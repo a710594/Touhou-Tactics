@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74ee5ba2ed60e6041ae0af2690100a55, type: 3}
+  m_Name: 1_1
+  m_EditorClassIdentifier: 
+  ID: 1_1
+  Comment: 1
+  Height: 1
+  MoveCost: 1
+  Enqueue: 1
+  Attachs:
+  - ID: Tree
+    Probability: 1
+  - ID: Grass
+    Probability: 10
+  - ID: 
+    Probability: 11
+  Up:
+  - ID: 1_1
+    Probability: 1
+  Down:
+  - ID: 1_1
+    Probability: 1
+  Left:
+  - ID: 1_1
+    Probability: 1
+  Right:
+  - ID: 1_1
+    Probability: 1
