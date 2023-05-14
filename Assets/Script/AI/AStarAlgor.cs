@@ -95,6 +95,10 @@ public class AStarAlgor
                 }
 
                 float g = x.G + _nodeDic[y.Position];    //從起點到節點y的距離
+                if (_nodeDic[y.Position] > 1)
+                {
+                    Debug.Log("!");
+                }
 
                 for (int j = 0; j < openset.Count; j++) //若y已被估值，跳過
                 {
