@@ -2,16 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PathPlanner
+public class PathManager
 {
-    private static PathPlanner _instance;
-    public static PathPlanner Instance
+    private static PathManager _instance;
+    public static PathManager Instance
     {
         get
         {
             if (_instance == null)
             {
-                _instance = new PathPlanner();
+                _instance = new PathManager();
             }
             return _instance;
         }

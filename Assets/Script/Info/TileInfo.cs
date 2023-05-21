@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TileInfo
 {
+    public bool HasCharacter;
     public string TileID;
     public int Height;
     public string AttachID; //Tile 上面的東西,例如草,樹,石頭...

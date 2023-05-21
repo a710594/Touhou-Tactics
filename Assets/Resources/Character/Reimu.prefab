@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5370710889101261414}
   - component: {fileID: 7278952700534606435}
   m_Layer: 0
-  m_Name: Reimu_S
+  m_Name: Reimu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

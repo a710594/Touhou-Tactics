@@ -1,40 +1,68 @@
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public static class Utility
 {
-    public static int ManhattanDistance(Vector3 a, Vector3 b)
+    public static int ManhattanDistance(Vector2 a, Vector2 b)
     {
         checked
         {
-            return (int)(Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y) + Mathf.Abs(a.z - b.z));
+            return (int)(Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y));
         }
     }
 
     /*
-     ¨ú±o¤@­Ó½d³ò¤ºªº®y¼Ğ,¨Ò¦p¦pªGrange=2,´N·|¹³³o¼Ë
+     å–å¾—ä¸€å€‹ç¯„åœå…§çš„åº§æ¨™,ä¾‹å¦‚å¦‚æœrange=2,å°±æœƒåƒé€™æ¨£
       x
      xxx
     xxxxx
      xxx
       x
     */
-    public static List<Vector3> GetRange(int range, int width, int height, Vector3 start) 
+    public static List<Vector2> GetRange(int range, int width, int height, Vector2 start)
     {
-        Vector3 position;
-        List<Vector3> list = new List<Vector3>();
-        for (int i=(int)start.x-range; i<= start.x + range; i++) 
+        Vector2 position;
+        List<Vector2> list = new List<Vector2>();
+        for (int i = (int)start.x - range; i <= start.x + range; i++)
         {
-            for (int j = (int)start.z - range; j <= start.z + range; j++)
+            for (int j = (int)start.y - range; j <= start.y + range; j++)
             {
-                position = new Vector3(i, 0, j);
-                if(position.z < height && position.z >=0 && position.x < width && position.x >=0 && ManhattanDistance(start, position) <= range) 
+                position = new Vector3(i, j);
+                if (position.y < height && position.y >= 0 && position.x < width && position.x >= 0 && ManhattanDistance(start, position) <= range)
                 {
                     list.Add(position);
                 }
             }
         }
         return list;
+    }
+
+    public static List<Vector2> GetStepList(int step, int width, int height, Vector2 start) 
+    {
+        int distance;
+        List<Vector2> stepList = GetRange(step, width, height, start);
+        for (int i = 0; i < stepList.Count; i++)
+        {
+            distance = PathManager.Instance.GetDistance(start, stepList[i]);
+            if (distance - 1 > step || distance == -1)
+            {
+                stepList.RemoveAt(i);
+                i--;
+            }
+        }
+
+        return stepList;
+    }
+
+    public static string Reverse(string s)
+    {
+        char[] charArray = s.ToCharArray();
+        Array.Reverse(charArray);
+        return new string(charArray);
     }
 }

@@ -9,9 +9,17 @@ public class NewBehaviourScript : MonoBehaviour
     {
         MapReader mapReader = new MapReader();
         mapReader.LoadData();
-        mapReader.Read(Application.streamingAssetsPath + "/Map.txt", out int width, out int height, out Dictionary<Vector3, TileInfo> tileInfoDic, out Dictionary<Vector3, TileComponent> tileComponentDic, out Dictionary<Vector3, GameObject> attachDic);
+        mapReader.Read(Application.streamingAssetsPath + "/Map.txt", out int width, out int height, out Dictionary<Vector2, TileInfo> tileInfoDic, out Dictionary<Vector2, TileComponent> tileComponentDic, out Dictionary<Vector2, GameObject> attachDic);
 
-        BattleController.Instance.Init(width, height, tileComponentDic, tileInfoDic, attachDic);
+        DataContext.Instance.Init();
+
+        BattleInfo battleInfo = new BattleInfo();
+        battleInfo.Width = width;
+        battleInfo.Height = height;
+        battleInfo.tileInfoDic = tileInfoDic;
+        battleInfo.tileComponentDic = tileComponentDic;
+        battleInfo.attachDic = attachDic;
+        BattleController.Instance.Init(battleInfo);
     }
 
     // Update is called once per frame
