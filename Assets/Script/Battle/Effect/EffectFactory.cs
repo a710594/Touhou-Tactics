@@ -6,18 +6,30 @@ using System.Threading.Tasks;
 
 public class EffectFactory
 {
-    public static Effect GetEffect(EffectModel.TypeEnum type, int id, BattleCharacterInfo user)
+    public static Effect GetEffect(EffectModel.TypeEnum type, int id)
     {
-        return GetEffect(DataContext.Instance.EffectDic[type][id], user);
+        return GetEffect(DataContext.Instance.EffectDic[type][id]);
     }
 
-    public static Effect GetEffect(EffectModel data, BattleCharacterInfo user)
+    public static Effect GetEffect(EffectModel data)
     {
         Effect skill = null;
 
-        if (data.Type == EffectModel.TypeEnum.Attack)
+        if (data.Type == EffectModel.TypeEnum.PhysicalAttack)
         {
-            skill = new AttackEffect(data, user);
+            skill = new PhysicalAttackEffect(data);
+        }
+        else if (data.Type == EffectModel.TypeEnum.MagicAttack)
+        {
+            skill = new PhysicalAttackEffect(data);
+        }
+        else if(data.Type == EffectModel.TypeEnum.Provocative) 
+        {
+            skill = new ProvocativeEffect(data);
+        }
+        else if (data.Type == EffectModel.TypeEnum.Buff)
+        {
+            skill = new BuffEffect(data);
         }
 
         return skill;

@@ -13,8 +13,11 @@ public class EffectModel
     {
         None = -1,
         Idle = 0,
-        Attack,
+        PhysicalAttack,
+        MagicAttack,
         Recover,
+        Provocative,
+        Buff,
     }
 
     public enum TargetEnum
@@ -23,6 +26,13 @@ public class EffectModel
         Them,
         All,
         None, //只能在空地上使用
+    }
+
+    public enum TrackEnum 
+    {
+        None = 1,
+        Straight,
+        Parabola,
     }
 
     public TypeEnum Type;
@@ -34,6 +44,7 @@ public class EffectModel
     public string Area;
     public List<Vector2> AreaList = new List<Vector2>();
     public TargetEnum Target;
+    public TrackEnum Track;
     public StatusModel.TypeEnum StatusType;
     public int StatusID;
     public TypeEnum SubType;
@@ -44,7 +55,7 @@ public class EffectModel
         string str;
         string[] arr;
         Vector3 v;
-        Stack<Char> stack = new Stack<char>();
+        Stack<char> stack = new Stack<char>();
         for (int i=0; i<Area.Length; i++) 
         {
             if (Area[i] != ')') 

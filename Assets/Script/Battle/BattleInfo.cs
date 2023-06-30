@@ -9,7 +9,7 @@ public class BattleInfo
 {
     public int Width;
     public int Height;
-    public Dictionary<Vector2, TileInfo> tileInfoDic;
-    public Dictionary<Vector2, TileComponent> tileComponentDic;
-    public Dictionary<Vector2, GameObject> attachDic;
+    public Dictionary<Vector2, TileInfo> TileInfoDic;
+    public Dictionary<Vector2, TileComponent> TileComponentDic;
+    public Dictionary<Vector2, GameObject> AttachDic;
 }

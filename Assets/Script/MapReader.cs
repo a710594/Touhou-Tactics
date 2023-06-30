@@ -9,42 +9,42 @@ using UnityEngine;
 
 public class MapReader
 {
-    private string _prePath = Application.streamingAssetsPath;
-    private TileScriptableObject[] _tileScriptableObjects;
-    private AttachScriptableObject[] _attachScriptableObjects;
-    private Dictionary<string, TileScriptableObject> _tileScriptableObjectDic = new Dictionary<string, TileScriptableObject>();
-    private Dictionary<string, AttachScriptableObject> _attachScriptableObjectDic = new Dictionary<string, AttachScriptableObject>();
+    //private string _prePath = Application.streamingAssetsPath;
+    //private TileScriptableObject[] _tileScriptableObjects;
+    //private AttachScriptableObject[] _attachScriptableObjects;
+    //private Dictionary<string, TileScriptableObject> _tileScriptableObjectDic = new Dictionary<string, TileScriptableObject>();
+    //private Dictionary<string, AttachScriptableObject> _attachScriptableObjectDic = new Dictionary<string, AttachScriptableObject>();
 
-    public void LoadData()
-    {
-        DirectoryInfo d;
-        FileInfo[] Files;
-        string str = "";
-        AttachScriptableObject attach;
-        TileScriptableObject tile;
+    //public void LoadData()
+    //{
+    //    DirectoryInfo d;
+    //    FileInfo[] Files;
+    //    string str = "";
+    //    AttachScriptableObject attach;
+    //    TileScriptableObject tile;
 
-        d = new DirectoryInfo(_prePath + "./Attach/"); //Assuming Test is your Folder
-        Files = d.GetFiles("*.json"); //Getting Text files
-        foreach (FileInfo file in Files)
-        {
-            str = str + ", " + file.Name;
-            string jsonString = File.ReadAllText(file.FullName);
-            attach = JsonConvert.DeserializeObject<AttachScriptableObject>(jsonString);
-            _attachScriptableObjectDic.Add(attach.ID, attach);
+    //    d = new DirectoryInfo(_prePath + "./Attach/"); //Assuming Test is your Folder
+    //    Files = d.GetFiles("*.json"); //Getting Text files
+    //    foreach (FileInfo file in Files)
+    //    {
+    //        str = str + ", " + file.Name;
+    //        string jsonString = File.ReadAllText(file.FullName);
+    //        attach = JsonConvert.DeserializeObject<AttachScriptableObject>(jsonString);
+    //        _attachScriptableObjectDic.Add(attach.ID, attach);
 
-        }
+    //    }
 
-        d = new DirectoryInfo(_prePath + "./Tile/"); //Assuming Test is your Folder
-        Files = d.GetFiles("*.json"); //Getting Text files
-        foreach (FileInfo file in Files)
-        {
-            str = str + ", " + file.Name;
-            string jsonString = File.ReadAllText(file.FullName);
-            tile = JsonConvert.DeserializeObject<TileScriptableObject>(jsonString);
-            _tileScriptableObjectDic.Add(tile.ID, tile);
+    //    d = new DirectoryInfo(_prePath + "./Tile/"); //Assuming Test is your Folder
+    //    Files = d.GetFiles("*.json"); //Getting Text files
+    //    foreach (FileInfo file in Files)
+    //    {
+    //        str = str + ", " + file.Name;
+    //        string jsonString = File.ReadAllText(file.FullName);
+    //        tile = JsonConvert.DeserializeObject<TileScriptableObject>(jsonString);
+    //        _tileScriptableObjectDic.Add(tile.ID, tile);
 
-        }
-    }
+    //    }
+    //}
 
     public void Read(string path, out int width, out int height, out Dictionary<Vector2, TileInfo> tileInfoDic, out Dictionary<Vector2, TileComponent> tileComponentDic, out Dictionary<Vector2, GameObject> attachDic) 
     {
@@ -74,7 +74,7 @@ public class MapReader
                     for (int j = 0; j < str.Length; j++)
                     {
                         position = new Vector2(i - 1, j);
-                        tileScriptableObject = _tileScriptableObjectDic[str[j]];
+                        tileScriptableObject = DataContext.Instance.TileScriptableObjectDic[str[j]];
                         tileInfoDic.Add(position, new TileInfo(tileScriptableObject));
                     }
                 }
@@ -84,9 +84,9 @@ public class MapReader
                     for (int j = 0; j < str.Length; j++)
                     {
                         position = new Vector2(i - 1 - width, j);
-                        if (_attachScriptableObjectDic.ContainsKey(str[j]))
+                        if (DataContext.Instance.AttachScriptableObjectDic.ContainsKey(str[j]))
                         {
-                            attachScriptableObject = _attachScriptableObjectDic[str[j]];
+                            attachScriptableObject = DataContext.Instance.AttachScriptableObjectDic[str[j]];
                             tileInfoDic[position].SetAttach(attachScriptableObject.ID, attachScriptableObject.MoveCost);
                         }
                     }

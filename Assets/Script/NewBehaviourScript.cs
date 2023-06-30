@@ -7,18 +7,17 @@ public class NewBehaviourScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        MapReader mapReader = new MapReader();
-        mapReader.LoadData();
-        mapReader.Read(Application.streamingAssetsPath + "/Map.txt", out int width, out int height, out Dictionary<Vector2, TileInfo> tileInfoDic, out Dictionary<Vector2, TileComponent> tileComponentDic, out Dictionary<Vector2, GameObject> attachDic);
-
         DataContext.Instance.Init();
-
+        MapReader mapReader = new MapReader();
+        //mapReader.LoadData();
+        mapReader.Read(Application.streamingAssetsPath + "/Map.txt", out int width, out int height, out Dictionary<Vector2, TileInfo> tileInfoDic, out Dictionary<Vector2, TileComponent> tileComponentDic, out Dictionary<Vector2, GameObject> attachDic);
+        PathManager.Instance.LoadData(tileInfoDic);
         BattleInfo battleInfo = new BattleInfo();
         battleInfo.Width = width;
         battleInfo.Height = height;
-        battleInfo.tileInfoDic = tileInfoDic;
-        battleInfo.tileComponentDic = tileComponentDic;
-        battleInfo.attachDic = attachDic;
+        battleInfo.TileInfoDic = tileInfoDic;
+        battleInfo.TileComponentDic = tileComponentDic;
+        battleInfo.AttachDic = attachDic;
         BattleController.Instance.Init(battleInfo);
     }
 

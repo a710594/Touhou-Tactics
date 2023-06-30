@@ -22,4 +22,9 @@ public class JobModel
     public int DOWN;
     public int WT;
     public string Controller;
+    public int Skill_1;
+    public int Skill_2;
+    public int Skill_3;
+    public int Skill_4;
+    public int Skill_5;
 }

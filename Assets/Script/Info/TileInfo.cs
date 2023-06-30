@@ -9,11 +9,11 @@ public class TileInfo
     public int Height;
     public string AttachID; //Tile 上面的東西,例如草,樹,石頭...
 
-    public int MoveCost 
+    public int MoveCost
     {
-        get 
+        get
         {
-            if (_attachMoveCost >= 0)
+            if (_attachMoveCost >= 0 /*&& !HasCharacter*/)
             {
                 return _tileMoveCost + _attachMoveCost;
             }

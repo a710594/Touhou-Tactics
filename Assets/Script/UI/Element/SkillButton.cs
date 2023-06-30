@@ -6,23 +6,20 @@ using UnityEngine.UI;
 
 public class SkillButton : MonoBehaviour
 {
-    public Action<Skill> ClickHandler;
-
     public Button Button;
+    public Text Label;
 
     private Skill _skill;
 
     public void SetData(Skill skill) 
     {
         _skill = skill;
+        Label.text = skill.Data.Name;
     }
 
     private void OnClick() 
     {
-        if(ClickHandler!= null) 
-        {
-            ClickHandler(_skill);
-        }
+        BattleController.Instance.SelectSkill(_skill);
     }
 
     private void Awake()

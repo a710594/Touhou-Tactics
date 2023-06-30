@@ -9,39 +9,20 @@ public class Effect
 {
     public EffectModel Data;
 
-    protected BattleCharacterInfo _user;
-    protected Effect _subEffect;
+    public Effect SubEffect;
 
     public Effect() { }
 
-    public Effect(EffectModel data, BattleCharacterInfo user)
+    public Effect(EffectModel data)
     {
         Data = data;
-        _user = user;
         if (data.SubType != EffectModel.TypeEnum.None)
         {
-            EffectModel subData = DataContext.Instance.EffectDic[data.SubType][data.SubID];
-            _subEffect = EffectFactory.GetEffect(subData.Type, subData.ID, user);
+            SubEffect = EffectFactory.GetEffect(data.SubType, data.SubID);
         }
     }
 
-    public bool CheckArea(Vector2 center, Vector2 target)
+    public virtual void  SetEffect(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList) 
     {
-        for (int i = 0; i < Data.AreaList.Count; i++)
-        {
-            if (target == center + Data.AreaList[i])
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public virtual void SetEffect(BattleCharacterInfo target)
-    {
-        if (_subEffect != null)
-        {
-            _subEffect.SetEffect(target);
-        }
     }
 }

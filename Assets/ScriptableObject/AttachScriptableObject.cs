@@ -7,4 +7,5 @@ public class AttachScriptableObject : ScriptableObject
 {
     public string ID;
     public int MoveCost;
+    public int Height;
 }
