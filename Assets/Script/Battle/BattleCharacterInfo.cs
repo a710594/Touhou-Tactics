@@ -37,12 +37,13 @@ public class BattleCharacterInfo
 
     //當前屬性
     public bool IsAuto = false;
+    public bool HasUseSkill = false;
     public int CurrentHP;
     public int CurrentMP;
     public int CurrentPP;
     public int CurrentWT;
+    public int ActionCount = 2; //每個角色都有兩次的行動機會
     public Vector3 Position = new Vector3();
-    public Vector3 MoveTo = new Vector3(); //預期要移動到的目標
     public Skill SelectedSkill = null;
     public AI AI = null;
     public List<Status> StatusList = new List<Status>();
@@ -137,10 +138,18 @@ public class BattleCharacterInfo
         StatusList.Add(status);
     }
 
-    public void CheckStatus() 
+    public void CheckStatus(List<FloatingNumberData> floatingList) 
     {
         for (int i=0; i<StatusList.Count; i++) 
         {
+            if(StatusList[i] is Poison) 
+            {
+                int damage = ((Poison)StatusList[i]).GetDamage(this);
+                FloatingNumberData floatingNumberData = new FloatingNumberData(FloatingNumberData.TypeEnum.Poison, damage.ToString());
+                floatingList.Add(floatingNumberData);
+                SetDamage(damage);
+            }
+
             StatusList[i].RemainTime--;
             if(StatusList[i].RemainTime == 0) 
             {

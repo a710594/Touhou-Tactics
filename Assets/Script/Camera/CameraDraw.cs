@@ -16,9 +16,10 @@ public class CameraDraw : MonoBehaviour
         _isBlock = isBlock;
     }
 
-    public void DrawParabola(Vector3 p1, Vector3 p2, int height) 
+    public void DrawParabola(List<Vector3> list, bool isBlock) 
     {
-        _list = Utility.DrawParabola(p1, p2, height);
+        _list = list;
+        _isBlock = isBlock;
     }
 
     public void Clear() 

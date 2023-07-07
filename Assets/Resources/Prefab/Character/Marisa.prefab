@@ -102,6 +102,7 @@ MonoBehaviour:
   Front: {fileID: 21300000, guid: 0a762d9501080834694f9adb87871dc0, type: 3}
   Back: {fileID: 21300000, guid: 833a9b2afcd00f9429e914c0d1463ff2, type: 3}
   SpriteRenderer: {fileID: 6295611815365243967}
+  SpriteOutline: {fileID: 0}
 --- !u!1 &6686903792128981898
 GameObject:
   m_ObjectHideFlags: 0

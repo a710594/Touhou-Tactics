@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SkillButtonGroup : MonoBehaviour
 {
+    public Button BackButton;
     public SkillButton[] SkillButtons;
 
     public void SetVisible(bool isVisible)
@@ -25,5 +27,16 @@ public class SkillButtonGroup : MonoBehaviour
                 SkillButtons[i].gameObject.SetActive(false);
             }
         }
+    }
+
+    private void BackOnClick() 
+    {
+        gameObject.SetActive(false);
+        BattleController.Instance.SetActionState();
+    }
+
+    private void Awake()
+    {
+        BackButton.onClick.AddListener(BackOnClick);
     }
 }
