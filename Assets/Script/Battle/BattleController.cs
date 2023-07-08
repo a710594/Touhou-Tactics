@@ -49,14 +49,17 @@ public class BattleController
         CharacterList.Add(new BattleCharacterInfo(DataContext.Instance.JobDic[2]));
         CharacterList[1].ID = 2;
         CharacterList[1].Position = new Vector3(1, 1, 0);
-        CharacterList.Add(new BattleCharacterInfo(DataContext.Instance.EnemyDic[1]));
+        CharacterList.Add(new BattleCharacterInfo(DataContext.Instance.JobDic[3]));
         CharacterList[2].ID = 3;
-        CharacterList[2].AI = new MashroomAI(CharacterList[2]);
-        CharacterList[2].Position = new Vector3(1, 1, 1);
+        CharacterList[2].Position = new Vector3(0, 1, 1);
         CharacterList.Add(new BattleCharacterInfo(DataContext.Instance.EnemyDic[1]));
         CharacterList[3].ID = 4;
         CharacterList[3].AI = new MashroomAI(CharacterList[3]);
-        CharacterList[3].Position = new Vector3(0, 1, 1);
+        CharacterList[3].Position = new Vector3(3, 1, 3);
+        CharacterList.Add(new BattleCharacterInfo(DataContext.Instance.EnemyDic[1]));
+        CharacterList[4].ID = 5;
+        CharacterList[4].AI = new MashroomAI(CharacterList[4]);
+        CharacterList[4].Position = new Vector3(4, 1, 4);
 
         CameraDrag camera = Camera.main.GetComponent<CameraDrag>();
         _battleUI.SetMapInfo(info.Width, info.Height);
@@ -138,7 +141,7 @@ public class BattleController
         }
         else
         {
-            _skillAreaList = BattleCalculator.GetNormalAreaList(_selectedCharacter.SelectedSkill.Effect, _selectedPosition);
+            _skillAreaList = BattleCalculator.GetNormalAreaList(BattleInfo.Width, BattleInfo.Height, _selectedCharacter.SelectedSkill.Effect, _selectedPosition);
         }
         SetQuad(_skillAreaList, _yellow);
     }
@@ -367,14 +370,14 @@ public class BattleController
 
         public override void Begin()
         {
-            if (Instance._selectedCharacter.SelectedSkill.Effect.Data.Area == "Through")
-            {
-                Instance._skillAreaList = BattleCalculator.GetTroughAreaList(Instance._selectedCharacter.MoveTo, Instance._selectedPosition, Instance.BattleInfo.TileInfoDic);
-            }
-            else
-            {
-                Instance._skillAreaList = BattleCalculator.GetNormalAreaList(Instance._selectedCharacter.SelectedSkill.Effect, Instance._selectedPosition);
-            }
+            //if (Instance._selectedCharacter.SelectedSkill.Effect.Data.Area == "Through")
+            //{
+            //    Instance._skillAreaList = BattleCalculator.GetTroughAreaList(Instance._selectedCharacter.MoveTo, Instance._selectedPosition, Instance.BattleInfo.TileInfoDic);
+            //}
+            //else
+            //{
+            //    Instance._skillAreaList = BattleCalculator.GetNormalAreaList(Instance._selectedCharacter.SelectedSkill.Effect, Instance._selectedPosition);
+            //}
             Instance.SetSkillArea();
             Instance.BattleInfo.TileComponentDic[Instance._selectedPosition].Select.gameObject.SetActive(true);
         }
@@ -427,7 +430,7 @@ public class BattleController
             _targetList = new List<BattleCharacterInfo>();
             for (int i = 0; i < _characterList.Count; i++)
             {
-                if (BattleCalculator.CheckEffectArea(Instance._skillAreaList, Utility.ConvertToVector2(_characterList[i].Position)))
+                if (BattleCalculator.CheckEffectArea(Instance._skillAreaList, Utility.ConvertToVector2(_characterList[i].MoveTo)))
                 {
                     _targetList.Add(_characterList[i]);
                 }

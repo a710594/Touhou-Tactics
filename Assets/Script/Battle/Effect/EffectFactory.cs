@@ -31,6 +31,10 @@ public class EffectFactory
         {
             skill = new BuffEffect(data);
         }
+        else if (data.Type == EffectModel.TypeEnum.Recover)
+        {
+            skill = new RecoverEffect(data);
+        }
 
         return skill;
     }

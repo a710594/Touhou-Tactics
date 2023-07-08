@@ -132,6 +132,15 @@ public class BattleCharacterInfo
         }
     }
 
+    public void SetRecover(int recover) 
+    {
+        CurrentHP += recover;
+        if(CurrentHP> MaxHP) 
+        {
+            CurrentHP = MaxHP;
+        }
+    }
+
     public void AddStatus(Status status) 
     {
         StatusList.Add(status);

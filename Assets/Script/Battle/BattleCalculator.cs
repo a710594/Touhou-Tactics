@@ -15,12 +15,17 @@ public static class BattleCalculator
         NoDamage,
     }
 
-    public static  List<Vector2> GetNormalAreaList(Effect effect, Vector2 center) 
+    public static  List<Vector2> GetNormalAreaList(int width, int height, Effect effect, Vector2 center) 
     {
+        Vector2 position;
         List<Vector2> list = new List<Vector2>();
         for (int i = 0; i < effect.Data.AreaList.Count; i++)
         {
-            list.Add(center + effect.Data.AreaList[i]);
+            position = center + effect.Data.AreaList[i];
+            if (position.x < width && position.x >= 0 && position.y < height && position.y >= 0)
+            {
+                list.Add(position);
+            }
         }
         return list;
     }

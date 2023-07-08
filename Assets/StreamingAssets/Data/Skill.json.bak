@@ -3,4 +3,5 @@
 {"ID":3,"Name":"魔彈","MP":0,"PP":0,"CD":0,"EffectType":2,"EffectID":1},
 {"ID":4,"Name":"隕石術","MP":10,"PP":0,"CD":0,"EffectType":2,"EffectID":2},
 {"ID":5,"Name":"雷射","MP":10,"PP":0,"CD":0,"EffectType":2,"EffectID":3},
-{"ID":6,"Name":"挑釁","MP":10,"PP":0,"CD":0,"EffectType":4,"EffectID":1}]
+{"ID":6,"Name":"挑釁","MP":10,"PP":0,"CD":0,"EffectType":4,"EffectID":1},
+{"ID":7,"Name":"金剛結界","MP":10,"PP":0,"CD":0,"EffectType":5,"EffectID":1}]
