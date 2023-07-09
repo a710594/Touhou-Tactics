@@ -133,3 +133,4 @@ MonoBehaviour:
   Front: {fileID: 21300000, guid: 155015026990d434296f1c92a97250b0, type: 3}
   Back: {fileID: 21300000, guid: 7258e38fc9fb9eb40bb641851ea97426, type: 3}
   SpriteRenderer: {fileID: 5370710889101261414}
+  SpriteOutline: {fileID: 0}

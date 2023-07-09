@@ -15,6 +15,7 @@ public class SkillButton : MonoBehaviour
     {
         _skill = skill;
         Label.text = skill.Data.Name;
+        Button.interactable = skill.CurrentCD == 0;
     }
 
     private void OnClick() 

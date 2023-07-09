@@ -9,9 +9,9 @@ public class AI
 {
     protected AIContext _context = new AIContext();
 
-    public virtual void Start(List<Vector2> stepList) 
+    public virtual void Start() 
     {
-        ((AIState)_context.CurrentState).Start(stepList);
+        ((AIState)_context.CurrentState).Start();
     }
 
     public void OnMoveEnd() 
@@ -36,17 +36,21 @@ public class AI
     public class AIState : State 
     {
         protected AIContext _aiContext;
+        protected BattleCharacterInfo _character;
         protected List<Vector2> _stepList;
         protected Skill _selectedSkill;
 
         public AIState(StateContext context) : base(context)
         {
             _aiContext = (AIContext)context;
+            _character = _aiContext.CharacterInfo;
         }
 
-        public virtual void Start(List<Vector2> stepList)
+        public virtual void Start()
         {
-            _stepList = stepList;
+            BattleInfo info = BattleController.Instance.BattleInfo;
+            List<BattleCharacterInfo> characterList = BattleController.Instance.CharacterList;
+            _stepList = _stepList = AStarAlgor.Instance.GetStepList(info.Width, info.Height, Utility.ConvertToVector2(_character.Position), _character, characterList, info.TileInfoDic);
         }
 
         public virtual void OnMoveEnd() 

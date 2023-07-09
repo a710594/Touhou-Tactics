@@ -8,6 +8,7 @@ using UnityEngine;
 
 public class Skill
 {
+    public int CurrentCD;
     public SkillModel Data;
     public Effect Effect;
 
@@ -17,5 +18,22 @@ public class Skill
     {
         Data = data;
         Effect = EffectFactory.GetEffect(data.EffectType, data.EffectID);
+    }
+
+    public virtual void SetEffect(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)
+    {
+        Effect.SetEffect(user, target, floatingList, characterList);
+        if (Data.CD > 0)
+        {
+            CurrentCD = Data.CD + 1; //要加一的原因是為了抵銷本回合的 CheckCD
+        }
+    }
+
+    public void CheckCD() 
+    {
+        if (CurrentCD > 0) 
+        {
+            CurrentCD--;
+        }
     }
 }

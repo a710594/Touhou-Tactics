@@ -243,4 +243,33 @@ public static class BattleCalculator
 
         result = to;
     }
+
+    public static void CheckParabola(Vector3 from, Vector3 to, int parabolaHeight, Dictionary<Vector2, TileInfo> tileDic, out bool isBlock, out List<Vector3> result)
+    {
+        isBlock = false;
+        result = new List<Vector3>();
+        int height;
+        Vector2 position;
+        List<Vector3> list = Utility.DrawParabola(from, to, parabolaHeight);
+        for (int i = 0; i < list.Count; i++)
+        {
+            position = new Vector2(list[i].x, list[i].z);
+            if (tileDic.ContainsKey(position))
+            {
+                result.Add(list[i]);
+
+                height = tileDic[position].Height;
+                if (tileDic[position].AttachID != null)
+                {
+                    height += DataContext.Instance.AttachScriptableObjectDic[tileDic[position].AttachID].Height;
+                }
+
+                if (height > list[i].y)
+                {
+                    isBlock = true;
+                    return;
+                }
+            }
+        }
+    }
 }

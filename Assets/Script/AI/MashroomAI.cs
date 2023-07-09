@@ -26,9 +26,9 @@ public class MashroomAI : AI
         {
         }
 
-        public override void Start(List<Vector2> stepList)
+        public override void Start()
         {
-            base.Start(stepList);
+            base.Start();
 
             _target = null;
             _rangeList.Clear();
@@ -40,18 +40,18 @@ public class MashroomAI : AI
             {
                 _inRange = true;
                 GetMoveTo(true);
+                BattleController.Instance.SetMoveState();
                 BattleController.Instance.Click(_moveTo);
-                //BattleController.Instance.SelectSkill(_selectedSkill);
-                //BattleController.Instance.Click(Utility.ConvertToVector2(_target.Position));
-                //BattleController.Instance.Confirm();
+                BattleController.Instance.Click(_moveTo);
             }
             else 
             {
                 _inRange = false;
                 GetTarget(false);
                 GetMoveTo(false);
+                BattleController.Instance.SetMoveState();
                 BattleController.Instance.Click(_moveTo);
-                //BattleController.Instance.Skip();
+                BattleController.Instance.Click(_moveTo);
             }
         }
 
@@ -59,13 +59,14 @@ public class MashroomAI : AI
         {
             if (_inRange)
             {
+                BattleController.Instance.SetSelectSkillState();
                 BattleController.Instance.SelectSkill(_selectedSkill);
                 BattleController.Instance.Click(Utility.ConvertToVector2(_target.Position));
                 BattleController.Instance.Click(Utility.ConvertToVector2(_target.Position));
             }
             else
             {
-                BattleController.Instance.Skip();
+                BattleController.Instance.Idle();
             }
         }
 

@@ -49,7 +49,8 @@ public class MapReader
     public void Read(string path, out int width, out int height, out Dictionary<Vector2, TileInfo> tileInfoDic, out Dictionary<Vector2, TileComponent> tileComponentDic, out Dictionary<Vector2, GameObject> attachDic) 
     {
         string text = File.ReadAllText(path);
-        string[] lines = text.Split('\n', '\r');
+        string[] stringSeparators = new string[] { "\r\n" };
+        string[] lines = text.Split(stringSeparators, StringSplitOptions.None);
         string[] str;
         Vector2 position = new Vector2();
         TileScriptableObject tileScriptableObject;

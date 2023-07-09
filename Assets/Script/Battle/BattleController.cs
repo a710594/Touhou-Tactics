@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using System.Linq;
 
 public class BattleController
 {
@@ -90,7 +91,9 @@ public class BattleController
         });
 
         _context.AddState(new SelectCharacterState(_context));
+        _context.AddState(new SelectActionState(_context));
         _context.AddState(new MoveState(_context));
+        _context.AddState(new SelectSkillState(_context));
         _context.AddState(new SelectTargetState(_context));
         _context.AddState(new ConfirmState(_context));
         _context.AddState(new EffectState(_context));
@@ -109,17 +112,34 @@ public class BattleController
         ((BattleControllerState)_context.CurrentState).Click(position);
     }
 
-    public void SelectSkill(Skill skill)
+    public void SetActionState()
     {
-        if (_context.CurrentState is MoveState)
-        {
-            ((MoveState)_context.CurrentState).SelectSkill(skill);
-        }
+        _context.SetState<SelectActionState>();
     }
 
-    public void Idle() 
+    public void SetMoveState()
     {
+        _context.SetState<MoveState>();
+    }
+
+    public void SetSelectSkillState()
+    {
+        _context.SetState<SelectSkillState>();
+    }
+
+    public void Idle()
+    {
+        _selectedCharacter.ActionCount = 0;
         _context.SetState<EndState>();
+    }
+
+    public void SelectSkill(Skill skill)
+    {
+        if (_context.CurrentState is SelectSkillState)
+        {
+            _selectedCharacter.SelectedSkill = skill;
+            _context.SetState<SelectTargetState>();
+        }
     }
 
     public void SetQuad(List<Vector2> list, Color color) 
@@ -137,7 +157,7 @@ public class BattleController
     {
         if (_selectedCharacter.SelectedSkill.Effect.Data.Area == "Through")
         {
-            _skillAreaList = BattleCalculator.GetTroughAreaList(_selectedCharacter.MoveTo, new Vector3(_selectedPosition.x, Instance.BattleInfo.TileInfoDic[_selectedPosition].Height, _selectedPosition.y), BattleInfo.TileInfoDic);
+            _skillAreaList = BattleCalculator.GetTroughAreaList(_selectedCharacter.Position, new Vector3(_selectedPosition.x, Instance.BattleInfo.TileInfoDic[_selectedPosition].Height, _selectedPosition.y), BattleInfo.TileInfoDic);
         }
         else
         {
@@ -162,6 +182,7 @@ public class BattleController
     public void OnMoveEnd() 
     {
         _canClick = true;
+        _selectedCharacter.ActionCount--;
 
         if (_selectedCharacter.AI != null)
         {
@@ -169,12 +190,36 @@ public class BattleController
         }
         else
         {
-            Instance._battleUI.SetSkillVisible(true);
+            if (_selectedCharacter.ActionCount > 0)
+            {
+                _context.SetState<SelectActionState>();
+            }
+            else 
+            {
+                _context.SetState<EndState>();
+            }
+        }
+    }
+
+    public void SetCharacterInfoUI_2(Vector2 position) 
+    {
+        //顯示角色資料
+        Instance._battleUI.SetCharacterInfoUI_2(null);
+        for (int i = 0; i < CharacterList.Count; i++)
+        {
+            if (CharacterList[i] != Instance._selectedCharacter && position == new Vector2(CharacterList[i].Position.x, CharacterList[i].Position.z))
+            {
+                Instance._battleUI.SetCharacterInfoUI_2(CharacterList[i]);
+                return;
+            }
         }
     }
 
     private class BattleControllerState : State
     {
+        protected BattleCharacterInfo _character;
+        protected List<BattleCharacterInfo> _characterList;
+
         public BattleControllerState(StateContext context) : base(context)
         {
         }
@@ -218,17 +263,44 @@ public class BattleController
             }
             Camera.main.transform.DOMove(position, 1f).OnComplete(()=> 
             {
-                _context.SetState<MoveState>();
+                _context.SetState<SelectActionState>();
             });
             //Camera.main.transform.localEulerAngles = new Vector3(30, 45, 0);
         }
     }
 
+    private class SelectActionState : BattleControllerState
+    {
+        public SelectActionState(StateContext context) : base(context)
+        {
+        }
+
+        public override void Begin()
+        {
+            _character = Instance._selectedCharacter;
+            _characterList = Instance.CharacterList;
+            Instance._battleUI.ActionButtonGroup.gameObject.SetActive(true);
+            Instance._battleUI.ActionButtonGroup.SkillButton.interactable = !_character.HasUseSkill;
+            Instance._battleUI.SetCharacterInfoUI_1(_character);
+            Instance._battleUI.SetCharacterInfoUI_2(null);
+            Instance.ClearQuad();
+
+            if (_character.IsAuto)
+            {
+                _character.AI.Start();
+            }
+        }
+
+        public override void Click(Vector2 position)
+        {
+            Instance.SetCharacterInfoUI_2(position);
+        }
+    }
+
     private class MoveState : BattleControllerState
     {
+        private Vector2 _lastSelectedPosition;
         private List<Vector2> _stepList;
-        private BattleCharacterInfo _character;
-        private List<BattleCharacterInfo> _characterList;
 
         public MoveState(StateContext context) : base(context)
         {
@@ -236,69 +308,87 @@ public class BattleController
 
         public override void Begin()
         {
+            _lastSelectedPosition = new Vector2(int.MaxValue, int.MaxValue);
             BattleInfo info = Instance.BattleInfo;
             _character = Instance._selectedCharacter;
-            _character.MoveTo = _character.Position;
             _characterList = Instance.CharacterList;
             Instance._controllerDic[_character.ID].transform.position = _character.Position;
             Instance.BattleInfo.TileInfoDic[Utility.ConvertToVector2(_character.Position)].HasCharacter = false;
-            Instance._battleUI.SetCharacterInfoUI_1(_character);
-            Instance._battleUI.SetCharacterInfoUI_2(null);
-            if (!_character.IsAuto)
-            {
-                Instance._battleUI.SetSkillVisible(true);
-                Instance._battleUI.SetSkillData(_character);
-            }
+            Instance._battleUI.ActionButtonGroup.gameObject.SetActive(false);
             _stepList = AStarAlgor.Instance.GetStepList(info.Width, info.Height, Utility.ConvertToVector2(_character.Position), _character, _characterList, info.TileInfoDic);
             Instance.SetQuad(_stepList, Instance._white);
+        }
 
-            if (_character.IsAuto)
+        public override void Click(Vector2 position)
+        {
+            Instance.SetCharacterInfoUI_2(position);
+
+            if (_stepList.Contains(position))
             {
-                _character.AI.Start(_stepList);
+                if (position == _lastSelectedPosition) //確定移動
+                {
+                    Instance._canClick = false;
+                    Instance._controllerDic[_character.ID].transform.position = _character.Position;
+                    Instance._battleUI.SetSkillVisible(false);
+                    Instance.BattleInfo.TileComponentDic[_lastSelectedPosition].Select.gameObject.SetActive(false);
+                    Instance.ClearQuad();
+                    List<Vector2> path = AStarAlgor.Instance.GetPath(Utility.ConvertToVector2(_character.Position), position, _character, _characterList, Instance.BattleInfo.TileInfoDic, false);
+                    Instance._controllerDic[_character.ID].Move(path);
+                    Instance.BattleInfo.TileInfoDic[Utility.ConvertToVector2(_character.Position)].HasCharacter = false;
+                    _character.Position = new Vector3(position.x, Instance.BattleInfo.TileInfoDic[position].Height, position.y);
+                    Instance.BattleInfo.TileInfoDic[Utility.ConvertToVector2(_character.Position)].HasCharacter = true;
+                }
+                else
+                {
+                    _lastSelectedPosition = position;
+                    Instance.BattleInfo.TileComponentDic[_lastSelectedPosition].Select.gameObject.SetActive(true);
+                }
+            }
+            else
+            {
+                if (Instance.BattleInfo.TileComponentDic.ContainsKey(_lastSelectedPosition))
+                {
+                    Instance.BattleInfo.TileComponentDic[_lastSelectedPosition].Select.gameObject.SetActive(false);
+                }
+                Instance._controllerDic[_character.ID].transform.position = _character.Position;
+                _context.SetState<SelectActionState>();
+            }
+        }
+
+        //public void SelectSkill(Skill skill)
+        //{
+        //    _character.SelectedSkill = skill;
+        //    _context.SetState<SelectTargetState>();
+        //}
+    }
+
+    private class SelectSkillState : BattleControllerState
+    {
+        public SelectSkillState(StateContext context) : base(context)
+        {
+        }
+
+        public override void Begin()
+        {
+            Instance._battleUI.ActionButtonGroup.gameObject.SetActive(false);
+            BattleCharacterInfo character = Instance._selectedCharacter;
+            if (!character.IsAuto)
+            {
+                Instance._battleUI.SetSkillVisible(true);
+                Instance._battleUI.SetSkillData(character);
             }
         }
 
         public override void Click(Vector2 position)
         {
-            //顯示角色資料
-            Instance._battleUI.SetCharacterInfoUI_2(null);
-            for (int i = 0; i < _characterList.Count; i++)
-            {
-                if (_characterList[i] != Instance._selectedCharacter && position == new Vector2(_characterList[i].Position.x, _characterList[i].Position.z))
-                {
-                    Instance._battleUI.SetCharacterInfoUI_2(_characterList[i]);
-                    return;
-                }
-            }
-
-            if (_stepList.Contains(position))
-            {
-                Instance._canClick = false;
-                Instance._controllerDic[_character.ID].transform.position = _character.Position;
-                Instance._battleUI.SetSkillVisible(false);
-                _character.MoveTo = new Vector3(position.x, Instance.BattleInfo.TileInfoDic[position].Height, position.y);
-                List<Vector2> path = AStarAlgor.Instance.GetPath(Utility.ConvertToVector2(_character.Position), position, _character, _characterList, Instance.BattleInfo.TileInfoDic, false);
-                Instance._controllerDic[_character.ID].Move(path);
-            }
-            else
-            {
-                _character.MoveTo = _character.Position;
-                Instance._controllerDic[_character.ID].transform.position = _character.Position;
-                //Console.WriteLine("不在可移動的範圍內");
-            }
-        }
-
-        public void SelectSkill(Skill skill)
-        {
-            _character.SelectedSkill = skill;
-            _context.SetState<SelectTargetState>();
+            Instance.SetCharacterInfoUI_2(position);
         }
     }
 
     private class SelectTargetState : BattleControllerState
     {
         private List<Vector2> _rangeList;
-        private BattleCharacterInfo _character = Instance._selectedCharacter;
+        private BattleCharacterInfo _character;
 
         public SelectTargetState(StateContext context) : base(context)
         {
@@ -310,7 +400,7 @@ public class BattleController
             _character = Instance._selectedCharacter;
             if (_character.SelectedSkill != null)
             {
-                _rangeList = Utility.GetRange(_character.SelectedSkill.Effect.Data.Range, info.Width, info.Height, new Vector2(_character.MoveTo.x, _character.MoveTo.z));
+                _rangeList = Utility.GetRange(_character.SelectedSkill.Effect.Data.Range, info.Width, info.Height, new Vector2(_character.Position.x, _character.Position.z));
                 Instance.SetQuad(_rangeList, Instance._white);
             }
             Instance._battleUI.SetSkillVisible(false);
@@ -336,13 +426,19 @@ public class BattleController
                     }
                 }
 
-                if (_character.SelectedSkill.Effect.Data.Track == EffectModel.TrackEnum.Straight && Instance.BattleInfo.TileInfoDic.ContainsKey(position))
+                Dictionary<Vector2, TileInfo> tileDic = Instance.BattleInfo.TileInfoDic;
+                Vector3 p = new Vector3(position.x, tileDic[position].Height, position.y);
+                if (_character.SelectedSkill.Effect.Data.Track == EffectModel.TrackEnum.Straight)
                 {
-                    Dictionary<Vector2, TileInfo> tileDic = Instance.BattleInfo.TileInfoDic;
-                    Vector3 p = new Vector3(position.x, tileDic[position].Height, position.y);
-                    BattleCalculator.CheckLine(_character.MoveTo, p, tileDic, out bool isBlock, out Vector3 result);
-                    Instance._cameraController.DrawLine(_character.MoveTo, result, isBlock);
+                    BattleCalculator.CheckLine(_character.Position, p, tileDic, out bool isBlock, out Vector3 result);
+                    Instance._cameraController.DrawLine(_character.Position, result, isBlock);
                     Instance._selectedPosition = new Vector2(result.x, result.z);
+                }
+                else if (_character.SelectedSkill.Effect.Data.Track == EffectModel.TrackEnum.Parabola)
+                {
+                    BattleCalculator.CheckParabola(_character.Position, p, 4, tileDic, out bool isBlock, out List<Vector3> result); //要補拋物線的高度
+                    Instance._cameraController.DrawParabola(result, isBlock);
+                    Instance._selectedPosition = new Vector2(result.Last().x, result.Last().z);
                 }
                 else
                 {
@@ -352,12 +448,11 @@ public class BattleController
                 Instance._controllerDic[_character.ID].SetDirection(Instance._selectedPosition);
 
                 _context.SetState<ConfirmState>();
-                //Console.WriteLine("Select " + position);
             }
             else
             {
-                _context.SetState<MoveState>();
-                //Console.WriteLine("Return to move state");
+                Instance.ClearQuad();
+                _context.SetState<SelectSkillState>();
             }
         }
     }
@@ -370,14 +465,14 @@ public class BattleController
 
         public override void Begin()
         {
-            //if (Instance._selectedCharacter.SelectedSkill.Effect.Data.Area == "Through")
-            //{
-            //    Instance._skillAreaList = BattleCalculator.GetTroughAreaList(Instance._selectedCharacter.MoveTo, Instance._selectedPosition, Instance.BattleInfo.TileInfoDic);
-            //}
-            //else
-            //{
-            //    Instance._skillAreaList = BattleCalculator.GetNormalAreaList(Instance._selectedCharacter.SelectedSkill.Effect, Instance._selectedPosition);
-            //}
+            if (Instance._selectedCharacter.SelectedSkill.Effect.Data.Area == "Through")
+            {
+                Instance._skillAreaList = BattleCalculator.GetTroughAreaList(Instance._selectedCharacter.Position, Instance._selectedPosition, Instance.BattleInfo.TileInfoDic);
+            }
+            else
+            {
+                Instance._skillAreaList = BattleCalculator.GetNormalAreaList(Instance._selectedCharacter.SelectedSkill.Effect, Instance._selectedPosition);
+            }
             Instance.SetSkillArea();
             Instance.BattleInfo.TileComponentDic[Instance._selectedPosition].Select.gameObject.SetActive(true);
         }
@@ -393,13 +488,9 @@ public class BattleController
             else
             {
                 Instance._battleUI.SetCharacterInfoUI_2(null);
-                _context.SetState<MoveState>();
+                Instance.ClearQuad();
+                _context.SetState<SelectSkillState>();
             }
-        }
-
-        public void Confirm()
-        {
-            _context.SetState<EffectState>();
         }
 
         public override void End()
@@ -426,7 +517,7 @@ public class BattleController
             Instance._battleUI.SetCharacterInfoUI_2(null);
             Instance.ClearQuad();
             _characterList = Instance.CharacterList;
-            _character = _characterList[0];
+            _character = Instance._selectedCharacter;
             _targetList = new List<BattleCharacterInfo>();
             for (int i = 0; i < _characterList.Count; i++)
             {
@@ -441,7 +532,7 @@ public class BattleController
                 for (int i = 0; i < _targetList.Count; i++)
                 {
                     List<FloatingNumberData> floatingList = new List<FloatingNumberData>();
-                    _character.SelectedSkill.Effect.SetEffect(_character, _targetList[i], floatingList, _characterList);
+                    _character.SelectedSkill.SetEffect(_character, _targetList[i], floatingList, _characterList);
                     Instance._battleUI.SetLittleHpBarValue(_targetList[i].ID, _targetList[i]);
                     for (int j = 0; j < floatingList.Count; j++)
                     {
@@ -494,7 +585,16 @@ public class BattleController
             }
             else
             {
-                _context.SetState<EndState>();
+                _character.HasUseSkill = true;
+                _character.ActionCount--;
+                if (_character.ActionCount > 0)
+                {
+                    _context.SetState<SelectActionState>();
+                }
+                else
+                {
+                    _context.SetState<EndState>();
+                }
             }
         }
     }
@@ -507,30 +607,52 @@ public class BattleController
 
         public override void Begin()
         {
-            List<BattleCharacterInfo> characterList = Instance.CharacterList;
-            BattleCharacterInfo character = characterList[0];
+            _characterList = Instance.CharacterList;
+            _character = Instance._selectedCharacter;
             Dictionary<Vector2, TileInfo> tileDic = Instance.BattleInfo.TileInfoDic;
 
-            Instance.BattleInfo.TileInfoDic[Utility.ConvertToVector2(character.Position)].HasCharacter = false;
-            Instance.BattleInfo.TileInfoDic[Utility.ConvertToVector2(character.MoveTo)].HasCharacter = true;
-            character.CheckStatus();
-            character.CurrentWT = character.WT;
-            character.Position = character.MoveTo;
-            characterList.RemoveAt(0);
-            characterList.Add(character);
-            characterList.Sort((x, y) =>
+            if (_characterList.Contains(_character))
             {
-                if (x.CurrentWT > y.CurrentWT)
+                if (_character.ActionCount == 0)
                 {
-                    return 1;
+                    List<FloatingNumberData> floatingList = new List<FloatingNumberData>();
+                    _character.CheckStatus(floatingList);
+                    for (int j = 0; j < floatingList.Count; j++)
+                    {
+                        Instance._battleUI.PlayFloatingNumberPool(_character.ID, floatingList[j].Type, floatingList[j].Text);
+                    }
+                    for(int i=0; i<_character.SkillList.Count; i++)
+                    {
+                        _character.SkillList[i].CheckCD();
+                    }
+                    _character.CurrentWT = _character.WT;
+                    _character.ActionCount = 2;
+                    _character.HasUseSkill = false;
+                    _characterList.RemoveAt(0);
+                    _characterList.Add(_character);
+                    _characterList.Sort((x, y) =>
+                    {
+                        if (x.CurrentWT > y.CurrentWT)
+                        {
+                            return 1;
+                        }
+                        else
+                        {
+                            return -1;
+                        }
+                    });
+
+                    _context.SetState<SelectCharacterState>();
                 }
                 else
                 {
-                    return -1;
+                    _context.SetState<SelectActionState>();
                 }
-            });
-
-            _context.SetState<SelectCharacterState>();
+            }
+            else 
+            {
+                _context.SetState<SelectCharacterState>();
+            }
         }
     }
 }

@@ -7,10 +7,11 @@ using UnityEngine.UI;
 
 public class BattleUI : MonoBehaviour
 {
-    public Button IdleButton;
+    //public Button IdleButton;
     public ButtonPlus BackgroundButton;
     public CharacterInfoUI CharacterInfoUI_1;
     public CharacterInfoUI CharacterInfoUI_2;
+    public ActionButtonGroup ActionButtonGroup;
     public SkillButtonGroup SkillButtonGroup;
     public AnchorValueBar LittleHpBar;
     public FloatingNumberPool FloatingNumberPool;
@@ -191,7 +192,7 @@ public class BattleUI : MonoBehaviour
     {
         _graphicRaycaster = transform.parent.GetComponent<GraphicRaycaster>();
 
-        IdleButton.onClick.AddListener(IdleOnClick);
+        //IdleButton.onClick.AddListener(IdleOnClick);
         BackgroundButton.DownHandler += BackgroundDown;
         BackgroundButton.UpHandler += BackgroundUp;
     }
