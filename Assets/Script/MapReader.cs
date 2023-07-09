@@ -46,21 +46,21 @@ public class MapReader
     //    }
     //}
 
-    public void Read(string path, out int width, out int height, out Dictionary<Vector2, TileInfo> tileInfoDic, out Dictionary<Vector2, TileComponent> tileComponentDic, out Dictionary<Vector2, GameObject> attachDic) 
+    public void Read(string path, out int width, out int height, out Dictionary<Vector2Int, TileInfo> tileInfoDic, out Dictionary<Vector2Int, TileComponent> tileComponentDic, out Dictionary<Vector2Int, GameObject> attachDic) 
     {
         string text = File.ReadAllText(path);
         string[] stringSeparators = new string[] { "\r\n" };
         string[] lines = text.Split(stringSeparators, StringSplitOptions.None);
         string[] str;
-        Vector2 position = new Vector2();
+        Vector2Int position = new Vector2Int();
         TileScriptableObject tileScriptableObject;
         AttachScriptableObject attachScriptableObject;
         GameObject tileObj;
         GameObject attachObj; ;
-        tileComponentDic = new Dictionary<Vector2, TileComponent>();
-        attachDic = new Dictionary<Vector2, GameObject>();
+        tileComponentDic = new Dictionary<Vector2Int, TileComponent>();
+        attachDic = new Dictionary<Vector2Int, GameObject>();
 
-        tileInfoDic = new Dictionary<Vector2, TileInfo>();
+        tileInfoDic = new Dictionary<Vector2Int, TileInfo>();
         str = lines[0].Split(' ');
         width = int.Parse(str[0]);
         height = int.Parse(str[1]);
@@ -74,7 +74,7 @@ public class MapReader
                     str = lines[i].Split(' ');
                     for (int j = 0; j < str.Length; j++)
                     {
-                        position = new Vector2(i - 1, j);
+                        position = new Vector2Int(i - 1, j);
                         tileScriptableObject = DataContext.Instance.TileScriptableObjectDic[str[j]];
                         tileInfoDic.Add(position, new TileInfo(tileScriptableObject));
                     }
@@ -84,7 +84,7 @@ public class MapReader
                     str = lines[i].Split(' ');
                     for (int j = 0; j < str.Length; j++)
                     {
-                        position = new Vector2(i - 1 - width, j);
+                        position = new Vector2Int(i - 1 - width, j);
                         if (DataContext.Instance.AttachScriptableObjectDic.ContainsKey(str[j]))
                         {
                             attachScriptableObject = DataContext.Instance.AttachScriptableObjectDic[str[j]];
@@ -95,7 +95,7 @@ public class MapReader
             }
         }
 
-        foreach (KeyValuePair<Vector2, TileInfo> pair in tileInfoDic)
+        foreach (KeyValuePair<Vector2Int, TileInfo> pair in tileInfoDic)
         {
             tileObj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + pair.Value.TileID), Vector3.zero, Quaternion.identity);
             Transform parent = GameObject.Find("Tilemap").transform;

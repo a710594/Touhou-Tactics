@@ -19,13 +19,13 @@ public class AStarAlgor
 
     private BattleCharacterInfo _selectedCharacter;
     private List<BattleCharacterInfo> _characterList;
-    private Dictionary<Vector2, TileInfo> _tileInfoDic;
+    private Dictionary<Vector2Int, TileInfo> _tileInfoDic;
 
-    public List<Vector2> GetPath(Vector2 start, Vector2 goal, BattleCharacterInfo selectedCharacter, List<BattleCharacterInfo> characterList, Dictionary<Vector2, TileInfo> tileInfoDic, bool isRandom)
+    public List<Vector2Int> GetPath(Vector2Int start, Vector2 goal, BattleCharacterInfo selectedCharacter, List<BattleCharacterInfo> characterList, Dictionary<Vector2Int, TileInfo> tileInfoDic, bool isRandom)
     {
         if (start == goal)
         {
-            return new List<Vector2>();
+            return new List<Vector2Int>();
         }
         else
         {
@@ -60,7 +60,7 @@ public class AStarAlgor
 
                 if (x.Position == goal)
                 {
-                    List<Vector2> result = ReconstructPath(x);
+                    List<Vector2Int> result = ReconstructPath(x);
                     return result;   //返回到x的最佳路徑
                 }
 
@@ -68,7 +68,7 @@ public class AStarAlgor
                 closedset.Add(x); //將x節點插入已經被估算的節點
 
                 bool isBetter;
-                List<Vector2> neighborList = GetNeighborPos(x.Position);
+                List<Vector2Int> neighborList = GetNeighborPos(x.Position);
                 for (int i = 0; i < neighborList.Count; i++)  //循環遍歷與x相鄰節點
                 {
                     Node y = new Node(neighborList[i]);
@@ -126,7 +126,7 @@ public class AStarAlgor
         return null;
     }
 
-    public int GetDistance(Vector2 start, Vector2 goal, BattleCharacterInfo selectedCharacter, List<BattleCharacterInfo> characterList, Dictionary<Vector2, TileInfo> tileInfoDic)
+    public int GetDistance(Vector2Int start, Vector2Int goal, BattleCharacterInfo selectedCharacter, List<BattleCharacterInfo> characterList, Dictionary<Vector2Int, TileInfo> tileInfoDic)
     {
         int distance = 0;
         if (tileInfoDic[goal].MoveCost == -1)
@@ -139,7 +139,7 @@ public class AStarAlgor
         }
         else
         {
-            List<Vector2> path = GetPath(start, goal, selectedCharacter, characterList, tileInfoDic, false);
+            List<Vector2Int> path = GetPath(start, goal, selectedCharacter, characterList, tileInfoDic, false);
             if (path != null)
             {
                 for (int i = 0; i < path.Count; i++)
@@ -156,10 +156,10 @@ public class AStarAlgor
         }
     }
 
-    public List<Vector2> GetStepList(int width, int height, Vector2 start, BattleCharacterInfo selectedCharacter, List<BattleCharacterInfo> characterList, Dictionary<Vector2, TileInfo> tileInfoDic)
+    public List<Vector2Int> GetStepList(int width, int height, Vector2Int start, BattleCharacterInfo selectedCharacter, List<BattleCharacterInfo> characterList, Dictionary<Vector2Int, TileInfo> tileInfoDic)
     {
         int distance;
-        List<Vector2> stepList = Utility.GetRange(selectedCharacter.MOV, width, height, start);
+        List<Vector2Int> stepList = Utility.GetRange(selectedCharacter.MOV, width, height, start);
         for (int i = 0; i < stepList.Count; i++)
         {
             distance = GetDistance(start, stepList[i], selectedCharacter, characterList, tileInfoDic);
@@ -174,16 +174,16 @@ public class AStarAlgor
         {
             if(_characterList[i]!= _selectedCharacter) 
             {
-                stepList.Remove(Utility.ConvertToVector2(_characterList[i].Position));
+                stepList.Remove(Utility.ConvertToVector2Int(_characterList[i].Position));
             }
         }
 
         return stepList;
     }
 
-    private List<Vector2> ReconstructPath(Node currentNode)
+    private List<Vector2Int> ReconstructPath(Node currentNode)
     {
-        List<Vector2> path = new List<Vector2>();
+        List<Vector2Int> path = new List<Vector2Int>();
 
         if (currentNode.parent != null)
         {
@@ -194,34 +194,34 @@ public class AStarAlgor
         return path;
     }
 
-    private List<Vector2> GetNeighborPos(Vector2 current)
+    private List<Vector2Int> GetNeighborPos(Vector2Int current)
     {
-        List<Vector2> list = new List<Vector2>();
+        List<Vector2Int> list = new List<Vector2Int>();
 
-        if (_tileInfoDic.ContainsKey(current + Vector2.left) && MoveCost(current + Vector2.left) > 0)
+        if (_tileInfoDic.ContainsKey(current + Vector2Int.left) && MoveCost(current + Vector2Int.left) > 0)
         {
-            list.Add(current + Vector2.left);
+            list.Add(current + Vector2Int.left);
         }
 
-        if (_tileInfoDic.ContainsKey(current + Vector2.right) && MoveCost(current + Vector2.right) > 0)
+        if (_tileInfoDic.ContainsKey(current + Vector2Int.right) && MoveCost(current + Vector2Int.right) > 0)
         {
-            list.Add(current + Vector2.right);
+            list.Add(current + Vector2Int.right);
         }
 
-        if (_tileInfoDic.ContainsKey(current + Vector2.up) && MoveCost(current + Vector2.up) > 0)
+        if (_tileInfoDic.ContainsKey(current + Vector2Int.up) && MoveCost(current + Vector2Int.up) > 0)
         {
-            list.Add(current + Vector2.up);
+            list.Add(current + Vector2Int.up);
         }
 
-        if (_tileInfoDic.ContainsKey(current + Vector2.down) && MoveCost(current + Vector2.down) > 0)
+        if (_tileInfoDic.ContainsKey(current + Vector2Int.down) && MoveCost(current + Vector2Int.down) > 0)
         {
-            list.Add(current + Vector2.down);
+            list.Add(current + Vector2Int.down);
         }
 
         return list;
     }
 
-    private int MoveCost(Vector2 position) 
+    private int MoveCost(Vector2Int position) 
     {
         for (int i=0; i< _characterList.Count; i++) 
         {

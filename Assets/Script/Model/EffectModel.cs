@@ -42,7 +42,7 @@ public class EffectModel
     public int Hit;
     public int Range;
     public string Area;
-    public List<Vector2> AreaList = new List<Vector2>();
+    public List<Vector2Int> AreaList = new List<Vector2Int>();
     public TargetEnum Target;
     public TrackEnum Track;
     public StatusModel.TypeEnum StatusType;
@@ -54,7 +54,7 @@ public class EffectModel
     {
         string str;
         string[] arr;
-        Vector3 v;
+        Vector2Int v;
         Stack<char> stack = new Stack<char>();
         for (int i=0; i<Area.Length; i++) 
         {
@@ -75,7 +75,7 @@ public class EffectModel
                 }
                 str = Utility.Reverse(str);
                 arr = str.Split(',');
-                v = new Vector2(int.Parse(arr[0]), int.Parse(arr[1]));
+                v = new Vector2Int(int.Parse(arr[0]), int.Parse(arr[1]));
                 AreaList.Add(v);
             }
         }

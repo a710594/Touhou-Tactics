@@ -18,9 +18,9 @@ public class MashroomAI : AI
     private class NormalState : AIState 
     {
         private bool _inRange;
-        private Vector2 _moveTo;
+        private Vector2Int _moveTo;
         private BattleCharacterInfo _target = null;
-        private List<Vector2> _rangeList = new List<Vector2>();
+        private List<Vector2Int> _rangeList = new List<Vector2Int>();
 
         public NormalState(StateContext context) : base(context)
         {
@@ -61,8 +61,8 @@ public class MashroomAI : AI
             {
                 BattleController.Instance.SetSelectSkillState();
                 BattleController.Instance.SelectSkill(_selectedSkill);
-                BattleController.Instance.Click(Utility.ConvertToVector2(_target.Position));
-                BattleController.Instance.Click(Utility.ConvertToVector2(_target.Position));
+                BattleController.Instance.Click(Utility.ConvertToVector2Int(_target.Position));
+                BattleController.Instance.Click(Utility.ConvertToVector2Int(_target.Position));
             }
             else
             {
@@ -72,11 +72,11 @@ public class MashroomAI : AI
 
         private void GetRange()
         {
-            Vector2 start = new Vector2(_aiContext.CharacterInfo.Position.x, _aiContext.CharacterInfo.Position.z);
-            Vector2 position = new Vector2();
-            List<Vector2> list = new List<Vector2>(); //先挑選出距離 <= step + range 的座標
+            Vector2Int start = Utility.ConvertToVector2Int(_aiContext.CharacterInfo.Position);
+            Vector2Int position = new Vector2Int();
+            List<Vector2Int> list = new List<Vector2Int>(); //先挑選出距離 <= step + range 的座標
             BattleInfo battleInfo = BattleController.Instance.BattleInfo;
-            foreach (KeyValuePair<Vector2, TileInfo> pair in battleInfo.TileInfoDic)
+            foreach (KeyValuePair<Vector2Int, TileInfo> pair in battleInfo.TileInfoDic)
             {
                 position = pair.Key;
                 if (Utility.ManhattanDistance(position, start) <= _aiContext.CharacterInfo.MOV + _selectedSkill.Effect.Data.Range)
@@ -94,7 +94,7 @@ public class MashroomAI : AI
 
         private void GetTarget(bool inRange) 
         {
-            Vector2 position = new Vector2();
+            Vector2Int position = new Vector2Int();
             List<BattleCharacterInfo> characterList = BattleController.Instance.CharacterList;
 
             //如果受到挑釁,會優先攻擊挑釁者
@@ -121,7 +121,7 @@ public class MashroomAI : AI
             {
                 if (characterList[i].Faction == faction) 
                 {
-                    position = new Vector2(characterList[i].Position.x, characterList[i].Position.z);
+                    position = Utility.ConvertToVector2Int(characterList[i].Position);
                     if (!inRange || _rangeList.Contains(position)) 
                     {
                         if(_target == null || characterList[i].CurrentHP < _target.CurrentHP) 
@@ -137,14 +137,14 @@ public class MashroomAI : AI
         {
             int distance;
             int minDistance = -1;
-            Vector2 myPosition = new Vector2(_aiContext.CharacterInfo.Position.x, _aiContext.CharacterInfo.Position.z);
-            Vector2 targetPosition = new Vector2(_target.Position.x, _target.Position.z);
+            Vector2Int myPosition = Utility.ConvertToVector2Int(_aiContext.CharacterInfo.Position);
+            Vector2Int targetPosition = Utility.ConvertToVector2Int(_target.Position);
             BattleInfo battleInfo = BattleController.Instance.BattleInfo;
             List<BattleCharacterInfo> characterList = BattleController.Instance.CharacterList;
 
             if (inRange) //目標必需在射程之內
             {
-                List<Vector2> rangeList;
+                List<Vector2Int> rangeList;
 
                 for (int i = 0; i < _stepList.Count; i++)
                 {

@@ -24,15 +24,15 @@ public static class Utility
      xxx
       x
     */
-    public static List<Vector2> GetRange(int range, int width, int height, Vector2 start)
+    public static List<Vector2Int> GetRange(int range, int width, int height, Vector2Int start)
     {
-        Vector2 position;
-        List<Vector2> list = new List<Vector2>();
+        Vector2Int position;
+        List<Vector2Int> list = new List<Vector2Int>();
         for (int i = (int)start.x - range; i <= start.x + range; i++)
         {
             for (int j = (int)start.y - range; j <= start.y + range; j++)
             {
-                position = new Vector3(i, j);
+                position = new Vector2Int(i, j);
                 if (position.y < height && position.y >= 0 && position.x < width && position.x >= 0 && ManhattanDistance(start, position) <= range)
                 {
                     list.Add(position);
@@ -69,6 +69,11 @@ public static class Utility
     public static Vector2 ConvertToVector2(Vector3 vector3)
     {
         return new Vector2(vector3.x, vector3.z);
+    }
+
+    public static Vector2Int ConvertToVector2Int(Vector3 vector3)
+    {
+        return new Vector2Int(Mathf.RoundToInt(vector3.x), Mathf.RoundToInt(vector3.z));
     }
 
     public static List<Vector2> DrawLine2D(Vector2 a, Vector2 b)
@@ -263,11 +268,23 @@ public static class Utility
         return list;
     }
 
-    public static List<Vector3> DrawParabola(Vector3 point0, Vector3 point1, int height)
+    public static List<Vector3> DrawParabola(Vector3 point0, Vector3 point1, int height, bool isInt)
     {
         List<Vector3> line = DrawLine3D(point0, point1);
         Vector3 center = new Vector3((int)Math.Ceiling((point0.x + point1.x) / 2f), height * 2, (int)Math.Ceiling((point0.z + point1.z) / 2f));
-        List<Vector3> bezier = DrawQuadraticBezierCurve(point0, center, point1, line.Count - 1);
+        List<Vector3> bezier = new List<Vector3>();
+        if (isInt)
+        {
+            bezier = DrawQuadraticBezierCurve(point0, center, point1, line.Count - 1);
+            for (int i=0; i<bezier.Count; i++) 
+            {
+                bezier[i] = new Vector3(Mathf.RoundToInt(bezier[i].x), Mathf.RoundToInt(bezier[i].y), Mathf.RoundToInt(bezier[i].z));
+            }
+        }
+        else
+        {
+            bezier = DrawQuadraticBezierCurve(point0, center, point1, 10);
+        }
 
         return bezier;
     }

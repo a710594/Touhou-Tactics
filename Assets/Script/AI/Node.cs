@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Node
 {
-    public Node(Vector2 pos)
+    public Node(Vector2Int pos)
     {
         Position = pos;
     }
 
-    public Vector2 Position;
+    public Vector2Int Position;
     public float G;
     public float H;
     public float F;

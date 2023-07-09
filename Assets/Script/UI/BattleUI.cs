@@ -139,11 +139,11 @@ public class BattleUI : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 100))
         {
-            BattleController.Instance.Click(new Vector2(hit.transform.position.x, hit.transform.position.z));
+            BattleController.Instance.Click(Utility.ConvertToVector2Int(hit.transform.position));
         }
         else //代表按到沒有按鍵的地方
         {
-            BattleController.Instance.Click(new Vector2(int.MinValue, int.MinValue));
+            BattleController.Instance.Click(new Vector2Int(int.MinValue, int.MinValue));
         }
     }
 
@@ -174,11 +174,11 @@ public class BattleUI : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 100))
             {
-                BattleController.Instance.Click(new Vector2(hit.transform.position.x, hit.transform.position.z));
+                BattleController.Instance.Click(Utility.ConvertToVector2Int(hit.transform.position));
             }
             else //代表按到沒有按鍵的地方
             {
-                BattleController.Instance.Click(new Vector2(int.MinValue, int.MinValue));
+                BattleController.Instance.Click(new Vector2Int(int.MinValue, int.MinValue));
             }
         }
     }

@@ -31,7 +31,7 @@ public class BattleCharacterController : MonoBehaviour
     //    }
     //}
 
-    public void Move(List<Vector2> paths)
+    public void Move(List<Vector2Int> paths)
     {
         if (paths.Count > 0)
         {

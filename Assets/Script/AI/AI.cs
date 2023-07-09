@@ -37,7 +37,7 @@ public class AI
     {
         protected AIContext _aiContext;
         protected BattleCharacterInfo _character;
-        protected List<Vector2> _stepList;
+        protected List<Vector2Int> _stepList;
         protected Skill _selectedSkill;
 
         public AIState(StateContext context) : base(context)
@@ -50,7 +50,7 @@ public class AI
         {
             BattleInfo info = BattleController.Instance.BattleInfo;
             List<BattleCharacterInfo> characterList = BattleController.Instance.CharacterList;
-            _stepList = _stepList = AStarAlgor.Instance.GetStepList(info.Width, info.Height, Utility.ConvertToVector2(_character.Position), _character, characterList, info.TileInfoDic);
+            _stepList = _stepList = AStarAlgor.Instance.GetStepList(info.Width, info.Height, Utility.ConvertToVector2Int(_character.Position), _character, characterList, info.TileInfoDic);
         }
 
         public virtual void OnMoveEnd() 

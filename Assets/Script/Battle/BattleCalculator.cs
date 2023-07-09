@@ -15,10 +15,10 @@ public static class BattleCalculator
         NoDamage,
     }
 
-    public static  List<Vector2> GetNormalAreaList(int width, int height, Effect effect, Vector2 center) 
+    public static  List<Vector2Int> GetNormalAreaList(int width, int height, Effect effect, Vector2Int center) 
     {
-        Vector2 position;
-        List<Vector2> list = new List<Vector2>();
+        Vector2Int position;
+        List<Vector2Int> list = new List<Vector2Int>();
         for (int i = 0; i < effect.Data.AreaList.Count; i++)
         {
             position = center + effect.Data.AreaList[i];
@@ -30,20 +30,20 @@ public static class BattleCalculator
         return list;
     }
 
-    public static List<Vector2> GetTroughAreaList(Vector3 from, Vector3 to, Dictionary<Vector2, TileInfo> tileDic)
+    public static List<Vector2Int> GetTroughAreaList(Vector3 from, Vector3 to, Dictionary<Vector2Int, TileInfo> tileDic)
     {
-        List<Vector2> list = new List<Vector2>();
+        List<Vector2Int> list = new List<Vector2Int>();
         CheckLine(from, to, tileDic, out bool isBlock, out Vector3 result);
         List<Vector3> line = Utility.DrawLine3D(from, result);
         for (int i = 0; i < line.Count; i++)
         {
-            list.Add(Utility.ConvertToVector2(line[i]));
+            list.Add(Utility.ConvertToVector2Int(line[i]));
         }
-        list.Remove(Utility.ConvertToVector2(from));
+        list.Remove(Utility.ConvertToVector2Int(from));
         return list;
     }
 
-    public static bool CheckEffectArea(List<Vector2> list, Vector2 target)
+    public static bool CheckEffectArea(List<Vector2Int> list, Vector2Int target)
     {
         for (int i = 0; i < list.Count; i++)
         {
@@ -215,15 +215,15 @@ public static class BattleCalculator
         }
     }
 
-    public static void CheckLine(Vector3 from, Vector3 to, Dictionary<Vector2, TileInfo> tileDic, out bool isBlock, out Vector3 result) 
+    public static void CheckLine(Vector3 from, Vector3 to, Dictionary<Vector2Int, TileInfo> tileDic, out bool isBlock, out Vector3 result) 
     {
         isBlock = false;
         int height;
-        Vector2 position;
+        Vector2Int position;
         List<Vector3> list = Utility.DrawLine3D(from, to);
         for(int i=0; i<list.Count; i++) 
         {
-            position = new Vector2(list[i].x, list[i].z);
+            position = Utility.ConvertToVector2Int(list[i]);
             if (tileDic.ContainsKey(position)) 
             {
                 height = tileDic[position].Height;
@@ -244,20 +244,18 @@ public static class BattleCalculator
         result = to;
     }
 
-    public static void CheckParabola(Vector3 from, Vector3 to, int parabolaHeight, Dictionary<Vector2, TileInfo> tileDic, out bool isBlock, out List<Vector3> result)
+    public static void CheckParabola(Vector3 from, Vector3 to, int parabolaHeight, Dictionary<Vector2Int, TileInfo> tileDic, out bool isBlock, out List<Vector3> result)
     {
         isBlock = false;
         result = new List<Vector3>();
         int height;
-        Vector2 position;
-        List<Vector3> list = Utility.DrawParabola(from, to, parabolaHeight);
+        Vector2Int position;
+        List<Vector3> list = Utility.DrawParabola(from, to, parabolaHeight, true);
         for (int i = 0; i < list.Count; i++)
         {
-            position = new Vector2(list[i].x, list[i].z);
+            position = Utility.ConvertToVector2Int(list[i]);
             if (tileDic.ContainsKey(position))
             {
-                result.Add(list[i]);
-
                 height = tileDic[position].Height;
                 if (tileDic[position].AttachID != null)
                 {
@@ -267,9 +265,12 @@ public static class BattleCalculator
                 if (height > list[i].y)
                 {
                     isBlock = true;
+                    to = list[i];
                     return;
                 }
             }
         }
+
+        result = Utility.DrawParabola(from, to, parabolaHeight, false);
     }
 }

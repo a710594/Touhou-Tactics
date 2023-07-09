@@ -10,7 +10,7 @@ public class NewBehaviourScript : MonoBehaviour
         DataContext.Instance.Init();
         MapReader mapReader = new MapReader();
         //mapReader.LoadData();
-        mapReader.Read(Application.streamingAssetsPath + "/Map.txt", out int width, out int height, out Dictionary<Vector2, TileInfo> tileInfoDic, out Dictionary<Vector2, TileComponent> tileComponentDic, out Dictionary<Vector2, GameObject> attachDic);
+        mapReader.Read(Application.streamingAssetsPath + "/Map.txt", out int width, out int height, out Dictionary<Vector2Int, TileInfo> tileInfoDic, out Dictionary<Vector2Int, TileComponent> tileComponentDic, out Dictionary<Vector2Int, GameObject> attachDic);
         PathManager.Instance.LoadData(tileInfoDic);
         BattleInfo battleInfo = new BattleInfo();
         battleInfo.Width = width;
