@@ -17,6 +17,10 @@ public class StatusFactory
         {
             status = new ProvocativeStatus(data);
         }
+        else if(data.Type == StatusModel.TypeEnum.Poison) 
+        {
+            status = new Poison(data);
+        }
         else 
         {
             status = new Status(data);

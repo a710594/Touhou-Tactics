@@ -18,6 +18,7 @@ public class MashroomAI : AI
     private class NormalState : AIState 
     {
         private bool _inRange;
+        private int _skillId = 9;
         private Vector2Int _moveTo;
         private BattleCharacterInfo _target = null;
         private List<Vector2Int> _rangeList = new List<Vector2Int>();
@@ -32,7 +33,7 @@ public class MashroomAI : AI
 
             _target = null;
             _rangeList.Clear();
-            _selectedSkill = new Skill(DataContext.Instance.SkillDic[1]);
+            _selectedSkill = new Skill(DataContext.Instance.SkillDic[SkillModel.TypeEnum.Normal][_skillId]);
 
             GetRange();
             GetTarget(true);

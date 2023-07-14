@@ -8,6 +8,8 @@ using UnityEngine;
 
 public class BattleCharacterInfo
 {
+    public static readonly Vector3 DefaultLastPosition = new (int.MaxValue, int.MaxValue, int.MaxValue); 
+
     public enum FactionEnum 
     {
         Player,
@@ -18,7 +20,6 @@ public class BattleCharacterInfo
     public int ID;
     public string Name;
     public int MaxHP;
-    public int MaxMP;
     public int PP;
     public int ATK;
     public int DEF;
@@ -33,17 +34,19 @@ public class BattleCharacterInfo
     public string Controller;
     public FactionEnum Faction;
 
-    public List<Skill> SkillList = new List<Skill>();
+    public Dictionary<SkillModel.TypeEnum, List<Skill>> SkillDic = new Dictionary<SkillModel.TypeEnum, List<Skill>>();
 
     //當前屬性
     public bool IsAuto = false;
     public bool HasUseSkill = false;
+    public bool HasUseSupport = false;
     public int CurrentHP;
-    public int CurrentMP;
     public int CurrentPP;
     public int CurrentWT;
+    public int CurrentSP = 2; //support point
     public int ActionCount = 2; //每個角色都有兩次的行動機會
     public Vector3 Position = new Vector3();
+    public Vector3 LastPosition = new Vector3();
     public Skill SelectedSkill = null;
     public AI AI = null;
     public List<Status> StatusList = new List<Status>();
@@ -53,7 +56,6 @@ public class BattleCharacterInfo
         ID = job.ID;
         Name = job.Name;
         MaxHP = job.HP;
-        MaxMP = job.MP;
         PP = job.PP;
         ATK = job.ATK;
         DEF = job.DEF;
@@ -69,30 +71,54 @@ public class BattleCharacterInfo
         Faction = FactionEnum.Player;
 
         CurrentHP = MaxHP;
-        CurrentMP = MaxMP;
         CurrentPP = PP;
         CurrentWT = WT;
 
+        List<Skill> normalList = new List<Skill>();
         if (job.Skill_1 != -1)
         {
-            SkillList.Add(new Skill(DataContext.Instance.SkillDic[job.Skill_1]));
+            normalList.Add(new Skill(DataContext.Instance.SkillDic[SkillModel.TypeEnum.Normal][job.Skill_1]));
         }
         if (job.Skill_2 != -1)
         {
-            SkillList.Add(new Skill(DataContext.Instance.SkillDic[job.Skill_2]));
+            normalList.Add(new Skill(DataContext.Instance.SkillDic[SkillModel.TypeEnum.Normal][job.Skill_2]));
         }
         if (job.Skill_3 != -1)
         {
-            SkillList.Add(new Skill(DataContext.Instance.SkillDic[job.Skill_3]));
+            normalList.Add(new Skill(DataContext.Instance.SkillDic[SkillModel.TypeEnum.Normal][job.Skill_3]));
         }
         if (job.Skill_4 != -1)
         {
-            SkillList.Add(new Skill(DataContext.Instance.SkillDic[job.Skill_4]));
+            normalList.Add(new Skill(DataContext.Instance.SkillDic[SkillModel.TypeEnum.Normal][job.Skill_4]));
         }
         if (job.Skill_5 != -1)
         {
-            SkillList.Add(new Skill(DataContext.Instance.SkillDic[job.Skill_5]));
+            normalList.Add(new Skill(DataContext.Instance.SkillDic[SkillModel.TypeEnum.Normal][job.Skill_5]));
         }
+        SkillDic.Add(SkillModel.TypeEnum.Normal, normalList);
+
+        List<Skill> supportList = new List<Skill>();
+        if (job.Support_1 != -1)
+        {
+            supportList.Add(new Skill(DataContext.Instance.SkillDic[SkillModel.TypeEnum.Support][job.Support_1]));
+        }
+        if (job.Support_2 != -1)
+        {
+            supportList.Add(new Skill(DataContext.Instance.SkillDic[SkillModel.TypeEnum.Support][job.Support_2]));
+        }
+        if (job.Support_3 != -1)
+        {
+            supportList.Add(new Skill(DataContext.Instance.SkillDic[SkillModel.TypeEnum.Support][job.Support_3]));
+        }
+        if (job.Support_4 != -1)
+        {
+            supportList.Add(new Skill(DataContext.Instance.SkillDic[SkillModel.TypeEnum.Support][job.Support_4]));
+        }
+        if (job.Support_5 != -1)
+        {
+            supportList.Add(new Skill(DataContext.Instance.SkillDic[SkillModel.TypeEnum.Support][job.Support_5]));
+        }
+        SkillDic.Add(SkillModel.TypeEnum.Support, supportList);
     }
 
     public BattleCharacterInfo(EnemyModel enemy)
@@ -100,7 +126,6 @@ public class BattleCharacterInfo
         ID = enemy.ID;
         Name = enemy.Name;
         MaxHP = enemy.HP;
-        MaxMP = enemy.MP;
         ATK = enemy.ATK;
         DEF = enemy.DEF;
         MTK = enemy.MTK;
@@ -116,7 +141,6 @@ public class BattleCharacterInfo
 
         IsAuto = true;
         CurrentHP = MaxHP;
-        CurrentMP = MaxMP;
         CurrentPP = PP;
         CurrentWT = WT;
     }
@@ -165,6 +189,14 @@ public class BattleCharacterInfo
                 StatusList.RemoveAt(i);
                 i--;
             }
+        }
+    }
+
+    public void CheckSP() 
+    {
+        if(CurrentSP < 5) 
+        {
+            CurrentSP++;
         }
     }
 }

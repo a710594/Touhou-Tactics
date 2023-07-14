@@ -19,6 +19,7 @@ public class StatusModel
         AGI,
         MOV, 
         WT,
+        Poison,
     }
 
     public TypeEnum Type;

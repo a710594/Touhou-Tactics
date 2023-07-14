@@ -28,12 +28,14 @@ public class DataContext
     public List<EffectModel> EffectList = new List<EffectModel>();
     public List<StatusModel> StatusList = new List<StatusModel>();
     public List<EnemyModel> EnemyList = new List<EnemyModel>();
+    public List<SupportModel> SupportList = new List<SupportModel>();
 
     public Dictionary<int, JobModel> JobDic = new Dictionary<int, JobModel>();
-    public Dictionary<int, SkillModel> SkillDic = new Dictionary<int, SkillModel>();
+    public Dictionary<SkillModel.TypeEnum, Dictionary<int, SkillModel>> SkillDic = new Dictionary<SkillModel.TypeEnum, Dictionary<int, SkillModel>>();
     public Dictionary<EffectModel.TypeEnum, Dictionary<int, EffectModel>> EffectDic = new Dictionary<EffectModel.TypeEnum, Dictionary<int, EffectModel>>();
     public Dictionary<StatusModel.TypeEnum, Dictionary<int, StatusModel>> StatusDic = new Dictionary<StatusModel.TypeEnum, Dictionary<int, StatusModel>>();
     public Dictionary<int, EnemyModel> EnemyDic = new Dictionary<int, EnemyModel>();
+    public Dictionary<int, SupportModel> SupportDic = new Dictionary<int, SupportModel>();
     public Dictionary<string, TileScriptableObject> TileScriptableObjectDic = new Dictionary<string, TileScriptableObject>();
     public Dictionary<string, AttachScriptableObject> AttachScriptableObjectDic = new Dictionary<string, AttachScriptableObject>();
 
@@ -50,7 +52,11 @@ public class DataContext
         SkillList = Load<List<SkillModel>>("Skill");
         for (int i = 0; i < SkillList.Count; i++)
         {
-            SkillDic.Add(SkillList[i].ID, SkillList[i]);
+            if (!SkillDic.ContainsKey(SkillList[i].Type))
+            {
+                SkillDic.Add(SkillList[i].Type, new Dictionary<int, SkillModel>());
+            }
+            SkillDic[SkillList[i].Type].Add(SkillList[i].ID, SkillList[i]);
         }
 
         EffectList = Load<List<EffectModel>>("Effect");
@@ -79,6 +85,12 @@ public class DataContext
         for (int i = 0; i < EnemyList.Count; i++)
         {
             EnemyDic.Add(EnemyList[i].ID, EnemyList[i]);
+        }
+
+        SupportList = Load<List<SupportModel>>("Support");
+        for (int i = 0; i < SupportList.Count; i++)
+        {
+            SupportDic.Add(SupportList[i].ID, SupportList[i]);
         }
 
         DirectoryInfo d;

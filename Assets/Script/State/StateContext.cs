@@ -16,7 +16,7 @@ public class StateContext
         _stateDic.Add(state.GetType(), state);
     }
 
-    public void SetState<T>()
+    public void SetState<T>(object obj = null)
     {
         if (CurrentState != null)
         {
@@ -26,7 +26,7 @@ public class StateContext
         if (_stateDic.ContainsKey(typeof(T)))
         {
             CurrentState = _stateDic[typeof(T)];
-            CurrentState.Begin();
+            CurrentState.Begin(obj);
         }
         else
         {

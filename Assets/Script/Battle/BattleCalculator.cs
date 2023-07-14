@@ -207,7 +207,7 @@ public static class BattleCalculator
 
         if (effect.SubEffect != null)
         {
-            return GetPredictionHp(prediction, effect, user, target, characterList);
+            return GetPredictionHp(prediction, effect.SubEffect, user, target, characterList);
         }
         else
         {

@@ -9,7 +9,6 @@ public class EnemyModel
     public int ID;
     public string Name;
     public int HP;
-    public int MP;
     public int ATK;
     public int DEF;
     public int MTK;

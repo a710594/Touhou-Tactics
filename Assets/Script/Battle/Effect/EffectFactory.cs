@@ -35,6 +35,10 @@ public class EffectFactory
         {
             skill = new RecoverEffect(data);
         }
+        else if (data.Type == EffectModel.TypeEnum.Poison)
+        {
+            skill = new PoisonEffect(data);
+        }
 
         return skill;
     }

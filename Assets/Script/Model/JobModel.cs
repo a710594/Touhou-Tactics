@@ -9,7 +9,6 @@ public class JobModel
     public int ID;
     public string Name;
     public int HP;
-    public int MP;
     public int PP;
     public int ATK;
     public int DEF;
@@ -27,4 +26,9 @@ public class JobModel
     public int Skill_3;
     public int Skill_4;
     public int Skill_5;
+    public int Support_1;
+    public int Support_2;
+    public int Support_3;
+    public int Support_4;
+    public int Support_5;
 }

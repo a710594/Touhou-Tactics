@@ -9,6 +9,7 @@ public class ActionButtonGroup : MonoBehaviour
     public Button MoveButton;
     public Button SkillButton;
     public Button IdleButton;
+    public Button ResetButton;
 
     private void MoveOnClick() 
     {
@@ -25,10 +26,16 @@ public class ActionButtonGroup : MonoBehaviour
         BattleController.Instance.Idle();
     }
 
+    private void ResetOnClick() 
+    {
+        BattleController.Instance.ResetAction();
+    }
+
     private void Awake()
     {
         MoveButton.onClick.AddListener(MoveOnClick);
         SkillButton.onClick.AddListener(SkillOnClick);
         IdleButton.onClick.AddListener(IdleOnClick);
+        ResetButton.onClick.AddListener(ResetOnClick);
     }
 }

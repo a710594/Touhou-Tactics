@@ -15,6 +15,7 @@ public class BattleUI : MonoBehaviour
     public SkillButtonGroup SkillButtonGroup;
     public AnchorValueBar LittleHpBar;
     public FloatingNumberPool FloatingNumberPool;
+    public CharacterListGroup CharacterListGroup;
 
     private GraphicRaycaster _graphicRaycaster;
     private PointerEventData _pointerEventData = new PointerEventData(null);
@@ -66,9 +67,9 @@ public class BattleUI : MonoBehaviour
         SkillButtonGroup.gameObject.SetActive(isVisible);
     }
 
-    public void SetSkillData(BattleCharacterInfo info) 
+    public void SetSkillData(BattleCharacterInfo info, SkillModel.TypeEnum type) 
     {
-        SkillButtonGroup.SetData(info);
+        SkillButtonGroup.SetData(info, type);
     }
 
     public void SetHpPrediction(int origin, int prediction, int max)
@@ -79,16 +80,6 @@ public class BattleUI : MonoBehaviour
     public void StopHpPrediction()
     {
         CharacterInfoUI_2.StopHpPrediction();
-    }
-
-    public void SetMpPrediction(int origin, int prediction, int max)
-    {
-        CharacterInfoUI_1.SetMpPrediction(origin, prediction, max);
-    }
-
-    public void StopMpPrediction()
-    {
-        CharacterInfoUI_1.StopMpPrediction();
     }
 
     public void SetLittleHpBarAnchor(int id, BattleCharacterController characterController) 
@@ -130,6 +121,16 @@ public class BattleUI : MonoBehaviour
     {
         _width = width;
         _height = height;
+    }
+
+    public void CharacterListGroupInit(List<BattleCharacterInfo> characterList)
+    {
+        CharacterListGroup.Init(characterList);
+    }
+
+    public void CharacterListGroupRefresh()
+    {
+        CharacterListGroup.Refresh();
     }
 
 

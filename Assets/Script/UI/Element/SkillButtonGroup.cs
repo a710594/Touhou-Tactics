@@ -13,14 +13,14 @@ public class SkillButtonGroup : MonoBehaviour
         gameObject.SetActive(isVisible);
     }
 
-    public void SetData(BattleCharacterInfo info) 
+    public void SetData(BattleCharacterInfo info, SkillModel.TypeEnum type) 
     {
         for(int i=0; i< SkillButtons.Length; i++) 
         {
-            if (i < info.SkillList.Count) 
+            if (i < info.SkillDic[type].Count) 
             {
                 SkillButtons[i].gameObject.SetActive(true);
-                SkillButtons[i].SetData(info.SkillList[i]);
+                SkillButtons[i].SetData(info.SkillDic[type][i]);
             }
             else 
             {

@@ -18,6 +18,7 @@ public class EffectModel
         Recover,
         Provocative,
         Buff,
+        Poison,
     }
 
     public enum TargetEnum

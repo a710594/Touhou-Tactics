@@ -6,11 +6,19 @@ using System.Threading.Tasks;
 
 public class SkillModel
 {
+    public enum TypeEnum 
+    {
+        Normal = 1,
+        Support,
+        Card,
+    }
+
+    public TypeEnum Type;
     public int ID;  
     public string Name;
-    public int MP;
-    public int PP;
+    public string Comment;
     public int CD;
+    public int SP;
     public EffectModel.TypeEnum EffectType;
     public int EffectID;
 }

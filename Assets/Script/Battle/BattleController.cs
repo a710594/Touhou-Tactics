@@ -79,24 +79,16 @@ public class BattleController
             _battleUI.SetFloatingNumberPoolAnchor(CharacterList[i].ID, _controllerDic[CharacterList[i].ID]);
         }
 
-        CharacterList.Sort((x, y) =>
-        {
-            if (x.CurrentWT > y.CurrentWT)
-            {
-                return 1;
-            }
-            else
-            {
-                return -1;
-            }
-        });
+        SortCharacterList();
+
+        _battleUI.CharacterListGroupInit(CharacterList);
 
         _arrow = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Other/Arrow"), Vector3.zero, Quaternion.identity);
 
         _context.AddState(new SelectCharacterState(_context));
-        _context.AddState(new SelectActionState(_context));
+        _context.AddState(new ActionState(_context));
         _context.AddState(new MoveState(_context));
-        _context.AddState(new SelectSkillState(_context));
+        _context.AddState(new SkillState(_context));
         _context.AddState(new SelectTargetState(_context));
         _context.AddState(new ConfirmState(_context));
         _context.AddState(new EffectState(_context));
@@ -107,7 +99,7 @@ public class BattleController
 
     public void Click(Vector2Int position)
     {
-        if (!_canClick) 
+        if (!_canClick)
         {
             return;
         }
@@ -117,7 +109,7 @@ public class BattleController
 
     public void SetActionState()
     {
-        _context.SetState<SelectActionState>();
+        _context.SetState<ActionState>();
     }
 
     public void SetMoveState()
@@ -127,7 +119,7 @@ public class BattleController
 
     public void SetSelectSkillState()
     {
-        _context.SetState<SelectSkillState>();
+        _context.SetState<SkillState>(SkillModel.TypeEnum.Normal);
     }
 
     public void Idle()
@@ -138,14 +130,14 @@ public class BattleController
 
     public void SelectSkill(Skill skill)
     {
-        if (_context.CurrentState is SelectSkillState)
+        if (_context.CurrentState is SkillState)
         {
             _selectedCharacter.SelectedSkill = skill;
             _context.SetState<SelectTargetState>();
         }
     }
 
-    public void SetQuad(List<Vector2Int> list, Color color) 
+    public void SetQuad(List<Vector2Int> list, Color color)
     {
         ClearQuad();
 
@@ -156,7 +148,7 @@ public class BattleController
         }
     }
 
-    public void SetSkillArea() 
+    public void SetSkillArea()
     {
         if (_selectedCharacter.SelectedSkill.Effect.Data.Area == "Through")
         {
@@ -169,7 +161,7 @@ public class BattleController
         SetQuad(_skillAreaList, _yellow);
     }
 
-    public void ClearQuad() 
+    public void ClearQuad()
     {
         foreach (KeyValuePair<Vector2Int, TileComponent> pair in BattleInfo.TileComponentDic)
         {
@@ -177,12 +169,12 @@ public class BattleController
         }
     }
 
-    public void Skip() 
+    public void Skip()
     {
         _context.SetState<EndState>();
     }
 
-    public void OnMoveEnd() 
+    public void OnMoveEnd()
     {
         _canClick = true;
         _selectedCharacter.ActionCount--;
@@ -195,16 +187,16 @@ public class BattleController
         {
             if (_selectedCharacter.ActionCount > 0)
             {
-                _context.SetState<SelectActionState>();
+                _context.SetState<ActionState>();
             }
-            else 
+            else
             {
                 _context.SetState<EndState>();
             }
         }
     }
 
-    public void SetCharacterInfoUI_2(Vector2 position) 
+    public void SetCharacterInfoUI_2(Vector2 position)
     {
         //顯示角色資料
         Instance._battleUI.SetCharacterInfoUI_2(null);
@@ -216,6 +208,46 @@ public class BattleController
                 return;
             }
         }
+    }
+
+    public void ResetAction()
+    {
+        if (!_selectedCharacter.HasUseSkill && _selectedCharacter.LastPosition != BattleCharacterInfo.DefaultLastPosition && _selectedCharacter.ActionCount < 2)
+        {
+            _selectedCharacter.ActionCount = 2;
+            _selectedCharacter.Position = _selectedCharacter.LastPosition;
+            _controllerDic[_selectedCharacter.ID].transform.position = _selectedCharacter.LastPosition;
+            _selectedCharacter.LastPosition = BattleCharacterInfo.DefaultLastPosition;
+        }
+    }
+
+    private void SortCharacterList() 
+    {
+        CharacterList.Sort((x, y) =>
+        {
+            if (x.CurrentWT > y.CurrentWT)
+            {
+                return 1;
+            }
+            else
+            {
+                if (x.CurrentWT == y.CurrentWT)
+                {
+                    if (x.ID > y.ID)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return -1;
+                    }
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+        });
     }
 
     private class BattleControllerState : State
@@ -242,7 +274,7 @@ public class BattleController
         {
         }
 
-        public override void Begin()
+        public override void Begin(object obj)
         {
             info = Instance.CharacterList[0];
             Instance._selectedCharacter = info;
@@ -264,28 +296,38 @@ public class BattleController
             {
                 position = controller.transform.position + new Vector3(0, 10, 0);
             }
+            Instance._battleUI.ActionButtonGroup.gameObject.SetActive(false);
             Camera.main.transform.DOMove(position, 1f).OnComplete(()=> 
             {
-                _context.SetState<SelectActionState>();
+                _context.SetState<ActionState>();
             });
             Instance._arrow.transform.SetParent(controller.transform);
             Instance._arrow.transform.localPosition = new Vector3(0, 1.3f, 0);
             Instance._arrow.transform.localEulerAngles = Vector3.zero;
+            Instance._battleUI.CharacterListGroupRefresh();
         }
     }
 
-    private class SelectActionState : BattleControllerState
+    private class ActionState : BattleControllerState
     {
-        public SelectActionState(StateContext context) : base(context)
+        public ActionState(StateContext context) : base(context)
         {
         }
 
-        public override void Begin()
+        public override void Begin(object obj)
         {
             _character = Instance._selectedCharacter;
             _characterList = Instance.CharacterList;
             Instance._battleUI.ActionButtonGroup.gameObject.SetActive(true);
             Instance._battleUI.ActionButtonGroup.SkillButton.interactable = !_character.HasUseSkill;
+            if (!_character.HasUseSkill && _character.LastPosition != BattleCharacterInfo.DefaultLastPosition && _character.ActionCount < 2)
+            {
+                Instance._battleUI.ActionButtonGroup.ResetButton.interactable = true;
+            }
+            else
+            {
+                Instance._battleUI.ActionButtonGroup.ResetButton.interactable = false;
+            }
             Instance._battleUI.SetCharacterInfoUI_1(_character);
             Instance._battleUI.SetCharacterInfoUI_2(null);
             Instance.ClearQuad();
@@ -304,16 +346,16 @@ public class BattleController
 
     private class MoveState : BattleControllerState
     {
-        private Vector2Int _lastSelectedPosition;
+        private Vector2Int _originalPosition;
         private List<Vector2Int> _stepList;
 
         public MoveState(StateContext context) : base(context)
         {
         }
 
-        public override void Begin()
+        public override void Begin(object obj)
         {
-            _lastSelectedPosition = new Vector2Int(int.MaxValue, int.MaxValue);
+            _originalPosition = new Vector2Int(int.MaxValue, int.MaxValue);
             BattleInfo info = Instance.BattleInfo;
             _character = Instance._selectedCharacter;
             _characterList = Instance.CharacterList;
@@ -330,33 +372,34 @@ public class BattleController
 
             if (_stepList.Contains(position))
             {
-                if (position == _lastSelectedPosition) //確定移動
+                if (position == _originalPosition) //確定移動
                 {
                     Instance._canClick = false;
                     Instance._controllerDic[_character.ID].transform.position = _character.Position;
                     Instance._battleUI.SetSkillVisible(false);
-                    Instance.BattleInfo.TileComponentDic[_lastSelectedPosition].Select.gameObject.SetActive(false);
+                    Instance.BattleInfo.TileComponentDic[_originalPosition].Select.gameObject.SetActive(false);
                     Instance.ClearQuad();
                     List<Vector2Int> path = AStarAlgor.Instance.GetPath(Utility.ConvertToVector2Int(_character.Position), position, _character, _characterList, Instance.BattleInfo.TileInfoDic, false);
                     Instance._controllerDic[_character.ID].Move(path);
                     Instance.BattleInfo.TileInfoDic[Utility.ConvertToVector2Int(_character.Position)].HasCharacter = false;
+                    _character.LastPosition = _character.Position;
                     _character.Position = new Vector3(position.x, Instance.BattleInfo.TileInfoDic[position].Height, position.y);
                     Instance.BattleInfo.TileInfoDic[Utility.ConvertToVector2Int(_character.Position)].HasCharacter = true;
                 }
                 else
                 {
-                    _lastSelectedPosition = position;
-                    Instance.BattleInfo.TileComponentDic[_lastSelectedPosition].Select.gameObject.SetActive(true);
+                    _originalPosition = position;
+                    Instance.BattleInfo.TileComponentDic[_originalPosition].Select.gameObject.SetActive(true);
                 }
             }
             else
             {
-                if (Instance.BattleInfo.TileComponentDic.ContainsKey(_lastSelectedPosition))
+                if (Instance.BattleInfo.TileComponentDic.ContainsKey(_originalPosition))
                 {
-                    Instance.BattleInfo.TileComponentDic[_lastSelectedPosition].Select.gameObject.SetActive(false);
+                    Instance.BattleInfo.TileComponentDic[_originalPosition].Select.gameObject.SetActive(false);
                 }
                 Instance._controllerDic[_character.ID].transform.position = _character.Position;
-                _context.SetState<SelectActionState>();
+                _context.SetState<ActionState>();
             }
         }
 
@@ -367,20 +410,23 @@ public class BattleController
         //}
     }
 
-    private class SelectSkillState : BattleControllerState
+    private class SkillState : BattleControllerState
     {
-        public SelectSkillState(StateContext context) : base(context)
+        public SkillState(StateContext context) : base(context)
         {
         }
 
-        public override void Begin()
+        public override void Begin(object obj)
         {
             Instance._battleUI.ActionButtonGroup.gameObject.SetActive(false);
-            BattleCharacterInfo character = Instance._selectedCharacter;
-            if (!character.IsAuto)
+            _character = Instance._selectedCharacter;
+            if (!_character.IsAuto)
             {
                 Instance._battleUI.SetSkillVisible(true);
-                Instance._battleUI.SetSkillData(character);
+                if (obj != null)
+                {
+                    Instance._battleUI.SetSkillData(_character, (SkillModel.TypeEnum)obj);
+                }
             }
         }
 
@@ -399,7 +445,7 @@ public class BattleController
         {
         }
 
-        public override void Begin()
+        public override void Begin(object obj)
         {
             BattleInfo info = Instance.BattleInfo;
             _character = Instance._selectedCharacter;
@@ -457,7 +503,7 @@ public class BattleController
             else
             {
                 Instance.ClearQuad();
-                _context.SetState<SelectSkillState>();
+                _context.SetState<SkillState>();
             }
         }
     }
@@ -468,7 +514,7 @@ public class BattleController
         {
         }
 
-        public override void Begin()
+        public override void Begin(object obj)
         {
             if (Instance._selectedCharacter.SelectedSkill.Effect.Data.Area == "Through")
             {
@@ -495,7 +541,7 @@ public class BattleController
             {
                 Instance._battleUI.SetCharacterInfoUI_2(null);
                 Instance.ClearQuad();
-                _context.SetState<SelectSkillState>();
+                _context.SetState<SkillState>();
             }
         }
 
@@ -517,9 +563,8 @@ public class BattleController
         {
         }
 
-        public override void Begin()
+        public override void Begin(object obj)
         {
-            base.Begin();
             Instance._battleUI.SetCharacterInfoUI_2(null);
             Instance.ClearQuad();
             _characterList = Instance.CharacterList;
@@ -535,6 +580,7 @@ public class BattleController
             }
             if (_targetList.Count > 0)
             {
+                int max = 0;
                 for (int i = 0; i < _targetList.Count; i++)
                 {
                     List<FloatingNumberData> floatingList = new List<FloatingNumberData>();
@@ -544,9 +590,12 @@ public class BattleController
                     {
                         Instance._battleUI.PlayFloatingNumberPool(_targetList[i].ID, floatingList[j].Type, floatingList[j].Text);
                     }
+                    if (floatingList.Count > max) 
+                    {
+                        max = floatingList.Count;
+                    }
                 }
-                _character.CurrentMP -= _character.SelectedSkill.Data.MP;
-                _timer.Start(0.5f, CheckResult);
+                _timer.Start(max, CheckResult);
             }
             else 
             {
@@ -595,7 +644,7 @@ public class BattleController
                 _character.ActionCount--;
                 if (_character.ActionCount > 0)
                 {
-                    _context.SetState<SelectActionState>();
+                    _context.SetState<ActionState>();
                 }
                 else
                 {
@@ -611,7 +660,7 @@ public class BattleController
         {
         }
 
-        public override void Begin()
+        public override void Begin(object obj)
         {
             _characterList = Instance.CharacterList;
             _character = Instance._selectedCharacter;
@@ -627,32 +676,24 @@ public class BattleController
                     {
                         Instance._battleUI.PlayFloatingNumberPool(_character.ID, floatingList[j].Type, floatingList[j].Text);
                     }
-                    for(int i=0; i<_character.SkillList.Count; i++)
+                    for(int i=0; i<_character.SkillDic[SkillModel.TypeEnum.Normal].Count; i++)
                     {
-                        _character.SkillList[i].CheckCD();
+                        _character.SkillDic[SkillModel.TypeEnum.Normal][i].CheckCD();
                     }
                     _character.CurrentWT = _character.WT;
                     _character.ActionCount = 2;
                     _character.HasUseSkill = false;
+                    _character.LastPosition = BattleCharacterInfo.DefaultLastPosition;
+                    _character.CheckSP();
                     _characterList.RemoveAt(0);
                     _characterList.Add(_character);
-                    _characterList.Sort((x, y) =>
-                    {
-                        if (x.CurrentWT > y.CurrentWT)
-                        {
-                            return 1;
-                        }
-                        else
-                        {
-                            return -1;
-                        }
-                    });
+                    Instance.SortCharacterList();
 
                     _context.SetState<SelectCharacterState>();
                 }
                 else
                 {
-                    _context.SetState<SelectActionState>();
+                    _context.SetState<ActionState>();
                 }
             }
             else 
