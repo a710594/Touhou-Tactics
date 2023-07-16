@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class SkillButtonGroup : MonoBehaviour
 {
+    public SPGroup SPGroup;
     public Button BackButton;
     public SkillButton[] SkillButtons;
 
@@ -20,12 +21,22 @@ public class SkillButtonGroup : MonoBehaviour
             if (i < info.SkillDic[type].Count) 
             {
                 SkillButtons[i].gameObject.SetActive(true);
-                SkillButtons[i].SetData(info.SkillDic[type][i]);
+                SkillButtons[i].SetData(info.SkillDic[type][i], info);
             }
             else 
             {
                 SkillButtons[i].gameObject.SetActive(false);
             }
+        }
+
+        if(type == SkillModel.TypeEnum.Support) 
+        {
+            SPGroup.gameObject.SetActive(true);
+            SPGroup.SetData(info.CurrentSP);
+        }
+        else 
+        {
+            SPGroup.gameObject.SetActive(false);
         }
     }
 

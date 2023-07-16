@@ -60,7 +60,7 @@ public class MashroomAI : AI
         {
             if (_inRange)
             {
-                BattleController.Instance.SetSelectSkillState();
+                BattleController.Instance.SetSelectSkillState(SkillModel.TypeEnum.Normal);
                 BattleController.Instance.SelectSkill(_selectedSkill);
                 BattleController.Instance.Click(Utility.ConvertToVector2Int(_target.Position));
                 BattleController.Instance.Click(Utility.ConvertToVector2Int(_target.Position));

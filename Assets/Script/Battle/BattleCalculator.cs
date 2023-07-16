@@ -30,10 +30,10 @@ public static class BattleCalculator
         return list;
     }
 
-    public static List<Vector2Int> GetTroughAreaList(Vector3 from, Vector3 to, Dictionary<Vector2Int, TileInfo> tileDic)
+    public static List<Vector2Int> GetTroughAreaList(Vector3 from, Vector3 to, List<BattleCharacterInfo> characterList, Dictionary<Vector2Int, TileInfo> tileDic)
     {
         List<Vector2Int> list = new List<Vector2Int>();
-        CheckLine(from, to, tileDic, out bool isBlock, out Vector3 result);
+        CheckLine(from, to, characterList, tileDic, out bool isBlock, out Vector3 result);
         List<Vector3> line = Utility.DrawLine3D(from, result);
         for (int i = 0; i < line.Count; i++)
         {
@@ -54,37 +54,6 @@ public static class BattleCalculator
         }
         return false;
     }
-
-    //public static void SetEffect(Effect effect, BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> list) 
-    //{
-    //    FloatingNumberData floatingNumberData;
-    //    HitType hitType = CheckHit(effect, user, target);
-    //    if(effect.Data.Type == EffectModel.TypeEnum.PhysicalAttack || effect.Data.Type == EffectModel.TypeEnum.MagicAttack) 
-    //    {
-    //        if (hitType != HitType.Miss)
-    //        {
-    //            int damage = SetDamage(effect, user, target, hitType);
-    //            if (hitType == HitType.Hit)
-    //            {
-    //                floatingNumberData = new FloatingNumberData(FloatingNumberData.TypeEnum.Damage, damage.ToString());
-    //            }
-    //            else
-    //            {
-    //                floatingNumberData = new FloatingNumberData(FloatingNumberData.TypeEnum.Critical, damage.ToString());
-    //            }
-    //        }
-    //        else
-    //        {
-    //            floatingNumberData = new FloatingNumberData(FloatingNumberData.TypeEnum.Miss, "Miss");
-    //        }
-    //        list.Add(floatingNumberData);
-    //    }
-
-    //    if (effect.SubEffect != null && hitType != HitType.Miss)
-    //    {
-    //        SetEffect(effect.SubEffect, user, target, list);
-    //    }
-    //}
 
 
     public static HitType CheckHit(Effect effect, BattleCharacterInfo user, BattleCharacterInfo target)
@@ -215,7 +184,7 @@ public static class BattleCalculator
         }
     }
 
-    public static void CheckLine(Vector3 from, Vector3 to, Dictionary<Vector2Int, TileInfo> tileDic, out bool isBlock, out Vector3 result) 
+    public static void CheckLine(Vector3 from, Vector3 to, List<BattleCharacterInfo> characterList, Dictionary<Vector2Int, TileInfo> tileDic, out bool isBlock, out Vector3 result) 
     {
         isBlock = false;
         int height;
@@ -232,7 +201,15 @@ public static class BattleCalculator
                     height += DataContext.Instance.AttachScriptableObjectDic[tileDic[position].AttachID].Height;
                 }
 
-                if(height> list[i].y) 
+                for (int j = 0; j < characterList.Count; j++)
+                {
+                    if(Utility.ConvertToVector2Int(from) != Utility.ConvertToVector2Int(characterList[j].Position) && Utility.ConvertToVector2Int(to) != Utility.ConvertToVector2Int(characterList[j].Position) && position == Utility.ConvertToVector2Int(characterList[j].Position)) 
+                    {
+                        height++;
+                    }
+                }
+
+                if (height> list[i].y) 
                 {
                     isBlock = true;
                     result = list[i];
@@ -266,7 +243,7 @@ public static class BattleCalculator
                 {
                     isBlock = true;
                     to = list[i];
-                    return;
+                    break;
                 }
             }
         }

@@ -27,6 +27,7 @@ public class Skill
         {
             CurrentCD = Data.CD + 1; //要加一的原因是為了抵銷本回合的 CheckCD
         }
+        user.CurrentSP -= Data.SP;
     }
 
     public void CheckCD() 

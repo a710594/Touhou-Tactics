@@ -9,7 +9,6 @@ public class JobModel
     public int ID;
     public string Name;
     public int HP;
-    public int PP;
     public int ATK;
     public int DEF;
     public int MTK;

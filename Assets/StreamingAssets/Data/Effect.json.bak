@@ -1,7 +1,12 @@
 [{"Type":1,"ID":1,"Name":"攻擊","Value":100,"Hit":100,"Range":1,"Area":"(0,0)","Target":3,"Track":1,"StatusType":-1,"StatusID":-1,"SubType":-1,"SubID":-1},
-{"Type":1,"ID":2,"Name":"射擊","Value":100,"Hit":100,"Range":5,"Area":"(0,0)","Target":3,"Track":2,"StatusType":-1,"StatusID":-1,"SubType":-1,"SubID":-1},
+{"Type":1,"ID":2,"Name":"射擊","Value":100,"Hit":100,"Range":5,"Area":"(0,0)","Target":3,"Track":3,"StatusType":-1,"StatusID":-1,"SubType":-1,"SubID":-1},
+{"Type":1,"ID":3,"Name":"毒攻擊","Value":100,"Hit":100,"Range":1,"Area":"(0,0)","Target":3,"Track":1,"StatusType":-1,"StatusID":-1,"SubType":6,"SubID":1},
 {"Type":2,"ID":1,"Name":"魔彈","Value":100,"Hit":100,"Range":5,"Area":"(0,0)","Target":3,"Track":2,"StatusType":-1,"StatusID":-1,"SubType":-1,"SubID":-1},
 {"Type":2,"ID":2,"Name":"隕石術","Value":80,"Hit":100,"Range":5,"Area":"(0,0),(1,0),(-1,0),(0,1),(0,-1)","Target":3,"Track":1,"StatusType":-1,"StatusID":-1,"SubType":-1,"SubID":-1},
-{"Type":2,"ID":3,"Name":"雷射","Value":120,"Hit":100,"Range":5,"Area":"Through","Target":3,"Track":2,"StatusType":-1,"StatusID":-1,"SubType":-1,"SubID":-1},
+{"Type":2,"ID":3,"Name":"雷射","Value":80,"Hit":100,"Range":10,"Area":"Through","Target":3,"Track":2,"StatusType":-1,"StatusID":-1,"SubType":-1,"SubID":-1},
+{"Type":3,"ID":1,"Name":"治癒","Value":100,"Hit":100,"Range":5,"Area":"(0,0)","Target":1,"Track":1,"StatusType":-1,"StatusID":-1,"SubType":-1,"SubID":-1},
 {"Type":4,"ID":1,"Name":"挑釁","Value":-1,"Hit":100,"Range":5,"Area":"(0,0)","Target":2,"Track":1,"StatusType":1,"StatusID":1,"SubType":-1,"SubID":-1},
-{"Type":5,"ID":1,"Name":"金剛結界","Value":-1,"Hit":100,"Range":0,"Area":"(0,0)","Target":1,"Track":1,"StatusType":3,"StatusID":1,"SubType":-1,"SubID":-1}]
+{"Type":5,"ID":1,"Name":"金剛結界","Value":-1,"Hit":100,"Range":0,"Area":"(0,0)","Target":1,"Track":1,"StatusType":3,"StatusID":1,"SubType":-1,"SubID":-1},
+{"Type":5,"ID":2,"Name":"退魔結界","Value":-1,"Hit":100,"Range":0,"Area":"(0,0)","Target":1,"Track":1,"StatusType":5,"StatusID":2,"SubType":-1,"SubID":-1},
+{"Type":5,"ID":3,"Name":"魔力壓縮","Value":-1,"Hit":100,"Range":0,"Area":"(0,0)","Target":1,"Track":1,"StatusType":4,"StatusID":3,"SubType":-1,"SubID":-1},
+{"Type":6,"ID":1,"Name":"毒","Value":-1,"Hit":100,"Range":1,"Area":"(0,0)","Target":3,"Track":1,"StatusType":10,"StatusID":1,"SubType":-1,"SubID":-1}]

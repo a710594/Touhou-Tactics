@@ -13,11 +13,22 @@ public class SkillButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private Skill _skill;
 
-    public void SetData(Skill skill) 
+    public void SetData(Skill skill, BattleCharacterInfo info) 
     {
         _skill = skill;
         NameLabel.text = skill.Data.Name;
-        Button.interactable = skill.CurrentCD == 0;
+        if (skill.CurrentCD == 0)
+        {
+            Button.interactable = false;
+        }
+        else if(skill.Data.Type == SkillModel.TypeEnum.Support && skill.Data.SP> info.CurrentSP)
+        {
+            Button.interactable = false;
+        }
+        else 
+        {
+            Button.interactable = true;
+        }
     }
 
     private void OnClick() 
@@ -34,7 +45,7 @@ public class SkillButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void OnPointerEnter(PointerEventData eventData)
     {
         CommentLabel.gameObject.SetActive(true);
-        CommentLabel.text = _skill.Data.Name;
+        CommentLabel.text = _skill.Data.Comment;
     }
 
     public void OnPointerExit(PointerEventData eventData)

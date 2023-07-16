@@ -54,14 +54,18 @@ public class BattleController
         CharacterList.Add(new BattleCharacterInfo(DataContext.Instance.JobDic[3]));
         CharacterList[2].ID = 3;
         CharacterList[2].Position = new Vector3(0, 1, 1);
-        CharacterList.Add(new BattleCharacterInfo(DataContext.Instance.EnemyDic[1]));
+        CharacterList.Add(new BattleCharacterInfo(DataContext.Instance.JobDic[4]));
         CharacterList[3].ID = 4;
-        CharacterList[3].AI = new MashroomAI(CharacterList[3]);
-        CharacterList[3].Position = new Vector3(3, 1, 3);
+        CharacterList[3].Position = new Vector3(1, 1, 1);
+
         CharacterList.Add(new BattleCharacterInfo(DataContext.Instance.EnemyDic[1]));
         CharacterList[4].ID = 5;
         CharacterList[4].AI = new MashroomAI(CharacterList[4]);
-        CharacterList[4].Position = new Vector3(4, 1, 4);
+        CharacterList[4].Position = new Vector3(3, 1, 3);
+        CharacterList.Add(new BattleCharacterInfo(DataContext.Instance.EnemyDic[1]));
+        CharacterList[5].ID = 6;
+        CharacterList[5].AI = new MashroomAI(CharacterList[5]);
+        CharacterList[5].Position = new Vector3(4, 1, 3);
 
         CameraDrag camera = Camera.main.GetComponent<CameraDrag>();
         _battleUI.SetMapInfo(info.Width, info.Height);
@@ -117,9 +121,9 @@ public class BattleController
         _context.SetState<MoveState>();
     }
 
-    public void SetSelectSkillState()
+    public void SetSelectSkillState(SkillModel.TypeEnum type)
     {
-        _context.SetState<SkillState>(SkillModel.TypeEnum.Normal);
+        _context.SetState<SkillState>(type);
     }
 
     public void Idle()
@@ -152,7 +156,7 @@ public class BattleController
     {
         if (_selectedCharacter.SelectedSkill.Effect.Data.Area == "Through")
         {
-            _skillAreaList = BattleCalculator.GetTroughAreaList(_selectedCharacter.Position, new Vector3(_selectedPosition.x, Instance.BattleInfo.TileInfoDic[_selectedPosition].Height, _selectedPosition.y), BattleInfo.TileInfoDic);
+            _skillAreaList = BattleCalculator.GetTroughAreaList(_selectedCharacter.Position, new Vector3(_selectedPosition.x, Instance.BattleInfo.TileInfoDic[_selectedPosition].Height, _selectedPosition.y), CharacterList, BattleInfo.TileInfoDic);
         }
         else
         {
@@ -319,7 +323,7 @@ public class BattleController
             _character = Instance._selectedCharacter;
             _characterList = Instance.CharacterList;
             Instance._battleUI.ActionButtonGroup.gameObject.SetActive(true);
-            Instance._battleUI.ActionButtonGroup.SkillButton.interactable = !_character.HasUseSkill;
+            Instance._battleUI.ActionButtonGroup.SetButton(_character);
             if (!_character.HasUseSkill && _character.LastPosition != BattleCharacterInfo.DefaultLastPosition && _character.ActionCount < 2)
             {
                 Instance._battleUI.ActionButtonGroup.ResetButton.interactable = true;
@@ -481,7 +485,7 @@ public class BattleController
                 Vector3 p = new Vector3(position.x, tileDic[position].Height, position.y);
                 if (_character.SelectedSkill.Effect.Data.Track == EffectModel.TrackEnum.Straight)
                 {
-                    BattleCalculator.CheckLine(_character.Position, p, tileDic, out bool isBlock, out Vector3 result);
+                    BattleCalculator.CheckLine(_character.Position, p, characterList, tileDic, out bool isBlock, out Vector3 result);
                     Instance._cameraController.DrawLine(_character.Position, result, isBlock);
                     Instance._selectedPosition = Utility.ConvertToVector2Int(result);
                 }
@@ -516,10 +520,13 @@ public class BattleController
 
         public override void Begin(object obj)
         {
-            if (Instance._selectedCharacter.SelectedSkill.Effect.Data.Area == "Through")
+            _character = Instance._selectedCharacter;
+            _characterList = Instance.CharacterList;
+
+            if (_character.SelectedSkill.Effect.Data.Area == "Through")
             {
                 Vector3 to = new Vector3(Instance._selectedPosition.x, Instance.BattleInfo.TileInfoDic[Instance._selectedPosition].Height, Instance._selectedPosition.y);
-                Instance._skillAreaList = BattleCalculator.GetTroughAreaList(Instance._selectedCharacter.Position, to, Instance.BattleInfo.TileInfoDic);
+                Instance._skillAreaList = BattleCalculator.GetTroughAreaList(_character.Position, to, _characterList, Instance.BattleInfo.TileInfoDic);
             }
             else
             {
@@ -640,8 +647,15 @@ public class BattleController
             }
             else
             {
-                _character.HasUseSkill = true;
-                _character.ActionCount--;
+                if (_character.SelectedSkill.Data.Type == SkillModel.TypeEnum.Normal)
+                {
+                    _character.HasUseSkill = true;
+                    _character.ActionCount--;
+                }
+                else if (_character.SelectedSkill.Data.Type == SkillModel.TypeEnum.Support) 
+                {
+                    _character.HasUseSupport = true;
+                }
                 if (_character.ActionCount > 0)
                 {
                     _context.SetState<ActionState>();
@@ -683,6 +697,7 @@ public class BattleController
                     _character.CurrentWT = _character.WT;
                     _character.ActionCount = 2;
                     _character.HasUseSkill = false;
+                    _character.HasUseSupport = false;
                     _character.LastPosition = BattleCharacterInfo.DefaultLastPosition;
                     _character.CheckSP();
                     _characterList.RemoveAt(0);

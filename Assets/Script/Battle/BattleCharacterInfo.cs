@@ -20,7 +20,6 @@ public class BattleCharacterInfo
     public int ID;
     public string Name;
     public int MaxHP;
-    public int PP;
     public int ATK;
     public int DEF;
     public int MTK;
@@ -56,7 +55,6 @@ public class BattleCharacterInfo
         ID = job.ID;
         Name = job.Name;
         MaxHP = job.HP;
-        PP = job.PP;
         ATK = job.ATK;
         DEF = job.DEF;
         MTK = job.MTK;
@@ -71,10 +69,10 @@ public class BattleCharacterInfo
         Faction = FactionEnum.Player;
 
         CurrentHP = MaxHP;
-        CurrentPP = PP;
         CurrentWT = WT;
 
         List<Skill> normalList = new List<Skill>();
+        SkillDic.Add(SkillModel.TypeEnum.Normal, normalList);
         if (job.Skill_1 != -1)
         {
             normalList.Add(new Skill(DataContext.Instance.SkillDic[SkillModel.TypeEnum.Normal][job.Skill_1]));
@@ -95,9 +93,9 @@ public class BattleCharacterInfo
         {
             normalList.Add(new Skill(DataContext.Instance.SkillDic[SkillModel.TypeEnum.Normal][job.Skill_5]));
         }
-        SkillDic.Add(SkillModel.TypeEnum.Normal, normalList);
 
         List<Skill> supportList = new List<Skill>();
+        SkillDic.Add(SkillModel.TypeEnum.Support, supportList);
         if (job.Support_1 != -1)
         {
             supportList.Add(new Skill(DataContext.Instance.SkillDic[SkillModel.TypeEnum.Support][job.Support_1]));
@@ -118,7 +116,6 @@ public class BattleCharacterInfo
         {
             supportList.Add(new Skill(DataContext.Instance.SkillDic[SkillModel.TypeEnum.Support][job.Support_5]));
         }
-        SkillDic.Add(SkillModel.TypeEnum.Support, supportList);
     }
 
     public BattleCharacterInfo(EnemyModel enemy)
@@ -141,8 +138,9 @@ public class BattleCharacterInfo
 
         IsAuto = true;
         CurrentHP = MaxHP;
-        CurrentPP = PP;
         CurrentWT = WT;
+
+        SkillDic.Add(SkillModel.TypeEnum.Normal, new List<Skill>());
     }
 
     public void SetDamage(int damage)
