@@ -67,7 +67,6 @@ public class MapFileGenerator : MonoBehaviour
         string text = File.ReadAllText(path);
         string[] lines = text.Split('\n');
         string[] str;
-        char c;
         GameObject tile;
         Dictionary<Vector3, GameObject> tileList = new Dictionary<Vector3, GameObject>();
 

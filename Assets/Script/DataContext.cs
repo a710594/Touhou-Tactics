@@ -29,13 +29,15 @@ public class DataContext
     public List<StatusModel> StatusList = new List<StatusModel>();
     public List<EnemyModel> EnemyList = new List<EnemyModel>();
     public List<SupportModel> SupportList = new List<SupportModel>();
+    public List<ItemModel> ItemList = new List<ItemModel>();
 
     public Dictionary<int, JobModel> JobDic = new Dictionary<int, JobModel>();
-    public Dictionary<SkillModel.TypeEnum, Dictionary<int, SkillModel>> SkillDic = new Dictionary<SkillModel.TypeEnum, Dictionary<int, SkillModel>>();
+    public Dictionary<int, SkillModel> SkillDic = new Dictionary<int, SkillModel>();
     public Dictionary<EffectModel.TypeEnum, Dictionary<int, EffectModel>> EffectDic = new Dictionary<EffectModel.TypeEnum, Dictionary<int, EffectModel>>();
     public Dictionary<StatusModel.TypeEnum, Dictionary<int, StatusModel>> StatusDic = new Dictionary<StatusModel.TypeEnum, Dictionary<int, StatusModel>>();
     public Dictionary<int, EnemyModel> EnemyDic = new Dictionary<int, EnemyModel>();
     public Dictionary<int, SupportModel> SupportDic = new Dictionary<int, SupportModel>();
+    public Dictionary<ItemModel.CategoryEnum, Dictionary<int, ItemModel>> ItemDic = new Dictionary<ItemModel.CategoryEnum, Dictionary<int, ItemModel>>();
     public Dictionary<string, TileScriptableObject> TileScriptableObjectDic = new Dictionary<string, TileScriptableObject>();
     public Dictionary<string, AttachScriptableObject> AttachScriptableObjectDic = new Dictionary<string, AttachScriptableObject>();
 
@@ -52,11 +54,7 @@ public class DataContext
         SkillList = Load<List<SkillModel>>("Skill");
         for (int i = 0; i < SkillList.Count; i++)
         {
-            if (!SkillDic.ContainsKey(SkillList[i].Type))
-            {
-                SkillDic.Add(SkillList[i].Type, new Dictionary<int, SkillModel>());
-            }
-            SkillDic[SkillList[i].Type].Add(SkillList[i].ID, SkillList[i]);
+            SkillDic.Add(SkillList[i].ID, SkillList[i]);
         }
 
         EffectList = Load<List<EffectModel>>("Effect");
@@ -91,6 +89,16 @@ public class DataContext
         for (int i = 0; i < SupportList.Count; i++)
         {
             SupportDic.Add(SupportList[i].ID, SupportList[i]);
+        }
+
+        ItemList = Load<List<ItemModel>>("Item");
+        for (int i = 0; i < ItemList.Count; i++)
+        {
+            if (!ItemDic.ContainsKey(ItemList[i].Category))
+            {
+                ItemDic.Add(ItemList[i].Category, new Dictionary<int, ItemModel>());
+            }
+            ItemDic[ItemList[i].Category].Add(ItemList[i].ID, ItemList[i]);
         }
 
         DirectoryInfo d;
@@ -142,7 +150,40 @@ public class DataContext
         }
         catch (Exception ex)
         {
+            Debug.LogError(ex);
             return default(T);
         }
+    }
+
+    public void Save<T>(T t, string fileName = "")
+    {
+        try
+        {
+            string path;
+            if (fileName == "")
+            {
+                path = Path.Combine(_prePath, typeof(T).Name + ".json");
+            }
+            else
+            {
+                path = Path.Combine(_prePath, fileName + ".json");
+            }
+            File.WriteAllText(path, JsonConvert.SerializeObject(t));
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError(ex);
+        }
+    }
+
+    public void DeleteData<T>()
+    {
+        string path = Path.Combine(_prePath, typeof(T).Name + ".json");
+        File.Delete(path);
+    }
+
+    public void DeleteData(string fileName = "")
+    {
+        File.Delete(Path.Combine(_prePath, fileName + ".json"));
     }
 }

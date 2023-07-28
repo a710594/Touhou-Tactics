@@ -1,3 +1,4 @@
+using Battle;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,20 +13,33 @@ public class SkillButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public Text CommentLabel;
 
     private Skill _skill;
+    private Support _support;
 
-    public void SetData(Skill skill, BattleCharacterInfo info) 
+    public void SetData(Skill skill) 
     {
         _skill = skill;
+        _support = null;
         NameLabel.text = skill.Data.Name;
         if (skill.CurrentCD == 0)
         {
-            Button.interactable = false;
+            Button.interactable = true;
         }
-        else if(skill.Data.Type == SkillModel.TypeEnum.Support && skill.Data.SP> info.CurrentSP)
+        else 
         {
             Button.interactable = false;
         }
-        else 
+    }
+
+    public void SetData(Support support, int currentSP) //雖然 support 和 skill 是不一樣的東西,但是 UI 共用
+    {
+        _support = support;
+        _skill = null;
+        NameLabel.text = support.Data.Name;
+        if (support.Data.SP> currentSP)
+        {
+            Button.interactable = false;
+        }
+        else
         {
             Button.interactable = true;
         }
@@ -33,7 +47,14 @@ public class SkillButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private void OnClick() 
     {
-        BattleController.Instance.SelectSkill(_skill);
+        if (_skill != null)
+        {
+            BattleController.Instance.SelectSkill(_skill);
+        }
+        else if (_support != null) 
+        {
+            BattleController.Instance.SelectSupport(_support);
+        }
     }
 
     private void Awake()

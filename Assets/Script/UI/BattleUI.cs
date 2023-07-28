@@ -1,3 +1,4 @@
+using Battle;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
@@ -67,9 +68,14 @@ public class BattleUI : MonoBehaviour
         SkillButtonGroup.gameObject.SetActive(isVisible);
     }
 
-    public void SetSkillData(BattleCharacterInfo info, SkillModel.TypeEnum type) 
+    public void SetSkillData(List<Skill> skillList) 
     {
-        SkillButtonGroup.SetData(info, type);
+        SkillButtonGroup.SetData(skillList);
+    }
+
+    public void SetSupportData(List<Support> supportList, int currentSP) 
+    {
+        SkillButtonGroup.SetData(supportList, currentSP);
     }
 
     public void SetHpPrediction(int origin, int prediction, int max)

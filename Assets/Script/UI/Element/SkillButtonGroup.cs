@@ -1,3 +1,4 @@
+using Battle;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,30 +15,39 @@ public class SkillButtonGroup : MonoBehaviour
         gameObject.SetActive(isVisible);
     }
 
-    public void SetData(BattleCharacterInfo info, SkillModel.TypeEnum type) 
+    public void SetData(List<Skill> skillList) 
     {
         for(int i=0; i< SkillButtons.Length; i++) 
         {
-            if (i < info.SkillDic[type].Count) 
+            if (i < skillList.Count) 
             {
                 SkillButtons[i].gameObject.SetActive(true);
-                SkillButtons[i].SetData(info.SkillDic[type][i], info);
+                SkillButtons[i].SetData(skillList[i]);
             }
             else 
             {
                 SkillButtons[i].gameObject.SetActive(false);
             }
         }
+        SPGroup.gameObject.SetActive(false);
+    }
 
-        if(type == SkillModel.TypeEnum.Support) 
+    public void SetData(List<Support> supportList, int currentSP)
+    {
+        for (int i = 0; i < SkillButtons.Length; i++)
         {
-            SPGroup.gameObject.SetActive(true);
-            SPGroup.SetData(info.CurrentSP);
+            if (i < supportList.Count)
+            {
+                SkillButtons[i].gameObject.SetActive(true);
+                SkillButtons[i].SetData(supportList[i], currentSP);
+            }
+            else
+            {
+                SkillButtons[i].gameObject.SetActive(false);
+            }
         }
-        else 
-        {
-            SPGroup.gameObject.SetActive(false);
-        }
+        SPGroup.gameObject.SetActive(true);
+        SPGroup.SetData(currentSP);
     }
 
     private void BackOnClick() 

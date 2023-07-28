@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Battle;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,7 +34,7 @@ public class MashroomAI : AI
 
             _target = null;
             _rangeList.Clear();
-            _selectedSkill = new Skill(DataContext.Instance.SkillDic[SkillModel.TypeEnum.Normal][_skillId]);
+            _selectedSkill = new Skill(DataContext.Instance.SkillDic[_skillId]);
 
             GetRange();
             GetTarget(true);
