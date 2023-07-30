@@ -20,6 +20,7 @@ public class ScrollView : MonoBehaviour
     public GridLayoutGroup MainGrid;
     public RectTransform MainGridRect;
     public ScrollGrid SubGrid;
+    public ScrollItem ScrollItem;
 
     private int _currentIndex = 0;
     private int _subGridAmount = 0;
@@ -33,21 +34,21 @@ public class ScrollView : MonoBehaviour
         float length = 0;
         if (Type == TypeEnum.Horizontal)
         {
-            _subGridAmount = Mathf.FloorToInt(Background.sizeDelta.x / SubGrid.ScrollItem.Background.rectTransform.sizeDelta.x) + 1;
-            MainGridRect.sizeDelta = new Vector2((SubGrid.ScrollItem.Background.rectTransform.sizeDelta.x + SpacingX) * _subGridAmount, Background.sizeDelta.y);
+            _subGridAmount = Mathf.FloorToInt(Background.sizeDelta.x / ScrollItem.Background.rectTransform.sizeDelta.x) + 1;
+            MainGridRect.sizeDelta = new Vector2((ScrollItem.Background.rectTransform.sizeDelta.x + SpacingX) * _subGridAmount, Background.sizeDelta.y);
             MainGrid.cellSize = new Vector2(CellSizeX, Background.sizeDelta.y);
             MainGrid.spacing = new Vector2(SpacingX, 0);
             length = Content.sizeDelta.y;
-            _scrollItemAmount = Mathf.FloorToInt(length / (SubGrid.ScrollItem.Background.rectTransform.sizeDelta.y + SubGrid.Grid.spacing.y));
+            _scrollItemAmount = Mathf.FloorToInt(length / (ScrollItem.Background.rectTransform.sizeDelta.y + SubGrid.Grid.spacing.y));
         }
         else if (Type == TypeEnum.Vertical)
         {
-            _subGridAmount = Mathf.FloorToInt(Background.sizeDelta.y / SubGrid.ScrollItem.Background.rectTransform.sizeDelta.y) + 1;
-            MainGridRect.sizeDelta = new Vector2(Background.sizeDelta.x, (SubGrid.ScrollItem.Background.rectTransform.sizeDelta.y + SpacingY) * _subGridAmount);
+            _subGridAmount = Mathf.FloorToInt(Background.sizeDelta.y / ScrollItem.Background.rectTransform.sizeDelta.y) + 1;
+            MainGridRect.sizeDelta = new Vector2(Background.sizeDelta.x, (ScrollItem.Background.rectTransform.sizeDelta.y + SpacingY) * _subGridAmount);
             MainGrid.cellSize = new Vector2(Background.sizeDelta.x, CellSizeY);
             MainGrid.spacing = new Vector2(0, SpacingY);
             length = Content.sizeDelta.x;
-            _scrollItemAmount = Mathf.FloorToInt(length / (SubGrid.ScrollItem.Background.rectTransform.sizeDelta.x + SubGrid.Grid.spacing.x));
+            _scrollItemAmount = Mathf.FloorToInt(length / (ScrollItem.Background.rectTransform.sizeDelta.x + SubGrid.Grid.spacing.x));
         }
 
 
@@ -64,7 +65,7 @@ public class ScrollView : MonoBehaviour
             //{
             //    grid.transform.localPosition = new Vector3(Background.sizeDelta.x / 2f, -(i + 0.5f) * CellSizeY - i * SpacingY);
             //}
-            grid.Init(Type, length, CellSizeX, CellSizeY, SpacingX, SpacingY, _scrollItemAmount);
+            grid.Init(ScrollItem, Type, length, CellSizeX, CellSizeY, SpacingX, SpacingY, _scrollItemAmount);
             _gridList.Add(grid);
         }
     }
@@ -98,14 +99,14 @@ public class ScrollView : MonoBehaviour
 
     private void Awake()
     {
-        Init();
+        //Init();
 
-        List<object> list = new List<object>();
-        for (int i=1; i<= 50; i++) 
-        {
-            list.Add(i.ToString());
-        }
-        SetData(list);
+        //List<object> list = new List<object>();
+        //for (int i=1; i<= 50; i++) 
+        //{
+        //    list.Add(i.ToString());
+        //}
+        //SetData(list);
     }
 
     private void Update()

@@ -106,7 +106,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 14c925e747597a74e8eb96a6c45e8623, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4717fb1cbf240ce4d96ee885f40ba5bf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -130,6 +130,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HpAnchor: {fileID: 4050872517935161470}
-  Front: {fileID: 21300000, guid: 14c925e747597a74e8eb96a6c45e8623, type: 3}
-  Back: {fileID: 21300000, guid: 6e7e50ab4abd7c948affa2ff0a2e9868, type: 3}
+  Front: {fileID: 21300000, guid: 4717fb1cbf240ce4d96ee885f40ba5bf, type: 3}
+  Back: {fileID: 21300000, guid: b13a5125a392bfb4bbb1cb5520737549, type: 3}
   SpriteRenderer: {fileID: 5370710889101261414}

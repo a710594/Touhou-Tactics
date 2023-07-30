@@ -7,14 +7,14 @@ public class ScrollGrid : MonoBehaviour
 {
     public Image Background;
     public GridLayoutGroup Grid;
-    public ScrollItem ScrollItem;
+
 
     [NonReorderable]
     public int ItemAmount;
 
     private List<ScrollItem> _itemList = new List<ScrollItem>();
 
-    public void Init(ScrollView.TypeEnum type, float length, float cellSizeX, float cellSizeY, float spacingX, float spacingY, int itemAmount)
+    public void Init(ScrollItem scrollItem, ScrollView.TypeEnum type, float length, float cellSizeX, float cellSizeY, float spacingX, float spacingY, int itemAmount)
     {
         Grid.cellSize = new Vector2(cellSizeX, cellSizeY);
         Grid.spacing = new Vector2(spacingX, spacingY);
@@ -22,18 +22,18 @@ public class ScrollGrid : MonoBehaviour
         if (type == ScrollView.TypeEnum.Horizontal) 
         {
             ItemAmount = itemAmount;
-            Background.rectTransform.sizeDelta = new Vector2(ScrollItem.Background.rectTransform.sizeDelta.x, length);
+            Background.rectTransform.sizeDelta = new Vector2(scrollItem.Background.rectTransform.sizeDelta.x, length);
         }
         else if(type == ScrollView.TypeEnum.Vertical)
         {
             ItemAmount = itemAmount;
-            Background.rectTransform.sizeDelta = new Vector2(length, ScrollItem.Background.rectTransform.sizeDelta.y);
+            Background.rectTransform.sizeDelta = new Vector2(length, scrollItem.Background.rectTransform.sizeDelta.y);
         }
 
         ScrollItem item;
         for (int i = 0; i < ItemAmount; i++)
         {
-            item = Instantiate(ScrollItem);
+            item = Instantiate(scrollItem);
             item.transform.SetParent(transform);
             _itemList.Add(item);
         }

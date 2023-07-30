@@ -93,12 +93,12 @@ namespace Battle
                 }
                 else
                 {
-                    if (_character.SelectedSkill.Data.Type == SkillModel.TypeEnum.Normal)
+                    if (_character.SelectedSkill != null)
                     {
                         _character.HasUseSkill = true;
                         _character.ActionCount--;
                     }
-                    else if (_character.SelectedSkill.Data.Type == SkillModel.TypeEnum.Support)
+                    else if (_character.SelectedSupport != null)
                     {
                         _character.HasUseSupport = true;
                     }

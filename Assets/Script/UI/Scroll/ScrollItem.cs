@@ -21,7 +21,7 @@ public class ScrollItem : MonoBehaviour
     public virtual void SetData(object obj)
     {
         _data = obj;
-        Button.Label.text = (string)obj;
+        //Button.Label.text = (string)obj;
     }
 
     public void SetSelected(bool show)

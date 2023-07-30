@@ -17,6 +17,7 @@ public class BattleUI : MonoBehaviour
     public AnchorValueBar LittleHpBar;
     public FloatingNumberPool FloatingNumberPool;
     public CharacterListGroup CharacterListGroup;
+    public ScrollView ItemScrollView;
 
     private GraphicRaycaster _graphicRaycaster;
     private PointerEventData _pointerEventData = new PointerEventData(null);
@@ -139,6 +140,11 @@ public class BattleUI : MonoBehaviour
         CharacterListGroup.Refresh();
     }
 
+    public void SetItemScrollView() 
+    {
+        ItemScrollView.transform.parent.gameObject.SetActive(true);
+        ItemScrollView.SetData(new List<object>(ItemManager.Instance.GetItemList(ItemModel.CategoryEnum.Medicine)));
+    }
 
     private void BackgroundOnClick(ButtonPlus buttonPlus) 
     {
@@ -198,6 +204,8 @@ public class BattleUI : MonoBehaviour
     private void Awake()
     {
         _graphicRaycaster = transform.parent.GetComponent<GraphicRaycaster>();
+
+        ItemScrollView.Init();
 
         //IdleButton.onClick.AddListener(IdleOnClick);
         BackgroundButton.DownHandler += BackgroundDown;

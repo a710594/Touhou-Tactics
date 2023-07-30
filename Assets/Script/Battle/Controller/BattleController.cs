@@ -96,6 +96,7 @@ namespace Battle
             _context.AddState(new MoveState(_context));
             _context.AddState(new SkillState(_context));
             _context.AddState(new SupportState(_context));
+            _context.AddState(new ItemState(_context));
             _context.AddState(new TargetState(_context));
             _context.AddState(new ConfirmState(_context));
             _context.AddState(new EffectState(_context));
@@ -127,6 +128,11 @@ namespace Battle
         public void SetSelectSkillState(SkillModel.TypeEnum type)
         {
             _context.SetState<SkillState>(type);
+        }
+
+        public void SetItemState()
+        {
+            _context.SetState<ItemState>();
         }
 
         public void Idle()

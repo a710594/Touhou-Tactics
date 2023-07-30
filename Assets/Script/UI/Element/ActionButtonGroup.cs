@@ -10,6 +10,7 @@ public class ActionButtonGroup : MonoBehaviour
     public Button MoveButton;
     public Button SkillButton;
     public Button SupportButton;
+    public Button ItemButton;
     public Button IdleButton;
     public Button ResetButton;
 
@@ -34,6 +35,11 @@ public class ActionButtonGroup : MonoBehaviour
         BattleController.Instance.SetSelectSkillState(SkillModel.TypeEnum.Support);
     }
 
+    private void ItemOnClick() 
+    {
+        BattleController.Instance.SetItemState();
+    }
+
     private void IdleOnClick() 
     {
         BattleController.Instance.Idle();
@@ -49,6 +55,7 @@ public class ActionButtonGroup : MonoBehaviour
         MoveButton.onClick.AddListener(MoveOnClick);
         SkillButton.onClick.AddListener(SkillOnClick);
         SupportButton.onClick.AddListener(SupportOnClick);
+        ItemButton.onClick.AddListener(ItemOnClick);
         IdleButton.onClick.AddListener(IdleOnClick);
         ResetButton.onClick.AddListener(ResetOnClick);
     }

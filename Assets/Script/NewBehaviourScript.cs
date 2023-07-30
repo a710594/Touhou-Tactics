@@ -13,6 +13,7 @@ public class NewBehaviourScript : MonoBehaviour
         //mapReader.LoadData();
         mapReader.Read(Application.streamingAssetsPath + "/Map.txt", out int width, out int height, out Dictionary<Vector2Int, TileInfo> tileInfoDic, out Dictionary<Vector2Int, TileComponent> tileComponentDic, out Dictionary<Vector2Int, GameObject> attachDic);
         PathManager.Instance.LoadData(tileInfoDic);
+        ItemManager.Instance.AddItem(ItemModel.CategoryEnum.Medicine, 1, 1);
         BattleInfo battleInfo = new BattleInfo();
         battleInfo.Width = width;
         battleInfo.Height = height;
