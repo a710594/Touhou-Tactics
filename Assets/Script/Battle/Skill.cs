@@ -23,11 +23,16 @@ public class Skill
     public virtual void SetEffect(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)
     {
         Effect.SetEffect(user, target, floatingList, characterList);
+        user.HasUseSkill = true;
+        user.ActionCount--;
+        if(user.CurrentPP < BattleCharacterInfo.MaxPP) 
+        {
+            user.CurrentPP++;
+        }
         if (Data.CD > 0)
         {
             CurrentCD = Data.CD + 1; //要加一的原因是為了抵銷本回合的 CheckCD
         }
-        user.CurrentSP -= Data.SP;
     }
 
     public void CheckCD() 

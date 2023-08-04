@@ -27,6 +27,12 @@ public class Item
     public virtual void SetEffect(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)
     {
         Effect.SetEffect(user, target, floatingList, characterList);
+        user.HasUseItem = true;
+        user.ActionCount--;
+        if (user.CurrentPP < BattleCharacterInfo.MaxPP)
+        {
+            user.CurrentPP++;
+        }
         ItemManager.Instance.MinusItem(this, 1);
     }
 }

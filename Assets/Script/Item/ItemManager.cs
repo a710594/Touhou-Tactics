@@ -123,6 +123,37 @@ public class ItemManager
         return list;
     }
 
+    public List<Item> GetItemList(BattleCharacterInfo character)
+    {
+        Dictionary<int, Item> dic = null;
+        List<Item> cardList = new List<Item>();
+        List<Item> medicineList = new List<Item>();
+        List<Item> resultList = new List<Item>();
+
+        if (ItemDic.TryGetValue(ItemModel.CategoryEnum.Card, out dic))
+        {
+            cardList = new List<Item>(dic.Values);
+            for (int i=0; i<cardList.Count; i++) 
+            {
+                if(cardList[i].Data.Job==-1 ||(character.Job!= null && cardList[i].Data.Job == character.Job.ID)) 
+                {
+                    resultList.Add(cardList[i]);
+                }
+            }
+        }
+
+        if (ItemDic.TryGetValue(ItemModel.CategoryEnum.Medicine, out dic))
+        {
+            medicineList = new List<Item>(dic.Values);
+            for (int i=0; i<medicineList.Count; i++) 
+            {
+                resultList.Add(medicineList[i]);
+            }
+        }
+
+        return medicineList;
+    }
+
     public Item GetItem(ItemModel.CategoryEnum category, int id)
     {
         Dictionary<int, Item> dic = null;

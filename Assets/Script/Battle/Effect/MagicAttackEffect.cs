@@ -1,3 +1,4 @@
+using Battle;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,18 +18,18 @@ public class MagicAttackEffect : Effect
     public override void SetEffect(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)
     {
         FloatingNumberData floatingNumberData;
-        BattleCalculator.HitType hitType = BattleCalculator.CheckHit(this, user, target);
+        BattleController.HitType hitType = BattleController.CheckHit(this, user, target);
 
-        if (hitType != BattleCalculator.HitType.Miss)
+        if (hitType != BattleController.HitType.Miss)
         {
-            int damage = BattleCalculator.GetDamage(this, user, target, characterList);
-            if (hitType == BattleCalculator.HitType.Critical)
+            int damage = BattleController.GetDamage(this, user, target, characterList);
+            if (hitType == BattleController.HitType.Critical)
             {
                 damage *= 2;
             }
             target.SetDamage(damage);
 
-            if (hitType == BattleCalculator.HitType.Hit)
+            if (hitType == BattleController.HitType.Hit)
             {
                 floatingNumberData = new FloatingNumberData(FloatingNumberData.TypeEnum.Damage, damage.ToString());
             }
@@ -44,7 +45,7 @@ public class MagicAttackEffect : Effect
         floatingList.Add(floatingNumberData);
 
 
-        if (SubEffect != null && hitType != BattleCalculator.HitType.Miss)
+        if (SubEffect != null && hitType != BattleController.HitType.Miss)
         {
             SubEffect.SetEffect(user, target, floatingList, characterList);
         }

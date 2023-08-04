@@ -16,5 +16,6 @@ public class ItemModel
     public string Description;
     public EffectModel.TypeEnum EffectType;
     public int EffectID;
-    public string IconName;
+    public int Job;
+    public int PP;
 }

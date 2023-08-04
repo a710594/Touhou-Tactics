@@ -30,7 +30,22 @@ namespace Battle
                 Instance._battleUI.SetCharacterInfoUI_2(null);
                 Instance.ClearQuad();
 
-                if (_character.IsAuto)
+                bool sleep = false;
+                for (int i = 0; i < _character.StatusList.Count; i++)
+                {
+                    if (_character.StatusList[i] is Sleep)
+                    {
+                        sleep = true;
+                        break;
+                    }
+                }
+
+                if (sleep)
+                {
+                    _character.ActionCount = 0;
+                    _context.SetState<EndState>();
+                }
+                else if (_character.IsAuto)
                 {
                     _character.AI.Start();
                 }

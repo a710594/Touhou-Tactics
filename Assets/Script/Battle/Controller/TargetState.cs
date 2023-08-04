@@ -9,6 +9,7 @@ namespace Battle
     {
         private class TargetState : BattleControllerState
         {
+            private Effect _effect;
             private List<Vector2Int> _rangeList;
 
             public TargetState(StateContext context) : base(context)
@@ -19,18 +20,22 @@ namespace Battle
             {
                 _info = Instance.BattleInfo;
                 _character = Instance._selectedCharacter;
-                Effect effect = null;
                 if (_character.SelectedSkill != null)
                 {
-                    effect = _character.SelectedSkill.Effect;
+                    _effect = _character.SelectedSkill.Effect;
                 }
                 else if(_character.SelectedSupport != null) 
                 {
-                    effect = _character.SelectedSupport.Effect;
+                    _effect = _character.SelectedSupport.Effect;
                 }
-                _rangeList = Utility.GetRange(effect.Data.Range, _info.Width, _info.Height, Utility.ConvertToVector2Int(_character.Position));
+                else if (_character.SelectedItem != null)
+                {
+                    _effect = _character.SelectedItem.Effect;
+                }
+                _rangeList = Utility.GetRange(_effect.Data.Range, _info.Width, _info.Height, Utility.ConvertToVector2Int(_character.Position));
                 Instance.SetQuad(_rangeList, Instance._white);
                 Instance._battleUI.SetSkillVisible(false);
+                Instance._battleUI.SetItemScrollViewVisible(false);
             }
 
             public override void Click(Vector2Int position)
@@ -44,7 +49,7 @@ namespace Battle
                         if (characterList[i] != Instance._selectedCharacter && position == Utility.ConvertToVector2Int(characterList[i].Position))
                         {
                             Instance._battleUI.SetCharacterInfoUI_2(characterList[i]);
-                            int predictionHp = BattleCalculator.GetPredictionHp(characterList[i].CurrentHP, _character.SelectedSkill.Effect, _character, characterList[i], characterList);
+                            int predictionHp = GetPredictionHp(characterList[i].CurrentHP, _effect, _character, characterList[i], characterList);
                             if (predictionHp != -1)
                             {
                                 Instance._battleUI.SetHpPrediction(characterList[i].CurrentHP, predictionHp, characterList[i].MaxHP);
@@ -55,15 +60,15 @@ namespace Battle
 
                     Dictionary<Vector2Int, TileInfo> tileDic = Instance.BattleInfo.TileInfoDic;
                     Vector3 p = new Vector3(position.x, tileDic[position].Height, position.y);
-                    if (_character.SelectedSkill.Effect.Data.Track == EffectModel.TrackEnum.Straight)
+                    if (_effect.Data.Track == EffectModel.TrackEnum.Straight)
                     {
-                        BattleCalculator.CheckLine(_character.Position, p, characterList, tileDic, out bool isBlock, out Vector3 result);
+                        CheckLine(_character.Position, p, characterList, tileDic, out bool isBlock, out Vector3 result);
                         Instance._cameraController.DrawLine(_character.Position, result, isBlock);
                         Instance._selectedPosition = Utility.ConvertToVector2Int(result);
                     }
-                    else if (_character.SelectedSkill.Effect.Data.Track == EffectModel.TrackEnum.Parabola)
+                    else if (_effect.Data.Track == EffectModel.TrackEnum.Parabola)
                     {
-                        BattleCalculator.CheckParabola(_character.Position, p, 4, tileDic, out bool isBlock, out List<Vector3> result); //要補拋物線的高度
+                        CheckParabola(_character.Position, p, 4, tileDic, out bool isBlock, out List<Vector3> result); //要補拋物線的高度
                         Instance._cameraController.DrawParabola(result, isBlock);
                         Instance._selectedPosition = Utility.ConvertToVector2Int(result.Last());
                     }

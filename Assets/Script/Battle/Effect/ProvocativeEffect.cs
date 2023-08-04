@@ -1,3 +1,4 @@
+using Battle;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,9 +19,9 @@ public class ProvocativeEffect : Effect
     public override void SetEffect(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)
     {
         FloatingNumberData floatingNumberData;
-        BattleCalculator.HitType hitType = BattleCalculator.HitType.Hit; //挑釁的命中判定比較特別,以後再說...
+        BattleController.HitType hitType = BattleController.HitType.Hit; //挑釁的命中判定比較特別,以後再說...
 
-        if (hitType != BattleCalculator.HitType.Miss)
+        if (hitType != BattleController.HitType.Miss)
         {
             Status status = StatusFactory.GetStatus(Data.StatusType, Data.StatusID);
             ((ProvocativeStatus)status).Target = user;
@@ -34,7 +35,7 @@ public class ProvocativeEffect : Effect
         floatingList.Add(floatingNumberData);
 
 
-        if (SubEffect != null && hitType != BattleCalculator.HitType.Miss)
+        if (SubEffect != null && hitType != BattleController.HitType.Miss)
         {
             SubEffect.SetEffect(user, target, floatingList, characterList);
         }

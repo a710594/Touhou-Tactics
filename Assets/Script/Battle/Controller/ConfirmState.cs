@@ -22,9 +22,13 @@ namespace Battle
                 {
                     effect = _character.SelectedSkill.Effect;
                 }
-                else if (_character.SupportList != null) 
+                else if (_character.SelectedSupport != null) 
                 {
                     effect = _character.SelectedSupport.Effect;
+                }
+                else if (_character.SelectedItem != null)
+                {
+                    effect = _character.SelectedItem.Effect;
                 }
 
                 Instance.SetSkillArea(effect);

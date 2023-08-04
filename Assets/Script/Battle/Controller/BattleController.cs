@@ -60,14 +60,21 @@ namespace Battle
             CharacterList[3].ID = 4;
             CharacterList[3].Position = new Vector3(1, 1, 1);
 
-            CharacterList.Add(new BattleCharacterInfo(DataContext.Instance.EnemyDic[1]));
-            CharacterList[4].ID = 5;
-            CharacterList[4].AI = new MashroomAI(CharacterList[4]);
-            CharacterList[4].Position = new Vector3(3, 1, 3);
-            CharacterList.Add(new BattleCharacterInfo(DataContext.Instance.EnemyDic[1]));
-            CharacterList[5].ID = 6;
-            CharacterList[5].AI = new MashroomAI(CharacterList[5]);
-            CharacterList[5].Position = new Vector3(4, 1, 3);
+            for (int i=0; i<5; i++) 
+            {
+                CharacterList.Add(new BattleCharacterInfo(DataContext.Instance.EnemyDic[1]));
+                CharacterList[4 + i].ID = 5 + i;
+                CharacterList[4 + i].AI = new MashroomAI(CharacterList[4 + i]);
+                CharacterList[4 + i].Position = RandomCharacterPosition(BattleCharacterInfo.FactionEnum.Enemy);
+            }
+            //CharacterList.Add(new BattleCharacterInfo(DataContext.Instance.EnemyDic[1]));
+            //CharacterList[4].ID = 5;
+            //CharacterList[4].AI = new MashroomAI(CharacterList[4]);
+            //CharacterList[4].Position = /*new Vector3(3, 1, 3)*/ RandomCharacterPosition(BattleCharacterInfo.FactionEnum.Enemy);
+            //CharacterList.Add(new BattleCharacterInfo(DataContext.Instance.EnemyDic[1]));
+            //CharacterList[5].ID = 6;
+            //CharacterList[5].AI = new MashroomAI(CharacterList[5]);
+            //CharacterList[5].Position = /*new Vector3(4, 1, 3)*/ RandomCharacterPosition(BattleCharacterInfo.FactionEnum.Enemy);
 
             CameraDrag camera = Camera.main.GetComponent<CameraDrag>();
             _battleUI.SetMapInfo(info.Width, info.Height);
@@ -125,9 +132,14 @@ namespace Battle
             _context.SetState<MoveState>();
         }
 
-        public void SetSelectSkillState(SkillModel.TypeEnum type)
+        public void SetSelectSkillState()
         {
-            _context.SetState<SkillState>(type);
+            _context.SetState<SkillState>();
+        }
+
+        public void SetSupportState() 
+        {
+            _context.SetState<SupportState>();
         }
 
         public void SetItemState()
@@ -147,6 +159,7 @@ namespace Battle
             {
                 _selectedCharacter.SelectedSkill = skill;
                 _selectedCharacter.SelectedSupport = null;
+                _selectedCharacter.SelectedItem = null;
                 _context.SetState<TargetState>();
             }
         }
@@ -157,7 +170,28 @@ namespace Battle
             {
                 _selectedCharacter.SelectedSupport = support;
                 _selectedCharacter.SelectedSkill = null;
+                _selectedCharacter.SelectedItem = null;
                 _context.SetState<TargetState>();
+            }
+        }
+
+
+        public void SelectItem(Item item)
+        {
+            if (_context.CurrentState is ItemState)
+            {
+                if (item.Data.PP == -1 || SelectedCharacter.CurrentPP >= item.Data.PP)
+                {
+                    _selectedCharacter.SelectedItem = item;
+                    _selectedCharacter.SelectedSkill = null;
+                    _selectedCharacter.SelectedSupport = null;
+                    _context.SetState<TargetState>();
+                }
+                else
+                {
+                    Debug.Log("PP¤£¨¬");
+                }
+
             }
         }
 
@@ -176,11 +210,11 @@ namespace Battle
         {
             if (effect.Data.Area == "Through")
             {
-                _areaList = BattleCalculator.GetTroughAreaList(_selectedCharacter.Position, new Vector3(_selectedPosition.x, Instance.BattleInfo.TileInfoDic[_selectedPosition].Height, _selectedPosition.y), CharacterList, BattleInfo.TileInfoDic);
+                _areaList = GetTroughAreaList(_selectedCharacter.Position, new Vector3(_selectedPosition.x, Instance.BattleInfo.TileInfoDic[_selectedPosition].Height, _selectedPosition.y), CharacterList, BattleInfo.TileInfoDic);
             }
             else
             {
-                _areaList = BattleCalculator.GetNormalAreaList(BattleInfo.Width, BattleInfo.Height, effect, _selectedPosition);
+                _areaList = GetNormalAreaList(BattleInfo.Width, BattleInfo.Height, effect, _selectedPosition);
             }
             SetQuad(_areaList, _yellow);
         }
@@ -249,26 +283,37 @@ namespace Battle
         {
             CharacterList.Sort((x, y) =>
             {
-                if (x.CurrentWT > y.CurrentWT)
+                if (Passive.Contains<ForwardPassive>(x.passiveList) && !Passive.Contains<ForwardPassive>(y.passiveList))
                 {
                     return 1;
                 }
-                else
+                else if (!Passive.Contains<ForwardPassive>(x.passiveList) && Passive.Contains<ForwardPassive>(y.passiveList))
                 {
-                    if (x.CurrentWT == y.CurrentWT)
+                    return -1;
+                }
+                else 
+                {
+                    if (x.CurrentWT > y.CurrentWT)
                     {
-                        if (x.ID > y.ID)
+                        return 1;
+                    }
+                    else
+                    {
+                        if (x.CurrentWT == y.CurrentWT)
                         {
-                            return 1;
+                            if (x.ID > y.ID)
+                            {
+                                return 1;
+                            }
+                            else
+                            {
+                                return -1;
+                            }
                         }
                         else
                         {
                             return -1;
                         }
-                    }
-                    else
-                    {
-                        return -1;
                     }
                 }
             });

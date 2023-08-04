@@ -59,18 +59,18 @@ public class SkillButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private void Awake()
     {
-        CommentLabel.gameObject.SetActive(false);
+        //CommentLabel.gameObject.SetActive(false);
         Button.onClick.AddListener(OnClick);    
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        CommentLabel.gameObject.SetActive(true);
-        CommentLabel.text = _skill.Data.Comment;
+        //CommentLabel.gameObject.SetActive(true);
+        //CommentLabel.text = _skill.Data.Comment;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        CommentLabel.gameObject.SetActive(false);
+        //CommentLabel.gameObject.SetActive(false);
     }
 }

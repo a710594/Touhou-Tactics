@@ -53,32 +53,6 @@ public class EffectModel
 
     public void GetAreaList() 
     {
-        string str;
-        string[] arr;
-        Vector2Int v;
-        Stack<char> stack = new Stack<char>();
-        for (int i=0; i<Area.Length; i++) 
-        {
-            if (Area[i] != ')') 
-            {
-                stack.Push(Area[i]);
-            }
-            else
-            {
-                str = "";
-                while(stack.Peek() != '(')
-                {
-                    str += stack.Pop();
-                }
-                while (stack.Count> 0)
-                {
-                    stack.Pop();
-                }
-                str = Utility.Reverse(str);
-                arr = str.Split(',');
-                v = new Vector2Int(int.Parse(arr[0]), int.Parse(arr[1]));
-                AreaList.Add(v);
-            }
-        }
+        AreaList = Utility.GetAreaList(Area);
     }
 }

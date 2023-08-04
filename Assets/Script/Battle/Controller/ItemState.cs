@@ -18,7 +18,7 @@ namespace Battle
                 _character = Instance._selectedCharacter;
                 if (!_character.IsAuto)
                 {
-                    Instance._battleUI.SetItemScrollView();
+                    Instance._battleUI.SetItemScrollView(_character);
                 }
             }
 

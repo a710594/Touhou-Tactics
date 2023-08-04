@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class CharacterListGroup : MonoBehaviour
 {
+    private static readonly int _max = 8;
+
     public Image Image;
 
     private List<BattleCharacterInfo> _characterList = new List<BattleCharacterInfo>();
@@ -20,6 +22,10 @@ public class CharacterListGroup : MonoBehaviour
             image.transform.SetParent(transform);
             image.sprite = Resources.Load<Sprite>("Prefab/Image/" + _characterList[i].Controller + "_F"); 
             _imageDic.Add(_characterList[i], image);
+            if (i > _max) 
+            {
+                image.gameObject.SetActive(false);
+            }
         }
     }
 
@@ -28,12 +34,11 @@ public class CharacterListGroup : MonoBehaviour
         int index = 0;
         foreach(KeyValuePair<BattleCharacterInfo, Image> pair in _imageDic) 
         {
-            if (_characterList.Contains(pair.Key)) 
+            if (_characterList.Contains(pair.Key) && _characterList.IndexOf(pair.Key) < _max) 
             {
                 pair.Value.gameObject.SetActive(true);
                 pair.Value.transform.SetSiblingIndex(_characterList.IndexOf(pair.Key));
                 index++;
-                //pair.Value.transform.localPosition = new Vector3(pair.Key.CurrentWT * Image.rectTransform.rect.width, 0, 0);
             }
             else
             {

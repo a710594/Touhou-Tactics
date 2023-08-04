@@ -1,3 +1,4 @@
+using Battle;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,18 +18,18 @@ public class BuffEffect : Effect
     public override void SetEffect(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)
     {
         FloatingNumberData floatingNumberData;
-        BattleCalculator.HitType hitType;
+        BattleController.HitType hitType;
 
         if(Data.Target == EffectModel.TargetEnum.Us) 
         {
-            hitType = BattleCalculator.HitType.Hit;
+            hitType = BattleController.HitType.Hit;
         }
         else 
         {
-            hitType = BattleCalculator.CheckHit(this, user, target);
+            hitType = BattleController.CheckHit(this, user, target);
         }
 
-        if (hitType != BattleCalculator.HitType.Miss)
+        if (hitType != BattleController.HitType.Miss)
         {
             Status status = StatusFactory.GetStatus(Data.StatusType, Data.StatusID);
             target.AddStatus(status);
@@ -41,7 +42,7 @@ public class BuffEffect : Effect
         floatingList.Add(floatingNumberData);
 
 
-        if (SubEffect != null && hitType != BattleCalculator.HitType.Miss)
+        if (SubEffect != null && hitType != BattleController.HitType.Miss)
         {
             SubEffect.SetEffect(user, target, floatingList, characterList);
         }

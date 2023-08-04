@@ -18,6 +18,7 @@ public class ActionButtonGroup : MonoBehaviour
     {
         SkillButton.interactable = !character.HasUseSkill;
         SupportButton.interactable = !character.HasUseSupport;
+        ItemButton.interactable = !character.HasUseItem;
     }
 
     private void MoveOnClick() 
@@ -27,12 +28,12 @@ public class ActionButtonGroup : MonoBehaviour
 
     private void SkillOnClick() 
     {
-        BattleController.Instance.SetSelectSkillState(SkillModel.TypeEnum.Normal);
+        BattleController.Instance.SetSelectSkillState();
     }
 
     private void SupportOnClick()
     {
-        BattleController.Instance.SetSelectSkillState(SkillModel.TypeEnum.Support);
+        BattleController.Instance.SetSupportState();
     }
 
     private void ItemOnClick() 

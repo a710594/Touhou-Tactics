@@ -297,4 +297,37 @@ public static class Utility
         GL.Vertex(end);
         GL.End();
     }
+
+    public static List<Vector2Int> GetAreaList(string area)
+    {
+        string str;
+        string[] arr;
+        Vector2Int v;
+        Stack<char> stack = new Stack<char>();
+        List<Vector2Int> areaList = new List<Vector2Int>();
+        for (int i = 0; i < area.Length; i++)
+        {
+            if (area[i] != ')')
+            {
+                stack.Push(area[i]);
+            }
+            else
+            {
+                str = "";
+                while (stack.Peek() != '(')
+                {
+                    str += stack.Pop();
+                }
+                while (stack.Count > 0)
+                {
+                    stack.Pop();
+                }
+                str = Reverse(str);
+                arr = str.Split(',');
+                v = new Vector2Int(int.Parse(arr[0]), int.Parse(arr[1]));
+                areaList.Add(v);
+            }
+        }
+        return areaList;
+    }
 }

@@ -17,5 +17,6 @@ public class Support
     {
         Effect.SetEffect(user, target, floatingList, characterList);
         user.CurrentSP -= Data.SP;
+        user.HasUseSupport = true;
     }
 }

@@ -32,6 +32,7 @@ public class BattleUI : MonoBehaviour
     private int _height;
     private float _distance = 20;
     private Vector3 _dragOrigin;
+    private CameraRotate _cameraRotate;
 
     public void SetVisible(bool isVisible) 
     {
@@ -67,6 +68,11 @@ public class BattleUI : MonoBehaviour
     public void SetSkillVisible(bool isVisible) 
     {
         SkillButtonGroup.gameObject.SetActive(isVisible);
+    }
+
+    public void SetItemScrollViewVisible(bool isVisible)
+    {
+        ItemScrollView.transform.parent.gameObject.SetActive(isVisible);
     }
 
     public void SetSkillData(List<Skill> skillList) 
@@ -140,25 +146,25 @@ public class BattleUI : MonoBehaviour
         CharacterListGroup.Refresh();
     }
 
-    public void SetItemScrollView() 
+    public void SetItemScrollView(BattleCharacterInfo character) 
     {
-        ItemScrollView.transform.parent.gameObject.SetActive(true);
-        ItemScrollView.SetData(new List<object>(ItemManager.Instance.GetItemList(ItemModel.CategoryEnum.Medicine)));
+        SetItemScrollViewVisible(true);
+        ItemScrollView.SetData(new List<object>(ItemManager.Instance.GetItemList(character)));
     }
 
-    private void BackgroundOnClick(ButtonPlus buttonPlus) 
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 100))
-        {
-            BattleController.Instance.Click(Utility.ConvertToVector2Int(hit.transform.position));
-        }
-        else //代表按到沒有按鍵的地方
-        {
-            BattleController.Instance.Click(new Vector2Int(int.MinValue, int.MinValue));
-        }
-    }
+    //private void BackgroundOnClick(ButtonPlus buttonPlus) 
+    //{
+    //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+    //    RaycastHit hit;
+    //    if (Physics.Raycast(ray, out hit, 100))
+    //    {
+    //        BattleController.Instance.Click(Utility.ConvertToVector2Int(hit.transform.position));
+    //    }
+    //    else //代表按到沒有按鍵的地方
+    //    {
+    //        BattleController.Instance.Click(new Vector2Int(int.MinValue, int.MinValue));
+    //    }
+    //}
 
     private void BackgroundDown(ButtonPlus button) 
     {
@@ -169,17 +175,20 @@ public class BattleUI : MonoBehaviour
     {
         if (Vector2.Distance(_dragOrigin, Input.mousePosition) > _distance)
         {
+            Vector3 move;
             Vector3 v1 = Camera.main.ScreenToViewportPoint(_dragOrigin - Input.mousePosition);
-            Vector3 v2 = new Vector3(v1.x * Mathf.Sin(45) + v1.y * Mathf.Cos(45), 0, v1.x * Mathf.Sin(-45) + v1.y * Mathf.Cos(-45));
-            Vector3 move = new Vector3(v2.x * CameraDragSpeed, 0, v2.z * CameraDragSpeed);
+            if (_cameraRotate.CurrentState == CameraRotate.StateEnum.Slope) 
+            {
+                Vector3 v2 = new Vector3(v1.x * Mathf.Sin(45) + v1.y * Mathf.Cos(45), 0, v1.x * Mathf.Sin(-45) + v1.y * Mathf.Cos(-45));
+                move = new Vector3(v2.x * CameraDragSpeed, 0, v2.z * CameraDragSpeed);
+            }
+            else 
+            {
+                move = new Vector3(v1.x * CameraDragSpeed, 0, v1.y * CameraDragSpeed);
+            }
             float x = Mathf.Clamp(Camera.main.transform.position.x + move.x, -10, _width - 10);
             float z = Mathf.Clamp(Camera.main.transform.position.z + move.z, -10, _height - 10);
             Camera.main.transform.DOMove(new Vector3(x, Camera.main.transform.position.y, z), 1f);
-
-            //if (Camera.main.transform.position.x + move.x > -10 && Camera.main.transform.position.x + move.x < _width - 10 && Camera.main.transform.position.z + move.z > -10 && Camera.main.transform.position.z + move.z < _height - 10)
-            //{
-            //    Camera.main.transform.DOMove(Camera.main.transform.position + move, 1f);
-            //}
         }
         else
         {
@@ -196,20 +205,27 @@ public class BattleUI : MonoBehaviour
         }
     }
 
-    private void IdleOnClick() 
+    //private void IdleOnClick() 
+    //{
+    //    BattleController.Instance.Idle();
+    //}
+
+    private void ItemScrollItemOnClick(object obj, ScrollItem scrollItem) 
     {
-        BattleController.Instance.Idle();
+        BattleController.Instance.SelectItem((Item)obj);
     }
 
     private void Awake()
     {
         _graphicRaycaster = transform.parent.GetComponent<GraphicRaycaster>();
+        _cameraRotate = Camera.main.GetComponent<CameraRotate>();
 
         ItemScrollView.Init();
 
         //IdleButton.onClick.AddListener(IdleOnClick);
         BackgroundButton.DownHandler += BackgroundDown;
         BackgroundButton.UpHandler += BackgroundUp;
+        ItemScrollView.ItemOnClickHandler += ItemScrollItemOnClick;
     }
 
     private void Update()

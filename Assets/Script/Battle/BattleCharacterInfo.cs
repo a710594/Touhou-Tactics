@@ -8,6 +8,7 @@ using UnityEngine;
 
 public class BattleCharacterInfo
 {
+    public static readonly int MaxPP = 10;
     public static readonly Vector3 DefaultLastPosition = new (int.MaxValue, int.MaxValue, int.MaxValue); 
 
     public enum FactionEnum 
@@ -32,6 +33,8 @@ public class BattleCharacterInfo
     public int WT;
     public string Controller;
     public FactionEnum Faction;
+    public JobModel Job = null;
+    public EnemyModel Enemy = null;
 
     public List<Skill> SkillList = new List<Skill>();
     public List<Support> SupportList = new List<Support>();
@@ -40,8 +43,9 @@ public class BattleCharacterInfo
     public bool IsAuto = false;
     public bool HasUseSkill = false;
     public bool HasUseSupport = false;
+    public bool HasUseItem = false;
     public int CurrentHP;
-    public int CurrentPP;
+    public int CurrentPP = 0; //符卡點數
     public int CurrentWT;
     public int CurrentSP = 2; //support point
     public int ActionCount = 2; //每個角色都有兩次的行動機會
@@ -52,9 +56,11 @@ public class BattleCharacterInfo
     public Item SelectedItem = null;
     public AI AI = null;
     public List<Status> StatusList = new List<Status>();
+    public List<Passive> passiveList = new List<Passive>();
 
     public BattleCharacterInfo(JobModel job) 
     {
+        Job = job;
         ID = job.ID;
         Name = job.Name;
         MaxHP = job.HP;
@@ -119,6 +125,7 @@ public class BattleCharacterInfo
 
     public BattleCharacterInfo(EnemyModel enemy)
     {
+        Enemy = enemy;
         ID = enemy.ID;
         Name = enemy.Name;
         MaxHP = enemy.HP;
@@ -149,6 +156,15 @@ public class BattleCharacterInfo
         else
         {
             CurrentHP = 0;
+        }
+
+        for (int i=0; i<StatusList.Count; i++) 
+        {
+            if(StatusList[i] is Sleep) 
+            {
+                StatusList.RemoveAt(i);
+                i--;
+            }
         }
     }
 

@@ -87,7 +87,7 @@ public class AStarAlgor
                         continue;
                     }
 
-                    float g = x.G + MoveCost(y.Position);    //從起點到節點y的距離
+                    float g = x.G + MoveCost(x.Position, y.Position);    //從起點到節點y的距離
 
                     for (int j = 0; j < openset.Count; j++) //若y已被估值，跳過
                     {
@@ -198,22 +198,22 @@ public class AStarAlgor
     {
         List<Vector2Int> list = new List<Vector2Int>();
 
-        if (_tileInfoDic.ContainsKey(current + Vector2Int.left) && MoveCost(current + Vector2Int.left) > 0)
+        if (_tileInfoDic.ContainsKey(current + Vector2Int.left) && MoveCost(current, current + Vector2Int.left) > 0)
         {
             list.Add(current + Vector2Int.left);
         }
 
-        if (_tileInfoDic.ContainsKey(current + Vector2Int.right) && MoveCost(current + Vector2Int.right) > 0)
+        if (_tileInfoDic.ContainsKey(current + Vector2Int.right) && MoveCost(current, current + Vector2Int.right) > 0)
         {
             list.Add(current + Vector2Int.right);
         }
 
-        if (_tileInfoDic.ContainsKey(current + Vector2Int.up) && MoveCost(current + Vector2Int.up) > 0)
+        if (_tileInfoDic.ContainsKey(current + Vector2Int.up) && MoveCost(current, current + Vector2Int.up) > 0)
         {
             list.Add(current + Vector2Int.up);
         }
 
-        if (_tileInfoDic.ContainsKey(current + Vector2Int.down) && MoveCost(current + Vector2Int.down) > 0)
+        if (_tileInfoDic.ContainsKey(current + Vector2Int.down) && MoveCost(current, current + Vector2Int.down) > 0)
         {
             list.Add(current + Vector2Int.down);
         }
@@ -221,19 +221,21 @@ public class AStarAlgor
         return list;
     }
 
-    private int MoveCost(Vector2Int position) 
+    private int MoveCost(Vector2Int from, Vector2Int to) 
     {
+        int cost = 0;
         for (int i=0; i< _characterList.Count; i++) 
         {
-            if(Utility.ConvertToVector2(_characterList[i].Position) == position) 
+            if(Utility.ConvertToVector2(_characterList[i].Position) == to) 
             {
-            if(_characterList[i].Faction != _selectedCharacter.Faction) 
+                if(_characterList[i].Faction != _selectedCharacter.Faction) 
                 {
-                    return -1;
+                    cost = -1;
                 }
             }
         }
+        cost = _tileInfoDic[to].MoveCost + Mathf.Abs(_tileInfoDic[from].Height - _tileInfoDic[to].Height);
 
-        return _tileInfoDic[position].MoveCost;
+        return cost;
     }
 }

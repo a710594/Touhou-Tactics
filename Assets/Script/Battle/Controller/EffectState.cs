@@ -25,7 +25,7 @@ namespace Battle
                 _targetList = new List<BattleCharacterInfo>();
                 for (int i = 0; i < _characterList.Count; i++)
                 {
-                    if (BattleCalculator.CheckEffectArea(Instance._areaList, Utility.ConvertToVector2Int(_characterList[i].Position)))
+                    if (CheckEffectArea(Instance._areaList, Utility.ConvertToVector2Int(_characterList[i].Position)))
                     {
                         _targetList.Add(_characterList[i]);
                     }
@@ -37,7 +37,18 @@ namespace Battle
                     for (int i = 0; i < _targetList.Count; i++)
                     {
                         List<FloatingNumberData> floatingList = new List<FloatingNumberData>();
-                        _character.SelectedSkill.SetEffect(_character, _targetList[i], floatingList, _characterList);
+                        if (_character.SelectedSkill != null)
+                        {
+                            _character.SelectedSkill.SetEffect(_character, _targetList[i], floatingList, _characterList);
+                        }
+                        else if (_character.SelectedSupport != null) 
+                        {
+                            _character.SelectedSupport.SetEffect(_character, _targetList[i], floatingList, _characterList);
+                        }
+                        else if (_character.SelectedItem != null) 
+                        {
+                            _character.SelectedItem.SetEffect(_character, _targetList[i], floatingList, _characterList);
+                        }
                         Instance._battleUI.SetLittleHpBarValue(_targetList[i].ID, _targetList[i]);
                         for (int j = 0; j < floatingList.Count; j++)
                         {
@@ -93,15 +104,22 @@ namespace Battle
                 }
                 else
                 {
-                    if (_character.SelectedSkill != null)
-                    {
-                        _character.HasUseSkill = true;
-                        _character.ActionCount--;
-                    }
-                    else if (_character.SelectedSupport != null)
-                    {
-                        _character.HasUseSupport = true;
-                    }
+                    //if (_character.SelectedSkill != null)
+                    //{
+                    //    _character.HasUseSkill = true;
+                    //    _character.ActionCount--;
+                    //}
+                    //else if (_character.SelectedSupport != null)
+                    //{
+                    //    _character.HasUseSupport = true;
+                    //}
+                    //else if (_character.SelectedItem != null)
+                    //{
+                    //    _character.HasUseItem = true;
+                    //    _character.ActionCount--;
+                    //    ItemManager.Instance.MinusItem(_character.SelectedItem, 1);
+                    //}
+
                     if (_character.ActionCount > 0)
                     {
                         _context.SetState<ActionState>();

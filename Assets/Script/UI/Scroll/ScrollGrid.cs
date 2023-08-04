@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,8 @@ using UnityEngine.UI;
 
 public class ScrollGrid : MonoBehaviour
 {
+    public Action<object, ScrollItem> ItemOnClickHandler;
+
     public Image Background;
     public GridLayoutGroup Grid;
 
@@ -35,6 +38,7 @@ public class ScrollGrid : MonoBehaviour
         {
             item = Instantiate(scrollItem);
             item.transform.SetParent(transform);
+            item.OnClickHandler += ItemOnClick;
             _itemList.Add(item);
         }
     }
@@ -52,6 +56,14 @@ public class ScrollGrid : MonoBehaviour
             {
                 _itemList[i].gameObject.SetActive(false);
             }
+        }
+    }
+
+    private void ItemOnClick(object obj, ScrollItem item)
+    {
+        if (ItemOnClickHandler != null)
+        {
+            ItemOnClickHandler(obj, item);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,6 +10,8 @@ public class ScrollView : MonoBehaviour
         Horizontal,
         Vertical,
     }
+
+    public Action<object, ScrollItem> ItemOnClickHandler;
 
     public TypeEnum Type;
     public float CellSizeX;
@@ -65,6 +68,7 @@ public class ScrollView : MonoBehaviour
             //{
             //    grid.transform.localPosition = new Vector3(Background.sizeDelta.x / 2f, -(i + 0.5f) * CellSizeY - i * SpacingY);
             //}
+            grid.ItemOnClickHandler += ItemOnClick;
             grid.Init(ScrollItem, Type, length, CellSizeX, CellSizeY, SpacingX, SpacingY, _scrollItemAmount);
             _gridList.Add(grid);
         }
@@ -94,6 +98,14 @@ public class ScrollView : MonoBehaviour
         for (int i = 0; i < _gridList.Count; i++)
         {
             _gridList[i].RefreshData(index + i, _dataList);
+        }
+    }
+
+    private void ItemOnClick(object obj, ScrollItem item) 
+    {
+        if (ItemOnClickHandler != null) 
+        {
+            ItemOnClickHandler(obj, item);
         }
     }
 
