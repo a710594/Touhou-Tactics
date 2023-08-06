@@ -49,12 +49,17 @@ public class ScrollGrid : MonoBehaviour
         {
             if (index * ItemAmount + i < list.Count)
             {
+                gameObject.SetActive(true);
                 _itemList[i].gameObject.SetActive(true);
                 _itemList[i].SetData(list[index * ItemAmount + i]);
             }
             else
             {
                 _itemList[i].gameObject.SetActive(false);
+                if (i == 0) 
+                {
+                    gameObject.SetActive(false);
+                }
             }
         }
     }

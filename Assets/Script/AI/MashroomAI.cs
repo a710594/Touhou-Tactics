@@ -19,7 +19,7 @@ public class MashroomAI : AI
     private class NormalState : AIState 
     {
         private bool _inRange;
-        private int _skillId = 9;
+        private int _skillId = 1;
         private Vector2Int _moveTo;
         private BattleCharacterInfo _target = null;
         private List<Vector2Int> _rangeList = new List<Vector2Int>();

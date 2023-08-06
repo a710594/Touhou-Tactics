@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PurifyEffect : Effect
+public class MedicineEffect : Effect
 {
-    public PurifyEffect(EffectModel data)
+    public MedicineEffect(EffectModel data)
     {
         Data = data;
         if (data.SubType != EffectModel.TypeEnum.None)
@@ -14,7 +14,6 @@ public class PurifyEffect : Effect
             SubEffect = EffectFactory.GetEffect(subData);
         }
     }
-
     public override void SetEffect(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)
     {
         FloatingNumberData floatingNumberData;
@@ -31,15 +30,9 @@ public class PurifyEffect : Effect
 
         if (hitType != BattleController.HitType.Miss)
         {
-            for (int i=0; i<target.StatusList.Count; i++) 
-            {
-                if(target.StatusList[i] is Poison || target.StatusList[i] is Sleep) //以後還會有更多種類的異常狀態
-                {
-                    target.StatusList.RemoveAt(i);
-                    i--;
-                }
-            }
-            floatingNumberData = new FloatingNumberData(FloatingNumberData.TypeEnum.Recover, "淨化");
+            int recover = Data.Value;
+            target.SetRecover(recover);
+            floatingNumberData = new FloatingNumberData(FloatingNumberData.TypeEnum.Recover, recover.ToString());
         }
         else
         {
@@ -53,4 +46,5 @@ public class PurifyEffect : Effect
             SubEffect.SetEffect(user, target, floatingList, characterList);
         }
     }
+
 }

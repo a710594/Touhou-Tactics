@@ -12,6 +12,13 @@ public class ItemScrollItem : ScrollItem
     {
         base.SetData(obj);
         Item item = (Item)obj;
-        Label.text = item.Data.Name;
+        if (item != null)
+        {
+            Label.text = item.Data.Name;
+        }
+        else 
+        {
+            Label.text = "ªð¦^";
+        }
     }
 }

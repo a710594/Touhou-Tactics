@@ -23,7 +23,6 @@ namespace Battle
         }
 
         public BattleInfo BattleInfo;
-        public BattleCharacterInfo SelectedCharacter;
         public List<BattleCharacterInfo> CharacterList = new List<BattleCharacterInfo>();
 
         private readonly Color _white = new Color(1, 1, 1, 0.5f);
@@ -110,6 +109,8 @@ namespace Battle
             _context.AddState(new EndState(_context));
 
             _context.SetState<CharacterState>();
+
+            List<Vector2Int> list = AStarAlgor.Instance.GetPath(new Vector2Int(10, 2), new Vector2Int(13, 2), CharacterList[0], CharacterList, BattleInfo.TileInfoDic, false);
         }
 
         public void Click(Vector2Int position)
@@ -180,7 +181,13 @@ namespace Battle
         {
             if (_context.CurrentState is ItemState)
             {
-                if (item.Data.PP == -1 || SelectedCharacter.CurrentPP >= item.Data.PP)
+                if (item == null) //ªð¦^ 
+                {
+                    Instance._battleUI.ActionButtonGroup.gameObject.SetActive(true);
+                    Instance._battleUI.SetItemScrollViewVisible(false);
+                    Instance.SetActionState();
+                }
+                else if (item.Data.PP == -1 || _selectedCharacter.CurrentPP >= item.Data.PP)
                 {
                     _selectedCharacter.SelectedItem = item;
                     _selectedCharacter.SelectedSkill = null;
@@ -189,7 +196,7 @@ namespace Battle
                 }
                 else
                 {
-                    Debug.Log("PP¤£¨¬");
+                    Instance._battleUI.TipLabel.SetLabel("PP¤£¨¬" + _selectedCharacter.CurrentPP);
                 }
 
             }

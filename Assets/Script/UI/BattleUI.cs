@@ -18,6 +18,9 @@ public class BattleUI : MonoBehaviour
     public FloatingNumberPool FloatingNumberPool;
     public CharacterListGroup CharacterListGroup;
     public ScrollView ItemScrollView;
+    public PointGroup PPGroup;
+    //public GameObject PowerPoint;
+    public TipLabel TipLabel;
 
     private GraphicRaycaster _graphicRaycaster;
     private PointerEventData _pointerEventData = new PointerEventData(null);
@@ -149,21 +152,33 @@ public class BattleUI : MonoBehaviour
     public void SetItemScrollView(BattleCharacterInfo character) 
     {
         SetItemScrollViewVisible(true);
-        ItemScrollView.SetData(new List<object>(ItemManager.Instance.GetItemList(character)));
+        List<object> list = new List<object>(ItemManager.Instance.GetItemList(character));
+        list.Add(null);
+        ItemScrollView.SetData(list);
+        PPGroup.SetData(character.CurrentPP);
     }
 
-    //private void BackgroundOnClick(ButtonPlus buttonPlus) 
+    //public void DropPowerPoint(List<BattleCharacterInfo> targetList)
     //{
-    //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-    //    RaycastHit hit;
-    //    if (Physics.Raycast(ray, out hit, 100))
+    //    GameObject obj;
+    //    for (int i = 0; i < targetList.Count; i++)
     //    {
-    //        BattleController.Instance.Click(Utility.ConvertToVector2Int(hit.transform.position));
+    //        obj = Instantiate(PowerPoint, Vector3.zero, Quaternion.identity);
+    //        obj.transform.SetParent(PowerPoint.transform.parent);
+    //        obj.transform.position = Camera.main.WorldToScreenPoint(targetList[i].Position + Vector3.up * 0.5f);
+    //        JumpPowerPoint(obj);
     //    }
-    //    else //代表按到沒有按鍵的地方
+    //}
+
+    //private void JumpPowerPoint(GameObject obj)
+    //{
+    //    obj.transform.DOLocalJump(obj.transform.localPosition + Vector3.right * UnityEngine.Random.Range(-50, 50), 50, 1, 0.5f).OnComplete(() =>
     //    {
-    //        BattleController.Instance.Click(new Vector2Int(int.MinValue, int.MinValue));
-    //    }
+    //        obj.transform.DOMove(PPGroup.transform.position, 0.5f).OnComplete(() =>
+    //        {
+    //            Destroy(obj);
+    //        });
+    //    });
     //}
 
     private void BackgroundDown(ButtonPlus button) 
@@ -230,43 +245,5 @@ public class BattleUI : MonoBehaviour
 
     private void Update()
     {
-        //_pointerEventData.position = Input.mousePosition;
-        //_graphicHitList.Clear();
-        //_graphicRaycaster.Raycast(_pointerEventData, _graphicHitList);
-        //Debug.Log(_graphicHitList.Count);
-        //if (_graphicHitList.Count == 0)
-        //{
-        //    if (Input.GetMouseButtonDown(0))
-        //    {
-        //        _dragOrigin = Input.mousePosition;
-        //    }
-        //    else if (Input.GetMouseButtonUp(0))
-        //    {
-        //        if (Vector2.Distance(_dragOrigin, Input.mousePosition) > _distance)
-        //        {
-        //            Vector3 v1 = Camera.main.ScreenToViewportPoint(_dragOrigin - Input.mousePosition);
-        //            Vector3 v2 = new Vector3(v1.x * Mathf.Sin(45) + v1.y * Mathf.Cos(45), 0, v1.x * Mathf.Sin(-45) + v1.y * Mathf.Cos(-45));
-        //            Vector3 move = new Vector3(v2.x * CameraDragSpeed, 0, v2.z * CameraDragSpeed);
-
-        //            if (Camera.main.transform.position.x + move.x > -10 && Camera.main.transform.position.x + move.x < _width - 10 && Camera.main.transform.position.z + move.z > -10 && Camera.main.transform.position.z + move.z < _height - 10)
-        //            {
-        //                Camera.main.transform.DOMove(Camera.main.transform.position + move, 1f);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        //            RaycastHit hit;
-        //            if (Physics.Raycast(ray, out hit, 100))
-        //            {
-        //                BattleController.Instance.Click(new Vector2(hit.transform.position.x, hit.transform.position.z));
-        //            }
-        //            else //代表按到沒有按鍵的地方
-        //            {
-        //                BattleController.Instance.Click(new Vector2(int.MinValue, int.MinValue));
-        //            }
-        //        }
-        //    }
-        //}
     }
 }

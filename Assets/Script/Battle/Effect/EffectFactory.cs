@@ -39,6 +39,18 @@ public class EffectFactory
         {
             skill = new PoisonEffect(data);
         }
+        else if (data.Type == EffectModel.TypeEnum.Purify)
+        {
+            skill = new PurifyEffect(data);
+        }
+        else if (data.Type == EffectModel.TypeEnum.Medicine)
+        {
+            skill = new MedicineEffect(data);
+        }
+        else if (data.Type == EffectModel.TypeEnum.Sleep)
+        {
+            skill = new SleepEffect(data);
+        }
 
         return skill;
     }

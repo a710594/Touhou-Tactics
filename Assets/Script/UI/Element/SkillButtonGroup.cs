@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class SkillButtonGroup : MonoBehaviour
 {
-    public SPGroup SPGroup;
+    public PointGroup SPGroup;
     public Button BackButton;
     public SkillButton[] SkillButtons;
 

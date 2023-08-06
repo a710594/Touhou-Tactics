@@ -27,6 +27,7 @@ namespace Battle
                         for (int j = 0; j < floatingList.Count; j++)
                         {
                             Instance._battleUI.PlayFloatingNumberPool(_character.ID, floatingList[j].Type, floatingList[j].Text);
+                            Instance._battleUI.SetLittleHpBarValue(_character.ID, _character);
                         }
                         for (int i = 0; i < _character.SkillList.Count; i++)
                         {

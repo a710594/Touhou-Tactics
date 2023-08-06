@@ -19,6 +19,9 @@ public class EffectModel
         Provocative,
         Buff,
         Poison,
+        Purify,
+        Medicine,
+        Sleep,
     }
 
     public enum TargetEnum

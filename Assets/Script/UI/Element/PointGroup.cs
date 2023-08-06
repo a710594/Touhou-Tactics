@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SPGroup : MonoBehaviour
+public class PointGroup : MonoBehaviour
 {
     public GameObject[] Obj;
 

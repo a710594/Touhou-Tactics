@@ -151,7 +151,7 @@ public class ItemManager
             }
         }
 
-        return medicineList;
+        return resultList;
     }
 
     public Item GetItem(ItemModel.CategoryEnum category, int id)

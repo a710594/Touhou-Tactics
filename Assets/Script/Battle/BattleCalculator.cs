@@ -269,7 +269,7 @@ namespace Battle
                     {
                         if (faction != CharacterList[i].Faction) //與自己的陣營不同的角色
                         {
-                            path = AStarAlgor.Instance.GetPath(v2, Utility.ConvertToVector2(CharacterList[i].Position), CharacterList[i], CharacterList, BattleInfo.TileInfoDic, false);
+                            path = AStarAlgor.Instance.GetPath(v2, Utility.ConvertToVector2Int(CharacterList[i].Position), CharacterList[i], CharacterList, BattleInfo.TileInfoDic, false);
                             if(path != null) 
                             {
                                 v3 = new Vector3(v2.x, BattleInfo.TileInfoDic[v2].Height, v2.y);

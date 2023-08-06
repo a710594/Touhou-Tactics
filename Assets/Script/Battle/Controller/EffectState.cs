@@ -63,7 +63,21 @@ namespace Battle
                 }
                 else
                 {
-                    Debug.Log("毫無反應...");
+                    Instance._battleUI.TipLabel.SetLabel("毫無反應...");
+                    if (_character.SelectedSkill != null)
+                    {
+                        _character.HasUseSkill = true;
+                        _character.ActionCount--;
+                    }
+                    else if (_character.SelectedSupport != null)
+                    {
+                        _character.HasUseSupport = true;
+                    }
+                    else if (_character.SelectedItem != null)
+                    {
+                        _character.HasUseItem = true;
+                        _character.ActionCount--;
+                    }
                     _context.SetState<EndState>();
                 }
             }
@@ -96,11 +110,12 @@ namespace Battle
 
                 if (playerCount == 0)
                 {
-                    Debug.Log("You Lose");
+                    Instance._battleUI.TipLabel.SetLabel("You Lose");
+
                 }
                 else if (enemyCount == 0)
                 {
-                    Debug.Log("You Win");
+                    Instance._battleUI.TipLabel.SetLabel("You Win");
                 }
                 else
                 {

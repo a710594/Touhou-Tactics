@@ -38,7 +38,8 @@ namespace Battle
                     position = controller.transform.position + new Vector3(0, 10, 0);
                 }
                 Instance._battleUI.ActionButtonGroup.gameObject.SetActive(false);
-                Camera.main.transform.DOMove(position, 1f).OnComplete(() =>
+                float distance = Vector3.Distance(Camera.main.transform.position, position);
+                Camera.main.transform.DOMove(position, 0.1f * distance).OnComplete(() =>
                 {
                     _context.SetState<ActionState>();
                 });

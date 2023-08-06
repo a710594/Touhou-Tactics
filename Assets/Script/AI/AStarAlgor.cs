@@ -21,7 +21,7 @@ public class AStarAlgor
     private List<BattleCharacterInfo> _characterList;
     private Dictionary<Vector2Int, TileInfo> _tileInfoDic;
 
-    public List<Vector2Int> GetPath(Vector2Int start, Vector2 goal, BattleCharacterInfo selectedCharacter, List<BattleCharacterInfo> characterList, Dictionary<Vector2Int, TileInfo> tileInfoDic, bool isRandom)
+    public List<Vector2Int> GetPath(Vector2Int start, Vector2Int goal, BattleCharacterInfo selectedCharacter, List<BattleCharacterInfo> characterList, Dictionary<Vector2Int, TileInfo> tileInfoDic, bool isRandom)
     {
         if (start == goal)
         {
@@ -142,9 +142,9 @@ public class AStarAlgor
             List<Vector2Int> path = GetPath(start, goal, selectedCharacter, characterList, tileInfoDic, false);
             if (path != null)
             {
-                for (int i = 0; i < path.Count; i++)
+                for (int i = 1; i < path.Count; i++)
                 {
-                    distance += tileInfoDic[path[i]].MoveCost;
+                    distance += MoveCost(path[i - 1], path[i]);
                 }
             }
             else
@@ -163,7 +163,7 @@ public class AStarAlgor
         for (int i = 0; i < stepList.Count; i++)
         {
             distance = GetDistance(start, stepList[i], selectedCharacter, characterList, tileInfoDic);
-            if (distance - 1 > selectedCharacter.MOV || distance == -1)
+            if (distance > selectedCharacter.MOV || distance == -1)
             {
                 stepList.RemoveAt(i);
                 i--;
@@ -234,7 +234,13 @@ public class AStarAlgor
                 }
             }
         }
-        cost = _tileInfoDic[to].MoveCost + Mathf.Abs(_tileInfoDic[from].Height - _tileInfoDic[to].Height);
+        int height = _tileInfoDic[from].Height - _tileInfoDic[to].Height;
+        cost = _tileInfoDic[to].MoveCost + Mathf.Abs(height);
+
+        if(height > 0) 
+        {
+            Debug.Log(height);
+        }
 
         return cost;
     }
