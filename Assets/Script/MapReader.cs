@@ -46,7 +46,7 @@ public class MapReader
     //    }
     //}
 
-    public void Read(string path, out int width, out int height, out Dictionary<Vector2Int, TileInfo> tileInfoDic, out Dictionary<Vector2Int, TileComponent> tileComponentDic, out Dictionary<Vector2Int, GameObject> attachDic) 
+    public void Read(string path, out BattleInfo battleInfo) 
     {
         string text = File.ReadAllText(path);
         string[] stringSeparators = new string[] { "\r\n" };
@@ -56,27 +56,27 @@ public class MapReader
         TileScriptableObject tileScriptableObject;
         AttachScriptableObject attachScriptableObject;
         GameObject tileObj;
-        GameObject attachObj; ;
-        tileComponentDic = new Dictionary<Vector2Int, TileComponent>();
-        attachDic = new Dictionary<Vector2Int, GameObject>();
-
-        tileInfoDic = new Dictionary<Vector2Int, TileInfo>();
+        GameObject attachObj;
+        battleInfo = new BattleInfo();
+        battleInfo.TileComponentDic = new Dictionary<Vector2Int, TileComponent>();
+        battleInfo.AttachDic = new Dictionary<Vector2Int, GameObject>();
+        battleInfo.TileInfoDic = new Dictionary<Vector2Int, TileInfo>();
         str = lines[0].Split(' ');
-        width = int.Parse(str[0]);
-        height = int.Parse(str[1]);
+        battleInfo.Width = int.Parse(str[0]);
+        battleInfo.Height = int.Parse(str[1]);
 
         for (int i = 1; i < lines.Length; i++) //第一行是長寬,忽視之
         {
             if (lines[i] != "")
             {
-                if (i <= width)
+                if (i <= battleInfo.Width)
                 {
                     str = lines[i].Split(' ');
                     for (int j = 0; j < str.Length; j++)
                     {
                         position = new Vector2Int(i - 1, j);
                         tileScriptableObject = DataContext.Instance.TileScriptableObjectDic[str[j]];
-                        tileInfoDic.Add(position, new TileInfo(tileScriptableObject));
+                        battleInfo.TileInfoDic.Add(position, new TileInfo(tileScriptableObject));
                     }
                 }
                 else
@@ -84,18 +84,18 @@ public class MapReader
                     str = lines[i].Split(' ');
                     for (int j = 0; j < str.Length; j++)
                     {
-                        position = new Vector2Int(i - 1 - width, j);
+                        position = new Vector2Int(i - 1 - battleInfo.Width, j);
                         if (DataContext.Instance.AttachScriptableObjectDic.ContainsKey(str[j]))
                         {
                             attachScriptableObject = DataContext.Instance.AttachScriptableObjectDic[str[j]];
-                            tileInfoDic[position].SetAttach(attachScriptableObject.ID, attachScriptableObject.MoveCost);
+                            battleInfo.TileInfoDic[position].SetAttach(attachScriptableObject.ID, attachScriptableObject.MoveCost);
                         }
                     }
                 }
             }
         }
 
-        foreach (KeyValuePair<Vector2Int, TileInfo> pair in tileInfoDic)
+        foreach (KeyValuePair<Vector2Int, TileInfo> pair in battleInfo.TileInfoDic)
         {
             tileObj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + pair.Value.TileID), Vector3.zero, Quaternion.identity);
             Transform parent = GameObject.Find("Tilemap").transform;
@@ -104,14 +104,14 @@ public class MapReader
                 tileObj.transform.SetParent(parent);
             }
             tileObj.transform.position = new Vector3(pair.Key.x, 0, pair.Key.y);
-            tileComponentDic.Add(pair.Key, tileObj.GetComponent<TileComponent>());
+            battleInfo.TileComponentDic.Add(pair.Key, tileObj.GetComponent<TileComponent>());
 
             if (pair.Value.AttachID != null)
             {
                 attachObj = (GameObject)GameObject.Instantiate(Resources.Load("Attach/" + pair.Value.AttachID), Vector3.zero, Quaternion.identity);
                 attachObj.transform.position = tileObj.transform.position + new Vector3(0, pair.Value.Height - 0.5f, 0);
                 attachObj.transform.parent = tileObj.transform;
-                attachDic.Add(pair.Key, attachObj);
+                battleInfo.AttachDic.Add(pair.Key, attachObj);
             }
         }
     }

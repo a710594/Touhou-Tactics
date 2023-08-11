@@ -30,6 +30,7 @@ public class DataContext
     public List<EnemyModel> EnemyList = new List<EnemyModel>();
     public List<SupportModel> SupportList = new List<SupportModel>();
     public List<ItemModel> ItemList = new List<ItemModel>();
+    public List<PassiveModel> PassiveList = new List<PassiveModel>();
 
     public Dictionary<int, JobModel> JobDic = new Dictionary<int, JobModel>();
     public Dictionary<int, SkillModel> SkillDic = new Dictionary<int, SkillModel>();
@@ -37,6 +38,7 @@ public class DataContext
     public Dictionary<StatusModel.TypeEnum, Dictionary<int, StatusModel>> StatusDic = new Dictionary<StatusModel.TypeEnum, Dictionary<int, StatusModel>>();
     public Dictionary<int, EnemyModel> EnemyDic = new Dictionary<int, EnemyModel>();
     public Dictionary<int, SupportModel> SupportDic = new Dictionary<int, SupportModel>();
+    public Dictionary<int, PassiveModel> PassiveDic = new Dictionary<int, PassiveModel>();
     public Dictionary<ItemModel.CategoryEnum, Dictionary<int, ItemModel>> ItemDic = new Dictionary<ItemModel.CategoryEnum, Dictionary<int, ItemModel>>();
     public Dictionary<string, TileScriptableObject> TileScriptableObjectDic = new Dictionary<string, TileScriptableObject>();
     public Dictionary<string, AttachScriptableObject> AttachScriptableObjectDic = new Dictionary<string, AttachScriptableObject>();
@@ -99,6 +101,12 @@ public class DataContext
                 ItemDic.Add(ItemList[i].Category, new Dictionary<int, ItemModel>());
             }
             ItemDic[ItemList[i].Category].Add(ItemList[i].ID, ItemList[i]);
+        }
+
+        PassiveList = Load<List<PassiveModel>>("Passive");
+        for (int i = 0; i < PassiveList.Count; i++)
+        {
+            PassiveDic.Add(PassiveList[i].ID, PassiveList[i]);
         }
 
         DirectoryInfo d;

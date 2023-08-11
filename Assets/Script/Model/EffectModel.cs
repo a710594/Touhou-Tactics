@@ -37,6 +37,7 @@ public class EffectModel
         None = 1,
         Straight,
         Parabola,
+        Through,
     }
 
     public TypeEnum Type;

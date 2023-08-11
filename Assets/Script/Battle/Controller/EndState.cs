@@ -41,7 +41,7 @@ namespace Battle
                         _character.CheckSP();
                         _characterList.RemoveAt(0);
                         _characterList.Add(_character);
-                        Instance.SortCharacterList();
+                        Instance.SortCharacterList(false);
 
                         _context.SetState<CharacterState>();
                     }

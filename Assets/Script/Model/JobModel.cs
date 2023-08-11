@@ -19,6 +19,7 @@ public class JobModel
     public int UP;
     public int DOWN;
     public int WT;
+    public int Passive;
     public string Controller;
     public int Skill_1;
     public int Skill_2;

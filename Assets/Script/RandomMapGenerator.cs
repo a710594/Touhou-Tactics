@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -32,26 +33,26 @@ public class RandomMapGenerator : MonoBehaviour
         }
     }
 
-    public void Generate(out Dictionary<Vector3, TileComponent> tileComponentDic, out Dictionary<Vector3, TileInfo> tileInfoDic, out Dictionary<Vector3, GameObject> attachDic, out List<Vector3> noAttachList) 
+    public void Generate(out BattleInfo battleInfo) 
     {
-        int width;
-        int height;
-        string path = Path.Combine(_prePath, SeedFile[Random.Range(0, SeedFile.Length)] + ".txt");
+        string path = Path.Combine(_prePath, SeedFile[UnityEngine.Random.Range(0, SeedFile.Length)] + ".txt");
         string text = File.ReadAllText(path);
-        string[] lines = text.Split('\n');
+        string[] stringSeparators = new string[] { "\r\n" };
+        string[] lines = text.Split(stringSeparators, StringSplitOptions.None);
         string[] str;
-        Vector3 position = new Vector3();
+        Vector2Int position = new Vector2Int();
         TileScriptableObject tileScriptableObject;
         AttachScriptableObject attachScriptableObject;
-        Dictionary<Vector3, TileScriptableObject> visitedDic = new Dictionary<Vector3, TileScriptableObject>();
-        Queue<Vector3> queue = new Queue<Vector3>();
+        Dictionary<Vector2Int, TileScriptableObject> visitedDic = new Dictionary<Vector2Int, TileScriptableObject>();
+        Queue<Vector2Int> queue = new Queue<Vector2Int>();
         GameObject tileObj;
         GameObject attachObj;
+        battleInfo = new BattleInfo();
 
-        tileInfoDic = new Dictionary<Vector3, TileInfo>();
-        tileComponentDic = new Dictionary<Vector3, TileComponent>();
-        attachDic = new Dictionary<Vector3, GameObject>();
-        noAttachList = new List<Vector3>(); //禁建區,不會有附加物件的區域
+        foreach(KeyValuePair<string, TileScriptableObject> pair1 in _tileScriptableObjectDic) 
+        {
+            Debug.Log(pair1.Key);
+        }
 
         for (int i = this.transform.childCount; i > 0; --i)
         {
@@ -59,30 +60,30 @@ public class RandomMapGenerator : MonoBehaviour
         }
 
         str = lines[0].Split(' ');
-        width = int.Parse(str[0]);
-        height = int.Parse(str[1]);
+        battleInfo.Width = int.Parse(str[0]);
+        battleInfo.Height = int.Parse(str[1]);
 
         for (int i = 1; i < lines.Length; i++) //第一行是長寬,忽視之
         {
             if (lines[i] != "")
             {
-                if (i <= width)
+                if (i <= battleInfo.Width)
                 {
                     str = lines[i].Split(' ');
                     for (int j = 0; j < str.Length; j++)
                     {
-                        position = new Vector3(i - 1, 0, j);
+                        position = new Vector2Int(i - 1, j);
                         if (str[j] == "X")
                         {
                             visitedDic.Add(position, null);
-                            tileInfoDic.Add(position, null);
+                            battleInfo.TileInfoDic.Add(position, null);
                             continue;
                         }
                         else
                         {
                             tileScriptableObject = _tileScriptableObjectDic[str[j]];
                             visitedDic.Add(position, tileScriptableObject);
-                            tileInfoDic.Add(position, new TileInfo(tileScriptableObject));
+                            battleInfo.TileInfoDic.Add(position, new TileInfo(tileScriptableObject));
                             if (tileScriptableObject.Enqueue)
                             {
                                 queue.Enqueue(position);
@@ -92,7 +93,7 @@ public class RandomMapGenerator : MonoBehaviour
                 }
                 else
                 {
-                    noAttachList = JsonConvert.DeserializeObject<List<Vector3>>(lines[i]);
+                    battleInfo.NoAttachList = JsonConvert.DeserializeObject<List<Vector2Int>>(lines[i]);
                 }
 
             }
@@ -104,57 +105,57 @@ public class RandomMapGenerator : MonoBehaviour
             position = queue.Dequeue();
 
             tileScriptableObject = visitedDic[position];
-            if ((position + Vector3.forward).z < height && visitedDic[position + Vector3.forward] == null)
+            if ((position + Vector2Int.up).y < battleInfo.Height && visitedDic[position + Vector2Int.up] == null)
             {
-                visitedDic[position + Vector3.forward] = GetAdjacentTile(tileScriptableObject, Vector3.forward);
-                tileInfoDic[position + Vector3.forward] = new TileInfo(visitedDic[position + Vector3.forward]);
-                if (visitedDic[position + Vector3.forward].Enqueue)
+                visitedDic[position + Vector2Int.up] = GetAdjacentTile(tileScriptableObject, Vector2Int.up);
+                battleInfo.TileInfoDic[position + Vector2Int.up] = new TileInfo(visitedDic[position + Vector2Int.up]);
+                if (visitedDic[position + Vector2Int.up].Enqueue)
                 {
-                    queue.Enqueue(position + Vector3.forward);
+                    queue.Enqueue(position + Vector2Int.up);
                 }
             }
-            if ((position + Vector3.back).z >= 0 && visitedDic[position + Vector3.back] == null)
+            if ((position + Vector2Int.down).y >= 0 && visitedDic[position + Vector2Int.down] == null)
             {
-                visitedDic[position + Vector3.back] = GetAdjacentTile(tileScriptableObject, Vector3.back);
-                tileInfoDic[position + Vector3.back] = new TileInfo(visitedDic[position + Vector3.back]);
-                if (visitedDic[position + Vector3.back].Enqueue)
+                visitedDic[position + Vector2Int.down] = GetAdjacentTile(tileScriptableObject, Vector2Int.down);
+                battleInfo.TileInfoDic[position + Vector2Int.down] = new TileInfo(visitedDic[position + Vector2Int.down]);
+                if (visitedDic[position + Vector2Int.down].Enqueue)
                 {
-                    queue.Enqueue(position + Vector3.back);
+                    queue.Enqueue(position + Vector2Int.down);
                 }
             }
-            if ((position + Vector3.left).x >= 0 && visitedDic[position + Vector3.left] == null)
+            if ((position + Vector2Int.left).x >= 0 && visitedDic[position + Vector2Int.left] == null)
             {
-                visitedDic[position + Vector3.left] = GetAdjacentTile(tileScriptableObject, Vector3.left);
-                tileInfoDic[position + Vector3.left] = new TileInfo(visitedDic[position + Vector3.left]);
-                if (visitedDic[position + Vector3.left].Enqueue)
+                visitedDic[position + Vector2Int.left] = GetAdjacentTile(tileScriptableObject, Vector2Int.left);
+                battleInfo.TileInfoDic[position + Vector2Int.left] = new TileInfo(visitedDic[position + Vector2Int.left]);
+                if (visitedDic[position + Vector2Int.left].Enqueue)
                 {
-                    queue.Enqueue(position + Vector3.left);
+                    queue.Enqueue(position + Vector2Int.left);
                 }
             }
-            if ((position + Vector3.right).x < width && visitedDic[position + Vector3.right] == null)
+            if ((position + Vector2Int.right).x < battleInfo.Width && visitedDic[position + Vector2Int.right] == null)
             {
-                visitedDic[position + Vector3.right] = GetAdjacentTile(tileScriptableObject, Vector3.right);
-                tileInfoDic[position + Vector3.right] = new TileInfo(visitedDic[position + Vector3.right]);
-                if (visitedDic[position + Vector3.right].Enqueue)
+                visitedDic[position + Vector2Int.right] = GetAdjacentTile(tileScriptableObject, Vector2Int.right);
+                battleInfo.TileInfoDic[position + Vector2Int.right] = new TileInfo(visitedDic[position + Vector2Int.right]);
+                if (visitedDic[position + Vector2Int.right].Enqueue)
                 {
-                    queue.Enqueue(position + Vector3.right);
+                    queue.Enqueue(position + Vector2Int.right);
                 }
             }
         }
 
         //Attach
-        foreach (KeyValuePair<Vector3, TileScriptableObject> pair in visitedDic)
+        foreach (KeyValuePair<Vector2Int, TileScriptableObject> pair in visitedDic)
         {
-            if (!noAttachList.Contains(pair.Key))
+            if (!battleInfo.NoAttachList.Contains(pair.Key))
             {
                 attachScriptableObject = GetAttachIDRRandomly(pair.Value.Attachs); ;
                 if (attachScriptableObject != null)
                 {
-                    tileInfoDic[pair.Key].SetAttach(attachScriptableObject.ID, attachScriptableObject.MoveCost);
+                    battleInfo.TileInfoDic[pair.Key].SetAttach(attachScriptableObject.ID, attachScriptableObject.MoveCost);
                 }
                 else
                 {
-                    tileInfoDic[pair.Key].SetAttach(null, 0);
+                    battleInfo.TileInfoDic[pair.Key].SetAttach(null, 0);
                 }
             }
         }
@@ -163,7 +164,7 @@ public class RandomMapGenerator : MonoBehaviour
         int count = 5;
         while (count > 0)
         {
-            NextGeneration(width, height, tileInfoDic, noAttachList);
+            NextGeneration(battleInfo.Width, battleInfo.Height, battleInfo.TileInfoDic, battleInfo.NoAttachList);
             count--;
         }
 
@@ -172,7 +173,7 @@ public class RandomMapGenerator : MonoBehaviour
             DestroyImmediate(this.transform.GetChild(0).gameObject);
         }
 
-        foreach(KeyValuePair<Vector3, TileInfo> pair in tileInfoDic) 
+        foreach(KeyValuePair<Vector2Int, TileInfo> pair in battleInfo.TileInfoDic) 
         {
             tileObj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + pair.Value.TileID), Vector3.zero, Quaternion.identity);
             Transform parent = GameObject.Find("Tilemap").transform;
@@ -180,47 +181,47 @@ public class RandomMapGenerator : MonoBehaviour
             {
                 tileObj.transform.SetParent(parent);
             }
-            tileObj.transform.position = pair.Key;
-            tileComponentDic.Add(pair.Key, tileObj.GetComponent<TileComponent>());
+            tileObj.transform.position = new Vector3(pair.Key.x, 0, pair.Key.y);
+            battleInfo.TileComponentDic.Add(pair.Key, tileObj.GetComponent<TileComponent>());
 
             if (pair.Value.AttachID != null)
             {
                 attachObj = (GameObject)GameObject.Instantiate(Resources.Load("Attach/" + pair.Value.AttachID), Vector3.zero, Quaternion.identity);
                 attachObj.transform.position = tileObj.transform.position + new Vector3(0, pair.Value.Height - 0.5f, 0);
                 attachObj.transform.parent = tileObj.transform;
-                attachDic.Add(pair.Key, attachObj);
+                battleInfo.AttachDic.Add(pair.Key, attachObj);
             }
         } 
     }
 
-    private TileScriptableObject GetAdjacentTile(TileScriptableObject tile, Vector3 direction) 
+    private TileScriptableObject GetAdjacentTile(TileScriptableObject tile, Vector2Int direction) 
     {
         int random;
         TileScriptableObject adjacentTile = null;
         List<string> pool = new List<string>();
 
-        if(direction == Vector3.forward) 
+        if(direction == Vector2Int.up) 
         {
             pool = GetTilePool(tile.Up);
-            random = Random.Range(0, pool.Count);
+            random = UnityEngine.Random.Range(0, pool.Count);
             adjacentTile = _tileScriptableObjectDic[pool[random]];
         }
-        else if (direction == Vector3.back)
+        else if (direction == Vector2Int.down)
         {
             pool = GetTilePool(tile.Down);
-            random = Random.Range(0, pool.Count);
+            random = UnityEngine.Random.Range(0, pool.Count);
             adjacentTile = _tileScriptableObjectDic[pool[random]];
         }
-        else if (direction == Vector3.left)
+        else if (direction == Vector2Int.left)
         {
             pool = GetTilePool(tile.Left);
-            random = Random.Range(0, pool.Count);
+            random = UnityEngine.Random.Range(0, pool.Count);
             adjacentTile = _tileScriptableObjectDic[pool[random]];
         }
-        else if (direction == Vector3.right)
+        else if (direction == Vector2Int.right)
         {
             pool = GetTilePool(tile.Right);
-            random = Random.Range(0, pool.Count);
+            random = UnityEngine.Random.Range(0, pool.Count);
             adjacentTile = _tileScriptableObjectDic[pool[random]];
         }
 
@@ -243,7 +244,7 @@ public class RandomMapGenerator : MonoBehaviour
 
     private AttachScriptableObject GetAttachIDRRandomly(TileScriptableObject.Attach[] attachs) //隨機取得物件,包含 null
     {
-        int random = Random.Range(0, attachs.Length + 1);
+        int random = UnityEngine.Random.Range(0, attachs.Length + 1);
         string id = null;
         if (random < attachs.Length)
         {
@@ -281,7 +282,7 @@ public class RandomMapGenerator : MonoBehaviour
             }
         }
 
-        int random = Random.Range(0, pool.Count);
+        int random = UnityEngine.Random.Range(0, pool.Count);
         string id = null;
         if (pool.Count > 0)
         {
@@ -299,10 +300,10 @@ public class RandomMapGenerator : MonoBehaviour
     }
 
     // 計算 Life Game 下一代的棋盤
-    private Dictionary<Vector3, TileInfo> NextGeneration(int width, int height, Dictionary<Vector3, TileInfo> tileInfoDic, List<Vector3> noAttachList)
+    private Dictionary<Vector2Int, TileInfo> NextGeneration(int width, int height, Dictionary<Vector2Int, TileInfo> tileInfoDic, List<Vector2Int> noAttachList)
     {
         AttachScriptableObject attach;
-        foreach(KeyValuePair<Vector3, TileInfo> pair in tileInfoDic) 
+        foreach(KeyValuePair<Vector2Int, TileInfo> pair in tileInfoDic) 
         {
             int neighbors = CountNeighbors(width, height, tileInfoDic, pair.Key, null);
             int grassNeighbors = CountNeighbors(width, height, tileInfoDic, pair.Key, "Grass");
@@ -343,7 +344,7 @@ public class RandomMapGenerator : MonoBehaviour
         return tileInfoDic;
     }
 
-    private int CountNeighbors(int width, int height, Dictionary<Vector3, TileInfo> tileInfoDic, Vector3 position, string attach)
+    private int CountNeighbors(int width, int height, Dictionary<Vector2Int, TileInfo> tileInfoDic, Vector2Int position, string attach)
     {
         int count = 0;
 
@@ -351,15 +352,15 @@ public class RandomMapGenerator : MonoBehaviour
         {
             for (int j = -1; j <= 1; j++)
             {
-                int x = (int)position.x + i;
-                int z = (int)position.z + j;
+                int x = position.x + i;
+                int y = position.y + j;
 
-                if (x < 0 || x >= width || z < 0 || z >= height || (i == 0 && j == 0))
+                if (x < 0 || x >= width || y < 0 || y >= height || (i == 0 && j == 0))
                 {
                     continue;
                 }
 
-                if ((attach == null && tileInfoDic[new Vector3(x, 0, z)].AttachID != null)  || (attach != null && tileInfoDic[new Vector3(x, 0, z)].AttachID == attach))
+                if ((attach == null && tileInfoDic[new Vector2Int(x, y)].AttachID != null)  || (attach != null && tileInfoDic[new Vector2Int(x, y)].AttachID == attach))
                 {
                     count++;
                 }

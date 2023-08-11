@@ -13,45 +13,45 @@ public class EffectFactory
 
     public static Effect GetEffect(EffectModel data)
     {
-        Effect skill = null;
+        Effect effect = null;
 
         if (data.Type == EffectModel.TypeEnum.PhysicalAttack)
         {
-            skill = new PhysicalAttackEffect(data);
+            effect = new PhysicalAttackEffect(data);
         }
         else if (data.Type == EffectModel.TypeEnum.MagicAttack)
         {
-            skill = new PhysicalAttackEffect(data);
+            effect = new PhysicalAttackEffect(data);
         }
         else if(data.Type == EffectModel.TypeEnum.Provocative) 
         {
-            skill = new ProvocativeEffect(data);
+            effect = new ProvocativeEffect(data);
         }
         else if (data.Type == EffectModel.TypeEnum.Buff)
         {
-            skill = new BuffEffect(data);
+            effect = new BuffEffect(data);
         }
         else if (data.Type == EffectModel.TypeEnum.Recover)
         {
-            skill = new RecoverEffect(data);
+            effect = new RecoverEffect(data);
         }
         else if (data.Type == EffectModel.TypeEnum.Poison)
         {
-            skill = new PoisonEffect(data);
+            effect = new PoisonEffect(data);
         }
         else if (data.Type == EffectModel.TypeEnum.Purify)
         {
-            skill = new PurifyEffect(data);
+            effect = new PurifyEffect(data);
         }
         else if (data.Type == EffectModel.TypeEnum.Medicine)
         {
-            skill = new MedicineEffect(data);
+            effect = new MedicineEffect(data);
         }
         else if (data.Type == EffectModel.TypeEnum.Sleep)
         {
-            skill = new SleepEffect(data);
+            effect = new SleepEffect(data);
         }
 
-        return skill;
+        return effect;
     }
 }

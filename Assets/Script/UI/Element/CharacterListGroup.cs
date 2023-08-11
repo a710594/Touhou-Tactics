@@ -11,16 +11,21 @@ public class CharacterListGroup : MonoBehaviour
 
     private List<BattleCharacterInfo> _characterList = new List<BattleCharacterInfo>();
     private Dictionary<BattleCharacterInfo, Image> _imageDic = new Dictionary<BattleCharacterInfo, Image>();
+    private Dictionary<int, Sprite> _spriteDic = new Dictionary<int, Sprite>();
 
     public void Init(List<BattleCharacterInfo> characterList)
     {
         _characterList = characterList;
         Image image;
+        Sprite sprite;
         for (int i=0; i<_characterList.Count; i++) 
         {
             image = Instantiate(Image);
             image.transform.SetParent(transform);
-            image.sprite = Resources.Load<Sprite>("Prefab/Image/" + _characterList[i].Controller + "_F"); 
+            sprite = Resources.Load<Sprite>("Prefab/Image/" + _characterList[i].Controller + "_F");
+            image.sprite = sprite;
+            _spriteDic.Add(_characterList[i].ID, sprite);
+
             _imageDic.Add(_characterList[i], image);
             if (i > _max) 
             {
@@ -34,10 +39,10 @@ public class CharacterListGroup : MonoBehaviour
         int index = 0;
         foreach(KeyValuePair<BattleCharacterInfo, Image> pair in _imageDic) 
         {
-            if (_characterList.Contains(pair.Key) && _characterList.IndexOf(pair.Key) < _max) 
+            if (index != -1 && index < _max) 
             {
                 pair.Value.gameObject.SetActive(true);
-                pair.Value.transform.SetSiblingIndex(_characterList.IndexOf(pair.Key));
+                pair.Value.sprite = _spriteDic[_characterList[index].ID];
                 index++;
             }
             else

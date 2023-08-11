@@ -55,8 +55,9 @@ public class BattleCharacterInfo
     public Support SelectedSupport = null;
     public Item SelectedItem = null;
     public AI AI = null;
+    public Vector2Int Direction = Vector2Int.left;
     public List<Status> StatusList = new List<Status>();
-    public List<Passive> passiveList = new List<Passive>();
+    public List<Passive> PassiveList = new List<Passive>();
 
     public BattleCharacterInfo(JobModel job) 
     {
@@ -74,6 +75,10 @@ public class BattleCharacterInfo
         UP = job.UP;
         DOWN = job.DOWN;
         WT = job.WT;
+        if(job.Passive != -1) 
+        {
+            PassiveList.Add(PassiveFactory.GetPassive(job.Passive));
+        }
         Controller = job.Controller;
         Faction = FactionEnum.Player;
 

@@ -8,12 +8,14 @@ using Battle;
 public class BattleCharacterController : MonoBehaviour
 {
     public Action MoveEndHandler;
+    public Action<Vector2Int> SetDirectionHandler;
 
     public Transform HpAnchor;
     public Sprite Front;
     public Sprite Back;
     public SpriteRenderer SpriteRenderer;
 
+    private Vector2Int _direction = Vector2Int.left;
     private CameraRotate _cameraRotate;
 
     //public void Move(Vector2 position)
@@ -71,21 +73,25 @@ public class BattleCharacterController : MonoBehaviour
             {
                 SpriteRenderer.sprite = Back;
                 SpriteRenderer.flipX = false;
+                _direction = Vector2Int.right;
             }
             else if (position.x < transform.position.x)
             {
                 SpriteRenderer.sprite = Front;
                 SpriteRenderer.flipX = false;
+                _direction = Vector2Int.left;
             }
             else if (position.y > transform.position.z)
             {
                 SpriteRenderer.sprite = Back;
                 SpriteRenderer.flipX = true;
+                _direction = Vector2Int.up;
             }
             else if (position.y < transform.position.z)
             {
                 SpriteRenderer.sprite = Front;
                 SpriteRenderer.flipX = true;
+                _direction = Vector2Int.down;
             }
         }
         else 
@@ -110,6 +116,11 @@ public class BattleCharacterController : MonoBehaviour
                 SpriteRenderer.sprite = Front;
                 SpriteRenderer.flipX = true;
             }
+        }
+
+        if (SetDirectionHandler != null) 
+        {
+            SetDirectionHandler(_direction);
         }
     }
 

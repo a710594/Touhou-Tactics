@@ -5,21 +5,18 @@ using UnityEngine;
 
 public class NewBehaviourScript : MonoBehaviour
 {
+    public RandomMapGenerator RandomMapGenerator;
+
     // Start is called before the first frame update
     void Start()
     {
         DataContext.Instance.Init();
         MapReader mapReader = new MapReader();
         //mapReader.LoadData();
-        mapReader.Read(Application.streamingAssetsPath + "/Map.txt", out int width, out int height, out Dictionary<Vector2Int, TileInfo> tileInfoDic, out Dictionary<Vector2Int, TileComponent> tileComponentDic, out Dictionary<Vector2Int, GameObject> attachDic);
-        PathManager.Instance.LoadData(tileInfoDic);
-        ItemManager.Instance.Init();
-        BattleInfo battleInfo = new BattleInfo();
-        battleInfo.Width = width;
-        battleInfo.Height = height;
-        battleInfo.TileInfoDic = tileInfoDic;
-        battleInfo.TileComponentDic = tileComponentDic;
-        battleInfo.AttachDic = attachDic;
+        //mapReader.Read(Application.streamingAssetsPath + "/Map.txt", out BattleInfo battleInfo);
+        RandomMapGenerator.Generate(out BattleInfo battleInfo);
+        PathManager.Instance.LoadData(battleInfo.TileInfoDic);
+        //ItemManager.Instance.Init();
         BattleController.Instance.Init(battleInfo);
 
         ItemManager.Instance.AddItem(ItemModel.CategoryEnum.Medicine, 1, 1);

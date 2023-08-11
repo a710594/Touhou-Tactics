@@ -13,7 +13,7 @@ public class RandomMapGeneratorEditor : Editor
         RandomMapGenerator nodeGenerator = (RandomMapGenerator)target;
         if (GUILayout.Button("產生地圖"))
         {
-            nodeGenerator.Generate(out Dictionary<Vector3, TileComponent> tileComponentDic, out Dictionary<Vector3, TileInfo> tileInfoDic, out Dictionary<Vector3, GameObject> attachDic, out List<Vector3> noAttachList);
+            nodeGenerator.Generate(out BattleInfo battleInfo);
             //BattleController.Instance.Init(tileComponentDic, tileInfoDic, attachDic, noAttachList);
         
         }

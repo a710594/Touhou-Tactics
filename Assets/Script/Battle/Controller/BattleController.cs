@@ -86,12 +86,13 @@ namespace Battle
                 obj.transform.position = CharacterList[i].Position;
                 _controllerDic.Add(CharacterList[i].ID, obj.GetComponent<BattleCharacterController>());
                 _controllerDic[CharacterList[i].ID].MoveEndHandler += OnMoveEnd;
+                _controllerDic[CharacterList[i].ID].SetDirectionHandler += SetDirection;
                 _battleUI.SetLittleHpBarAnchor(CharacterList[i].ID, _controllerDic[CharacterList[i].ID]);
                 _battleUI.SetLittleHpBarValue(CharacterList[i].ID, CharacterList[i]);
                 _battleUI.SetFloatingNumberPoolAnchor(CharacterList[i].ID, _controllerDic[CharacterList[i].ID]);
             }
 
-            SortCharacterList();
+            SortCharacterList(true);
 
             _battleUI.CharacterListGroupInit(CharacterList);
 
@@ -217,7 +218,7 @@ namespace Battle
         {
             if (effect.Data.Area == "Through")
             {
-                _areaList = GetTroughAreaList(_selectedCharacter.Position, new Vector3(_selectedPosition.x, Instance.BattleInfo.TileInfoDic[_selectedPosition].Height, _selectedPosition.y), CharacterList, BattleInfo.TileInfoDic);
+                _areaList = GetTroughAreaList(_selectedCharacter.Position, new Vector3(_selectedPosition.x, Instance.BattleInfo.TileInfoDic[_selectedPosition].Height, _selectedPosition.y));
             }
             else
             {
@@ -261,6 +262,11 @@ namespace Battle
             }
         }
 
+        public void SetDirection(Vector2Int direction) 
+        {
+            _selectedCharacter.Direction = direction;
+        }
+
         public void SetCharacterInfoUI_2(Vector2 position)
         {
             //顯示角色資料
@@ -286,15 +292,15 @@ namespace Battle
             }
         }
 
-        private void SortCharacterList()
+        private void SortCharacterList(bool isStart)
         {
             CharacterList.Sort((x, y) =>
             {
-                if (Passive.Contains<ForwardPassive>(x.passiveList) && !Passive.Contains<ForwardPassive>(y.passiveList))
+                if (isStart && !Passive.Contains<ForwardPassive>(x.PassiveList) && Passive.Contains<ForwardPassive>(y.PassiveList))
                 {
                     return 1;
                 }
-                else if (!Passive.Contains<ForwardPassive>(x.passiveList) && Passive.Contains<ForwardPassive>(y.passiveList))
+                else if (isStart && Passive.Contains<ForwardPassive>(x.PassiveList) && !Passive.Contains<ForwardPassive>(y.PassiveList))
                 {
                     return -1;
                 }

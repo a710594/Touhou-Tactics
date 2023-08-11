@@ -230,17 +230,12 @@ public class AStarAlgor
             {
                 if(_characterList[i].Faction != _selectedCharacter.Faction) 
                 {
-                    cost = -1;
+                    return -1;
                 }
             }
         }
         int height = _tileInfoDic[from].Height - _tileInfoDic[to].Height;
         cost = _tileInfoDic[to].MoveCost + Mathf.Abs(height);
-
-        if(height > 0) 
-        {
-            Debug.Log(height);
-        }
 
         return cost;
     }

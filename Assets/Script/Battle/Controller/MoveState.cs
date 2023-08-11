@@ -50,6 +50,10 @@ namespace Battle
                     }
                     else
                     {
+                        if (Instance.BattleInfo.TileComponentDic.ContainsKey(_originalPosition))
+                        {
+                            Instance.BattleInfo.TileComponentDic[_originalPosition].Select.gameObject.SetActive(false);
+                        }
                         _originalPosition = position;
                         Instance.BattleInfo.TileComponentDic[_originalPosition].Select.gameObject.SetActive(true);
                     }

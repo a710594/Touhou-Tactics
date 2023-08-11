@@ -32,16 +32,17 @@ namespace Battle
             return list;
         }
 
-        public static List<Vector2Int> GetTroughAreaList(Vector3 from, Vector3 to, List<BattleCharacterInfo> characterList, Dictionary<Vector2Int, TileInfo> tileDic)
+        public List<Vector2Int> GetTroughAreaList(Vector3 from, Vector3 to)
         {
             List<Vector2Int> list = new List<Vector2Int>();
-            CheckLine(from, to, characterList, tileDic, out bool isBlock, out Vector3 result);
+            CheckThrough(from, to, out bool isBlock, out Vector3 result);
             List<Vector3> line = Utility.DrawLine3D(from, result);
             for (int i = 0; i < line.Count; i++)
             {
                 list.Add(Utility.ConvertToVector2Int(line[i]));
             }
             list.Remove(Utility.ConvertToVector2Int(from));
+
             return list;
         }
 
@@ -61,6 +62,20 @@ namespace Battle
         public static HitType CheckHit(Effect effect, BattleCharacterInfo user, BattleCharacterInfo target)
         {
             float hitRate = user.SEN * (effect.Data.Hit / 100f) / target.AGI;
+
+            //角色互相面對時較度為180,方向相同時角度為0
+            //角度越大則命中越低
+            //面對面的時候命中率只有一半
+            //從背面攻擊時命中率則為1.5倍
+            Vector3 v = target.Position - user.Position;
+            float angle = Vector2.Angle(new Vector2(v.x, v.z), target.Direction);
+            if (Passive.Contains<FaceToFacePassive>(user.PassiveList) && angle > 90)
+            {
+                angle = 90;
+            
+            }
+            hitRate = (angle * (-1 / 180f) + 1.5f) * hitRate;
+
             if (hitRate <= 1)
             {
                 if (hitRate > UnityEngine.Random.Range(0f, 1f))
@@ -210,6 +225,33 @@ namespace Battle
                             height++;
                         }
                     }
+
+                    if (height > list[i].y)
+                    {
+                        isBlock = true;
+                        result = list[i];
+                        return;
+                    }
+                }
+            }
+
+            result = to;
+        }
+
+        //和 CheckLine 相似,但是無視 attach 和 character
+        public void CheckThrough(Vector3 from, Vector3 to, out bool isBlock, out Vector3 result)
+        {
+            isBlock = false;
+            int height;
+            Vector2Int position;
+            List<Vector3> list = Utility.DrawLine3D(from, to);
+            Dictionary<Vector2Int, TileInfo> tileDic = BattleInfo.TileInfoDic;
+            for (int i = 0; i < list.Count; i++)
+            {
+                position = Utility.ConvertToVector2Int(list[i]);
+                if (tileDic.ContainsKey(position))
+                {
+                    height = tileDic[position].Height;
 
                     if (height > list[i].y)
                     {
