@@ -58,13 +58,16 @@ namespace Battle
             CharacterList.Add(new BattleCharacterInfo(DataContext.Instance.JobDic[4]));
             CharacterList[3].ID = 4;
             CharacterList[3].Position = new Vector3(1, 1, 1);
+            CharacterList.Add(new BattleCharacterInfo(DataContext.Instance.JobDic[5]));
+            CharacterList[4].ID = 5;
+            CharacterList[4].Position = new Vector3(1, 1, 2);
 
             for (int i=0; i<5; i++) 
             {
                 CharacterList.Add(new BattleCharacterInfo(DataContext.Instance.EnemyDic[1]));
-                CharacterList[4 + i].ID = 5 + i;
-                CharacterList[4 + i].AI = new MashroomAI(CharacterList[4 + i]);
-                CharacterList[4 + i].Position = RandomCharacterPosition(BattleCharacterInfo.FactionEnum.Enemy);
+                CharacterList[5 + i].ID = 6 + i;
+                CharacterList[5 + i].AI = new MashroomAI(CharacterList[5 + i]);
+                CharacterList[5 + i].Position = RandomCharacterPosition(BattleCharacterInfo.FactionEnum.Enemy);
             }
             //CharacterList.Add(new BattleCharacterInfo(DataContext.Instance.EnemyDic[1]));
             //CharacterList[4].ID = 5;

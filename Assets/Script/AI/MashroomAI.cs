@@ -175,8 +175,6 @@ public class MashroomAI : AI
                     }
                 }
             }
-
-            Debug.Log(_moveTo);
         }
     }
 }

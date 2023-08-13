@@ -11,7 +11,10 @@ public class StatusIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     public void SetData(Status status) 
     {
-        //Icon.sprite = Resources.Load<Sprite>("Image/" + status.Data); 還沒畫圖
+        if (status.Data.Icon != "x")
+        {
+            Icon.sprite = Resources.Load<Sprite>("Image/" + status.Data.Icon);
+        }
         Label.text = status.Data.Name + "\n" + status.Data.Comment;
     }
 

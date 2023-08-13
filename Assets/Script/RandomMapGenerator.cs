@@ -37,7 +37,7 @@ public class RandomMapGenerator : MonoBehaviour
     {
         string path = Path.Combine(_prePath, SeedFile[UnityEngine.Random.Range(0, SeedFile.Length)] + ".txt");
         string text = File.ReadAllText(path);
-        string[] stringSeparators = new string[] { "\r\n" };
+        string[] stringSeparators = new string[] { "\n", "\r\n" };
         string[] lines = text.Split(stringSeparators, StringSplitOptions.None);
         string[] str;
         Vector2Int position = new Vector2Int();

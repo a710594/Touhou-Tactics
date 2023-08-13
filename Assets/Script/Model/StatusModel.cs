@@ -30,6 +30,7 @@ public class StatusModel
     public int Value;
     public int Time;
     public string Area;
+    public string Icon;
     public List<Vector2Int> AreaList = new List<Vector2Int>();
 
     public void GetAreaList()
