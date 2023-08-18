@@ -9,7 +9,23 @@ public class PassiveFactory
         Passive passive = null;
         if(id == 1) 
         {
-            passive = new ForwardPassive(DataContext.Instance.PassiveDic[id]);
+            passive = new TankPassive(DataContext.Instance.PassiveDic[id]);
+        }
+        else if(id == 2) 
+        {
+            passive = new MagicianPassive(DataContext.Instance.PassiveDic[id]);
+        }
+        else if (id == 3)
+        {
+            passive = new ArcherPassive(DataContext.Instance.PassiveDic[id]);
+        }
+        else if (id == 4)
+        {
+            passive = new SwordmanPassive(DataContext.Instance.PassiveDic[id]);
+        }
+        else if (id == 3)
+        {
+            passive = new DreamEaterPassive(DataContext.Instance.PassiveDic[id]);
         }
 
         return passive;

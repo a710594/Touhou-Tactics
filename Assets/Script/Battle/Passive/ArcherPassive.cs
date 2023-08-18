@@ -27,35 +27,47 @@ public class ArcherPassive : Passive
             list.Add(position);
 
             newPosition = position + Vector2Int.up;
-            heightDiff = tileInfoDic[start].Height - tileInfoDic[newPosition].Height;
-            newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
-            if (!list.Contains(newPosition) && newPosition.y < height && Utility.ManhattanDistance(newPosition, start) <= newRange)
+            if (!list.Contains(newPosition) && newPosition.y < height)
             {
-                queue.Enqueue(newPosition);
+                heightDiff = tileInfoDic[start].Height - tileInfoDic[newPosition].Height;
+                newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
+                if (Utility.ManhattanDistance(newPosition, start) <= newRange)
+                {
+                    queue.Enqueue(newPosition);
+                }
             }
 
             newPosition = position + Vector2Int.down;
-            heightDiff = tileInfoDic[start].Height - tileInfoDic[newPosition].Height;
-            newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
-            if (!list.Contains(newPosition) && newPosition.y >= 0 && Utility.ManhattanDistance(newPosition, start) <= newRange)
+            if (!list.Contains(newPosition) && newPosition.y >= 0)
             {
-                queue.Enqueue(newPosition);
+                heightDiff = tileInfoDic[start].Height - tileInfoDic[newPosition].Height;
+                newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
+                if (Utility.ManhattanDistance(newPosition, start) <= newRange)
+                {
+                    queue.Enqueue(newPosition);
+                }
             }
 
             newPosition = position + Vector2Int.left;
-            heightDiff = tileInfoDic[start].Height - tileInfoDic[newPosition].Height;
-            newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
-            if (!list.Contains(newPosition) && newPosition.x >= 0 && Utility.ManhattanDistance(newPosition, start) <= newRange)
+            if (!list.Contains(newPosition) && newPosition.x >= 0)
             {
-                queue.Enqueue(newPosition);
+                heightDiff = tileInfoDic[start].Height - tileInfoDic[newPosition].Height;
+                newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
+                if (Utility.ManhattanDistance(newPosition, start) <= newRange)
+                {
+                    queue.Enqueue(newPosition);
+                }
             }
 
             newPosition = position + Vector2Int.right;
-            heightDiff = tileInfoDic[start].Height - tileInfoDic[newPosition].Height;
-            newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
-            if (!list.Contains(newPosition) && newPosition.x < width && Utility.ManhattanDistance(newPosition, start) <= newRange)
+            if (!list.Contains(newPosition) && newPosition.x < width)
             {
-                queue.Enqueue(newPosition);
+                heightDiff = tileInfoDic[start].Height - tileInfoDic[newPosition].Height;
+                newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
+                if (Utility.ManhattanDistance(newPosition, start) <= newRange)
+                {
+                    queue.Enqueue(newPosition);
+                }
             }
         }
         return list;

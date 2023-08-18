@@ -297,11 +297,11 @@ namespace Battle
         {
             CharacterList.Sort((x, y) =>
             {
-                if (isStart && !Passive.Contains<ForwardPassive>(x.PassiveList) && Passive.Contains<ForwardPassive>(y.PassiveList))
+                if (isStart && !Passive.Contains<TankPassive>(x.PassiveList) && Passive.Contains<TankPassive>(y.PassiveList))
                 {
                     return 1;
                 }
-                else if (isStart && Passive.Contains<ForwardPassive>(x.PassiveList) && !Passive.Contains<ForwardPassive>(y.PassiveList))
+                else if (isStart && Passive.Contains<TankPassive>(x.PassiveList) && !Passive.Contains<TankPassive>(y.PassiveList))
                 {
                     return -1;
                 }
