@@ -11,14 +11,18 @@ public class ItemScrollItem : ScrollItem
     public override void SetData(object obj)
     {
         base.SetData(obj);
-        Item item = (Item)obj;
-        if (item != null)
+
+        if(obj is Skill) 
         {
-            Label.text = item.Data.Name;
+            Label.text = ((Skill)obj).Data.Name;
         }
-        else 
+        else if(obj is Support) 
         {
-            Label.text = "ªð¦^";
+            Label.text = ((Support)obj).Data.Name;
+        }
+        else if(obj is Item) 
+        {
+            Label.text = ((Item)obj).Data.Name;
         }
     }
 }

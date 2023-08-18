@@ -21,13 +21,13 @@ public class BattleCharacterInfo
     public int ID;
     public string Name;
     public int MaxHP;
-    public int ATK;
-    public int DEF;
-    public int MTK;
-    public int MEF;
-    public int SEN;
-    public int AGI;
-    public int MOV;
+    public int STR; //Strength 力量 影響物理傷害
+    public int CON; //Constitution 體質 抵抗物理傷害
+    public int INT; //Intelligence 智力 影響法術傷害
+    public int MEN; //mentality 精神 抵抗法術傷害
+    public int DEX; //Dexterity 靈巧 影響命中率
+    public int AGI; //Agility 敏捷 對抗命中率
+    public int MOV; //move 移動
     public int UP;
     public int DOWN;
     public int WT;
@@ -35,6 +35,9 @@ public class BattleCharacterInfo
     public FactionEnum Faction;
     public JobModel Job = null;
     public EnemyModel Enemy = null;
+    public Equip Weapon = new Equip(EquipModel.CategoryEnum.Weapon);
+    public Equip Armor = new Equip(EquipModel.CategoryEnum.Armor);
+    public Equip[] Amulets = new Equip[3] { new Equip(EquipModel.CategoryEnum.Amulet), new Equip(EquipModel.CategoryEnum.Amulet) , new Equip(EquipModel.CategoryEnum.Amulet) };
 
     public List<Skill> SkillList = new List<Skill>();
     public List<Support> SupportList = new List<Support>();
@@ -65,11 +68,11 @@ public class BattleCharacterInfo
         ID = job.ID;
         Name = job.Name;
         MaxHP = job.HP;
-        ATK = job.ATK;
-        DEF = job.DEF;
-        MTK = job.MTK;
-        MEF = job.MEF;
-        SEN = job.SEN;
+        STR = job.STR;
+        CON = job.CON;
+        INT = job.INT;
+        MEN = job.MEN;
+        DEX = job.DEX;
         AGI = job.AGI;
         MOV = job.MOV;
         UP = job.UP;
@@ -134,11 +137,11 @@ public class BattleCharacterInfo
         ID = enemy.ID;
         Name = enemy.Name;
         MaxHP = enemy.HP;
-        ATK = enemy.ATK;
-        DEF = enemy.DEF;
-        MTK = enemy.MTK;
-        MEF = enemy.MEF;
-        SEN = enemy.SEN;
+        STR = enemy.STR;
+        CON = enemy.CON;
+        INT = enemy.INT;
+        MEN = enemy.MEN;
+        DEX = enemy.DEX;
         AGI = enemy.AGI;
         MOV = enemy.MOV;
         UP = enemy.UP;

@@ -8,7 +8,7 @@ using UnityEngine;
 
 public static class Utility
 {
-    public static int ManhattanDistance(Vector2 a, Vector2 b)
+    public static int ManhattanDistance(Vector2Int a, Vector2Int b)
     {
         checked
         {
@@ -28,36 +28,35 @@ public static class Utility
     {
         Vector2Int position;
         List<Vector2Int> list = new List<Vector2Int>();
-        for (int i = (int)start.x - range; i <= start.x + range; i++)
+
+        //BFS
+        Queue<Vector2Int> queue = new Queue<Vector2Int>();
+        queue.Enqueue(start);
+        while (queue.Count != 0)
         {
-            for (int j = (int)start.y - range; j <= start.y + range; j++)
+            position = queue.Dequeue();
+            list.Add(position);
+
+            if (!list.Contains(position + Vector2Int.up) && (position + Vector2Int.up).y < height && ManhattanDistance(position + Vector2Int.up, start) <= range)
             {
-                position = new Vector2Int(i, j);
-                if (position.y < height && position.y >= 0 && position.x < width && position.x >= 0 && ManhattanDistance(start, position) <= range)
-                {
-                    list.Add(position);
-                }
+                queue.Enqueue(position + Vector2Int.up);
+            }
+            if (!list.Contains(position + Vector2Int.down) && (position + Vector2Int.down).y >= 0 && ManhattanDistance(position + Vector2Int.down, start) <= range)
+            {
+                queue.Enqueue(position + Vector2Int.down);
+            }
+            if (!list.Contains(position + Vector2Int.left) && (position + Vector2Int.left).x >= 0 && ManhattanDistance(position + Vector2Int.left, start) <= range)
+            {
+                queue.Enqueue(position + Vector2Int.left);
+            }
+            if (!list.Contains(position + Vector2Int.right) && (position + Vector2Int.right).x < width && ManhattanDistance(position + Vector2Int.right, start) <= range)
+            {
+                queue.Enqueue(position + Vector2Int.right);
             }
         }
         return list;
     }
 
-    //public static List<Vector2> GetStepList(int step, int width, int height, Vector2 start, battlec) 
-    //{
-    //    int distance;
-    //    List<Vector2> stepList = GetRange(step, width, height, start);
-    //    for (int i = 0; i < stepList.Count; i++)
-    //    {
-    //        distance = AStarAlgor.Instance.GetDistance(start, stepList[i]);
-    //        if (distance - 1 > step || distance == -1)
-    //        {
-    //            stepList.RemoveAt(i);
-    //            i--;
-    //        }
-    //    }
-
-    //    return stepList;
-    //}
 
     public static string Reverse(string s)
     {
@@ -329,5 +328,27 @@ public static class Utility
             }
         }
         return areaList;
+    }
+
+    public static float RandomGaussian(float minValue = 0.0f, float maxValue = 1.0f)
+    {
+        float u, v, S;
+
+        do
+        {
+            u = 2.0f * UnityEngine.Random.value - 1.0f;
+            v = 2.0f * UnityEngine.Random.value - 1.0f;
+            S = u * u + v * v;
+        }
+        while (S >= 1.0f);
+
+        // Standard Normal Distribution
+        float std = u * Mathf.Sqrt(-2.0f * Mathf.Log(S) / S);
+
+        // Normal Distribution centered between the min and max value
+        // and clamped following the "three-sigma rule"
+        float mean = (minValue + maxValue) / 2.0f;
+        float sigma = (maxValue - mean) / 3.0f;
+        return Mathf.Clamp(std * sigma + mean, minValue, maxValue);
     }
 }

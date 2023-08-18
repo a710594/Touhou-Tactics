@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -51,7 +52,7 @@ public class AStarAlgor
                     }
                     else if (openset[i].F == x.F && isRandom)
                     {
-                        if (Random.Range(0, 2) == 0) //可能是造成 stack overflow 的原因?
+                        if (UnityEngine.Random.Range(0, 2) == 0) //可能是造成 stack overflow 的原因?
                         {
                             x = openset[i];
                         }
@@ -224,19 +225,25 @@ public class AStarAlgor
     private int MoveCost(Vector2Int from, Vector2Int to) 
     {
         int cost = 0;
-        for (int i=0; i< _characterList.Count; i++) 
+        try
         {
-            if(Utility.ConvertToVector2(_characterList[i].Position) == to) 
+            for (int i = 0; i < _characterList.Count; i++)
             {
-                if(_characterList[i].Faction != _selectedCharacter.Faction) 
+                if (Utility.ConvertToVector2(_characterList[i].Position) == to)
                 {
-                    return -1;
+                    if (_characterList[i].Faction != _selectedCharacter.Faction)
+                    {
+                        return -1;
+                    }
                 }
             }
+            int height = _tileInfoDic[from].Height - _tileInfoDic[to].Height;
+            cost = _tileInfoDic[to].MoveCost + Mathf.Abs(height);
         }
-        int height = _tileInfoDic[from].Height - _tileInfoDic[to].Height;
-        cost = _tileInfoDic[to].MoveCost + Mathf.Abs(height);
-
+        catch (Exception ex)
+        {
+            Debug.Log(ex);
+        }
         return cost;
     }
 }

@@ -9,7 +9,9 @@ public class CharacterInfoUI : MonoBehaviour
     public BattleValueBar HpBar;
     public StatusIcon StatusIcon;
     public Transform StatusGrid;
+    public Button Button;
 
+    private BattleCharacterInfo _character;
     private List<StatusIcon> _statusIconList = new List<StatusIcon>();
 
     public void SetVisible(bool isVisible) 
@@ -17,18 +19,19 @@ public class CharacterInfoUI : MonoBehaviour
         gameObject.SetActive(isVisible);
     }
 
-    public void SetData(BattleCharacterInfo info) 
+    public void SetData(BattleCharacterInfo character) 
     {
         StatusIcon icon;
 
-        NameLabel.text = info.Name;
-        HpBar.SetValue(info.CurrentHP, info.MaxHP);
+        _character = character;
+        NameLabel.text = character.Name;
+        HpBar.SetValue(character.CurrentHP, character.MaxHP);
 
         for (int i=0; i<_statusIconList.Count; i++) 
         {
             _statusIconList[i].gameObject.SetActive(false);
         }
-        for (int i=0; i<info.StatusList.Count; i++) 
+        for (int i=0; i<character.StatusList.Count; i++) 
         {
             if (i >= _statusIconList.Count) 
             {
@@ -37,7 +40,7 @@ public class CharacterInfoUI : MonoBehaviour
                 _statusIconList.Add(icon);
             }
             _statusIconList[i].gameObject.SetActive(true);
-            _statusIconList[i].SetData(info.StatusList[i]);
+            _statusIconList[i].SetData(character.StatusList[i]);
         }
     }
 
@@ -49,5 +52,19 @@ public class CharacterInfoUI : MonoBehaviour
     public void StopHpPrediction() 
     {
         HpBar.StopPrediction();
+    }
+
+    private void ButtonOnClick() 
+    {
+        if (_character != null)
+        {
+            CharacterDetailUI characterDetailUI = CharacterDetailUI.Open();
+            characterDetailUI.SetData(_character);
+        }
+    }
+
+    private void Awake()
+    {
+        Button.onClick.AddListener(ButtonOnClick);
     }
 }

@@ -113,8 +113,6 @@ namespace Battle
             _context.AddState(new EndState(_context));
 
             _context.SetState<CharacterState>();
-
-            List<Vector2Int> list = AStarAlgor.Instance.GetPath(new Vector2Int(10, 2), new Vector2Int(13, 2), CharacterList[0], CharacterList, BattleInfo.TileInfoDic, false);
         }
 
         public void Click(Vector2Int position)
@@ -187,8 +185,7 @@ namespace Battle
             {
                 if (item == null) //返回 
                 {
-                    Instance._battleUI.ActionButtonGroup.gameObject.SetActive(true);
-                    Instance._battleUI.SetItemScrollViewVisible(false);
+                    Instance._battleUI.SetSkillVisible(false);
                     Instance.SetActionState();
                 }
                 else if (item.Data.PP == -1 || _selectedCharacter.CurrentPP >= item.Data.PP)
@@ -200,7 +197,7 @@ namespace Battle
                 }
                 else
                 {
-                    Instance._battleUI.TipLabel.SetLabel("PP不足" + _selectedCharacter.CurrentPP);
+                    Instance._battleUI.TipLabel.SetLabel("PP不足 " + (item.Data.PP - _selectedCharacter.CurrentPP));
                 }
 
             }
@@ -270,7 +267,7 @@ namespace Battle
             _selectedCharacter.Direction = direction;
         }
 
-        public void SetCharacterInfoUI_2(Vector2 position)
+        public bool SetCharacterInfoUI_2(Vector2 position)
         {
             //顯示角色資料
             Instance._battleUI.SetCharacterInfoUI_2(null);
@@ -279,9 +276,10 @@ namespace Battle
                 if (CharacterList[i] != Instance._selectedCharacter && position == new Vector2(CharacterList[i].Position.x, CharacterList[i].Position.z))
                 {
                     Instance._battleUI.SetCharacterInfoUI_2(CharacterList[i]);
-                    return;
+                    return true;
                 }
             }
+            return false;
         }
 
         public void ResetAction()

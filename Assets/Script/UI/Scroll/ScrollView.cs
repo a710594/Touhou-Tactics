@@ -90,7 +90,7 @@ public class ScrollView : MonoBehaviour
             Content.sizeDelta = new Vector2(Content.sizeDelta.x, (count + 1) * CellSizeY + count * SpacingY);
             MainGrid.transform.localPosition = new Vector2(MainGridRect.sizeDelta.x / 2f, -MainGridRect.sizeDelta.y / 2f);
         }
-        _gridOrign = MainGrid.transform.position;
+        _gridOrign = MainGrid.transform.localPosition;
     }
 
     private void Refresh(int index) 
@@ -119,19 +119,20 @@ public class ScrollView : MonoBehaviour
         //    list.Add(i.ToString());
         //}
         //SetData(list);
+        MainGrid.transform.localPosition = Vector3.zero;
     }
 
     private void Update()
     {
         if (Type == TypeEnum.Horizontal)
         {
-            if (MainGrid.transform.position.x - _gridOrign.x < (CellSizeY + SpacingY))
+            if (MainGrid.transform.localPosition.x - _gridOrign.x < (CellSizeY + SpacingY))
             {
                 MainGrid.transform.localPosition = new Vector2(MainGrid.transform.localPosition.y + CellSizeY + SpacingY, MainGrid.transform.localPosition.y);
                 _currentIndex++;
                 Refresh(_currentIndex);
             }
-            else if (MainGrid.transform.position.y - _gridOrign.y > -0.1f)
+            else if (MainGrid.transform.localPosition.y - _gridOrign.y > -0.1f)
             {
                 MainGrid.transform.localPosition = new Vector2(MainGrid.transform.localPosition.y - CellSizeY - SpacingY, MainGrid.transform.localPosition.x);
                 _currentIndex--;
@@ -140,13 +141,13 @@ public class ScrollView : MonoBehaviour
         }
         else if (Type == TypeEnum.Vertical)
         {
-            if (MainGrid.transform.position.y - _gridOrign.y >  (CellSizeY + SpacingY))
+            if (MainGrid.transform.localPosition.y - _gridOrign.y >  (CellSizeY + SpacingY))
             {
                 MainGrid.transform.localPosition = new Vector2(MainGrid.transform.localPosition.x, MainGrid.transform.localPosition.y - CellSizeY - SpacingY);
                 _currentIndex++;
                 Refresh(_currentIndex);
             }
-            else if (MainGrid.transform.position.y - _gridOrign.y < -0.1f)
+            else if (MainGrid.transform.localPosition.y - _gridOrign.y < -0.1f)
             {
                 MainGrid.transform.localPosition = new Vector2(MainGrid.transform.localPosition.x, MainGrid.transform.localPosition.y + CellSizeY + SpacingY);
                 _currentIndex--;

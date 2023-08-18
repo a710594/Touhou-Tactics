@@ -101,7 +101,8 @@ MonoBehaviour:
   Content: {fileID: 5268101872079686617}
   MainGrid: {fileID: 5268101872003109207}
   MainGridRect: {fileID: 5268101872003109204}
-  SubGrid: {fileID: 6512655964204905964, guid: ffe3a7101027d8846961999574adb368, type: 3}
+  SubGrid: {fileID: 0}
+  ScrollItem: {fileID: 0}
 --- !u!1 &5268101871546434443
 GameObject:
   m_ObjectHideFlags: 0

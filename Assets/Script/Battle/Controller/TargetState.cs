@@ -32,10 +32,18 @@ namespace Battle
                 {
                     _effect = _character.SelectedItem.Effect;
                 }
-                _rangeList = Utility.GetRange(_effect.Data.Range, _info.Width, _info.Height, Utility.ConvertToVector2Int(_character.Position));
+
+                if (Passive.Contains<ArcherPassive>(_character.PassiveList))
+                {
+                    _rangeList = ArcherPassive.GetRange(_effect.Data.Range, _info.Width, _info.Height, Utility.ConvertToVector2Int(_character.Position), _info.TileInfoDic);
+                }
+                else
+                {
+                    _rangeList = Utility.GetRange(_effect.Data.Range, _info.Width, _info.Height, Utility.ConvertToVector2Int(_character.Position));
+                }
                 Instance.SetQuad(_rangeList, Instance._white);
+                Instance._battleUI.SetActionVisible(false);
                 Instance._battleUI.SetSkillVisible(false);
-                Instance._battleUI.SetItemScrollViewVisible(false);
             }
 
             public override void Click(Vector2Int position)
@@ -84,7 +92,18 @@ namespace Battle
                 else
                 {
                     Instance.ClearQuad();
-                    _context.SetState<SkillState>();
+                    if (_character.SelectedSkill != null)
+                    {
+                        _context.SetState<SkillState>();
+                    }
+                    else if (_character.SelectedSupport != null)
+                    {
+                        _context.SetState<SupportState>();
+                    }
+                    else if (_character.SelectedItem != null)
+                    {
+                        _context.SetState<ItemState>();
+                    }
                 }
             }
         }

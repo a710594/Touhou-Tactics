@@ -13,12 +13,14 @@ public class ActionButtonGroup : MonoBehaviour
     public Button ItemButton;
     public Button IdleButton;
     public Button ResetButton;
+    public Text ActionCountLabel;
 
     public void SetButton(BattleCharacterInfo character) 
     {
         SkillButton.interactable = !character.HasUseSkill;
         SupportButton.interactable = !character.HasUseSupport;
         ItemButton.interactable = !character.HasUseItem;
+        ActionCountLabel.text = "Action Count: " + character.ActionCount.ToString();
     }
 
     private void MoveOnClick() 

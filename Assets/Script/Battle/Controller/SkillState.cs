@@ -14,18 +14,28 @@ namespace Battle
 
             public override void Begin(object obj)
             {
-                Instance._battleUI.ActionButtonGroup.gameObject.SetActive(false);
+                //Instance._battleUI.ActionButtonGroup.gameObject.SetActive(false);
                 _character = Instance._selectedCharacter;
                 if (!_character.IsAuto)
                 {
+                    Instance._battleUI.SetActionVisible(true);
                     Instance._battleUI.SetSkillVisible(true);
                     Instance._battleUI.SetSkillData(_character.SkillList);
                 }
             }
 
+            public override void End()
+            {
+                Instance._battleUI.SetSkillVisible(false);
+            }
+
             public override void Click(Vector2Int position)
             {
-                Instance.SetCharacterInfoUI_2(position);
+                bool show = Instance.SetCharacterInfoUI_2(position);
+                if (!show)
+                {
+                    _context.SetState<ActionState>();
+                }
             }
         }
     }

@@ -13,12 +13,11 @@ public class BattleUI : MonoBehaviour
     public CharacterInfoUI CharacterInfoUI_1;
     public CharacterInfoUI CharacterInfoUI_2;
     public ActionButtonGroup ActionButtonGroup;
-    public SkillButtonGroup SkillButtonGroup;
+    public SkillGroup SkillGroup;
     public AnchorValueBar LittleHpBar;
+    public Transform HPGroup;
     public FloatingNumberPool FloatingNumberPool;
     public CharacterListGroup CharacterListGroup;
-    public ScrollView ItemScrollView;
-    public PointGroup PPGroup;
     //public GameObject PowerPoint;
     public TipLabel TipLabel;
 
@@ -68,24 +67,29 @@ public class BattleUI : MonoBehaviour
         }
     }
 
-    public void SetSkillVisible(bool isVisible) 
+    public void SetActionVisible(bool isVisible)
     {
-        SkillButtonGroup.gameObject.SetActive(isVisible);
+        ActionButtonGroup.gameObject.SetActive(isVisible);
     }
 
-    public void SetItemScrollViewVisible(bool isVisible)
+    public void SetSkillVisible(bool isVisible) 
     {
-        ItemScrollView.transform.parent.gameObject.SetActive(isVisible);
+        SkillGroup.gameObject.SetActive(isVisible);
     }
 
     public void SetSkillData(List<Skill> skillList) 
     {
-        SkillButtonGroup.SetData(skillList);
+        SkillGroup.SetData(skillList);
     }
 
     public void SetSupportData(List<Support> supportList, int currentSP) 
     {
-        SkillButtonGroup.SetData(supportList, currentSP);
+        SkillGroup.SetData(supportList, currentSP);
+    }
+
+    public void SetItemData(BattleCharacterInfo character)
+    {
+        SkillGroup.SetData(character);
     }
 
     public void SetHpPrediction(int origin, int prediction, int max)
@@ -101,7 +105,7 @@ public class BattleUI : MonoBehaviour
     public void SetLittleHpBarAnchor(int id, BattleCharacterController characterController) 
     {
         AnchorValueBar hpBar = Instantiate(LittleHpBar);
-        hpBar.transform.parent = transform;
+        hpBar.transform.SetParent(HPGroup);
         hpBar.SetAnchor(characterController.HpAnchor);
         _littleHpBarDic.Add(id, hpBar);
     }
@@ -147,15 +151,6 @@ public class BattleUI : MonoBehaviour
     public void CharacterListGroupRefresh()
     {
         CharacterListGroup.Refresh();
-    }
-
-    public void SetItemScrollView(BattleCharacterInfo character) 
-    {
-        SetItemScrollViewVisible(true);
-        List<object> list = new List<object>(ItemManager.Instance.GetItemList(character));
-        list.Add(null);
-        ItemScrollView.SetData(list);
-        PPGroup.SetData(character.CurrentPP);
     }
 
     //public void DropPowerPoint(List<BattleCharacterInfo> targetList)
@@ -220,27 +215,14 @@ public class BattleUI : MonoBehaviour
         }
     }
 
-    //private void IdleOnClick() 
-    //{
-    //    BattleController.Instance.Idle();
-    //}
-
-    private void ItemScrollItemOnClick(object obj, ScrollItem scrollItem) 
-    {
-        BattleController.Instance.SelectItem((Item)obj);
-    }
-
     private void Awake()
     {
         _graphicRaycaster = transform.parent.GetComponent<GraphicRaycaster>();
         _cameraRotate = Camera.main.GetComponent<CameraRotate>();
 
-        ItemScrollView.Init();
-
         //IdleButton.onClick.AddListener(IdleOnClick);
         BackgroundButton.DownHandler += BackgroundDown;
         BackgroundButton.UpHandler += BackgroundUp;
-        ItemScrollView.ItemOnClickHandler += ItemScrollItemOnClick;
     }
 
     private void Update()

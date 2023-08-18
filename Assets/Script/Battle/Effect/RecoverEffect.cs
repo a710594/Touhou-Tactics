@@ -31,7 +31,7 @@ public class RecoverEffect : Effect
 
         if (hitType != BattleController.HitType.Miss)
         {
-            int recover = Mathf.RoundToInt((float)Data.Value * (float)user.MEF / 100f);
+            int recover = Mathf.RoundToInt((float)Data.Value * (float)user.MEN / 100f);
             target.SetRecover(recover);
             floatingNumberData = new FloatingNumberData(FloatingNumberData.TypeEnum.Recover, recover.ToString());
         }

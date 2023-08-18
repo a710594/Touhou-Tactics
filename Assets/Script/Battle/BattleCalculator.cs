@@ -61,7 +61,7 @@ namespace Battle
 
         public static HitType CheckHit(Effect effect, BattleCharacterInfo user, BattleCharacterInfo target)
         {
-            float hitRate = user.SEN * (effect.Data.Hit / 100f) / target.AGI;
+            float hitRate = user.DEX * (effect.Data.Hit / 100f) / target.AGI;
 
             //角色互相面對時較度為180,方向相同時角度為0
             //角度越大則命中越低
@@ -102,10 +102,11 @@ namespace Battle
 
         public static int GetDamage(Effect effect, BattleCharacterInfo user, BattleCharacterInfo target, List<BattleCharacterInfo> characterList)
         {
+            int damage = 0;
             if (effect.Data.Type == EffectModel.TypeEnum.PhysicalAttack)
             {
-                float atk = (float)user.ATK;
-                float def = (float)target.DEF;
+                float atk = (float)user.STR;
+                float def = (float)target.CON;
                 for (int i = 0; i < characterList.Count; i++)
                 {
                     for (int j = 0; j < characterList[i].StatusList.Count; j++)
@@ -133,12 +134,12 @@ namespace Battle
                     }
                 }
 
-                return Mathf.RoundToInt(atk / def * effect.Data.Value);
+                damage =  Mathf.RoundToInt(atk / def * effect.Data.Value) + user.Weapon.ATK - target.Armor.DEF;
             }
             else if (effect.Data.Type == EffectModel.TypeEnum.MagicAttack)
             {
-                float mtk = (float)user.MTK;
-                float mef = (float)target.MEF;
+                float mtk = (float)user.INT;
+                float mef = (float)target.MEN;
                 for (int i = 0; i < characterList.Count; i++)
                 {
                     for (int j = 0; j < characterList[i].StatusList.Count; j++)
@@ -166,12 +167,31 @@ namespace Battle
                     }
                 }
 
-                return Mathf.RoundToInt(mtk / mef * effect.Data.Value);
+                damage = Mathf.RoundToInt(mtk / mef * effect.Data.Value) + user.Weapon .MTK - target.Armor.MEF;
             }
             else
             {
-                return -1;
+                damage = 0;
             }
+
+            //各種和被動技能相關的計算
+            if(damage > 0) 
+            {
+                if (Passive.Contains<MagicianPassive>(user.PassiveList))
+                {
+                    damage = Mathf.RoundToInt(damage * MagicianPassive.GetValue(user));
+                }
+                if (Passive.Contains<DreamEaterPassive>(user.PassiveList))
+                {
+                    damage *= 2;
+                }
+            }
+            else 
+            {
+                damage = 0;
+            }
+
+            return damage;
         }
 
         public static int GetPredictionHp(int targetCurrentHp, Effect effect, BattleCharacterInfo user, BattleCharacterInfo target, List<BattleCharacterInfo> characterList)
@@ -297,32 +317,48 @@ namespace Battle
 
         public Vector3 RandomCharacterPosition(BattleCharacterInfo.FactionEnum faction) 
         {
-            bool isBreak = false;
+            bool isRepeat = false;
+            bool hasPath = false;
             Vector2Int v2;
             Vector3 v3 = new Vector3();
             List<Vector2Int> path;
 
             while (true) 
             {
-                v2 = new Vector2Int(UnityEngine.Random.Range(0, BattleInfo.Width), UnityEngine.Random.Range(0, BattleInfo.Height));
+                v2 = new Vector2Int(Mathf.RoundToInt(Utility.RandomGaussian(0, BattleInfo.Width)), Mathf.RoundToInt(Utility.RandomGaussian(0, BattleInfo.Height)));
                 if(BattleInfo.TileInfoDic[v2].MoveCost > 0) 
                 {
+                    //檢查位置是否有和其他角色重複
+                    isRepeat = false;
                     for (int i = 0; i < CharacterList.Count; i++)
                     {
-                        if (faction != CharacterList[i].Faction) //與自己的陣營不同的角色
+                        if (v2 == Utility.ConvertToVector2Int(CharacterList[i].Position))
                         {
-                            path = AStarAlgor.Instance.GetPath(v2, Utility.ConvertToVector2Int(CharacterList[i].Position), CharacterList[i], CharacterList, BattleInfo.TileInfoDic, false);
-                            if(path != null) 
-                            {
-                                v3 = new Vector3(v2.x, BattleInfo.TileInfoDic[v2].Height, v2.y);
-                                isBreak = true;
-                                break;
-                            }
+                            isRepeat = true;
+                            break;
                         }
                     }
-                    if (isBreak) 
+
+                    if (!isRepeat)
                     {
-                        break;
+                        //檢查是否與其他角色之間有路徑
+                        for (int i = 0; i < CharacterList.Count; i++)
+                        {
+                            if (faction != CharacterList[i].Faction)
+                            {
+                                path = AStarAlgor.Instance.GetPath(v2, Utility.ConvertToVector2Int(CharacterList[i].Position), CharacterList[i], CharacterList, BattleInfo.TileInfoDic, false);
+                                if (path != null)
+                                {
+                                    v3 = new Vector3(v2.x, BattleInfo.TileInfoDic[v2].Height, v2.y);
+                                    hasPath = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (hasPath)
+                        {
+                            break;
+                        }
                     }
                 }
             }

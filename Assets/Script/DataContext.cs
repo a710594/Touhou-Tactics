@@ -31,6 +31,7 @@ public class DataContext
     public List<SupportModel> SupportList = new List<SupportModel>();
     public List<ItemModel> ItemList = new List<ItemModel>();
     public List<PassiveModel> PassiveList = new List<PassiveModel>();
+    public List<EquipModel> EquipList = new List<EquipModel>();
 
     public Dictionary<int, JobModel> JobDic = new Dictionary<int, JobModel>();
     public Dictionary<int, SkillModel> SkillDic = new Dictionary<int, SkillModel>();
@@ -39,6 +40,7 @@ public class DataContext
     public Dictionary<int, EnemyModel> EnemyDic = new Dictionary<int, EnemyModel>();
     public Dictionary<int, SupportModel> SupportDic = new Dictionary<int, SupportModel>();
     public Dictionary<int, PassiveModel> PassiveDic = new Dictionary<int, PassiveModel>();
+    public Dictionary<EquipModel.CategoryEnum, Dictionary<int, EquipModel>> EquipDic = new Dictionary<EquipModel.CategoryEnum, Dictionary<int, EquipModel>>();
     public Dictionary<ItemModel.CategoryEnum, Dictionary<int, ItemModel>> ItemDic = new Dictionary<ItemModel.CategoryEnum, Dictionary<int, ItemModel>>();
     public Dictionary<string, TileScriptableObject> TileScriptableObjectDic = new Dictionary<string, TileScriptableObject>();
     public Dictionary<string, AttachScriptableObject> AttachScriptableObjectDic = new Dictionary<string, AttachScriptableObject>();
@@ -107,6 +109,16 @@ public class DataContext
         for (int i = 0; i < PassiveList.Count; i++)
         {
             PassiveDic.Add(PassiveList[i].ID, PassiveList[i]);
+        }
+
+        EquipList = Load<List<EquipModel>>("Equip");
+        for (int i = 0; i < EquipList.Count; i++)
+        {
+            if (!EquipDic.ContainsKey(EquipList[i].Category))
+            {
+                EquipDic.Add(EquipList[i].Category, new Dictionary<int, EquipModel>());
+            }
+            EquipDic[EquipList[i].Category].Add(EquipList[i].ID, EquipList[i]);
         }
 
         DirectoryInfo d;

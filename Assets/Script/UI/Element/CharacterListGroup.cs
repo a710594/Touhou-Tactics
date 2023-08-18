@@ -22,7 +22,7 @@ public class CharacterListGroup : MonoBehaviour
         {
             image = Instantiate(Image);
             image.transform.SetParent(transform);
-            sprite = Resources.Load<Sprite>("Prefab/Image/" + _characterList[i].Controller + "_F");
+            sprite = Resources.Load<Sprite>("Image/" + _characterList[i].Controller + "_F");
             image.sprite = sprite;
             _spriteDic.Add(_characterList[i].ID, sprite);
 
