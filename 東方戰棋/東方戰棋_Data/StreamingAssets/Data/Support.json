@@ -1,0 +1,2 @@
+[{"ID":1,"Name":"魔力壓縮","Comment":"該回合的魔法攻擊力上升100%","SP":3,"EffectType":5,"EffectID":3},
+{"ID":2,"Name":"猛力一擊","Comment":"該回合的物理攻擊力上升100%","SP":2,"EffectType":5,"EffectID":4}]

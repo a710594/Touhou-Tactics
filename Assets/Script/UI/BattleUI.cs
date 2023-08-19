@@ -185,19 +185,24 @@ public class BattleUI : MonoBehaviour
     {
         if (Vector2.Distance(_dragOrigin, Input.mousePosition) > _distance)
         {
+            float x;
+            float z;
             Vector3 move;
             Vector3 v1 = Camera.main.ScreenToViewportPoint(_dragOrigin - Input.mousePosition);
             if (_cameraRotate.CurrentState == CameraRotate.StateEnum.Slope) 
             {
                 Vector3 v2 = new Vector3(v1.x * Mathf.Sin(45) + v1.y * Mathf.Cos(45), 0, v1.x * Mathf.Sin(-45) + v1.y * Mathf.Cos(-45));
                 move = new Vector3(v2.x * CameraDragSpeed, 0, v2.z * CameraDragSpeed);
+                x = Mathf.Clamp(Camera.main.transform.position.x + move.x, -10, _width - 10);
+                z = Mathf.Clamp(Camera.main.transform.position.z + move.z, -10, _height - 10);
             }
             else 
             {
                 move = new Vector3(v1.x * CameraDragSpeed, 0, v1.y * CameraDragSpeed);
+                x = Mathf.Clamp(Camera.main.transform.position.x + move.x, 0, _width);
+                z = Mathf.Clamp(Camera.main.transform.position.z + move.z, 0, _height);
             }
-            float x = Mathf.Clamp(Camera.main.transform.position.x + move.x, -10, _width - 10);
-            float z = Mathf.Clamp(Camera.main.transform.position.z + move.z, -10, _height - 10);
+
             Camera.main.transform.DOMove(new Vector3(x, Camera.main.transform.position.y, z), 1f);
         }
         else

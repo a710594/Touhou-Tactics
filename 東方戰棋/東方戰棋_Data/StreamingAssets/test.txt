@@ -1,0 +1,21 @@
+20 20
+1_5 1_5 1_5 1_5 1_5 1_5 1_5 1_5 1_5 1_5 1_5 1_5 1_5 1_5 1_5 1_5 1_5 1_5 1_5 1_5
+1_5 X X X X X X X X X X X X X X X X X X 1_5
+1_5 X X X X X X X X X X X X X X X X X X 1_5
+1_5 X X X X X X X X X X X X X X X X X X 1_5
+1_5 X X X X X X X X X X X X X X X X X X 1_5
+1_5 X X X X X X X X X X X X X X X X X X 1_5
+1_5 X X X X X X X X X X X X X X X X X X 1_5
+1_5 X X X X X X X X X X X X X X X X X X 1_5
+1_5 X X X X X X X X X X X X X X X X X X 1_5
+1_5 X X X X X X X X X X X X X X X X X X 1_5
+1_5 X X X X X X X X X X X X X X X X X X 1_5
+1_5 X X X X X X X X X X X X X X X X X X 1_5
+1_5 X X X X X X X X X X X X X X X X X X 1_5
+1_5 X X X X X X X X X X X X X X X X X X 1_5
+1_5 X X X X X X X X X X X X X X X X X X 1_5
+1_5 X X X X X X X X X X X X X X X X X X 1_5
+1_5 X X X X X X X X X X X X X X X X X X 1_5
+1_5 X X X X X X X X X X X X X X X X X X 1_5
+1_5 X X X X X X X X X X X X X X X X X X 1_5
+1_5 1_5 1_5 1_5 1_5 1_5 1_5 1_5 1_5 1_5 1_5 1_5 1_5 1_5 1_5 1_5 1_5 1_5 1_5 1_5

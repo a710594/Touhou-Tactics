@@ -48,7 +48,7 @@ namespace Battle
             BattleInfo = info;
             CharacterList.Add(new BattleCharacterInfo(DataContext.Instance.JobDic[1]));
             CharacterList[0].ID = 1;
-            CharacterList[0].Position = new Vector3(0, 1, 0);
+            CharacterList[0].Position = new Vector3(0, 1, 2);
             CharacterList.Add(new BattleCharacterInfo(DataContext.Instance.JobDic[2]));
             CharacterList[1].ID = 2;
             CharacterList[1].Position = new Vector3(1, 1, 0);
@@ -60,7 +60,7 @@ namespace Battle
             CharacterList[3].Position = new Vector3(1, 1, 1);
             CharacterList.Add(new BattleCharacterInfo(DataContext.Instance.JobDic[5]));
             CharacterList[4].ID = 5;
-            CharacterList[4].Position = new Vector3(1, 1, 2);
+            CharacterList[4].Position = new Vector3(0, 1, 0);
 
             for (int i=0; i<5; i++) 
             {
