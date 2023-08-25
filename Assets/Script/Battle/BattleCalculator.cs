@@ -365,5 +365,20 @@ namespace Battle
 
             return v3;
         }
+
+        public bool HasCharacter(Vector2Int position) 
+        {
+            bool hasCharacter = false;
+            for (int i=0; i<CharacterList.Count; i++) 
+            {
+            if(Utility.ConvertToVector2(CharacterList[i].Position) == position) 
+                {
+                    hasCharacter = true;
+                    break;
+                }
+            }
+
+            return hasCharacter;
+        }
     }
 }
