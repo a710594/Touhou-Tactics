@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = System.Random;
 using Graphs;
+using Explore;
 
 public class Generator2D : MonoBehaviour {
     public enum CellType {
@@ -58,10 +59,11 @@ public class Generator2D : MonoBehaviour {
         Triangulate();
         CreateHallways();
         PathfindHallways();
-        PlaceWall();
 
         Camera.main.transform.position = new Vector3((int)rooms[0].bounds.center.x, 1, (int)rooms[0].bounds.center.y);
         Explore.ExploreManager.Instance.SetData(grid, rooms);
+
+        PlaceWall();
     }
 
     void PlaceRooms() {
@@ -216,9 +218,8 @@ public class Generator2D : MonoBehaviour {
             {
                 if (grid[i, j] == CellType.None) 
                 {
-                    if((i-1>=0 && grid[i-1,j]!= CellType.None) || (i + 1 < grid.Size.x && grid[i + 1, j] != CellType.None) || (j - 1 >= 0 && grid[i, j - 1] != CellType.None) || (j + 1 < grid.Size.y && grid[i, j + 1] != CellType.None)) 
+                    if(CheckWall(new Vector3(i, 0, j))) 
                     {
-                        Debug.Log(i +"," + j + ":" + grid[i,j]);
                         GameObject go = Instantiate(cubePrefab, Vector3.zero, Quaternion.identity);
                         go.transform.position = new Vector3(i, 2, j);
                         go.transform.localScale = new Vector3(1, 5, 1);
@@ -230,6 +231,51 @@ public class Generator2D : MonoBehaviour {
         }
     }
 
+    private bool CheckWall(Vector3 position)
+    {
+        Vector3 newPosition;
+        newPosition = new Vector3(position.x - 1, 0, position.z); //左
+        if (ExploreManager.Instance.InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None)
+        {
+            return true;
+        }
+        newPosition = new Vector3(position.x + 1, 0, position.z); //右
+        if (ExploreManager.Instance.InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None)
+        {
+            return true;
+        }
+        newPosition = new Vector3(position.x, 0, position.z - 1); //下
+        if (ExploreManager.Instance.InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None)
+        {
+            return true;
+        }
+        newPosition = new Vector3(position.x, 0, position.z + 1); //上
+        if (ExploreManager.Instance.InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None)
+        {
+            return true;
+        }
+        newPosition = new Vector3(position.x - 1, 0, position.z - 1); //左下
+        if (ExploreManager.Instance.InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None)
+        {
+            return true;
+        }
+        newPosition = new Vector3(position.x - 1, 0, position.z + 1); //左上
+        if (ExploreManager.Instance.InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None)
+        {
+            return true;
+        }
+        newPosition = new Vector3(position.x + 1, 0, position.z - 1); //右下
+        if (ExploreManager.Instance.InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None)
+        {
+            return true;
+        }
+        newPosition = new Vector3(position.x + 1, 0, position.z + 1); //右上
+        if (ExploreManager.Instance.InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None)
+        {
+            return true;
+        }
+        return false;
+    }
     void PlaceCube(Vector2Int location, Vector2Int size, Material material) {
         for (int i=0; i<size.x; i++) 
         {

@@ -11,7 +11,7 @@ namespace Explore
 
         public void Init(List<Generator2D.Room> rooms)
         {
-            Generator2D.Room room = rooms[0];
+            Generator2D.Room room = rooms[Random.Range(0, rooms.Count)];
             Vector3 position = new Vector3(Random.Range(room.bounds.xMin, room.bounds.xMax), 1, Random.Range(room.bounds.yMin, room.bounds.yMax));
             transform.position = position;
         }
