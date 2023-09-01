@@ -7,7 +7,9 @@ namespace Explore
 {
     public class MashroomAI : MonoBehaviour
     {
-        private Vector3 position;
+
+        public SpriteRenderer Sprite;
+        public Vector3 MoveTo;
 
         public void Init(List<Generator2D.Room> rooms)
         {
@@ -18,25 +20,39 @@ namespace Explore
 
         public void Step() 
         {
-            position = transform.position + transform.forward;
             if (ExploreManager.Instance.IsWalkable(transform.position + transform.forward))
             {
+                MoveTo = transform.position + transform.forward;
                 transform.DOMove(transform.position + transform.forward, 0.5f).SetEase(Ease.Linear);
             }
             else if (ExploreManager.Instance.IsWalkable(transform.position + transform.right))
             {
+                MoveTo = transform.position + transform.right;
                 transform.DOMove(transform.position + transform.right, 0.5f).SetEase(Ease.Linear);
                 transform.DORotate(transform.localEulerAngles + Vector3.up * 90, 0.5f).SetEase(Ease.Linear);
             }
             else if (ExploreManager.Instance.IsWalkable(transform.position - transform.right))
             {
+                MoveTo = transform.position - transform.right;
                 transform.DOMove(transform.position - transform.right, 0.5f).SetEase(Ease.Linear);
                 transform.DORotate(transform.localEulerAngles - Vector3.up * 90, 0.5f).SetEase(Ease.Linear);
             }
             else if (ExploreManager.Instance.IsWalkable(transform.position - transform.forward))
             {
+                MoveTo = transform.position - transform.forward;
                 transform.DOMove(transform.position - transform.forward, 0.5f).SetEase(Ease.Linear);
                 transform.DORotate(transform.localEulerAngles + Vector3.up * 180, 0.5f).SetEase(Ease.Linear);
+            }
+
+            Vector3 v = ExploreManager.Instance.Player.transform.position - transform.position;
+            float angle = Vector2.Angle(new Vector2(v.x, v.z), new Vector2(transform.forward.x, transform.forward.z));
+            if (angle >= 90)
+            {
+                Sprite.transform.DORotate(ExploreManager.Instance.Player.transform.eulerAngles, 0.5f);
+            }
+            else
+            {
+                Sprite.transform.DORotate(ExploreManager.Instance.Player.transform.eulerAngles + Vector3.up * 180, 0.5f);
             }
         }
     }

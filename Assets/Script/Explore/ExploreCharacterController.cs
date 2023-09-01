@@ -10,6 +10,8 @@ namespace Explore
     {
         public Action MoveHandler;
 
+        public Vector3 MoveTo;
+
         private Vector3 position;
         private bool _isMoving = false;
         private Grid2D<Generator2D.CellType> _grid;
@@ -25,6 +27,7 @@ namespace Explore
                     {
                         _isMoving = true;
                         transform.DOMove(position, 0.5f).SetEase(Ease.Linear).OnComplete(() => { _isMoving = false; });
+                        MoveTo = position;
                         if (MoveHandler != null)
                         {
                             MoveHandler();
@@ -38,6 +41,7 @@ namespace Explore
                     {
                         _isMoving = true;
                         transform.DOMove(position, 0.5f).SetEase(Ease.Linear).OnComplete(() => { _isMoving = false; });
+                        MoveTo = position;
                         if (MoveHandler != null)
                         {
                             MoveHandler();

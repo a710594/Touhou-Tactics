@@ -69,6 +69,7 @@ namespace Battle
             //從背面攻擊時命中率則為1.5倍
             Vector3 v = target.Position - user.Position;
             float angle = Vector2.Angle(new Vector2(v.x, v.z), target.Direction);
+            //戰士的被動技能
             if (Passive.Contains<SwordmanPassive>(user.PassiveList) && angle > 90)
             {
                 angle = 90;

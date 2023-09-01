@@ -19,15 +19,16 @@ namespace Explore
             }
         }
 
+        public ExploreCharacterController Player;
+
         private Grid2D<Generator2D.CellType> _grid;
-        private ExploreCharacterController _player;
         private List<MashroomAI> enemyList = new List<MashroomAI>();
 
         public void SetData(Grid2D<Generator2D.CellType> grid, List<Generator2D.Room> rooms)
         {
             _grid = grid;
-            _player = Camera.main.GetComponent<ExploreCharacterController>();
-            _player.MoveHandler += OnPlayerMove;
+            Player = Camera.main.GetComponent<ExploreCharacterController>();
+            Player.MoveHandler += OnPlayerMove;
 
             GameObject obj;
             MashroomAI mashroom;
@@ -58,6 +59,14 @@ namespace Explore
         {
             if (InBound(position) && _grid[(int)position.x, (int)position.z] != Generator2D.CellType.None)
             {
+                for (int i = 0; i < enemyList.Count; i++) 
+                {
+                    if((int)position.x == (int)enemyList[i].MoveTo.x && (int)position.z == (int)enemyList[i].MoveTo.z) 
+                    {
+                        return false;
+                    }
+                }
+
                 return true;
             }
             else
