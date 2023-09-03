@@ -44,16 +44,16 @@ namespace Explore
                 transform.DORotate(transform.localEulerAngles + Vector3.up * 180, 0.5f).SetEase(Ease.Linear);
             }
 
-            Vector3 v = ExploreManager.Instance.Player.transform.position - transform.position;
-            float angle = Vector2.Angle(new Vector2(v.x, v.z), new Vector2(transform.forward.x, transform.forward.z));
-            if (angle >= 90)
-            {
-                Sprite.transform.DORotate(ExploreManager.Instance.Player.transform.eulerAngles, 0.5f);
-            }
-            else
-            {
-                Sprite.transform.DORotate(ExploreManager.Instance.Player.transform.eulerAngles + Vector3.up * 180, 0.5f);
-            }
+            //Vector3 v = ExploreManager.Instance.Player.transform.position - transform.position;
+            //float angle = Vector2.Angle(new Vector2(v.x, v.z), new Vector2(transform.forward.x, transform.forward.z));
+            //if (angle >= 90)
+            //{
+            //    Sprite.transform.DORotate(ExploreManager.Instance.Player.transform.eulerAngles, 0.5f);
+            //}
+            //else
+            //{
+            //    Sprite.transform.DORotate(ExploreManager.Instance.Player.transform.eulerAngles + Vector3.up * 180, 0.5f);
+            //}
         }
     }
 }
