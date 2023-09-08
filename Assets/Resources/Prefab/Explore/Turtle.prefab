@@ -440,5 +440,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a730c9a0e06f7f54f893c3b0b23448ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Sprite: {fileID: 0}
+  Back: {fileID: 6018973041013668648}
   MoveTo: {x: 0, y: 0, z: 0}

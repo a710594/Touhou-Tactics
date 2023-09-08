@@ -351,4 +351,16 @@ public static class Utility
         float sigma = (maxValue - mean) / 3.0f;
         return Mathf.Clamp(std * sigma + mean, minValue, maxValue);
     }
+
+    public static bool ComparePosition(Vector3 v1, Vector3 v2) 
+    {
+        if((int)v1.x == (int)v2.x && (int)v1.z == (int)v2.z) 
+        {
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+    }
 }

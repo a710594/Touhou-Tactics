@@ -10,6 +10,9 @@ using UnityEngine;
 
 public class DataContext
 {
+    private static readonly string _dataPrePath = Application.streamingAssetsPath + "./Data/";
+    private static readonly string _savePrePath = Application.streamingAssetsPath + "./Save/";
+
     private static DataContext _instance;
     public static DataContext Instance
     {
@@ -23,6 +26,12 @@ public class DataContext
         }
     }
 
+    public enum PrePathEnum 
+    {
+        Data,
+        Save,
+    }
+
     public List<JobModel> JobList = new List<JobModel>();
     public List<SkillModel> SkillList = new List<SkillModel>();
     public List<EffectModel> EffectList = new List<EffectModel>();
@@ -32,6 +41,7 @@ public class DataContext
     public List<ItemModel> ItemList = new List<ItemModel>();
     public List<PassiveModel> PassiveList = new List<PassiveModel>();
     public List<EquipModel> EquipList = new List<EquipModel>();
+    public List<EnemyGroupModel> EnemyGroupList = new List<EnemyGroupModel>();
 
     public Dictionary<int, JobModel> JobDic = new Dictionary<int, JobModel>();
     public Dictionary<int, SkillModel> SkillDic = new Dictionary<int, SkillModel>();
@@ -42,26 +52,26 @@ public class DataContext
     public Dictionary<int, PassiveModel> PassiveDic = new Dictionary<int, PassiveModel>();
     public Dictionary<EquipModel.CategoryEnum, Dictionary<int, EquipModel>> EquipDic = new Dictionary<EquipModel.CategoryEnum, Dictionary<int, EquipModel>>();
     public Dictionary<ItemModel.CategoryEnum, Dictionary<int, ItemModel>> ItemDic = new Dictionary<ItemModel.CategoryEnum, Dictionary<int, ItemModel>>();
+    public Dictionary<int, Dictionary<int, EnemyGroupModel>> EnemyGroupDic = new Dictionary<int, Dictionary<int, EnemyGroupModel>>();
+    
     public Dictionary<string, TileScriptableObject> TileScriptableObjectDic = new Dictionary<string, TileScriptableObject>();
     public Dictionary<string, AttachScriptableObject> AttachScriptableObjectDic = new Dictionary<string, AttachScriptableObject>();
 
-    private string _prePath = Application.streamingAssetsPath + "./Data/";
-
     public void Init() 
     {
-        JobList = Load<List<JobModel>>("Job");
+        JobList = Load<List<JobModel>>("Job", PrePathEnum.Data);
         for (int i=0; i<JobList.Count; i++) 
         {
             JobDic.Add(JobList[i].ID, JobList[i]);
         }
 
-        SkillList = Load<List<SkillModel>>("Skill");
+        SkillList = Load<List<SkillModel>>("Skill", PrePathEnum.Data);
         for (int i = 0; i < SkillList.Count; i++)
         {
             SkillDic.Add(SkillList[i].ID, SkillList[i]);
         }
 
-        EffectList = Load<List<EffectModel>>("Effect");
+        EffectList = Load<List<EffectModel>>("Effect", PrePathEnum.Data);
         for (int i=0; i<EffectList.Count; i++) 
         {
             EffectList[i].GetAreaList();
@@ -72,7 +82,7 @@ public class DataContext
             EffectDic[EffectList[i].Type].Add(EffectList[i].ID, EffectList[i]);
         }
 
-        StatusList = Load<List<StatusModel>>("Status");
+        StatusList = Load<List<StatusModel>>("Status", PrePathEnum.Data);
         for (int i = 0; i < StatusList.Count; i++)
         {
             StatusList[i].GetAreaList();
@@ -83,19 +93,19 @@ public class DataContext
             StatusDic[StatusList[i].Type].Add(StatusList[i].ID, StatusList[i]);
         }
 
-        EnemyList = Load<List<EnemyModel>>("Enemy");
+        EnemyList = Load<List<EnemyModel>>("Enemy", PrePathEnum.Data);
         for (int i = 0; i < EnemyList.Count; i++)
         {
             EnemyDic.Add(EnemyList[i].ID, EnemyList[i]);
         }
 
-        SupportList = Load<List<SupportModel>>("Support");
+        SupportList = Load<List<SupportModel>>("Support", PrePathEnum.Data);
         for (int i = 0; i < SupportList.Count; i++)
         {
             SupportDic.Add(SupportList[i].ID, SupportList[i]);
         }
 
-        ItemList = Load<List<ItemModel>>("Item");
+        ItemList = Load<List<ItemModel>>("Item", PrePathEnum.Data);
         for (int i = 0; i < ItemList.Count; i++)
         {
             if (!ItemDic.ContainsKey(ItemList[i].Category))
@@ -105,13 +115,13 @@ public class DataContext
             ItemDic[ItemList[i].Category].Add(ItemList[i].ID, ItemList[i]);
         }
 
-        PassiveList = Load<List<PassiveModel>>("Passive");
+        PassiveList = Load<List<PassiveModel>>("Passive", PrePathEnum.Data);
         for (int i = 0; i < PassiveList.Count; i++)
         {
             PassiveDic.Add(PassiveList[i].ID, PassiveList[i]);
         }
 
-        EquipList = Load<List<EquipModel>>("Equip");
+        EquipList = Load<List<EquipModel>>("Equip", PrePathEnum.Data);
         for (int i = 0; i < EquipList.Count; i++)
         {
             if (!EquipDic.ContainsKey(EquipList[i].Category))
@@ -119,6 +129,17 @@ public class DataContext
                 EquipDic.Add(EquipList[i].Category, new Dictionary<int, EquipModel>());
             }
             EquipDic[EquipList[i].Category].Add(EquipList[i].ID, EquipList[i]);
+        }
+
+        EnemyGroupList = Load<List<EnemyGroupModel>>("EnemyGroup", PrePathEnum.Data);
+        for (int i = 0; i < EnemyGroupList.Count; i++)
+        {
+            EnemyGroupList[i].GetEnemyList();
+            if (!EnemyGroupDic.ContainsKey(EnemyGroupList[i].Floor))
+            {
+                EnemyGroupDic.Add(EnemyGroupList[i].Floor, new Dictionary<int, EnemyGroupModel>());
+            }
+            EnemyGroupDic[EnemyGroupList[i].Floor].Add(EnemyGroupList[i].ID, EnemyGroupList[i]);
         }
 
         DirectoryInfo d;
@@ -151,18 +172,28 @@ public class DataContext
         }
     }
 
-    public T Load<T>(string fileName = "")
+    public T Load<T>(string fileName, PrePathEnum prePathEnum)
     {
         try
         {
             string path;
+            string prePath = "";
+            if(prePathEnum == PrePathEnum.Data) 
+            {
+                prePath = _dataPrePath;
+            }
+            else if(prePathEnum == PrePathEnum.Save) 
+            {
+                prePath = _savePrePath;
+            }
+
             if (fileName == "")
             {
-                path = Path.Combine(_prePath, typeof(T).Name + ".json");
+                path = Path.Combine(prePath, typeof(T).Name + ".json");
             }
             else
             {
-                path = Path.Combine(_prePath, fileName + ".json");
+                path = Path.Combine(prePath, fileName + ".json");
             }
             string jsonString = File.ReadAllText(path);
             T info = JsonConvert.DeserializeObject<T>(jsonString);
@@ -170,23 +201,32 @@ public class DataContext
         }
         catch (Exception ex)
         {
-            Debug.LogError(ex);
+            Debug.LogWarning(ex);
             return default(T);
         }
     }
 
-    public void Save<T>(T t, string fileName = "")
+    public void Save<T>(T t, string fileName, PrePathEnum prePathEnum)
     {
         try
         {
             string path;
+            string prePath = "";
+            if (prePathEnum == PrePathEnum.Data)
+            {
+                prePath = _dataPrePath;
+            }
+            else if (prePathEnum == PrePathEnum.Save)
+            {
+                prePath = _savePrePath;
+            }
             if (fileName == "")
             {
-                path = Path.Combine(_prePath, typeof(T).Name + ".json");
+                path = Path.Combine(prePath, typeof(T).Name + ".json");
             }
             else
             {
-                path = Path.Combine(_prePath, fileName + ".json");
+                path = Path.Combine(prePath, fileName + ".json");
             }
             File.WriteAllText(path, JsonConvert.SerializeObject(t));
         }
@@ -198,12 +238,12 @@ public class DataContext
 
     public void DeleteData<T>()
     {
-        string path = Path.Combine(_prePath, typeof(T).Name + ".json");
+        string path = Path.Combine(_dataPrePath, typeof(T).Name + ".json");
         File.Delete(path);
     }
 
     public void DeleteData(string fileName = "")
     {
-        File.Delete(Path.Combine(_prePath, fileName + ".json"));
+        File.Delete(Path.Combine(_dataPrePath, fileName + ".json"));
     }
 }

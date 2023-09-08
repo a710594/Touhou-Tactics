@@ -225,6 +225,7 @@ public class Generator2D : MonoBehaviour {
                         go.transform.localScale = new Vector3(1, 5, 1);
                         go.GetComponent<MeshRenderer>().material = whiteMaterial;
                         go.layer = LayerMask.NameToLayer("Wall");
+                        go.transform.SetParent(transform);
                     }
                 }
             }
@@ -284,14 +285,9 @@ public class Generator2D : MonoBehaviour {
                 GameObject go = Instantiate(cubePrefab, Vector3.zero, Quaternion.identity);
                 go.transform.position = new Vector3(location.x + i, 0, location.y + j);
                 go.GetComponent<MeshRenderer>().material = material;
+                go.transform.SetParent(transform);
             }
         }
-
-
-        //GameObject go = Instantiate(cubePrefab, Vector3.zero, Quaternion.identity);
-        //go.GetComponent<Transform>().localScale = new Vector3(size.x, 1, size.y);
-        //go.transform.position = new Vector3(location.x + size.x / 2, 0, location.y + size.y / 2);
-        //go.GetComponent<MeshRenderer>().material = material;
     }
 
     void PlaceRoom(Vector2Int location, Vector2Int size) {

@@ -5,55 +5,46 @@ using UnityEngine;
 
 namespace Explore
 {
-    public class MashroomAI : MonoBehaviour
+    public class MashroomAI : AI
     {
-
-        public SpriteRenderer Sprite;
-        public Vector3 MoveTo;
-
-        public void Init(List<Generator2D.Room> rooms)
+        public override void Init(List<Generator2D.Room> rooms)
         {
-            Generator2D.Room room = rooms[Random.Range(0, rooms.Count)];
+            Generator2D.Room room = rooms[/*Random.Range(0, rooms.Count)*/0];
             Vector3 position = new Vector3(Random.Range(room.bounds.xMin, room.bounds.xMax), 1, Random.Range(room.bounds.yMin, room.bounds.yMax));
             transform.position = position;
         }
 
-        public void Step() 
+        public override void Move() 
         {
-            if (ExploreManager.Instance.IsWalkable(transform.position + transform.forward))
+            if (ExploreManager.Instance.IsWalkable(this, transform.position + transform.forward))
             {
                 MoveTo = transform.position + transform.forward;
                 transform.DOMove(transform.position + transform.forward, 0.5f).SetEase(Ease.Linear);
             }
-            else if (ExploreManager.Instance.IsWalkable(transform.position + transform.right))
+            else if (ExploreManager.Instance.IsWalkable(this, transform.position + transform.right))
             {
                 MoveTo = transform.position + transform.right;
                 transform.DOMove(transform.position + transform.right, 0.5f).SetEase(Ease.Linear);
                 transform.DORotate(transform.localEulerAngles + Vector3.up * 90, 0.5f).SetEase(Ease.Linear);
             }
-            else if (ExploreManager.Instance.IsWalkable(transform.position - transform.right))
+            else if (ExploreManager.Instance.IsWalkable(this, transform.position - transform.right))
             {
                 MoveTo = transform.position - transform.right;
                 transform.DOMove(transform.position - transform.right, 0.5f).SetEase(Ease.Linear);
                 transform.DORotate(transform.localEulerAngles - Vector3.up * 90, 0.5f).SetEase(Ease.Linear);
             }
-            else if (ExploreManager.Instance.IsWalkable(transform.position - transform.forward))
+            else if (ExploreManager.Instance.IsWalkable(this, transform.position - transform.forward))
             {
                 MoveTo = transform.position - transform.forward;
                 transform.DOMove(transform.position - transform.forward, 0.5f).SetEase(Ease.Linear);
                 transform.DORotate(transform.localEulerAngles + Vector3.up * 180, 0.5f).SetEase(Ease.Linear);
             }
+            Back.transform.DORotate(ExploreManager.Instance.Player.RotateTo + Vector3.down * 180, 0.5f);
+        }
 
-            //Vector3 v = ExploreManager.Instance.Player.transform.position - transform.position;
-            //float angle = Vector2.Angle(new Vector2(v.x, v.z), new Vector2(transform.forward.x, transform.forward.z));
-            //if (angle >= 90)
-            //{
-            //    Sprite.transform.DORotate(ExploreManager.Instance.Player.transform.eulerAngles, 0.5f);
-            //}
-            //else
-            //{
-            //    Sprite.transform.DORotate(ExploreManager.Instance.Player.transform.eulerAngles + Vector3.up * 180, 0.5f);
-            //}
+        public override void Rotate() 
+        {
+            Back.transform.DORotate(ExploreManager.Instance.Player.RotateTo + Vector3.down * 180, 0.5f);
         }
     }
 }

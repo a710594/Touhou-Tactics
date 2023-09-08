@@ -17,7 +17,7 @@ public class NewBehaviourScript : MonoBehaviour
         RandomMapGenerator.Generate(out BattleInfo battleInfo);
         PathManager.Instance.LoadData(battleInfo.TileInfoDic);
         //ItemManager.Instance.Init();
-        BattleController.Instance.Init(battleInfo);
+        BattleController.Instance.Init(1, 1, battleInfo);
 
         ItemManager.Instance.AddItem(ItemModel.CategoryEnum.Medicine, 1, 1);
         ItemManager.Instance.AddItem(ItemModel.CategoryEnum.Card, 1, 1);

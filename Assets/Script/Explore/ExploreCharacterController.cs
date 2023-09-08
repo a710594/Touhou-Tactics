@@ -9,8 +9,11 @@ namespace Explore
     public class ExploreCharacterController : MonoBehaviour
     {
         public Action MoveHandler;
+        public Action RotateHandler;
 
+        public bool CanMove = true;
         public Vector3 MoveTo;
+        public Vector3 RotateTo;
 
         private Vector3 position;
         private bool _isMoving = false;
@@ -18,7 +21,7 @@ namespace Explore
 
         private void Update()
         {
-            if (!_isMoving)
+            if (CanMove && !_isMoving)
             {
                 if (Input.GetKey(KeyCode.UpArrow))
                 {
@@ -28,6 +31,7 @@ namespace Explore
                         _isMoving = true;
                         transform.DOMove(position, 0.5f).SetEase(Ease.Linear).OnComplete(() => { _isMoving = false; });
                         MoveTo = position;
+                        ExploreManager.Instance.CheckCollision();
                         if (MoveHandler != null)
                         {
                             MoveHandler();
@@ -42,6 +46,7 @@ namespace Explore
                         _isMoving = true;
                         transform.DOMove(position, 0.5f).SetEase(Ease.Linear).OnComplete(() => { _isMoving = false; });
                         MoveTo = position;
+                        ExploreManager.Instance.CheckCollision();
                         if (MoveHandler != null)
                         {
                             MoveHandler();
@@ -51,12 +56,22 @@ namespace Explore
                 else if (Input.GetKey(KeyCode.LeftArrow))
                 {
                     _isMoving = true;
-                    transform.DORotate(transform.localEulerAngles + Vector3.down * 90, 0.5f).SetEase(Ease.Linear).OnComplete(() => { _isMoving = false; });
+                    RotateTo = transform.localEulerAngles + Vector3.down * 90;
+                    transform.DORotate(RotateTo, 0.5f).SetEase(Ease.Linear).OnComplete(() => { _isMoving = false; });
+                    if (RotateHandler != null) 
+                    {
+                        RotateHandler();
+                    }
                 }
                 else if (Input.GetKey(KeyCode.RightArrow))
                 {
                     _isMoving = true;
-                    transform.DORotate(transform.localEulerAngles + Vector3.up * 90, 0.5f).SetEase(Ease.Linear).OnComplete(() => { _isMoving = false; });
+                    RotateTo = transform.localEulerAngles + Vector3.up * 90;
+                    transform.DORotate(RotateTo, 0.5f).SetEase(Ease.Linear).OnComplete(() => { _isMoving = false; });
+                    if (RotateHandler != null)
+                    {
+                        RotateHandler();
+                    }
                 }
             }
         }

@@ -1,3 +1,4 @@
+using Battle;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,6 +22,7 @@ namespace Explore
 
         public ExploreCharacterController Player;
 
+        private Timer _timer = new Timer();
         private Grid2D<Generator2D.CellType> _grid;
         private List<MashroomAI> enemyList = new List<MashroomAI>();
 
@@ -29,39 +31,52 @@ namespace Explore
             _grid = grid;
             Player = Camera.main.GetComponent<ExploreCharacterController>();
             Player.MoveHandler += OnPlayerMove;
+            Player.RotateHandler += OnPlayerRotate;
 
             GameObject obj;
             MashroomAI mashroom;
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 1; i++)
             {
                 obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Mashroom"), Vector3.zero, Quaternion.identity);
                 mashroom = obj.GetComponent<MashroomAI>();
                 mashroom.Init(rooms);
                 enemyList.Add(mashroom);
             }
-            for (int i = 0; i < 5; i++)
+            //for (int i = 0; i < 5; i++)
+            //{
+            //    obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/MountainPig"), Vector3.zero, Quaternion.identity);
+            //    mashroom = obj.GetComponent<MashroomAI>();
+            //    mashroom.Init(rooms);
+            //    enemyList.Add(mashroom);
+            //}
+            //for (int i = 0; i < 5; i++)
+            //{
+            //    obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Turtle"), Vector3.zero, Quaternion.identity);
+            //    mashroom = obj.GetComponent<MashroomAI>();
+            //    mashroom.Init(rooms);
+            //    enemyList.Add(mashroom);
+            //}
+        }
+
+        public bool IsWalkable(Vector3 position) //for player
+        {
+            if (InBound(position) && _grid[(int)position.x, (int)position.z] != Generator2D.CellType.None)
             {
-                obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/MountainPig"), Vector3.zero, Quaternion.identity);
-                mashroom = obj.GetComponent<MashroomAI>();
-                mashroom.Init(rooms);
-                enemyList.Add(mashroom);
+                return true;
             }
-            for (int i = 0; i < 5; i++)
+            else
             {
-                obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Turtle"), Vector3.zero, Quaternion.identity);
-                mashroom = obj.GetComponent<MashroomAI>();
-                mashroom.Init(rooms);
-                enemyList.Add(mashroom);
+                return false;
             }
         }
 
-        public bool IsWalkable(Vector3 position)
+        public bool IsWalkable(AI enemy, Vector3 position) //for enemy
         {
             if (InBound(position) && _grid[(int)position.x, (int)position.z] != Generator2D.CellType.None)
             {
                 for (int i = 0; i < enemyList.Count; i++) 
                 {
-                    if((int)position.x == (int)enemyList[i].MoveTo.x && (int)position.z == (int)enemyList[i].MoveTo.z) 
+                    if(enemy != enemyList[i] && Utility.ComparePosition(position, enemyList[i].MoveTo)) 
                     {
                         return false;
                     }
@@ -87,11 +102,43 @@ namespace Explore
             }
         }
 
+        public void CheckCollision() 
+        {
+            for (int i = 0; i < enemyList.Count; i++)
+            {
+                if (Utility.ComparePosition(enemyList[i].MoveTo, Player.MoveTo))
+                {
+                    Debug.Log("Start Battle!");
+                    Player.CanMove = false;
+                    _timer.Start(1f, ()=> 
+                    {
+                        SceneController.Instance.ChangeScene("Battle", () =>
+                        {
+                            RandomMapGenerator randomMapGenerator = GameObject.Find("Tilemap").GetComponent<RandomMapGenerator>();
+                            randomMapGenerator.Generate(out BattleInfo battleInfo);
+                            PathManager.Instance.LoadData(battleInfo.TileInfoDic);
+                            BattleController.Instance.Init(1, 1, battleInfo);
+                        });
+                    });
+                }
+            }
+        }
+
         private void OnPlayerMove() 
         {
             for (int i=0; i<enemyList.Count; i++) 
             {
-                enemyList[i].Step();
+                enemyList[i].Move();
+            }
+
+            CheckCollision();
+        }
+
+        private void OnPlayerRotate()
+        {
+            for (int i = 0; i < enemyList.Count; i++)
+            {
+                enemyList[i].Rotate();
             }
         }
     }

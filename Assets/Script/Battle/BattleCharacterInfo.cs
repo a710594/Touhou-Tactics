@@ -20,6 +20,7 @@ public class BattleCharacterInfo
     //基礎屬性
     public int ID;
     public string Name;
+    public int Lv;
     public int MaxHP;
     public int STR; //Strength 力量 影響物理傷害
     public int CON; //Constitution 體質 抵抗物理傷害
@@ -33,7 +34,9 @@ public class BattleCharacterInfo
     public int WT;
     public string Controller;
     public FactionEnum Faction;
+    [NonSerialized]
     public JobModel Job = null;
+    [NonSerialized]
     public EnemyModel Enemy = null;
     public Equip Weapon = new Equip(EquipModel.CategoryEnum.Weapon);
     public Equip Armor = new Equip(EquipModel.CategoryEnum.Armor);
@@ -41,6 +44,7 @@ public class BattleCharacterInfo
 
     public List<Skill> SkillList = new List<Skill>();
     public List<Support> SupportList = new List<Support>();
+    public List<Passive> PassiveList = new List<Passive>();
 
     //當前屬性
     public bool IsAuto = false;
@@ -60,20 +64,21 @@ public class BattleCharacterInfo
     public AI AI = null;
     public Vector2Int Direction = Vector2Int.left;
     public List<Status> StatusList = new List<Status>();
-    public List<Passive> PassiveList = new List<Passive>();
 
-    public BattleCharacterInfo(JobModel job) 
+    public BattleCharacterInfo(int lv, JobModel job) 
     {
         Job = job;
-        ID = job.ID;
         Name = job.Name;
-        MaxHP = job.HP;
-        STR = job.STR;
-        CON = job.CON;
-        INT = job.INT;
-        MEN = job.MEN;
-        DEX = job.DEX;
-        AGI = job.AGI;
+        Lv = lv;
+
+        float n = (1 + (lv - 1) * 0.1f);
+        MaxHP = Mathf.RoundToInt(job.HP * n);
+        STR = Mathf.RoundToInt(job.STR * n);
+        CON = Mathf.RoundToInt(job.CON * n);
+        INT = Mathf.RoundToInt(job.INT * n);
+        MEN = Mathf.RoundToInt(job.MEN * n);
+        DEX = Mathf.RoundToInt(job.DEX * n);
+        AGI = Mathf.RoundToInt(job.AGI * n);
         MOV = job.MOV;
         UP = job.UP;
         DOWN = job.DOWN;
@@ -131,18 +136,20 @@ public class BattleCharacterInfo
         }
     }
 
-    public BattleCharacterInfo(EnemyModel enemy)
+    public BattleCharacterInfo(int lv, EnemyModel enemy)
     {
         Enemy = enemy;
-        ID = enemy.ID;
         Name = enemy.Name;
-        MaxHP = enemy.HP;
-        STR = enemy.STR;
-        CON = enemy.CON;
-        INT = enemy.INT;
-        MEN = enemy.MEN;
-        DEX = enemy.DEX;
-        AGI = enemy.AGI;
+        Lv = lv;
+
+        float n = (1 + (lv - 1) * 0.1f);
+        MaxHP = Mathf.RoundToInt(enemy.HP * n);
+        STR = Mathf.RoundToInt(enemy.STR * n);
+        CON = Mathf.RoundToInt(enemy.CON * n);
+        INT = Mathf.RoundToInt(enemy.INT * n);
+        MEN = Mathf.RoundToInt(enemy.MEN * n);
+        DEX = Mathf.RoundToInt(enemy.DEX * n);
+        AGI = Mathf.RoundToInt(enemy.AGI * n);
         MOV = enemy.MOV;
         UP = enemy.UP;
         DOWN = enemy.DOWN;
@@ -153,6 +160,33 @@ public class BattleCharacterInfo
         IsAuto = true;
         CurrentHP = MaxHP;
         CurrentWT = WT;
+    }
+
+    public BattleCharacterInfo(CharacterInfo info)
+    {
+        Name = info.Name;
+        Lv = info.Lv;
+
+        MaxHP = info.MaxHP;
+        STR = info.STR;
+        CON = info.CON;
+        INT = info.INT;
+        MEN = info.MEN;
+        DEX = info.DEX;
+        AGI = info.AGI;
+        MOV = info.MOV;
+        UP = info.UP;
+        DOWN = info.DEX;
+        WT = info.WT;
+        PassiveList = info.PassiveList;
+        Controller = info.Controller;
+        Faction = FactionEnum.Player;
+
+        CurrentHP = info.CurrentHP;
+        CurrentWT = WT;
+
+        SkillList = info.SkillList;
+        SupportList = info.SupportList;
     }
 
     public void SetDamage(int damage)

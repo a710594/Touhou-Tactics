@@ -45,7 +45,7 @@ public class ItemManager
     {
         ItemDic.Clear();
 
-        BagInfo baginfo = DataContext.Instance.Load<BagInfo>(_fileName);
+        BagInfo baginfo = DataContext.Instance.Load<BagInfo>(_fileName, DataContext.PrePathEnum.Save);
         if (baginfo != null)
         {
             _bagInfo = baginfo;
@@ -54,6 +54,10 @@ public class ItemManager
             {
                 baginfo.ItemList[i].Data = DataContext.Instance.ItemDic[baginfo.ItemList[i].Category][baginfo.ItemList[i].ID];
                 baginfo.ItemList[i].Effect = EffectFactory.GetEffect(baginfo.ItemList[i].Data.EffectType, baginfo.ItemList[i].Data.EffectID);
+                if (!ItemDic.ContainsKey(baginfo.ItemList[i].Data.Category)) 
+                {
+                    ItemDic.Add(baginfo.ItemList[i].Data.Category, new Dictionary<int, Item>());
+                }
                 ItemDic[baginfo.ItemList[i].Data.Category].Add(baginfo.ItemList[i].ID, baginfo.ItemList[i]);
             }
         }
@@ -66,7 +70,7 @@ public class ItemManager
     public void Save()
     {
         _bagInfo.Save(ItemDic);
-        DataContext.Instance.Save(_bagInfo, _fileName);
+        DataContext.Instance.Save(_bagInfo, _fileName, DataContext.PrePathEnum.Save);
     }
 
     public void Delete()
