@@ -9,7 +9,8 @@ public class Generator2D : MonoBehaviour {
     public enum CellType {
         None,
         Room,
-        Hallway
+        Hallway,
+        Wall,
     }
 
     public class Room {
@@ -47,10 +48,10 @@ public class Generator2D : MonoBehaviour {
     HashSet<Prim.Edge> selectedEdges;
 
     void Start() {
-        Generate();
+        //Generate();
     }
 
-    void Generate() {
+    public void Generate() {
         random = new Random(0);
         grid = new Grid2D<CellType>(size, Vector2Int.zero);
         rooms = new List<Room>();
@@ -59,11 +60,37 @@ public class Generator2D : MonoBehaviour {
         Triangulate();
         CreateHallways();
         PathfindHallways();
-
+        PlaceWall();
         Camera.main.transform.position = new Vector3((int)rooms[0].bounds.center.x, 1, (int)rooms[0].bounds.center.y);
         Explore.ExploreManager.Instance.SetData(grid, rooms);
+    }
 
-        PlaceWall();
+    public void Relod(Grid2D<Generator2D.CellType> grid, List<Generator2D.Room> rooms)
+    {
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            PlaceRoom(rooms[i].bounds.position, rooms[i].bounds.size);
+        }
+
+        for (int i = 0; i < grid.Size.x; i++)
+        {
+            for (int j = 0; j < grid.Size.y; j++)
+            {
+                if (grid[i, j] == CellType.Hallway)
+                {
+                    PlaceHallway(new Vector2Int(i, j));
+                }
+                else if (grid[i, j] == CellType.Wall)
+                {
+                    GameObject go = Instantiate(cubePrefab, Vector3.zero, Quaternion.identity);
+                    go.transform.position = new Vector3(i, 2, j);
+                    go.transform.localScale = new Vector3(1, 5, 1);
+                    go.GetComponent<MeshRenderer>().material = whiteMaterial;
+                    go.layer = LayerMask.NameToLayer("Wall");
+                    go.transform.SetParent(transform);
+                }
+            }
+        }
     }
 
     void PlaceRooms() {
@@ -220,6 +247,7 @@ public class Generator2D : MonoBehaviour {
                 {
                     if(CheckWall(new Vector3(i, 0, j))) 
                     {
+                        grid[i, j] = CellType.Wall;
                         GameObject go = Instantiate(cubePrefab, Vector3.zero, Quaternion.identity);
                         go.transform.position = new Vector3(i, 2, j);
                         go.transform.localScale = new Vector3(1, 5, 1);

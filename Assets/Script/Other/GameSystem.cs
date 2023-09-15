@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameSystem : MonoBehaviour
 {
+    public Generator2D Generator2D;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -11,6 +13,7 @@ public class GameSystem : MonoBehaviour
         SceneController.Instance.Init();
         ItemManager.Instance.Init();
         CharacterManager.Instance.Init();
+        Generator2D.Generate();
 
         //Init Data
 

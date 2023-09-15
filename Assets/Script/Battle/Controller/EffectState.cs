@@ -111,7 +111,7 @@ namespace Battle
                 if (playerCount == 0)
                 {
                     Instance._battleUI.TipLabel.SetLabel("You Lose");
-
+                    _context.SetState<WinState>();
                 }
                 else if (enemyCount == 0)
                 {

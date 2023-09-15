@@ -114,6 +114,7 @@ namespace Battle
             _context.AddState(new ConfirmState(_context));
             _context.AddState(new EffectState(_context));
             _context.AddState(new EndState(_context));
+            _context.AddState(new WinState(_context));
 
             _context.SetState<CharacterState>();
         }

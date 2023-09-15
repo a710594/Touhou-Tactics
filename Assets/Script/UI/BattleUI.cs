@@ -232,5 +232,11 @@ public class BattleUI : MonoBehaviour
 
     private void Update()
     {
+#if UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.V)) 
+        {
+        
+        }
+#endif
     }
 }

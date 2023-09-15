@@ -135,7 +135,7 @@ namespace Battle
                     }
                 }
 
-                damage =  Mathf.RoundToInt(atk / def * effect.Data.Value) + user.Weapon.ATK - target.Armor.DEF;
+                damage =  Mathf.RoundToInt(atk / def * effect.Data.Value * (1 + (user.Lv - 1) * 0.1f) + user.Weapon.ATK - target.Armor.DEF);
             }
             else if (effect.Data.Type == EffectModel.TypeEnum.MagicAttack)
             {
@@ -168,7 +168,7 @@ namespace Battle
                     }
                 }
 
-                damage = Mathf.RoundToInt(mtk / mef * effect.Data.Value) + user.Weapon .MTK - target.Armor.MEF;
+                damage = Mathf.RoundToInt(mtk / mef * effect.Data.Value *(1 + (user.Lv - 1) * 0.1f) + user.Weapon .MTK - target.Armor.MEF);
             }
             else
             {

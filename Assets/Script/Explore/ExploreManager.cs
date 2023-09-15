@@ -24,11 +24,13 @@ namespace Explore
 
         private Timer _timer = new Timer();
         private Grid2D<Generator2D.CellType> _grid;
+        private List<Generator2D.Room> _rooms;
         private List<MashroomAI> enemyList = new List<MashroomAI>();
 
         public void SetData(Grid2D<Generator2D.CellType> grid, List<Generator2D.Room> rooms)
         {
             _grid = grid;
+            _rooms = rooms;
             Player = Camera.main.GetComponent<ExploreCharacterController>();
             Player.MoveHandler += OnPlayerMove;
             Player.RotateHandler += OnPlayerRotate;
@@ -122,6 +124,12 @@ namespace Explore
                     });
                 }
             }
+        }
+
+        public void Reload() 
+        {
+            Generator2D generator2D = GameObject.Find("Generator2D").GetComponent<Generator2D>();
+            generator2D.Relod(_grid, _rooms);
         }
 
         private void OnPlayerMove() 
