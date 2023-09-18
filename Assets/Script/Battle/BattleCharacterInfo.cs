@@ -15,6 +15,7 @@ public class BattleCharacterInfo
     {
         Player,
         Enemy,
+        None,
     }
 
     //基礎屬性

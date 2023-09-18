@@ -51,7 +51,7 @@ public class AI
         {
             BattleInfo info = BattleController.Instance.BattleInfo;
             List<BattleCharacterInfo> characterList = BattleController.Instance.CharacterList;
-            _stepList = _stepList = AStarAlgor.Instance.GetStepList(info.Width, info.Height, Utility.ConvertToVector2Int(_character.Position), _character, characterList, info.TileInfoDic);
+            _stepList = _stepList = BattleController.Instance.GetStepList(Utility.ConvertToVector2Int(_character.Position), _character);
         }
 
         public virtual void OnMoveEnd() 

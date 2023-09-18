@@ -153,7 +153,7 @@ public class MashroomAI : AI
                     rangeList = Utility.GetRange(_selectedSkill.Effect.Data.Range, battleInfo.Width, battleInfo.Height, _stepList[i]);
                     if (rangeList.Contains(targetPosition))
                     {
-                        distance = AStarAlgor.Instance.GetDistance(myPosition, _stepList[i], _aiContext.CharacterInfo, characterList, battleInfo.TileInfoDic);
+                        distance = BattleController.Instance.GetDistance(myPosition, _stepList[i], _aiContext.CharacterInfo);
                         if (minDistance == -1 || (distance < minDistance && BattleController.Instance.HasCharacter(_stepList[i])))
                         {
                             minDistance = distance;
@@ -167,7 +167,7 @@ public class MashroomAI : AI
             {
                 for (int i = 0; i < _stepList.Count; i++)
                 {
-                    distance = AStarAlgor.Instance.GetDistance(targetPosition, _stepList[i], _aiContext.CharacterInfo, characterList, battleInfo.TileInfoDic);
+                    distance = BattleController.Instance.GetDistance(targetPosition, _stepList[i], _aiContext.CharacterInfo);
                     if (minDistance == -1 || (distance < minDistance && BattleController.Instance.HasCharacter(_stepList[i])))
                     {
                         minDistance = distance;

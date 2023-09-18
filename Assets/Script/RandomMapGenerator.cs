@@ -49,11 +49,6 @@ public class RandomMapGenerator : MonoBehaviour
         GameObject attachObj;
         battleInfo = new BattleInfo();
 
-        foreach(KeyValuePair<string, TileScriptableObject> pair1 in _tileScriptableObjectDic) 
-        {
-            Debug.Log(pair1.Key);
-        }
-
         for (int i = this.transform.childCount; i > 0; --i)
         {
             DestroyImmediate(this.transform.GetChild(0).gameObject);

@@ -15,21 +15,21 @@ public class MapFileGenerator : MonoBehaviour
 
     public void BuildFile() 
     {
-        Dictionary<Vector3, string> tileDic = new Dictionary<Vector3, string>();
+        Dictionary<Vector2Int, string> tileDic = new Dictionary<Vector2Int, string>();
         TileComponent component;
-        List<Vector3Int> noAttachList = new List<Vector3Int>(); //禁建區,不會有附加物件的區域
+        List<Vector2Int> noAttachList = new List<Vector2Int>(); //禁建區,不會有附加物件的區域
         foreach (Transform child in transform)
         {
             component = child.GetComponent<TileComponent>();
-            tileDic.Add(child.position, component.ID);
+            tileDic.Add(Utility.ConvertToVector2Int(child.position), component.ID);
             if(component.tag == "NoAttach") 
             {
-                noAttachList.Add(Vector3Int.RoundToInt(child.position));
+                noAttachList.Add(new Vector2Int((int)child.position.x, (int)child.position.z));
             }
         }
 
         string path = Path.Combine(_prePath, FileName + ".txt");
-        Vector3 position;
+        Vector2Int position;
         using (StreamWriter writer = new StreamWriter(path))
         {
             writer.Write(Width + " " + Height + "\n");
@@ -43,7 +43,7 @@ public class MapFileGenerator : MonoBehaviour
                         writer.Write(" ");
                     }
 
-                    position = new Vector3(i, 0, j);
+                    position = new Vector2Int(i, j);
                     if (tileDic.ContainsKey(position))
                     {
                         writer.Write(tileDic[position]);
@@ -68,7 +68,7 @@ public class MapFileGenerator : MonoBehaviour
         string[] lines = text.Split('\n');
         string[] str;
         GameObject tile;
-        Dictionary<Vector3, GameObject> tileList = new Dictionary<Vector3, GameObject>();
+        Dictionary<Vector2Int, GameObject> tileList = new Dictionary<Vector2Int, GameObject>();
 
         for (int i = this.transform.childCount; i > 0; --i)
         {
@@ -101,13 +101,13 @@ public class MapFileGenerator : MonoBehaviour
                                 tile.transform.SetParent(parent);
                             }
                             tile.transform.position = new Vector3(i - 1, 0, j);
-                            tileList.Add(tile.transform.position, tile);
+                            tileList.Add(Utility.ConvertToVector2Int(tile.transform.position), tile);
                         }
                     }
                 }
                 else
                 {
-                    List<Vector3> noAttachList = JsonConvert.DeserializeObject<List<Vector3>>(lines[i]);
+                    List<Vector2Int> noAttachList = JsonConvert.DeserializeObject<List<Vector2Int>>(lines[i]);
                     for (int j = 0; j < noAttachList.Count; j++)
                     {
                         tileList[noAttachList[j]].tag = "NoAttach";

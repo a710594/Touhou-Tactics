@@ -326,7 +326,7 @@ namespace Battle
 
             while (true) 
             {
-                v2 = new Vector2Int(Mathf.RoundToInt(Utility.RandomGaussian(0, BattleInfo.Width)), Mathf.RoundToInt(Utility.RandomGaussian(0, BattleInfo.Height)));
+                v2 = new Vector2Int(Mathf.RoundToInt(Utility.RandomGaussian(0, BattleInfo.Width - 1)), Mathf.RoundToInt(Utility.RandomGaussian(0, BattleInfo.Height - 1)));
                 if(BattleInfo.TileInfoDic[v2].MoveCost > 0) 
                 {
                     //檢查位置是否有和其他角色重複
@@ -343,17 +343,14 @@ namespace Battle
                     if (!isRepeat)
                     {
                         //檢查是否與其他角色之間有路徑
-                        for (int i = 0; i < CharacterList.Count; i++)
+                        for (int i = 0; i < BattleInfo.NoAttachList.Count; i++)
                         {
-                            if (faction != CharacterList[i].Faction)
+                            path = GetPath(v2, Utility.ConvertToVector2Int(CharacterList[i].Position), CharacterList[i].Faction);
+                            if (path != null)
                             {
-                                path = AStarAlgor.Instance.GetPath(v2, Utility.ConvertToVector2Int(CharacterList[i].Position), CharacterList[i], CharacterList, BattleInfo.TileInfoDic, false);
-                                if (path != null)
-                                {
-                                    v3 = new Vector3(v2.x, BattleInfo.TileInfoDic[v2].Height, v2.y);
-                                    hasPath = true;
-                                    break;
-                                }
+                                v3 = new Vector3(v2.x, BattleInfo.TileInfoDic[v2].Height, v2.y);
+                                hasPath = true;
+                                break;
                             }
                         }
                         if (hasPath)

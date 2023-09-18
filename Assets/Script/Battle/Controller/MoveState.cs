@@ -24,7 +24,7 @@ namespace Battle
                 Instance._controllerDic[_character.ID].transform.position = _character.Position;
                 Instance.BattleInfo.TileInfoDic[Utility.ConvertToVector2Int(_character.Position)].HasCharacter = false;
                 Instance._battleUI.ActionButtonGroup.gameObject.SetActive(false);
-                _stepList = AStarAlgor.Instance.GetStepList(info.Width, info.Height, Utility.ConvertToVector2Int(_character.Position), _character, _characterList, info.TileInfoDic);
+                _stepList = Instance.GetStepList(Utility.ConvertToVector2Int(_character.Position), _character);
                 Instance.SetQuad(_stepList, Instance._white);
             }
 
@@ -41,7 +41,7 @@ namespace Battle
                         Instance._battleUI.SetSkillVisible(false);
                         Instance.BattleInfo.TileComponentDic[_originalPosition].Select.gameObject.SetActive(false);
                         Instance.ClearQuad();
-                        List<Vector2Int> path = AStarAlgor.Instance.GetPath(Utility.ConvertToVector2Int(_character.Position), position, _character, _characterList, Instance.BattleInfo.TileInfoDic, false);
+                        List<Vector2Int> path = Instance.GetPath(Utility.ConvertToVector2Int(_character.Position), position, _character.Faction);
                         Instance._controllerDic[_character.ID].Move(path);
                         Instance.BattleInfo.TileInfoDic[Utility.ConvertToVector2Int(_character.Position)].HasCharacter = false;
                         _character.LastPosition = _character.Position;

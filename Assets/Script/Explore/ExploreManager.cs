@@ -62,7 +62,7 @@ namespace Explore
 
         public bool IsWalkable(Vector3 position) //for player
         {
-            if (InBound(position) && _grid[(int)position.x, (int)position.z] != Generator2D.CellType.None)
+            if (InBound(position) && _grid[(int)position.x, (int)position.z] != Generator2D.CellType.None && _grid[(int)position.x, (int)position.z] != Generator2D.CellType.Wall)
             {
                 return true;
             }
@@ -74,7 +74,8 @@ namespace Explore
 
         public bool IsWalkable(AI enemy, Vector3 position) //for enemy
         {
-            if (InBound(position) && _grid[(int)position.x, (int)position.z] != Generator2D.CellType.None)
+            Debug.Log(_grid[(int)position.x, (int)position.z]);
+            if (InBound(position) && _grid[(int)position.x, (int)position.z] != Generator2D.CellType.None && _grid[(int)position.x, (int)position.z] != Generator2D.CellType.Wall)
             {
                 for (int i = 0; i < enemyList.Count; i++) 
                 {
