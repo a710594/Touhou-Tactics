@@ -21,20 +21,10 @@ public class BattleUI : MonoBehaviour
     //public GameObject PowerPoint;
     public TipLabel TipLabel;
 
-    private GraphicRaycaster _graphicRaycaster;
     private PointerEventData _pointerEventData = new PointerEventData(null);
     private List<RaycastResult> _graphicHitList = new List<RaycastResult>();
     private Dictionary<int, AnchorValueBar> _littleHpBarDic = new Dictionary<int, AnchorValueBar>();
     private Dictionary<int, FloatingNumberPool> _floatingNumberPoolDic  = new Dictionary<int, FloatingNumberPool>();
-
-    //camera drag
-    public float CameraDragSpeed = 100;
-
-    private int _width;
-    private int _height;
-    private float _distance = 20;
-    private Vector3 _dragOrigin;
-    private CameraRotate _cameraRotate;
 
     public void SetVisible(bool isVisible) 
     {
@@ -137,12 +127,6 @@ public class BattleUI : MonoBehaviour
         floatingNumberPool.Play(text, type);
     }
 
-    public void SetMapInfo(int width, int height)
-    {
-        _width = width;
-        _height = height;
-    }
-
     public void CharacterListGroupInit(List<BattleCharacterInfo> characterList)
     {
         CharacterListGroup.Init(characterList);
@@ -175,60 +159,6 @@ public class BattleUI : MonoBehaviour
     //        });
     //    });
     //}
-
-    private void BackgroundDown(ButtonPlus button) 
-    {
-        _dragOrigin = Input.mousePosition;
-    }
-
-    private void BackgroundUp(ButtonPlus button) 
-    {
-        if (Vector2.Distance(_dragOrigin, Input.mousePosition) > _distance)
-        {
-            float x;
-            float z;
-            Vector3 move;
-            Vector3 v1 = Camera.main.ScreenToViewportPoint(_dragOrigin - Input.mousePosition);
-            if (_cameraRotate.CurrentState == CameraRotate.StateEnum.Slope) 
-            {
-                Vector3 v2 = new Vector3(v1.x * Mathf.Sin(45) + v1.y * Mathf.Cos(45), 0, v1.x * Mathf.Sin(-45) + v1.y * Mathf.Cos(-45));
-                move = new Vector3(v2.x * CameraDragSpeed, 0, v2.z * CameraDragSpeed);
-                x = Mathf.Clamp(Camera.main.transform.position.x + move.x, -10, _width - 10);
-                z = Mathf.Clamp(Camera.main.transform.position.z + move.z, -10, _height - 10);
-            }
-            else 
-            {
-                move = new Vector3(v1.x * CameraDragSpeed, 0, v1.y * CameraDragSpeed);
-                x = Mathf.Clamp(Camera.main.transform.position.x + move.x, 0, _width);
-                z = Mathf.Clamp(Camera.main.transform.position.z + move.z, 0, _height);
-            }
-
-            Camera.main.transform.DOMove(new Vector3(x, Camera.main.transform.position.y, z), 1f);
-        }
-        else
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 100))
-            {
-                BattleController.Instance.Click(Utility.ConvertToVector2Int(hit.transform.position));
-            }
-            else //代表按到沒有按鍵的地方
-            {
-                BattleController.Instance.Click(new Vector2Int(int.MinValue, int.MinValue));
-            }
-        }
-    }
-
-    private void Awake()
-    {
-        _graphicRaycaster = transform.parent.GetComponent<GraphicRaycaster>();
-        _cameraRotate = Camera.main.GetComponent<CameraRotate>();
-
-        //IdleButton.onClick.AddListener(IdleOnClick);
-        BackgroundButton.DownHandler += BackgroundDown;
-        BackgroundButton.UpHandler += BackgroundUp;
-    }
 
     private void Update()
     {

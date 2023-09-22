@@ -5,30 +5,43 @@ using UnityEngine.UI;
 
 public class SelectBattleCharacterUI : MonoBehaviour
 {
-    public DragCharacter DragCharacter;
+    public DragCharacterImage DragCharacterImage;
+    public Image DragCharacterBG;
     public Transform CharacterListGroup;
+    public DragCameraUI DragCameraUI;
 
     private List<CharacterInfo> _tempCharacterList = new List<CharacterInfo>();
-    private Dictionary<CharacterInfo, DragCharacter> _dragCharacterDic = new Dictionary<CharacterInfo, DragCharacter>();
+    private Dictionary<CharacterInfo, DragCharacterImage> _dragCharacterImageDic = new Dictionary<CharacterInfo, DragCharacterImage>();
+    private Dictionary<CharacterInfo, Image> _dragCharacterBGDic = new Dictionary<CharacterInfo, Image>();
 
     // Start is called before the first frame update
     void Start()
     {
-        DragCharacter dragCharacter;
+        Image dragCharacterBG;
+        DragCharacterImage dragCharacterImage;
         _tempCharacterList = new List<CharacterInfo>(CharacterManager.Instance.CharacterInfoGroup.CharacterList);
         for (int i=0; i<_tempCharacterList.Count; i++) 
         {
-            dragCharacter = Instantiate(DragCharacter);
-            dragCharacter.transform.SetParent(CharacterListGroup);
-            dragCharacter.SetData(_tempCharacterList[i]);
-            dragCharacter.DragEndHandler += OnDragEnd;
-            _dragCharacterDic.Add(_tempCharacterList[i], dragCharacter);
+            dragCharacterBG = Instantiate(DragCharacterBG);
+            dragCharacterBG.transform.SetParent(CharacterListGroup);
+            _dragCharacterBGDic.Add(_tempCharacterList[i], dragCharacterBG);
+
+            dragCharacterImage = Instantiate(DragCharacterImage);
+            dragCharacterImage.transform.SetParent(dragCharacterBG.transform);
+            dragCharacterImage.SetData(_tempCharacterList[i]);
+            dragCharacterImage.DragEndHandler += OnDragEnd;
+            _dragCharacterImageDic.Add(_tempCharacterList[i], dragCharacterImage);
         }
+    }
+    private void OnStartDrag(CharacterInfo character) 
+    {
+    
     }
 
     private void OnDragEnd(CharacterInfo character) 
     {
         _tempCharacterList.Remove(character);
-        _dragCharacterDic[character].gameObject.SetActive(false);
+        _dragCharacterImageDic[character].transform.SetParent(this.transform);
+        _dragCharacterBGDic[character].gameObject.SetActive(false);
     }
 }

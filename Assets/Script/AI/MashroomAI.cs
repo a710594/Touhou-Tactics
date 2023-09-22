@@ -77,7 +77,7 @@ public class MashroomAI : AI
             Vector2Int start = Utility.ConvertToVector2Int(_aiContext.CharacterInfo.Position);
             Vector2Int position = new Vector2Int();
             List<Vector2Int> list = new List<Vector2Int>(); //先挑選出距離 <= step + range 的座標
-            BattleInfo battleInfo = BattleController.Instance.BattleInfo;
+            BattleInfo battleInfo = BattleController.Instance.Info;
             foreach (KeyValuePair<Vector2Int, TileInfo> pair in battleInfo.TileInfoDic)
             {
                 position = pair.Key;
@@ -141,7 +141,7 @@ public class MashroomAI : AI
             int minDistance = -1;
             Vector2Int myPosition = Utility.ConvertToVector2Int(_aiContext.CharacterInfo.Position);
             Vector2Int targetPosition = Utility.ConvertToVector2Int(_target.Position);
-            BattleInfo battleInfo = BattleController.Instance.BattleInfo;
+            BattleInfo battleInfo = BattleController.Instance.Info;
             List<BattleCharacterInfo> characterList = BattleController.Instance.CharacterList;
 
             if (inRange) //目標必需在射程之內

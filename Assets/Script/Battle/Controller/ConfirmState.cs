@@ -34,7 +34,7 @@ namespace Battle
                 Instance.SetSkillArea(effect);
                 Vector2Int v = Instance._selectedPosition;
 
-                Instance.BattleInfo.TileComponentDic[Instance._selectedPosition].Select.gameObject.SetActive(true);
+                Instance.Info.TileComponentDic[Instance._selectedPosition].Select.gameObject.SetActive(true);
             }
 
             public override void Click(Vector2Int position)
@@ -56,7 +56,7 @@ namespace Battle
             public override void End()
             {
                 Instance._cameraController.Clear();
-                Instance.BattleInfo.TileComponentDic[Instance._selectedPosition].Select.gameObject.SetActive(false);
+                Instance.Info.TileComponentDic[Instance._selectedPosition].Select.gameObject.SetActive(false);
             }
         }
     }

@@ -18,7 +18,7 @@ namespace Battle
 
             public override void Begin(object obj)
             {
-                _info = Instance.BattleInfo;
+                _info = Instance.Info;
                 _character = Instance._selectedCharacter;
                 if (_character.SelectedSkill != null)
                 {
@@ -66,7 +66,7 @@ namespace Battle
                         }
                     }
 
-                    Dictionary<Vector2Int, TileInfo> tileDic = Instance.BattleInfo.TileInfoDic;
+                    Dictionary<Vector2Int, TileInfo> tileDic = Instance.Info.TileInfoDic;
                     Vector3 p = new Vector3(position.x, tileDic[position].Height, position.y);
                     if (_effect.Data.Track == EffectModel.TrackEnum.Straight)
                     {

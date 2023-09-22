@@ -106,7 +106,7 @@ namespace Battle
             public int GetDistance(Vector2Int start, Vector2Int goal, BattleCharacterInfo selectedCharacter)
             {
                 int distance = 0;
-                if (BattleInfo.TileInfoDic[goal].MoveCost == -1)
+                if (Info.TileInfoDic[goal].MoveCost == -1)
                 {
                     return -1;
                 }
@@ -136,7 +136,7 @@ namespace Battle
             public List<Vector2Int> GetStepList(Vector2Int start, BattleCharacterInfo selectedCharacter)
             {
                 int distance;
-                List<Vector2Int> stepList = Utility.GetRange(selectedCharacter.MOV, BattleInfo.Width, BattleInfo.Height, start);
+                List<Vector2Int> stepList = Utility.GetRange(selectedCharacter.MOV, Info.Width, Info.Height, start);
                 for (int i = 0; i < stepList.Count; i++)
                 {
                     distance = GetDistance(start, stepList[i], selectedCharacter);
@@ -175,22 +175,22 @@ namespace Battle
             {
                 List<Vector2Int> list = new List<Vector2Int>();
 
-                if (BattleInfo.TileInfoDic.ContainsKey(current + Vector2Int.left) && MoveCost(current, current + Vector2Int.left, faction) > 0)
+                if (Info.TileInfoDic.ContainsKey(current + Vector2Int.left) && MoveCost(current, current + Vector2Int.left, faction) > 0)
                 {
                     list.Add(current + Vector2Int.left);
                 }
 
-                if (BattleInfo.TileInfoDic.ContainsKey(current + Vector2Int.right) && MoveCost(current, current + Vector2Int.right, faction) > 0)
+                if (Info.TileInfoDic.ContainsKey(current + Vector2Int.right) && MoveCost(current, current + Vector2Int.right, faction) > 0)
                 {
                     list.Add(current + Vector2Int.right);
                 }
 
-                if (BattleInfo.TileInfoDic.ContainsKey(current + Vector2Int.up) && MoveCost(current, current + Vector2Int.up, faction) > 0)
+                if (Info.TileInfoDic.ContainsKey(current + Vector2Int.up) && MoveCost(current, current + Vector2Int.up, faction) > 0)
                 {
                     list.Add(current + Vector2Int.up);
                 }
 
-                if (BattleInfo.TileInfoDic.ContainsKey(current + Vector2Int.down) && MoveCost(current, current + Vector2Int.down, faction) > 0)
+                if (Info.TileInfoDic.ContainsKey(current + Vector2Int.down) && MoveCost(current, current + Vector2Int.down, faction) > 0)
                 {
                     list.Add(current + Vector2Int.down);
                 }
@@ -213,8 +213,8 @@ namespace Battle
                             }
                         }
                     }
-                    int height = BattleInfo.TileInfoDic[from].Height - BattleInfo.TileInfoDic[to].Height;
-                    cost = BattleInfo.TileInfoDic[to].MoveCost + Mathf.Abs(height);
+                    int height = Info.TileInfoDic[from].Height - Info.TileInfoDic[to].Height;
+                    cost = Info.TileInfoDic[to].MoveCost + Mathf.Abs(height);
                 }
                 catch (Exception ex)
                 {

@@ -90,7 +90,7 @@ namespace Battle
                     {
                         _characterList.Remove(_targetList[i]);
                         Instance._controllerDic[_targetList[i].ID].gameObject.SetActive(false);
-                        Instance.BattleInfo.TileInfoDic[Utility.ConvertToVector2Int(_targetList[i].Position)].HasCharacter = false;
+                        Instance.Info.TileInfoDic[Utility.ConvertToVector2Int(_targetList[i].Position)].HasCharacter = false;
                     }
                 }
 

@@ -22,7 +22,7 @@ namespace Battle
             }
         }
 
-        public BattleInfo BattleInfo;
+        public BattleInfo Info;
         public List<BattleCharacterInfo> CharacterList = new List<BattleCharacterInfo>();
 
         private readonly Color _white = new Color(1, 1, 1, 0.5f);
@@ -35,6 +35,7 @@ namespace Battle
         private StateContext _context = new StateContext();
         private BattleCharacterInfo _selectedCharacter;
         private BattleUI _battleUI;
+        private DragCameraUI _dragCameraUI;
         private GameObject _arrow;
         private List<Vector2Int> _areaList = new List<Vector2Int>();
         private Dictionary<int, BattleCharacterController> _controllerDic = new Dictionary<int, BattleCharacterController>();
@@ -45,7 +46,7 @@ namespace Battle
             _cameraController = Camera.main.GetComponent<CameraDraw>();
             _cameraRotate = Camera.main.GetComponent<CameraRotate>();
 
-            BattleInfo = info;
+            Info = info;
             //CharacterList.Add(new BattleCharacterInfo(CharacterManager.Instance.CharacterInfoGroup.CharacterList[0]));
             //CharacterList[0].ID = 1;
             //CharacterList[0].Position = new Vector3(0, 1, 2);
@@ -82,6 +83,8 @@ namespace Battle
             //CharacterList[5].Position = /*new Vector3(4, 1, 3)*/ RandomCharacterPosition(BattleCharacterInfo.FactionEnum.Enemy);
 
             //_battleUI.SetMapInfo(info.Width, info.Height);
+            _dragCameraUI = GameObject.Find("DragCameraUI").GetComponent<DragCameraUI>();
+            _dragCameraUI.Init(info.Width, info.Height);
 
             GameObject obj;
             for (int i = 0; i < CharacterList.Count; i++)
@@ -129,11 +132,23 @@ namespace Battle
             ((BattleControllerState)_context.CurrentState).Click(position);
         }
 
-        public void PlaceCharacter(Vector2Int position, CharacterInfo characterInfo)
+        public GameObject PlaceCharacter(Vector2Int position, CharacterInfo characterInfo)
         {
             if(_context.CurrentState is PrepareState) 
             {
-                ((PrepareState)_context.CurrentState).PlaceCharacter(position, characterInfo);
+                return ((PrepareState)_context.CurrentState).PlaceCharacter(position, characterInfo);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public void HideCharacter(CharacterInfo characterInfo) 
+        {
+            if (_context.CurrentState is PrepareState)
+            {
+                ((PrepareState)_context.CurrentState).HideCharacter(characterInfo);
             }
         }
 
@@ -221,8 +236,8 @@ namespace Battle
 
             for (int i = 0; i < list.Count; i++)
             {
-                BattleInfo.TileComponentDic[list[i]].Quad.gameObject.SetActive(true);
-                BattleInfo.TileComponentDic[list[i]].Quad.material.SetColor("_Color", color);
+                Info.TileComponentDic[list[i]].Quad.gameObject.SetActive(true);
+                Info.TileComponentDic[list[i]].Quad.material.SetColor("_Color", color);
             }
         }
 
@@ -230,18 +245,18 @@ namespace Battle
         {
             if (effect.Data.Area == "Through")
             {
-                _areaList = GetTroughAreaList(_selectedCharacter.Position, new Vector3(_selectedPosition.x, Instance.BattleInfo.TileInfoDic[_selectedPosition].Height, _selectedPosition.y));
+                _areaList = GetTroughAreaList(_selectedCharacter.Position, new Vector3(_selectedPosition.x, Instance.Info.TileInfoDic[_selectedPosition].Height, _selectedPosition.y));
             }
             else
             {
-                _areaList = GetNormalAreaList(BattleInfo.Width, BattleInfo.Height, effect, _selectedPosition);
+                _areaList = GetNormalAreaList(Info.Width, Info.Height, effect, _selectedPosition);
             }
             SetQuad(_areaList, _yellow);
         }
 
         public void ClearQuad()
         {
-            foreach (KeyValuePair<Vector2Int, TileComponent> pair in BattleInfo.TileComponentDic)
+            foreach (KeyValuePair<Vector2Int, TileComponent> pair in Info.TileComponentDic)
             {
                 pair.Value.Quad.gameObject.SetActive(false);
             }

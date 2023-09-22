@@ -266,7 +266,7 @@ namespace Battle
             int height;
             Vector2Int position;
             List<Vector3> list = Utility.DrawLine3D(from, to);
-            Dictionary<Vector2Int, TileInfo> tileDic = BattleInfo.TileInfoDic;
+            Dictionary<Vector2Int, TileInfo> tileDic = Info.TileInfoDic;
             for (int i = 0; i < list.Count; i++)
             {
                 position = Utility.ConvertToVector2Int(list[i]);
@@ -326,8 +326,8 @@ namespace Battle
 
             while (true) 
             {
-                v2 = new Vector2Int(Mathf.RoundToInt(Utility.RandomGaussian(0, BattleInfo.Width - 1)), Mathf.RoundToInt(Utility.RandomGaussian(0, BattleInfo.Height - 1)));
-                if(BattleInfo.TileInfoDic[v2].MoveCost > 0) 
+                v2 = new Vector2Int(Mathf.RoundToInt(Utility.RandomGaussian(0, Info.Width - 1)), Mathf.RoundToInt(Utility.RandomGaussian(0, Info.Height - 1)));
+                if(Info.TileInfoDic[v2].MoveCost > 0) 
                 {
                     //檢查位置是否有和其他角色重複
                     isRepeat = false;
@@ -343,12 +343,12 @@ namespace Battle
                     if (!isRepeat)
                     {
                         //檢查是否與其他角色之間有路徑
-                        for (int i = 0; i < BattleInfo.NoAttachList.Count; i++)
+                        for (int i = 0; i < Info.NoAttachList.Count; i++)
                         {
                             path = GetPath(v2, Utility.ConvertToVector2Int(CharacterList[i].Position), CharacterList[i].Faction);
                             if (path != null)
                             {
-                                v3 = new Vector3(v2.x, BattleInfo.TileInfoDic[v2].Height, v2.y);
+                                v3 = new Vector3(v2.x, Info.TileInfoDic[v2].Height, v2.y);
                                 hasPath = true;
                                 break;
                             }

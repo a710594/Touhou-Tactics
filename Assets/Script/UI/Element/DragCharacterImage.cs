@@ -6,43 +6,62 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Battle;
 
-public class DragCharacter : MonoBehaviour, IDragHandler, IEndDragHandler
+public class DragCharacterImage : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler
 {
+    public Action<CharacterInfo> DragBeginHandler;
     public Action<CharacterInfo> DragEndHandler;
 
-    public Image BG;
-    public Image Drag;
+    public Image Image;
 
+    private bool _drag = false;
     private CharacterInfo _character;
+    private Transform _anchor;
 
     public void SetData(CharacterInfo character) 
     {
         _character = character;
         Sprite sprite = Resources.Load<Sprite>("Image/" + character.Controller + "_F");
-        BG.sprite = sprite;
-        Drag.sprite = sprite;
+        Image.sprite = sprite;
+        Image.transform.localPosition = Vector3.zero;
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        _drag = true;
+        BattleController.Instance.HideCharacter(_character);
+        Image.color = Color.white;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        Drag.rectTransform.anchoredPosition += eventData.delta;
+        Image.rectTransform.anchoredPosition += eventData.delta;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        _drag = false;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         Vector2Int position = new Vector2Int();
         if (Physics.Raycast(ray, out hit, 100))
         {
             position = Utility.ConvertToVector2Int(hit.transform.position);
-            BattleController.Instance.PlaceCharacter(position, _character);
+            GameObject obj = BattleController.Instance.PlaceCharacter(position, _character);
+            _anchor = obj.transform;
 
             if(DragEndHandler != null) 
             {
                 DragEndHandler(_character);
             }
         }
-        Drag.transform.position = BG.transform.position;
+        Image.color = Color.clear;
+    }
+
+    void Update() 
+    {
+        if (_anchor != null && !_drag)
+        {
+            this.transform.position = Camera.main.WorldToScreenPoint(_anchor.position);
+        }
     }
 }

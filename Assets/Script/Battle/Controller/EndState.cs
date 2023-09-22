@@ -16,7 +16,7 @@ namespace Battle
             {
                 _characterList = Instance.CharacterList;
                 _character = Instance._selectedCharacter;
-                Dictionary<Vector2Int, TileInfo> tileDic = Instance.BattleInfo.TileInfoDic;
+                Dictionary<Vector2Int, TileInfo> tileDic = Instance.Info.TileInfoDic;
 
                 if (_characterList.Contains(_character))
                 {
