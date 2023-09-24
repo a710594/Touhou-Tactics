@@ -47,14 +47,21 @@ public class DragCharacterImage : MonoBehaviour, IDragHandler, IEndDragHandler, 
         {
             position = Utility.ConvertToVector2Int(hit.transform.position);
             GameObject obj = BattleController.Instance.PlaceCharacter(position, _character);
-            _anchor = obj.transform;
-
-            if(DragEndHandler != null) 
+            if (obj != null)
             {
-                DragEndHandler(_character);
+                _anchor = obj.transform;
+                Image.color = Color.clear;
+
+                if (DragEndHandler != null)
+                {
+                    DragEndHandler(_character);
+                }
             }
         }
-        Image.color = Color.clear;
+        else
+        {
+            transform.localPosition = Vector3.zero;
+        }
     }
 
     void Update() 

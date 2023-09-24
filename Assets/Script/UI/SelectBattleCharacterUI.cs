@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Battle;
 
 public class SelectBattleCharacterUI : MonoBehaviour
 {
@@ -9,13 +10,14 @@ public class SelectBattleCharacterUI : MonoBehaviour
     public Image DragCharacterBG;
     public Transform CharacterListGroup;
     public DragCameraUI DragCameraUI;
+    public Button ConfirmButton;
 
     private List<CharacterInfo> _tempCharacterList = new List<CharacterInfo>();
     private Dictionary<CharacterInfo, DragCharacterImage> _dragCharacterImageDic = new Dictionary<CharacterInfo, DragCharacterImage>();
     private Dictionary<CharacterInfo, Image> _dragCharacterBGDic = new Dictionary<CharacterInfo, Image>();
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         Image dragCharacterBG;
         DragCharacterImage dragCharacterImage;
@@ -32,6 +34,8 @@ public class SelectBattleCharacterUI : MonoBehaviour
             dragCharacterImage.DragEndHandler += OnDragEnd;
             _dragCharacterImageDic.Add(_tempCharacterList[i], dragCharacterImage);
         }
+
+        ConfirmButton.onClick.AddListener(ConfirmOnClick);
     }
     private void OnStartDrag(CharacterInfo character) 
     {
@@ -43,5 +47,13 @@ public class SelectBattleCharacterUI : MonoBehaviour
         _tempCharacterList.Remove(character);
         _dragCharacterImageDic[character].transform.SetParent(this.transform);
         _dragCharacterBGDic[character].gameObject.SetActive(false);
+    }
+
+    private void ConfirmOnClick() 
+    {
+        if(_tempCharacterList.Count == 0) 
+        {
+            BattleController.Instance.SetCharacterState();
+        }
     }
 }

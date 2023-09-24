@@ -42,7 +42,7 @@ namespace Battle
 
         public void Init(int floor, int lv, BattleInfo info)
         {
-            //_battleUI = GameObject.Find("BattleUI").GetComponent<BattleUI>();
+            _battleUI = GameObject.Find("BattleUI").GetComponent<BattleUI>();
             _cameraController = Camera.main.GetComponent<CameraDraw>();
             _cameraRotate = Camera.main.GetComponent<CameraRotate>();
 
@@ -82,7 +82,6 @@ namespace Battle
             //CharacterList[5].AI = new MashroomAI(CharacterList[5]);
             //CharacterList[5].Position = /*new Vector3(4, 1, 3)*/ RandomCharacterPosition(BattleCharacterInfo.FactionEnum.Enemy);
 
-            //_battleUI.SetMapInfo(info.Width, info.Height);
             _dragCameraUI = GameObject.Find("DragCameraUI").GetComponent<DragCameraUI>();
             _dragCameraUI.Init(info.Width, info.Height);
 
@@ -95,10 +94,11 @@ namespace Battle
                 _controllerDic.Add(CharacterList[i].ID, obj.GetComponent<BattleCharacterController>());
                 _controllerDic[CharacterList[i].ID].MoveEndHandler += OnMoveEnd;
                 _controllerDic[CharacterList[i].ID].SetDirectionHandler += SetDirection;
-                //_battleUI.SetLittleHpBarAnchor(CharacterList[i].ID, _controllerDic[CharacterList[i].ID]);
-                //_battleUI.SetLittleHpBarValue(CharacterList[i].ID, CharacterList[i]);
-                //_battleUI.SetFloatingNumberPoolAnchor(CharacterList[i].ID, _controllerDic[CharacterList[i].ID]);
+                _battleUI.SetLittleHpBarAnchor(CharacterList[i].ID, _controllerDic[CharacterList[i].ID]);
+                _battleUI.SetLittleHpBarValue(CharacterList[i].ID, CharacterList[i]);
+                _battleUI.SetFloatingNumberPoolAnchor(CharacterList[i].ID, _controllerDic[CharacterList[i].ID]);
             }
+            _battleUI.gameObject.SetActive(false);
 
             //SortCharacterList(true);
 
@@ -150,6 +150,11 @@ namespace Battle
             {
                 ((PrepareState)_context.CurrentState).HideCharacter(characterInfo);
             }
+        }
+
+        public void SetCharacterState() 
+        {
+            _context.SetState<CharacterState>();
         }
 
         public void SetActionState()
