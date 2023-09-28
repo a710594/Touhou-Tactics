@@ -6,7 +6,6 @@ public class CharacterInfo
 {
     public int ID;
     public string Name;
-    public int Lv;
     public int MaxHP;
     public int CurrentHP;
     public int STR; //Strength 力量 影響物理傷害
@@ -28,15 +27,22 @@ public class CharacterInfo
     public List<Support> SupportList = new List<Support>();
     public List<Passive> PassiveList = new List<Passive>();
 
+    [System.NonSerialized]
+    private JobModel _job;
+
+    private int _jobId;
+
     public CharacterInfo() { }
 
     public CharacterInfo(JobModel job)
     {
         ID = job.ID;
         Name = job.Name;
-        Lv = 1;
+        _job = job;
+        _jobId = job.ID;
 
-        float n = (1 + (Lv - 1) * 0.1f);
+        int lv = 1;
+        float n = (1 + (lv - 1) * 0.1f);
         MaxHP = Mathf.RoundToInt(job.HP * n);
         CurrentHP = MaxHP;
         STR = Mathf.RoundToInt(job.STR * n);
@@ -96,5 +102,23 @@ public class CharacterInfo
         {
             SupportList.Add(new Support(DataContext.Instance.SupportDic[job.Support_5]));
         }
+    }
+
+    public void Init() 
+    {
+        _job = DataContext.Instance.JobDic[_jobId];
+    }
+
+    public void SetLv(int lv) 
+    {
+        float n = (1 + (lv - 1) * 0.1f);
+        MaxHP = Mathf.RoundToInt(_job.HP * n);
+        CurrentHP = MaxHP;
+        STR = Mathf.RoundToInt(_job.STR * n);
+        CON = Mathf.RoundToInt(_job.CON * n);
+        INT = Mathf.RoundToInt(_job.INT * n);
+        MEN = Mathf.RoundToInt(_job.MEN * n);
+        DEX = Mathf.RoundToInt(_job.DEX * n);
+        AGI = Mathf.RoundToInt(_job.AGI * n);
     }
 }

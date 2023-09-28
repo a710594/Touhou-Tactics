@@ -163,10 +163,10 @@ public class BattleCharacterInfo
         CurrentWT = WT;
     }
 
-    public BattleCharacterInfo(CharacterInfo info)
+    public BattleCharacterInfo(CharacterInfo info, int lv)
     {
         Name = info.Name;
-        Lv = info.Lv;
+        Lv = lv;
 
         MaxHP = info.MaxHP;
         STR = info.STR;

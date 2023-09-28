@@ -32,7 +32,7 @@ namespace Battle
                 BattleCharacterInfo battleCharacter;
                 foreach (KeyValuePair<CharacterInfo, GameObject> pair in _tempDic)
                 {
-                    battleCharacter = new BattleCharacterInfo(pair.Key);
+                    battleCharacter = new BattleCharacterInfo(pair.Key, CharacterManager.Instance.Lv);
                     battleCharacter.ID = _characterList.Count + 1;
                     battleCharacter.Position = pair.Value.transform.position;
                     _characterList.Add(battleCharacter);
@@ -45,6 +45,7 @@ namespace Battle
                     Instance._battleUI.SetFloatingNumberPoolAnchor(battleCharacter.ID, Instance._controllerDic[battleCharacter.ID]);
                 }
                 Instance._battleUI.gameObject.SetActive(true);
+                Instance._selectBattleCharacterUI.gameObject.SetActive(false);
 
                 Instance.SortCharacterList(true);
 
@@ -57,6 +58,15 @@ namespace Battle
             {
                 if (_info.NoAttachList.Contains(position))
                 {
+                    //不能和其他角色重疊
+                    foreach (KeyValuePair<CharacterInfo, GameObject> pair in _tempDic)
+                    {
+                        if (pair.Key != characterInfo && Utility.ConvertToVector2Int(pair.Value.transform.position) == position)
+                        {
+                            return null;
+                        }
+                    }
+
                     if (!_tempDic.ContainsKey(characterInfo))
                     {
                         GameObject obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/" + characterInfo.Controller), Vector3.zero, Quaternion.identity);
@@ -65,15 +75,6 @@ namespace Battle
                     }
                     else
                     {
-                        //不能和其他角色重疊
-                        foreach(KeyValuePair<CharacterInfo, GameObject> pair in _tempDic)
-                        {
-                            if(pair.Key != characterInfo && Utility.ConvertToVector2Int(pair.Value.transform.position) == position) 
-                            {
-                                return null;
-                            }
-                        }
-
                         _tempDic[characterInfo].SetActive(true);
                         _tempDic[characterInfo].transform.position = new Vector3(position.x, _info.TileInfoDic[position].Height, position.y);
                     }

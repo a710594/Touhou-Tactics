@@ -57,6 +57,10 @@ public class DragCharacterImage : MonoBehaviour, IDragHandler, IEndDragHandler, 
                     DragEndHandler(_character);
                 }
             }
+            else
+            {
+                transform.localPosition = Vector3.zero;
+            }
         }
         else
         {

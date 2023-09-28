@@ -31,33 +31,8 @@ namespace Explore
         {
             _grid = grid;
             _rooms = rooms;
-            Player = Camera.main.GetComponent<ExploreCharacterController>();
-            Player.MoveHandler += OnPlayerMove;
-            Player.RotateHandler += OnPlayerRotate;
 
-            GameObject obj;
-            MashroomAI mashroom;
-            for (int i = 0; i < 1; i++)
-            {
-                obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Mashroom"), Vector3.zero, Quaternion.identity);
-                mashroom = obj.GetComponent<MashroomAI>();
-                mashroom.Init(rooms);
-                enemyList.Add(mashroom);
-            }
-            //for (int i = 0; i < 5; i++)
-            //{
-            //    obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/MountainPig"), Vector3.zero, Quaternion.identity);
-            //    mashroom = obj.GetComponent<MashroomAI>();
-            //    mashroom.Init(rooms);
-            //    enemyList.Add(mashroom);
-            //}
-            //for (int i = 0; i < 5; i++)
-            //{
-            //    obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Turtle"), Vector3.zero, Quaternion.identity);
-            //    mashroom = obj.GetComponent<MashroomAI>();
-            //    mashroom.Init(rooms);
-            //    enemyList.Add(mashroom);
-            //}
+            SetObject();
         }
 
         public bool IsWalkable(Vector3 position) //for player
@@ -131,6 +106,25 @@ namespace Explore
         {
             Generator2D generator2D = GameObject.Find("Generator2D").GetComponent<Generator2D>();
             generator2D.Relod(_grid, _rooms);
+            SetObject();
+        }
+
+        private void SetObject() 
+        {
+            Camera.main.transform.position = new Vector3((int)_rooms[0].bounds.center.x, 1, (int)_rooms[0].bounds.center.y);
+            Player = Camera.main.GetComponent<ExploreCharacterController>();
+            Player.MoveHandler += OnPlayerMove;
+            Player.RotateHandler += OnPlayerRotate;
+
+            GameObject obj;
+            MashroomAI mashroom;
+            for (int i = 0; i < 1; i++)
+            {
+                obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Mashroom"), Vector3.zero, Quaternion.identity);
+                mashroom = obj.GetComponent<MashroomAI>();
+                mashroom.Init(_rooms);
+                enemyList.Add(mashroom);
+            }
         }
 
         private void OnPlayerMove() 

@@ -329,6 +329,12 @@ namespace Battle
                 v2 = new Vector2Int(Mathf.RoundToInt(Utility.RandomGaussian(0, Info.Width - 1)), Mathf.RoundToInt(Utility.RandomGaussian(0, Info.Height - 1)));
                 if(Info.TileInfoDic[v2].MoveCost > 0) 
                 {
+                    //檢查是否為保留區
+                    if (Info.NoAttachList.Contains(v2)) 
+                    {
+                        continue;
+                    }
+
                     //檢查位置是否有和其他角色重複
                     isRepeat = false;
                     for (int i = 0; i < CharacterList.Count; i++)

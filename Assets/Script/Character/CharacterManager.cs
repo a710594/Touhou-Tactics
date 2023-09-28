@@ -19,6 +19,8 @@ public class CharacterManager
         }
     }
 
+    public int Lv;
+    public int Exp;
     public CharacterInfoGroup CharacterInfoGroup;
 
     public void Init() 
@@ -27,11 +29,17 @@ public class CharacterManager
         if (characterInfoGroup != null)
         {
             CharacterInfoGroup = characterInfoGroup;
+            for (int i=0; i<characterInfoGroup.CharacterList.Count; i++) 
+            {
+                characterInfoGroup.CharacterList[i].Init();
+            }
         }
         else
         {
+            Lv = 1;
+            Exp = 0;
             CharacterInfoGroup = new CharacterInfoGroup();
-            CharacterInfoGroup.Lv = 1;
+            CharacterInfoGroup.Lv = Lv;
             CharacterInfoGroup.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[1]));
             CharacterInfoGroup.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[2]));
             CharacterInfoGroup.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[3]));
@@ -48,5 +56,26 @@ public class CharacterManager
     public void Delete()
     {
         DataContext.Instance.DeleteData(_fileName);
+    }
+
+    public void AddExp(int addExp) 
+    {
+        int needExp;
+        while (addExp>0) 
+        {
+            needExp = (int)Mathf.Pow(Lv, 3) - Exp;
+            if (addExp >= needExp) 
+            {
+                addExp -= needExp;
+                Lv++;
+                Exp = 0;
+            }
+            else
+            {
+                Exp += addExp;
+                addExp = 0;
+            }
+        }
+        Debug.Log(Lv + " " + Exp);
     }
 }

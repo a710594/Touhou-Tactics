@@ -20,4 +20,19 @@ public class EnemyModel
     public int DOWN;
     public int WT;
     public string Controller;
+    public int Drop_1;
+    public int Drop_2;
+    public List<int> DropList = new List<int>();
+
+    public void GetDropList()
+    {
+        if(Drop_1 != -1) 
+        {
+            DropList.Add(Drop_1);
+        }
+        if (Drop_2 != -1)
+        {
+            DropList.Add(Drop_2);
+        }
+    }
 }

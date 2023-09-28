@@ -8,6 +8,7 @@ public class ItemModel
     {
         Medicine = 1,
         Card,
+        Material,
     }
 
     public CategoryEnum Category;

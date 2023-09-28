@@ -21,7 +21,10 @@ public class Item
         ID = id;
         Data = DataContext.Instance.ItemDic[category][id];
         Amount = amount;
-        Effect = EffectFactory.GetEffect(Data.EffectType, Data.EffectID);
+        if (Data.EffectType != EffectModel.TypeEnum.None)
+        {
+            Effect = EffectFactory.GetEffect(Data.EffectType, Data.EffectID);
+        }
     }
 
     public virtual void SetEffect(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)

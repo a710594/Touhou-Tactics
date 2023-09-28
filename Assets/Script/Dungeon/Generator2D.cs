@@ -60,9 +60,8 @@ public class Generator2D : MonoBehaviour {
         Triangulate();
         CreateHallways();
         PathfindHallways();
-        Explore.ExploreManager.Instance.SetData(grid, rooms);
         PlaceWall();
-        Camera.main.transform.position = new Vector3((int)rooms[0].bounds.center.x, 1, (int)rooms[0].bounds.center.y);
+        Explore.ExploreManager.Instance.SetData(grid, rooms);
     }
 
     public void Relod(Grid2D<Generator2D.CellType> grid, List<Generator2D.Room> rooms)
@@ -264,47 +263,60 @@ public class Generator2D : MonoBehaviour {
     {
         Vector3 newPosition;
         newPosition = new Vector3(position.x - 1, 0, position.z); //左
-        if (ExploreManager.Instance.InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None && grid[(int)newPosition.x, (int)newPosition.z] != CellType.Wall)
+        if (InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None && grid[(int)newPosition.x, (int)newPosition.z] != CellType.Wall)
         {
             return true;
         }
         newPosition = new Vector3(position.x + 1, 0, position.z); //右
-        if (ExploreManager.Instance.InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None && grid[(int)newPosition.x, (int)newPosition.z] != CellType.Wall)
+        if (InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None && grid[(int)newPosition.x, (int)newPosition.z] != CellType.Wall)
         {
             return true;
         }
         newPosition = new Vector3(position.x, 0, position.z - 1); //下
-        if (ExploreManager.Instance.InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None && grid[(int)newPosition.x, (int)newPosition.z] != CellType.Wall)
+        if (InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None && grid[(int)newPosition.x, (int)newPosition.z] != CellType.Wall)
         {
             return true;
         }
         newPosition = new Vector3(position.x, 0, position.z + 1); //上
-        if (ExploreManager.Instance.InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None && grid[(int)newPosition.x, (int)newPosition.z] != CellType.Wall)
+        if (InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None && grid[(int)newPosition.x, (int)newPosition.z] != CellType.Wall)
         {
             return true;
         }
         newPosition = new Vector3(position.x - 1, 0, position.z - 1); //左下
-        if (ExploreManager.Instance.InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None && grid[(int)newPosition.x, (int)newPosition.z] != CellType.Wall)
+        if (InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None && grid[(int)newPosition.x, (int)newPosition.z] != CellType.Wall)
         {
             return true;
         }
         newPosition = new Vector3(position.x - 1, 0, position.z + 1); //左上
-        if (ExploreManager.Instance.InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None && grid[(int)newPosition.x, (int)newPosition.z] != CellType.Wall)
+        if (InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None && grid[(int)newPosition.x, (int)newPosition.z] != CellType.Wall)
         {
             return true;
         }
         newPosition = new Vector3(position.x + 1, 0, position.z - 1); //右下
-        if (ExploreManager.Instance.InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None && grid[(int)newPosition.x, (int)newPosition.z] != CellType.Wall)
+        if (InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None && grid[(int)newPosition.x, (int)newPosition.z] != CellType.Wall)
         {
             return true;
         }
         newPosition = new Vector3(position.x + 1, 0, position.z + 1); //右上
-        if (ExploreManager.Instance.InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None && grid[(int)newPosition.x, (int)newPosition.z] != CellType.Wall)
+        if (InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None && grid[(int)newPosition.x, (int)newPosition.z] != CellType.Wall)
         {
             return true;
         }
         return false;
     }
+
+    private bool InBound(Vector3 position)
+    {
+        if (position.x >= 0 && position.x < grid.Size.x && position.z >= 0 && position.z < grid.Size.y)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     void PlaceCube(Vector2Int location, Vector2Int size, Material material) {
         for (int i=0; i<size.x; i++) 
         {

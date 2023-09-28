@@ -96,6 +96,7 @@ public class DataContext
         EnemyList = Load<List<EnemyModel>>("Enemy", PrePathEnum.Data);
         for (int i = 0; i < EnemyList.Count; i++)
         {
+            EnemyList[i].GetDropList();
             EnemyDic.Add(EnemyList[i].ID, EnemyList[i]);
         }
 

@@ -1,62 +1,10 @@
-[
-  {
-    "Category": 1,
-    "ID": 1,
-    "Name": "回復藥",
-    "Description": "可以回復HP",
-    "EffectType": 8,
-    "EffectID": 1,
-    "Job": -1,
-    "PP": 0
-  },
-  {
-    "Category": 2,
-    "ID": 1,
-    "Name": "夢想封印",
-    "Description": "對範圍內目標造成傷害並降低物理攻擊與魔法攻擊",
-    "EffectType": 1,
-    "EffectID": 6,
-    "Job": 1,
-    "PP": 3
-  },
-  {
-    "Category": 2,
-    "ID": 2,
-    "Name": "極限火花",
-    "Description": "對敵人造成大量魔法傷害的遠距離貫穿攻擊",
-    "EffectType": 2,
-    "EffectID": 4,
-    "Job": 2,
-    "PP": 3
-  },
-  {
-    "Category": 2,
-    "ID": 3,
-    "Name": "天文密葬法",
-    "Description": "範圍與射程超大的物理攻擊",
-    "EffectType": 1,
-    "EffectID": 7,
-    "Job": 3,
-    "PP": 3
-  },
-  {
-    "Category": 2,
-    "ID": 4,
-    "Name": "未來永劫斬",
-    "Description": "威力超高的近距離物理攻擊",
-    "EffectType": 1,
-    "EffectID": 8,
-    "Job": 4,
-    "PP": 3
-  },
-  {
-    "Category": 2,
-    "ID": 5,
-    "Name": "奇美拉的惡夢",
-    "Description": "威力超高的遠距離魔法攻擊",
-    "EffectType": 2,
-    "EffectID": 5,
-    "Job": 5,
-    "PP": 3
-  }
-]
+[{"Category":1,"ID":1,"Name":"回復藥","Description":"可以回復HP","EffectType":8,"EffectID":1,"Job":-1,"PP":0},
+{"Category":2,"ID":1,"Name":"夢想封印","Description":"對範圍內目標造成傷害並降低物理攻擊與魔法攻擊","EffectType":1,"EffectID":6,"Job":1,"PP":3},
+{"Category":2,"ID":2,"Name":"極限火花","Description":"對敵人造成大量魔法傷害的遠距離貫穿攻擊","EffectType":2,"EffectID":4,"Job":2,"PP":3},
+{"Category":2,"ID":3,"Name":"天文密葬法","Description":"範圍與射程超大的物理攻擊","EffectType":1,"EffectID":7,"Job":3,"PP":3},
+{"Category":2,"ID":4,"Name":"未來永劫斬","Description":"威力超高的近距離物理攻擊","EffectType":1,"EffectID":8,"Job":4,"PP":3},
+{"Category":2,"ID":5,"Name":"奇美拉的惡夢","Description":"威力超高的遠距離魔法攻擊","EffectType":2,"EffectID":5,"Job":5,"PP":3},
+{"Category":3,"ID":1,"Name":"菌傘","Description":"可以當成食材","EffectType":-1,"EffectID":-1,"Job":-1,"PP":-1},
+{"Category":3,"ID":2,"Name":"龜殼","Description":"可以作為裝備的材料","EffectType":-1,"EffectID":-1,"Job":-1,"PP":-1},
+{"Category":3,"ID":3,"Name":"獸肉","Description":"可以當成食材","EffectType":-1,"EffectID":-1,"Job":-1,"PP":-1},
+{"Category":3,"ID":4,"Name":"獸皮","Description":"可以作為裝備的材料","EffectType":-1,"EffectID":-1,"Job":-1,"PP":-1}]

@@ -11,6 +11,7 @@ public class EnemyGroupModel
     public int Enemy_3;
     public int Enemy_4;
     public int Enemy_5;
+    public int Exp;
 
     public List<int> EnemyList = new List<int>();
 

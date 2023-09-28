@@ -165,7 +165,7 @@ public class BattleUI : MonoBehaviour
 #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.V)) 
         {
-        
+            BattleController.Instance.SetWin();
         }
 #endif
     }

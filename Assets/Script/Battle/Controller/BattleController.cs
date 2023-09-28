@@ -36,13 +36,18 @@ namespace Battle
         private BattleCharacterInfo _selectedCharacter;
         private BattleUI _battleUI;
         private DragCameraUI _dragCameraUI;
+        private SelectBattleCharacterUI _selectBattleCharacterUI;
+        private BattleResultUI _battleResultUI;
         private GameObject _arrow;
+        private EnemyGroupModel _enemyGroup;
         private List<Vector2Int> _areaList = new List<Vector2Int>();
         private Dictionary<int, BattleCharacterController> _controllerDic = new Dictionary<int, BattleCharacterController>();
 
         public void Init(int floor, int lv, BattleInfo info)
         {
             _battleUI = GameObject.Find("BattleUI").GetComponent<BattleUI>();
+            _selectBattleCharacterUI = GameObject.Find("SelectBattleCharacterUI").GetComponent<SelectBattleCharacterUI>();
+            _battleResultUI = GameObject.Find("BattleResultUI").GetComponent<BattleResultUI>();
             _cameraController = Camera.main.GetComponent<CameraDraw>();
             _cameraRotate = Camera.main.GetComponent<CameraRotate>();
 
@@ -64,7 +69,8 @@ namespace Battle
             //CharacterList[4].Position = new Vector3(0, 1, 0);
 
             KeyValuePair<int, EnemyGroupModel> pair = DataContext.Instance.EnemyGroupDic[floor].ElementAt(UnityEngine.Random.Range(0, DataContext.Instance.EnemyGroupDic[floor].Count));
-            List<int> enemyList = pair.Value.EnemyList;
+            _enemyGroup = pair.Value;
+            List<int> enemyList = _enemyGroup.EnemyList;
             int index = 0;
             for (int i=0; i< enemyList.Count; i++) 
             {
@@ -99,6 +105,7 @@ namespace Battle
                 _battleUI.SetFloatingNumberPoolAnchor(CharacterList[i].ID, _controllerDic[CharacterList[i].ID]);
             }
             _battleUI.gameObject.SetActive(false);
+            _battleResultUI.gameObject.SetActive(false);
 
             //SortCharacterList(true);
 
@@ -363,6 +370,11 @@ namespace Battle
                     }
                 }
             });
+        }
+
+        public void SetWin() 
+        {
+            _context.SetState<WinState>();
         }
 
         private class BattleControllerState : State

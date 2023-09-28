@@ -14,10 +14,25 @@ namespace Battle
 
             public override void Begin(object obj) 
             {
-                SceneController.Instance.ChangeScene("Explore", () =>
+                int itemId;
+                EnemyGroupModel enemyGroup = Instance._enemyGroup;
+                EnemyModel enemy;
+                List<int> itemList = new List<int>();
+                for (int i=0; i<enemyGroup.EnemyList.Count; i++) 
                 {
-                    Explore.ExploreManager.Instance.Reload();
-                });
+                    enemy = DataContext.Instance.EnemyDic[enemyGroup.EnemyList[i]];
+                    itemId = enemy.DropList[Random.Range(0, enemy.DropList.Count)];
+                    itemList.Add(itemId);
+                    ItemManager.Instance.AddItem(ItemModel.CategoryEnum.Material, itemId, 1);
+                }
+                Instance._battleUI.gameObject.SetActive(false);
+                Instance._battleResultUI.gameObject.SetActive(true);
+                Instance._battleResultUI.SetData(CharacterManager.Instance.Lv, CharacterManager.Instance.Exp, Instance._enemyGroup.Exp, itemList);
+                CharacterManager.Instance.AddExp(Instance._enemyGroup.Exp);
+                //SceneController.Instance.ChangeScene("Explore", () =>
+                //{
+                //    Explore.ExploreManager.Instance.Reload();
+                //});
             }
         }
     }
