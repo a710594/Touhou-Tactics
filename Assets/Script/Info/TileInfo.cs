@@ -34,6 +34,13 @@ public class TileInfo
         _tileMoveCost = tile.MoveCost;
     }
 
+    public TileInfo(TileSetting tile)
+    {
+        TileID = tile.ID;
+        Height = tile.Height;
+        _tileMoveCost = tile.MoveCost;
+    }
+
     public void SetAttach(string id, int moveCost) 
     {
         AttachID = id;

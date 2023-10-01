@@ -12,6 +12,7 @@ public class DataContext
 {
     private static readonly string _dataPrePath = Application.streamingAssetsPath + "./Data/";
     private static readonly string _savePrePath = Application.streamingAssetsPath + "./Save/";
+    private static readonly string _settingPrePath = Application.streamingAssetsPath + "./Setting/";
 
     private static DataContext _instance;
     public static DataContext Instance
@@ -30,6 +31,7 @@ public class DataContext
     {
         Data,
         Save,
+        Setting,
     }
 
     public List<JobModel> JobList = new List<JobModel>();
@@ -187,6 +189,10 @@ public class DataContext
             {
                 prePath = _savePrePath;
             }
+            else if (prePathEnum == PrePathEnum.Setting)
+            {
+                prePath = _settingPrePath;
+            }
 
             if (fileName == "")
             {
@@ -221,6 +227,11 @@ public class DataContext
             {
                 prePath = _savePrePath;
             }
+            else if (prePathEnum == PrePathEnum.Setting)
+            {
+                prePath = _settingPrePath;
+            }
+
             if (fileName == "")
             {
                 path = Path.Combine(prePath, typeof(T).Name + ".json");

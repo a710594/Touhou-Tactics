@@ -92,7 +92,7 @@ namespace Explore
                     {
                         SceneController.Instance.ChangeScene("Battle", () =>
                         {
-                            RandomMapGenerator randomMapGenerator = GameObject.Find("Tilemap").GetComponent<RandomMapGenerator>();
+                            BattleMapGenerator randomMapGenerator = GameObject.Find("Tilemap").GetComponent<BattleMapGenerator>();
                             randomMapGenerator.Generate(out BattleInfo battleInfo);
                             PathManager.Instance.LoadData(battleInfo.TileInfoDic);
                             BattleController.Instance.Init(1, 1, battleInfo);
