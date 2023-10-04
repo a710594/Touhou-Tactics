@@ -24,10 +24,10 @@ namespace Explore
 
         private Timer _timer = new Timer();
         private Grid2D<Generator2D.CellType> _grid;
-        private List<Generator2D.Room> _rooms;
+        private List<Room> _rooms;
         private List<MashroomAI> enemyList = new List<MashroomAI>();
 
-        public void SetData(Grid2D<Generator2D.CellType> grid, List<Generator2D.Room> rooms)
+        public void SetData(Grid2D<Generator2D.CellType> grid, List<Room> rooms)
         {
             _grid = grid;
             _rooms = rooms;

@@ -9,7 +9,7 @@ namespace Explore
         public GameObject Back;
         public Vector3 MoveTo;
 
-        public virtual void Init(List<Generator2D.Room> rooms)
+        public virtual void Init(List<Room> rooms)
         {
         }
 

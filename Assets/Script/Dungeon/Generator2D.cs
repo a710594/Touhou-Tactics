@@ -13,19 +13,6 @@ public class Generator2D : MonoBehaviour {
         Wall,
     }
 
-    public class Room {
-        public RectInt bounds;
-
-        public Room(Vector2Int location, Vector2Int size) {
-            bounds = new RectInt(location, size);
-        }
-
-        public static bool Intersect(Room a, Room b) {
-            return !((a.bounds.position.x >= (b.bounds.position.x + b.bounds.size.x)) || ((a.bounds.position.x + a.bounds.size.x) <= b.bounds.position.x)
-                || (a.bounds.position.y >= (b.bounds.position.y + b.bounds.size.y)) || ((a.bounds.position.y + a.bounds.size.y) <= b.bounds.position.y));
-        }
-    }
-
     [SerializeField]
     Vector2Int size;
     [SerializeField]
@@ -64,7 +51,7 @@ public class Generator2D : MonoBehaviour {
         Explore.ExploreManager.Instance.SetData(grid, rooms);
     }
 
-    public void Relod(Grid2D<Generator2D.CellType> grid, List<Generator2D.Room> rooms)
+    public void Relod(Grid2D<Generator2D.CellType> grid, List<Room> rooms)
     {
         for (int i = 0; i < rooms.Count; i++)
         {

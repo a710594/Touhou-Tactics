@@ -7,9 +7,9 @@ namespace Explore
 {
     public class MashroomAI : AI
     {
-        public override void Init(List<Generator2D.Room> rooms)
+        public override void Init(List<Room> rooms)
         {
-            Generator2D.Room room = rooms[/*Random.Range(0, rooms.Count)*/0];
+            Room room = rooms[/*Random.Range(0, rooms.Count)*/0];
             //Vector3 position = new Vector3(Random.Range(room.bounds.xMin, room.bounds.xMax), 1, Random.Range(room.bounds.yMin, room.bounds.yMax));
             Vector3 position = new Vector3((int)rooms[0].bounds.center.x, 1, (int)rooms[0].bounds.center.y + 1);
             transform.position = position;
