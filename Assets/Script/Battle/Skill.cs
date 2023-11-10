@@ -17,22 +17,7 @@ public class Skill
     public Skill(SkillModel data)
     {
         Data = data;
-        Effect = EffectFactory.GetEffect(data.EffectType, data.EffectID);
-    }
-
-    public virtual void SetEffect(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)
-    {
-        Effect.SetEffect(user, target, floatingList, characterList);
-        user.HasUseSkill = true;
-        user.ActionCount--;
-        if(user.CurrentPP < BattleCharacterInfo.MaxPP) 
-        {
-            user.CurrentPP++;
-        }
-        if (Data.CD > 0)
-        {
-            CurrentCD = Data.CD + 1; //要加一的原因是為了抵銷本回合的 CheckCD
-        }
+        Effect = EffectFactory.GetEffect(data.EffectID);
     }
 
     public void CheckCD() 

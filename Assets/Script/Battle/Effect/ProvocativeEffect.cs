@@ -6,26 +6,25 @@ using UnityEngine;
 //挑釁
 public class ProvocativeEffect : Effect
 {
-    public ProvocativeEffect(EffectModel data)
+    public ProvocativeEffect(EffectModel data) : base(data)
     {
-        Data = data;
-        if (data.SubType != EffectModel.TypeEnum.None)
-        {
-            EffectModel subData = DataContext.Instance.EffectDic[data.SubType][data.SubID];
-            SubEffect = EffectFactory.GetEffect(subData);
-        }
+        //Data = data;
+        //if (data.SubID != -1)
+        //{
+        //    EffectModel subData = DataContext.Instance.EffectDic[data.SubID];
+        //    SubEffect = EffectFactory.GetEffect(subData);
+        //}
     }
 
-    public override void SetEffect(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)
+    public override void Use(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)
     {
         FloatingNumberData floatingNumberData;
         BattleController.HitType hitType = BattleController.HitType.Hit; //挑釁的命中判定比較特別,以後再說...
 
         if (hitType != BattleController.HitType.Miss)
         {
-            Status status = StatusFactory.GetStatus(Data.StatusType, Data.StatusID);
-            ((ProvocativeStatus)status).Target = user;
-            target.AddStatus(status);
+            ((ProvocativeStatus)Status).Target = user;
+            target.AddStatus(Status);
             floatingNumberData = new FloatingNumberData(FloatingNumberData.TypeEnum.Other, "挑釁");
         }
         else
@@ -37,7 +36,7 @@ public class ProvocativeEffect : Effect
 
         if (SubEffect != null && hitType != BattleController.HitType.Miss)
         {
-            SubEffect.SetEffect(user, target, floatingList, characterList);
+            SubEffect.Use(user, target, floatingList, characterList);
         }
     }
 }

@@ -6,9 +6,7 @@ public class ProvocativeStatus : Status
 {
     public BattleCharacterInfo Target; //§ðÀ»¥Ø¼Ð
 
-    public ProvocativeStatus(StatusModel data)
+    public ProvocativeStatus(StatusModel data) : base(data)
     {
-        Data = data;
-        RemainTime = data.Time;
     }
 }

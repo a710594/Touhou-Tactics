@@ -10,19 +10,18 @@ public class ItemGroup : MonoBehaviour
 
     public void SetScrollView(BattleCharacterInfo character)
     {
-        List<object> list = new List<object>(ItemManager.Instance.GetItemList(character));
+        List<object> list = new List<object>(ItemManager.Instance.GetBattleItemList(character));
         ScrollView.SetData(list);
         PPGroup.SetData(character.CurrentPP);
     }
 
     private void ItemScrollItemOnClick(object obj, ScrollItem scrollItem)
     {
-        BattleController.Instance.SelectItem((Item)obj);
+        BattleController.Instance.SelectObject(obj);
     }
 
     private void Awake()
     {
-        ScrollView.Init();
         ScrollView.ItemOnClickHandler += ItemScrollItemOnClick;
     }
 }

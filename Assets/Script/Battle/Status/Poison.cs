@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class Poison : Status
 {
-    public Poison(StatusModel data)
+    public Poison(StatusModel data) :base(data)
     {
-        Data = data;
-        RemainTime = data.Time;
     }
 
     public int GetDamage(BattleCharacterInfo target) 
     {
-        return Mathf.RoundToInt(target.MaxHP * Data.Value / 100f);
+        return Mathf.RoundToInt(target.MaxHP * Value / 100f);
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Explore;
 
 public class BattleResultUI : MonoBehaviour
 {
@@ -9,9 +10,11 @@ public class BattleResultUI : MonoBehaviour
     public Text LvLabel;
     public ValueBar ExpBar;
     public ScrollView ScrollView;
+    public Button ConfirmButton;
 
     public void SetData(int lv, int exp, int addExp, List<int> itemList) 
     {
+        LvLabel.text = "Lv." + lv;
         SetExpBar(lv, exp, addExp);
         List<object> list = new List<object>();
         for (int i=0; i<itemList.Count; i++) 
@@ -26,7 +29,7 @@ public class BattleResultUI : MonoBehaviour
         int needExp = (int)Mathf.Pow(lv, 3) - exp;
         if (addExp >= needExp)
         {
-            ExpBar.SetValueTween(needExp, needExp, ()=> 
+            ExpBar.SetValueTween(exp, needExp, needExp, ()=> 
             {
                 addExp -= needExp;
                 lv++;
@@ -37,14 +40,22 @@ public class BattleResultUI : MonoBehaviour
         }
         else
         {
+            ExpBar.SetValueTween(exp, exp + addExp, needExp, null);
             exp += addExp;
             addExp = 0;
-            ExpBar.SetValueTween(exp, needExp, null);
         }
+    }
+
+    private void ConfirmOnClick() 
+    {
+        SceneController.Instance.ChangeScene("Explore", ()=> 
+        {
+            ExploreManager.Instance.Reload();
+        });
     }
 
     private void Awake()
     {
-        ScrollView.Init();
+        ConfirmButton.onClick.AddListener(ConfirmOnClick);
     }
 }

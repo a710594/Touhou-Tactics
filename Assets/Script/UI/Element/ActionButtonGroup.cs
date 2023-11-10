@@ -14,6 +14,8 @@ public class ActionButtonGroup : MonoBehaviour
     public Button IdleButton;
     public Button ResetButton;
     public Text ActionCountLabel;
+    public ScrollView ScrollView;
+    public TipLabel TipLabel;
 
     public void SetButton(BattleCharacterInfo character) 
     {
@@ -23,6 +25,11 @@ public class ActionButtonGroup : MonoBehaviour
         ActionCountLabel.text = "Action Count: " + character.ActionCount.ToString();
     }
 
+    public void SetScrollView(List<object> list)
+    {
+        ScrollView.SetData(list);
+    }
+
     private void MoveOnClick() 
     {
         BattleController.Instance.SetMoveState();
@@ -30,17 +37,32 @@ public class ActionButtonGroup : MonoBehaviour
 
     private void SkillOnClick() 
     {
-        BattleController.Instance.SetSelectSkillState();
+        BattleCharacterInfo character = BattleController.Instance.SelectedCharacter;
+        if (!character.IsAuto)
+        {
+            ScrollView.transform.parent.gameObject.SetActive(true);
+            ScrollView.SetData(new List<object>(character.SkillList));
+        }
     }
 
     private void SupportOnClick()
     {
-        BattleController.Instance.SetSupportState();
+        BattleCharacterInfo character = BattleController.Instance.SelectedCharacter;
+        if (!character.IsAuto)
+        {
+            ScrollView.transform.parent.gameObject.SetActive(true);
+            ScrollView.SetData(new List<object>(character.SupportList));
+        }
     }
 
     private void ItemOnClick() 
     {
-        BattleController.Instance.SetItemState();
+        BattleCharacterInfo character = BattleController.Instance.SelectedCharacter;
+        if (!character.IsAuto)
+        {
+            ScrollView.transform.parent.gameObject.SetActive(true);
+            ScrollView.SetData(new List<object>(ItemManager.Instance.GetBattleItemList(character)));
+        }
     }
 
     private void IdleOnClick() 
@@ -53,6 +75,48 @@ public class ActionButtonGroup : MonoBehaviour
         BattleController.Instance.ResetAction();
     }
 
+    private void ScrollItemOnClick(object obj, ScrollItem scrollItem)
+    {
+        bool canUse = true;
+        string tip = "";
+        if (obj is Skill)
+        {
+            Skill skill = (Skill)obj;
+            if (skill.CurrentCD > 0)
+            {
+                canUse = false;
+                tip = "還需要" + skill.CurrentCD + "回合冷卻";
+            }
+        }
+        else if (obj is Support)
+        {
+            Support support = (Support)obj;
+            if (support.CurrentCD > 0)
+            {
+                canUse = false;
+                tip = "還需要" + support.CurrentCD + "回合冷卻";
+            }
+        }
+        else if (obj is Card)
+        {
+            Card card = (Card)obj;
+            if (BattleController.Instance.SelectedCharacter.CurrentPP < card.CardData.PP)
+            {
+                canUse = false;
+                tip = "PP不足";
+            }
+        }
+
+        if (canUse)
+        {
+            BattleController.Instance.SelectObject(obj);
+        }
+        else
+        {
+            TipLabel.SetLabel(tip);
+        }
+    }
+
     private void Awake()
     {
         MoveButton.onClick.AddListener(MoveOnClick);
@@ -61,5 +125,7 @@ public class ActionButtonGroup : MonoBehaviour
         ItemButton.onClick.AddListener(ItemOnClick);
         IdleButton.onClick.AddListener(IdleOnClick);
         ResetButton.onClick.AddListener(ResetOnClick);
+        ScrollView.ItemOnClickHandler += ScrollItemOnClick;
+        ScrollView.transform.parent.gameObject.SetActive(false);
     }
 }

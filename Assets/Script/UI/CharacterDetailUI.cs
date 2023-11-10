@@ -98,8 +98,6 @@ public class CharacterDetailUI : MonoBehaviour
 
     private void Awake()
     {
-        SkillScrollView.Init();
-        SupportScrollView.Init();
         CloseButton.onClick.AddListener(Close);
     }
 }

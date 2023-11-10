@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SkillButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+/*public class SkillButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public Button Button;
     public Text NameLabel;
@@ -73,4 +73,4 @@ public class SkillButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         //CommentLabel.gameObject.SetActive(false);
     }
-}
+}*/

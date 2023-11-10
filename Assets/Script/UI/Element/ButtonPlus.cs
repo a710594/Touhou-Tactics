@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ButtonPlus : UIBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
+public class ButtonPlus : Button
 {
     public Action<ButtonPlus> ClickHandler;
     public Action<ButtonPlus> PressHandler;
@@ -60,15 +60,29 @@ public class ButtonPlus : UIBehaviour, IPointerDownHandler, IPointerUpHandler, I
         }
     }
 
-    public void OnPointerDown(PointerEventData eventData)
+    public override void OnPointerDown(PointerEventData eventData)
     {
+        base.OnPointerDown(eventData);
+
+        //if (!interactable) 
+        //{
+        //    return;
+        //}
+
         _startDownTime = Time.time;
         _isPointerDown = true;
         _longPressTriggered = false;
     }
 
-    public void OnPointerUp(PointerEventData eventData)
+    public override void OnPointerUp(PointerEventData eventData)
     {
+        base.OnPointerDown(eventData);
+
+        //if (!interactable)
+        //{
+        //    return;
+        //}
+
         _isPointerDown = false;
 
         if (UpHandler != null)
@@ -77,13 +91,20 @@ public class ButtonPlus : UIBehaviour, IPointerDownHandler, IPointerUpHandler, I
         }
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    public override void OnPointerExit(PointerEventData eventData)
     {
+        base.OnPointerExit(eventData);
         _isPointerDown = false;
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    public override void OnPointerClick(PointerEventData eventData)
     {
+        //if (!interactable)
+        //{
+        //    return;
+        //}
+        base.OnPointerExit(eventData);
+
         if (!_longPressTriggered || DownThreshold == 0)
         {
             if (ClickHandler != null)

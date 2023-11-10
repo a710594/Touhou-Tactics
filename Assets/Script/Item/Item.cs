@@ -3,39 +3,41 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//道具中的素材類別
 public class Item 
 {
-    public ItemModel.CategoryEnum Category;
     public int ID;
     public int Amount;
     [NonSerialized]
     public ItemModel Data;
-    [NonSerialized]
-    public Effect Effect;
 
     public Item() { }
 
-    public Item(ItemModel.CategoryEnum category, int id, int amount)
+    public Item(int id, int amount)
     {
-        Category = category;
         ID = id;
-        Data = DataContext.Instance.ItemDic[category][id];
+        Data = DataContext.Instance.ItemDic[id];
         Amount = amount;
-        if (Data.EffectType != EffectModel.TypeEnum.None)
-        {
-            Effect = EffectFactory.GetEffect(Data.EffectType, Data.EffectID);
-        }
     }
 
-    public virtual void SetEffect(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)
+    public void Init() 
     {
-        Effect.SetEffect(user, target, floatingList, characterList);
-        user.HasUseItem = true;
-        user.ActionCount--;
-        if (user.CurrentPP < BattleCharacterInfo.MaxPP)
-        {
-            user.CurrentPP++;
-        }
-        ItemManager.Instance.MinusItem(this, 1);
+        Data = DataContext.Instance.ItemDic[ID];
+        //if (Data.EffectID != -1)
+        //{
+        //    Effect = EffectFactory.GetEffect(Data.EffectID);
+        //}
     }
+
+    //public virtual void SetEffect(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)
+    //{
+    //    Effect.SetEffect(user, target, floatingList, characterList);
+    //    user.HasUseItem = true;
+    //    user.ActionCount--;
+    //    if (user.CurrentPP < BattleCharacterInfo.MaxPP)
+    //    {
+    //        user.CurrentPP++;
+    //    }
+    //    ItemManager.Instance.MinusItem(this, 1);
+    //}
 }

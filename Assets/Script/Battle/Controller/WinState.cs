@@ -23,11 +23,11 @@ namespace Battle
                     enemy = DataContext.Instance.EnemyDic[enemyGroup.EnemyList[i]];
                     itemId = enemy.DropList[Random.Range(0, enemy.DropList.Count)];
                     itemList.Add(itemId);
-                    ItemManager.Instance.AddItem(ItemModel.CategoryEnum.Material, itemId, 1);
+                    ItemManager.Instance.AddItem(itemId, 1);
                 }
                 Instance._battleUI.gameObject.SetActive(false);
                 Instance._battleResultUI.gameObject.SetActive(true);
-                Instance._battleResultUI.SetData(CharacterManager.Instance.Lv, CharacterManager.Instance.Exp, Instance._enemyGroup.Exp, itemList);
+                Instance._battleResultUI.SetData(CharacterManager.Instance.CharacterInfoGroup.Lv, CharacterManager.Instance.CharacterInfoGroup.Exp, Instance._enemyGroup.Exp, itemList);
                 CharacterManager.Instance.AddExp(Instance._enemyGroup.Exp);
                 //SceneController.Instance.ChangeScene("Explore", () =>
                 //{

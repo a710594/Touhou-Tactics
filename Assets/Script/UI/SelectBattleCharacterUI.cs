@@ -56,4 +56,14 @@ public class SelectBattleCharacterUI : MonoBehaviour
             BattleController.Instance.SetCharacterState();
         }
     }
+
+    private void Update()
+    {
+#if UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            BattleController.Instance.SetWin();
+        }
+#endif
+    }
 }

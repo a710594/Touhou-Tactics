@@ -1,10 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterInfo
 {
-    public int ID;
     public string Name;
     public int MaxHP;
     public int CurrentHP;
@@ -23,23 +23,21 @@ public class CharacterInfo
     public Equip Armor = new Equip(EquipModel.CategoryEnum.Armor);
     public Equip[] Amulets = new Equip[3] { new Equip(EquipModel.CategoryEnum.Amulet), new Equip(EquipModel.CategoryEnum.Amulet), new Equip(EquipModel.CategoryEnum.Amulet) };
 
+    [NonSerialized]
     public List<Skill> SkillList = new List<Skill>();
+    [NonSerialized]
     public List<Support> SupportList = new List<Support>();
+    [NonSerialized]
     public List<Passive> PassiveList = new List<Passive>();
 
-    [System.NonSerialized]
-    private JobModel _job;
-
-    private int _jobId;
+    public int JobId;
 
     public CharacterInfo() { }
 
     public CharacterInfo(JobModel job)
     {
-        ID = job.ID;
         Name = job.Name;
-        _job = job;
-        _jobId = job.ID;
+        JobId = job.ID;
 
         int lv = 1;
         float n = (1 + (lv - 1) * 0.1f);
@@ -55,11 +53,14 @@ public class CharacterInfo
         UP = job.UP;
         DOWN = job.DOWN;
         WT = job.WT;
-        if (job.Passive != -1)
-        {
-            PassiveList.Add(PassiveFactory.GetPassive(job.Passive));
-        }
         Controller = job.Controller;
+
+        Init();
+    }
+
+    public void Init() 
+    {
+        JobModel job = DataContext.Instance.JobDic[JobId];
 
         if (job.Skill_1 != -1)
         {
@@ -102,23 +103,24 @@ public class CharacterInfo
         {
             SupportList.Add(new Support(DataContext.Instance.SupportDic[job.Support_5]));
         }
-    }
 
-    public void Init() 
-    {
-        _job = DataContext.Instance.JobDic[_jobId];
+        if (job.Passive != -1)
+        {
+            PassiveList.Add(PassiveFactory.GetPassive(job.Passive));
+        }
     }
 
     public void SetLv(int lv) 
     {
+        JobModel job = DataContext.Instance.JobDic[JobId];
         float n = (1 + (lv - 1) * 0.1f);
-        MaxHP = Mathf.RoundToInt(_job.HP * n);
+        MaxHP = Mathf.RoundToInt(job.HP * n);
         CurrentHP = MaxHP;
-        STR = Mathf.RoundToInt(_job.STR * n);
-        CON = Mathf.RoundToInt(_job.CON * n);
-        INT = Mathf.RoundToInt(_job.INT * n);
-        MEN = Mathf.RoundToInt(_job.MEN * n);
-        DEX = Mathf.RoundToInt(_job.DEX * n);
-        AGI = Mathf.RoundToInt(_job.AGI * n);
+        STR = Mathf.RoundToInt(job.STR * n);
+        CON = Mathf.RoundToInt(job.CON * n);
+        INT = Mathf.RoundToInt(job.INT * n);
+        MEN = Mathf.RoundToInt(job.MEN * n);
+        DEX = Mathf.RoundToInt(job.DEX * n);
+        AGI = Mathf.RoundToInt(job.AGI * n);
     }
 }

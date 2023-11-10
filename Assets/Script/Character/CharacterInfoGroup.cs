@@ -5,5 +5,6 @@ using UnityEngine;
 public class CharacterInfoGroup
 {
     public int Lv;
+    public int Exp;
     public List<CharacterInfo> CharacterList = new List<CharacterInfo>();
 }

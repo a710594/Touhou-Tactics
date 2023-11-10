@@ -50,9 +50,7 @@ public class EffectModel
     public List<Vector2Int> AreaList = new List<Vector2Int>();
     public TargetEnum Target;
     public TrackEnum Track;
-    public StatusModel.TypeEnum StatusType;
     public int StatusID;
-    public TypeEnum SubType;
     public int SubID;
 
     public void GetAreaList() 

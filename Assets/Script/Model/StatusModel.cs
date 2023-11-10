@@ -18,7 +18,6 @@ public class StatusModel
         SEN,
         AGI,
         MOV, 
-        WT,
         Poison,
         Sleep,
     }

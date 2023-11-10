@@ -16,6 +16,11 @@ public class StateContext
         _stateDic.Add(state.GetType(), state);
     }
 
+    public void ClearState() 
+    {
+        _stateDic.Clear();
+    }
+
     public void SetState<T>(object obj = null)
     {
         if (CurrentState != null)

@@ -13,87 +13,77 @@ public class Generator2D : MonoBehaviour {
         Wall,
     }
 
-    [SerializeField]
-    Vector2Int size;
-    [SerializeField]
-    int roomCount;
-    [SerializeField]
-    Vector2Int roomMaxSize;
-    [SerializeField]
-    GameObject cubePrefab;
-    [SerializeField]
-    Material redMaterial;
-    [SerializeField]
-    Material blueMaterial;
-    [SerializeField]
-    Material whiteMaterial;
-
     Random random;
     Grid2D<CellType> grid;
     List<Room> rooms;
     Delaunay2D delaunay;
     HashSet<Prim.Edge> selectedEdges;
+    ExploreInfo info;
+
+    private Vector2Int _roomSize;
+    private int _roomCount;
+    private Vector2Int _start;
+    private Vector2Int _goal;
 
     void Start() {
         //Generate();
     }
 
-    public void Generate() {
-        random = new Random(0);
-        grid = new Grid2D<CellType>(size, Vector2Int.zero);
+    public void Generate(int floor) {
+        FloorModel data = DataContext.Instance.FloorDic[floor];
+        _roomSize = new Vector2Int(data.Width, data.Height);
+        _roomCount = data.RoomCount;
+        random = new Random();
+        grid = new Grid2D<CellType>(_roomSize, Vector2Int.zero);
         rooms = new List<Room>();
+        info = new ExploreInfo();
+        info.Size = _roomSize;
+        info.Floor = floor;
 
         PlaceRooms();
         Triangulate();
         CreateHallways();
         PathfindHallways();
         PlaceWall();
-        Explore.ExploreManager.Instance.SetData(grid, rooms);
+        PlaceStartAndGoal();
+        PlaceObject();
+        info.Start = _start;
+        info.Goal = _goal;
+        ExploreManager.Instance.SetData(info);
     }
 
-    public void Relod(Grid2D<Generator2D.CellType> grid, List<Room> rooms)
+    public void Relod(ExploreInfo info)
     {
-        for (int i = 0; i < rooms.Count; i++)
+        this.info = info;
+        _start = info.Start;
+        _goal = info.Goal;
+        PlaceObject();
+        foreach(KeyValuePair<Vector2Int, CellInfo> pair in info.CellDic) 
         {
-            PlaceRoom(rooms[i].bounds.position, rooms[i].bounds.size);
-        }
-
-        for (int i = 0; i < grid.Size.x; i++)
-        {
-            for (int j = 0; j < grid.Size.y; j++)
+            if (info.VisitedList.Contains(pair.Key)) 
             {
-                if (grid[i, j] == CellType.Hallway)
+                if (pair.Value.Quad != null) 
                 {
-                    PlaceHallway(new Vector2Int(i, j));
+                    pair.Value.Quad.layer = ExploreManager.Instance.MapLayer;
                 }
-                else if (grid[i, j] == CellType.Wall)
+                if (pair.Value.Icon != null) 
                 {
-                    GameObject go = Instantiate(cubePrefab, Vector3.zero, Quaternion.identity);
-                    go.transform.position = new Vector3(i, 2, j);
-                    go.transform.localScale = new Vector3(1, 5, 1);
-                    go.GetComponent<MeshRenderer>().material = whiteMaterial;
-                    go.layer = LayerMask.NameToLayer("Wall");
-                    go.transform.SetParent(transform);
+                    pair.Value.Icon.layer = ExploreManager.Instance.MapLayer;
                 }
             }
         }
     }
 
     void PlaceRooms() {
-        for (int i = 0; i < roomCount; i++) {
+        for (int i = 0; i < _roomCount; i++) {
             Vector2Int location = new Vector2Int(
-                random.Next(0, size.x),
-                random.Next(0, size.y)
-            );
-
-            Vector2Int roomSize = new Vector2Int(
-                random.Next(1, roomMaxSize.x + 1),
-                random.Next(1, roomMaxSize.y + 1)
+                random.Next(0, _roomSize.x),
+                random.Next(0, _roomSize.y)
             );
 
             bool add = true;
-            Room newRoom = new Room(location, roomSize);
-            Room buffer = new Room(location + new Vector2Int(-1, -1), roomSize + new Vector2Int(2, 2));
+            Room newRoom = RoomFactory.GetRoom(1, location);
+            Room buffer = new Room(location + new Vector2Int(-1, -1), newRoom.bounds.size + new Vector2Int(2, 2));
 
             foreach (var room in rooms) {
                 if (Room.Intersect(room, buffer)) {
@@ -102,17 +92,27 @@ public class Generator2D : MonoBehaviour {
                 }
             }
 
-            if (newRoom.bounds.xMin < 0 || newRoom.bounds.xMax >= size.x
-                || newRoom.bounds.yMin < 0 || newRoom.bounds.yMax >= size.y) {
+            if (newRoom.bounds.xMin < 0 || newRoom.bounds.xMax >= _roomSize.x
+                || newRoom.bounds.yMin < 0 || newRoom.bounds.yMax >= _roomSize.y) {
                 add = false;
             }
-
+            
             if (add) {
                 rooms.Add(newRoom);
-                PlaceRoom(newRoom.bounds.position, newRoom.bounds.size);
 
                 foreach (var pos in newRoom.bounds.allPositionsWithin) {
                     grid[pos] = CellType.Room;
+                    if (!info.CellDic.ContainsKey(pos)) 
+                    {
+                        info.CellDic.Add(pos, new CellInfo(CellType.Room, pos));
+                        info.WalkableList.Add(pos);
+                    }
+                }
+
+                Dictionary<Vector2Int, Treasure> treasures = newRoom.GetTreasures();
+                foreach(KeyValuePair<Vector2Int, Treasure> pair in treasures) 
+                {
+                    info.TreasureDic.Add(pair.Key, pair.Value);
                 }
             }
         }
@@ -145,7 +145,7 @@ public class Generator2D : MonoBehaviour {
 
             foreach (var edge in remainingEdges)
             {
-                if (random.NextDouble() < 0.125)
+                if (random.NextDouble() < 0.125) //額外的路徑
                 {
                     selectedEdges.Add(edge);
                 }
@@ -154,7 +154,7 @@ public class Generator2D : MonoBehaviour {
     }
 
     void PathfindHallways() {
-        DungeonPathfinder2D aStar = new DungeonPathfinder2D(size);
+        DungeonPathfinder2D aStar = new DungeonPathfinder2D(_roomSize);
 
         if (selectedEdges != null)
         {
@@ -213,9 +213,17 @@ public class Generator2D : MonoBehaviour {
 
                     foreach (var pos in path)
                     {
-                        if (grid[pos] == CellType.Hallway)
+                        if (!info.CellDic.ContainsKey(pos))
                         {
-                            PlaceHallway(pos);
+                            if (grid[pos] == CellType.Hallway)
+                            {
+                                info.CellDic.Add(pos, new CellInfo(CellType.Hallway, pos));
+                                info.WalkableList.Add(pos);
+                            }
+                        }
+                        else 
+                        {
+                            CellInfo cell = info.CellDic[pos];
                         }
                     }
                 }
@@ -225,76 +233,175 @@ public class Generator2D : MonoBehaviour {
 
     void PlaceWall()
     {
-        for (int i=0; i<grid.Size.x; i++) 
+        Vector2Int position;
+        for (int i=-1; i<=grid.Size.x; i++) 
         {
-            for(int j=0; j<grid.Size.y; j++)
+            for(int j=-1; j<=grid.Size.y; j++)
             {
-                if (grid[i, j] == CellType.None) 
+                position = new Vector2Int(i, j);
+                if (InBound(i, j))
                 {
-                    if(CheckWall(new Vector3(i, 0, j))) 
+                    if (grid[i, j] == CellType.None && CheckWall(position))
                     {
                         grid[i, j] = CellType.Wall;
-                        GameObject go = Instantiate(cubePrefab, Vector3.zero, Quaternion.identity);
-                        go.transform.position = new Vector3(i, 2, j);
-                        go.transform.localScale = new Vector3(1, 5, 1);
-                        go.GetComponent<MeshRenderer>().material = whiteMaterial;
-                        go.layer = LayerMask.NameToLayer("Wall");
-                        go.transform.SetParent(transform);
+
+                        info.CellDic.Add(position, new CellInfo(CellType.Wall, position));
+                    }
+                }
+                else
+                {
+                    if (CheckWall(position))
+                    {
+                        info.CellDic.Add(position, new CellInfo(CellType.Wall, position));
                     }
                 }
             }
         }
     }
 
-    private bool CheckWall(Vector3 position)
+    private bool CheckWall(Vector2Int position)
     {
-        Vector3 newPosition;
-        newPosition = new Vector3(position.x - 1, 0, position.z); //左
-        if (InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None && grid[(int)newPosition.x, (int)newPosition.z] != CellType.Wall)
+        int x;
+        int y;
+        CellType cellType;
+        //左
+        x = position.x - 1;
+        y = position.y;
+        if (InBound(x, y))
         {
-            return true;
+            cellType = grid[x, y];
+            if (cellType != CellType.None && cellType != CellType.Wall)
+            {
+                return true;
+            }
         }
-        newPosition = new Vector3(position.x + 1, 0, position.z); //右
-        if (InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None && grid[(int)newPosition.x, (int)newPosition.z] != CellType.Wall)
+        //右
+        x = position.x + 1;
+        y = position.y;
+        if (InBound(x, y))
         {
-            return true;
+            cellType = grid[x, y];
+            if (cellType != CellType.None && cellType != CellType.Wall)
+            {
+                return true;
+            }
         }
-        newPosition = new Vector3(position.x, 0, position.z - 1); //下
-        if (InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None && grid[(int)newPosition.x, (int)newPosition.z] != CellType.Wall)
+        //下
+        x = position.x;
+        y = position.y - 1;
+        if (InBound(x, y))
         {
-            return true;
+            cellType = grid[x, y];
+            if (cellType != CellType.None && cellType != CellType.Wall)
+            {
+                return true;
+            }
         }
-        newPosition = new Vector3(position.x, 0, position.z + 1); //上
-        if (InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None && grid[(int)newPosition.x, (int)newPosition.z] != CellType.Wall)
+        //上
+        x = position.x;
+        y = position.y + 1;
+        if (InBound(x, y))
         {
-            return true;
+            cellType = grid[x, y];
+            if (cellType != CellType.None && cellType != CellType.Wall)
+            {
+                return true;
+            }
         }
-        newPosition = new Vector3(position.x - 1, 0, position.z - 1); //左下
-        if (InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None && grid[(int)newPosition.x, (int)newPosition.z] != CellType.Wall)
+        //左下
+        x = position.x - 1;
+        y = position.y - 1;
+        if (InBound(x, y))
         {
-            return true;
+            cellType = grid[x, y];
+            if (cellType != CellType.None && cellType != CellType.Wall)
+            {
+                return true;
+            }
         }
-        newPosition = new Vector3(position.x - 1, 0, position.z + 1); //左上
-        if (InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None && grid[(int)newPosition.x, (int)newPosition.z] != CellType.Wall)
+        //左上
+        x = position.x - 1;
+        y = position.y + 1;
+        if (InBound(x, y))
         {
-            return true;
+            cellType = grid[x, y];
+            if (cellType != CellType.None && cellType != CellType.Wall)
+            {
+                return true;
+            }
         }
-        newPosition = new Vector3(position.x + 1, 0, position.z - 1); //右下
-        if (InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None && grid[(int)newPosition.x, (int)newPosition.z] != CellType.Wall)
+        //右下
+        x = position.x + 1;
+        y = position.y - 1;
+        if (InBound(x, y))
         {
-            return true;
+            cellType = grid[x, y];
+            if (cellType != CellType.None && cellType != CellType.Wall)
+            {
+                return true;
+            }
         }
-        newPosition = new Vector3(position.x + 1, 0, position.z + 1); //右上
-        if (InBound(newPosition) && grid[(int)newPosition.x, (int)newPosition.z] != CellType.None && grid[(int)newPosition.x, (int)newPosition.z] != CellType.Wall)
+        //右上
+        x = position.x + 1;
+        y = position.y + 1;
+        if (InBound(x, y))
         {
-            return true;
+            cellType = grid[x, y];
+            if (cellType != CellType.None && cellType != CellType.Wall)
+            {
+                return true;
+            }
         }
         return false;
     }
 
-    private bool InBound(Vector3 position)
+    private void PlaceStartAndGoal()
     {
-        if (position.x >= 0 && position.x < grid.Size.x && position.z >= 0 && position.z < grid.Size.y)
+        Room startRoom = rooms[UnityEngine.Random.Range(0, rooms.Count)];
+        List<Vector2Int> positionList = new List<Vector2Int>();
+        for (int i = 0; i < startRoom.bounds.size.x; i++)
+        {
+            for (int j = 0; j < startRoom.bounds.size.y; j++)
+            {
+                positionList.Add(new Vector2Int(startRoom.bounds.position.x + i, startRoom.bounds.y + j));
+            }
+        }
+        foreach(KeyValuePair<Vector2Int, Treasure> pair in info.TreasureDic)
+        {
+            positionList.Remove(pair.Key);
+        }
+        _start = positionList[UnityEngine.Random.Range(0, positionList.Count)];
+
+        List<Room> tempList = new List<Room>(rooms);
+        tempList.Remove(startRoom);
+        Room goalRoom = null;
+        for (int i = 0; i < tempList.Count; i++)
+        {
+            if (goalRoom == null || Vector3.Distance(tempList[i].bounds.center, startRoom.bounds.center) > Vector3.Distance(goalRoom.bounds.center, startRoom.bounds.center))
+            {
+                goalRoom = tempList[i];
+            }
+        }
+
+        positionList.Clear();
+        for (int i = 0; i < goalRoom.bounds.size.x; i++)
+        {
+            for (int j = 0; j < goalRoom.bounds.size.y; j++)
+            {
+                positionList.Add(new Vector2Int(goalRoom.bounds.position.x + i, goalRoom.bounds.y + j));
+            }
+        }
+        foreach (KeyValuePair<Vector2Int, Treasure> pair in info.TreasureDic)
+        {
+            positionList.Remove(pair.Key);
+        }
+
+        _goal = positionList[UnityEngine.Random.Range(0, positionList.Count)];
+    }
+
+    private bool InBound(int x, int y)
+    {
+        if (x >= 0 && x < grid.Size.x && y >= 0 && y < grid.Size.y)
         {
             return true;
         }
@@ -304,24 +411,50 @@ public class Generator2D : MonoBehaviour {
         }
     }
 
-    void PlaceCube(Vector2Int location, Vector2Int size, Material material) {
-        for (int i=0; i<size.x; i++) 
+    private void PlaceObject() 
+    {
+        GameObject obj = null;
+        foreach(KeyValuePair<Vector2Int, CellInfo> pair in info.CellDic) 
         {
-            for (int j=0; j<size.y; j++) 
+            if (pair.Value.CellType == CellType.Room || pair.Value.CellType == CellType.Hallway)
             {
-                GameObject go = Instantiate(cubePrefab, Vector3.zero, Quaternion.identity);
-                go.transform.position = new Vector3(location.x + i, 0, location.y + j);
-                go.GetComponent<MeshRenderer>().material = material;
-                go.transform.SetParent(transform);
+                obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Ground"), Vector3.zero, Quaternion.identity);
+            }
+            else if (pair.Value.CellType == CellType.Wall) 
+            {
+                obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Wall"), Vector3.zero, Quaternion.identity);
+            }
+
+            if (obj != null)
+            {
+                obj.transform.position = new Vector3(pair.Key.x, 0, pair.Key.y);
+                obj.transform.SetParent(transform);
+                info.CellDic[pair.Key].Cube = obj;
+                info.CellDic[pair.Key].Quad = obj.transform.GetChild(0).gameObject;
             }
         }
-    }
 
-    void PlaceRoom(Vector2Int location, Vector2Int size) {
-        PlaceCube(location, size, redMaterial);
-    }
+        foreach(KeyValuePair<Vector2Int, Treasure> pair in info.TreasureDic)
+        {
+            obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + pair.Value.Prefab), Vector3.zero, Quaternion.identity);
+            obj.transform.position = new Vector3(pair.Key.x, pair.Value.Height, pair.Key.y);
+            info.CellDic[pair.Key].Treasure = obj;
+            if (obj.transform.childCount > 0)
+            {
+                info.CellDic[pair.Key].Icon = obj.transform.GetChild(0).gameObject;
+            }
+        }
 
-    void PlaceHallway(Vector2Int location) {
-        PlaceCube(location, new Vector2Int(1, 1), blueMaterial);
+        obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Start"), Vector3.zero, Quaternion.identity);
+        obj.transform.position = new Vector3(_start.x, 0, _start.y);
+        obj.transform.eulerAngles = new Vector3(90, 0, 0);
+        obj.transform.SetParent(transform);
+        info.CellDic[_start].Icon = obj;
+
+        obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Goal"), Vector3.zero, Quaternion.identity);
+        obj.transform.position = new Vector3(_goal.x, 0, _goal.y);
+        obj.transform.eulerAngles = new Vector3(90, 0, 0);
+        obj.transform.SetParent(transform);
+        info.CellDic[_goal].Icon = obj;
     }
 }

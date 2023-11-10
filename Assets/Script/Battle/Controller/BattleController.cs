@@ -23,6 +23,7 @@ namespace Battle
         }
 
         public BattleInfo Info;
+        public BattleCharacterInfo SelectedCharacter;
         public List<BattleCharacterInfo> CharacterList = new List<BattleCharacterInfo>();
 
         private readonly Color _white = new Color(1, 1, 1, 0.5f);
@@ -33,7 +34,6 @@ namespace Battle
         private CameraDraw _cameraController;
         private CameraRotate _cameraRotate;
         private StateContext _context = new StateContext();
-        private BattleCharacterInfo _selectedCharacter;
         private BattleUI _battleUI;
         private DragCameraUI _dragCameraUI;
         private SelectBattleCharacterUI _selectBattleCharacterUI;
@@ -72,10 +72,11 @@ namespace Battle
             _enemyGroup = pair.Value;
             List<int> enemyList = _enemyGroup.EnemyList;
             int index = 0;
+            CharacterList.Clear();
             for (int i=0; i< enemyList.Count; i++) 
             {
                 CharacterList.Add(new BattleCharacterInfo(lv, DataContext.Instance.EnemyDic[enemyList[i]]));
-                CharacterList[index + i].ID = index + 1 + i;
+                CharacterList[index + i].Index = index + 1 + i;
                 CharacterList[index + i].AI = new MashroomAI(CharacterList[index + i]);
                 CharacterList[index + i].Position = RandomCharacterPosition(BattleCharacterInfo.FactionEnum.Enemy);
             }
@@ -92,17 +93,18 @@ namespace Battle
             _dragCameraUI.Init(info.Width, info.Height);
 
             GameObject obj;
+            _controllerDic.Clear();
             for (int i = 0; i < CharacterList.Count; i++)
             {
                 info.TileInfoDic[Utility.ConvertToVector2Int(CharacterList[i].Position)].HasCharacter = true;
                 obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/" + CharacterList[i].Controller), Vector3.zero, Quaternion.identity);
                 obj.transform.position = CharacterList[i].Position;
-                _controllerDic.Add(CharacterList[i].ID, obj.GetComponent<BattleCharacterController>());
-                _controllerDic[CharacterList[i].ID].MoveEndHandler += OnMoveEnd;
-                _controllerDic[CharacterList[i].ID].SetDirectionHandler += SetDirection;
-                _battleUI.SetLittleHpBarAnchor(CharacterList[i].ID, _controllerDic[CharacterList[i].ID]);
-                _battleUI.SetLittleHpBarValue(CharacterList[i].ID, CharacterList[i]);
-                _battleUI.SetFloatingNumberPoolAnchor(CharacterList[i].ID, _controllerDic[CharacterList[i].ID]);
+                _controllerDic.Add(CharacterList[i].Index, obj.GetComponent<BattleCharacterController>());
+                _controllerDic[CharacterList[i].Index].MoveEndHandler += OnMoveEnd;
+                _controllerDic[CharacterList[i].Index].SetDirectionHandler += SetDirection;
+                _battleUI.SetLittleHpBarAnchor(CharacterList[i].Index, _controllerDic[CharacterList[i].Index]);
+                _battleUI.SetLittleHpBarValue(CharacterList[i].Index, CharacterList[i]);
+                _battleUI.SetFloatingNumberPoolAnchor(CharacterList[i].Index, _controllerDic[CharacterList[i].Index]);
             }
             _battleUI.gameObject.SetActive(false);
             _battleResultUI.gameObject.SetActive(false);
@@ -113,13 +115,14 @@ namespace Battle
 
             //_arrow = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Other/Arrow"), Vector3.zero, Quaternion.identity);
 
+            _context.ClearState();
             _context.AddState(new PrepareState(_context));
             _context.AddState(new CharacterState(_context));
             _context.AddState(new ActionState(_context));
             _context.AddState(new MoveState(_context));
-            _context.AddState(new SkillState(_context));
-            _context.AddState(new SupportState(_context));
-            _context.AddState(new ItemState(_context));
+            //_context.AddState(new SkillState(_context));
+            //_context.AddState(new SupportState(_context));
+            //_context.AddState(new ItemState(_context));
             _context.AddState(new TargetState(_context));
             _context.AddState(new ConfirmState(_context));
             _context.AddState(new EffectState(_context));
@@ -174,73 +177,85 @@ namespace Battle
             _context.SetState<MoveState>();
         }
 
-        public void SetSelectSkillState()
-        {
-            _context.SetState<SkillState>();
-        }
+        //public void SetSelectSkillState()
+        //{
+        //    _context.SetState<SkillState>();
+        //}
 
-        public void SetSupportState() 
-        {
-            _context.SetState<SupportState>();
-        }
+        //public void SetSupportState() 
+        //{
+        //    _context.SetState<SupportState>();
+        //}
 
-        public void SetItemState()
-        {
-            _context.SetState<ItemState>();
-        }
+        //public void SetItemState()
+        //{
+        //    _context.SetState<ItemState>();
+        //}
 
         public void Idle()
         {
-            _selectedCharacter.ActionCount = 0;
+            SelectedCharacter.ActionCount = 0;
             _context.SetState<EndState>();
         }
 
-        public void SelectSkill(Skill skill)
+        public void SelectObject(object obj)
         {
-            if (_context.CurrentState is SkillState)
-            {
-                _selectedCharacter.SelectedSkill = skill;
-                _selectedCharacter.SelectedSupport = null;
-                _selectedCharacter.SelectedItem = null;
-                _context.SetState<TargetState>();
-            }
+            SelectedCharacter.SelectedObject = obj;
+            _context.SetState<TargetState>();
         }
 
-        public void SelectSupport(Support support)
-        {
-            if (_context.CurrentState is SupportState)
-            {
-                _selectedCharacter.SelectedSupport = support;
-                _selectedCharacter.SelectedSkill = null;
-                _selectedCharacter.SelectedItem = null;
-                _context.SetState<TargetState>();
-            }
-        }
+        //public void SelectSkill(Skill skill)
+        //{
+        //    if (_context.CurrentState is SkillState)
+        //    {
+        //        _selectedCharacter.SelectedSkill = skill;
+        //        _selectedCharacter.SelectedSupport = null;
+        //        _selectedCharacter.SelectedCard = null;
+        //        _selectedCharacter.SelectedConsumables = null;
+        //        _selectedCharacter.SelectedFood = null;
+        //        _selectedCharacter.SelectedEffect = skill.Effect;
+        //        _context.SetState<TargetState>();
+        //    }
+        //}
+
+        //public void SelectSupport(Support support)
+        //{
+        //    if (_context.CurrentState is SupportState)
+        //    {
+        //        _selectedCharacter.SelectedSupport = support;
+        //        _selectedCharacter.SelectedSkill = null;
+        //        _selectedCharacter.SelectedCard = null;
+        //        _selectedCharacter.SelectedConsumables = null;
+        //        _selectedCharacter.SelectedFood = null;
+        //        _selectedCharacter.SelectedEffect = support.Effect;
+        //        _context.SetState<TargetState>();
+        //    }
+        //}
 
 
-        public void SelectItem(Item item)
-        {
-            if (_context.CurrentState is ItemState)
-            {
-                if (item == null) //返回 
-                {
-                    Instance._battleUI.SetSkillVisible(false);
-                    Instance.SetActionState();
-                }
-                else if (item.Data.PP == -1 || _selectedCharacter.CurrentPP >= item.Data.PP)
-                {
-                    _selectedCharacter.SelectedItem = item;
-                    _selectedCharacter.SelectedSkill = null;
-                    _selectedCharacter.SelectedSupport = null;
-                    _context.SetState<TargetState>();
-                }
-                else
-                {
-                    Instance._battleUI.TipLabel.SetLabel("PP不足 " + (item.Data.PP - _selectedCharacter.CurrentPP));
-                }
+        //public void SelectItem(Item item)
+        //{
+        //if (_context.CurrentState is ItemState)
+        //{
+        //    if (item == null) //返回 
+        //    {
+        //        Instance._battleUI.SetSkillVisible(false);
+        //        Instance.SetActionState();
+        //    }
+        //    else if (item.Data.PP == -1 || _selectedCharacter.CurrentPP >= item.Data.PP)
+        //    {
+        //        _selectedCharacter.SelectedItem = item;
+        //        _selectedCharacter.SelectedSkill = null;
+        //        _selectedCharacter.SelectedSupport = null;
+        //        _context.SetState<TargetState>();
+        //    }
+        //    else
+        //    {
+        //        Instance._battleUI.TipLabel.SetLabel("PP不足 " + (item.Data.PP - _selectedCharacter.CurrentPP));
+        //    }
 
-            }
-        }
+        //}
+        //}
 
         public void SetQuad(List<Vector2Int> list, Color color)
         {
@@ -255,14 +270,16 @@ namespace Battle
 
         public void SetSkillArea(Effect effect)
         {
-            if (effect.Data.Area == "Through")
+            if (effect.Area == "Through")
             {
-                _areaList = GetTroughAreaList(_selectedCharacter.Position, new Vector3(_selectedPosition.x, Instance.Info.TileInfoDic[_selectedPosition].Height, _selectedPosition.y));
+                _areaList = GetTroughAreaList(SelectedCharacter.Position, new Vector3(_selectedPosition.x, Instance.Info.TileInfoDic[_selectedPosition].Height, _selectedPosition.y));
             }
             else
             {
                 _areaList = GetNormalAreaList(Info.Width, Info.Height, effect, _selectedPosition);
             }
+
+            RemoveByFaction(effect, _areaList);
             SetQuad(_areaList, _yellow);
         }
 
@@ -282,15 +299,15 @@ namespace Battle
         public void OnMoveEnd()
         {
             _canClick = true;
-            _selectedCharacter.ActionCount--;
+            SelectedCharacter.ActionCount--;
 
-            if (_selectedCharacter.AI != null)
+            if (SelectedCharacter.AI != null)
             {
-                _selectedCharacter.AI.OnMoveEnd();
+                SelectedCharacter.AI.OnMoveEnd();
             }
             else
             {
-                if (_selectedCharacter.ActionCount > 0)
+                if (SelectedCharacter.ActionCount > 0)
                 {
                     _context.SetState<ActionState>();
                 }
@@ -303,7 +320,7 @@ namespace Battle
 
         public void SetDirection(Vector2Int direction) 
         {
-            _selectedCharacter.Direction = direction;
+            SelectedCharacter.Direction = direction;
         }
 
         public bool SetCharacterInfoUI_2(Vector2 position)
@@ -312,7 +329,7 @@ namespace Battle
             Instance._battleUI.SetCharacterInfoUI_2(null);
             for (int i = 0; i < CharacterList.Count; i++)
             {
-                if (CharacterList[i] != Instance._selectedCharacter && position == new Vector2(CharacterList[i].Position.x, CharacterList[i].Position.z))
+                if (CharacterList[i] != Instance.SelectedCharacter && position == new Vector2(CharacterList[i].Position.x, CharacterList[i].Position.z))
                 {
                     Instance._battleUI.SetCharacterInfoUI_2(CharacterList[i]);
                     return true;
@@ -323,12 +340,12 @@ namespace Battle
 
         public void ResetAction()
         {
-            if (!_selectedCharacter.HasUseSkill && _selectedCharacter.LastPosition != BattleCharacterInfo.DefaultLastPosition && _selectedCharacter.ActionCount < 2)
+            if (!SelectedCharacter.HasUseSkill && SelectedCharacter.LastPosition != BattleCharacterInfo.DefaultLastPosition && SelectedCharacter.ActionCount < 2)
             {
-                _selectedCharacter.ActionCount = 2;
-                _selectedCharacter.Position = _selectedCharacter.LastPosition;
-                _controllerDic[_selectedCharacter.ID].transform.position = _selectedCharacter.LastPosition;
-                _selectedCharacter.LastPosition = BattleCharacterInfo.DefaultLastPosition;
+                SelectedCharacter.ActionCount = 2;
+                SelectedCharacter.Position = SelectedCharacter.LastPosition;
+                _controllerDic[SelectedCharacter.Index].transform.position = SelectedCharacter.LastPosition;
+                SelectedCharacter.LastPosition = BattleCharacterInfo.DefaultLastPosition;
             }
         }
 
@@ -354,7 +371,7 @@ namespace Battle
                     {
                         if (x.CurrentWT == y.CurrentWT)
                         {
-                            if (x.ID > y.ID)
+                            if (x.Index > y.Index)
                             {
                                 return 1;
                             }

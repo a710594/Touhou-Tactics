@@ -44,18 +44,36 @@ public class DataContext
     public List<PassiveModel> PassiveList = new List<PassiveModel>();
     public List<EquipModel> EquipList = new List<EquipModel>();
     public List<EnemyGroupModel> EnemyGroupList = new List<EnemyGroupModel>();
+    public List<FloorModel> FloorList = new List<FloorModel>();
+    public List<RoomModel> RoomList = new List<RoomModel>();
+    public List<TreasureModel> TreasureList = new List<TreasureModel>();
+    public List<ShopModel> ShopList = new List<ShopModel>();
+    public List<CookModel> CookList = new List<CookModel>();
+    public List<CookAddModel> CookAddList = new List<CookAddModel>();
+    public List<FoodModel> FoodList = new List<FoodModel>();
+    public List<ConsumablesModel> ConsumablesList = new List<ConsumablesModel>();
+    public List<CardModel> CardList = new List<CardModel>();
 
     public Dictionary<int, JobModel> JobDic = new Dictionary<int, JobModel>();
     public Dictionary<int, SkillModel> SkillDic = new Dictionary<int, SkillModel>();
-    public Dictionary<EffectModel.TypeEnum, Dictionary<int, EffectModel>> EffectDic = new Dictionary<EffectModel.TypeEnum, Dictionary<int, EffectModel>>();
-    public Dictionary<StatusModel.TypeEnum, Dictionary<int, StatusModel>> StatusDic = new Dictionary<StatusModel.TypeEnum, Dictionary<int, StatusModel>>();
+    public Dictionary<int, EffectModel> EffectDic = new Dictionary<int, EffectModel>();
+    public Dictionary<int, StatusModel> StatusDic = new Dictionary<int, StatusModel>();
     public Dictionary<int, EnemyModel> EnemyDic = new Dictionary<int, EnemyModel>();
     public Dictionary<int, SupportModel> SupportDic = new Dictionary<int, SupportModel>();
     public Dictionary<int, PassiveModel> PassiveDic = new Dictionary<int, PassiveModel>();
-    public Dictionary<EquipModel.CategoryEnum, Dictionary<int, EquipModel>> EquipDic = new Dictionary<EquipModel.CategoryEnum, Dictionary<int, EquipModel>>();
-    public Dictionary<ItemModel.CategoryEnum, Dictionary<int, ItemModel>> ItemDic = new Dictionary<ItemModel.CategoryEnum, Dictionary<int, ItemModel>>();
+    public Dictionary<int, EquipModel> EquipDic = new Dictionary<int, EquipModel>();
+    public Dictionary<int, ItemModel> ItemDic = new Dictionary<int, ItemModel>();
     public Dictionary<int, Dictionary<int, EnemyGroupModel>> EnemyGroupDic = new Dictionary<int, Dictionary<int, EnemyGroupModel>>();
-    
+    public Dictionary<int, FloorModel> FloorDic = new Dictionary<int, FloorModel>();
+    public Dictionary<int, RoomModel> RoomDic = new Dictionary<int, RoomModel>();
+    public Dictionary<int, List<int>> RoomPool = new Dictionary<int, List<int>>(); //機率池 <Floor, idList>
+    public Dictionary<int, TreasureModel> TreasureDic = new Dictionary<int, TreasureModel>();
+    public Dictionary<ItemModel.CategoryEnum, List<ShopModel>> ShopItemDic = new Dictionary<ItemModel.CategoryEnum, List<ShopModel>>();
+    public Dictionary<int, CookAddModel> CookAddDic = new Dictionary<int, CookAddModel>();
+    public Dictionary<int, FoodModel> FoodDic = new Dictionary<int, FoodModel>();
+    public Dictionary<int, ConsumablesModel> ConsumablesDic = new Dictionary<int, ConsumablesModel>();
+    public Dictionary<int, CardModel> CardDic = new Dictionary<int, CardModel>();
+
     public Dictionary<string, TileScriptableObject> TileScriptableObjectDic = new Dictionary<string, TileScriptableObject>();
     public Dictionary<string, AttachScriptableObject> AttachScriptableObjectDic = new Dictionary<string, AttachScriptableObject>();
 
@@ -77,22 +95,14 @@ public class DataContext
         for (int i=0; i<EffectList.Count; i++) 
         {
             EffectList[i].GetAreaList();
-            if (!EffectDic.ContainsKey(EffectList[i].Type)) 
-            {
-                EffectDic.Add(EffectList[i].Type, new Dictionary<int, EffectModel>());
-            }
-            EffectDic[EffectList[i].Type].Add(EffectList[i].ID, EffectList[i]);
+            EffectDic.Add(EffectList[i].ID, EffectList[i]);
         }
 
         StatusList = Load<List<StatusModel>>("Status", PrePathEnum.Data);
         for (int i = 0; i < StatusList.Count; i++)
         {
             StatusList[i].GetAreaList();
-            if (!StatusDic.ContainsKey(StatusList[i].Type))
-            {
-                StatusDic.Add(StatusList[i].Type, new Dictionary<int, StatusModel>());
-            }
-            StatusDic[StatusList[i].Type].Add(StatusList[i].ID, StatusList[i]);
+            StatusDic.Add(StatusList[i].ID, StatusList[i]);
         }
 
         EnemyList = Load<List<EnemyModel>>("Enemy", PrePathEnum.Data);
@@ -111,11 +121,7 @@ public class DataContext
         ItemList = Load<List<ItemModel>>("Item", PrePathEnum.Data);
         for (int i = 0; i < ItemList.Count; i++)
         {
-            if (!ItemDic.ContainsKey(ItemList[i].Category))
-            {
-                ItemDic.Add(ItemList[i].Category, new Dictionary<int, ItemModel>());
-            }
-            ItemDic[ItemList[i].Category].Add(ItemList[i].ID, ItemList[i]);
+            ItemDic.Add(ItemList[i].ID, ItemList[i]);
         }
 
         PassiveList = Load<List<PassiveModel>>("Passive", PrePathEnum.Data);
@@ -127,11 +133,7 @@ public class DataContext
         EquipList = Load<List<EquipModel>>("Equip", PrePathEnum.Data);
         for (int i = 0; i < EquipList.Count; i++)
         {
-            if (!EquipDic.ContainsKey(EquipList[i].Category))
-            {
-                EquipDic.Add(EquipList[i].Category, new Dictionary<int, EquipModel>());
-            }
-            EquipDic[EquipList[i].Category].Add(EquipList[i].ID, EquipList[i]);
+            EquipDic.Add(EquipList[i].ID, EquipList[i]);
         }
 
         EnemyGroupList = Load<List<EnemyGroupModel>>("EnemyGroup", PrePathEnum.Data);
@@ -143,6 +145,100 @@ public class DataContext
                 EnemyGroupDic.Add(EnemyGroupList[i].Floor, new Dictionary<int, EnemyGroupModel>());
             }
             EnemyGroupDic[EnemyGroupList[i].Floor].Add(EnemyGroupList[i].ID, EnemyGroupList[i]);
+        }
+
+        FloorList = Load<List<FloorModel>>("Floor", PrePathEnum.Data);
+        for (int i = 0; i < FloorList.Count; i++)
+        {
+            FloorDic.Add(FloorList[i].Floor, FloorList[i]);
+        }
+
+        RoomList = Load<List<RoomModel>>("Room", PrePathEnum.Data);
+        for (int i = 0; i < RoomList.Count; i++)
+        {
+            RoomDic.Add(RoomList[i].ID, RoomList[i]);
+        }
+
+        for (int i=0; i< FloorList.Count; i++) 
+        {
+            RoomPool.Add(FloorList[i].Floor, new List<int>());
+            if (FloorList[i].Room_1 != -1) 
+            {
+                for (int j = 0; j < FloorList[i].Probability_1; j++)
+                {
+                    RoomPool[FloorList[i].Floor].Add(FloorList[i].Room_1);
+                }
+
+                for (int j = 0; j < FloorList[i].Probability_2; j++)
+                {
+                    RoomPool[FloorList[i].Floor].Add(FloorList[i].Room_2);
+                }
+
+                for (int j = 0; j < FloorList[i].Probability_3; j++)
+                {
+                    RoomPool[FloorList[i].Floor].Add(FloorList[i].Room_3);
+                }
+
+                for (int j = 0; j < FloorList[i].Probability_4; j++)
+                {
+                    RoomPool[FloorList[i].Floor].Add(FloorList[i].Room_4);
+                }
+
+                for (int j = 0; j < FloorList[i].Probability_5; j++)
+                {
+                    RoomPool[FloorList[i].Floor].Add(FloorList[i].Room_5);
+                }
+            }
+        }
+
+        TreasureList = Load<List<TreasureModel>>("Treasure", PrePathEnum.Data);
+        for (int i = 0; i < TreasureList.Count; i++)
+        {
+            TreasureList[i].GetList();
+            TreasureDic.Add(TreasureList[i].ID, TreasureList[i]);
+        }
+
+        ShopList = Load<List<ShopModel>>("Shop", PrePathEnum.Data);
+        ItemModel item;
+        for (int i = 0; i < ShopList.Count; i++)
+        {
+            ShopList[i].GetList();
+            item = ItemDic[ShopList[i].ID];
+            if (!ShopItemDic.ContainsKey(item.Category))
+            {
+                ShopItemDic.Add(item.Category, new List<ShopModel>());
+            }
+            ShopItemDic[item.Category].Add(ShopList[i]);
+        }
+
+        CookList = Load<List<CookModel>>("Cook", PrePathEnum.Data);
+        for (int i=0; i<CookList.Count; i++) 
+        {
+            CookList[i].GetList();
+        }
+
+        CookAddList = Load<List<CookAddModel>>("CookAdd", PrePathEnum.Data);
+        for (int i = 0; i < CookAddList.Count; i++)
+        {
+            CookAddDic.Add(CookAddList[i].ID, CookAddList[i]);
+        }
+
+        FoodList = Load<List<FoodModel>>("Food", PrePathEnum.Data);
+        for (int i = 0; i < FoodList.Count; i++)
+        {
+            FoodDic.Add(FoodList[i].ID, FoodList[i]);
+        }
+
+        ConsumablesList = Load<List<ConsumablesModel>>("Consumables", PrePathEnum.Data);
+        for (int i = 0; i < ConsumablesList.Count; i++)
+        {
+            ConsumablesDic.Add(ConsumablesList[i].ID, ConsumablesList[i]);
+        }
+
+        CardList = Load<List<CardModel>>("Card", PrePathEnum.Data);
+        for (int i = 0; i < CardList.Count; i++)
+        {
+            CardDic.Add(CardList[i].ID, CardList[i]);
         }
 
         DirectoryInfo d;

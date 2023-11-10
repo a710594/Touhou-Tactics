@@ -1,0 +1,7 @@
+[{"ID":1,"Price":10,"UnlockFloor":1,"MaterialID_1":-1,"MaterialAmount_1":-1,"MaterialID_2":-1,"MaterialAmount_2":-1,"MaterialID_3":-1,"MaterialAmount_3":-1},
+{"ID":2,"Price":1,"UnlockFloor":1,"MaterialID_1":13,"MaterialAmount_1":1,"MaterialID_2":-1,"MaterialAmount_2":-1,"MaterialID_3":-1,"MaterialAmount_3":-1},
+{"ID":3,"Price":1,"UnlockFloor":1,"MaterialID_1":13,"MaterialAmount_1":1,"MaterialID_2":-1,"MaterialAmount_2":-1,"MaterialID_3":-1,"MaterialAmount_3":-1},
+{"ID":4,"Price":1,"UnlockFloor":1,"MaterialID_1":13,"MaterialAmount_1":1,"MaterialID_2":-1,"MaterialAmount_2":-1,"MaterialID_3":-1,"MaterialAmount_3":-1},
+{"ID":5,"Price":1,"UnlockFloor":1,"MaterialID_1":13,"MaterialAmount_1":1,"MaterialID_2":-1,"MaterialAmount_2":-1,"MaterialID_3":-1,"MaterialAmount_3":-1},
+{"ID":6,"Price":1,"UnlockFloor":1,"MaterialID_1":13,"MaterialAmount_1":1,"MaterialID_2":-1,"MaterialAmount_2":-1,"MaterialID_3":-1,"MaterialAmount_3":-1},
+{"ID":21,"Price":100,"UnlockFloor":1,"MaterialID_1":12,"MaterialAmount_1":3,"MaterialID_2":-1,"MaterialAmount_2":-1,"MaterialID_3":-1,"MaterialAmount_3":-1}]

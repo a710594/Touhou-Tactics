@@ -6,17 +6,16 @@ public class ItemModel
 {
     public enum CategoryEnum
     {
-        Medicine = 1,
+        Consumables = 1,
+        Food,
         Card,
-        Material,
+        Equip,
+        Item,
     }
 
     public CategoryEnum Category;
     public int ID;
     public string Name;
-    public string Description;
-    public EffectModel.TypeEnum EffectType;
-    public int EffectID;
-    public int Job;
-    public int PP;
+    public string Comment;
+    public int Price;
 }

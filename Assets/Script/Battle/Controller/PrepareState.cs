@@ -32,17 +32,17 @@ namespace Battle
                 BattleCharacterInfo battleCharacter;
                 foreach (KeyValuePair<CharacterInfo, GameObject> pair in _tempDic)
                 {
-                    battleCharacter = new BattleCharacterInfo(pair.Key, CharacterManager.Instance.Lv);
-                    battleCharacter.ID = _characterList.Count + 1;
+                    battleCharacter = new BattleCharacterInfo(pair.Key, CharacterManager.Instance.CharacterInfoGroup.Lv);
+                    battleCharacter.Index = _characterList.Count + 1;
                     battleCharacter.Position = pair.Value.transform.position;
                     _characterList.Add(battleCharacter);
                     _info.TileInfoDic[Utility.ConvertToVector2Int(battleCharacter.Position)].HasCharacter = true;
-                    Instance._controllerDic.Add(battleCharacter.ID, pair.Value.GetComponent<BattleCharacterController>());
-                    Instance._controllerDic[battleCharacter.ID].MoveEndHandler += Instance.OnMoveEnd;
-                    Instance._controllerDic[battleCharacter.ID].SetDirectionHandler += Instance.SetDirection;
-                    Instance._battleUI.SetLittleHpBarAnchor(battleCharacter.ID, Instance._controllerDic[battleCharacter.ID]);
-                    Instance._battleUI.SetLittleHpBarValue(battleCharacter.ID, battleCharacter);
-                    Instance._battleUI.SetFloatingNumberPoolAnchor(battleCharacter.ID, Instance._controllerDic[battleCharacter.ID]);
+                    Instance._controllerDic.Add(battleCharacter.Index, pair.Value.GetComponent<BattleCharacterController>());
+                    Instance._controllerDic[battleCharacter.Index].MoveEndHandler += Instance.OnMoveEnd;
+                    Instance._controllerDic[battleCharacter.Index].SetDirectionHandler += Instance.SetDirection;
+                    Instance._battleUI.SetLittleHpBarAnchor(battleCharacter.Index, Instance._controllerDic[battleCharacter.Index]);
+                    Instance._battleUI.SetLittleHpBarValue(battleCharacter.Index, battleCharacter);
+                    Instance._battleUI.SetFloatingNumberPoolAnchor(battleCharacter.Index, Instance._controllerDic[battleCharacter.Index]);
                 }
                 Instance._battleUI.gameObject.SetActive(true);
                 Instance._selectBattleCharacterUI.gameObject.SetActive(false);

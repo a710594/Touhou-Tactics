@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class Sleep : Status
 {
-    public Sleep(StatusModel data)
+    public Sleep(StatusModel data) : base(data)
     {
-        Data = data;
-        RemainTime = data.Time;
     }
 }

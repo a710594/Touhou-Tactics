@@ -5,22 +5,22 @@ using UnityEngine;
 
 public class RecoverEffect : Effect
 {
-    public RecoverEffect(EffectModel data)
+    public RecoverEffect(EffectModel data) : base(data)
     {
-        Data = data;
-        if (data.SubType != EffectModel.TypeEnum.None)
-        {
-            EffectModel subData = DataContext.Instance.EffectDic[data.SubType][data.SubID];
-            SubEffect = EffectFactory.GetEffect(subData);
-        }
+        //Data = data;
+        //if (data.SubID != -1)
+        //{
+        //    EffectModel subData = DataContext.Instance.EffectDic[data.SubID];
+        //    SubEffect = EffectFactory.GetEffect(subData);
+        //}
     }
 
-    public override void SetEffect(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)
+    public override void Use(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)
     {
         FloatingNumberData floatingNumberData;
         BattleController.HitType hitType;
 
-        if (Data.Target == EffectModel.TargetEnum.Us)
+        if (Target == EffectModel.TargetEnum.Us)
         {
             hitType = BattleController.HitType.Hit;
         }
@@ -31,7 +31,7 @@ public class RecoverEffect : Effect
 
         if (hitType != BattleController.HitType.Miss)
         {
-            int recover = Mathf.RoundToInt((float)Data.Value * (float)user.MEN / 100f);
+            int recover = Mathf.RoundToInt((float)Value * (float)user.MEN / 100f);
             target.SetRecover(recover);
             floatingNumberData = new FloatingNumberData(FloatingNumberData.TypeEnum.Recover, recover.ToString());
         }
@@ -44,7 +44,7 @@ public class RecoverEffect : Effect
 
         if (SubEffect != null && hitType != BattleController.HitType.Miss)
         {
-            SubEffect.SetEffect(user, target, floatingList, characterList);
+            SubEffect.Use(user, target, floatingList, characterList);
         }
     }
 }

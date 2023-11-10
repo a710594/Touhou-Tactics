@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 public class EffectFactory
 {
-    public static Effect GetEffect(EffectModel.TypeEnum type, int id)
+    public static Effect GetEffect(int id)
     {
-        return GetEffect(DataContext.Instance.EffectDic[type][id]);
+        return GetEffect(DataContext.Instance.EffectDic[id]);
     }
 
     public static Effect GetEffect(EffectModel data)
@@ -21,7 +21,7 @@ public class EffectFactory
         }
         else if (data.Type == EffectModel.TypeEnum.MagicAttack)
         {
-            effect = new PhysicalAttackEffect(data);
+            effect = new MagicAttackEffect(data);
         }
         else if(data.Type == EffectModel.TypeEnum.Provocative) 
         {
@@ -50,6 +50,19 @@ public class EffectFactory
         else if (data.Type == EffectModel.TypeEnum.Sleep)
         {
             effect = new SleepEffect(data);
+        }
+
+        return effect;
+    }
+
+    public static Effect GetEffect(int id, int addValue) 
+    {
+        Effect effect = null;
+        EffectModel data = DataContext.Instance.EffectDic[id];
+
+        if (data.Type == EffectModel.TypeEnum.Medicine)
+        {
+            effect = new MedicineEffect(addValue);
         }
 
         return effect;

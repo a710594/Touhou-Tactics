@@ -18,6 +18,7 @@ public class ScrollView : MonoBehaviour
     public float CellSizeY;
     public float SpacingX;
     public float SpacingY;
+    public float SubSpacing;
     public RectTransform Background;
     public RectTransform Content;
     public GridLayoutGroup MainGrid;
@@ -32,7 +33,7 @@ public class ScrollView : MonoBehaviour
     private List<ScrollGrid> _gridList = new List<ScrollGrid>();
     private List<object> _dataList = new List<object>();
 
-    public void Init()
+    private void Init()
     {
         float length = 0;
         if (Type == TypeEnum.Horizontal)
@@ -41,7 +42,8 @@ public class ScrollView : MonoBehaviour
             MainGridRect.sizeDelta = new Vector2((ScrollItem.Background.rectTransform.sizeDelta.x + SpacingX) * _subGridAmount, Background.sizeDelta.y);
             MainGrid.cellSize = new Vector2(CellSizeX, Background.sizeDelta.y);
             MainGrid.spacing = new Vector2(SpacingX, 0);
-            length = Content.sizeDelta.y;
+            length = Background.sizeDelta.y;
+            Content.sizeDelta = new Vector2(Content.sizeDelta.x, length);
             _scrollItemAmount = Mathf.FloorToInt(length / (ScrollItem.Background.rectTransform.sizeDelta.y + SubGrid.Grid.spacing.y));
         }
         else if (Type == TypeEnum.Vertical)
@@ -50,7 +52,8 @@ public class ScrollView : MonoBehaviour
             MainGridRect.sizeDelta = new Vector2(Background.sizeDelta.x, (ScrollItem.Background.rectTransform.sizeDelta.y + SpacingY) * _subGridAmount);
             MainGrid.cellSize = new Vector2(Background.sizeDelta.x, CellSizeY);
             MainGrid.spacing = new Vector2(0, SpacingY);
-            length = Content.sizeDelta.x;
+            length = Background.sizeDelta.x;
+            Content.sizeDelta = new Vector2(length, Content.sizeDelta.y);
             _scrollItemAmount = Mathf.FloorToInt(length / (ScrollItem.Background.rectTransform.sizeDelta.x + SubGrid.Grid.spacing.x));
         }
 
@@ -60,14 +63,6 @@ public class ScrollView : MonoBehaviour
         {
             grid = Instantiate(SubGrid);
             grid.transform.SetParent(MainGrid.transform);
-            //if (Type == TypeEnum.Horizontal)
-            //{
-            //    grid.transform.localPosition = new Vector3((i + 0.5f) * CellSizeY + i * SpacingY, Background.sizeDelta.y / 2f);
-            //}
-            //else if (Type == TypeEnum.Vertical)
-            //{
-            //    grid.transform.localPosition = new Vector3(Background.sizeDelta.x / 2f, -(i + 0.5f) * CellSizeY - i * SpacingY);
-            //}
             grid.ItemOnClickHandler += ItemOnClick;
             grid.Init(ScrollItem, Type, length, CellSizeX, CellSizeY, SpacingX, SpacingY, _scrollItemAmount);
             _gridList.Add(grid);
@@ -93,6 +88,14 @@ public class ScrollView : MonoBehaviour
         _gridOrign = MainGrid.transform.localPosition;
     }
 
+    public void CancelSelect() 
+    {
+        for (int i = 0; i < _gridList.Count; i++)
+        {
+            _gridList[i].SetSelect(null);
+        }
+    }
+
     private void Refresh(int index) 
     {
         for (int i = 0; i < _gridList.Count; i++)
@@ -103,6 +106,11 @@ public class ScrollView : MonoBehaviour
 
     private void ItemOnClick(object obj, ScrollItem item) 
     {
+        for (int i = 0; i < _gridList.Count; i++)
+        {
+            _gridList[i].SetSelect(item);
+        }
+
         if (ItemOnClickHandler != null) 
         {
             ItemOnClickHandler(obj, item);
@@ -111,14 +119,15 @@ public class ScrollView : MonoBehaviour
 
     private void Awake()
     {
-        //Init();
-
-        //List<object> list = new List<object>();
-        //for (int i=1; i<= 50; i++) 
-        //{
-        //    list.Add(i.ToString());
-        //}
-        //SetData(list);
+        if (Type == TypeEnum.Horizontal)
+        {
+            SubGrid.Grid.spacing = new Vector3(0, SubSpacing);
+        }
+        else if (Type == TypeEnum.Vertical)
+        {
+            SubGrid.Grid.spacing = new Vector3(SubSpacing, 0);
+        }
+        Init();
         MainGrid.transform.localPosition = Vector3.zero;
     }
 

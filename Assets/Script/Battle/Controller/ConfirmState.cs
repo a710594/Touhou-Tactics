@@ -14,25 +14,9 @@ namespace Battle
 
             public override void Begin(object obj)
             {
-                _character = Instance._selectedCharacter;
+                _character = Instance.SelectedCharacter;
                 _characterList = Instance.CharacterList;
-
-                Effect effect = null;
-                if (_character.SelectedSkill != null) 
-                {
-                    effect = _character.SelectedSkill.Effect;
-                }
-                else if (_character.SelectedSupport != null) 
-                {
-                    effect = _character.SelectedSupport.Effect;
-                }
-                else if (_character.SelectedItem != null)
-                {
-                    effect = _character.SelectedItem.Effect;
-                }
-
-                Instance.SetSkillArea(effect);
-                Vector2Int v = Instance._selectedPosition;
+                Instance.SetSkillArea(Utility.GetEffect(_character.SelectedObject));
 
                 Instance.Info.TileComponentDic[Instance._selectedPosition].Select.gameObject.SetActive(true);
             }
@@ -49,7 +33,7 @@ namespace Battle
                 {
                     Instance._battleUI.SetCharacterInfoUI_2(null);
                     Instance.ClearQuad();
-                    _context.SetState<SkillState>();
+                    _context.SetState<ActionState>();
                 }
             }
 

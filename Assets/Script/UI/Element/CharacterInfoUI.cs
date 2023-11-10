@@ -7,6 +7,7 @@ public class CharacterInfoUI : MonoBehaviour
 {
     public Text NameLabel;
     public BattleValueBar HpBar;
+    public ValueBar PpBar;
     public StatusIcon StatusIcon;
     public Transform StatusGrid;
     public Button Button;
@@ -26,6 +27,15 @@ public class CharacterInfoUI : MonoBehaviour
         _character = character;
         NameLabel.text = character.Name;
         HpBar.SetValue(character.CurrentHP, character.MaxHP);
+        if (character.Faction == BattleCharacterInfo.FactionEnum.Player)
+        {
+            PpBar.gameObject.SetActive(true);
+            PpBar.SetValue(character.CurrentPP, BattleCharacterInfo.MaxPP);
+        }
+        else
+        {
+            PpBar.gameObject.SetActive(false);
+        }
 
         for (int i=0; i<_statusIconList.Count; i++) 
         {
@@ -65,6 +75,7 @@ public class CharacterInfoUI : MonoBehaviour
 
     private void Awake()
     {
+        PpBar.SetValue(0, BattleCharacterInfo.MaxPP);
         Button.onClick.AddListener(ButtonOnClick);
     }
 }

@@ -8,6 +8,7 @@ namespace Battle
     {
         private class EffectState : BattleControllerState
         {
+            int _maxFloatingCount;
             private List<BattleCharacterInfo> _targetList;
             private Timer _timer = new Timer();
             private Effect effect;
@@ -21,7 +22,7 @@ namespace Battle
                 Instance._battleUI.SetCharacterInfoUI_2(null);
                 Instance.ClearQuad();
                 _characterList = Instance.CharacterList;
-                _character = Instance._selectedCharacter;
+                _character = Instance.SelectedCharacter;
                 _targetList = new List<BattleCharacterInfo>();
                 for (int i = 0; i < _characterList.Count; i++)
                 {
@@ -33,52 +34,120 @@ namespace Battle
                 }
                 if (_targetList.Count > 0)
                 {
-                    int max = 0;
-                    for (int i = 0; i < _targetList.Count; i++)
+                    _maxFloatingCount = 0;
+                    if (_character.SelectedObject is Skill)
                     {
-                        List<FloatingNumberData> floatingList = new List<FloatingNumberData>();
-                        if (_character.SelectedSkill != null)
+                        Skill skill = (Skill)_character.SelectedObject;
+                        for (int i = 0; i < _targetList.Count; i++)
                         {
-                            _character.SelectedSkill.SetEffect(_character, _targetList[i], floatingList, _characterList);
+                            List<FloatingNumberData> floatingList = new List<FloatingNumberData>();
+                            skill.Effect.Use(_character, _targetList[i], floatingList, _characterList);
+                            SetUI(_targetList[i], floatingList);
                         }
-                        else if (_character.SelectedSupport != null) 
+                        _character.HasUseSkill = true;
+                        _character.ActionCount--;
+                        if (_character.CurrentPP < BattleCharacterInfo.MaxPP)
                         {
-                            _character.SelectedSupport.SetEffect(_character, _targetList[i], floatingList, _characterList);
+                            _character.CurrentPP++;
                         }
-                        else if (_character.SelectedItem != null) 
+                        if (skill.Data.CD > 0)
                         {
-                            _character.SelectedItem.SetEffect(_character, _targetList[i], floatingList, _characterList);
-                        }
-                        Instance._battleUI.SetLittleHpBarValue(_targetList[i].ID, _targetList[i]);
-                        for (int j = 0; j < floatingList.Count; j++)
-                        {
-                            Instance._battleUI.PlayFloatingNumberPool(_targetList[i].ID, floatingList[j].Type, floatingList[j].Text);
-                        }
-                        if (floatingList.Count > max)
-                        {
-                            max = floatingList.Count;
+                            skill.CurrentCD = skill.Data.CD + 1; //要加一的原因是為了抵銷本回合的 CheckCD
                         }
                     }
-                    _timer.Start(max, CheckResult);
+                    else if(_character.SelectedObject is Support) 
+                    {
+                        Support support = (Support)_character.SelectedObject;
+                        for (int i = 0; i < _targetList.Count; i++)
+                        {
+                            List<FloatingNumberData> floatingList = new List<FloatingNumberData>();
+                            support.Effect.Use(_character, _targetList[i], floatingList, _characterList);
+                            SetUI(_targetList[i], floatingList);
+                        }
+                        _character.HasUseSupport = true;
+                        if (_character.CurrentPP < BattleCharacterInfo.MaxPP)
+                        {
+                            _character.CurrentPP++;
+                        }
+                        if (support.Data.CD > 0)
+                        {
+                            support.CurrentCD = support.Data.CD + 1; //要加一的原因是為了抵銷本回合的 CheckCD
+                        }
+                    }
+                    else if(_character.SelectedObject is Card) 
+                    {
+                        Card card = (Card)_character.SelectedObject;
+                        for (int i = 0; i < _targetList.Count; i++)
+                        {
+                            List<FloatingNumberData> floatingList = new List<FloatingNumberData>();
+                            card.Effect.Use(_character, _targetList[i], floatingList, _characterList);
+                            SetUI(_targetList[i], floatingList);
+                        }
+                        _character.HasUseItem = true;
+                        _character.ActionCount--;
+                        _character.CurrentPP -= card.CardData.PP;
+                        ItemManager.Instance.MinusItem(card.ID, 1);
+                    }
+                    else if(_character.SelectedObject is Consumables) 
+                    {
+                        Consumables consumables = (Consumables)_character.SelectedObject;
+                        for (int i = 0; i < _targetList.Count; i++)
+                        {
+                            List<FloatingNumberData> floatingList = new List<FloatingNumberData>();
+                            consumables.Effect.Use(_character, _targetList[i], floatingList, _characterList);
+                            SetUI(_targetList[i], floatingList);
+                        }
+                        _character.HasUseItem = true;
+                        _character.ActionCount--;
+                        ItemManager.Instance.MinusItem(consumables.ID, 1);
+                    }
+                    else if(_character.SelectedObject is Food) 
+                    {
+                        Food food = (Food)_character.SelectedObject;
+                        for (int i = 0; i < _targetList.Count; i++)
+                        {
+                            List<FloatingNumberData> floatingList = new List<FloatingNumberData>();
+                            food.Effect.Use(_character, _targetList[i], floatingList, _characterList);
+                            SetUI(_targetList[i], floatingList);
+                        }
+                        _character.HasUseItem = true;
+                        _character.ActionCount--;
+                        ItemManager.Instance.MinusItem(food.ID, 1);
+                    }
+
+                    _timer.Start(_maxFloatingCount, CheckResult);
                 }
                 else
                 {
                     Instance._battleUI.TipLabel.SetLabel("毫無反應...");
-                    if (_character.SelectedSkill != null)
+                    if (_character.SelectedObject is Skill)
                     {
                         _character.HasUseSkill = true;
                         _character.ActionCount--;
                     }
-                    else if (_character.SelectedSupport != null)
+                    else if (_character.SelectedObject is Support)
                     {
                         _character.HasUseSupport = true;
                     }
-                    else if (_character.SelectedItem != null)
+                    else if (_character.SelectedObject is Card || _character.SelectedObject is Consumables || _character.SelectedObject is Food)
                     {
                         _character.HasUseItem = true;
                         _character.ActionCount--;
                     }
                     _context.SetState<EndState>();
+                }
+            }
+
+            private void SetUI(BattleCharacterInfo target, List<FloatingNumberData> floatingList) 
+            {
+                Instance._battleUI.SetLittleHpBarValue(target.Index, target);
+                for (int j = 0; j < floatingList.Count; j++)
+                {
+                    Instance._battleUI.PlayFloatingNumberPool(target.Index, floatingList[j].Type, floatingList[j].Text);
+                }
+                if (floatingList.Count > _maxFloatingCount)
+                {
+                    _maxFloatingCount = floatingList.Count;
                 }
             }
 
@@ -89,7 +158,7 @@ namespace Battle
                     if (_targetList[i].CurrentHP <= 0)
                     {
                         _characterList.Remove(_targetList[i]);
-                        Instance._controllerDic[_targetList[i].ID].gameObject.SetActive(false);
+                        Instance._controllerDic[_targetList[i].Index].gameObject.SetActive(false);
                         Instance.Info.TileInfoDic[Utility.ConvertToVector2Int(_targetList[i].Position)].HasCharacter = false;
                     }
                 }
@@ -115,26 +184,10 @@ namespace Battle
                 }
                 else if (enemyCount == 0)
                 {
-                    Instance._battleUI.TipLabel.SetLabel("You Win");
+                    _context.SetState<WinState>();
                 }
                 else
                 {
-                    //if (_character.SelectedSkill != null)
-                    //{
-                    //    _character.HasUseSkill = true;
-                    //    _character.ActionCount--;
-                    //}
-                    //else if (_character.SelectedSupport != null)
-                    //{
-                    //    _character.HasUseSupport = true;
-                    //}
-                    //else if (_character.SelectedItem != null)
-                    //{
-                    //    _character.HasUseItem = true;
-                    //    _character.ActionCount--;
-                    //    ItemManager.Instance.MinusItem(_character.SelectedItem, 1);
-                    //}
-
                     if (_character.ActionCount > 0)
                     {
                         _context.SetState<ActionState>();

@@ -5,6 +5,7 @@ using UnityEngine;
 public class ItemManager
 {
     private readonly string _fileName = "BagInfo";
+    private readonly int _maxEquipCount = 10;
 
     private static ItemManager _instance;
     public static ItemManager Instance
@@ -19,22 +20,7 @@ public class ItemManager
         }
     }
 
-    public int Money
-    {
-        get
-        {
-            return _bagInfo.Money;
-        }
-        set
-        {
-            _bagInfo.Money = value;
-        }
-    }
-
-    public Dictionary<ItemModel.CategoryEnum, Dictionary<int, Item>> ItemDic = new Dictionary<ItemModel.CategoryEnum, Dictionary<int, Item>>() //<Category, <ID, Item>>
-    { { ItemModel.CategoryEnum.Medicine, new Dictionary<int, Item>()} , { ItemModel.CategoryEnum.Card, new Dictionary<int, Item>()} }; 
-
-    private BagInfo _bagInfo;
+    public BagInfo BagInfo;
 
     public void Init()
     {
@@ -43,34 +29,40 @@ public class ItemManager
 
     public void Load()
     {
-        ItemDic.Clear();
-
         BagInfo baginfo = DataContext.Instance.Load<BagInfo>(_fileName, DataContext.PrePathEnum.Save);
         if (baginfo != null)
         {
-            _bagInfo = baginfo;
+            BagInfo = baginfo;
 
-            for (int i = 0; i < baginfo.ItemList.Count; i++)
+            foreach(KeyValuePair<int, Consumables> pair in baginfo.ConsumablesDic)
             {
-                baginfo.ItemList[i].Data = DataContext.Instance.ItemDic[baginfo.ItemList[i].Category][baginfo.ItemList[i].ID];
-                baginfo.ItemList[i].Effect = EffectFactory.GetEffect(baginfo.ItemList[i].Data.EffectType, baginfo.ItemList[i].Data.EffectID);
-                if (!ItemDic.ContainsKey(baginfo.ItemList[i].Data.Category)) 
-                {
-                    ItemDic.Add(baginfo.ItemList[i].Data.Category, new Dictionary<int, Item>());
-                }
-                ItemDic[baginfo.ItemList[i].Data.Category].Add(baginfo.ItemList[i].ID, baginfo.ItemList[i]);
+                pair.Value.Init();
+            }
+
+            foreach (KeyValuePair<int, Card> pair in baginfo.CardDic)
+            {
+                pair.Value.Init();
+            }
+
+            foreach (KeyValuePair<int, Item> pair in baginfo.ItemDic)
+            {
+                pair.Value.Init();
+            }
+
+            for (int i=0; i<baginfo.FoodList.Count; i++) 
+            {
+                baginfo.FoodList[i].Init();
             }
         }
         else
         {
-            _bagInfo = new BagInfo();
+            BagInfo = new BagInfo();
         }
     }
 
     public void Save()
     {
-        _bagInfo.Save(ItemDic);
-        DataContext.Instance.Save(_bagInfo, _fileName, DataContext.PrePathEnum.Save);
+        DataContext.Instance.Save(BagInfo, _fileName, DataContext.PrePathEnum.Save);
     }
 
     public void Delete()
@@ -78,36 +70,101 @@ public class ItemManager
         DataContext.Instance.DeleteData(_fileName);
     }
 
-    public void AddItem(ItemModel.CategoryEnum category, int id, int amount)
+    public void AddItem(int id, int amount)
     {
-        Item item;
+        ItemModel data = DataContext.Instance.ItemDic[id];
 
-        if (!ItemDic.ContainsKey(category))
+        if (data.Category == ItemModel.CategoryEnum.Item)
         {
-            ItemDic.Add(category, new Dictionary<int, Item>());
+            if (!BagInfo.ItemDic.ContainsKey(id))
+            {
+                Item item = new Item(id, amount);
+                BagInfo.ItemDic.Add(id, item);
+            }
+            else
+            {
+                BagInfo.ItemDic[id].Amount += amount;
+            }
         }
-
-        if (!ItemDic[category].ContainsKey(id))
+        else if (data.Category == ItemModel.CategoryEnum.Consumables)
         {
-            item = new Item(category, id, amount);
-            ItemDic[category].Add(id, item);
+            if (!BagInfo.ConsumablesDic.ContainsKey(id))
+            {
+                Consumables consumables = new Consumables(id, amount);
+                BagInfo.ConsumablesDic.Add(id, consumables);
+            }
+            else
+            {
+                BagInfo.ConsumablesDic[id].Amount += amount;
+            }
         }
-        else
+        else if (data.Category == ItemModel.CategoryEnum.Card)
         {
-            ItemDic[category][id].Amount += amount;
+            if (!BagInfo.CardDic.ContainsKey(id))
+            {
+                Card card = new Card(id, amount);
+                BagInfo.CardDic.Add(id, card);
+            }
+            else
+            {
+                BagInfo.CardDic[id].Amount += amount;
+            }
         }
     }
 
-    public bool MinusItem(Item item, int amount)
+    public bool MinusItem(int id, int amount)
     {
-        if (amount <= item.Amount)
+        ItemModel data = DataContext.Instance.ItemDic[id];
+        if (data.Category == ItemModel.CategoryEnum.Item)
         {
-            item.Amount -= amount;
-            if (item.Amount == 0)
+            Item item = BagInfo.ItemDic[id];
+            if (amount <= item.Amount)
             {
-                ItemDic[item.Data.Category].Remove(item.Data.ID);
+                item.Amount -= amount;
+                if (item.Amount == 0)
+                {
+                    BagInfo.ItemDic.Remove(item.Data.ID);
+                }
+                return true;
             }
-            return true;
+            else
+            {
+                return false;
+            }
+        }
+        else if (data.Category == ItemModel.CategoryEnum.Consumables)
+        {
+            Consumables consumables = BagInfo.ConsumablesDic[id];
+            if (amount <= consumables.Amount)
+            {
+                consumables.Amount -= amount;
+                if (consumables.Amount == 0)
+                {
+                    BagInfo.ConsumablesDic.Remove(consumables.ItemData.ID);
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else if (data.Category == ItemModel.CategoryEnum.Card)
+        {
+            Card card = BagInfo.CardDic[id];
+            if (amount <= card.Amount)
+            {
+                card.Amount -= amount;
+                if (card.Amount == 0)
+                {
+                    BagInfo.CardDic.Remove(card.ItemData.ID);
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         else
         {
@@ -115,57 +172,92 @@ public class ItemManager
         }
     }
 
-    public List<Item> GetItemList(ItemModel.CategoryEnum category)
+    public bool AddEquip(int id) 
     {
-        Dictionary<int, Item> dic = null;
-        List<Item> list = new List<Item>();
-        if (ItemDic.TryGetValue(category, out dic))
+        if (BagInfo.EquipList.Count < _maxEquipCount)
         {
-            list = new List<Item>(dic.Values);
-        }
+            Equip equip = new Equip(id);
+            BagInfo.EquipList.Add(equip);
 
-        return list;
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 
-    public List<Item> GetItemList(BattleCharacterInfo character)
+    public void MinusEquip(Equip equip)
     {
-        Dictionary<int, Item> dic = null;
-        List<Item> cardList = new List<Item>();
-        List<Item> medicineList = new List<Item>();
-        List<Item> resultList = new List<Item>();
+        BagInfo.EquipList.Remove(equip);
+    }
 
-        if (ItemDic.TryGetValue(ItemModel.CategoryEnum.Card, out dic))
+    public void MinusFood(Food food)
+    {
+        BagInfo.FoodList.Remove(food);
+    }
+
+    public List<object> GetBattleItemList(BattleCharacterInfo character)
+    {
+        List<object> resultList = new List<object>();
+
+        foreach (KeyValuePair<int, Card> pair in BagInfo.CardDic)
         {
-            cardList = new List<Item>(dic.Values);
-            for (int i=0; i<cardList.Count; i++) 
+            if (pair.Value.CardData.Job == -1 || (character.Job != null && pair.Value.CardData.Job == character.Job.ID))
             {
-                if(cardList[i].Data.Job==-1 ||(character.Job!= null && cardList[i].Data.Job == character.Job.ID)) 
-                {
-                    resultList.Add(cardList[i]);
-                }
+                resultList.Add(pair.Value);
             }
         }
 
-        if (ItemDic.TryGetValue(ItemModel.CategoryEnum.Medicine, out dic))
+        foreach (KeyValuePair<int, Consumables> pair in BagInfo.ConsumablesDic) 
         {
-            medicineList = new List<Item>(dic.Values);
-            for (int i=0; i<medicineList.Count; i++) 
-            {
-                resultList.Add(medicineList[i]);
-            }
+            resultList.Add(pair.Value);
+        }
+
+        for(int i=0; i<BagInfo.FoodList.Count; i++)
+        {
+            resultList.Add(BagInfo.FoodList[i]);
         }
 
         return resultList;
     }
 
-    public Item GetItem(ItemModel.CategoryEnum category, int id)
+    public int GetAmount(ItemModel.CategoryEnum category, int id)
     {
-        Dictionary<int, Item> dic = null;
-        Item item = null;
-        if (ItemDic.TryGetValue(category, out dic))
+        if (category == ItemModel.CategoryEnum.Item)
         {
-            dic.TryGetValue(id, out item);
+            if (BagInfo.ItemDic.TryGetValue(id, out Item item))
+            {
+                return item.Amount;
+            }
+            else
+            {
+                return 0;
+            }
         }
-        return item;
+        else if (category == ItemModel.CategoryEnum.Consumables)
+        {
+            if (BagInfo.ConsumablesDic.TryGetValue(id, out Consumables consumables))
+            {
+                return consumables.Amount;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        else if (category == ItemModel.CategoryEnum.Card)
+        {
+            if (BagInfo.CardDic.TryGetValue(id, out Card card))
+            {
+                return card.Amount;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        return 0;
     }
 }

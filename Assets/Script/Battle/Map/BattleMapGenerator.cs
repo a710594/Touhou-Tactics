@@ -46,7 +46,7 @@ public class BattleMapGenerator : MonoBehaviour
 
     public void Generate(out BattleInfo battleInfo) 
     {
-        string path = Path.Combine(_prePath, SeedFile[UnityEngine.Random.Range(0, SeedFile.Length)] + ".txt");
+        string path = Path.Combine(_prePath, SeedFile[2] + ".txt");
         string text = File.ReadAllText(path);
         string[] stringSeparators = new string[] { "\n", "\r\n" };
         string[] lines = text.Split(stringSeparators, StringSplitOptions.None);
@@ -60,6 +60,8 @@ public class BattleMapGenerator : MonoBehaviour
         GameObject attachObj;
         battleInfo = new BattleInfo();
 
+        Debug.Log(path);
+
         for (int i = this.transform.childCount; i > 0; --i)
         {
             DestroyImmediate(this.transform.GetChild(0).gameObject);
@@ -69,40 +71,47 @@ public class BattleMapGenerator : MonoBehaviour
         battleInfo.Width = int.Parse(str[0]);
         battleInfo.Height = int.Parse(str[1]);
 
-        for (int i = 1; i < lines.Length; i++) //第一行是長寬,忽視之
+        try
         {
-            if (lines[i] != "")
+            for (int i = 1; i < lines.Length; i++) //第一行是長寬,忽視之
             {
-                if (i <= battleInfo.Width)
+                if (lines[i] != "")
                 {
-                    str = lines[i].Split(' ');
-                    for (int j = 0; j < str.Length; j++)
+                    if (i <= battleInfo.Width)
                     {
-                        position = new Vector2Int(i - 1, j);
-                        if (str[j] == "X")
+                        str = lines[i].Split(' ');
+                        for (int j = 0; j < str.Length; j++)
                         {
-                            visitedDic.Add(position, null);
-                            battleInfo.TileInfoDic.Add(position, null);
-                            continue;
-                        }
-                        else
-                        {
-                            tileSetting = _tileSettingDic[str[j]];
-                            visitedDic.Add(position, tileSetting);
-                            battleInfo.TileInfoDic.Add(position, new TileInfo(tileSetting));
-                            if (tileSetting.Enqueue)
+                            position = new Vector2Int(i - 1, j);
+                            if (str[j] == "X")
                             {
-                                queue.Enqueue(position);
+                                visitedDic.Add(position, null);
+                                battleInfo.TileInfoDic.Add(position, null);
+                                continue;
+                            }
+                            else
+                            {
+                                tileSetting = _tileSettingDic[str[j]];
+                                visitedDic.Add(position, tileSetting);
+                                battleInfo.TileInfoDic.Add(position, new TileInfo(tileSetting));
+                                if (tileSetting.Enqueue)
+                                {
+                                    queue.Enqueue(position);
+                                }
                             }
                         }
                     }
-                }
-                else
-                {
-                    battleInfo.NoAttachList = JsonConvert.DeserializeObject<List<Vector2Int>>(lines[i]);
-                }
+                    else
+                    {
+                        battleInfo.NoAttachList = JsonConvert.DeserializeObject<List<Vector2Int>>(lines[i]);
+                    }
 
+                }
             }
+        }
+        catch (Exception ex) 
+        {
+            Debug.Log(ex);
         }
 
         //BFS

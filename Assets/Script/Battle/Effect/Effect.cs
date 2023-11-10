@@ -7,7 +7,16 @@ using UnityEngine;
 
 public class Effect
 {
-    public EffectModel Data;
+    //public EffectModel Data;
+    public EffectModel.TypeEnum Type;
+    public int Value;
+    public int Hit;
+    public int Range;
+    public EffectModel.TargetEnum Target;
+    public EffectModel.TrackEnum Track;
+    public string Area;
+    public List<Vector2Int> AreaList = new List<Vector2Int>();
+    public Status Status;
 
     public Effect SubEffect;
 
@@ -15,14 +24,26 @@ public class Effect
 
     public Effect(EffectModel data)
     {
-        Data = data;
-        if (data.SubType != EffectModel.TypeEnum.None)
+        //Data = data;
+        Type = data.Type;
+        Value = data.Value;
+        Hit = data.Hit;
+        Range = data.Range;
+        Target = data.Target;
+        Track = data.Track;
+        Area = data.Area;
+        AreaList = data.AreaList;
+        if (data.StatusID != -1)
         {
-            SubEffect = EffectFactory.GetEffect(data.SubType, data.SubID);
+            Status = StatusFactory.GetStatus(data.StatusID);
+        }
+        if (data.SubID != -1)
+        {
+            SubEffect = EffectFactory.GetEffect(data.SubID);
         }
     }
 
-    public virtual void  SetEffect(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList) 
+    public virtual void  Use(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList) 
     {
     }
 }

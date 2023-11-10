@@ -15,7 +15,7 @@ namespace Battle
             public override void Begin(object obj)
             {
                 _characterList = Instance.CharacterList;
-                _character = Instance._selectedCharacter;
+                _character = Instance.SelectedCharacter;
                 Dictionary<Vector2Int, TileInfo> tileDic = Instance.Info.TileInfoDic;
 
                 if (_characterList.Contains(_character))
@@ -26,8 +26,8 @@ namespace Battle
                         _character.CheckStatus(floatingList);
                         for (int j = 0; j < floatingList.Count; j++)
                         {
-                            Instance._battleUI.PlayFloatingNumberPool(_character.ID, floatingList[j].Type, floatingList[j].Text);
-                            Instance._battleUI.SetLittleHpBarValue(_character.ID, _character);
+                            Instance._battleUI.PlayFloatingNumberPool(_character.Index, floatingList[j].Type, floatingList[j].Text);
+                            Instance._battleUI.SetLittleHpBarValue(_character.Index, _character);
                         }
                         for (int i = 0; i < _character.SkillList.Count; i++)
                         {
@@ -38,7 +38,6 @@ namespace Battle
                         _character.HasUseSkill = false;
                         _character.HasUseSupport = false;
                         _character.LastPosition = BattleCharacterInfo.DefaultLastPosition;
-                        _character.CheckSP();
                         _characterList.RemoveAt(0);
                         _characterList.Add(_character);
                         Instance.SortCharacterList(false);

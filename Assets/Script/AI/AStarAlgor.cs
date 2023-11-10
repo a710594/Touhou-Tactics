@@ -45,7 +45,7 @@ namespace Battle
                         closedset.Add(x); //將x節點插入已經被估算的節點
 
                         bool isBetter;
-                        List<Vector2Int> neighborList = GetNeighborPos(x.Position, faction);
+                        List<Vector2Int> neighborList = GetNeighborPos(x.Position, goal, faction);
                         for (int i = 0; i < neighborList.Count; i++)  //循環遍歷與x相鄰節點
                         {
                             Node y = new Node(neighborList[i]);
@@ -64,7 +64,7 @@ namespace Battle
                                 continue;
                             }
 
-                            float g = x.G + MoveCost(x.Position, y.Position, faction);    //從起點到節點y的距離
+                            float g = x.G + MoveCost(x.Position, y.Position, goal, faction);    //從起點到節點y的距離
 
                             for (int j = 0; j < openset.Count; j++) //若y已被估值，跳過
                             {
@@ -103,7 +103,7 @@ namespace Battle
                 return null;
             }
 
-            public int GetDistance(Vector2Int start, Vector2Int goal, BattleCharacterInfo selectedCharacter)
+            public int GetDistance(Vector2Int start, Vector2Int goal, BattleCharacterInfo.FactionEnum faction)
             {
                 int distance = 0;
                 if (Info.TileInfoDic[goal].MoveCost == -1)
@@ -116,12 +116,12 @@ namespace Battle
                 }
                 else
                 {
-                    List<Vector2Int> path = GetPath(start, goal, selectedCharacter.Faction);
+                    List<Vector2Int> path = GetPath(start, goal, faction);
                     if (path != null)
                     {
                         for (int i = 1; i < path.Count; i++)
                         {
-                            distance += MoveCost(path[i - 1], path[i], selectedCharacter.Faction);
+                            distance += MoveCost(path[i - 1], path[i], goal, faction);
                         }
                     }
                     else
@@ -139,7 +139,7 @@ namespace Battle
                 List<Vector2Int> stepList = Utility.GetRange(selectedCharacter.MOV, Info.Width, Info.Height, start);
                 for (int i = 0; i < stepList.Count; i++)
                 {
-                    distance = GetDistance(start, stepList[i], selectedCharacter);
+                    distance = GetDistance(start, stepList[i], selectedCharacter.Faction);
                     if (distance > selectedCharacter.MOV || distance == -1)
                     {
                         stepList.RemoveAt(i);
@@ -162,7 +162,7 @@ namespace Battle
             {
                 List<Vector2Int> path = new List<Vector2Int>();
 
-                if (currentNode.parent != null)
+                if (currentNode.parent != null && currentNode != currentNode.parent)
                 {
                     path = ReconstructPath(currentNode.parent);
                 }
@@ -171,26 +171,26 @@ namespace Battle
                 return path;
             }
 
-            private List<Vector2Int> GetNeighborPos(Vector2Int current, BattleCharacterInfo.FactionEnum faction)
+            private List<Vector2Int> GetNeighborPos(Vector2Int current, Vector2Int goal, BattleCharacterInfo.FactionEnum faction)
             {
                 List<Vector2Int> list = new List<Vector2Int>();
 
-                if (Info.TileInfoDic.ContainsKey(current + Vector2Int.left) && MoveCost(current, current + Vector2Int.left, faction) > 0)
+                if (Info.TileInfoDic.ContainsKey(current + Vector2Int.left) && MoveCost(current, current + Vector2Int.left, goal, faction) > 0)
                 {
                     list.Add(current + Vector2Int.left);
                 }
 
-                if (Info.TileInfoDic.ContainsKey(current + Vector2Int.right) && MoveCost(current, current + Vector2Int.right, faction) > 0)
+                if (Info.TileInfoDic.ContainsKey(current + Vector2Int.right) && MoveCost(current, current + Vector2Int.right, goal, faction) > 0)
                 {
                     list.Add(current + Vector2Int.right);
                 }
 
-                if (Info.TileInfoDic.ContainsKey(current + Vector2Int.up) && MoveCost(current, current + Vector2Int.up, faction) > 0)
+                if (Info.TileInfoDic.ContainsKey(current + Vector2Int.up) && MoveCost(current, current + Vector2Int.up, goal, faction) > 0)
                 {
                     list.Add(current + Vector2Int.up);
                 }
 
-                if (Info.TileInfoDic.ContainsKey(current + Vector2Int.down) && MoveCost(current, current + Vector2Int.down, faction) > 0)
+                if (Info.TileInfoDic.ContainsKey(current + Vector2Int.down) && MoveCost(current, current + Vector2Int.down, goal, faction) > 0)
                 {
                     list.Add(current + Vector2Int.down);
                 }
@@ -198,14 +198,16 @@ namespace Battle
                 return list;
             }
 
-            private int MoveCost(Vector2Int from, Vector2Int to, BattleCharacterInfo.FactionEnum faction)
+            //from:目前座標 to:下一個座標 goal:路徑的最終目標 //faction:自己的陣營
+            private int MoveCost(Vector2Int from, Vector2Int to, Vector2Int goal, BattleCharacterInfo.FactionEnum faction)
             {
                 int cost = 0;
                 try
                 {
                     for (int i = 0; i < CharacterList.Count; i++)
                     {
-                        if (Utility.ConvertToVector2(CharacterList[i].Position) == to)
+                        //如果有角色不為目標且與自己陣營不同,就視為障礙物
+                        if (Utility.ConvertToVector2(CharacterList[i].Position) == to && Utility.ConvertToVector2(CharacterList[i].Position) != goal)
                         {
                             if (faction != BattleCharacterInfo.FactionEnum.None && CharacterList[i].Faction != faction)
                             {

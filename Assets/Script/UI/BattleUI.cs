@@ -13,7 +13,7 @@ public class BattleUI : MonoBehaviour
     public CharacterInfoUI CharacterInfoUI_1;
     public CharacterInfoUI CharacterInfoUI_2;
     public ActionButtonGroup ActionButtonGroup;
-    public SkillGroup SkillGroup;
+    //public SkillGroup SkillGroup;
     public AnchorValueBar LittleHpBar;
     public Transform HPGroup;
     public FloatingNumberPool FloatingNumberPool;
@@ -64,22 +64,12 @@ public class BattleUI : MonoBehaviour
 
     public void SetSkillVisible(bool isVisible) 
     {
-        SkillGroup.gameObject.SetActive(isVisible);
+        ActionButtonGroup.ScrollView.transform.parent.gameObject.SetActive(isVisible);
     }
 
-    public void SetSkillData(List<Skill> skillList) 
+    public void SetActionScrollView(List<object> list) 
     {
-        SkillGroup.SetData(skillList);
-    }
-
-    public void SetSupportData(List<Support> supportList, int currentSP) 
-    {
-        SkillGroup.SetData(supportList, currentSP);
-    }
-
-    public void SetItemData(BattleCharacterInfo character)
-    {
-        SkillGroup.SetData(character);
+        ActionButtonGroup.SetScrollView(list);
     }
 
     public void SetHpPrediction(int origin, int prediction, int max)

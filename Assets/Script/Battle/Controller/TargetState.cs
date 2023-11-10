@@ -19,28 +19,37 @@ namespace Battle
             public override void Begin(object obj)
             {
                 _info = Instance.Info;
-                _character = Instance._selectedCharacter;
-                if (_character.SelectedSkill != null)
-                {
-                    _effect = _character.SelectedSkill.Effect;
-                }
-                else if(_character.SelectedSupport != null) 
-                {
-                    _effect = _character.SelectedSupport.Effect;
-                }
-                else if (_character.SelectedItem != null)
-                {
-                    _effect = _character.SelectedItem.Effect;
-                }
+                _character = Instance.SelectedCharacter;
+                _characterList = Instance.CharacterList;
+                _effect = Utility.GetEffect(_character.SelectedObject);
 
                 if (Passive.Contains<ArcherPassive>(_character.PassiveList))
                 {
-                    _rangeList = ArcherPassive.GetRange(_effect.Data.Range, _info.Width, _info.Height, Utility.ConvertToVector2Int(_character.Position), _info.TileInfoDic);
+                    _rangeList = ArcherPassive.GetRange(_effect.Range, _info.Width, _info.Height, Utility.ConvertToVector2Int(_character.Position), _info.TileInfoDic);
                 }
                 else
                 {
-                    _rangeList = Utility.GetRange(_effect.Data.Range, _info.Width, _info.Height, Utility.ConvertToVector2Int(_character.Position));
+                    _rangeList = Utility.GetRange(_effect.Range, _info.Width, _info.Height, Utility.ConvertToVector2Int(_character.Position));
                 }
+
+                Instance.RemoveByFaction(_effect, _rangeList);
+
+                //Vector2Int v2;
+                //for (int i=0; i< _characterList.Count; i++) 
+                //{
+                //    v2 = Utility.ConvertToVector2Int(_characterList[i].Position);
+                //    if (_rangeList.Contains(v2)) 
+                //    {
+                //        if(_effect.Target == EffectModel.TargetEnum.None ||
+                //           (_effect.Target == EffectModel.TargetEnum.Us && _character.Faction != _characterList[i].Faction) ||
+                //           (_effect.Target == EffectModel.TargetEnum.Them && _character.Faction == _characterList[i].Faction)) 
+                //        {
+                //            _rangeList.Remove(v2);
+                //            i--;
+                //        }
+                //    }
+                //}
+
                 Instance.SetQuad(_rangeList, Instance._white);
                 Instance._battleUI.SetActionVisible(false);
                 Instance._battleUI.SetSkillVisible(false);
@@ -54,7 +63,7 @@ namespace Battle
                     List<BattleCharacterInfo> characterList = Instance.CharacterList;
                     for (int i = 0; i < characterList.Count; i++)
                     {
-                        if (characterList[i] != Instance._selectedCharacter && position == Utility.ConvertToVector2Int(characterList[i].Position))
+                        if (characterList[i] != Instance.SelectedCharacter && position == Utility.ConvertToVector2Int(characterList[i].Position))
                         {
                             Instance._battleUI.SetCharacterInfoUI_2(characterList[i]);
                             int predictionHp = GetPredictionHp(characterList[i].CurrentHP, _effect, _character, characterList[i], characterList);
@@ -68,13 +77,13 @@ namespace Battle
 
                     Dictionary<Vector2Int, TileInfo> tileDic = Instance.Info.TileInfoDic;
                     Vector3 p = new Vector3(position.x, tileDic[position].Height, position.y);
-                    if (_effect.Data.Track == EffectModel.TrackEnum.Straight)
+                    if (_effect.Track == EffectModel.TrackEnum.Straight)
                     {
                         CheckLine(_character.Position, p, characterList, tileDic, out bool isBlock, out Vector3 result);
                         Instance._cameraController.DrawLine(_character.Position, result, isBlock);
                         Instance._selectedPosition = Utility.ConvertToVector2Int(result);
                     }
-                    else if (_effect.Data.Track == EffectModel.TrackEnum.Parabola)
+                    else if (_effect.Track == EffectModel.TrackEnum.Parabola)
                     {
                         CheckParabola(_character.Position, p, 4, tileDic, out bool isBlock, out List<Vector3> result); //要補拋物線的高度
                         Instance._cameraController.DrawParabola(result, isBlock);
@@ -85,25 +94,14 @@ namespace Battle
                         Instance._selectedPosition = position;
                     }
 
-                    Instance._controllerDic[_character.ID].SetDirection(Instance._selectedPosition);
+                    Instance._controllerDic[_character.Index].SetDirection(Instance._selectedPosition);
 
                     _context.SetState<ConfirmState>();
                 }
                 else
                 {
                     Instance.ClearQuad();
-                    if (_character.SelectedSkill != null)
-                    {
-                        _context.SetState<SkillState>();
-                    }
-                    else if (_character.SelectedSupport != null)
-                    {
-                        _context.SetState<SupportState>();
-                    }
-                    else if (_character.SelectedItem != null)
-                    {
-                        _context.SetState<ItemState>();
-                    }
+                    _context.SetState<ActionState>();
                 }
             }
         }

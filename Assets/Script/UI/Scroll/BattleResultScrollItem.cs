@@ -12,6 +12,6 @@ public class BattleResultScrollItem : ScrollItem
         base.SetData(obj);
         int id = (int)obj;
 
-        Label.text = DataContext.Instance.ItemDic[ItemModel.CategoryEnum.Material][id].Name;
+        Label.text = DataContext.Instance.ItemDic[id].Name;
     }
 }

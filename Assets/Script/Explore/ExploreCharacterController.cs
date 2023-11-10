@@ -29,7 +29,11 @@ namespace Explore
                     if (ExploreManager.Instance.IsWalkable(position))
                     {
                         _isMoving = true;
-                        transform.DOMove(position, 0.5f).SetEase(Ease.Linear).OnComplete(() => { _isMoving = false; });
+                        transform.DOMove(position, 0.5f).SetEase(Ease.Linear).OnComplete(() => 
+                        {
+                            ExploreManager.Instance.CheckVidsit(transform);
+                            _isMoving = false; 
+                        });
                         MoveTo = position;
                         ExploreManager.Instance.CheckCollision();
                         if (MoveHandler != null)
@@ -44,7 +48,11 @@ namespace Explore
                     if (ExploreManager.Instance.IsWalkable(position))
                     {
                         _isMoving = true;
-                        transform.DOMove(position, 0.5f).SetEase(Ease.Linear).OnComplete(() => { _isMoving = false; });
+                        transform.DOMove(position, 0.5f).SetEase(Ease.Linear).OnComplete(() => 
+                        {
+                            _isMoving = false;
+                            ExploreManager.Instance.CheckVidsit(transform);
+                        });
                         MoveTo = position;
                         ExploreManager.Instance.CheckCollision();
                         if (MoveHandler != null)
@@ -57,7 +65,11 @@ namespace Explore
                 {
                     _isMoving = true;
                     RotateTo = transform.localEulerAngles + Vector3.down * 90;
-                    transform.DORotate(RotateTo, 0.5f).SetEase(Ease.Linear).OnComplete(() => { _isMoving = false; });
+                    transform.DORotate(RotateTo, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
+                    {
+                        _isMoving = false;
+                        ExploreManager.Instance.CheckVidsit(transform);
+                    });
                     if (RotateHandler != null) 
                     {
                         RotateHandler();
@@ -67,7 +79,11 @@ namespace Explore
                 {
                     _isMoving = true;
                     RotateTo = transform.localEulerAngles + Vector3.up * 90;
-                    transform.DORotate(RotateTo, 0.5f).SetEase(Ease.Linear).OnComplete(() => { _isMoving = false; });
+                    transform.DORotate(RotateTo, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
+                    {
+                        _isMoving = false;
+                        ExploreManager.Instance.CheckVidsit(transform);
+                    });
                     if (RotateHandler != null)
                     {
                         RotateHandler();

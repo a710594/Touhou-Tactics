@@ -5,22 +5,14 @@ using UnityEngine;
 public class BagInfo
 {
     public int Money;
-    public List<Item> ItemList = new List<Item>();
+    public Dictionary<int, Item> ItemDic = new Dictionary<int, Item>();
+    public Dictionary<int, Consumables> ConsumablesDic = new Dictionary<int, Consumables>();
+    public Dictionary<int, Card> CardDic = new Dictionary<int, Card>();
+    public List<Food> FoodList = new List<Food>();
+    public List<Equip> EquipList = new List<Equip>();
 
     public BagInfo()
     {
         Money = 100;
-    }
-
-    public void Save(Dictionary<ItemModel.CategoryEnum, Dictionary<int, Item>> itemDic)
-    {
-        ItemList.Clear();
-        foreach (KeyValuePair<ItemModel.CategoryEnum, Dictionary<int, Item>> pair1 in itemDic)
-        {
-            foreach (KeyValuePair<int, Item> pair2 in pair1.Value)
-            {
-                ItemList.Add(pair2.Value);
-            }
-        }
     }
 }

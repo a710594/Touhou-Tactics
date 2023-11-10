@@ -15,7 +15,7 @@ public class ScrollGrid : MonoBehaviour
     [NonReorderable]
     public int ItemAmount;
 
-    private List<ScrollItem> _itemList = new List<ScrollItem>();
+    private List<ScrollItem> _scrollItemList = new List<ScrollItem>();
 
     public void Init(ScrollItem scrollItem, ScrollView.TypeEnum type, float length, float cellSizeX, float cellSizeY, float spacingX, float spacingY, int itemAmount)
     {
@@ -39,27 +39,42 @@ public class ScrollGrid : MonoBehaviour
             item = Instantiate(scrollItem);
             item.transform.SetParent(transform);
             item.OnClickHandler += ItemOnClick;
-            _itemList.Add(item);
+            _scrollItemList.Add(item);
         }
     }
 
     public void RefreshData(int index, List<object> list)
     {
-        for (int i = 0; i < _itemList.Count; i++)
+        for (int i = 0; i < _scrollItemList.Count; i++)
         {
             if (index * ItemAmount + i < list.Count)
             {
                 gameObject.SetActive(true);
-                _itemList[i].gameObject.SetActive(true);
-                _itemList[i].SetData(list[index * ItemAmount + i]);
+                _scrollItemList[i].gameObject.SetActive(true);
+                _scrollItemList[i].SetData(list[index * ItemAmount + i]);
             }
             else
             {
-                _itemList[i].gameObject.SetActive(false);
+                _scrollItemList[i].gameObject.SetActive(false);
                 if (i == 0) 
                 {
                     gameObject.SetActive(false);
                 }
+            }
+        }
+    }
+
+    public void SetSelect(ScrollItem scrollItem)
+    {
+        for (int i = 0; i < _scrollItemList.Count; i++)
+        {
+            if (_scrollItemList[i].Equals(scrollItem))
+            {
+                _scrollItemList[i].SetSelected(true);
+            }
+            else
+            {
+                _scrollItemList[i].SetSelected(false);
             }
         }
     }

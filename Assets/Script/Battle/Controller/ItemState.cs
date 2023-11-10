@@ -6,7 +6,7 @@ namespace Battle
 {
     public partial class BattleController
     {
-        private class ItemState : BattleControllerState 
+        /*private class ItemState : BattleControllerState 
         {
             public ItemState(StateContext context) : base(context)
             {
@@ -14,7 +14,7 @@ namespace Battle
 
             public override void Begin(object obj)
             {
-                _character = Instance._selectedCharacter;
+                _character = Instance.SelectedCharacter;
                 if (!_character.IsAuto)
                 {
                     Instance._battleUI.SetActionVisible(true);
@@ -36,6 +36,6 @@ namespace Battle
                     _context.SetState<ActionState>();
                 }
             }
-        }
+        }*/
     }
 }

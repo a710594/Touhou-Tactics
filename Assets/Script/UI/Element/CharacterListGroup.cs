@@ -24,7 +24,7 @@ public class CharacterListGroup : MonoBehaviour
             image.transform.SetParent(transform);
             sprite = Resources.Load<Sprite>("Image/" + _characterList[i].Controller + "_F");
             image.sprite = sprite;
-            _spriteDic.Add(_characterList[i].ID, sprite);
+            _spriteDic.Add(_characterList[i].Index, sprite);
 
             _imageDic.Add(_characterList[i], image);
             if (i > _max) 
@@ -39,10 +39,10 @@ public class CharacterListGroup : MonoBehaviour
         int index = 0;
         foreach(KeyValuePair<BattleCharacterInfo, Image> pair in _imageDic) 
         {
-            if (index != -1 && index < _max) 
+            if (index != -1 && index < _max && index < _characterList.Count) 
             {
                 pair.Value.gameObject.SetActive(true);
-                pair.Value.sprite = _spriteDic[_characterList[index].ID];
+                pair.Value.sprite = _spriteDic[_characterList[index].Index];
                 index++;
             }
             else

@@ -14,7 +14,7 @@ namespace Battle
 
             public override void Begin(object obj)
             {
-                _character = Instance._selectedCharacter;
+                _character = Instance.SelectedCharacter;
                 _characterList = Instance.CharacterList;
                 Instance._battleUI.ActionButtonGroup.gameObject.SetActive(true);
                 Instance._battleUI.ActionButtonGroup.SetButton(_character);

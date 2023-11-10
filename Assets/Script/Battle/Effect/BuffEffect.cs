@@ -5,22 +5,26 @@ using UnityEngine;
 
 public class BuffEffect : Effect
 {
-    public BuffEffect(EffectModel data)
+    public BuffEffect(EffectModel data) : base(data)
     {
-        Data = data;
-        if (data.SubType != EffectModel.TypeEnum.None)
-        {
-            EffectModel subData = DataContext.Instance.EffectDic[data.SubType][data.SubID];
-            SubEffect = EffectFactory.GetEffect(subData);
-        }
     }
 
-    public override void SetEffect(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)
+    public BuffEffect(StatusModel.TypeEnum type, int value, int time)
+    {
+        Value = value;
+        Type = EffectModel.TypeEnum.Medicine;
+        Hit = 100;
+        Target = EffectModel.TargetEnum.Us;
+        Track = EffectModel.TrackEnum.None;
+        Status = new Status(type, value, time);
+    }
+
+    public override void Use(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)
     {
         FloatingNumberData floatingNumberData;
         BattleController.HitType hitType;
 
-        if(Data.Target == EffectModel.TargetEnum.Us) 
+        if(Target == EffectModel.TargetEnum.Us) 
         {
             hitType = BattleController.HitType.Hit;
         }
@@ -31,9 +35,8 @@ public class BuffEffect : Effect
 
         if (hitType != BattleController.HitType.Miss)
         {
-            Status status = StatusFactory.GetStatus(Data.StatusType, Data.StatusID);
-            target.AddStatus(status);
-            floatingNumberData = new FloatingNumberData(FloatingNumberData.TypeEnum.Other, status.Data.Name);
+            target.AddStatus(Status);
+            floatingNumberData = new FloatingNumberData(FloatingNumberData.TypeEnum.Other, Status.Name);
         }
         else
         {
@@ -44,7 +47,7 @@ public class BuffEffect : Effect
 
         if (SubEffect != null && hitType != BattleController.HitType.Miss)
         {
-            SubEffect.SetEffect(user, target, floatingList, characterList);
+            SubEffect.Use(user, target, floatingList, characterList);
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Battle
 {
     public partial class BattleController
     {
-        private class SkillState : BattleControllerState
+        /*private class SkillState : BattleControllerState
         {
             public SkillState(StateContext context) : base(context)
             {
@@ -15,7 +15,7 @@ namespace Battle
             public override void Begin(object obj)
             {
                 //Instance._battleUI.ActionButtonGroup.gameObject.SetActive(false);
-                _character = Instance._selectedCharacter;
+                _character = Instance.SelectedCharacter;
                 if (!_character.IsAuto)
                 {
                     Instance._battleUI.SetActionVisible(true);
@@ -37,6 +37,6 @@ namespace Battle
                     _context.SetState<ActionState>();
                 }
             }
-        }
+        }*/
     }
 }

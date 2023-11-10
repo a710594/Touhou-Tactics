@@ -354,13 +354,41 @@ public static class Utility
 
     public static bool ComparePosition(Vector3 v1, Vector3 v2) 
     {
-        if((int)v1.x == (int)v2.x && (int)v1.z == (int)v2.z) 
+        if(Mathf.RoundToInt(v1.x) == Mathf.RoundToInt(v2.x) && Mathf.RoundToInt(v1.z) == Mathf.RoundToInt(v2.z)) 
         {
             return true;
         }
         else 
         {
             return false;
+        }
+    }
+
+    public static Effect GetEffect(object obj) 
+    {
+        if (obj is Skill)
+        {
+            return ((Skill)obj).Effect;
+        }
+        else if (obj is Support)
+        {
+            return ((Support)obj).Effect;
+        }
+        else if (obj is Card)
+        {
+            return ((Card)obj).Effect;
+        }
+        else if (obj is Consumables)
+        {
+            return ((Consumables)obj).Effect;
+        }
+        else if (obj is Food)
+        {
+            return ((Food)obj).Effect;
+        }
+        else
+        {
+            return null;
         }
     }
 }

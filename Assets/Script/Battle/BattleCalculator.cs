@@ -21,9 +21,9 @@ namespace Battle
         {
             Vector2Int position;
             List<Vector2Int> list = new List<Vector2Int>();
-            for (int i = 0; i < effect.Data.AreaList.Count; i++)
+            for (int i = 0; i < effect.AreaList.Count; i++)
             {
-                position = center + effect.Data.AreaList[i];
+                position = center + effect.AreaList[i];
                 if (position.x < width && position.x >= 0 && position.y < height && position.y >= 0)
                 {
                     list.Add(position);
@@ -46,6 +46,25 @@ namespace Battle
             return list;
         }
 
+        private void RemoveByFaction(Effect effect, List<Vector2Int> list) 
+        {
+            Vector2Int v2;
+            for (int i = 0; i < CharacterList.Count; i++)
+            {
+                v2 = Utility.ConvertToVector2Int(CharacterList[i].Position);
+                if (list.Contains(v2))
+                {
+                    if (effect.Target == EffectModel.TargetEnum.None ||
+                       (effect.Target == EffectModel.TargetEnum.Us && SelectedCharacter.Faction != CharacterList[i].Faction) ||
+                       (effect.Target == EffectModel.TargetEnum.Them && SelectedCharacter.Faction == CharacterList[i].Faction))
+                    {
+                        list.Remove(v2);
+                        i--;
+                    }
+                }
+            }
+        }
+
         public static bool CheckEffectArea(List<Vector2Int> list, Vector2Int target)
         {
             for (int i = 0; i < list.Count; i++)
@@ -61,9 +80,9 @@ namespace Battle
 
         public static HitType CheckHit(Effect effect, BattleCharacterInfo user, BattleCharacterInfo target)
         {
-            float hitRate = user.DEX * (effect.Data.Hit / 100f) / target.AGI;
+            float hitRate = user.DEX * (effect.Hit / 100f) / target.AGI;
 
-            //角色互相面對時較度為180,方向相同時角度為0
+            //角色互相面對時角度為180,方向相同時角度為0
             //角度越大則命中越低
             //面對面的時候命中率只有一半
             //從背面攻擊時命中率則為1.5倍
@@ -104,7 +123,7 @@ namespace Battle
         public static int GetDamage(Effect effect, BattleCharacterInfo user, BattleCharacterInfo target, List<BattleCharacterInfo> characterList)
         {
             int damage = 0;
-            if (effect.Data.Type == EffectModel.TypeEnum.PhysicalAttack)
+            if (effect.Type == EffectModel.TypeEnum.PhysicalAttack)
             {
                 float atk = (float)user.STR;
                 float def = (float)target.CON;
@@ -112,32 +131,32 @@ namespace Battle
                 {
                     for (int j = 0; j < characterList[i].StatusList.Count; j++)
                     {
-                        if (characterList[i].StatusList[j].Data.Type == StatusModel.TypeEnum.ATK && user.Faction == characterList[i].Faction)
+                        if (characterList[i].StatusList[j].Type == StatusModel.TypeEnum.ATK && user.Faction == characterList[i].Faction)
                         {
-                            for (int k = 0; k < characterList[i].StatusList[j].Data.AreaList.Count; k++)
+                            for (int k = 0; k < characterList[i].StatusList[j].AreaList.Count; k++)
                             {
-                                if (Utility.ConvertToVector2(characterList[i].Position) + characterList[i].StatusList[j].Data.AreaList[k] == Utility.ConvertToVector2(user.Position))
+                                if (Utility.ConvertToVector2(characterList[i].Position) + characterList[i].StatusList[j].AreaList[k] == Utility.ConvertToVector2(user.Position))
                                 {
-                                    atk *= characterList[i].StatusList[j].Data.Value / 100f;
+                                    atk *= characterList[i].StatusList[j].Value / 100f;
                                 }
                             }
                         }
-                        else if (characterList[i].StatusList[j].Data.Type == StatusModel.TypeEnum.DEF && target.Faction == characterList[i].Faction)
+                        else if (characterList[i].StatusList[j].Type == StatusModel.TypeEnum.DEF && target.Faction == characterList[i].Faction)
                         {
-                            for (int k = 0; k < characterList[i].StatusList[j].Data.AreaList.Count; k++)
+                            for (int k = 0; k < characterList[i].StatusList[j].AreaList.Count; k++)
                             {
-                                if (Utility.ConvertToVector2(characterList[i].Position) + characterList[i].StatusList[j].Data.AreaList[k] == Utility.ConvertToVector2(target.Position))
+                                if (Utility.ConvertToVector2(characterList[i].Position) + characterList[i].StatusList[j].AreaList[k] == Utility.ConvertToVector2(target.Position))
                                 {
-                                    def *= characterList[i].StatusList[j].Data.Value / 100f;
+                                    def *= characterList[i].StatusList[j].Value / 100f;
                                 }
                             }
                         }
                     }
                 }
 
-                damage =  Mathf.RoundToInt(atk / def * effect.Data.Value * (1 + (user.Lv - 1) * 0.1f) + user.Weapon.ATK - target.Armor.DEF);
+                damage =  Mathf.RoundToInt(atk / def * effect.Value * (1 + (user.Lv - 1) * 0.1f) + user.Weapon.ATK - target.Armor.DEF);
             }
-            else if (effect.Data.Type == EffectModel.TypeEnum.MagicAttack)
+            else if (effect.Type == EffectModel.TypeEnum.MagicAttack)
             {
                 float mtk = (float)user.INT;
                 float mef = (float)target.MEN;
@@ -145,30 +164,30 @@ namespace Battle
                 {
                     for (int j = 0; j < characterList[i].StatusList.Count; j++)
                     {
-                        if (characterList[i].StatusList[j].Data.Type == StatusModel.TypeEnum.MTK && user.Faction == characterList[i].Faction)
+                        if (characterList[i].StatusList[j].Type == StatusModel.TypeEnum.MTK && user.Faction == characterList[i].Faction)
                         {
-                            for (int k = 0; k < characterList[i].StatusList[j].Data.AreaList.Count; k++)
+                            for (int k = 0; k < characterList[i].StatusList[j].AreaList.Count; k++)
                             {
-                                if (Utility.ConvertToVector2(characterList[i].Position) + characterList[i].StatusList[j].Data.AreaList[k] == Utility.ConvertToVector2(user.Position))
+                                if (Utility.ConvertToVector2(characterList[i].Position) + characterList[i].StatusList[j].AreaList[k] == Utility.ConvertToVector2(user.Position))
                                 {
-                                    mtk *= characterList[i].StatusList[j].Data.Value / 100f;
+                                    mtk *= characterList[i].StatusList[j].Value / 100f;
                                 }
                             }
                         }
-                        else if (characterList[i].StatusList[j].Data.Type == StatusModel.TypeEnum.MEF && target.Faction == characterList[i].Faction)
+                        else if (characterList[i].StatusList[j].Type == StatusModel.TypeEnum.MEF && target.Faction == characterList[i].Faction)
                         {
-                            for (int k = 0; k < characterList[i].StatusList[j].Data.AreaList.Count; k++)
+                            for (int k = 0; k < characterList[i].StatusList[j].AreaList.Count; k++)
                             {
-                                if (Utility.ConvertToVector2(characterList[i].Position) + characterList[i].StatusList[j].Data.AreaList[k] == Utility.ConvertToVector2(target.Position))
+                                if (Utility.ConvertToVector2(characterList[i].Position) + characterList[i].StatusList[j].AreaList[k] == Utility.ConvertToVector2(target.Position))
                                 {
-                                    mef *= characterList[i].StatusList[j].Data.Value / 100f;
+                                    mef *= characterList[i].StatusList[j].Value / 100f;
                                 }
                             }
                         }
                     }
                 }
 
-                damage = Mathf.RoundToInt(mtk / mef * effect.Data.Value *(1 + (user.Lv - 1) * 0.1f) + user.Weapon .MTK - target.Armor.MEF);
+                damage = Mathf.RoundToInt(mtk / mef * effect.Value *(1 + (user.Lv - 1) * 0.1f) + user.Weapon .MTK - target.Armor.MEF);
             }
             else
             {
@@ -199,17 +218,26 @@ namespace Battle
         {
             int prediction = targetCurrentHp;
 
-            if (effect.Data.Type == EffectModel.TypeEnum.PhysicalAttack || effect.Data.Type == EffectModel.TypeEnum.MagicAttack)
+            if (effect.Type == EffectModel.TypeEnum.PhysicalAttack || effect.Type == EffectModel.TypeEnum.MagicAttack)
             {
                 prediction = targetCurrentHp - GetDamage(effect, user, target, characterList);
-                if (prediction < 0)
-                {
-                    prediction = 0;
-                }
-                else if (prediction > target.MaxHP)
-                {
-                    prediction = target.MaxHP;
-                }
+            }
+            else if (effect.Type == EffectModel.TypeEnum.Recover) 
+            {
+                prediction = targetCurrentHp + Mathf.RoundToInt((float)effect.Value * (float)user.MEN / 100f);
+            }
+            else if(effect.Type == EffectModel.TypeEnum.Medicine) 
+            {
+                prediction = targetCurrentHp + effect.Value;
+            }
+
+            if (prediction < 0)
+            {
+                prediction = 0;
+            }
+            else if (prediction > target.MaxHP)
+            {
+                prediction = target.MaxHP;
             }
 
             if (effect.SubEffect != null)
@@ -370,12 +398,18 @@ namespace Battle
             return v3;
         }
 
-        public bool HasCharacter(Vector2Int position) 
+        public bool HasCharacter(Vector2Int start, Vector2Int target) 
         {
+            if (start == target) //自己的位置不算
+            {
+                return false;
+            }
+
             bool hasCharacter = false;
+
             for (int i=0; i<CharacterList.Count; i++) 
             {
-            if(Utility.ConvertToVector2(CharacterList[i].Position) == position) 
+            if(Utility.ConvertToVector2(CharacterList[i].Position) == target) 
                 {
                     hasCharacter = true;
                     break;

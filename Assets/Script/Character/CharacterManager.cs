@@ -19,8 +19,6 @@ public class CharacterManager
         }
     }
 
-    public int Lv;
-    public int Exp;
     public CharacterInfoGroup CharacterInfoGroup;
 
     public void Init() 
@@ -36,10 +34,9 @@ public class CharacterManager
         }
         else
         {
-            Lv = 1;
-            Exp = 0;
             CharacterInfoGroup = new CharacterInfoGroup();
-            CharacterInfoGroup.Lv = Lv;
+            CharacterInfoGroup.Lv = 1;
+            CharacterInfoGroup.Exp = 0;
             CharacterInfoGroup.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[1]));
             CharacterInfoGroup.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[2]));
             CharacterInfoGroup.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[3]));
@@ -63,19 +60,18 @@ public class CharacterManager
         int needExp;
         while (addExp>0) 
         {
-            needExp = (int)Mathf.Pow(Lv, 3) - Exp;
+            needExp = (int)Mathf.Pow(CharacterInfoGroup.Lv, 3) - CharacterInfoGroup.Exp;
             if (addExp >= needExp) 
             {
                 addExp -= needExp;
-                Lv++;
-                Exp = 0;
+                CharacterInfoGroup.Lv++;
+                CharacterInfoGroup.Exp = 0;
             }
             else
             {
-                Exp += addExp;
+                CharacterInfoGroup.Exp += addExp;
                 addExp = 0;
             }
         }
-        Debug.Log(Lv + " " + Exp);
     }
 }

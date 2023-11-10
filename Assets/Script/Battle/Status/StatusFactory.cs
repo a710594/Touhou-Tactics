@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class StatusFactory
 {
-    public static Status GetStatus(StatusModel.TypeEnum type, int id)
+    public static Status GetStatus(int id)
     {
-        return GetStatus(DataContext.Instance.StatusDic[type][id]);
+        return GetStatus(DataContext.Instance.StatusDic[id]);
     }
 
     public static Status GetStatus(StatusModel data)

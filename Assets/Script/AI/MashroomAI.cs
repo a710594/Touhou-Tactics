@@ -61,8 +61,7 @@ public class MashroomAI : AI
         {
             if (_inRange)
             {
-                BattleController.Instance.SetSelectSkillState();
-                BattleController.Instance.SelectSkill(_selectedSkill);
+                BattleController.Instance.SelectObject(_selectedSkill);
                 BattleController.Instance.Click(Utility.ConvertToVector2Int(_target.Position));
                 BattleController.Instance.Click(Utility.ConvertToVector2Int(_target.Position));
             }
@@ -81,11 +80,11 @@ public class MashroomAI : AI
             foreach (KeyValuePair<Vector2Int, TileInfo> pair in battleInfo.TileInfoDic)
             {
                 position = pair.Key;
-                if (Utility.ManhattanDistance(position, start) <= _aiContext.CharacterInfo.MOV + _selectedSkill.Effect.Data.Range)
+                if (Utility.ManhattanDistance(position, start) <= _aiContext.CharacterInfo.MOV + _selectedSkill.Effect.Range)
                 {
                     for (int j = 0; j < _stepList.Count; j++)
                     {
-                        if (Utility.ManhattanDistance(position, _stepList[j]) <= _selectedSkill.Effect.Data.Range)
+                        if (Utility.ManhattanDistance(position, _stepList[j]) <= _selectedSkill.Effect.Range)
                         {
                             _rangeList.Add(position);
                         }
@@ -96,7 +95,9 @@ public class MashroomAI : AI
 
         private void GetTarget(bool inRange) 
         {
-            Vector2Int position = new Vector2Int();
+            int distance;
+            Vector2Int myPosition = Utility.ConvertToVector2Int(_aiContext.CharacterInfo.Position);
+            Vector2Int targetPosition = new Vector2Int();
             List<BattleCharacterInfo> characterList = BattleController.Instance.CharacterList;
 
             //如果受到挑釁,會優先攻擊挑釁者
@@ -123,8 +124,9 @@ public class MashroomAI : AI
             {
                 if (characterList[i].Faction == faction) 
                 {
-                    position = Utility.ConvertToVector2Int(characterList[i].Position);
-                    if (!inRange || _rangeList.Contains(position)) 
+                    targetPosition = Utility.ConvertToVector2Int(characterList[i].Position);
+                    distance = BattleController.Instance.GetDistance(myPosition, targetPosition, _aiContext.CharacterInfo.Faction);
+                    if (distance != -1 && (!inRange || _rangeList.Contains(targetPosition))) 
                     {
                         if(_target == null || characterList[i].CurrentHP < _target.CurrentHP) 
                         {
@@ -137,6 +139,11 @@ public class MashroomAI : AI
 
         private void GetMoveTo(bool inRange) 
         {
+            if(_target == null) 
+            {
+                return;
+            }
+
             int distance;
             int minDistance = -1;
             Vector2Int myPosition = Utility.ConvertToVector2Int(_aiContext.CharacterInfo.Position);
@@ -150,11 +157,11 @@ public class MashroomAI : AI
 
                 for (int i = 0; i < _stepList.Count; i++)
                 {
-                    rangeList = Utility.GetRange(_selectedSkill.Effect.Data.Range, battleInfo.Width, battleInfo.Height, _stepList[i]);
+                    rangeList = Utility.GetRange(_selectedSkill.Effect.Range, battleInfo.Width, battleInfo.Height, _stepList[i]);
                     if (rangeList.Contains(targetPosition))
                     {
-                        distance = BattleController.Instance.GetDistance(myPosition, _stepList[i], _aiContext.CharacterInfo);
-                        if (minDistance == -1 || (distance < minDistance && BattleController.Instance.HasCharacter(_stepList[i])))
+                        distance = BattleController.Instance.GetDistance(myPosition, _stepList[i], _aiContext.CharacterInfo.Faction);
+                        if (!BattleController.Instance.HasCharacter(myPosition, _stepList[i]) && (minDistance == -1 || distance < minDistance))
                         {
                             minDistance = distance;
                             _moveTo = _stepList[i];
@@ -167,8 +174,8 @@ public class MashroomAI : AI
             {
                 for (int i = 0; i < _stepList.Count; i++)
                 {
-                    distance = BattleController.Instance.GetDistance(targetPosition, _stepList[i], _aiContext.CharacterInfo);
-                    if (minDistance == -1 || (distance < minDistance && BattleController.Instance.HasCharacter(_stepList[i])))
+                    distance = BattleController.Instance.GetDistance(targetPosition, _stepList[i], _aiContext.CharacterInfo.Faction);
+                    if (!BattleController.Instance.HasCharacter(myPosition, _stepList[i]) && (minDistance == -1 || distance < minDistance))
                     {
                         minDistance = distance;
                         _moveTo = _stepList[i];

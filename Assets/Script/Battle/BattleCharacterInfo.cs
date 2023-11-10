@@ -19,7 +19,7 @@ public class BattleCharacterInfo
     }
 
     //基礎屬性
-    public int ID;
+    public int JobID;
     public string Name;
     public int Lv;
     public int MaxHP;
@@ -48,6 +48,8 @@ public class BattleCharacterInfo
     public List<Passive> PassiveList = new List<Passive>();
 
     //當前屬性
+    [NonSerialized]
+    public int Index; //戰鬥的時候用
     public bool IsAuto = false;
     public bool HasUseSkill = false;
     public bool HasUseSupport = false;
@@ -55,13 +57,10 @@ public class BattleCharacterInfo
     public int CurrentHP;
     public int CurrentPP = 0; //符卡點數
     public int CurrentWT;
-    public int CurrentSP = 2; //support point
     public int ActionCount = 2; //每個角色都有兩次的行動機會
     public Vector3 Position = new Vector3();
     public Vector3 LastPosition = new Vector3();
-    public Skill SelectedSkill = null;
-    public Support SelectedSupport = null;
-    public Item SelectedItem = null;
+    public object SelectedObject = null; //可能是技能,輔助,或道具(消耗品,料理,符卡)
     public AI AI = null;
     public Vector2Int Direction = Vector2Int.left;
     public List<Status> StatusList = new List<Status>();
@@ -69,6 +68,7 @@ public class BattleCharacterInfo
     public BattleCharacterInfo(int lv, JobModel job) 
     {
         Job = job;
+        JobID = job.ID;
         Name = job.Name;
         Lv = lv;
 
@@ -167,6 +167,7 @@ public class BattleCharacterInfo
     {
         Name = info.Name;
         Lv = lv;
+        Job = DataContext.Instance.JobDic[info.JobId];
 
         MaxHP = info.MaxHP;
         STR = info.STR;
@@ -243,14 +244,6 @@ public class BattleCharacterInfo
                 StatusList.RemoveAt(i);
                 i--;
             }
-        }
-    }
-
-    public void CheckSP() 
-    {
-        if(CurrentSP < 5) 
-        {
-            CurrentSP++;
         }
     }
 }
