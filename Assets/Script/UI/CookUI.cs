@@ -11,7 +11,7 @@ public class CookUI : MonoBehaviour
     public TipLabel TipLabel;
     public Text ResultNameLabel;
     public Text ResultCommentLabel;
-    public Text[] MaterialLabel;
+    public ButtonPlus[] MaterialButton;
 
     private Food _food = null;
     private List<ItemModel> _materialList = new List<ItemModel>();
@@ -19,10 +19,11 @@ public class CookUI : MonoBehaviour
     public void Open()
     {
         gameObject.SetActive(true);
-        BagScrollView.SetData(new List<object>(ItemManager.Instance.BagInfo.FoodList));
+        BagScrollView.SetData(new List<object>(ItemManager.Instance.BagInfo.GetFoodMaterial()));
         _materialList.Clear();
         SetMaterialLabel();
         ResultNameLabel.text = "";
+        ResultCommentLabel.text = "";
     }
 
     private void SetMaterialLabel() 
@@ -31,11 +32,13 @@ public class CookUI : MonoBehaviour
         {
             if (i < _materialList.Count)
             {
-                MaterialLabel[i].text = _materialList[i].Name;
+                MaterialButton[i].Label.text = _materialList[i].Name;
+                MaterialButton[i].Data = _materialList[i];
             }
             else
             {
-                MaterialLabel[i].text = "";
+                MaterialButton[i].Label.text = "";
+                MaterialButton[i].Data = null;
             }
         }
     }
@@ -80,21 +83,19 @@ public class CookUI : MonoBehaviour
             }
         }
 
-        //檢查有沒有超出料理需求的素材,有的話就會有 addValue
-        for (int i=0; i<cook.MaterialList.Count; i++) 
+        if (cook != null)
         {
-            materialIdList.Remove(cook.MaterialList[i]);
+            _food = new Food(DataContext.Instance.ItemDic[cook.Result], DataContext.Instance.FoodResultDic[cook.Result], materialIdList);
+            ResultNameLabel.text = _food.Name;
+            ResultCommentLabel.text = _food.Comment;
+            CookButton.gameObject.SetActive(true);
         }
-
-        List<CookAddModel> addList = new List<CookAddModel>();
-        for (int i=0; i<materialIdList.Count; i++) 
+        else
         {
-            addList.Add(DataContext.Instance.CookAddDic[materialIdList[i]]);
+            ResultNameLabel.text = "";
+            ResultCommentLabel.text = "";
+            CookButton.gameObject.SetActive(false);
         }
-
-        _food = new Food(DataContext.Instance.ItemDic[cook.Result], DataContext.Instance.FoodDic[cook.Result], addList);
-        ResultNameLabel.text = _food.Name;
-        ResultCommentLabel.text = _food.Comment;
     }
 
     private void ScrollItemOnClick(object obj, ScrollItem scrollItem)
@@ -112,11 +113,30 @@ public class CookUI : MonoBehaviour
         }
     }
 
+    private void MaterialOnClick(ButtonPlus button) 
+    {
+        if (button.Data != null) 
+        {
+            _materialList.Remove((ItemModel)button.Data);
+            SetMaterialLabel();
+            SetResult();
+        }
+    }
+
     private void CookOnClick() 
     {
         if (_food != null) 
         {
-        
+            ItemManager.Instance.AddFood(_food);
+            for (int i=0; i<_materialList.Count; i++) 
+            {
+                ItemManager.Instance.MinusItem(_materialList[i].ID, 1);
+            }
+            _food = null;
+            _materialList.Clear();
+            SetMaterialLabel();
+            BagScrollView.SetData(new List<object>(ItemManager.Instance.BagInfo.GetFoodMaterial()));
+            CookButton.gameObject.SetActive(false);
         }
     }
 
@@ -127,7 +147,13 @@ public class CookUI : MonoBehaviour
 
     private void Awake()
     {
+        CookButton.gameObject.SetActive(false);
+        CookButton.onClick.AddListener(CookOnClick);
         CloseButton.onClick.AddListener(CloseOnClick);
         BagScrollView.ItemOnClickHandler += ScrollItemOnClick;
+        for (int i=0; i<MaterialButton.Length; i++) 
+        {
+            MaterialButton[i].ClickHandler += MaterialOnClick;
+        }
     }
 }

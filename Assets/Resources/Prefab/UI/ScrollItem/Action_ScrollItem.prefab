@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2120444013385833796}
   - component: {fileID: 8166735597919473501}
   - component: {fileID: 3813532909082189549}
+  - component: {fileID: -3294762781510720845}
   m_Layer: 5
   m_Name: Action_ScrollItem
   m_TagString: Untagged
@@ -91,6 +92,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04447d470ee2d4240969e663410cfa77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DownThreshold: 0.2
+  PressDuration: 0.1
+  Button: {fileID: -3294762781510720845}
+  Label: {fileID: 4075583423622268716}
+  Image: {fileID: 0}
+--- !u!114 &3813532909082189549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2462210376951033353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f863a7a1336f414e91127b001a13edd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Background: {fileID: 2120444013385833796}
+  SelectedImage: {fileID: 0}
+  Button: {fileID: 8166735597919473501}
+  Label: {fileID: 4075583423622268716}
+--- !u!114 &-3294762781510720845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2462210376951033353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -119,30 +153,10 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 2120444013385833796}
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
-  DownThreshold: 0.2
-  PressDuration: 0.1
-  Label: {fileID: 4075583423622268716}
-  Image: {fileID: 0}
---- !u!114 &3813532909082189549
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2462210376951033353}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f863a7a1336f414e91127b001a13edd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Background: {fileID: 2120444013385833796}
-  SelectedImage: {fileID: 0}
-  Button: {fileID: 8166735597919473501}
-  Label: {fileID: 4075583423622268716}
 --- !u!1 &2688946866806302095
 GameObject:
   m_ObjectHideFlags: 0

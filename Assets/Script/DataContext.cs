@@ -49,8 +49,8 @@ public class DataContext
     public List<TreasureModel> TreasureList = new List<TreasureModel>();
     public List<ShopModel> ShopList = new List<ShopModel>();
     public List<CookModel> CookList = new List<CookModel>();
-    public List<CookAddModel> CookAddList = new List<CookAddModel>();
-    public List<FoodModel> FoodList = new List<FoodModel>();
+    public List<FoodMaterial> FoodMaterialList = new List<FoodMaterial>();
+    public List<FoodResult> FoodResultList = new List<FoodResult>();
     public List<ConsumablesModel> ConsumablesList = new List<ConsumablesModel>();
     public List<CardModel> CardList = new List<CardModel>();
 
@@ -69,8 +69,8 @@ public class DataContext
     public Dictionary<int, List<int>> RoomPool = new Dictionary<int, List<int>>(); //機率池 <Floor, idList>
     public Dictionary<int, TreasureModel> TreasureDic = new Dictionary<int, TreasureModel>();
     public Dictionary<ItemModel.CategoryEnum, List<ShopModel>> ShopItemDic = new Dictionary<ItemModel.CategoryEnum, List<ShopModel>>();
-    public Dictionary<int, CookAddModel> CookAddDic = new Dictionary<int, CookAddModel>();
-    public Dictionary<int, FoodModel> FoodDic = new Dictionary<int, FoodModel>();
+    public Dictionary<int, FoodMaterial> FoodMaterialDic = new Dictionary<int, FoodMaterial>();
+    public Dictionary<int, FoodResult> FoodResultDic = new Dictionary<int, FoodResult>();
     public Dictionary<int, ConsumablesModel> ConsumablesDic = new Dictionary<int, ConsumablesModel>();
     public Dictionary<int, CardModel> CardDic = new Dictionary<int, CardModel>();
 
@@ -217,16 +217,16 @@ public class DataContext
             CookList[i].GetList();
         }
 
-        CookAddList = Load<List<CookAddModel>>("CookAdd", PrePathEnum.Data);
-        for (int i = 0; i < CookAddList.Count; i++)
+        FoodMaterialList = Load<List<FoodMaterial>>("FoodMaterial", PrePathEnum.Data);
+        for (int i = 0; i < FoodMaterialList.Count; i++)
         {
-            CookAddDic.Add(CookAddList[i].ID, CookAddList[i]);
+            FoodMaterialDic.Add(FoodMaterialList[i].ID, FoodMaterialList[i]);
         }
 
-        FoodList = Load<List<FoodModel>>("Food", PrePathEnum.Data);
-        for (int i = 0; i < FoodList.Count; i++)
+        FoodResultList = Load<List<FoodResult>>("FoodResult", PrePathEnum.Data);
+        for (int i = 0; i < FoodResultList.Count; i++)
         {
-            FoodDic.Add(FoodList[i].ID, FoodList[i]);
+            FoodResultDic.Add(FoodResultList[i].ID, FoodResultList[i]);
         }
 
         ConsumablesList = Load<List<ConsumablesModel>>("Consumables", PrePathEnum.Data);

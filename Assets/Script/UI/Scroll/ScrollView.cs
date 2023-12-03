@@ -38,23 +38,23 @@ public class ScrollView : MonoBehaviour
         float length = 0;
         if (Type == TypeEnum.Horizontal)
         {
-            _subGridAmount = Mathf.FloorToInt(Background.sizeDelta.x / ScrollItem.Background.rectTransform.sizeDelta.x) + 1;
-            MainGridRect.sizeDelta = new Vector2((ScrollItem.Background.rectTransform.sizeDelta.x + SpacingX) * _subGridAmount, Background.sizeDelta.y);
+            _subGridAmount = Mathf.FloorToInt(Background.sizeDelta.x / CellSizeX) + 1;
+            MainGridRect.sizeDelta = new Vector2((CellSizeX + SpacingX) * _subGridAmount, Background.sizeDelta.y);
             MainGrid.cellSize = new Vector2(CellSizeX, Background.sizeDelta.y);
             MainGrid.spacing = new Vector2(SpacingX, 0);
             length = Background.sizeDelta.y;
             Content.sizeDelta = new Vector2(Content.sizeDelta.x, length);
-            _scrollItemAmount = Mathf.FloorToInt(length / (ScrollItem.Background.rectTransform.sizeDelta.y + SubGrid.Grid.spacing.y));
+            _scrollItemAmount = Mathf.FloorToInt(length / (CellSizeY + SubGrid.Grid.spacing.y));
         }
         else if (Type == TypeEnum.Vertical)
         {
-            _subGridAmount = Mathf.FloorToInt(Background.sizeDelta.y / ScrollItem.Background.rectTransform.sizeDelta.y) + 1;
-            MainGridRect.sizeDelta = new Vector2(Background.sizeDelta.x, (ScrollItem.Background.rectTransform.sizeDelta.y + SpacingY) * _subGridAmount);
+            _subGridAmount = Mathf.FloorToInt(Background.sizeDelta.y / CellSizeY) + 1;
+            MainGridRect.sizeDelta = new Vector2(Background.sizeDelta.x, (CellSizeY + SpacingY) * _subGridAmount);
             MainGrid.cellSize = new Vector2(Background.sizeDelta.x, CellSizeY);
             MainGrid.spacing = new Vector2(0, SpacingY);
             length = Background.sizeDelta.x;
             Content.sizeDelta = new Vector2(length, Content.sizeDelta.y);
-            _scrollItemAmount = Mathf.FloorToInt(length / (ScrollItem.Background.rectTransform.sizeDelta.x + SubGrid.Grid.spacing.x));
+            _scrollItemAmount = Mathf.FloorToInt(length / (CellSizeX + SubGrid.Grid.spacing.x));
         }
 
 

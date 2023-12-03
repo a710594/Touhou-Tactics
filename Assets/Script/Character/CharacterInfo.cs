@@ -22,6 +22,7 @@ public class CharacterInfo
     public Equip Weapon = new Equip(EquipModel.CategoryEnum.Weapon);
     public Equip Armor = new Equip(EquipModel.CategoryEnum.Armor);
     public Equip[] Amulets = new Equip[3] { new Equip(EquipModel.CategoryEnum.Amulet), new Equip(EquipModel.CategoryEnum.Amulet), new Equip(EquipModel.CategoryEnum.Amulet) };
+    public int Weight;
 
     [NonSerialized]
     public List<Skill> SkillList = new List<Skill>();
@@ -54,6 +55,7 @@ public class CharacterInfo
         DOWN = job.DOWN;
         WT = job.WT;
         Controller = job.Controller;
+        Weight = job.Weight;
 
         Init();
     }
@@ -115,12 +117,34 @@ public class CharacterInfo
         JobModel job = DataContext.Instance.JobDic[JobId];
         float n = (1 + (lv - 1) * 0.1f);
         MaxHP = Mathf.RoundToInt(job.HP * n);
-        CurrentHP = MaxHP;
         STR = Mathf.RoundToInt(job.STR * n);
         CON = Mathf.RoundToInt(job.CON * n);
         INT = Mathf.RoundToInt(job.INT * n);
         MEN = Mathf.RoundToInt(job.MEN * n);
         DEX = Mathf.RoundToInt(job.DEX * n);
         AGI = Mathf.RoundToInt(job.AGI * n);
+    }
+
+    public void Refresh(BattleCharacterInfo info) 
+    {
+        CurrentHP = info.CurrentHP;
+        for (int i=0; i<SkillList.Count; i++) 
+        {
+            SkillList[i].CurrentCD = 0;
+        }
+
+        for (int i = 0; i < SupportList.Count; i++)
+        {
+            SupportList[i].CurrentCD = 0;
+        }
+    }
+
+    public void SetRecover(int recover)
+    {
+        CurrentHP += recover;
+        if (CurrentHP > MaxHP)
+        {
+            CurrentHP = MaxHP;
+        }
     }
 }

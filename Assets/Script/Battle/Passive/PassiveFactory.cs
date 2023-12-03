@@ -23,7 +23,7 @@ public class PassiveFactory
         {
             passive = new SwordmanPassive(DataContext.Instance.PassiveDic[id]);
         }
-        else if (id == 3)
+        else if (id == 5)
         {
             passive = new DreamEaterPassive(DataContext.Instance.PassiveDic[id]);
         }

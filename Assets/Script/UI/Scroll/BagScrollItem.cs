@@ -7,6 +7,19 @@ public class BagScrollItem : ScrollItem
 {
     public Text NameLabel;
     public Text AmountLabel;
+    public ButtonColorSetting ColorSetting;
+
+    public class Data
+    {
+        public Equip Equip;
+        public int Weight;
+
+        public Data(Equip equip, int weight) 
+        {
+            Equip = equip;
+            Weight = weight;
+        }
+    }
 
     public override void SetData(object obj)
     {
@@ -36,11 +49,20 @@ public class BagScrollItem : ScrollItem
             NameLabel.text = food.Name;
             AmountLabel.text = "";
         }
-        else 
+        else if(obj is Equip)
         {
             Equip equip = (Equip)obj;
             NameLabel.text = equip.Name;
             AmountLabel.text = "";
+        }
+        else if(obj is Data) 
+        {
+            Data data = (Data)obj;
+            Equip equip = data.Equip;
+            int weight = data.Weight;
+            NameLabel.text = equip.Name;
+            AmountLabel.text = "";
+            ColorSetting.SetColor(weight >= equip.Weight);
         }
     }
 }

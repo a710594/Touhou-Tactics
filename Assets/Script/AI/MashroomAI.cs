@@ -22,7 +22,8 @@ public class MashroomAI : AI
         private int _skillId = 1;
         private Vector2Int _moveTo;
         private BattleCharacterInfo _target = null;
-        private List<Vector2Int> _rangeList = new List<Vector2Int>();
+        private List<Vector2Int> _allRangeList = new List<Vector2Int>();
+        private Dictionary<BattleCharacterInfo, List<Vector2Int>> _targetDic = new Dictionary<BattleCharacterInfo, List<Vector2Int>>();
 
         public NormalState(StateContext context) : base(context)
         {
@@ -33,28 +34,113 @@ public class MashroomAI : AI
             base.Start();
 
             _target = null;
-            _rangeList.Clear();
+            _allRangeList.Clear();
+            _targetDic.Clear();
             _selectedSkill = new Skill(DataContext.Instance.SkillDic[_skillId]);
 
-            GetRange();
-            GetTarget(true);
-            if (_target != null)
+            Vector2Int v2;
+            BattleInfo battleInfo = BattleController.Instance.Info;
+            List<Vector2Int> rangeList = new List<Vector2Int>();
+            List<BattleCharacterInfo> characterList = new List<BattleCharacterInfo>(BattleController.Instance.CharacterList);
+            for (int i=0; i<characterList.Count; i++) 
             {
+                if(characterList[i].Faction == BattleCharacterInfo.FactionEnum.Enemy) 
+                {
+                    characterList.RemoveAt(i);
+                    i--;
+                }
+            }
+
+            for (int i = 0; i < _stepList.Count; i++)
+            {
+                rangeList = Utility.GetRange(_selectedSkill.Effect.Range, battleInfo.Width, battleInfo.Height, _stepList[i]);
+                for (int j=0; j<characterList.Count; j++) 
+                {
+                    v2 = Utility.ConvertToVector2Int(characterList[j].Position);
+                    if (v2 != _stepList[i] && rangeList.Contains(v2))
+                    {
+                        if (!_targetDic.ContainsKey(characterList[j]))
+                        {
+                            _targetDic.Add(characterList[j], new List<Vector2Int>());
+                        }
+                        if (!_targetDic[characterList[j]].Contains(_stepList[i]))
+                        {
+                            _targetDic[characterList[j]].Add(_stepList[i]);
+                        }
+                    }
+                }
+            }
+
+            int damage;
+            int maxDamage = -1;
+            int distance;
+            int maxDistance = -1;
+            int minDistance = int.MaxValue;
+            if (_targetDic.Count > 0)
+            {
+                _target = GetTarget(new List<BattleCharacterInfo>(_targetDic.Keys));
+
+                List<Vector2Int> list = _targetDic[_target];
+                Vector2Int start = Utility.ConvertToVector2Int(_info.Position);
+                for (int i = 0; i < list.Count; i++)
+                {
+                    distance = BattleController.Instance.GetDistance(start, list[i], _info.Faction);
+                    if (distance > maxDistance)
+                    {
+                        maxDistance = distance;
+                        _moveTo = list[i];
+                    }
+                }
                 _inRange = true;
-                GetMoveTo(true);
-                BattleController.Instance.SetMoveState();
-                BattleController.Instance.Click(_moveTo);
-                BattleController.Instance.Click(_moveTo);
             }
-            else 
+            else
             {
-                _inRange = false;
-                GetTarget(false);
-                GetMoveTo(false);
-                BattleController.Instance.SetMoveState();
-                BattleController.Instance.Click(_moveTo);
-                BattleController.Instance.Click(_moveTo);
+                _target = GetTarget(characterList);
+
+                v2 = Utility.ConvertToVector2Int(_target.Position);
+                for (int i=0; i<_stepList.Count; i++) 
+                {
+                    distance = BattleController.Instance.GetDistance(_stepList[i], v2, _info.Faction);
+                    if (distance < minDistance)
+                    {
+                        minDistance = distance;
+                        _moveTo = _stepList[i];
+                    }
+                }
             }
+            Debug.Log(_moveTo);
+            BattleController.Instance.SetMoveState();
+            BattleController.Instance.Click(_moveTo);
+            BattleController.Instance.Click(_moveTo);
+        }
+
+        private BattleCharacterInfo GetTarget(List<BattleCharacterInfo> list)
+        {
+            int damage;
+            int maxDamage = -1;
+            BattleCharacterInfo target = null;
+
+            //如果受到挑釁,會優先攻擊挑釁者
+            for (int i = 0; i < _info.StatusList.Count; i++)
+            {
+                if (_info.StatusList[i] is ProvocativeStatus)
+                {
+                    target = ((ProvocativeStatus)_aiContext.CharacterInfo.StatusList[i]).Target;
+                    return target;
+                }
+            }
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                damage = BattleController.Instance.GetDamage(_selectedSkill.Effect, _info, list[i]);
+                if (damage > maxDamage)
+                {
+                    maxDamage = damage;
+                    target = list[i];
+                }
+            }
+
+            return target;
         }
 
         public override void OnMoveEnd()
@@ -69,119 +155,6 @@ public class MashroomAI : AI
             {
                 BattleController.Instance.Idle();
             }
-        }
-
-        private void GetRange()
-        {
-            Vector2Int start = Utility.ConvertToVector2Int(_aiContext.CharacterInfo.Position);
-            Vector2Int position = new Vector2Int();
-            List<Vector2Int> list = new List<Vector2Int>(); //先挑選出距離 <= step + range 的座標
-            BattleInfo battleInfo = BattleController.Instance.Info;
-            foreach (KeyValuePair<Vector2Int, TileInfo> pair in battleInfo.TileInfoDic)
-            {
-                position = pair.Key;
-                if (Utility.ManhattanDistance(position, start) <= _aiContext.CharacterInfo.MOV + _selectedSkill.Effect.Range)
-                {
-                    for (int j = 0; j < _stepList.Count; j++)
-                    {
-                        if (Utility.ManhattanDistance(position, _stepList[j]) <= _selectedSkill.Effect.Range)
-                        {
-                            _rangeList.Add(position);
-                        }
-                    }
-                }
-            }
-        }
-
-        private void GetTarget(bool inRange) 
-        {
-            int distance;
-            Vector2Int myPosition = Utility.ConvertToVector2Int(_aiContext.CharacterInfo.Position);
-            Vector2Int targetPosition = new Vector2Int();
-            List<BattleCharacterInfo> characterList = BattleController.Instance.CharacterList;
-
-            //如果受到挑釁,會優先攻擊挑釁者
-            for (int i=0; i< _aiContext.CharacterInfo.StatusList.Count; i++) 
-            {
-                if(_aiContext.CharacterInfo.StatusList[i] is ProvocativeStatus) 
-                {
-                    _target = ((ProvocativeStatus)_aiContext.CharacterInfo.StatusList[i]).Target;
-                    return;
-                }
-            }
-
-            BattleCharacterInfo.FactionEnum faction;
-            if(_aiContext.CharacterInfo.Faction == BattleCharacterInfo.FactionEnum.Player) 
-            {
-                faction = BattleCharacterInfo.FactionEnum.Enemy;
-            }
-            else 
-            {
-                faction = BattleCharacterInfo.FactionEnum.Player;
-            }
-
-            for (int i=0; i<characterList.Count; i++) 
-            {
-                if (characterList[i].Faction == faction) 
-                {
-                    targetPosition = Utility.ConvertToVector2Int(characterList[i].Position);
-                    distance = BattleController.Instance.GetDistance(myPosition, targetPosition, _aiContext.CharacterInfo.Faction);
-                    if (distance != -1 && (!inRange || _rangeList.Contains(targetPosition))) 
-                    {
-                        if(_target == null || characterList[i].CurrentHP < _target.CurrentHP) 
-                        {
-                            _target = characterList[i];
-                        }
-                    }
-                }
-            }
-        }
-
-        private void GetMoveTo(bool inRange) 
-        {
-            if(_target == null) 
-            {
-                return;
-            }
-
-            int distance;
-            int minDistance = -1;
-            Vector2Int myPosition = Utility.ConvertToVector2Int(_aiContext.CharacterInfo.Position);
-            Vector2Int targetPosition = Utility.ConvertToVector2Int(_target.Position);
-            BattleInfo battleInfo = BattleController.Instance.Info;
-            List<BattleCharacterInfo> characterList = BattleController.Instance.CharacterList;
-
-            if (inRange) //目標必需在射程之內
-            {
-                List<Vector2Int> rangeList;
-
-                for (int i = 0; i < _stepList.Count; i++)
-                {
-                    rangeList = Utility.GetRange(_selectedSkill.Effect.Range, battleInfo.Width, battleInfo.Height, _stepList[i]);
-                    if (rangeList.Contains(targetPosition))
-                    {
-                        distance = BattleController.Instance.GetDistance(myPosition, _stepList[i], _aiContext.CharacterInfo.Faction);
-                        if (!BattleController.Instance.HasCharacter(myPosition, _stepList[i]) && (minDistance == -1 || distance < minDistance))
-                        {
-                            minDistance = distance;
-                            _moveTo = _stepList[i];
-                        }
-
-                    }
-                }
-            }
-            else
-            {
-                for (int i = 0; i < _stepList.Count; i++)
-                {
-                    distance = BattleController.Instance.GetDistance(targetPosition, _stepList[i], _aiContext.CharacterInfo.Faction);
-                    if (!BattleController.Instance.HasCharacter(myPosition, _stepList[i]) && (minDistance == -1 || distance < minDistance))
-                    {
-                        minDistance = distance;
-                        _moveTo = _stepList[i];
-                    }
-                }
-            }
-        }
+        }              
     }
 }

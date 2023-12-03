@@ -68,7 +68,7 @@ public class CharacterInfoUI : MonoBehaviour
     {
         if (_character != null)
         {
-            CharacterDetailUI characterDetailUI = CharacterDetailUI.Open();
+            CharacterDetailUI characterDetailUI = CharacterDetailUI.Open(false);
             characterDetailUI.SetData(_character);
         }
     }

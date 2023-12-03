@@ -32,7 +32,7 @@ namespace Battle
                 BattleCharacterInfo battleCharacter;
                 foreach (KeyValuePair<CharacterInfo, GameObject> pair in _tempDic)
                 {
-                    battleCharacter = new BattleCharacterInfo(pair.Key, CharacterManager.Instance.CharacterInfoGroup.Lv);
+                    battleCharacter = new BattleCharacterInfo(pair.Key, CharacterManager.Instance.Info.Lv);
                     battleCharacter.Index = _characterList.Count + 1;
                     battleCharacter.Position = pair.Value.transform.position;
                     _characterList.Add(battleCharacter);

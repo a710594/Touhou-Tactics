@@ -52,7 +52,8 @@ public class CampUI : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.I))
         {
-            BagUI.Open();
+            BagUI bagUI = BagUI.Open();
+            bagUI.SetNormalState();
         }
     }
 

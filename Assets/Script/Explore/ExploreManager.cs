@@ -348,6 +348,7 @@ namespace Explore
             Camera.main.transform.position = new Vector3(_info.PlayerPosition.x, 1, _info.PlayerPosition.y);
             Camera.main.transform.eulerAngles = new Vector3(0, _info.PlayerRotation, 0);
             Player = Camera.main.GetComponent<ExploreCharacterController>();
+            Player.MoveTo = new Vector3(_info.PlayerPosition.x, 1, _info.PlayerPosition.y);
             Player.MoveHandler += OnPlayerMove;
             Player.RotateHandler += OnPlayerRotate;
             CheckVidsit(Player.transform);

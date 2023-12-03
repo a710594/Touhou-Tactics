@@ -35,7 +35,10 @@ public static class Utility
         while (queue.Count != 0)
         {
             position = queue.Dequeue();
-            list.Add(position);
+            if (!list.Contains(position))
+            {
+                list.Add(position);
+            }
 
             if (!list.Contains(position + Vector2Int.up) && (position + Vector2Int.up).y < height && ManhattanDistance(position + Vector2Int.up, start) <= range)
             {

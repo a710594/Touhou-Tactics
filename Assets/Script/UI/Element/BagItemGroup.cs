@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,8 @@ using UnityEngine.UI;
 
 public class BagItemGroup : MonoBehaviour
 {
+    public Action<object> ScrollHandler;
+
     public ScrollView ScrollView;
     public Text CommentLabel;
 
@@ -55,6 +58,8 @@ public class BagItemGroup : MonoBehaviour
             Food food = (Food)obj;
             SetComment(food.Comment);
         }
+
+        ScrollHandler(obj);
     }
 
     private void Awake()

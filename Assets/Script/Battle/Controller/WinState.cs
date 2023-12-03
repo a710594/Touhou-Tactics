@@ -27,12 +27,18 @@ namespace Battle
                 }
                 Instance._battleUI.gameObject.SetActive(false);
                 Instance._battleResultUI.gameObject.SetActive(true);
-                Instance._battleResultUI.SetData(CharacterManager.Instance.CharacterInfoGroup.Lv, CharacterManager.Instance.CharacterInfoGroup.Exp, Instance._enemyGroup.Exp, itemList);
+                Instance._battleResultUI.SetData(CharacterManager.Instance.Info.Lv, CharacterManager.Instance.Info.Exp, Instance._enemyGroup.Exp, itemList);
+
+                List<BattleCharacterInfo> playerList = new List<BattleCharacterInfo>();
+                for (int i=0; i<Instance.CharacterList.Count; i++) 
+                {
+                    if(Instance.CharacterList[i].Faction == BattleCharacterInfo.FactionEnum.Player) 
+                    {
+                        playerList.Add(Instance.CharacterList[i]);
+                    }
+                }
+                CharacterManager.Instance.Refresh(playerList);
                 CharacterManager.Instance.AddExp(Instance._enemyGroup.Exp);
-                //SceneController.Instance.ChangeScene("Explore", () =>
-                //{
-                //    Explore.ExploreManager.Instance.Reload();
-                //});
             }
         }
     }

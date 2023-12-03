@@ -15,4 +15,17 @@ public class BagInfo
     {
         Money = 100;
     }
+
+    public List<Item> GetFoodMaterial() 
+    {
+        List<Item> list = new List<Item>();
+        foreach(KeyValuePair<int, Item> pair in ItemDic) 
+        {
+            if (DataContext.Instance.FoodMaterialDic.ContainsKey(pair.Key)) 
+            {
+                list.Add(pair.Value);
+            }
+        }
+        return list;
+    }
 }

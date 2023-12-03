@@ -23,6 +23,7 @@ public class ActionButtonGroup : MonoBehaviour
         SupportButton.interactable = !character.HasUseSupport;
         ItemButton.interactable = !character.HasUseItem;
         ActionCountLabel.text = "Action Count: " + character.ActionCount.ToString();
+        ScrollView.transform.parent.gameObject.SetActive(false);
     }
 
     public void SetScrollView(List<object> list)

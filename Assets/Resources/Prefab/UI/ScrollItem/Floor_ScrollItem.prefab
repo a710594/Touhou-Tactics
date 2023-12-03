@@ -93,6 +93,7 @@ GameObject:
   - component: {fileID: 7597946877161861531}
   - component: {fileID: 381137135110267778}
   - component: {fileID: 2551077431089891320}
+  - component: {fileID: -5048403372775788765}
   m_Layer: 5
   m_Name: Floor_ScrollItem
   m_TagString: Untagged
@@ -171,6 +172,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04447d470ee2d4240969e663410cfa77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DownThreshold: 0.2
+  PressDuration: 0.1
+  Button: {fileID: -5048403372775788765}
+  Label: {fileID: 5517861112408435699}
+  Image: {fileID: 0}
+--- !u!114 &2551077431089891320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6212583466664477398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67d03bcfb06f1eb4e9340ccd2f627957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Background: {fileID: 7597946877161861531}
+  SelectedImage: {fileID: 0}
+  Button: {fileID: 381137135110267778}
+  Label: {fileID: 5517861112408435699}
+--- !u!114 &-5048403372775788765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6212583466664477398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -203,23 +237,3 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
-  DownThreshold: 0.2
-  PressDuration: 0.1
-  Label: {fileID: 5517861112408435699}
-  Image: {fileID: 0}
---- !u!114 &2551077431089891320
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6212583466664477398}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67d03bcfb06f1eb4e9340ccd2f627957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Background: {fileID: 7597946877161861531}
-  SelectedImage: {fileID: 0}
-  Button: {fileID: 381137135110267778}
-  Label: {fileID: 5517861112408435699}

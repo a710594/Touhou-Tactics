@@ -25,7 +25,7 @@ public class PhysicalAttackEffect : Effect
 
         if (hitType != BattleController.HitType.Miss)
         {
-            int damage = BattleController.GetDamage(this, user, target, characterList);
+            int damage = BattleController.Instance.GetDamage(this, user, target);
             if (hitType == BattleController.HitType.Critical)
             {
                 damage *= 2;

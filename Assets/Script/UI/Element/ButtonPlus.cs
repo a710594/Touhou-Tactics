@@ -5,15 +5,18 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ButtonPlus : Button
+public class ButtonPlus : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler, IPointerEnterHandler
 {
     public Action<ButtonPlus> ClickHandler;
     public Action<ButtonPlus> PressHandler;
     public Action<ButtonPlus> DownHandler;
     public Action<ButtonPlus> UpHandler;
+    public Action<ButtonPlus> EnterHandler;
+    public Action<ButtonPlus> ExitHandler;
 
     public float DownThreshold = 0.2f; //開始 Down 事件
     public float PressDuration = 0.1f; //Down 之後執行 Press 的週期
+    public Button Button;
     public Text Label;
     public Image Image;
     public object Data = null;
@@ -60,29 +63,15 @@ public class ButtonPlus : Button
         }
     }
 
-    public override void OnPointerDown(PointerEventData eventData)
+    public void OnPointerDown(PointerEventData eventData)
     {
-        base.OnPointerDown(eventData);
-
-        //if (!interactable) 
-        //{
-        //    return;
-        //}
-
         _startDownTime = Time.time;
         _isPointerDown = true;
         _longPressTriggered = false;
     }
 
-    public override void OnPointerUp(PointerEventData eventData)
+    public void OnPointerUp(PointerEventData eventData)
     {
-        base.OnPointerDown(eventData);
-
-        //if (!interactable)
-        //{
-        //    return;
-        //}
-
         _isPointerDown = false;
 
         if (UpHandler != null)
@@ -91,20 +80,26 @@ public class ButtonPlus : Button
         }
     }
 
-    public override void OnPointerExit(PointerEventData eventData)
+    public void OnPointerEnter(PointerEventData eventData)
     {
-        base.OnPointerExit(eventData);
-        _isPointerDown = false;
+        if(EnterHandler!= null) 
+        {
+            EnterHandler(this);
+        }
     }
 
-    public override void OnPointerClick(PointerEventData eventData)
+    public void OnPointerExit(PointerEventData eventData)
     {
-        //if (!interactable)
-        //{
-        //    return;
-        //}
-        base.OnPointerExit(eventData);
+        _isPointerDown = false;
 
+        if (ExitHandler != null) 
+        {
+            ExitHandler(this);
+        }
+    }
+
+    public void OnClick()
+    {
         if (!_longPressTriggered || DownThreshold == 0)
         {
             if (ClickHandler != null)
@@ -112,5 +107,10 @@ public class ButtonPlus : Button
                 ClickHandler(this);
             }
         }
+    }
+
+    protected void Awake()
+    {
+        Button.onClick.AddListener(OnClick);
     }
 }

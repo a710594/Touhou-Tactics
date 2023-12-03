@@ -21,7 +21,7 @@ public class SelectBattleCharacterUI : MonoBehaviour
     {
         Image dragCharacterBG;
         DragCharacterImage dragCharacterImage;
-        _tempCharacterList = new List<CharacterInfo>(CharacterManager.Instance.CharacterInfoGroup.CharacterList);
+        _tempCharacterList = new List<CharacterInfo>(CharacterManager.Instance.Info.CharacterList);
         for (int i=0; i<_tempCharacterList.Count; i++) 
         {
             dragCharacterBG = Instantiate(DragCharacterBG);

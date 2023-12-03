@@ -21,14 +21,14 @@ public class SceneController
 
     public string CurrentScene
     {
-        get;
-        protected set;
-    }
-
-    public string LastScene
-    {
-        get;
-        protected set;
+        get 
+        { 
+            return SystemManager.Instance.SystemInfo.CurrentScene;
+        }
+        set 
+        {
+            SystemManager.Instance.SystemInfo.CurrentScene = value;
+        }
     }
 
     public Action BeforeSceneLoadedHandler;
@@ -72,7 +72,6 @@ public class SceneController
     private void SceneLoaded(Scene scene, LoadSceneMode mode)
     {
         _isLock = false;
-        LastScene = CurrentScene;
         CurrentScene = _tempType;
         LoadingUI.Close();
 

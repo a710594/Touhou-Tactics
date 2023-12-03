@@ -187,9 +187,19 @@ public class ItemManager
         }
     }
 
+    public void AddEquip(Equip equip) 
+    {
+        BagInfo.EquipList.Add(equip);
+    }
+
     public void MinusEquip(Equip equip)
     {
         BagInfo.EquipList.Remove(equip);
+    }
+
+    public void AddFood(Food food) 
+    {
+        BagInfo.FoodList.Add(food);
     }
 
     public void MinusFood(Food food)

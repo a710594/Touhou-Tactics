@@ -19,7 +19,7 @@ public class BattleCharacterInfo
     }
 
     //基礎屬性
-    public int JobID;
+    public int JobId;
     public string Name;
     public int Lv;
     public int MaxHP;
@@ -35,20 +35,17 @@ public class BattleCharacterInfo
     public int WT;
     public string Controller;
     public FactionEnum Faction;
-    [NonSerialized]
     public JobModel Job = null;
-    [NonSerialized]
     public EnemyModel Enemy = null;
     public Equip Weapon = new Equip(EquipModel.CategoryEnum.Weapon);
     public Equip Armor = new Equip(EquipModel.CategoryEnum.Armor);
-    public Equip[] Amulets = new Equip[3] { new Equip(EquipModel.CategoryEnum.Amulet), new Equip(EquipModel.CategoryEnum.Amulet) , new Equip(EquipModel.CategoryEnum.Amulet) };
+    public Equip[] Amulets = new Equip[2] { new Equip(EquipModel.CategoryEnum.Amulet), new Equip(EquipModel.CategoryEnum.Amulet) };
 
     public List<Skill> SkillList = new List<Skill>();
     public List<Support> SupportList = new List<Support>();
     public List<Passive> PassiveList = new List<Passive>();
 
     //當前屬性
-    [NonSerialized]
     public int Index; //戰鬥的時候用
     public bool IsAuto = false;
     public bool HasUseSkill = false;
@@ -68,7 +65,7 @@ public class BattleCharacterInfo
     public BattleCharacterInfo(int lv, JobModel job) 
     {
         Job = job;
-        JobID = job.ID;
+        JobId = job.ID;
         Name = job.Name;
         Lv = lv;
 
@@ -168,6 +165,7 @@ public class BattleCharacterInfo
         Name = info.Name;
         Lv = lv;
         Job = DataContext.Instance.JobDic[info.JobId];
+        JobId = info.JobId;
 
         MaxHP = info.MaxHP;
         STR = info.STR;
@@ -189,6 +187,10 @@ public class BattleCharacterInfo
 
         SkillList = info.SkillList;
         SupportList = info.SupportList;
+
+        Weapon = info.Weapon;
+        Armor = info.Armor;
+        Amulets = info.Amulets;
     }
 
     public void SetDamage(int damage)

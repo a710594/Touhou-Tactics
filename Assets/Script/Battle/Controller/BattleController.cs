@@ -276,7 +276,7 @@ namespace Battle
             }
             else
             {
-                _areaList = GetNormalAreaList(Info.Width, Info.Height, effect, _selectedPosition);
+                _areaList = GetNormalAreaList(Utility.ConvertToVector2Int(SelectedCharacter.Position), _selectedPosition, effect);
             }
 
             RemoveByFaction(effect, _areaList);

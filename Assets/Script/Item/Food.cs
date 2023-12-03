@@ -9,10 +9,10 @@ public class Food
     public string Name;
     public string Comment;
     public int HP = 0;
-    public int ATK = 0;
-    public int DEF = 0;
-    public int MTK = 0;
-    public int MEF = 0;
+    public int STR = 0;
+    public int CON = 0;
+    public int INT = 0;
+    public int MEN = 0;
     public int SEN = 0;
     public int AGI = 0;
     public int MOV = 0;
@@ -24,73 +24,104 @@ public class Food
 
     public Food() { }
 
-    public Food(ItemModel item, FoodModel food, List<CookAddModel> addList)
+    public Food(ItemModel item, FoodResult food, List<int> materialList)
     {
         ID = item.ID;
         Name = item.Name;
         Comment = item.Comment + "\n";
         HP = food.HP;
-        ATK = food.ATK;
-        DEF = food.DEF;
-        MTK = food.MTK;
-        MEF = food.MEF;
+        STR = food.STR;
+        CON = food.CON;
+        INT = food.INT;
+        MEN = food.MEN;
         SEN = food.SEN;
         AGI = food.AGI;
         MOV = food.MOV;
         Time = food.Time;
         Price = item.Price;
 
-        for (int i=0; i<addList.Count; i++) 
+        FoodMaterial foodMaterial;
+        for (int i=0; i<materialList.Count; i++) 
         {
-            HP += addList[i].HP;
-            ATK += addList[i].ATK;
-            DEF += addList[i].DEF;
-            MTK += addList[i].MTK;
-            MEF += addList[i].MEF;
-            SEN += addList[i].SEN;
-            AGI += addList[i].AGI;
-            MOV += addList[i].MOV;
+            foodMaterial = DataContext.Instance.FoodMaterialDic[materialList[i]];
+            HP += foodMaterial.HP;
+            STR += foodMaterial.STR;
+            CON += foodMaterial.CON;
+            INT += foodMaterial.INT;
+            MEN += foodMaterial.MEN;
+            SEN += foodMaterial.SEN;
+            AGI += foodMaterial.AGI;
+            MOV += foodMaterial.MOV;
         }
 
-        if (HP > 0)
-        {
-            Comment += "HP" + HP + " ";
-        }
-        else if (ATK > 0)
-        {
-            Comment += "ATK" + ATK + " ";
-        }
-        else if (DEF > 0)
-        {
-            Comment += "DEF" + DEF + " ";
-        }
-        else if (MTK > 0)
-        {
-            Comment += "MTK" + MTK + " ";
-        }
-        else if (MEF > 0)
-        {
-            Comment += "MEF" + MEF + " ";
-        }
-        else if (SEN > 0)
-        {
-            Comment += "SEN" + SEN + " ";
-        }
-        else if (AGI > 0)
-        {
-            Comment += "AGI" + AGI + " ";
-        }
-        else if (MOV > 0)
-        {
-            Comment += "MOV" + MOV + " ";
-        }
-
+        SetComment();
         SetEffect();
+    }
+
+    //for debug
+    public Food(int id) 
+    {
+        ItemModel item = DataContext.Instance.ItemDic[id];
+        FoodResult food = DataContext.Instance.FoodResultDic[id];
+
+        ID = item.ID;
+        Name = item.Name;
+        Comment = item.Comment + "\n";
+        HP = food.HP;
+        STR = food.STR;
+        CON = food.CON;
+        INT = food.INT;
+        MEN = food.MEN;
+        SEN = food.SEN;
+        AGI = food.AGI;
+        MOV = food.MOV;
+        Time = food.Time;
+        Price = item.Price;
+
+        SetComment();
+        SetEffect();
+
     }
 
     public void Init()
     {
         SetEffect();
+    }
+
+    private void SetComment() 
+    {
+        if (HP > 0)
+        {
+            Comment += "HP+" + HP + " ";
+        }
+        if (STR > 0)
+        {
+            Comment += "STR+" + STR + "% ";
+        }
+        if (CON > 0)
+        {
+            Comment += "CON+" + CON + "% ";
+        }
+        if (INT > 0)
+        {
+            Comment += "INT+" + INT + "% ";
+        }
+        if (MEN > 0)
+        {
+            Comment += "MEN+" + MEN + "% ";
+        }
+        if (SEN > 0)
+        {
+            Comment += "SEN+" + SEN + "% ";
+        }
+        if (AGI > 0)
+        {
+            Comment += "AGI+" + AGI + "% ";
+        }
+        if (MOV > 0)
+        {
+            Comment += "MOV+" + MOV + " ";
+        }
     }
 
     private void SetEffect() 
@@ -102,37 +133,37 @@ public class Food
             effect = new MedicineEffect(HP);
             effectList.Add(effect);
         }
-        else if (ATK > 0) 
+        if (STR > 0) 
         {
-            effect = new BuffEffect(StatusModel.TypeEnum.ATK, ATK, Time);
+            effect = new BuffEffect(StatusModel.TypeEnum.STR, STR + 100, Time);
             effectList.Add(effect);
         }
-        else if (DEF > 0)
+        if (CON > 0)
         {
-            effect = new BuffEffect(StatusModel.TypeEnum.DEF, DEF, Time);
+            effect = new BuffEffect(StatusModel.TypeEnum.CON, CON + 100, Time);
             effectList.Add(effect);
         }
-        else if (MTK > 0)
+        if (INT > 0)
         {
-            effect = new BuffEffect(StatusModel.TypeEnum.MTK, MTK, Time);
+            effect = new BuffEffect(StatusModel.TypeEnum.INT, INT + 100, Time);
             effectList.Add(effect);
         }
-        else if (MEF > 0)
+        if (MEN > 0)
         {
-            effect = new BuffEffect(StatusModel.TypeEnum.MEF, MEF, Time);
+            effect = new BuffEffect(StatusModel.TypeEnum.MEN, MEN + 100, Time);
             effectList.Add(effect);
         }
-        else if (SEN > 0)
+        if (SEN > 0)
         {
-            effect = new BuffEffect(StatusModel.TypeEnum.SEN, SEN, Time);
+            effect = new BuffEffect(StatusModel.TypeEnum.SEN, SEN + 100, Time);
             effectList.Add(effect);
         }
-        else if (AGI > 0)
+        if (AGI > 0)
         {
-            effect = new BuffEffect(StatusModel.TypeEnum.AGI, AGI, Time);
+            effect = new BuffEffect(StatusModel.TypeEnum.AGI, AGI + 100, Time);
             effectList.Add(effect);
         }
-        else if (MOV > 0)
+        if (MOV > 0)
         {
             effect = new BuffEffect(StatusModel.TypeEnum.MOV, MOV, Time);
             effectList.Add(effect);
@@ -151,5 +182,6 @@ public class Food
             effect.Area = "-1";
             effect.AreaList = new List<Vector2Int>();
         }
+        Debug.Log(Effect);
     }
 }

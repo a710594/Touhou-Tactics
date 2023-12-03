@@ -31,4 +31,5 @@ public class JobModel
     public int Support_3;
     public int Support_4;
     public int Support_5;
+    public int Weight; //負重,和可穿戴的裝備有關
 }

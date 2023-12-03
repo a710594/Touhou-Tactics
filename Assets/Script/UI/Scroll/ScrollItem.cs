@@ -64,16 +64,19 @@ public class ScrollItem : MonoBehaviour
         }
     }
 
-    void Awake()
+    protected virtual void Awake()
     {
         if (SelectedImage != null)
         {
             SelectedImage.gameObject.SetActive(false);
         }
 
-        Button.ClickHandler = OnClick;
-        Button.DownHandler = OnDown;
-        Button.PressHandler = OnPress;
-        Button.UpHandler = OnUp;
+        if (Button != null)
+        {
+            Button.ClickHandler = OnClick;
+            Button.DownHandler = OnDown;
+            Button.PressHandler = OnPress;
+            Button.UpHandler = OnUp;
+        }
     }
 }

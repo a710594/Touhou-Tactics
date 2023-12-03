@@ -34,25 +34,29 @@ public class Status
         Time = time;
         RemainTime = time;
         AreaList = new List<Vector2Int>() { Vector2Int.zero };
-        if (type == StatusModel.TypeEnum.ATK) 
+        if (type == StatusModel.TypeEnum.STR) 
         {
             Name = "力量";
             Comment = "力量";
+            Icon = "Sword_Up";
         }
-        else if(type == StatusModel.TypeEnum.DEF) 
+        else if(type == StatusModel.TypeEnum.CON) 
         {
             Name = "體質";
             Comment = "體質";
+            Icon = "Shield_Up";
         }
-        else if (type == StatusModel.TypeEnum.MTK)
+        else if (type == StatusModel.TypeEnum.INT)
         {
             Name = "智力";
             Comment = "智力";
+            Icon = "Sword_Up";
         }
-        else if (type == StatusModel.TypeEnum.MEF)
+        else if (type == StatusModel.TypeEnum.MEN)
         {
             Name = "精神";
             Comment = "精神";
+            Icon = "Shield_Up";
         }
         else if(type == StatusModel.TypeEnum.SEN) 
         {

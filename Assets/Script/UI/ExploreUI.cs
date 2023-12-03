@@ -7,7 +7,6 @@ using Explore;
 public class ExploreUI : MonoBehaviour
 {
     public GameObject BigMap; 
-    public BagUI BagUI;
     public TreasureUI TreasureUI;
     public Text fpsText;
     public Camera BigMapCamera;
@@ -30,10 +29,7 @@ public class ExploreUI : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        BagUI.gameObject.SetActive(false);
         TreasureUI.gameObject.SetActive(false);
-
-        BagUI.CloseHandler += Unlock;
         TreasureUI.CloseHandler += Unlock;
     }
 
@@ -44,7 +40,9 @@ public class ExploreUI : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.I))
             {
-                BagUI.Open();
+                BagUI bagUI = BagUI.Open();
+                bagUI.SetNormalState();
+                bagUI.CloseHandler = Unlock;
                 Lock();
             }
             if (Input.GetKeyDown(KeyCode.Space))
@@ -55,6 +53,10 @@ public class ExploreUI : MonoBehaviour
                     TreasureUI.Open(treasure.ID);
                     Lock();
                 }
+            }
+            if (Input.GetKeyDown(KeyCode.C)) 
+            {
+                SelectCharacterUI selectCharacterUI = SelectCharacterUI.Open();
             }
         }
 

@@ -41,7 +41,7 @@ public class Equip
         DEX = 0;
         AGI = 0;
         MOV = 0;
-        Weight = 1;
+        Weight = -1;
         Price = 0;
     }
 

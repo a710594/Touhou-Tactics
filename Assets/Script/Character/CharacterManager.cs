@@ -19,14 +19,14 @@ public class CharacterManager
         }
     }
 
-    public CharacterInfoGroup CharacterInfoGroup;
+    public CharacterInfoGroup Info;
 
     public void Init() 
     {
         CharacterInfoGroup characterInfoGroup = DataContext.Instance.Load<CharacterInfoGroup>(_fileName, DataContext.PrePathEnum.Save);
         if (characterInfoGroup != null)
         {
-            CharacterInfoGroup = characterInfoGroup;
+            Info = characterInfoGroup;
             for (int i=0; i<characterInfoGroup.CharacterList.Count; i++) 
             {
                 characterInfoGroup.CharacterList[i].Init();
@@ -34,20 +34,20 @@ public class CharacterManager
         }
         else
         {
-            CharacterInfoGroup = new CharacterInfoGroup();
-            CharacterInfoGroup.Lv = 1;
-            CharacterInfoGroup.Exp = 0;
-            CharacterInfoGroup.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[1]));
-            CharacterInfoGroup.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[2]));
-            CharacterInfoGroup.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[3]));
-            CharacterInfoGroup.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[4]));
-            CharacterInfoGroup.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[5]));
+            Info = new CharacterInfoGroup();
+            Info.Lv = 1;
+            Info.Exp = 0;
+            Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[1]));
+            Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[2]));
+            Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[3]));
+            Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[4]));
+            Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[5]));
         }
     }
 
     public void Save()
     {
-        DataContext.Instance.Save(CharacterInfoGroup, _fileName, DataContext.PrePathEnum.Save);
+        DataContext.Instance.Save(Info, _fileName, DataContext.PrePathEnum.Save);
     }
 
     public void Delete()
@@ -60,17 +60,36 @@ public class CharacterManager
         int needExp;
         while (addExp>0) 
         {
-            needExp = (int)Mathf.Pow(CharacterInfoGroup.Lv, 3) - CharacterInfoGroup.Exp;
+            needExp = (int)Mathf.Pow(Info.Lv, 3) - Info.Exp;
             if (addExp >= needExp) 
             {
                 addExp -= needExp;
-                CharacterInfoGroup.Lv++;
-                CharacterInfoGroup.Exp = 0;
+                Info.Lv++;
+                Info.Exp = 0;
             }
             else
             {
-                CharacterInfoGroup.Exp += addExp;
+                Info.Exp += addExp;
                 addExp = 0;
+            }
+        }
+
+        for (int i=0; i<Info.CharacterList.Count; i++) 
+        {
+            Info.CharacterList[i].SetLv(Info.Lv);
+        }
+    }
+
+    public void Refresh(List<BattleCharacterInfo> list) 
+    {
+        for (int i = 0; i < Info.CharacterList.Count; i++)
+        {
+            for (int j = 0; j < list.Count; j++)
+            {
+                if(Info.CharacterList[i].JobId == list[j].JobId) 
+                {
+                    Info.CharacterList[i].Refresh(list[j]);
+                }
             }
         }
     }

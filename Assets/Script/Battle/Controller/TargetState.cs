@@ -66,7 +66,7 @@ namespace Battle
                         if (characterList[i] != Instance.SelectedCharacter && position == Utility.ConvertToVector2Int(characterList[i].Position))
                         {
                             Instance._battleUI.SetCharacterInfoUI_2(characterList[i]);
-                            int predictionHp = GetPredictionHp(characterList[i].CurrentHP, _effect, _character, characterList[i], characterList);
+                            int predictionHp = Instance.GetPredictionHp(characterList[i].CurrentHP, _effect, _character, characterList[i], characterList);
                             if (predictionHp != -1)
                             {
                                 Instance._battleUI.SetHpPrediction(characterList[i].CurrentHP, predictionHp, characterList[i].MaxHP);
