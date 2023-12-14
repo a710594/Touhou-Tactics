@@ -6,21 +6,23 @@ using UnityEngine.UI;
 
 public class ScrollItem : MonoBehaviour
 {
-    public Action<object, ScrollItem> OnClickHandler;
-    public Action<object> OnDownHandler;
-    public Action<object> OnPressHandler;
-    public Action<object> OnUpHandler;
+    public Action<ScrollItem> ClickHandler;
+    public Action<ScrollItem> DownHandler;
+    public Action<ScrollItem> PressHandler;
+    public Action<ScrollItem> UpHandler;
+    public Action<ScrollItem> EnterHandler;
+    public Action<ScrollItem> ExitHandler;
 
     //public Text Label;
     public Image Background;
     public Image SelectedImage;
     public ButtonPlus Button;
 
-    protected object _data;
+    public object Data;
 
     public virtual void SetData(object obj)
     {
-        _data = obj;
+        Data = obj;
         //Button.Label.text = (string)obj;
     }
 
@@ -34,33 +36,49 @@ public class ScrollItem : MonoBehaviour
 
     private void OnClick(ButtonPlus button)
     {
-        if (OnClickHandler != null)
+        if (ClickHandler != null)
         {
-            OnClickHandler(_data, this);
+            ClickHandler(this);
         }
     }
 
     private void OnDown(object data)
     {
-        if (OnDownHandler != null)
+        if (DownHandler != null)
         {
-            OnDownHandler(_data);
+            DownHandler(this);
         }
     }
 
     private void OnPress(object data)
     {
-        if (OnPressHandler != null)
+        if (PressHandler != null)
         {
-            OnPressHandler(_data);
+            PressHandler(this);
         }
     }
 
     private void OnUp(object data)
     {
-        if (OnUpHandler != null)
+        if (UpHandler != null)
         {
-            OnUpHandler(_data);
+            UpHandler(this);
+        }
+    }
+
+    private void OnEnter(object data)
+    {
+        if (EnterHandler != null)
+        {
+            EnterHandler(this);
+        }
+    }
+
+    private void OnExit(object data)
+    {
+        if (ExitHandler != null)
+        {
+            ExitHandler(this);
         }
     }
 
@@ -77,6 +95,8 @@ public class ScrollItem : MonoBehaviour
             Button.DownHandler = OnDown;
             Button.PressHandler = OnPress;
             Button.UpHandler = OnUp;
+            Button.EnterHandler = OnEnter;
+            Button.ExitHandler = OnExit;
         }
     }
 }

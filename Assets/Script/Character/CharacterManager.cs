@@ -80,6 +80,17 @@ public class CharacterManager
         }
     }
 
+    public void SetLv(int lv) //for debug
+    {
+        Info.Lv = lv;
+        Info.Exp = 0;
+
+        for (int i = 0; i < Info.CharacterList.Count; i++)
+        {
+            Info.CharacterList[i].SetLv(Info.Lv);
+        }
+    }
+
     public void Refresh(List<BattleCharacterInfo> list) 
     {
         for (int i = 0; i < Info.CharacterList.Count; i++)

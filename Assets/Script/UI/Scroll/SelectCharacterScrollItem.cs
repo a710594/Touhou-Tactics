@@ -28,7 +28,7 @@ public class SelectCharacterScrollItem : ScrollItem
     private void DetailOnClick() 
     {
         CharacterDetailUI characterDetailUI = CharacterDetailUI.Open(true);
-        characterDetailUI.SetData((CharacterInfo)_data);
+        characterDetailUI.SetData((CharacterInfo)Data);
     }
 
     private void UseItemOnClick() 

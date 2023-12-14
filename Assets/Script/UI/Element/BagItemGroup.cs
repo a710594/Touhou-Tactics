@@ -36,8 +36,9 @@ public class BagItemGroup : MonoBehaviour
         CommentLabel.text = text;
     }
 
-    private void ScrollItemOnClick(object obj, ScrollItem scrollItem)
+    private void ScrollItemOnClick(ScrollItem scrollItem)
     {
+        object obj = scrollItem.Data;
         if (obj is Item)
         {
             Item item = (Item)obj;
@@ -64,6 +65,6 @@ public class BagItemGroup : MonoBehaviour
 
     private void Awake()
     {
-        ScrollView.ItemOnClickHandler += ScrollItemOnClick;
+        ScrollView.ClickHandler += ScrollItemOnClick;
     }
 }

@@ -8,6 +8,7 @@ public class DebugUI : MonoBehaviour
     public Dropdown Dropdown;
     public DebugItemUI DebugItemUI;
     public DebugMoneyUI DebugMoneyUI;
+    public DebugLvUI DebugLvUI;
 
     private void DropdownOnValueChanged(int value)
     {
@@ -15,16 +16,25 @@ public class DebugUI : MonoBehaviour
         {
             DebugItemUI.gameObject.SetActive(true);
             DebugMoneyUI.gameObject.SetActive(false);
+            DebugLvUI.gameObject.SetActive(false);
         }
         else if (value == 2) 
         {
             DebugItemUI.gameObject.SetActive(false);
             DebugMoneyUI.gameObject.SetActive(true);
+            DebugLvUI.gameObject.SetActive(false);
+        }
+        else if (value == 3)
+        {
+            DebugItemUI.gameObject.SetActive(false);
+            DebugMoneyUI.gameObject.SetActive(false);
+            DebugLvUI.gameObject.SetActive(true);
         }
         else
         {
             DebugItemUI.gameObject.SetActive(false);
             DebugMoneyUI.gameObject.SetActive(false);
+            DebugLvUI.gameObject.SetActive(false);
         }
     }
 

@@ -6,10 +6,12 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Battle;
 
-public class DragCharacterImage : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler
+public class DragCharacterImage : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler, IPointerExitHandler, IPointerEnterHandler
 {
     public Action<CharacterInfo> DragBeginHandler;
     public Action<CharacterInfo> DragEndHandler;
+    public Action<CharacterInfo> EnterHandler;
+    public Action<CharacterInfo> ExitHandler;
 
     public Image Image;
 
@@ -73,6 +75,22 @@ public class DragCharacterImage : MonoBehaviour, IDragHandler, IEndDragHandler, 
         if (_anchor != null && !_drag)
         {
             this.transform.position = Camera.main.WorldToScreenPoint(_anchor.position);
+        }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (EnterHandler != null)
+        {
+            EnterHandler(_character);
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (ExitHandler != null)
+        {
+            ExitHandler(_character);
         }
     }
 }

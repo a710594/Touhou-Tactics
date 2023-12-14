@@ -98,9 +98,9 @@ public class CookUI : MonoBehaviour
         }
     }
 
-    private void ScrollItemOnClick(object obj, ScrollItem scrollItem)
+    private void ScrollItemOnClick(ScrollItem scrollItem)
     {
-        Item item = (Item)obj;
+        Item item = (Item)scrollItem.Data;
         if (_materialList.Count < 5) 
         {
             _materialList.Add(item.Data);
@@ -150,7 +150,7 @@ public class CookUI : MonoBehaviour
         CookButton.gameObject.SetActive(false);
         CookButton.onClick.AddListener(CookOnClick);
         CloseButton.onClick.AddListener(CloseOnClick);
-        BagScrollView.ItemOnClickHandler += ScrollItemOnClick;
+        BagScrollView.ClickHandler += ScrollItemOnClick;
         for (int i=0; i<MaterialButton.Length; i++) 
         {
             MaterialButton[i].ClickHandler += MaterialOnClick;

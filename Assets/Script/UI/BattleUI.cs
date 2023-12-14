@@ -82,6 +82,16 @@ public class BattleUI : MonoBehaviour
         CharacterInfoUI_2.StopHpPrediction();
     }
 
+    public void SetHitRate(int hitRate)
+    {
+        CharacterInfoUI_2.SetHitRate(hitRate);
+    }
+
+    public void HideHitRate()
+    {
+        CharacterInfoUI_2.HideHitRate();
+    }
+
     public void SetLittleHpBarAnchor(int id, BattleCharacterController characterController) 
     {
         AnchorValueBar hpBar = Instantiate(LittleHpBar);

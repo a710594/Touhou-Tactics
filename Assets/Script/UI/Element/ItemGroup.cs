@@ -15,13 +15,13 @@ public class ItemGroup : MonoBehaviour
         PPGroup.SetData(character.CurrentPP);
     }
 
-    private void ItemScrollItemOnClick(object obj, ScrollItem scrollItem)
+    private void ItemScrollItemOnClick(ScrollItem scrollItem)
     {
-        BattleController.Instance.SelectObject(obj);
+        BattleController.Instance.SelectObject(scrollItem.Data);
     }
 
     private void Awake()
     {
-        ScrollView.ItemOnClickHandler += ItemScrollItemOnClick;
+        ScrollView.ClickHandler += ItemScrollItemOnClick;
     }
 }

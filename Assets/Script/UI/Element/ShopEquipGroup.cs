@@ -124,18 +124,18 @@ public class ShopEquipGroup : MonoBehaviour
         }
     }
 
-    private void ScrollItemOnClick(object obj, ScrollItem scrollItem)
+    private void ScrollItemOnClick(ScrollItem scrollItem)
     {
-        if (obj is ShopModel)
+        if (scrollItem.Data is ShopModel)
         {
-            ShopModel shopData = (ShopModel)obj;
+            ShopModel shopData = (ShopModel)scrollItem.Data;
             SetDetailByData(DataContext.Instance.ItemDic[shopData.ID], DataContext.Instance.EquipDic[shopData.ID]);
             SetMaterial(shopData);
             ShopDataHandler(shopData);
         }
         else
         {
-            Equip equip = (Equip)obj;
+            Equip equip = (Equip)scrollItem.Data;
             SetDetailByEquip(equip);
             MaterialLabel.text = "";
             EquipHandler(equip);
@@ -144,6 +144,6 @@ public class ShopEquipGroup : MonoBehaviour
 
     private void Awake()
     {
-        ScrollView.ItemOnClickHandler += ScrollItemOnClick;
+        ScrollView.ClickHandler += ScrollItemOnClick;
     }
 }

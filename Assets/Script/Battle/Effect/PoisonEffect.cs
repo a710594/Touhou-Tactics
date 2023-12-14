@@ -18,7 +18,7 @@ public class PoisonEffect : Effect
     public override void Use(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)
     {
         FloatingNumberData floatingNumberData;
-        BattleController.HitType hitType = BattleController.CheckHit(this, user, target);
+        BattleController.HitType hitType = BattleController.Instance.CheckHit(this, user, target);
 
         if (hitType != BattleController.HitType.Miss)
         {

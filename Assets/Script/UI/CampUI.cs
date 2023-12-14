@@ -35,12 +35,12 @@ public class CampUI : MonoBehaviour
         FloorScrollView.SetData(floorList);
     }
 
-    private void FloorOnClick(object data, ScrollItem item) 
+    private void FloorOnClick(ScrollItem scrollItem) 
     {
         SceneController.Instance.ChangeScene("Explore", () =>
         {
             Generator2D generator2D = (GameObject.Find("Generator2D")).GetComponent<Generator2D>();
-            generator2D.Generate((int)data);
+            generator2D.Generate((int)scrollItem.Data);
         });
     }
 
@@ -64,6 +64,6 @@ public class CampUI : MonoBehaviour
         ShopButton.onClick.AddListener(ShopOnClick);
         CookButton.onClick.AddListener(CookOnClick);
         ExploreButton.onClick.AddListener(ExploreOnClick);
-        FloorScrollView.ItemOnClickHandler += FloorOnClick;
+        FloorScrollView.ClickHandler += FloorOnClick;
     }
 }

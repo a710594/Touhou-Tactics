@@ -28,6 +28,7 @@ namespace Battle
                 }
                 Instance._battleUI.SetCharacterInfoUI_1(_character);
                 Instance._battleUI.SetCharacterInfoUI_2(null);
+                Instance._battleUI.ActionButtonGroup.SkillInfoGroup.gameObject.SetActive(false);
                 Instance.ClearQuad();
 
                 bool sleep = false;

@@ -96,8 +96,9 @@ public class BagEquipGroup : MonoBehaviour
         }
     }
 
-    private void ScrollItemOnClick(object obj, ScrollItem scrollItem)
+    private void ScrollItemOnClick(ScrollItem scrollItem)
     {
+        object obj = scrollItem.Data;
         Equip equip = null;
         if (obj is Equip)
         {
@@ -114,6 +115,6 @@ public class BagEquipGroup : MonoBehaviour
 
     private void Awake()
     {
-        ScrollView.ItemOnClickHandler += ScrollItemOnClick;
+        ScrollView.ClickHandler += ScrollItemOnClick;
     }
 }

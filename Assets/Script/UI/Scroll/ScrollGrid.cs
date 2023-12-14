@@ -6,7 +6,12 @@ using UnityEngine.UI;
 
 public class ScrollGrid : MonoBehaviour
 {
-    public Action<object, ScrollItem> ItemOnClickHandler;
+    public Action<ScrollItem> ClickHandler;
+    public Action<ScrollItem> DownHandler;
+    public Action<ScrollItem> PressHandler;
+    public Action<ScrollItem> UpHandler;
+    public Action<ScrollItem> EnterHandler;
+    public Action<ScrollItem> ExitHandler;
 
     public Image Background;
     public GridLayoutGroup Grid;
@@ -38,7 +43,12 @@ public class ScrollGrid : MonoBehaviour
         {
             item = Instantiate(scrollItem);
             item.transform.SetParent(transform);
-            item.OnClickHandler += ItemOnClick;
+            item.ClickHandler = OnClick;
+            item.DownHandler = OnDown;
+            item.PressHandler = OnPress;
+            item.UpHandler = OnUp;
+            item.EnterHandler = OnEnter;
+            item.ExitHandler = OnExit;
             _scrollItemList.Add(item);
         }
     }
@@ -79,11 +89,51 @@ public class ScrollGrid : MonoBehaviour
         }
     }
 
-    private void ItemOnClick(object obj, ScrollItem item)
+    private void OnClick(ScrollItem scrollItem)
     {
-        if (ItemOnClickHandler != null)
+        if (ClickHandler != null)
         {
-            ItemOnClickHandler(obj, item);
+            ClickHandler(scrollItem);
+        }
+    }
+
+    private void OnDown(ScrollItem scrollItem)
+    {
+        if (DownHandler != null)
+        {
+            DownHandler(scrollItem);
+        }
+    }
+
+    private void OnPress(ScrollItem scrollItem)
+    {
+        if (PressHandler != null)
+        {
+            PressHandler(scrollItem);
+        }
+    }
+
+    private void OnUp(ScrollItem scrollItem)
+    {
+        if (UpHandler != null)
+        {
+            UpHandler(scrollItem);
+        }
+    }
+
+    private void OnEnter(ScrollItem scrollItem)
+    {
+        if (EnterHandler != null)
+        {
+            EnterHandler(scrollItem);
+        }
+    }
+
+    private void OnExit(ScrollItem scrollItem)
+    {
+        if (ExitHandler != null)
+        {
+            ExitHandler(scrollItem);
         }
     }
 }

@@ -25,6 +25,7 @@ public class CharacterDetailUI : MonoBehaviour
     public ScrollView SkillScrollView;
     public ScrollView SupportScrollView;
     public EquipDetail EquipDetail;
+    public SkillInfoGroup SkillInfoGroup;
 
     public Button CloseButton;
 
@@ -244,6 +245,32 @@ public class CharacterDetailUI : MonoBehaviour
         EquipDetail.gameObject.SetActive(false);
     }
 
+    private void ShowSkillInfo(ScrollItem scrollItem) 
+    {
+        Skill skill = (Skill)scrollItem.Data;
+        SkillInfoGroup.SetData(skill);
+        SkillInfoGroup.transform.localPosition = Vector3.zero;
+        SkillInfoGroup.gameObject.SetActive(true);
+    }
+
+    private void HideSkillInfo(ScrollItem scrollItem)
+    {
+        SkillInfoGroup.gameObject.SetActive(false);
+    }
+
+    private void ShowSupportInfo(ScrollItem scrollItem)
+    {
+        Support support = (Support)scrollItem.Data;
+        SkillInfoGroup.SetData(support);
+        SkillInfoGroup.transform.localPosition = new Vector3(0, -540, 0);
+        SkillInfoGroup.gameObject.SetActive(true);
+    }
+
+    private void HideSupportInfo(ScrollItem scrollItem)
+    {
+        SkillInfoGroup.gameObject.SetActive(false);
+    }
+
     private void Close() 
     {
         Destroy(gameObject);
@@ -252,6 +279,7 @@ public class CharacterDetailUI : MonoBehaviour
     private void Awake()
     {
         EquipDetail.gameObject.SetActive(false);
+        SkillInfoGroup.gameObject.SetActive(false);
         WeaponButton.ClickHandler += WeaponOnClick;
         WeaponButton.EnterHandler += ShowEquipDetail;
         WeaponButton.ExitHandler += HideEquipDetail;
@@ -264,6 +292,10 @@ public class CharacterDetailUI : MonoBehaviour
         AmuletButtons[1].ClickHandler += AmuletOnClick_2;
         AmuletButtons[1].EnterHandler += ShowEquipDetail;
         AmuletButtons[1].ExitHandler += HideEquipDetail;
+        SkillScrollView.EnterHandler += ShowSkillInfo;
+        SkillScrollView.ExitHandler += HideSkillInfo;
+        SupportScrollView.EnterHandler += ShowSupportInfo;
+        SupportScrollView.ExitHandler += HideSupportInfo;
         CloseButton.onClick.AddListener(Close);
     }
 }

@@ -13,6 +13,6 @@ public class MagicianPassive : Passive
 
     public static float GetValue(BattleCharacterInfo character) 
     {
-        return (1 + (character.CurrentHP / (float)character.MaxHP));
+        return (1 + ((character.CurrentHP / (float)character.MaxHP) * 0.2f));
     }
 }

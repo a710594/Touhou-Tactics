@@ -71,6 +71,8 @@ namespace Battle
                             {
                                 Instance._battleUI.SetHpPrediction(characterList[i].CurrentHP, predictionHp, characterList[i].MaxHP);
                             }
+                            float hitRate = Instance.GetHitRate(_effect, _character, characterList[i]);
+                            Instance._battleUI.SetHitRate(Mathf.RoundToInt(hitRate * 100));
                             break;
                         }
                     }

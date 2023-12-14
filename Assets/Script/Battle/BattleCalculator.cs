@@ -95,23 +95,9 @@ namespace Battle
         }
 
 
-        public static HitType CheckHit(Effect effect, BattleCharacterInfo user, BattleCharacterInfo target)
+        public HitType CheckHit(Effect effect, BattleCharacterInfo user, BattleCharacterInfo target)
         {
-            float hitRate = user.DEX * (effect.Hit / 100f) / target.AGI;
-
-            //角色互相面對時角度為180,方向相同時角度為0
-            //角度越大則命中越低
-            //面對面的時候命中率只有一半
-            //從背面攻擊時命中率則為1.5倍
-            Vector3 v = target.Position - user.Position;
-            float angle = Vector2.Angle(new Vector2(v.x, v.z), target.Direction);
-            //戰士的被動技能
-            if (Passive.Contains<SwordmanPassive>(user.PassiveList) && angle > 90)
-            {
-                angle = 90;
-            
-            }
-            hitRate = (angle * (-1 / 180f) + 1.5f) * hitRate;
+            float hitRate = GetHitRate(effect, user, target);
 
             if (hitRate <= 1)
             {
@@ -135,6 +121,27 @@ namespace Battle
                     return HitType.Hit;
                 }
             }
+        }
+
+        public float GetHitRate(Effect effect, BattleCharacterInfo user, BattleCharacterInfo target) 
+        {
+            float hitRate = user.DEX * (effect.Hit / 100f) / target.AGI;
+
+            //角色互相面對時角度為180,方向相同時角度為0
+            //角度越大則命中越低
+            //面對面的時候命中率只有一半
+            //從背面攻擊時命中率則為1.5倍
+            Vector3 v = target.Position - user.Position;
+            float angle = Vector2.Angle(new Vector2(v.x, v.z), target.Direction);
+            //戰士的被動技能
+            if (Passive.Contains<SwordmanPassive>(user.PassiveList) && angle > 90)
+            {
+                angle = 90;
+
+            }
+            hitRate = (angle * (-1 / 180f) + 1.5f) * hitRate;
+
+            return hitRate;
         }
 
         public int GetDamage(Effect effect, BattleCharacterInfo user, BattleCharacterInfo target)
@@ -216,7 +223,7 @@ namespace Battle
             {
                 if (Passive.Contains<MagicianPassive>(user.PassiveList))
                 {
-                    //damage = Mathf.RoundToInt(damage * MagicianPassive.GetValue(user));
+                    damage = Mathf.RoundToInt(damage * MagicianPassive.GetValue(user));
                 }
                 if (Passive.Contains<DreamEaterPassive>(user.PassiveList))
                 {

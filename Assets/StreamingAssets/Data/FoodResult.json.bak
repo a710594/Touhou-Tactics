@@ -1,6 +1,0 @@
-[{"ID":15,"Name":"烤肉","HP":0,"ATK":0,"DEF":0,"MTK":0,"MEF":0,"SEN":0,"AGI":0,"MOV":0,"Time":3},
-{"ID":16,"Name":"烤香菇","HP":0,"ATK":0,"DEF":0,"MTK":0,"MEF":0,"SEN":0,"AGI":0,"MOV":0,"Time":3},
-{"ID":17,"Name":"烤馬鈴薯","HP":0,"ATK":0,"DEF":0,"MTK":0,"MEF":0,"SEN":0,"AGI":0,"MOV":0,"Time":3},
-{"ID":18,"Name":"馬鈴薯燉肉","HP":0,"ATK":10,"DEF":0,"MTK":0,"MEF":0,"SEN":0,"AGI":0,"MOV":0,"Time":3},
-{"ID":19,"Name":"香菇烤肉串","HP":0,"ATK":0,"DEF":0,"MTK":10,"MEF":0,"SEN":0,"AGI":0,"MOV":0,"Time":3},
-{"ID":20,"Name":"綜合燉肉","HP":0,"ATK":10,"DEF":0,"MTK":10,"MEF":0,"SEN":0,"AGI":0,"MOV":0,"Time":3}]

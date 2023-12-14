@@ -16,6 +16,7 @@ public class ActionButtonGroup : MonoBehaviour
     public Text ActionCountLabel;
     public ScrollView ScrollView;
     public TipLabel TipLabel;
+    public SkillInfoGroup SkillInfoGroup;
 
     public void SetButton(BattleCharacterInfo character) 
     {
@@ -76,8 +77,9 @@ public class ActionButtonGroup : MonoBehaviour
         BattleController.Instance.ResetAction();
     }
 
-    private void ScrollItemOnClick(object obj, ScrollItem scrollItem)
+    private void ScrollItemOnClick(ScrollItem scrollItem)
     {
+        object obj = scrollItem.Data;
         bool canUse = true;
         string tip = "";
         if (obj is Skill)
@@ -118,6 +120,46 @@ public class ActionButtonGroup : MonoBehaviour
         }
     }
 
+    private void ShowInfo(ScrollItem scrollItem)
+    {
+        object obj = scrollItem.Data;
+        if (obj is Skill)
+        {
+            Skill skill = (Skill)obj;
+            SkillInfoGroup.SetData(skill);
+            SkillInfoGroup.gameObject.SetActive(true);
+        }
+        else if (obj is Support)
+        {
+            Support support = (Support)obj;
+            SkillInfoGroup.SetData(support);
+            SkillInfoGroup.gameObject.SetActive(true);
+        }
+        else if (obj is Card)
+        {
+            Card card = (Card)obj;
+            SkillInfoGroup.SetData(card);
+            SkillInfoGroup.gameObject.SetActive(true);
+        }
+        else if (obj is Consumables)
+        {
+            Consumables consumbles = (Consumables)obj;
+            SkillInfoGroup.SetData(consumbles);
+            SkillInfoGroup.gameObject.SetActive(true);
+        }
+        else if (obj is Food)
+        {
+            Food food = (Food)obj;
+            SkillInfoGroup.SetData(food);
+            SkillInfoGroup.gameObject.SetActive(true);
+        }
+    }
+
+    private void HideSkillInfo(ScrollItem scrollItem)
+    {
+        SkillInfoGroup.gameObject.SetActive(false);
+    }
+
     private void Awake()
     {
         MoveButton.onClick.AddListener(MoveOnClick);
@@ -126,7 +168,10 @@ public class ActionButtonGroup : MonoBehaviour
         ItemButton.onClick.AddListener(ItemOnClick);
         IdleButton.onClick.AddListener(IdleOnClick);
         ResetButton.onClick.AddListener(ResetOnClick);
-        ScrollView.ItemOnClickHandler += ScrollItemOnClick;
+        ScrollView.ClickHandler += ScrollItemOnClick;
+        ScrollView.EnterHandler += ShowInfo;
+        ScrollView.ExitHandler += HideSkillInfo;
         ScrollView.transform.parent.gameObject.SetActive(false);
+        SkillInfoGroup.gameObject.SetActive(false);
     }
 }

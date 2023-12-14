@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class CharacterInfoUI : MonoBehaviour
 {
     public Text NameLabel;
+    public Text HitRateLabel;
     public BattleValueBar HpBar;
     public ValueBar PpBar;
     public StatusIcon StatusIcon;
@@ -26,6 +27,7 @@ public class CharacterInfoUI : MonoBehaviour
 
         _character = character;
         NameLabel.text = character.Name;
+        HitRateLabel.gameObject.SetActive(false);
         HpBar.SetValue(character.CurrentHP, character.MaxHP);
         if (character.Faction == BattleCharacterInfo.FactionEnum.Player)
         {
@@ -54,6 +56,14 @@ public class CharacterInfoUI : MonoBehaviour
         }
     }
 
+    public void SetData(CharacterInfo character)
+    {
+        NameLabel.text = character.Name;
+        HitRateLabel.gameObject.SetActive(false);
+        HpBar.SetValue(character.CurrentHP, character.MaxHP);
+        PpBar.gameObject.SetActive(false);
+    }
+
     public void SetHpPrediction(int origin, int prediction, int max) 
     {
         HpBar.SetPrediction(origin, prediction, max);
@@ -62,6 +72,17 @@ public class CharacterInfoUI : MonoBehaviour
     public void StopHpPrediction() 
     {
         HpBar.StopPrediction();
+    }
+
+    public void SetHitRate(int hitRate) 
+    {
+        HitRateLabel.text = "©R¤¤²v:" + hitRate + "%";
+        HitRateLabel.gameObject.SetActive(true);
+    }
+
+    public void HideHitRate()
+    {
+        HitRateLabel.gameObject.SetActive(false);
     }
 
     private void ButtonOnClick() 

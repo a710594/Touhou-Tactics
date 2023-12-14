@@ -24,6 +24,7 @@ namespace Battle
             public override void Click(Vector2Int position)
             {
                 Instance._battleUI.StopHpPrediction();
+                Instance._battleUI.HideHitRate();
 
                 if (position == Instance._selectedPosition)
                 {

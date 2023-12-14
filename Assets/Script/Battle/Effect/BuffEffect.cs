@@ -30,7 +30,7 @@ public class BuffEffect : Effect
         }
         else 
         {
-            hitType = BattleController.CheckHit(this, user, target);
+            hitType = BattleController.Instance.CheckHit(this, user, target);
         }
 
         if (hitType != BattleController.HitType.Miss)
