@@ -33,7 +33,10 @@ public class Generator2D : MonoBehaviour {
         FloorModel data = DataContext.Instance.FloorDic[floor];
         _roomSize = new Vector2Int(data.Width, data.Height);
         _roomCount = data.RoomCount;
-        random = new Random();
+
+        int seed = (int)System.DateTime.Now.Ticks;
+        Debug.Log("Seed:" + seed.ToString());
+        random = new Random(seed);
         grid = new Grid2D<CellType>(_roomSize, Vector2Int.zero);
         rooms = new List<Room>();
         info = new ExploreInfo();
@@ -82,7 +85,7 @@ public class Generator2D : MonoBehaviour {
             );
 
             bool add = true;
-            Room newRoom = RoomFactory.GetRoom(1, location);
+            Room newRoom = RoomFactory.GetRoom(1, location, random);
             Room buffer = new Room(location + new Vector2Int(-1, -1), newRoom.bounds.size + new Vector2Int(2, 2));
 
             foreach (var room in rooms) {
@@ -226,6 +229,16 @@ public class Generator2D : MonoBehaviour {
                             CellInfo cell = info.CellDic[pos];
                         }
                     }
+
+                    //add adjRoom
+                    if (!startRoom.AdjRoomList.Contains(endRoom))
+                    {
+                        startRoom.AdjRoomList.Add(endRoom);
+                    }
+                    if (!endRoom.AdjRoomList.Contains(startRoom))
+                    {
+                        endRoom.AdjRoomList.Add(startRoom);
+                    }
                 }
             }
         }
@@ -357,7 +370,7 @@ public class Generator2D : MonoBehaviour {
 
     private void PlaceStartAndGoal()
     {
-        Room startRoom = rooms[UnityEngine.Random.Range(0, rooms.Count)];
+        Room startRoom = rooms[random.Next(0, rooms.Count)];
         List<Vector2Int> positionList = new List<Vector2Int>();
         for (int i = 0; i < startRoom.bounds.size.x; i++)
         {
@@ -370,7 +383,7 @@ public class Generator2D : MonoBehaviour {
         {
             positionList.Remove(pair.Key);
         }
-        _start = positionList[UnityEngine.Random.Range(0, positionList.Count)];
+        _start = positionList[random.Next(0, positionList.Count)];
 
         List<Room> tempList = new List<Room>(rooms);
         tempList.Remove(startRoom);
@@ -382,6 +395,24 @@ public class Generator2D : MonoBehaviour {
                 goalRoom = tempList[i];
             }
         }
+
+        //Room current = null;
+        //Stack<Room> stack = new Stack<Room>();
+        //List<Room> visitedList = new List<Room>();
+        //stack.Push(startRoom);
+        //while (stack.Count > 0)
+        //{
+        //    current = stack.Pop(); //当前访问的
+        //    visitedList.Add(current);
+        //    for (int i=0; i<current.AdjRoomList.Count; i++)
+        //    {
+        //        if (!visitedList.Contains(current.AdjRoomList[i]))
+        //        {
+        //            stack.Push(current.AdjRoomList[i]);
+        //        }
+        //    }
+        //}
+        //goalRoom = current;
 
         positionList.Clear();
         for (int i = 0; i < goalRoom.bounds.size.x; i++)
@@ -396,7 +427,7 @@ public class Generator2D : MonoBehaviour {
             positionList.Remove(pair.Key);
         }
 
-        _goal = positionList[UnityEngine.Random.Range(0, positionList.Count)];
+        _goal = positionList[random.Next(0, positionList.Count)];
     }
 
     private bool InBound(int x, int y)

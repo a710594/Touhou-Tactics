@@ -6,16 +6,17 @@ public class Room
 {
     public RectInt bounds;
     public RoomModel Data;
+    public List<Room> AdjRoomList = new List<Room>();
 
     public Room(Vector2Int location, Vector2Int size)
     {
         bounds = new RectInt(location, size);
     }
 
-    public Room(Vector2Int location, RoomModel data) 
+    public Room(Vector2Int location, RoomModel data, System.Random random) 
     {
         Data = data;
-        Vector2Int size = new Vector2Int(Random.Range(data.MinWidth, data.MaxWidth + 1), Random.Range(data.MinHeight, data.MaxHeight + 1));
+        Vector2Int size = new Vector2Int(random.Next(data.MinWidth, data.MaxWidth + 1), random.Next(data.MinHeight, data.MaxHeight + 1));
         bounds = new RectInt(location, size);
     }
 
