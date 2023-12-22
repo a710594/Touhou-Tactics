@@ -77,7 +77,14 @@ namespace Battle
             {
                 CharacterList.Add(new BattleCharacterInfo(lv, DataContext.Instance.EnemyDic[enemyList[i]]));
                 CharacterList[index + i].Index = index + 1 + i;
-                CharacterList[index + i].AI = new MashroomAI(CharacterList[index + i]);
+                if (enemyList[i] == 5)
+                {
+                    CharacterList[index + i].AI = new MonkeyAI(CharacterList[index + i]);
+                }
+                else
+                {
+                    CharacterList[index + i].AI = new MashroomAI(CharacterList[index + i]);
+                }
                 CharacterList[index + i].Position = RandomCharacterPosition(BattleCharacterInfo.FactionEnum.Enemy);
             }
             //CharacterList.Add(new BattleCharacterInfo(DataContext.Instance.EnemyDic[1]));

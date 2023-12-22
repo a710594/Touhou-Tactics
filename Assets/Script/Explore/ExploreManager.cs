@@ -44,7 +44,7 @@ namespace Explore
             else
             {
                 Generator2D generator2D = GameObject.Find("Generator2D").GetComponent<Generator2D>();
-                generator2D.Generate(1);
+                generator2D.Generate(3);
             }
         }
 

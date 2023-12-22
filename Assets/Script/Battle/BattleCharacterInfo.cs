@@ -248,4 +248,16 @@ public class BattleCharacterInfo
             }
         }
     }
+
+    public bool IsSleep() 
+    {
+        for (int i = 0; i < StatusList.Count; i++)
+        {
+            if (StatusList[i] is Sleep)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

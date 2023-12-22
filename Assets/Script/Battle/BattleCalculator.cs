@@ -227,7 +227,10 @@ namespace Battle
                 }
                 if (Passive.Contains<DreamEaterPassive>(user.PassiveList))
                 {
-                    damage *= 2;
+                    if (target.IsSleep())
+                    {
+                        damage *= 2;
+                    }
                 }
             }
             else 
