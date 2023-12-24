@@ -37,6 +37,7 @@ namespace Battle
                         _character.ActionCount = 2;
                         _character.HasUseSkill = false;
                         _character.HasUseSupport = false;
+                        _character.HasMove = false;
                         _character.LastPosition = BattleCharacterInfo.DefaultLastPosition;
                         _characterList.RemoveAt(0);
                         _characterList.Add(_character);

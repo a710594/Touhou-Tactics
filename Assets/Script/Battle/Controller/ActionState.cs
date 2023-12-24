@@ -18,14 +18,7 @@ namespace Battle
                 _characterList = Instance.CharacterList;
                 Instance._battleUI.ActionButtonGroup.gameObject.SetActive(true);
                 Instance._battleUI.ActionButtonGroup.SetButton(_character);
-                if (!_character.HasUseSkill && _character.LastPosition != BattleCharacterInfo.DefaultLastPosition && _character.ActionCount < 2)
-                {
-                    Instance._battleUI.ActionButtonGroup.ResetButton.interactable = true;
-                }
-                else
-                {
-                    Instance._battleUI.ActionButtonGroup.ResetButton.interactable = false;
-                }
+                Instance._battleUI.ActionButtonGroup.ResetButton.gameObject.SetActive(_character.HasMove);
                 Instance._battleUI.SetCharacterInfoUI_1(_character);
                 Instance._battleUI.SetCharacterInfoUI_2(null);
                 Instance._battleUI.ActionButtonGroup.SkillInfoGroup.gameObject.SetActive(false);

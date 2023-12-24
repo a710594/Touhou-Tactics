@@ -75,6 +75,7 @@ public class ActionButtonGroup : MonoBehaviour
     private void ResetOnClick() 
     {
         BattleController.Instance.ResetAction();
+        ResetButton.gameObject.SetActive(false);
     }
 
     private void ScrollItemOnClick(ScrollItem scrollItem)

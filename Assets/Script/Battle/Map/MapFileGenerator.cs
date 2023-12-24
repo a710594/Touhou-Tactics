@@ -65,7 +65,8 @@ public class MapFileGenerator : MonoBehaviour
         int height;
         string path = Path.Combine(_prePath, FileName + ".txt");
         string text = File.ReadAllText(path);
-        string[] lines = text.Split('\n');
+        string[] stringSeparators = new string[] { "\n", "\r\n" };
+        string[] lines = text.Split(stringSeparators, StringSplitOptions.None);
         string[] str;
         GameObject tile;
         Dictionary<Vector2Int, GameObject> tileList = new Dictionary<Vector2Int, GameObject>();
@@ -94,6 +95,7 @@ public class MapFileGenerator : MonoBehaviour
                         }
                         else
                         {
+                            Debug.Log(str[j]);
                             tile = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + str[j]), Vector3.zero, Quaternion.identity);
                             Transform parent = GameObject.Find("Tilemap").transform;
                             if (parent != null)

@@ -126,7 +126,10 @@ public class MashroomAI : AI
                 if (_info.StatusList[i] is ProvocativeStatus)
                 {
                     target = ((ProvocativeStatus)_aiContext.CharacterInfo.StatusList[i]).Target;
-                    return target;
+                    if (list.Contains(target))
+                    {
+                        return target;
+                    }
                 }
             }
 

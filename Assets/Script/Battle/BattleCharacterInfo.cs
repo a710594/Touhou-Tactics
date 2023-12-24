@@ -51,6 +51,7 @@ public class BattleCharacterInfo
     public bool HasUseSkill = false;
     public bool HasUseSupport = false;
     public bool HasUseItem = false;
+    public bool HasMove = false;
     public int CurrentHP;
     public int CurrentPP = 0; //符卡點數
     public int CurrentWT;

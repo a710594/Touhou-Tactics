@@ -44,7 +44,7 @@ namespace Explore
             else
             {
                 Generator2D generator2D = GameObject.Find("Generator2D").GetComponent<Generator2D>();
-                generator2D.Generate(3);
+                generator2D.Generate(1);
             }
         }
 
@@ -160,7 +160,16 @@ namespace Explore
                         SceneController.Instance.ChangeScene("Battle", () =>
                         {
                             BattleMapGenerator randomMapGenerator = GameObject.Find("Tilemap").GetComponent<BattleMapGenerator>();
-                            randomMapGenerator.Generate(out BattleInfo battleInfo);
+                            BattleInfo battleInfo;
+                            if (_enemyList[i] is NotMoveAI)
+                            {
+                                string map = ((NotMoveAI)_enemyList[i]).Map;
+                                randomMapGenerator.Get(map, out battleInfo);
+                            }
+                            else
+                            {
+                                randomMapGenerator.Generate(out battleInfo);
+                            }
                             PathManager.Instance.LoadData(battleInfo.TileInfoDic);
                             BattleController.Instance.Init(_info.Floor, _info.Floor, battleInfo);
                         });

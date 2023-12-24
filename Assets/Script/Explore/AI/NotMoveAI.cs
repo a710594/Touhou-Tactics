@@ -6,6 +6,8 @@ namespace Explore
 {
     public class NotMoveAI : AI
     {
+        public string Map;
+
         public override void Move()
         {
         }

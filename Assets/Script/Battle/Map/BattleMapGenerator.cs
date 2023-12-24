@@ -44,9 +44,9 @@ public class BattleMapGenerator : MonoBehaviour
         _attachDic.Add("Tree", DataContext.Instance.Load<AttachSetting>("Tree", DataContext.PrePathEnum.Setting));
     }
 
-    public void Generate(out BattleInfo battleInfo) 
+    public void Generate(out BattleInfo battleInfo) //有隨機成分的地圖
     {
-        string path = Path.Combine(_prePath, SeedFile[2] + ".txt");
+        string path = Path.Combine(_prePath, "MapSeed/" + SeedFile[UnityEngine.Random.Range(0, SeedFile.Length)] + ".txt");
         string text = File.ReadAllText(path);
         string[] stringSeparators = new string[] { "\n", "\r\n" };
         string[] lines = text.Split(stringSeparators, StringSplitOptions.None);
@@ -59,8 +59,6 @@ public class BattleMapGenerator : MonoBehaviour
         GameObject tileObj;
         GameObject attachObj;
         battleInfo = new BattleInfo();
-
-        Debug.Log(path);
 
         for (int i = this.transform.childCount; i > 0; --i)
         {
@@ -207,6 +205,107 @@ public class BattleMapGenerator : MonoBehaviour
                 battleInfo.AttachDic.Add(pair.Key, attachObj);
             }
         } 
+    }
+
+    public void Get(string map,out BattleInfo battleInfo) //固定的地圖
+    {
+        string path = Path.Combine(_prePath, "Map/" + map + ".txt");
+        string text = File.ReadAllText(path);
+        string[] stringSeparators = new string[] { "\n", "\r\n" };
+        string[] lines = text.Split(stringSeparators, StringSplitOptions.None);
+        string[] str;
+        Vector2Int position = new Vector2Int();
+        TileSetting tileSetting;
+        AttachSetting attachSetting;
+        Dictionary<Vector2Int, TileSetting> visitedDic = new Dictionary<Vector2Int, TileSetting>();
+        Queue<Vector2Int> queue = new Queue<Vector2Int>();
+        GameObject tileObj;
+        GameObject attachObj;
+        battleInfo = new BattleInfo();
+
+        for (int i = this.transform.childCount; i > 0; --i)
+        {
+            DestroyImmediate(this.transform.GetChild(0).gameObject);
+        }
+
+        str = lines[0].Split(' ');
+        battleInfo.Width = int.Parse(str[0]);
+        battleInfo.Height = int.Parse(str[1]);
+
+        try
+        {
+            for (int i = 1; i < lines.Length; i++) //第一行是長寬,忽視之
+            {
+                if (lines[i] != "")
+                {
+                    if (i <= battleInfo.Width)
+                    {
+                        str = lines[i].Split(' ');
+                        for (int j = 0; j < str.Length; j++)
+                        {
+                            position = new Vector2Int(i - 1, j);
+                            if (str[j] == "X")
+                            {
+                                visitedDic.Add(position, null);
+                                battleInfo.TileInfoDic.Add(position, null);
+                                continue;
+                            }
+                            else
+                            {
+                                tileSetting = _tileSettingDic[str[j]];
+                                visitedDic.Add(position, tileSetting);
+                                battleInfo.TileInfoDic.Add(position, new TileInfo(tileSetting));
+                                if (tileSetting.Enqueue)
+                                {
+                                    queue.Enqueue(position);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        battleInfo.NoAttachList = JsonConvert.DeserializeObject<List<Vector2Int>>(lines[i]);
+                    }
+
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.Log(ex);
+        }
+
+        for (int i = this.transform.childCount; i > 0; --i)
+        {
+            DestroyImmediate(this.transform.GetChild(0).gameObject);
+        }
+
+        CreateObject(battleInfo);
+    }
+
+    public void CreateObject(BattleInfo battleInfo)
+    {
+        GameObject tileObj;
+        GameObject attachObj;
+        Transform parent = GameObject.Find("Tilemap").transform;
+        foreach (KeyValuePair<Vector2Int, TileInfo> pair in battleInfo.TileInfoDic)
+        {
+            tileObj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + pair.Value.TileID), Vector3.zero, Quaternion.identity);
+            if (parent != null)
+            {
+                tileObj.transform.SetParent(parent);
+            }
+            tileObj.transform.position = new Vector3(pair.Key.x, 0, pair.Key.y);
+            battleInfo.TileComponentDic.Add(pair.Key, tileObj.GetComponent<TileComponent>());
+
+            if (pair.Value.AttachID != null)
+            {
+                attachObj = (GameObject)GameObject.Instantiate(Resources.Load("Attach/" + pair.Value.AttachID), Vector3.zero, Quaternion.identity);
+                attachObj.transform.position = tileObj.transform.position + new Vector3(0, pair.Value.Height - 0.5f, 0);
+                attachObj.transform.parent = tileObj.transform;
+                battleInfo.AttachDic.Add(pair.Key, attachObj);
+            }
+        }
     }
 
     private TileSetting GetAdjacentTile(TileSetting tile, Vector2Int direction) 

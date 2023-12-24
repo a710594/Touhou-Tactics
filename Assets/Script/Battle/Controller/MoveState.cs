@@ -46,6 +46,7 @@ namespace Battle
                         Instance.Info.TileInfoDic[Utility.ConvertToVector2Int(_character.Position)].HasCharacter = false;
                         _character.LastPosition = _character.Position;
                         _character.Position = new Vector3(position.x, Instance.Info.TileInfoDic[position].Height, position.y);
+                        _character.HasMove = true;
                         Instance.Info.TileInfoDic[Utility.ConvertToVector2Int(_character.Position)].HasCharacter = true;
                     }
                     else

@@ -347,13 +347,11 @@ namespace Battle
 
         public void ResetAction()
         {
-            if (!SelectedCharacter.HasUseSkill && SelectedCharacter.LastPosition != BattleCharacterInfo.DefaultLastPosition && SelectedCharacter.ActionCount < 2)
-            {
-                SelectedCharacter.ActionCount = 2;
-                SelectedCharacter.Position = SelectedCharacter.LastPosition;
-                _controllerDic[SelectedCharacter.Index].transform.position = SelectedCharacter.LastPosition;
-                SelectedCharacter.LastPosition = BattleCharacterInfo.DefaultLastPosition;
-            }
+            SelectedCharacter.ActionCount = 2;
+            SelectedCharacter.Position = SelectedCharacter.LastPosition;
+            SelectedCharacter.HasMove = false;
+            _controllerDic[SelectedCharacter.Index].transform.position = SelectedCharacter.LastPosition;
+            SelectedCharacter.LastPosition = BattleCharacterInfo.DefaultLastPosition;
         }
 
         private void SortCharacterList(bool isStart)
