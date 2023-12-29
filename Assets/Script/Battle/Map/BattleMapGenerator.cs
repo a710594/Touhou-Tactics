@@ -8,32 +8,15 @@ using UnityEngine;
 
 public class BattleMapGenerator : MonoBehaviour
 {
+    public Transform Tilemap;
     public string[] SeedFile;
 
-    //private TileScriptableObject[] _tileScriptableObjects;
-    //private AttachScriptableObject[] _attachScriptableObjects;
     private string _prePath = Application.streamingAssetsPath;
     public Dictionary<string, TileSetting> _tileSettingDic = new Dictionary<string, TileSetting>();
     public Dictionary<string, AttachSetting> _attachDic = new Dictionary<string, AttachSetting>();
-    //private Dictionary<string, TileScriptableObject> _tileScriptableObjectDic = new Dictionary<string, TileScriptableObject>();
-    //private Dictionary<string, AttachScriptableObject> _attachScriptableObjectDic = new Dictionary<string, AttachScriptableObject>();
 
     private void Awake()
     {
-        //_tileScriptableObjects = Resources.LoadAll("ScriptableObject", typeof(TileScriptableObject)).Cast<TileScriptableObject>().ToArray();
-
-        //for (int i=0; i< _tileScriptableObjects.Length; i++) 
-        //{
-        //    _tileScriptableObjectDic.Add(_tileScriptableObjects[i].ID, _tileScriptableObjects[i]);
-        //}
-
-        //_attachScriptableObjects = Resources.LoadAll("ScriptableObject", typeof(AttachScriptableObject)).Cast<AttachScriptableObject>().ToArray();
-
-        //for (int i = 0; i < _attachScriptableObjects.Length; i++)
-        //{
-        //    _attachScriptableObjectDic.Add(_attachScriptableObjects[i].ID, _attachScriptableObjects[i]);
-        //}
-
         _tileSettingDic.Add("1_1", DataContext.Instance.Load<TileSetting>("1_1", DataContext.PrePathEnum.Setting));
         _tileSettingDic.Add("1_2", DataContext.Instance.Load<TileSetting>("1_2", DataContext.PrePathEnum.Setting));
         _tileSettingDic.Add("1_3", DataContext.Instance.Load<TileSetting>("1_3", DataContext.PrePathEnum.Setting));
@@ -44,7 +27,7 @@ public class BattleMapGenerator : MonoBehaviour
         _attachDic.Add("Tree", DataContext.Instance.Load<AttachSetting>("Tree", DataContext.PrePathEnum.Setting));
     }
 
-    public void Generate(out BattleInfo battleInfo) //有隨機成分的地圖
+    public void Generate(out BattleMapInfo battleInfo) //有隨機成分的地圖
     {
         string path = Path.Combine(_prePath, "MapSeed/" + SeedFile[UnityEngine.Random.Range(0, SeedFile.Length)] + ".txt");
         string text = File.ReadAllText(path);
@@ -58,7 +41,7 @@ public class BattleMapGenerator : MonoBehaviour
         Queue<Vector2Int> queue = new Queue<Vector2Int>();
         GameObject tileObj;
         GameObject attachObj;
-        battleInfo = new BattleInfo();
+        battleInfo = new BattleMapInfo();
 
         for (int i = this.transform.childCount; i > 0; --i)
         {
@@ -101,7 +84,12 @@ public class BattleMapGenerator : MonoBehaviour
                     }
                     else
                     {
-                        battleInfo.NoAttachList = JsonConvert.DeserializeObject<List<Vector2Int>>(lines[i]);
+                        List<int[]> list = JsonConvert.DeserializeObject<List<int[]>>(lines[i]);
+                        for (int j=0; j<list.Count; j++) 
+                        {
+                            battleInfo.NoAttachList.Add(new Vector2Int(list[j][0], list[j][1]));
+                        }
+                        //battleInfo.NoAttachList = JsonConvert.DeserializeObject<List<Vector2Int>>(lines[i]);
                     }
 
                 }
@@ -186,14 +174,10 @@ public class BattleMapGenerator : MonoBehaviour
             DestroyImmediate(this.transform.GetChild(0).gameObject);
         }
 
-        Transform parent = GameObject.Find("Tilemap").transform;
         foreach (KeyValuePair<Vector2Int, TileInfo> pair in battleInfo.TileInfoDic) 
         {
             tileObj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + pair.Value.TileID), Vector3.zero, Quaternion.identity);
-            if (parent != null)
-            {
-                tileObj.transform.SetParent(parent);
-            }
+            tileObj.transform.SetParent(Tilemap);
             tileObj.transform.position = new Vector3(pair.Key.x, 0, pair.Key.y);
             battleInfo.TileComponentDic.Add(pair.Key, tileObj.GetComponent<TileComponent>());
 
@@ -207,7 +191,7 @@ public class BattleMapGenerator : MonoBehaviour
         } 
     }
 
-    public void Get(string map,out BattleInfo battleInfo) //固定的地圖
+    public void Get(string map,out BattleMapInfo battleInfo) //固定的地圖
     {
         string path = Path.Combine(_prePath, "Map/" + map + ".txt");
         string text = File.ReadAllText(path);
@@ -221,7 +205,7 @@ public class BattleMapGenerator : MonoBehaviour
         Queue<Vector2Int> queue = new Queue<Vector2Int>();
         GameObject tileObj;
         GameObject attachObj;
-        battleInfo = new BattleInfo();
+        battleInfo = new BattleMapInfo();
 
         for (int i = this.transform.childCount; i > 0; --i)
         {
@@ -262,11 +246,25 @@ public class BattleMapGenerator : MonoBehaviour
                             }
                         }
                     }
-                    else
+                    else if (i == battleInfo.Width + 1)
                     {
-                        battleInfo.NoAttachList = JsonConvert.DeserializeObject<List<Vector2Int>>(lines[i]);
+                        //battleInfo.NoAttachList = JsonConvert.DeserializeObject<List<Vector2Int>>(lines[i]);
+                        List<int[]> noAttachList = JsonConvert.DeserializeObject<List<int[]>>(lines[i]);
+                        for (int j = 0; j < noAttachList.Count; j++)
+                        {
+                            battleInfo.NoAttachList.Add(new Vector2Int(noAttachList[j][0], noAttachList[j][1]));
+                        }
                     }
-
+                    else 
+                    {
+                        Vector3Int v3;
+                        List<int[]> enemyList = JsonConvert.DeserializeObject<List<int[]>>(lines[i]);
+                        for (int j = 0; j < enemyList.Count; j++)
+                        {
+                            v3 = new Vector3Int(enemyList[j][0], enemyList[j][1], enemyList[j][2]);
+                            battleInfo.EnemyDic.Add(v3, enemyList[j][3]);
+                        }
+                    }
                 }
             }
         }
@@ -283,18 +281,14 @@ public class BattleMapGenerator : MonoBehaviour
         CreateObject(battleInfo);
     }
 
-    public void CreateObject(BattleInfo battleInfo)
+    public void CreateObject(BattleMapInfo battleInfo)
     {
         GameObject tileObj;
         GameObject attachObj;
-        Transform parent = GameObject.Find("Tilemap").transform;
         foreach (KeyValuePair<Vector2Int, TileInfo> pair in battleInfo.TileInfoDic)
         {
             tileObj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + pair.Value.TileID), Vector3.zero, Quaternion.identity);
-            if (parent != null)
-            {
-                tileObj.transform.SetParent(parent);
-            }
+            tileObj.transform.SetParent(Tilemap);
             tileObj.transform.position = new Vector3(pair.Key.x, 0, pair.Key.y);
             battleInfo.TileComponentDic.Add(pair.Key, tileObj.GetComponent<TileComponent>());
 

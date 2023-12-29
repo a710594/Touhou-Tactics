@@ -8,7 +8,6 @@ namespace Explore
     public class CellInfo
     {
         public Generator2D.CellType CellType;
-        public Vector2Int Position;
         [NonSerialized]
         public GameObject Cube;
         [NonSerialized]
@@ -22,21 +21,6 @@ namespace Explore
         public CellInfo(Generator2D.CellType type, Vector2Int pos) 
         {
             CellType = type;
-            Position = pos;
-        }
-
-
-        public void CheckVidsited(Vector2Int v2)
-        {
-            if (v2 == Position)
-            {
-                _isVisited = true;
-                Quad.layer = ExploreManager.Instance.MapLayer;
-                if (Icon != null)
-                {
-                    Icon.layer = ExploreManager.Instance.MapLayer;
-                }
-            }
         }
     }
 }

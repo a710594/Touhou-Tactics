@@ -18,7 +18,7 @@ namespace Battle
             public override void Begin(object obj)
             {
                 _originalPosition = new Vector2Int(int.MaxValue, int.MaxValue);
-                BattleInfo info = Instance.Info;
+                BattleMapInfo info = Instance.Info;
                 _character = Instance.SelectedCharacter;
                 _characterList = Instance.CharacterList;
                 Instance._controllerDic[_character.Index].transform.position = _character.Position;

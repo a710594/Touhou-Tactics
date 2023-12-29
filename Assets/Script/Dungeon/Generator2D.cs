@@ -20,7 +20,7 @@ public class Generator2D : MonoBehaviour {
     HashSet<Prim.Edge> selectedEdges;
     ExploreInfo info;
 
-    private Vector2Int _roomSize;
+    private Vector2Int _floorSize;
     private int _roomCount;
     private Vector2Int _start;
     private Vector2Int _goal;
@@ -31,16 +31,16 @@ public class Generator2D : MonoBehaviour {
 
     public void Generate(int floor) {
         FloorModel data = DataContext.Instance.FloorDic[floor];
-        _roomSize = new Vector2Int(data.Width, data.Height);
+        _floorSize = new Vector2Int(data.Width, data.Height);
         _roomCount = data.RoomCount;
 
         int seed = (int)System.DateTime.Now.Ticks;
         Debug.Log("Seed:" + seed.ToString());
         random = new Random(seed);
-        grid = new Grid2D<CellType>(_roomSize, Vector2Int.zero);
+        grid = new Grid2D<CellType>(_floorSize, Vector2Int.zero);
         rooms = new List<Room>();
         info = new ExploreInfo();
-        info.Size = _roomSize;
+        info.Size = _floorSize;
         info.Floor = floor;
 
         PlaceRooms();
@@ -80,8 +80,8 @@ public class Generator2D : MonoBehaviour {
     void PlaceRooms() {
         for (int i = 0; i < _roomCount; i++) {
             Vector2Int location = new Vector2Int(
-                random.Next(0, _roomSize.x),
-                random.Next(0, _roomSize.y)
+                random.Next(0, _floorSize.x),
+                random.Next(0, _floorSize.y)
             );
 
             bool add = true;
@@ -95,8 +95,8 @@ public class Generator2D : MonoBehaviour {
                 }
             }
 
-            if (newRoom.bounds.xMin < 0 || newRoom.bounds.xMax >= _roomSize.x
-                || newRoom.bounds.yMin < 0 || newRoom.bounds.yMax >= _roomSize.y) {
+            if (newRoom.bounds.xMin < 0 || newRoom.bounds.xMax >= _floorSize.x
+                || newRoom.bounds.yMin < 0 || newRoom.bounds.yMax >= _floorSize.y) {
                 add = false;
             }
             
@@ -157,7 +157,7 @@ public class Generator2D : MonoBehaviour {
     }
 
     void PathfindHallways() {
-        DungeonPathfinder2D aStar = new DungeonPathfinder2D(_roomSize);
+        DungeonPathfinder2D aStar = new DungeonPathfinder2D(_floorSize);
 
         if (selectedEdges != null)
         {

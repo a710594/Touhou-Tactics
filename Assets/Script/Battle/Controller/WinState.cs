@@ -15,19 +15,18 @@ namespace Battle
             public override void Begin(object obj) 
             {
                 int itemId;
-                EnemyGroupModel enemyGroup = Instance._enemyGroup;
                 EnemyModel enemy;
                 List<int> itemList = new List<int>();
-                for (int i=0; i<enemyGroup.EnemyList.Count; i++) 
+                for (int i=0; i<Instance._enemyList.Count; i++) 
                 {
-                    enemy = DataContext.Instance.EnemyDic[enemyGroup.EnemyList[i]];
+                    enemy = DataContext.Instance.EnemyDic[Instance._enemyList[i]];
                     itemId = enemy.DropList[Random.Range(0, enemy.DropList.Count)];
                     itemList.Add(itemId);
                     ItemManager.Instance.AddItem(itemId, 1);
                 }
                 Instance._battleUI.gameObject.SetActive(false);
                 Instance._battleResultUI.gameObject.SetActive(true);
-                Instance._battleResultUI.SetData(CharacterManager.Instance.Info.Lv, CharacterManager.Instance.Info.Exp, Instance._enemyGroup.Exp, itemList);
+                Instance._battleResultUI.SetData(CharacterManager.Instance.Info.Lv, CharacterManager.Instance.Info.Exp, Instance._exp, itemList);
 
                 List<BattleCharacterInfo> playerList = new List<BattleCharacterInfo>();
                 for (int i=0; i<Instance.CharacterList.Count; i++) 
@@ -38,7 +37,7 @@ namespace Battle
                     }
                 }
                 CharacterManager.Instance.Refresh(playerList);
-                CharacterManager.Instance.AddExp(Instance._enemyGroup.Exp);
+                CharacterManager.Instance.AddExp(Instance._exp);
             }
         }
     }

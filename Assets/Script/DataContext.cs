@@ -29,6 +29,7 @@ public class DataContext
 
     public enum PrePathEnum 
     {
+        None = -1,
         Data,
         Save,
         Setting,

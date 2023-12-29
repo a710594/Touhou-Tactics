@@ -46,7 +46,7 @@ public class MapReader
     //    }
     //}
 
-    public void Read(string path, out BattleInfo battleInfo) 
+    public void Read(string path, out BattleMapInfo battleInfo) 
     {
         string text = File.ReadAllText(path);
         string[] stringSeparators = new string[] { "\r\n" };
@@ -57,7 +57,7 @@ public class MapReader
         AttachScriptableObject attachScriptableObject;
         GameObject tileObj;
         GameObject attachObj;
-        battleInfo = new BattleInfo();
+        battleInfo = new BattleMapInfo();
         battleInfo.TileComponentDic = new Dictionary<Vector2Int, TileComponent>();
         battleInfo.AttachDic = new Dictionary<Vector2Int, GameObject>();
         battleInfo.TileInfoDic = new Dictionary<Vector2Int, TileInfo>();

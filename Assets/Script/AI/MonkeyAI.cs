@@ -35,7 +35,7 @@ public class MonkeyAI : AI
             _selectedSkill = new Skill(DataContext.Instance.SkillDic[_skillId]);
 
             Vector2Int v2;
-            BattleInfo battleInfo = BattleController.Instance.Info;
+            BattleMapInfo battleInfo = BattleController.Instance.Info;
             List<Vector2Int> rangeList = new List<Vector2Int>();
             List<BattleCharacterInfo> characterList = new List<BattleCharacterInfo>(BattleController.Instance.CharacterList);
             for (int i = 0; i < characterList.Count; i++)

@@ -1055,7 +1055,6 @@ GameObject:
   - component: {fileID: 376429049}
   - component: {fileID: 376429052}
   - component: {fileID: 376429051}
-  - component: {fileID: 376429054}
   m_Layer: 0
   m_Name: Tilemap
   m_TagString: Untagged
@@ -1165,22 +1164,6 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!114 &376429054
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 376429048}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4be8e65374df5c947ae9a60db0c09429, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SeedFile:
-  - "\u5C71\u5761_1"
-  - "\u5C71\u5761_2"
-  - "\u5C71\u5761_3"
 --- !u!1 &382343612
 GameObject:
   m_ObjectHideFlags: 0
@@ -5817,8 +5800,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1421777626}
   - component: {fileID: 1421777625}
+  - component: {fileID: 1421777627}
   m_Layer: 0
-  m_Name: Grid
+  m_Name: BattleMapGenerator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5852,6 +5836,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1421777627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1421777624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4be8e65374df5c947ae9a60db0c09429, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Tilemap: {fileID: 376429049}
+  SeedFile:
+  - "\u5C71\u5761_1"
+  - "\u5C71\u5761_2"
+  - "\u5C71\u5761_3"
 --- !u!1 &1432385926
 GameObject:
   m_ObjectHideFlags: 0

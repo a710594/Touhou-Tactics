@@ -22,7 +22,7 @@ namespace Battle
             }
         }
 
-        public BattleInfo Info;
+        public BattleMapInfo Info;
         public BattleCharacterInfo SelectedCharacter;
         public List<BattleCharacterInfo> CharacterList = new List<BattleCharacterInfo>();
 
@@ -30,6 +30,7 @@ namespace Battle
         private readonly Color _yellow = new Color(1, 1, 0, 0.5f);
 
         private bool _canClick = true;
+        private int _exp;
         private Vector2Int _selectedPosition;
         private CameraDraw _cameraController;
         private CameraRotate _cameraRotate;
@@ -39,62 +40,57 @@ namespace Battle
         private SelectBattleCharacterUI _selectBattleCharacterUI;
         private BattleResultUI _battleResultUI;
         private GameObject _arrow;
-        private EnemyGroupModel _enemyGroup;
+        private List<int> _enemyList = new List<int>();
         private List<Vector2Int> _areaList = new List<Vector2Int>();
         private Dictionary<int, BattleCharacterController> _controllerDic = new Dictionary<int, BattleCharacterController>();
 
-        public void Init(int floor, int lv, BattleInfo info)
+        public void Init(int floor, int lv, BattleMapInfo info)
         {
             _battleUI = GameObject.Find("BattleUI").GetComponent<BattleUI>();
             _selectBattleCharacterUI = GameObject.Find("SelectBattleCharacterUI").GetComponent<SelectBattleCharacterUI>();
             _battleResultUI = GameObject.Find("BattleResultUI").GetComponent<BattleResultUI>();
             _cameraController = Camera.main.GetComponent<CameraDraw>();
             _cameraRotate = Camera.main.GetComponent<CameraRotate>();
-
             Info = info;
-            //CharacterList.Add(new BattleCharacterInfo(CharacterManager.Instance.CharacterInfoGroup.CharacterList[0]));
-            //CharacterList[0].ID = 1;
-            //CharacterList[0].Position = new Vector3(0, 1, 2);
-            //CharacterList.Add(new BattleCharacterInfo(CharacterManager.Instance.CharacterInfoGroup.CharacterList[1]));
-            //CharacterList[1].ID = 2;
-            //CharacterList[1].Position = new Vector3(1, 1, 0);
-            //CharacterList.Add(new BattleCharacterInfo(CharacterManager.Instance.CharacterInfoGroup.CharacterList[2]));
-            //CharacterList[2].ID = 3;
-            //CharacterList[2].Position = new Vector3(0, 1, 1);
-            //CharacterList.Add(new BattleCharacterInfo(CharacterManager.Instance.CharacterInfoGroup.CharacterList[3]));
-            //CharacterList[3].ID = 4;
-            //CharacterList[3].Position = new Vector3(1, 1, 1);
-            //CharacterList.Add(new BattleCharacterInfo(CharacterManager.Instance.CharacterInfoGroup.CharacterList[4]));
-            //CharacterList[4].ID = 5;
-            //CharacterList[4].Position = new Vector3(0, 1, 0);
 
-            KeyValuePair<int, EnemyGroupModel> pair = DataContext.Instance.EnemyGroupDic[floor].ElementAt(UnityEngine.Random.Range(0, DataContext.Instance.EnemyGroupDic[floor].Count));
-            _enemyGroup = pair.Value;
-            List<int> enemyList = _enemyGroup.EnemyList;
-            int index = 0;
-            CharacterList.Clear();
-            for (int i=0; i< enemyList.Count; i++) 
+            if (info.EnemyDic.Count == 0)
             {
-                CharacterList.Add(new BattleCharacterInfo(lv, DataContext.Instance.EnemyDic[enemyList[i]]));
-                CharacterList[index + i].Index = index + 1 + i;
-                if (enemyList[i] == 5)
+                EnemyGroupModel enemyGroup = DataContext.Instance.EnemyGroupDic[floor].ElementAt(UnityEngine.Random.Range(0, DataContext.Instance.EnemyGroupDic[floor].Count)).Value;
+                List<int> enemyList = enemyGroup.EnemyList;
+                for (int i = 0; i < enemyList.Count; i++)
                 {
-                    CharacterList[index + i].AI = new MonkeyAI(CharacterList[index + i]);
+                    CharacterList.Add(new BattleCharacterInfo(lv, DataContext.Instance.EnemyDic[enemyList[i]]));
+                    CharacterList[i].Index = i + 1;
+                    if (enemyList[i] == 5)
+                    {
+                        CharacterList[i].AI = new MonkeyAI(CharacterList[i]);
+                    }
+                    else
+                    {
+                        CharacterList[i].AI = new MashroomAI(CharacterList[i]);
+                    }
+                    CharacterList[i].Position = RandomCharacterPosition(BattleCharacterInfo.FactionEnum.Enemy);
                 }
-                else
-                {
-                    CharacterList[index + i].AI = new MashroomAI(CharacterList[index + i]);
-                }
-                CharacterList[index + i].Position = RandomCharacterPosition(BattleCharacterInfo.FactionEnum.Enemy);
             }
-            //CharacterList.Add(new BattleCharacterInfo(DataContext.Instance.EnemyDic[1]));
-            //CharacterList[4].ID = 5;
-            //CharacterList[4].AI = new MashroomAI(CharacterList[4]);
-            //CharacterList[4].Position = /*new Vector3(3, 1, 3)*/ RandomCharacterPosition(BattleCharacterInfo.FactionEnum.Enemy);
-            //CharacterList.Add(new BattleCharacterInfo(DataContext.Instance.EnemyDic[1]));
-            //CharacterList[5].ID = 6;
-            //CharacterList[5].AI = new MashroomAI(CharacterList[5]);
-            //CharacterList[5].Position = /*new Vector3(4, 1, 3)*/ RandomCharacterPosition(BattleCharacterInfo.FactionEnum.Enemy);
+            else
+            {
+                int index = 0;
+                foreach(KeyValuePair<Vector3Int, int> pair in info.EnemyDic) 
+                {
+                    CharacterList.Add(new BattleCharacterInfo(lv, DataContext.Instance.EnemyDic[pair.Value]));
+                    CharacterList[index].Index = index + 1;
+                    if (pair.Value == 5)
+                    {
+                        CharacterList[index].AI = new MonkeyAI(CharacterList[index]);
+                    }
+                    else
+                    {
+                        CharacterList[index].AI = new MashroomAI(CharacterList[index]);
+                    }
+                    CharacterList[index].Position = pair.Key;
+                    index++;
+                }
+            }
 
             _dragCameraUI = GameObject.Find("DragCameraUI").GetComponent<DragCameraUI>();
             _dragCameraUI.Init(info.Width, info.Height);
@@ -401,7 +397,7 @@ namespace Battle
 
         private class BattleControllerState : State
         {
-            protected BattleInfo _info;
+            protected BattleMapInfo _info;
             protected BattleCharacterInfo _character;
             protected List<BattleCharacterInfo> _characterList;
 

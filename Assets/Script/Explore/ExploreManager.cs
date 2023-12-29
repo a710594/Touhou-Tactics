@@ -159,8 +159,8 @@ namespace Explore
                     {
                         SceneController.Instance.ChangeScene("Battle", () =>
                         {
-                            BattleMapGenerator randomMapGenerator = GameObject.Find("Tilemap").GetComponent<BattleMapGenerator>();
-                            BattleInfo battleInfo;
+                            BattleMapGenerator randomMapGenerator = GameObject.Find("BattleMapGenerator").GetComponent<BattleMapGenerator>();
+                            BattleMapInfo battleInfo;
                             if (_enemyList[i] is NotMoveAI)
                             {
                                 string map = ((NotMoveAI)_enemyList[i]).Map;

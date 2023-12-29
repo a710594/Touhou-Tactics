@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class BattleInfo
+public class BattleMapInfo
 {
     public int Width;
     public int Height;
@@ -13,4 +13,5 @@ public class BattleInfo
     public Dictionary<Vector2Int, TileInfo> TileInfoDic = new Dictionary<Vector2Int, TileInfo>();
     public Dictionary<Vector2Int, TileComponent> TileComponentDic = new Dictionary<Vector2Int, TileComponent>();
     public Dictionary<Vector2Int, GameObject> AttachDic = new Dictionary<Vector2Int, GameObject>();
+    public Dictionary<Vector3Int, int> EnemyDic = new Dictionary<Vector3Int, int>();
 }

@@ -49,7 +49,7 @@ public class AI
 
         public virtual void Start()
         {
-            BattleInfo info = BattleController.Instance.Info;
+            BattleMapInfo info = BattleController.Instance.Info;
             List<BattleCharacterInfo> characterList = BattleController.Instance.CharacterList;
             _stepList = BattleController.Instance.GetStepList(Utility.ConvertToVector2Int(_info.Position), _info);
         }
