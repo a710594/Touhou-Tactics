@@ -7,54 +7,76 @@ namespace Explore
     public class ExploreFileGenerator : MonoBehaviour
     {
         public Transform Tilemap;
+        public Transform Start;
+        public Transform Goal;
+        public ExploreEnemyInfoObject[] Enemys;
 
         private ExploreInfo _info = new ExploreInfo();
 
         public void BuildFile()
         {
+            int minX = int.MinValue;
+            int maxX = int.MinValue;
+            int minY = int.MinValue;
+            int maxY = int.MinValue;
             Vector2Int pos;
-            Generator2D.CellType type;
             foreach (Transform child in Tilemap)
             {
-                if(child.name == "Wall") 
-                {
-                    type = Generator2D.CellType.Wall;
-                }
-                else
-                {
-                    type = Generator2D.CellType.Room;
-                }
                 pos = Utility.ConvertToVector2Int(child.position);
-                _info.CellDic.Add(pos, new CellInfo(type, pos));
-                _info.WalkableList.Add(pos);
+                _info.TileDic.Add(pos, new TileObject(child.name));
+                if(child.name != "Wall")
+                    _info.WalkableList.Add(pos);
+
+                if(minX == int.MinValue || pos.x < minX)
+                {
+                    minX = pos.x;
+                }
+                if (maxX == int.MinValue || pos.x > maxX)
+                {
+                    maxX = pos.x;
+                }
+                if (minY == int.MinValue || pos.y < minY)
+                {
+                    minY = pos.y;
+                }
+                if (maxY == int.MinValue || pos.y > maxY)
+                {
+                    maxY = pos.y;
+                }
+            }
+            _info.Start = Utility.ConvertToVector2Int(Start.position);
+            _info.Goal = Utility.ConvertToVector2Int(Goal.position);
+            _info.PlayerPosition = _info.Start;
+            _info.Size = new Vector2Int(maxX - minX, maxY - minY);
+
+            ExploreEnemyInfo enemyInfo;
+            for(int i=0; i<Enemys.Length; i++)
+            {
+                enemyInfo = new ExploreEnemyInfo();
+                enemyInfo.Prefab = Enemys[i].Prefab;
+                enemyInfo.Map = Enemys[i].Map;
+                enemyInfo.Position = Utility.ConvertToVector2Int(Enemys[i].transform.position);
+                _info.EnemyInfoList.Add(enemyInfo);
             }
 
             ExploreFile file = new ExploreFile(_info);
-            DataContext.Instance.Save(file, Application.streamingAssetsPath + "./Map/Floor_1", DataContext.PrePathEnum.None);
+            DataContext.Instance.Save(file, "Explore/Floor_1", DataContext.PrePathEnum.Map);
         }
 
         public void LoadFile() 
         {
-            ExploreFile file = DataContext.Instance.Load<ExploreFile>(Application.streamingAssetsPath + "./Map/Floor_1", DataContext.PrePathEnum.Save);
+            ExploreFile file = DataContext.Instance.Load<ExploreFile>(Application.streamingAssetsPath + "Explore/Floor_1", DataContext.PrePathEnum.Map);
             for (int i = Tilemap.childCount; i > 0; --i)
             {
                 DestroyImmediate(Tilemap.GetChild(0).gameObject);
             }
 
             GameObject obj;
-            for(int i=0; i<file.CellValues.Count; i++)
+            for(int i=0; i<file.TileValues.Count; i++)
             {
-                if (file.CellValues[i].CellType == Generator2D.CellType.Wall)
-                {
-                    obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Wall"), Vector3.zero, Quaternion.identity);
-                    obj.name = "Wall";
-                }
-                else
-                {
-                    obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Ground"), Vector3.zero, Quaternion.identity);
-                    obj.name = "Ground";
-                }
-                obj.transform.position = new Vector3(file.CellKeys[i].x, 0, file.CellKeys[i].y);
+                obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + file.TileValues[i]), Vector3.zero, Quaternion.identity);
+                obj.name = file.TileValues[i];
+                obj.transform.position = new Vector3(file.TileKeys[i].x, 0, file.TileKeys[i].y);
                 obj.transform.SetParent(Tilemap);
             }
         }

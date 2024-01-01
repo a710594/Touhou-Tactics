@@ -49,9 +49,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Prefab: 
-  Back: {fileID: 7616247469770653152}
   Arrow: {fileID: 5145423960146584669}
   MoveTo: {x: 0, y: 0, z: 0}
+  Map: 
 --- !u!1 &5145423960146584669
 GameObject:
   m_ObjectHideFlags: 0

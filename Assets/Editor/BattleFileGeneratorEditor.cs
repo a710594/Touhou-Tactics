@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(MapFileGenerator))]
-public class MapFileGeneratorEditor : Editor
+[CustomEditor(typeof(BattleFileGenerator))]
+public class BattleFileGeneratorEditor : Editor
 {
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
 
-        MapFileGenerator nodeGenerator = (MapFileGenerator)target;
+        BattleFileGenerator nodeGenerator = (BattleFileGenerator)target;
         if (GUILayout.Button("«Ø¥ßÀÉ®×"))
         {
             nodeGenerator.BuildFile();

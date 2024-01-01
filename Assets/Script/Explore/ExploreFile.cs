@@ -17,8 +17,8 @@ namespace Explore
         public List<ExploreEnemyInfo> EnemyInfoList = new List<ExploreEnemyInfo>();
         //json 不能以 Vector2Int 作為 dictionary 的 key
         //所以要把它的 keys 和 values 分開來儲存
-        public List<Vector2Int> CellKeys = new List<Vector2Int>();
-        public List<CellInfo> CellValues = new List<CellInfo>();
+        public List<Vector2Int> TileKeys = new List<Vector2Int>();
+        public List<string> TileValues = new List<string>();
         public List<Vector2Int> TreasureKeys = new List<Vector2Int>();
         public List<Treasure> TreasureValues = new List<Treasure>();
 
@@ -35,8 +35,12 @@ namespace Explore
             WalkableList = info.WalkableList;
             VisitedList = info.VisitedList;
             EnemyInfoList = info.EnemyInfoList;
-            CellKeys = new List<Vector2Int>(info.CellDic.Keys);
-            CellValues = new List<CellInfo>(info.CellDic.Values);
+            TileKeys = new List<Vector2Int>(info.TileDic.Keys);
+            List<TileObject> tileObjList = new List<TileObject>(info.TileDic.Values); 
+            for(int i=0; i<tileObjList.Count; i++)
+            {
+                TileValues.Add(tileObjList[i].Name);
+            }
             TreasureKeys = new List<Vector2Int>(info.TreasureDic.Keys);
             TreasureValues = new List<Treasure>(info.TreasureDic.Values);
         }

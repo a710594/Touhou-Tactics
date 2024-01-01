@@ -9,6 +9,7 @@ public class BattleMapInfo
 {
     public int Width;
     public int Height;
+    public int PlayerCount;
     public List<Vector2Int> NoAttachList = new List<Vector2Int>();
     public Dictionary<Vector2Int, TileInfo> TileInfoDic = new Dictionary<Vector2Int, TileInfo>();
     public Dictionary<Vector2Int, TileComponent> TileComponentDic = new Dictionary<Vector2Int, TileComponent>();

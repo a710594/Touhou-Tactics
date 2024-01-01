@@ -16,7 +16,7 @@ namespace Explore
         public List<Vector2Int> WalkableList = new List<Vector2Int>(); //房間或走廊等可行走的地形
         public List<Vector2Int> VisitedList = new List<Vector2Int>();
         public List<ExploreEnemyInfo> EnemyInfoList = new List<ExploreEnemyInfo>();
-        public Dictionary<Vector2Int, CellInfo> CellDic = new Dictionary<Vector2Int, CellInfo>();
+        public Dictionary<Vector2Int, TileObject> TileDic = new Dictionary<Vector2Int, TileObject>();
         public Dictionary<Vector2Int, Treasure> TreasureDic = new Dictionary<Vector2Int, Treasure>();
 
         public ExploreInfo() { }
@@ -33,9 +33,9 @@ namespace Explore
             VisitedList = file.VisitedList;
             EnemyInfoList = file.EnemyInfoList;
 
-            for (int i=0; i<file.CellKeys.Count; i++) 
+            for (int i=0; i<file.TileKeys.Count; i++) 
             {
-                CellDic.Add(file.CellKeys[i], file.CellValues[i]);
+                TileDic.Add(file.TileKeys[i], new TileObject(file.TileValues[i]));
             }
 
             for (int i=0; i<file.TreasureKeys.Count; i++) 

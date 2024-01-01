@@ -48,6 +48,7 @@ namespace Battle
         {
             _battleUI = GameObject.Find("BattleUI").GetComponent<BattleUI>();
             _selectBattleCharacterUI = GameObject.Find("SelectBattleCharacterUI").GetComponent<SelectBattleCharacterUI>();
+            _selectBattleCharacterUI.PlayerCount = info.PlayerCount;
             _battleResultUI = GameObject.Find("BattleResultUI").GetComponent<BattleResultUI>();
             _cameraController = Camera.main.GetComponent<CameraDraw>();
             _cameraRotate = Camera.main.GetComponent<CameraRotate>();

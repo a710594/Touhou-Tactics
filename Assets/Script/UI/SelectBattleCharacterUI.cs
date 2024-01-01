@@ -13,6 +13,8 @@ public class SelectBattleCharacterUI : MonoBehaviour
     public Button ConfirmButton;
     public TipLabel TipLabel;
     public CharacterInfoUI CharacterInfoUI;
+    [System.NonSerialized]
+    public int PlayerCount;
 
     private List<CharacterInfo> _tempCharacterList = new List<CharacterInfo>();
     private List<CharacterInfo> _selectedCharacterList = new List<CharacterInfo>();
@@ -72,13 +74,13 @@ public class SelectBattleCharacterUI : MonoBehaviour
 
     private void ConfirmOnClick() 
     {
-        if(_selectedCharacterList.Count == 5) 
+        if(_selectedCharacterList.Count == PlayerCount) 
         {
             BattleController.Instance.SetCharacterState();
         }
         else
         {
-            TipLabel.SetLabel("要有五個角色參戰才能開始戰鬥");
+            TipLabel.SetLabel("要有" + PlayerCount + "個角色參戰才能開始戰鬥");
         }
     }
 

@@ -5,14 +5,17 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class MapFileGenerator : MonoBehaviour
+public class BattleFileGenerator : MonoBehaviour
 {
     public string FileName;
     public int Width;
     public int Height;
+    public int PlayerCount;
     public Transform Tilemap;
     public Transform EnemyGroup;
+    public Transform[] PlayerPositions; //戰鬥的準備階段玩家可放置角色的位置
 
+    private bool _isInit = false;
     private string _prePath = Application.streamingAssetsPath;
 
     public void BuildFile() 
@@ -25,11 +28,11 @@ public class MapFileGenerator : MonoBehaviour
         {
             component = child.GetComponent<TileComponent>();
             tileDic.Add(Utility.ConvertToVector2Int(child.position), component.ID);
-            if(component.tag == "NoAttach") 
-            {
-                //noAttachList.Add(new Vector2Int((int)child.position.x, (int)child.position.z));
-                noAttachList.Add(new int[2] { (int)child.position.x, (int)child.position.z });
-            }
+        }
+
+        for (int i=0; i<PlayerPositions.Length; i++)
+        {
+            noAttachList.Add(new int[2] { (int)PlayerPositions[i].position.x, (int)PlayerPositions[i].position.z });
         }
 
         BattleMapEnemy battleMapEnemy;
@@ -68,7 +71,8 @@ public class MapFileGenerator : MonoBehaviour
                 writer.Write("\n");
             }
             writer.WriteLine(JsonConvert.SerializeObject(noAttachList));
-            writer.Write(JsonConvert.SerializeObject(enemyList));
+            writer.WriteLine(JsonConvert.SerializeObject(enemyList));
+            writer.Write(JsonConvert.SerializeObject(PlayerCount));
         }
     }
 
@@ -84,7 +88,11 @@ public class MapFileGenerator : MonoBehaviour
         GameObject tile;
         Dictionary<Vector2Int, GameObject> tileList = new Dictionary<Vector2Int, GameObject>();
 
-        DataContext.Instance.Init();
+        if (!_isInit)
+        {
+            DataContext.Instance.Init();
+            _isInit = true;
+        }
 
         for (int i = Tilemap.childCount; i > 0; --i)
         {

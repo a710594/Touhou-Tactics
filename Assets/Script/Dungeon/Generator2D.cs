@@ -6,7 +6,7 @@ using Graphs;
 using Explore;
 
 public class Generator2D : MonoBehaviour {
-    public enum CellType {
+    private enum CellType {
         None,
         Room,
         Hallway,
@@ -61,7 +61,7 @@ public class Generator2D : MonoBehaviour {
         _start = info.Start;
         _goal = info.Goal;
         PlaceObject();
-        foreach(KeyValuePair<Vector2Int, CellInfo> pair in info.CellDic) 
+        foreach(KeyValuePair<Vector2Int, TileObject> pair in info.TileDic) 
         {
             if (info.VisitedList.Contains(pair.Key)) 
             {
@@ -105,9 +105,9 @@ public class Generator2D : MonoBehaviour {
 
                 foreach (var pos in newRoom.bounds.allPositionsWithin) {
                     grid[pos] = CellType.Room;
-                    if (!info.CellDic.ContainsKey(pos)) 
+                    if (!info.TileDic.ContainsKey(pos)) 
                     {
-                        info.CellDic.Add(pos, new CellInfo(CellType.Room, pos));
+                        info.TileDic.Add(pos, new TileObject("Ground"));
                         info.WalkableList.Add(pos);
                     }
                 }
@@ -216,17 +216,13 @@ public class Generator2D : MonoBehaviour {
 
                     foreach (var pos in path)
                     {
-                        if (!info.CellDic.ContainsKey(pos))
+                        if (!info.TileDic.ContainsKey(pos))
                         {
                             if (grid[pos] == CellType.Hallway)
                             {
-                                info.CellDic.Add(pos, new CellInfo(CellType.Hallway, pos));
+                                info.TileDic.Add(pos, new TileObject("Ground"));
                                 info.WalkableList.Add(pos);
                             }
-                        }
-                        else 
-                        {
-                            CellInfo cell = info.CellDic[pos];
                         }
                     }
 
@@ -258,14 +254,14 @@ public class Generator2D : MonoBehaviour {
                     {
                         grid[i, j] = CellType.Wall;
 
-                        info.CellDic.Add(position, new CellInfo(CellType.Wall, position));
+                        info.TileDic.Add(position, new TileObject("Wall"));
                     }
                 }
                 else
                 {
                     if (CheckWall(position))
                     {
-                        info.CellDic.Add(position, new CellInfo(CellType.Wall, position));
+                        info.TileDic.Add(position, new TileObject("Wall"));
                     }
                 }
             }
@@ -445,23 +441,16 @@ public class Generator2D : MonoBehaviour {
     private void PlaceObject() 
     {
         GameObject obj = null;
-        foreach(KeyValuePair<Vector2Int, CellInfo> pair in info.CellDic) 
+        foreach(KeyValuePair<Vector2Int, TileObject> pair in info.TileDic) 
         {
-            if (pair.Value.CellType == CellType.Room || pair.Value.CellType == CellType.Hallway)
-            {
-                obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Ground"), Vector3.zero, Quaternion.identity);
-            }
-            else if (pair.Value.CellType == CellType.Wall) 
-            {
-                obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Wall"), Vector3.zero, Quaternion.identity);
-            }
+            obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + pair.Value.Name), Vector3.zero, Quaternion.identity);
 
             if (obj != null)
             {
                 obj.transform.position = new Vector3(pair.Key.x, 0, pair.Key.y);
                 obj.transform.SetParent(transform);
-                info.CellDic[pair.Key].Cube = obj;
-                info.CellDic[pair.Key].Quad = obj.transform.GetChild(0).gameObject;
+                info.TileDic[pair.Key].Cube = obj;
+                info.TileDic[pair.Key].Quad = obj.transform.GetChild(0).gameObject;
             }
         }
 
@@ -469,10 +458,10 @@ public class Generator2D : MonoBehaviour {
         {
             obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + pair.Value.Prefab), Vector3.zero, Quaternion.identity);
             obj.transform.position = new Vector3(pair.Key.x, pair.Value.Height, pair.Key.y);
-            info.CellDic[pair.Key].Treasure = obj;
+            info.TileDic[pair.Key].Treasure = obj;
             if (obj.transform.childCount > 0)
             {
-                info.CellDic[pair.Key].Icon = obj.transform.GetChild(0).gameObject;
+                info.TileDic[pair.Key].Icon = obj.transform.GetChild(0).gameObject;
             }
         }
 
@@ -480,12 +469,12 @@ public class Generator2D : MonoBehaviour {
         obj.transform.position = new Vector3(_start.x, 0, _start.y);
         obj.transform.eulerAngles = new Vector3(90, 0, 0);
         obj.transform.SetParent(transform);
-        info.CellDic[_start].Icon = obj;
+        info.TileDic[_start].Icon = obj;
 
         obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Goal"), Vector3.zero, Quaternion.identity);
         obj.transform.position = new Vector3(_goal.x, 0, _goal.y);
         obj.transform.eulerAngles = new Vector3(90, 0, 0);
         obj.transform.SetParent(transform);
-        info.CellDic[_goal].Icon = obj;
+        info.TileDic[_goal].Icon = obj;
     }
 }
