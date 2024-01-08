@@ -17,7 +17,6 @@ namespace Explore
 
         private Vector3 position;
         private bool _isMoving = false;
-        private Grid2D<Generator2D.CellType> _grid;
 
         private void Update()
         {

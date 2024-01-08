@@ -43,8 +43,10 @@ namespace Explore
             }
             else
             {
-                Generator2D generator2D = GameObject.Find("Generator2D").GetComponent<Generator2D>();
-                generator2D.Generate(1);
+                ExploreFileLoader exploreFileLoader = GameObject.Find("Generator2D").GetComponent<ExploreFileLoader>();
+                file = exploreFileLoader.LoadFile();
+                _info = new ExploreInfo(file);
+                Reload();
             }
         }
 
@@ -159,12 +161,11 @@ namespace Explore
                     {
                         SceneController.Instance.ChangeScene("Battle", () =>
                         {
-                            BattleMapGenerator randomMapGenerator = GameObject.Find("BattleMapGenerator").GetComponent<BattleMapGenerator>();
+                            BattleMapBuilder randomMapGenerator = GameObject.Find("BattleMapGenerator").GetComponent<BattleMapBuilder>();
                             BattleMapInfo battleInfo;
-                            if (_enemyList[i] is NotMoveAI)
+                            if (_enemyList[i].Map != null)
                             {
-                                string map = ((NotMoveAI)_enemyList[i]).Map;
-                                randomMapGenerator.Get(map, out battleInfo);
+                                randomMapGenerator.Get(_enemyList[i].Map, out battleInfo);
                             }
                             else
                             {
@@ -214,30 +215,30 @@ namespace Explore
                 if (!_info.VisitedList.Contains(v2))
                 {
                     _info.VisitedList.Add(v2);
-                    _info.CellDic[v2].Quad.layer = MapLayer;
-                    if (_info.CellDic[v2].Icon != null)
+                    _info.TileDic[v2].Quad.layer = MapLayer;
+                    if (_info.TileDic[v2].Icon != null)
                     {
-                        _info.CellDic[v2].Icon.layer = MapLayer;
+                        _info.TileDic[v2].Icon.layer = MapLayer;
                     }
                 }
                 v2 = Utility.ConvertToVector2Int(transform.position + transform.forward * i + transform.right);
                 if (!_info.VisitedList.Contains(v2))
                 {
                     _info.VisitedList.Add(v2);
-                    _info.CellDic[v2].Quad.layer = MapLayer;
-                    if (_info.CellDic[v2].Icon != null)
+                    _info.TileDic[v2].Quad.layer = MapLayer;
+                    if (_info.TileDic[v2].Icon != null)
                     {
-                        _info.CellDic[v2].Icon.layer = MapLayer;
+                        _info.TileDic[v2].Icon.layer = MapLayer;
                     }
                 }
                 v2 = Utility.ConvertToVector2Int(transform.position + transform.forward * i - transform.right);
                 if (!_info.VisitedList.Contains(v2))
                 {
                     _info.VisitedList.Add(v2);
-                    _info.CellDic[v2].Quad.layer = MapLayer;
-                    if (_info.CellDic[v2].Icon != null)
+                    _info.TileDic[v2].Quad.layer = MapLayer;
+                    if (_info.TileDic[v2].Icon != null)
                     {
-                        _info.CellDic[v2].Icon.layer = MapLayer;
+                        _info.TileDic[v2].Icon.layer = MapLayer;
                     }
                 }
             }
@@ -262,7 +263,7 @@ namespace Explore
             SetObject();
             if(_info.PlayerPosition == _info.Goal) 
             {
-                _info.CellDic[_info.Goal].Icon.transform.GetChild(0).gameObject.SetActive(true); //顯示粒子
+                _info.TileDic[_info.Goal].Icon.transform.GetChild(0).gameObject.SetActive(true); //顯示粒子
                 ConfirmUI.Open("你已經打倒了出口的守衛！要前往下一層樓嗎？", "確定", "取消", ()=> 
                 {
                     _info.Floor++;
@@ -297,14 +298,14 @@ namespace Explore
                 if (treasure.Type == TreasureModel.TypeEnum.Item)
                 {
                     ItemManager.Instance.AddItem(treasure.ID, 1);
-                    GameObject.Destroy(_info.CellDic[v2].Treasure);
+                    GameObject.Destroy(_info.TileDic[v2].Treasure);
                 }
                 else
                 {
                     bool bagIsFull = ItemManager.Instance.AddEquip(treasure.ID);
                     if (!bagIsFull) 
                     {
-                        GameObject.Destroy(_info.CellDic[v2].Treasure);
+                        GameObject.Destroy(_info.TileDic[v2].Treasure);
                     }
                 }
             }
@@ -333,13 +334,13 @@ namespace Explore
                     obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Mashroom"), Vector3.zero, Quaternion.identity);
                     mashroom = obj.GetComponent<AI>();
                     random = UnityEngine.Random.Range(0, walkableList.Count);
-                    mashroom.Init("Mashroom", walkableList[random], 0);
+                    mashroom.Init("Mashroom", null, walkableList[random], 0);
                     walkableList.RemoveAt(random);
                     _enemyList.Add(mashroom);
                 }
                 obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Mashroom_NotMove"), Vector3.zero, Quaternion.identity);
                 mashroom = obj.GetComponent<AI>();
-                mashroom.Init("Mashroom_NotMove", _info.Goal, 0);
+                mashroom.Init("Mashroom_NotMove", null, _info.Goal, 0);
                 _enemyList.Add(mashroom);
             }
             else 
@@ -348,7 +349,7 @@ namespace Explore
                 {
                     obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + _info.EnemyInfoList[i].Prefab), Vector3.zero, Quaternion.identity);
                     mashroom = obj.GetComponent<AI>();
-                    mashroom.Init(_info.EnemyInfoList[i].Prefab, _info.EnemyInfoList[i].Position, _info.EnemyInfoList[i].Rotation);
+                    mashroom.Init(_info.EnemyInfoList[i].Prefab, _info.EnemyInfoList[i].Map, _info.EnemyInfoList[i].Position, _info.EnemyInfoList[i].Rotation);
                     _enemyList.Add(mashroom);
                 }
                 _info.EnemyInfoList.Clear();

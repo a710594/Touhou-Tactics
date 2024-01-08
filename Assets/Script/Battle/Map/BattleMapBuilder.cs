@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 
-public class BattleMapGenerator : MonoBehaviour
+public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
 {
     public Transform Tilemap;
     public string[] SeedFile;
@@ -193,7 +193,7 @@ public class BattleMapGenerator : MonoBehaviour
 
     public void Get(string map,out BattleMapInfo battleInfo) //固定的地圖
     {
-        string path = Path.Combine(_prePath, "Map/" + map + ".txt");
+        string path = Path.Combine(_prePath, "Map/Battle/" + map + ".txt");
         string text = File.ReadAllText(path);
         string[] stringSeparators = new string[] { "\n", "\r\n" };
         string[] lines = text.Split(stringSeparators, StringSplitOptions.None);
@@ -257,7 +257,7 @@ public class BattleMapGenerator : MonoBehaviour
                             battleInfo.NoAttachList.Add(new Vector2Int(noAttachList[j][0], noAttachList[j][1]));
                         }
                     }
-                    else 
+                    else if (i == battleInfo.Width + 2)
                     {
                         Vector3Int v3;
                         List<int[]> enemyList = JsonConvert.DeserializeObject<List<int[]>>(lines[i]);
@@ -266,6 +266,10 @@ public class BattleMapGenerator : MonoBehaviour
                             v3 = new Vector3Int(enemyList[j][0], enemyList[j][1], enemyList[j][2]);
                             battleInfo.EnemyDic.Add(v3, enemyList[j][3]);
                         }
+                    }
+                    else
+                    {
+                        battleInfo.PlayerCount = Convert.ToInt32(lines[i]);
                     }
                 }
             }

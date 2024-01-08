@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Explore
 {
-    public class CellInfo
+    /*public class CellInfo
     {
         public Generator2D.CellType CellType;
         [NonSerialized]
@@ -22,5 +22,5 @@ namespace Explore
         {
             CellType = type;
         }
-    }
+    }*/
 }

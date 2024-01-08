@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(BattleMapGenerator))]
+[CustomEditor(typeof(BattleMapBuilder))]
 public class BattleMapGeneratorEditor : Editor
 {
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
 
-        BattleMapGenerator nodeGenerator = (BattleMapGenerator)target;
+        BattleMapBuilder nodeGenerator = (BattleMapBuilder)target;
         if (GUILayout.Button("產生地圖"))
         {
             nodeGenerator.Generate(out BattleMapInfo battleInfo);

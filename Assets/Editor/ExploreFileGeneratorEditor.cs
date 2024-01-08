@@ -18,7 +18,7 @@ public class ExploreFileGeneratorEditor : Editor
         }
         if (GUILayout.Button("¸ü¤JÀÉ®×"))
         {
-            //exploreFileGenerator.LoadFile();
+            exploreFileGenerator.LoadFile();
         }
     }
 }
