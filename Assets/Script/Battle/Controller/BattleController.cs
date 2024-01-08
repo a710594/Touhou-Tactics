@@ -177,6 +177,10 @@ namespace Battle
 
         public void SetMoveState()
         {
+            if (Info.IsTutorial && !BattleTutorialController.Instance.CanSetMoveState())
+            {
+                return;
+            }
             _context.SetState<MoveState>();
         }
 

@@ -5,15 +5,16 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class MapFileGenerator : MonoBehaviour
+public class BattleFileGenerator : MonoBehaviour
 {
+    public bool IsTutorial;
     public string FileName;
     public int Width;
     public int Height;
     public Transform Tilemap;
     public Transform EnemyGroup;
 
-    private string _prePath = Application.streamingAssetsPath;
+    private string _prePath;
 
     public void BuildFile() 
     {
@@ -40,10 +41,12 @@ public class MapFileGenerator : MonoBehaviour
             enemyList.Add(new int[4] { (int)child.position.x, (int)child.position.y, (int)child.position.z , battleMapEnemy.ID});
         }
 
+        _prePath = Application.streamingAssetsPath + "/Map/Battle/";
         string path = Path.Combine(_prePath, FileName + ".txt");
         Vector2Int position;
         using (StreamWriter writer = new StreamWriter(path))
         {
+            writer.Write(IsTutorial + "\n");
             writer.Write(Width + " " + Height + "\n");
 
             for (int i=0; i<Width; i++)
@@ -96,11 +99,11 @@ public class MapFileGenerator : MonoBehaviour
             DestroyImmediate(EnemyGroup.GetChild(0).gameObject);
         }
 
-        str = lines[0].Split(' ');
+        str = lines[1].Split(' ');
         width = int.Parse(str[0]);
         height = int.Parse(str[1]);
 
-        for (int i=1; i<lines.Length; i++) //第一行是長寬,忽視之
+        for (int i=2; i<lines.Length; i++)
         {
             if (lines[i] != "")
             {

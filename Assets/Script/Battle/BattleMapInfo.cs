@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class BattleMapInfo
 {
+    public bool IsTutorial;
     public int Width;
     public int Height;
     public List<Vector2Int> NoAttachList = new List<Vector2Int>();

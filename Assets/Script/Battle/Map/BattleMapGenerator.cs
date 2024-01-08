@@ -212,13 +212,15 @@ public class BattleMapGenerator : MonoBehaviour
             DestroyImmediate(this.transform.GetChild(0).gameObject);
         }
 
-        str = lines[0].Split(' ');
+        battleInfo.IsTutorial = bool.Parse(lines[0]);
+
+        str = lines[1].Split(' ');
         battleInfo.Width = int.Parse(str[0]);
         battleInfo.Height = int.Parse(str[1]);
 
         try
         {
-            for (int i = 1; i < lines.Length; i++) //第一行是長寬,忽視之
+            for (int i = 2; i < lines.Length; i++) //第一行是長寬,忽視之
             {
                 if (lines[i] != "")
                 {
