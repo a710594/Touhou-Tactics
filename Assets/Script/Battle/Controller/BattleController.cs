@@ -22,7 +22,7 @@ namespace Battle
             }
         }
 
-        public BattleMapInfo Info;
+        public BattleInfo Info;
         public BattleCharacterInfo SelectedCharacter;
         public List<BattleCharacterInfo> CharacterList = new List<BattleCharacterInfo>();
 
@@ -39,16 +39,16 @@ namespace Battle
         private DragCameraUI _dragCameraUI;
         private SelectBattleCharacterUI _selectBattleCharacterUI;
         private BattleResultUI _battleResultUI;
-        private GameObject _arrow;
+        public GameObject Arrow;
         private List<int> _enemyList = new List<int>();
         private List<Vector2Int> _areaList = new List<Vector2Int>();
         private Dictionary<int, BattleCharacterController> _controllerDic = new Dictionary<int, BattleCharacterController>();
 
-        public void Init(int floor, int lv, BattleMapInfo info)
+        public void Init(int floor, int lv, BattleInfo info)
         {
             _battleUI = GameObject.Find("BattleUI").GetComponent<BattleUI>();
             _selectBattleCharacterUI = GameObject.Find("SelectBattleCharacterUI").GetComponent<SelectBattleCharacterUI>();
-            _selectBattleCharacterUI.PlayerCount = info.PlayerCount;
+            _selectBattleCharacterUI.Init(info);
             _battleResultUI = GameObject.Find("BattleResultUI").GetComponent<BattleResultUI>();
             _cameraController = Camera.main.GetComponent<CameraDraw>();
             _cameraRotate = Camera.main.GetComponent<CameraRotate>();
@@ -178,27 +178,8 @@ namespace Battle
 
         public void SetMoveState()
         {
-            if (Info.IsTutorial && !BattleTutorialController.Instance.CanSetMoveState())
-            {
-                return;
-            }
             _context.SetState<MoveState>();
         }
-
-        //public void SetSelectSkillState()
-        //{
-        //    _context.SetState<SkillState>();
-        //}
-
-        //public void SetSupportState() 
-        //{
-        //    _context.SetState<SupportState>();
-        //}
-
-        //public void SetItemState()
-        //{
-        //    _context.SetState<ItemState>();
-        //}
 
         public void Idle()
         {
@@ -211,59 +192,6 @@ namespace Battle
             SelectedCharacter.SelectedObject = obj;
             _context.SetState<TargetState>();
         }
-
-        //public void SelectSkill(Skill skill)
-        //{
-        //    if (_context.CurrentState is SkillState)
-        //    {
-        //        _selectedCharacter.SelectedSkill = skill;
-        //        _selectedCharacter.SelectedSupport = null;
-        //        _selectedCharacter.SelectedCard = null;
-        //        _selectedCharacter.SelectedConsumables = null;
-        //        _selectedCharacter.SelectedFood = null;
-        //        _selectedCharacter.SelectedEffect = skill.Effect;
-        //        _context.SetState<TargetState>();
-        //    }
-        //}
-
-        //public void SelectSupport(Support support)
-        //{
-        //    if (_context.CurrentState is SupportState)
-        //    {
-        //        _selectedCharacter.SelectedSupport = support;
-        //        _selectedCharacter.SelectedSkill = null;
-        //        _selectedCharacter.SelectedCard = null;
-        //        _selectedCharacter.SelectedConsumables = null;
-        //        _selectedCharacter.SelectedFood = null;
-        //        _selectedCharacter.SelectedEffect = support.Effect;
-        //        _context.SetState<TargetState>();
-        //    }
-        //}
-
-
-        //public void SelectItem(Item item)
-        //{
-        //if (_context.CurrentState is ItemState)
-        //{
-        //    if (item == null) //ªð¦^ 
-        //    {
-        //        Instance._battleUI.SetSkillVisible(false);
-        //        Instance.SetActionState();
-        //    }
-        //    else if (item.Data.PP == -1 || _selectedCharacter.CurrentPP >= item.Data.PP)
-        //    {
-        //        _selectedCharacter.SelectedItem = item;
-        //        _selectedCharacter.SelectedSkill = null;
-        //        _selectedCharacter.SelectedSupport = null;
-        //        _context.SetState<TargetState>();
-        //    }
-        //    else
-        //    {
-        //        Instance._battleUI.TipLabel.SetLabel("PP¤£¨¬ " + (item.Data.PP - _selectedCharacter.CurrentPP));
-        //    }
-
-        //}
-        //}
 
         public void SetQuad(List<Vector2Int> list, Color color)
         {
@@ -402,7 +330,7 @@ namespace Battle
 
         private class BattleControllerState : State
         {
-            protected BattleMapInfo _info;
+            protected BattleInfo _info;
             protected BattleCharacterInfo _character;
             protected List<BattleCharacterInfo> _characterList;
 

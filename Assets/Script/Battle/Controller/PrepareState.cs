@@ -51,7 +51,7 @@ namespace Battle
 
                 Instance._battleUI.CharacterListGroupInit(_characterList);
 
-                Instance._arrow = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Other/Arrow"), Vector3.zero, Quaternion.identity);
+                Instance.Arrow = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Other/Arrow"), Vector3.zero, Quaternion.identity);
             }
 
             public GameObject PlaceCharacter(Vector2Int position, CharacterInfo characterInfo)

@@ -34,11 +34,20 @@ public class ActionButtonGroup : MonoBehaviour
 
     private void MoveOnClick() 
     {
+        if (BattleController.Instance.Info.IsTutorial && !BattleTutorialController.Instance.CanMove())
+        {
+            return;
+        }
         BattleController.Instance.SetMoveState();
     }
 
     private void SkillOnClick() 
     {
+        if (BattleController.Instance.Info.IsTutorial && !BattleTutorialController.Instance.CanSkill())
+        {
+            return;
+        }
+
         BattleCharacterInfo character = BattleController.Instance.SelectedCharacter;
         if (!character.IsAuto)
         {
@@ -49,6 +58,11 @@ public class ActionButtonGroup : MonoBehaviour
 
     private void SupportOnClick()
     {
+        if (BattleController.Instance.Info.IsTutorial && !BattleTutorialController.Instance.CanSupport())
+        {
+            return;
+        }
+
         BattleCharacterInfo character = BattleController.Instance.SelectedCharacter;
         if (!character.IsAuto)
         {
@@ -59,6 +73,11 @@ public class ActionButtonGroup : MonoBehaviour
 
     private void ItemOnClick() 
     {
+        if (BattleController.Instance.Info.IsTutorial && !BattleTutorialController.Instance.CanItem())
+        {
+            return;
+        }
+
         BattleCharacterInfo character = BattleController.Instance.SelectedCharacter;
         if (!character.IsAuto)
         {
@@ -69,11 +88,21 @@ public class ActionButtonGroup : MonoBehaviour
 
     private void IdleOnClick() 
     {
+        if (BattleController.Instance.Info.IsTutorial && !BattleTutorialController.Instance.CanIdle())
+        {
+            return;
+        }
+
         BattleController.Instance.Idle();
     }
 
     private void ResetOnClick() 
     {
+        if (BattleController.Instance.Info.IsTutorial && !BattleTutorialController.Instance.CanReset())
+        {
+            return;
+        }
+
         BattleController.Instance.ResetAction();
         ResetButton.gameObject.SetActive(false);
     }
@@ -81,6 +110,11 @@ public class ActionButtonGroup : MonoBehaviour
     private void ScrollItemOnClick(ScrollItem scrollItem)
     {
         object obj = scrollItem.Data;
+        if (BattleController.Instance.Info.IsTutorial && !BattleTutorialController.Instance.CheckScrollItem(obj))
+        {
+            return;
+        }
+
         bool canUse = true;
         string tip = "";
         if (obj is Skill)

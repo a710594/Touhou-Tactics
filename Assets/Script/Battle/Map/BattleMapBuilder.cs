@@ -27,7 +27,7 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
         _attachDic.Add("Tree", DataContext.Instance.Load<AttachSetting>("Tree", DataContext.PrePathEnum.Setting));
     }
 
-    public void Generate(out BattleMapInfo battleInfo) //有隨機成分的地圖
+    public void Generate(out BattleInfo battleInfo) //有隨機成分的地圖
     {
         string path = Path.Combine(_prePath, "MapSeed/" + SeedFile[UnityEngine.Random.Range(0, SeedFile.Length)] + ".txt");
         string text = File.ReadAllText(path);
@@ -41,7 +41,7 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
         Queue<Vector2Int> queue = new Queue<Vector2Int>();
         GameObject tileObj;
         GameObject attachObj;
-        battleInfo = new BattleMapInfo();
+        battleInfo = new BattleInfo();
 
         for (int i = this.transform.childCount; i > 0; --i)
         {
@@ -191,7 +191,7 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
         } 
     }
 
-    public void Get(string map,out BattleMapInfo battleInfo) //固定的地圖
+    public void Get(string map,out BattleInfo battleInfo) //固定的地圖
     {
         string path = Path.Combine(_prePath, "Map/Battle/" + map + ".txt");
         string text = File.ReadAllText(path);
@@ -205,7 +205,7 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
         Queue<Vector2Int> queue = new Queue<Vector2Int>();
         GameObject tileObj;
         GameObject attachObj;
-        battleInfo = new BattleMapInfo();
+        battleInfo = new BattleInfo();
 
         for (int i = this.transform.childCount; i > 0; --i)
         {
@@ -220,16 +220,16 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
 
         try
         {
-            for (int i = 2; i < lines.Length; i++) //第一行是長寬,忽視之
+            for (int i = 2; i < lines.Length; i++)
             {
                 if (lines[i] != "")
                 {
-                    if (i <= battleInfo.Width)
+                    if (i < battleInfo.Width + 2)
                     {
                         str = lines[i].Split(' ');
                         for (int j = 0; j < str.Length; j++)
                         {
-                            position = new Vector2Int(i - 1, j);
+                            position = new Vector2Int(i - 2, j);
                             if (str[j] == "X")
                             {
                                 visitedDic.Add(position, null);
@@ -248,7 +248,7 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
                             }
                         }
                     }
-                    else if (i == battleInfo.Width + 1)
+                    else if (i == battleInfo.Width + 2)
                     {
                         //battleInfo.NoAttachList = JsonConvert.DeserializeObject<List<Vector2Int>>(lines[i]);
                         List<int[]> noAttachList = JsonConvert.DeserializeObject<List<int[]>>(lines[i]);
@@ -257,7 +257,7 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
                             battleInfo.NoAttachList.Add(new Vector2Int(noAttachList[j][0], noAttachList[j][1]));
                         }
                     }
-                    else if (i == battleInfo.Width + 2)
+                    else if (i == battleInfo.Width + 3)
                     {
                         Vector3Int v3;
                         List<int[]> enemyList = JsonConvert.DeserializeObject<List<int[]>>(lines[i]);
@@ -287,7 +287,7 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
         CreateObject(battleInfo);
     }
 
-    public void CreateObject(BattleMapInfo battleInfo)
+    public void CreateObject(BattleInfo battleInfo)
     {
         GameObject tileObj;
         GameObject attachObj;

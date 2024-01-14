@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class BattleMapInfo
+public class BattleInfo
 {
     public bool IsTutorial;
     public int Width;

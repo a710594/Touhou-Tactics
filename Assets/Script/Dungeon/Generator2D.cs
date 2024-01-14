@@ -440,10 +440,12 @@ public class Generator2D : MonoBehaviour {
 
     private void PlaceObject() 
     {
+        int count = 0;
         GameObject obj = null;
         foreach(KeyValuePair<Vector2Int, TileObject> pair in info.TileDic) 
         {
             obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + pair.Value.Name), Vector3.zero, Quaternion.identity);
+            count++;
 
             if (obj != null)
             {
@@ -456,6 +458,7 @@ public class Generator2D : MonoBehaviour {
 
         foreach(KeyValuePair<Vector2Int, Treasure> pair in info.TreasureDic)
         {
+            count++;
             obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + pair.Value.Prefab), Vector3.zero, Quaternion.identity);
             obj.transform.position = new Vector3(pair.Key.x, pair.Value.Height, pair.Key.y);
             info.TileDic[pair.Key].Treasure = obj;

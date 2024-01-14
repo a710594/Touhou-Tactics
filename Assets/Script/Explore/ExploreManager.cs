@@ -41,12 +41,16 @@ namespace Explore
                 _info = new ExploreInfo(file);
                 Reload();
             }
-            else
+            else if(SystemManager.Instance.SystemInfo.MaxFloor == 1)
             {
-                ExploreFileLoader exploreFileLoader = GameObject.Find("Generator2D").GetComponent<ExploreFileLoader>();
-                file = exploreFileLoader.LoadFile();
+                file = DataContext.Instance.Load<ExploreFile>("Explore/Floor_1", DataContext.PrePathEnum.Map);
                 _info = new ExploreInfo(file);
                 Reload();
+            }
+            else
+            {
+                Generator2D generator2D = GameObject.Find("Generator2D").GetComponent<Generator2D>();
+                generator2D.Generate(SystemManager.Instance.SystemInfo.MaxFloor);
             }
         }
 
@@ -69,6 +73,7 @@ namespace Explore
                 {
                     ExploreEnemyInfo info = new ExploreEnemyInfo();
                     info.Prefab = _enemyList[i].Prefab;
+                    info.Map = _enemyList[i].Map;
                     info.Position = Utility.ConvertToVector2Int(_enemyList[i].MoveTo);
                     info.Rotation = Mathf.RoundToInt(_enemyList[i].transform.eulerAngles.y);
                     _info.EnemyInfoList.Add(info);
@@ -162,7 +167,7 @@ namespace Explore
                         SceneController.Instance.ChangeScene("Battle", () =>
                         {
                             BattleMapBuilder randomMapGenerator = GameObject.Find("BattleMapGenerator").GetComponent<BattleMapBuilder>();
-                            BattleMapInfo battleInfo;
+                            BattleInfo battleInfo;
                             if (_enemyList[i].Map != null)
                             {
                                 randomMapGenerator.Get(_enemyList[i].Map, out battleInfo);

@@ -7,8 +7,6 @@ namespace Battle
 {
     public partial class BattleController
     {
-        int count = 0;
-
         public List<Vector2Int> GetPath(Vector2Int start, Vector2Int goal, BattleCharacterInfo.FactionEnum faction)
         {
             if (start == goal)
@@ -38,7 +36,6 @@ namespace Battle
 
                     if (x.Position == goal)
                     {
-                        count = 0;
                         List<Vector2Int> result = ReconstructPath(x);
                         return result;   //返回到x的最佳路徑
                     }

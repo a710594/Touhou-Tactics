@@ -14,6 +14,7 @@ namespace Battle
 
             public override void Begin(object obj)
             {
+                _info = Instance.Info;
                 _character = Instance.SelectedCharacter;
                 _characterList = Instance.CharacterList;
                 Instance._battleUI.ActionButtonGroup.gameObject.SetActive(true);
@@ -42,6 +43,10 @@ namespace Battle
                 else if (_character.IsAuto)
                 {
                     _character.AI.Start();
+                }
+                else if (_info.IsTutorial) 
+                {
+                    BattleTutorialController.Instance.Start();
                 }
             }
 

@@ -18,7 +18,7 @@ namespace Battle
             public override void Begin(object obj)
             {
                 _originalPosition = new Vector2Int(int.MaxValue, int.MaxValue);
-                BattleMapInfo info = Instance.Info;
+                BattleInfo info = Instance.Info;
                 _character = Instance.SelectedCharacter;
                 _characterList = Instance.CharacterList;
                 Instance._controllerDic[_character.Index].transform.position = _character.Position;
@@ -26,6 +26,14 @@ namespace Battle
                 Instance._battleUI.ActionButtonGroup.gameObject.SetActive(false);
                 _stepList = Instance.GetStepList(Utility.ConvertToVector2Int(_character.Position), _character);
                 Instance.SetQuad(_stepList, Instance._white);
+            }
+
+            public override void End()
+            {
+                if (Instance.Info.IsTutorial)
+                {
+                    BattleTutorialController.Instance.ToState_4();
+                }
             }
 
             public override void Click(Vector2Int position)

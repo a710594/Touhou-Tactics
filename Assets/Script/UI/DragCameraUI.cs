@@ -66,10 +66,19 @@ public class DragCameraUI : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 100))
             {
-                BattleController.Instance.Click(Utility.ConvertToVector2Int(hit.transform.position));
+                Vector2Int v2 = Utility.ConvertToVector2Int(hit.transform.position);
+                if (BattleController.Instance.Info.IsTutorial && !BattleTutorialController.Instance.CheckClick(v2))
+                {
+                    return;
+                }
+                BattleController.Instance.Click(v2);
             }
             else //代表按到沒有按鍵的地方
             {
+                if (BattleController.Instance.Info.IsTutorial)
+                {
+                    return;
+                }
                 BattleController.Instance.Click(new Vector2Int(int.MinValue, int.MinValue));
             }
         }

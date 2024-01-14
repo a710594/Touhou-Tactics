@@ -20,6 +20,11 @@ namespace Battle
                 info = Instance.CharacterList[0];
                 Instance.SelectedCharacter = info;
 
+                if (Instance.Info.IsTutorial && info.Faction == BattleCharacterInfo.FactionEnum.Enemy)
+                {
+                    BattleTutorialController.Instance.ToState_8(); //to State_8
+                }
+
                 int wt = info.CurrentWT;
                 List<BattleCharacterInfo> characterList = Instance.CharacterList;
                 for (int i = 0; i < characterList.Count; i++)
@@ -43,9 +48,9 @@ namespace Battle
                 {
                     _context.SetState<ActionState>();
                 });
-                Instance._arrow.transform.SetParent(controller.transform);
-                Instance._arrow.transform.localPosition = new Vector3(0, 1.3f, 0);
-                Instance._arrow.transform.localEulerAngles = Vector3.zero;
+                Instance.Arrow.transform.SetParent(controller.transform);
+                Instance.Arrow.transform.localPosition = new Vector3(0, 1.3f, 0);
+                Instance.Arrow.transform.localEulerAngles = Vector3.zero;
                 Instance._battleUI.CharacterListGroupRefresh();
             }
         }
