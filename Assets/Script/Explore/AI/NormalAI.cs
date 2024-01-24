@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Explore
 {
-    public class NormalAI : AI //撞到牆就轉彎
+    public class NormalAI : ExploreEnemyController //撞到牆就轉彎
     {
         public override void Move() 
         {

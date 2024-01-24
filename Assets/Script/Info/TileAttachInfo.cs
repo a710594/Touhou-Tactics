@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileInfo
+public class TileAttachInfo
 {
     public bool HasCharacter;
     public string TileID;
@@ -27,14 +27,15 @@ public class TileInfo
     private int _tileMoveCost;
     private int _attachMoveCost = 0;
 
-    public TileInfo(TileScriptableObject tile) 
+    public TileAttachInfo(string id)
     {
-        TileID = tile.ID;
-        Height = tile.Height;
-        _tileMoveCost = tile.MoveCost;
+        TileSetting tileSetting = DataContext.Instance.TileSettingDic[id];
+        TileID = id;
+        Height = tileSetting.Height;
+        _tileMoveCost = tileSetting.MoveCost;
     }
 
-    public TileInfo(TileSetting tile)
+    public TileAttachInfo(TileSetting tile)
     {
         TileID = tile.ID;
         Height = tile.Height;

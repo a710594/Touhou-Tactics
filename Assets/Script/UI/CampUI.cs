@@ -24,37 +24,47 @@ public class CampUI : MonoBehaviour
         CookUI.Open();
     }
 
-    private void ExploreOnClick() 
+    private void ExploreOnClick()
     {
-        FloorGroup.SetActive(true);
-        List<object> floorList = new List<object>();
-        for (int i=1; i<=SystemManager.Instance.SystemInfo.MaxFloor; i++) 
+        if (!FloorGroup.activeSelf)
         {
-            floorList.Add(i);
+            FloorGroup.SetActive(true);
+            List<object> floorList = new List<object>();
+            for (int i = 1; i <= SystemManager.Instance.SystemInfo.MaxFloor; i++)
+            {
+                floorList.Add(i);
+            }
+            FloorScrollView.SetData(floorList);
         }
-        FloorScrollView.SetData(floorList);
+        else
+        {
+            FloorGroup.SetActive(false);
+        }
     }
 
     private void FloorOnClick(ScrollItem scrollItem) 
     {
         SceneController.Instance.ChangeScene("Explore", () =>
         {
-            Generator2D generator2D = (GameObject.Find("Generator2D")).GetComponent<Generator2D>();
-            generator2D.Generate((int)scrollItem.Data);
+            Explore.ExploreManager.Instance.Init((int)scrollItem.Data);
         });
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            FileSystem.Instance.Save();
-        }
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            BagUI bagUI = BagUI.Open();
-            bagUI.SetNormalState();
-        }
+        //if (Input.GetKeyDown(KeyCode.S))
+        //{
+        //    FileSystem.Instance.Save();
+        //}
+        //if (Input.GetKeyDown(KeyCode.I))
+        //{
+        //    BagUI bagUI = BagUI.Open();
+        //    bagUI.SetNormalState();
+        //}
+        //if (Input.GetKeyDown(KeyCode.C))
+        //{
+        //    SelectCharacterUI selectCharacterUI = SelectCharacterUI.Open();
+        //}
     }
 
     private void Awake()

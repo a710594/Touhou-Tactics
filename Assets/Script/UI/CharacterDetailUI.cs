@@ -7,6 +7,8 @@ public class CharacterDetailUI : MonoBehaviour
 {
     public RectTransform RectTransform;
     public Text NameLabel;
+    public Text LvLabel;
+    public Text ExpLabel;
     public Text PassiveLabel;
     public Text HPLabel;
     public Text STRLabel;
@@ -17,10 +19,12 @@ public class CharacterDetailUI : MonoBehaviour
     public Text AGILabel;
     public Text MOVLabel;
     public Text WTLabel;
+    public Text PassiveCommentLabel;
 
     public ButtonPlus WeaponButton;
     public ButtonPlus ArmorButton;
     public ButtonPlus[] AmuletButtons;
+    public ButtonPlus PassiveCommentButton;
 
     public ScrollView SkillScrollView;
     public ScrollView SupportScrollView;
@@ -29,7 +33,8 @@ public class CharacterDetailUI : MonoBehaviour
 
     public Button CloseButton;
 
-    private CharacterInfo _characterInfo;
+    private CharacterInfo _characterInfo = null;
+    private BattleCharacterInfo _battleCharacterInfo = null;
 
     public static CharacterDetailUI Open(bool canSelectEquip) 
     {
@@ -49,14 +54,18 @@ public class CharacterDetailUI : MonoBehaviour
 
     public void SetData(BattleCharacterInfo character) 
     {
+        _battleCharacterInfo = character;
         NameLabel.text = character.Name;
-        if(character.PassiveList.Count>0)
+        LvLabel.text = "隊伍等級：" + CharacterManager.Instance.Info.Lv;
+        ExpLabel.text = "經驗值：" + CharacterManager.Instance.Info.Exp + "/" + CharacterManager.Instance.NeedExp(CharacterManager.Instance.Info.Lv);
+        if (character.PassiveList.Count>0)
         {
             PassiveLabel.text = character.PassiveList[0].Data.Name;
         }
         else
         {
             PassiveLabel.text = string.Empty;
+            PassiveCommentButton.gameObject.SetActive(false);
         }
         HPLabel.text = "HP " + character.CurrentHP + "/" + character.MaxHP;
         STRLabel.text = "力量 " + character.STR;
@@ -69,10 +78,13 @@ public class CharacterDetailUI : MonoBehaviour
         WTLabel.text = "WT " + character.WT;
 
         WeaponButton.Label.text = character.Weapon.Name;
+        WeaponButton.SetData(character.Weapon);
         ArmorButton.Label.text = character.Armor.Name;
+        ArmorButton.SetData(character.Armor);
         for (int i=0; i<AmuletButtons.Length; i++) 
         {
             AmuletButtons[i].Label.text = character.Amulets[i].Name;
+            AmuletButtons[i].SetData(character.Amulets[i]);
         }
 
         if (character.SkillList.Count > 0)
@@ -102,6 +114,8 @@ public class CharacterDetailUI : MonoBehaviour
     {
         _characterInfo = character;
         NameLabel.text = character.Name;
+        LvLabel.text = "隊伍等級：" + CharacterManager.Instance.Info.Lv;
+        ExpLabel.text = "經驗值：" + CharacterManager.Instance.Info.Exp + "/" + CharacterManager.Instance.NeedExp(CharacterManager.Instance.Info.Lv);
         if (character.PassiveList.Count > 0)
         {
             PassiveLabel.text = character.PassiveList[0].Data.Name;
@@ -109,6 +123,7 @@ public class CharacterDetailUI : MonoBehaviour
         else
         {
             PassiveLabel.text = string.Empty;
+            PassiveCommentButton.gameObject.SetActive(false);
         }
         HPLabel.text = "HP " + character.CurrentHP + "/" + character.MaxHP;
         STRLabel.text = "力量 " + character.STR;
@@ -155,82 +170,106 @@ public class CharacterDetailUI : MonoBehaviour
 
     private void WeaponOnClick(ButtonPlus button)
     {
-        BagUI bagUI =  BagUI.Open();
-        bagUI.SetEquipState(EquipModel.CategoryEnum.Weapon, _characterInfo);
-        bagUI.UseHandler += SetWeapon;
+        if (_characterInfo != null)
+        {
+            BagUI bagUI = BagUI.Open();
+            bagUI.SetEquipState(EquipModel.CategoryEnum.Weapon, _characterInfo);
+            bagUI.UseHandler += SetWeapon;
+        }
     }
 
     private void ArmornOnClick(ButtonPlus button)
     {
-        BagUI bagUI = BagUI.Open();
-        bagUI.SetEquipState(EquipModel.CategoryEnum.Armor, _characterInfo);
-        bagUI.UseHandler += SetArmor;
+        if (_characterInfo != null)
+        {
+            BagUI bagUI = BagUI.Open();
+            bagUI.SetEquipState(EquipModel.CategoryEnum.Armor, _characterInfo);
+            bagUI.UseHandler += SetArmor;
+        }
     }
 
     private void AmuletOnClick_1(ButtonPlus button)
     {
-        BagUI bagUI = BagUI.Open();
-        bagUI.SetEquipState(EquipModel.CategoryEnum.Amulet, _characterInfo);
-        bagUI.UseHandler += SetAmulet_1;
+        if (_characterInfo != null)
+        {
+            BagUI bagUI = BagUI.Open();
+            bagUI.SetEquipState(EquipModel.CategoryEnum.Amulet, _characterInfo);
+            bagUI.UseHandler += SetAmulet_1;
+        }
     }
 
     private void AmuletOnClick_2(ButtonPlus button)
     {
-        BagUI bagUI = BagUI.Open();
-        bagUI.SetEquipState(EquipModel.CategoryEnum.Amulet, _characterInfo);
-        bagUI.UseHandler += SetAmulet_2;
+        if (_characterInfo != null)
+        {
+            BagUI bagUI = BagUI.Open();
+            bagUI.SetEquipState(EquipModel.CategoryEnum.Amulet, _characterInfo);
+            bagUI.UseHandler += SetAmulet_2;
+        }
     }
 
     private void SetWeapon(object obj) 
     {
-        //如果角色身上有裝備,就把裝備放回背包
-        if (_characterInfo.Weapon != null && _characterInfo.Weapon.ID != 0) 
+        if (_characterInfo != null)
         {
-            ItemManager.Instance.AddEquip(_characterInfo.Weapon);
-        }
+            //如果角色身上有裝備,就把裝備放回背包
+            if (_characterInfo.Weapon != null && _characterInfo.Weapon.ID != 0)
+            {
+                ItemManager.Instance.AddEquip(_characterInfo.Weapon);
+            }
 
-        Equip equip = (Equip)obj;
-        _characterInfo.Weapon = equip;
-        SetData(_characterInfo);
+            Equip equip = (Equip)obj;
+            _characterInfo.Weapon = equip;
+            SetData(_characterInfo);
+        }
     }
 
     private void SetArmor(object obj)
     {
-        //如果角色身上有裝備,就把裝備放回背包
-        if (_characterInfo.Armor != null && _characterInfo.Armor.ID != 0)
+        if (_characterInfo != null)
         {
-            ItemManager.Instance.AddEquip(_characterInfo.Armor);
-        }
+            //如果角色身上有裝備,就把裝備放回背包
+            if (_characterInfo.Armor != null && _characterInfo.Armor.ID != 0)
+            {
+                ItemManager.Instance.AddEquip(_characterInfo.Armor);
+            }
 
-        Equip equip = (Equip)obj;
-        _characterInfo.Armor = equip;
-        SetData(_characterInfo);
+            Equip equip = (Equip)obj;
+            _characterInfo.Armor = equip;
+            SetData(_characterInfo);
+        }
     }
 
     private void SetAmulet_1(object obj)
     {
-        //如果角色身上有裝備,就把裝備放回背包
-        if (_characterInfo.Amulets[0] != null && _characterInfo.Amulets[0].ID != 0)
+        if (_characterInfo != null)
         {
-            ItemManager.Instance.AddEquip(_characterInfo.Amulets[0]);
-        }
+            //如果角色身上有裝備,就把裝備放回背包
+            if (_characterInfo.Amulets[0] != null && _characterInfo.Amulets[0].ID != 0)
+            {
+                ItemManager.Instance.AddEquip(_characterInfo.Amulets[0]);
+            }
 
-        Equip equip = (Equip)obj;
-        _characterInfo.Amulets[0] = equip;
-        SetData(_characterInfo);
+            Equip equip = (Equip)obj;
+            _characterInfo.Amulets[0] = equip;
+            SetData(_characterInfo);
+        }
     }
 
     private void SetAmulet_2(object obj)
     {
-        //如果角色身上有裝備,就把裝備放回背包
-        if (_characterInfo.Amulets[1] != null && _characterInfo.Amulets[1].ID != 0)
+        if (_characterInfo != null)
         {
-            ItemManager.Instance.AddEquip(_characterInfo.Amulets[1]);
-        }
+            //如果角色身上有裝備,就把裝備放回背包
+            if (_characterInfo.Amulets[1] != null && _characterInfo.Amulets[1].ID != 0)
+            {
+                ItemManager.Instance.AddEquip(_characterInfo.Amulets[1]);
+            }
 
-        Equip equip = (Equip)obj;
-        _characterInfo.Amulets[1] = equip;
-        SetData(_characterInfo);
+            Equip equip = (Equip)obj;
+            _characterInfo.Amulets[1] = equip;
+            SetData(_characterInfo);
+        }
     }
 
     private void ShowEquipDetail(ButtonPlus button) 
@@ -271,6 +310,24 @@ public class CharacterDetailUI : MonoBehaviour
         SkillInfoGroup.gameObject.SetActive(false);
     }
 
+    private void ShowPassiveComment(ButtonPlus button)
+    {
+        if (_characterInfo != null && _characterInfo.PassiveList.Count > 0)
+        {
+            PassiveCommentLabel.text = _characterInfo.PassiveList[0].Data.Comment;
+        }
+        else if (_battleCharacterInfo != null && _battleCharacterInfo.PassiveList.Count > 0)
+        {
+            PassiveCommentLabel.text = _battleCharacterInfo.PassiveList[0].Data.Comment;
+        }
+        PassiveCommentLabel.gameObject.SetActive(true);
+    }
+
+    private void HidePassiveComment(ButtonPlus button)
+    {
+        PassiveCommentLabel.gameObject.SetActive(false);
+    }
+
     private void Close() 
     {
         Destroy(gameObject);
@@ -280,6 +337,7 @@ public class CharacterDetailUI : MonoBehaviour
     {
         EquipDetail.gameObject.SetActive(false);
         SkillInfoGroup.gameObject.SetActive(false);
+        PassiveCommentLabel.gameObject.SetActive(false);
         WeaponButton.ClickHandler += WeaponOnClick;
         WeaponButton.EnterHandler += ShowEquipDetail;
         WeaponButton.ExitHandler += HideEquipDetail;
@@ -296,6 +354,8 @@ public class CharacterDetailUI : MonoBehaviour
         SkillScrollView.ExitHandler += HideSkillInfo;
         SupportScrollView.EnterHandler += ShowSupportInfo;
         SupportScrollView.ExitHandler += HideSupportInfo;
+        PassiveCommentButton.EnterHandler += ShowPassiveComment;
+        PassiveCommentButton.ExitHandler += HidePassiveComment;
         CloseButton.onClick.AddListener(Close);
     }
 }

@@ -25,12 +25,12 @@ namespace Battle
         public BattleInfo Info;
         public BattleCharacterInfo SelectedCharacter;
         public List<BattleCharacterInfo> CharacterList = new List<BattleCharacterInfo>();
+        public List<BattleCharacterInfo> DeadCharacterList = new List<BattleCharacterInfo>();
 
         private readonly Color _white = new Color(1, 1, 1, 0.5f);
         private readonly Color _yellow = new Color(1, 1, 0, 0.5f);
 
         private bool _canClick = true;
-        private int _exp;
         private Vector2Int _selectedPosition;
         private CameraDraw _cameraController;
         private CameraRotate _cameraRotate;
@@ -54,15 +54,16 @@ namespace Battle
             _cameraRotate = Camera.main.GetComponent<CameraRotate>();
             Info = info;
 
+            CharacterList.Clear();
             if (info.EnemyDic.Count == 0)
             {
                 EnemyGroupModel enemyGroup = DataContext.Instance.EnemyGroupDic[floor].ElementAt(UnityEngine.Random.Range(0, DataContext.Instance.EnemyGroupDic[floor].Count)).Value;
-                List<int> enemyList = enemyGroup.EnemyList;
-                for (int i = 0; i < enemyList.Count; i++)
+                _enemyList = enemyGroup.EnemyList;
+                for (int i = 0; i < _enemyList.Count; i++)
                 {
-                    CharacterList.Add(new BattleCharacterInfo(lv, DataContext.Instance.EnemyDic[enemyList[i]]));
+                    CharacterList.Add(new BattleCharacterInfo(lv, DataContext.Instance.EnemyDic[_enemyList[i]]));
                     CharacterList[i].Index = i + 1;
-                    if (enemyList[i] == 5)
+                    if (_enemyList[i] == 5)
                     {
                         CharacterList[i].AI = new MonkeyAI(CharacterList[i]);
                     }
@@ -72,13 +73,16 @@ namespace Battle
                     }
                     CharacterList[i].Position = RandomCharacterPosition(BattleCharacterInfo.FactionEnum.Enemy);
                 }
+                info.Exp = enemyGroup.Exp;
             }
             else
             {
                 int index = 0;
+                _enemyList.Clear();
                 foreach(KeyValuePair<Vector3Int, int> pair in info.EnemyDic) 
                 {
                     CharacterList.Add(new BattleCharacterInfo(lv, DataContext.Instance.EnemyDic[pair.Value]));
+                    _enemyList.Add(pair.Value);
                     CharacterList[index].Index = index + 1;
                     if (pair.Value == 5)
                     {
@@ -100,7 +104,7 @@ namespace Battle
             _controllerDic.Clear();
             for (int i = 0; i < CharacterList.Count; i++)
             {
-                info.TileInfoDic[Utility.ConvertToVector2Int(CharacterList[i].Position)].HasCharacter = true;
+                info.TileAttachInfoDic[Utility.ConvertToVector2Int(CharacterList[i].Position)].HasCharacter = true;
                 obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/" + CharacterList[i].Controller), Vector3.zero, Quaternion.identity);
                 obj.transform.position = CharacterList[i].Position;
                 _controllerDic.Add(CharacterList[i].Index, obj.GetComponent<BattleCharacterController>());
@@ -208,7 +212,7 @@ namespace Battle
         {
             if (effect.Area == "Through")
             {
-                _areaList = GetTroughAreaList(SelectedCharacter.Position, new Vector3(_selectedPosition.x, Instance.Info.TileInfoDic[_selectedPosition].Height, _selectedPosition.y));
+                _areaList = GetTroughAreaList(SelectedCharacter.Position, new Vector3(_selectedPosition.x, Instance.Info.TileAttachInfoDic[_selectedPosition].Height, _selectedPosition.y));
             }
             else
             {

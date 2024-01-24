@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Explore
 {
-    public class NotMoveAI : AI
+    public class NotMoveAI : ExploreEnemyController
     {
         public override void Move()
         {

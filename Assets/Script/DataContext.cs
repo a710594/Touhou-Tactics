@@ -77,24 +77,27 @@ public class DataContext
     public Dictionary<int, ConsumablesModel> ConsumablesDic = new Dictionary<int, ConsumablesModel>();
     public Dictionary<int, CardModel> CardDic = new Dictionary<int, CardModel>();
 
-    public Dictionary<string, TileScriptableObject> TileScriptableObjectDic = new Dictionary<string, TileScriptableObject>();
-    public Dictionary<string, AttachScriptableObject> AttachScriptableObjectDic = new Dictionary<string, AttachScriptableObject>();
+    public Dictionary<string, TileSetting> TileSettingDic = new Dictionary<string, TileSetting>();
+    public Dictionary<string, AttachSetting> AttachSettingDic = new Dictionary<string, AttachSetting>();
 
     public void Init() 
     {
         JobList = Load<List<JobModel>>("Job", PrePathEnum.Data);
+        JobDic.Clear();
         for (int i=0; i<JobList.Count; i++) 
         {
             JobDic.Add(JobList[i].ID, JobList[i]);
         }
 
         SkillList = Load<List<SkillModel>>("Skill", PrePathEnum.Data);
+        SkillDic.Clear();
         for (int i = 0; i < SkillList.Count; i++)
         {
             SkillDic.Add(SkillList[i].ID, SkillList[i]);
         }
 
         EffectList = Load<List<EffectModel>>("Effect", PrePathEnum.Data);
+        EffectDic.Clear();
         for (int i=0; i<EffectList.Count; i++) 
         {
             EffectList[i].GetAreaList();
@@ -102,6 +105,7 @@ public class DataContext
         }
 
         StatusList = Load<List<StatusModel>>("Status", PrePathEnum.Data);
+        StatusDic.Clear();
         for (int i = 0; i < StatusList.Count; i++)
         {
             StatusList[i].GetAreaList();
@@ -109,6 +113,7 @@ public class DataContext
         }
 
         EnemyList = Load<List<EnemyModel>>("Enemy", PrePathEnum.Data);
+        EnemyDic.Clear();
         for (int i = 0; i < EnemyList.Count; i++)
         {
             EnemyList[i].GetDropList();
@@ -116,30 +121,35 @@ public class DataContext
         }
 
         SupportList = Load<List<SupportModel>>("Support", PrePathEnum.Data);
+        SupportDic.Clear();
         for (int i = 0; i < SupportList.Count; i++)
         {
             SupportDic.Add(SupportList[i].ID, SupportList[i]);
         }
 
         ItemList = Load<List<ItemModel>>("Item", PrePathEnum.Data);
+        ItemDic.Clear();
         for (int i = 0; i < ItemList.Count; i++)
         {
             ItemDic.Add(ItemList[i].ID, ItemList[i]);
         }
 
         PassiveList = Load<List<PassiveModel>>("Passive", PrePathEnum.Data);
+        PassiveDic.Clear();
         for (int i = 0; i < PassiveList.Count; i++)
         {
             PassiveDic.Add(PassiveList[i].ID, PassiveList[i]);
         }
 
         EquipList = Load<List<EquipModel>>("Equip", PrePathEnum.Data);
+        EquipDic.Clear();
         for (int i = 0; i < EquipList.Count; i++)
         {
             EquipDic.Add(EquipList[i].ID, EquipList[i]);
         }
 
         EnemyGroupList = Load<List<EnemyGroupModel>>("EnemyGroup", PrePathEnum.Data);
+        EnemyGroupDic.Clear();
         for (int i = 0; i < EnemyGroupList.Count; i++)
         {
             EnemyGroupList[i].GetEnemyList();
@@ -151,17 +161,20 @@ public class DataContext
         }
 
         FloorList = Load<List<FloorModel>>("Floor", PrePathEnum.Data);
+        FloorDic.Clear();
         for (int i = 0; i < FloorList.Count; i++)
         {
             FloorDic.Add(FloorList[i].Floor, FloorList[i]);
         }
 
         RoomList = Load<List<RoomModel>>("Room", PrePathEnum.Data);
+        RoomDic.Clear();
         for (int i = 0; i < RoomList.Count; i++)
         {
             RoomDic.Add(RoomList[i].ID, RoomList[i]);
         }
 
+        RoomPool.Clear();
         for (int i=0; i< FloorList.Count; i++) 
         {
             RoomPool.Add(FloorList[i].Floor, new List<int>());
@@ -195,6 +208,7 @@ public class DataContext
         }
 
         TreasureList = Load<List<TreasureModel>>("Treasure", PrePathEnum.Data);
+        TreasureDic.Clear();
         for (int i = 0; i < TreasureList.Count; i++)
         {
             TreasureList[i].GetList();
@@ -203,6 +217,7 @@ public class DataContext
 
         ShopList = Load<List<ShopModel>>("Shop", PrePathEnum.Data);
         ItemModel item;
+        ShopItemDic.Clear();
         for (int i = 0; i < ShopList.Count; i++)
         {
             ShopList[i].GetList();
@@ -221,24 +236,28 @@ public class DataContext
         }
 
         FoodMaterialList = Load<List<FoodMaterial>>("FoodMaterial", PrePathEnum.Data);
+        FoodMaterialDic.Clear();
         for (int i = 0; i < FoodMaterialList.Count; i++)
         {
             FoodMaterialDic.Add(FoodMaterialList[i].ID, FoodMaterialList[i]);
         }
 
         FoodResultList = Load<List<FoodResult>>("FoodResult", PrePathEnum.Data);
+        FoodResultDic.Clear();
         for (int i = 0; i < FoodResultList.Count; i++)
         {
             FoodResultDic.Add(FoodResultList[i].ID, FoodResultList[i]);
         }
 
         ConsumablesList = Load<List<ConsumablesModel>>("Consumables", PrePathEnum.Data);
+        ConsumablesDic.Clear();
         for (int i = 0; i < ConsumablesList.Count; i++)
         {
             ConsumablesDic.Add(ConsumablesList[i].ID, ConsumablesList[i]);
         }
 
         CardList = Load<List<CardModel>>("Card", PrePathEnum.Data);
+        CardDic.Clear();
         for (int i = 0; i < CardList.Count; i++)
         {
             CardDic.Add(CardList[i].ID, CardList[i]);
@@ -248,28 +267,30 @@ public class DataContext
         FileInfo[] Files;
         string str = ""; 
         string jsonString;
-        AttachScriptableObject attach;
-        TileScriptableObject tile;
+        AttachSetting attach;
+        TileSetting tile;
 
         d = new DirectoryInfo(Application.streamingAssetsPath + "./Attach/"); //Assuming Test is your Folder
         Files = d.GetFiles("*.json"); //Getting Text files
+        AttachSettingDic.Clear();
         foreach (FileInfo file in Files)
         {
             str = str + ", " + file.Name;
             jsonString = File.ReadAllText(file.FullName);
-            attach = JsonConvert.DeserializeObject<AttachScriptableObject>(jsonString);
-            AttachScriptableObjectDic.Add(attach.ID, attach);
+            attach = JsonConvert.DeserializeObject<AttachSetting>(jsonString);
+            AttachSettingDic.Add(attach.ID, attach);
 
         }
 
         d = new DirectoryInfo(Application.streamingAssetsPath + "./Tile/"); //Assuming Test is your Folder
         Files = d.GetFiles("*.json"); //Getting Text files
+        TileSettingDic.Clear();
         foreach (FileInfo file in Files)
         {
             str = str + ", " + file.Name;
             jsonString = File.ReadAllText(file.FullName);
-            tile = JsonConvert.DeserializeObject<TileScriptableObject>(jsonString);
-            TileScriptableObjectDic.Add(tile.ID, tile);
+            tile = JsonConvert.DeserializeObject<TileSetting>(jsonString);
+            TileSettingDic.Add(tile.ID, tile);
 
         }
     }

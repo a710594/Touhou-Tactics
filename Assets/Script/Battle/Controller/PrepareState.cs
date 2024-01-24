@@ -36,7 +36,7 @@ namespace Battle
                     battleCharacter.Index = _characterList.Count + 1;
                     battleCharacter.Position = pair.Value.transform.position;
                     _characterList.Add(battleCharacter);
-                    _info.TileInfoDic[Utility.ConvertToVector2Int(battleCharacter.Position)].HasCharacter = true;
+                    _info.TileAttachInfoDic[Utility.ConvertToVector2Int(battleCharacter.Position)].HasCharacter = true;
                     Instance._controllerDic.Add(battleCharacter.Index, pair.Value.GetComponent<BattleCharacterController>());
                     Instance._controllerDic[battleCharacter.Index].MoveEndHandler += Instance.OnMoveEnd;
                     Instance._controllerDic[battleCharacter.Index].SetDirectionHandler += Instance.SetDirection;
@@ -70,13 +70,13 @@ namespace Battle
                     if (!_tempDic.ContainsKey(characterInfo))
                     {
                         GameObject obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/" + characterInfo.Controller), Vector3.zero, Quaternion.identity);
-                        obj.transform.position = new Vector3(position.x, _info.TileInfoDic[position].Height, position.y);
+                        obj.transform.position = new Vector3(position.x, _info.TileAttachInfoDic[position].Height, position.y);
                         _tempDic.Add(characterInfo, obj);
                     }
                     else
                     {
                         _tempDic[characterInfo].SetActive(true);
-                        _tempDic[characterInfo].transform.position = new Vector3(position.x, _info.TileInfoDic[position].Height, position.y);
+                        _tempDic[characterInfo].transform.position = new Vector3(position.x, _info.TileAttachInfoDic[position].Height, position.y);
                     }
                     Instance._dragCameraUI.DontDrag = false;
 

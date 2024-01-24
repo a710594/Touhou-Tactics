@@ -10,7 +10,7 @@ public class ArcherPassive : Passive
     }
 
     //擁有狙擊者被動的角色專用,站的越高射程越遠
-    public static List<Vector2Int> GetRange(int range, int width, int height, Vector2Int start, Dictionary<Vector2Int, TileInfo> tileInfoDic)
+    public static List<Vector2Int> GetRange(int range, int width, int height, Vector2Int start, Dictionary<Vector2Int, TileAttachInfo> tileInfoDic)
     {
         int heightDiff;
         int newRange;

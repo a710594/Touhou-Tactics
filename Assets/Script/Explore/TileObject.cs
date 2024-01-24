@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Explore
 {
-    public class TileObject : MonoBehaviour
+    public class TileObject
     {
         public string Name;
         public GameObject Cube;

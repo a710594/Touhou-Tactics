@@ -182,6 +182,5 @@ public class Food
             effect.Area = "-1";
             effect.AreaList = new List<Vector2Int>();
         }
-        Debug.Log(Effect);
     }
 }

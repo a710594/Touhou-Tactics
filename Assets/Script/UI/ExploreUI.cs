@@ -11,52 +11,27 @@ public class ExploreUI : MonoBehaviour
     public Text fpsText;
     public Camera BigMapCamera;
 
-    private bool _isLock = false;
     private float deltaTime;
-
-    private void Lock() 
-    {
-        _isLock = true;
-        ExploreManager.Instance.Player.CanMove = false;
-    }
-
-    private void Unlock() 
-    {
-        _isLock = false;
-        ExploreManager.Instance.Player.CanMove = true;
-    }
 
     // Start is called before the first frame update
     void Awake()
     {
         TreasureUI.gameObject.SetActive(false);
-        TreasureUI.CloseHandler += Unlock;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!_isLock)
+        if (!InputMamager.Instance.IsLock)
         {
-            if (Input.GetKeyDown(KeyCode.I))
-            {
-                BagUI bagUI = BagUI.Open();
-                bagUI.SetNormalState();
-                bagUI.CloseHandler = Unlock;
-                Lock();
-            }
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 Treasure treasure = ExploreManager.Instance.GetTreasure();
                 if (treasure != null)
                 {
                     TreasureUI.Open(treasure.ID);
-                    Lock();
+                    InputMamager.Instance.Lock();
                 }
-            }
-            if (Input.GetKeyDown(KeyCode.C)) 
-            {
-                SelectCharacterUI selectCharacterUI = SelectCharacterUI.Open();
             }
         }
 
@@ -66,16 +41,12 @@ public class ExploreUI : MonoBehaviour
             if (BigMap.activeSelf)
             {
                 BigMapCamera.Render();
-                Lock();
+                InputMamager.Instance.Lock();
             }
             else
             {
-                Unlock();
+                InputMamager.Instance.Unlock();
             }
-        }
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            FileSystem.Instance.Save();
         }
 
         deltaTime += (Time.deltaTime - deltaTime) * 0.1f;

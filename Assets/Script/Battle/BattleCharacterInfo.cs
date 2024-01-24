@@ -196,11 +196,8 @@ public class BattleCharacterInfo
 
     public void SetDamage(int damage)
     {
-        if (CurrentHP > 0)
-        {
-            CurrentHP -= damage;
-        }
-        else
+        CurrentHP -= damage;
+        if (CurrentHP < 0)
         {
             CurrentHP = 0;
         }
@@ -226,7 +223,7 @@ public class BattleCharacterInfo
 
     public void AddStatus(Status status) 
     {
-        StatusList.Add(status);
+        StatusList.Add((Status)status.Clone()); ;
     }
 
     public void CheckStatus(List<FloatingNumberData> floatingList) 

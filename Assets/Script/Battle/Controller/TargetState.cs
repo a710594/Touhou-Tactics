@@ -25,7 +25,7 @@ namespace Battle
 
                 if (Passive.Contains<ArcherPassive>(_character.PassiveList))
                 {
-                    _rangeList = ArcherPassive.GetRange(_effect.Range, _info.Width, _info.Height, Utility.ConvertToVector2Int(_character.Position), _info.TileInfoDic);
+                    _rangeList = ArcherPassive.GetRange(_effect.Range, _info.Width, _info.Height, Utility.ConvertToVector2Int(_character.Position), _info.TileAttachInfoDic);
                 }
                 else
                 {
@@ -77,7 +77,7 @@ namespace Battle
                         }
                     }
 
-                    Dictionary<Vector2Int, TileInfo> tileDic = Instance.Info.TileInfoDic;
+                    Dictionary<Vector2Int, TileAttachInfo> tileDic = Instance.Info.TileAttachInfoDic;
                     Vector3 p = new Vector3(position.x, tileDic[position].Height, position.y);
                     if (_effect.Track == EffectModel.TrackEnum.Straight)
                     {

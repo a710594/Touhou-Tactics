@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class CharacterInfoUI : MonoBehaviour
 {
+    public Text LvLabel;
     public Text NameLabel;
     public Text HitRateLabel;
     public BattleValueBar HpBar;
@@ -26,6 +27,7 @@ public class CharacterInfoUI : MonoBehaviour
         StatusIcon icon;
 
         _character = character;
+        LvLabel.text = "Lv. " + character.Lv;
         NameLabel.text = character.Name;
         HitRateLabel.gameObject.SetActive(false);
         HpBar.SetValue(character.CurrentHP, character.MaxHP);
@@ -58,6 +60,7 @@ public class CharacterInfoUI : MonoBehaviour
 
     public void SetData(CharacterInfo character)
     {
+        LvLabel.text = "Lv. " + CharacterManager.Instance.Info.Lv;
         NameLabel.text = character.Name;
         HitRateLabel.gameObject.SetActive(false);
         HpBar.SetValue(character.CurrentHP, character.MaxHP);

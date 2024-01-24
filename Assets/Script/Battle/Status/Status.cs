@@ -1,8 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Status
+public class Status :ICloneable
 {
     public StatusModel.TypeEnum Type;
     public string Name;
@@ -79,6 +80,11 @@ public class Status
             Name += "¤U­°";
             Comment += "¤U­°" + (100 - value) + "%";
         }
+    }
+
+    public object Clone()
+    {
+        return this.MemberwiseClone();
     }
 
     public void ResetTurn()

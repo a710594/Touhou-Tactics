@@ -111,6 +111,9 @@ public class ButtonPlus : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     protected void Awake()
     {
-        Button.onClick.AddListener(OnClick);
+        if (Button != null)
+        {
+            Button.onClick.AddListener(OnClick);
+        }
     }
 }

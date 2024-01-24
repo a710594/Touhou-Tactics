@@ -29,7 +29,7 @@ public class Generator2D : MonoBehaviour {
         //Generate();
     }
 
-    public void Generate(int floor) {
+    public ExploreInfo Generate(int floor) {
         FloorModel data = DataContext.Instance.FloorDic[floor];
         _floorSize = new Vector2Int(data.Width, data.Height);
         _roomCount = data.RoomCount;
@@ -49,33 +49,34 @@ public class Generator2D : MonoBehaviour {
         PathfindHallways();
         PlaceWall();
         PlaceStartAndGoal();
-        PlaceObject();
         info.Start = _start;
         info.Goal = _goal;
-        ExploreManager.Instance.SetData(info);
+        info.PlayerPosition = _start;
+
+        return info;
     }
 
-    public void Relod(ExploreInfo info)
-    {
-        this.info = info;
-        _start = info.Start;
-        _goal = info.Goal;
-        PlaceObject();
-        foreach(KeyValuePair<Vector2Int, TileObject> pair in info.TileDic) 
-        {
-            if (info.VisitedList.Contains(pair.Key)) 
-            {
-                if (pair.Value.Quad != null) 
-                {
-                    pair.Value.Quad.layer = ExploreManager.Instance.MapLayer;
-                }
-                if (pair.Value.Icon != null) 
-                {
-                    pair.Value.Icon.layer = ExploreManager.Instance.MapLayer;
-                }
-            }
-        }
-    }
+    //public void Relod(ExploreInfo info)
+    //{
+    //    this.info = info;
+    //    _start = info.Start;
+    //    _goal = info.Goal;
+    //    PlaceObject();
+    //    foreach(KeyValuePair<Vector2Int, TileObject> pair in info.TileDic) 
+    //    {
+    //        if (info.VisitedList.Contains(pair.Key)) 
+    //        {
+    //            if (pair.Value.Quad != null) 
+    //            {
+    //                pair.Value.Quad.layer = ExploreManager.Instance.MapLayer;
+    //            }
+    //            if (pair.Value.Icon != null) 
+    //            {
+    //                pair.Value.Icon.layer = ExploreManager.Instance.MapLayer;
+    //            }
+    //        }
+    //    }
+    //}
 
     void PlaceRooms() {
         for (int i = 0; i < _roomCount; i++) {
@@ -436,48 +437,5 @@ public class Generator2D : MonoBehaviour {
         {
             return false;
         }
-    }
-
-    private void PlaceObject() 
-    {
-        int count = 0;
-        GameObject obj = null;
-        foreach(KeyValuePair<Vector2Int, TileObject> pair in info.TileDic) 
-        {
-            obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + pair.Value.Name), Vector3.zero, Quaternion.identity);
-            count++;
-
-            if (obj != null)
-            {
-                obj.transform.position = new Vector3(pair.Key.x, 0, pair.Key.y);
-                obj.transform.SetParent(transform);
-                info.TileDic[pair.Key].Cube = obj;
-                info.TileDic[pair.Key].Quad = obj.transform.GetChild(0).gameObject;
-            }
-        }
-
-        foreach(KeyValuePair<Vector2Int, Treasure> pair in info.TreasureDic)
-        {
-            count++;
-            obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + pair.Value.Prefab), Vector3.zero, Quaternion.identity);
-            obj.transform.position = new Vector3(pair.Key.x, pair.Value.Height, pair.Key.y);
-            info.TileDic[pair.Key].Treasure = obj;
-            if (obj.transform.childCount > 0)
-            {
-                info.TileDic[pair.Key].Icon = obj.transform.GetChild(0).gameObject;
-            }
-        }
-
-        obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Start"), Vector3.zero, Quaternion.identity);
-        obj.transform.position = new Vector3(_start.x, 0, _start.y);
-        obj.transform.eulerAngles = new Vector3(90, 0, 0);
-        obj.transform.SetParent(transform);
-        info.TileDic[_start].Icon = obj;
-
-        obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Goal"), Vector3.zero, Quaternion.identity);
-        obj.transform.position = new Vector3(_goal.x, 0, _goal.y);
-        obj.transform.eulerAngles = new Vector3(90, 0, 0);
-        obj.transform.SetParent(transform);
-        info.TileDic[_goal].Icon = obj;
     }
 }

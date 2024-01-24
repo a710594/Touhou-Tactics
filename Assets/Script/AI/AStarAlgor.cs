@@ -105,7 +105,7 @@ namespace Battle
         public int GetDistance(Vector2Int start, Vector2Int goal, BattleCharacterInfo.FactionEnum faction)
         {
             int distance = 0;
-            if (Info.TileInfoDic[goal].MoveCost == -1)
+            if (Info.TileAttachInfoDic[goal].MoveCost == -1)
             {
                 return -1;
             }
@@ -180,22 +180,22 @@ namespace Battle
         {
             List<Vector2Int> list = new List<Vector2Int>();
 
-            if (Info.TileInfoDic.ContainsKey(current + Vector2Int.left) && MoveCost(current, current + Vector2Int.left, goal, faction) > 0)
+            if (Info.TileAttachInfoDic.ContainsKey(current + Vector2Int.left) && MoveCost(current, current + Vector2Int.left, goal, faction) > 0)
             {
                 list.Add(current + Vector2Int.left);
             }
 
-            if (Info.TileInfoDic.ContainsKey(current + Vector2Int.right) && MoveCost(current, current + Vector2Int.right, goal, faction) > 0)
+            if (Info.TileAttachInfoDic.ContainsKey(current + Vector2Int.right) && MoveCost(current, current + Vector2Int.right, goal, faction) > 0)
             {
                 list.Add(current + Vector2Int.right);
             }
 
-            if (Info.TileInfoDic.ContainsKey(current + Vector2Int.up) && MoveCost(current, current + Vector2Int.up, goal, faction) > 0)
+            if (Info.TileAttachInfoDic.ContainsKey(current + Vector2Int.up) && MoveCost(current, current + Vector2Int.up, goal, faction) > 0)
             {
                 list.Add(current + Vector2Int.up);
             }
 
-            if (Info.TileInfoDic.ContainsKey(current + Vector2Int.down) && MoveCost(current, current + Vector2Int.down, goal, faction) > 0)
+            if (Info.TileAttachInfoDic.ContainsKey(current + Vector2Int.down) && MoveCost(current, current + Vector2Int.down, goal, faction) > 0)
             {
                 list.Add(current + Vector2Int.down);
             }
@@ -220,8 +220,8 @@ namespace Battle
                         }
                     }
                 }
-                int height = Info.TileInfoDic[from].Height - Info.TileInfoDic[to].Height;
-                cost = Info.TileInfoDic[to].MoveCost + Mathf.Abs(height);
+                int height = Info.TileAttachInfoDic[from].Height - Info.TileAttachInfoDic[to].Height;
+                cost = Info.TileAttachInfoDic[to].MoveCost + Mathf.Abs(height);
             }
             catch (Exception ex)
             {

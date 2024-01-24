@@ -18,10 +18,15 @@ public class EnemyGroupModel
 
     public void GetEnemyList() 
     {
-        EnemyList.Add(Enemy_1);
-        EnemyList.Add(Enemy_2);
-        EnemyList.Add(Enemy_3);
-        EnemyList.Add(Enemy_4);
-        EnemyList.Add(Enemy_5); //
+        if(Enemy_1 != -1)
+            EnemyList.Add(Enemy_1);
+        if (Enemy_2 != -1)
+            EnemyList.Add(Enemy_2);
+        if (Enemy_3 != -1)
+            EnemyList.Add(Enemy_3);
+        if (Enemy_4 != -1)
+            EnemyList.Add(Enemy_4);
+        if (Enemy_5 != -1)
+            EnemyList.Add(Enemy_5);
     }
 }

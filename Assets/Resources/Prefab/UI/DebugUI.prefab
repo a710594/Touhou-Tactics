@@ -615,7 +615,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 2}
-  m_SizeDelta: {x: 0, y: 150}
+  m_SizeDelta: {x: 0, y: 205.4418}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &2293591606713101311
 CanvasRenderer:
@@ -2169,6 +2169,8 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: "\u589E\u52A0\u91D1\u9322"
       m_Image: {fileID: 0}
+    - m_Text: "\u8A2D\u5B9A\u7B49\u7D1A"
+      m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -2591,6 +2593,7 @@ MonoBehaviour:
   Dropdown: {fileID: 2293591608020038584}
   DebugItemUI: {fileID: 2293591607105669519}
   DebugMoneyUI: {fileID: 2293591606531758544}
+  DebugLvUI: {fileID: 929455331}
 --- !u!1 &2293591608364647939
 GameObject:
   m_ObjectHideFlags: 0
@@ -2907,13 +2910,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7628332347967064194}
+  - component: {fileID: 929455331}
   m_Layer: 5
   m_Name: DebugLUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7628332347967064194
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2936,6 +2940,20 @@ RectTransform:
   m_AnchoredPosition: {x: -785, y: 384}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &929455331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5856153222354173673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ccfce07c7702c744ab169a3d10cc57b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LvField: {fileID: 1603102140656012904}
+  ConfirmButton: {fileID: 3556144958351453732}
 --- !u!1 &7529949611317680362
 GameObject:
   m_ObjectHideFlags: 0

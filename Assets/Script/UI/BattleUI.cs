@@ -116,7 +116,7 @@ public class BattleUI : MonoBehaviour
     public void SetFloatingNumberPoolAnchor(int id, BattleCharacterController characterController)
     {
         FloatingNumberPool floatingNumberPool = Instantiate(FloatingNumberPool);
-        floatingNumberPool.transform.parent = transform;
+        floatingNumberPool.transform.SetParent(transform);
         floatingNumberPool.SetAnchor(characterController.HpAnchor);
         _floatingNumberPoolDic.Add(id, floatingNumberPool);
     }

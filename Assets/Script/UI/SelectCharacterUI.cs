@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,10 +6,14 @@ using UnityEngine.UI;
 
 public class SelectCharacterUI : MonoBehaviour
 {
+    public Action CloseHandler;
+
     public RectTransform RectTransform;
     public ScrollView ScrollView;
     public TipLabel TipLabel;
     public Button CloseButton;
+    public Text LvLabel;
+    public Text ExpLabel;
 
     private static TipLabel _tipLabel;
 
@@ -21,6 +26,8 @@ public class SelectCharacterUI : MonoBehaviour
         selectCharacterUI.RectTransform.offsetMax = Vector3.zero;
         selectCharacterUI.RectTransform.offsetMin = Vector3.zero;
         selectCharacterUI.ScrollView.SetData(new List<object>(CharacterManager.Instance.Info.CharacterList));
+        selectCharacterUI.LvLabel.text = "∂§•Óµ•Ø≈°G" + CharacterManager.Instance.Info.Lv;
+        selectCharacterUI.ExpLabel.text = "∏g≈Á≠»°G" + CharacterManager.Instance.Info.Exp + "/" + CharacterManager.Instance.NeedExp(CharacterManager.Instance.Info.Lv);
         _tipLabel = selectCharacterUI.TipLabel;
 
         return selectCharacterUI;
@@ -31,8 +38,13 @@ public class SelectCharacterUI : MonoBehaviour
         _tipLabel.SetLabel(str);
     }
 
-    private void Close()
+    public void Close()
     {
+        if (CloseHandler != null)
+        {
+            CloseHandler();
+        }
+
         Destroy(gameObject);
     }
 

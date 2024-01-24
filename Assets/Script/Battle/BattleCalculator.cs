@@ -112,7 +112,7 @@ namespace Battle
             }
             else
             {
-                if ((hitRate - 1) * 0.2f > UnityEngine.Random.Range(0f, 1f))
+                if ((hitRate - 1) * 1f > UnityEngine.Random.Range(0f, 1f))
                 {
                     return HitType.Critical;
                 }
@@ -277,7 +277,7 @@ namespace Battle
             }
         }
 
-        public static void CheckLine(Vector3 from, Vector3 to, List<BattleCharacterInfo> characterList, Dictionary<Vector2Int, TileInfo> tileDic, out bool isBlock, out Vector3 result)
+        public static void CheckLine(Vector3 from, Vector3 to, List<BattleCharacterInfo> characterList, Dictionary<Vector2Int, TileAttachInfo> tileDic, out bool isBlock, out Vector3 result)
         {
             isBlock = false;
             int height;
@@ -291,7 +291,7 @@ namespace Battle
                     height = tileDic[position].Height;
                     if (tileDic[position].AttachID != null)
                     {
-                        height += DataContext.Instance.AttachScriptableObjectDic[tileDic[position].AttachID].Height;
+                        height += DataContext.Instance.AttachSettingDic[tileDic[position].AttachID].Height;
                     }
 
                     for (int j = 0; j < characterList.Count; j++)
@@ -321,7 +321,7 @@ namespace Battle
             int height;
             Vector2Int position;
             List<Vector3> list = Utility.DrawLine3D(from, to);
-            Dictionary<Vector2Int, TileInfo> tileDic = Info.TileInfoDic;
+            Dictionary<Vector2Int, TileAttachInfo> tileDic = Info.TileAttachInfoDic;
             for (int i = 0; i < list.Count; i++)
             {
                 position = Utility.ConvertToVector2Int(list[i]);
@@ -341,7 +341,7 @@ namespace Battle
             result = to;
         }
 
-        public static void CheckParabola(Vector3 from, Vector3 to, int parabolaHeight, Dictionary<Vector2Int, TileInfo> tileDic, out bool isBlock, out List<Vector3> result)
+        public static void CheckParabola(Vector3 from, Vector3 to, int parabolaHeight, Dictionary<Vector2Int, TileAttachInfo> tileDic, out bool isBlock, out List<Vector3> result)
         {
             isBlock = false;
             result = new List<Vector3>();
@@ -356,7 +356,7 @@ namespace Battle
                     height = tileDic[position].Height;
                     if (tileDic[position].AttachID != null)
                     {
-                        height += DataContext.Instance.AttachScriptableObjectDic[tileDic[position].AttachID].Height;
+                        height += DataContext.Instance.AttachSettingDic[tileDic[position].AttachID].Height;
                     }
 
                     if (height > list[i].y)
@@ -382,7 +382,7 @@ namespace Battle
             while (true) 
             {
                 v2 = new Vector2Int(Mathf.RoundToInt(Utility.RandomGaussian(0, Info.Width - 1)), Mathf.RoundToInt(Utility.RandomGaussian(0, Info.Height - 1)));
-                if(Info.TileInfoDic[v2].MoveCost > 0) 
+                if(Info.TileAttachInfoDic[v2].MoveCost > 0) 
                 {
                     //檢查是否為保留區
                     if (Info.NoAttachList.Contains(v2)) 
@@ -409,7 +409,7 @@ namespace Battle
                             path = GetPath(v2, Utility.ConvertToVector2Int(CharacterList[i].Position), CharacterList[i].Faction);
                             if (path != null)
                             {
-                                v3 = new Vector3(v2.x, Info.TileInfoDic[v2].Height, v2.y);
+                                v3 = new Vector3(v2.x, Info.TileAttachInfoDic[v2].Height, v2.y);
                                 hasPath = true;
                                 break;
                             }

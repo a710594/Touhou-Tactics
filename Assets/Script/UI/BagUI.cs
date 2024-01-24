@@ -33,17 +33,20 @@ public class BagUI : MonoBehaviour
     private bool _canUse;
     private StateEnum _currentState;
     private object _selectedObj = null;
+    private static BagUI _bagUI;
 
     public static BagUI Open() 
     {
-        GameObject obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/UI/BagUI"), Vector3.zero, Quaternion.identity);
-        GameObject canvas = GameObject.Find("Canvas");
-        obj.transform.SetParent(canvas.transform);
-        BagUI bagUI = obj.GetComponent<BagUI>();
-        bagUI.RectTransform.offsetMax = Vector3.zero;
-        bagUI.RectTransform.offsetMin = Vector3.zero;
-
-        return bagUI;
+        if (_bagUI == null)
+        {
+            GameObject obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/UI/BagUI"), Vector3.zero, Quaternion.identity);
+            GameObject canvas = GameObject.Find("Canvas");
+            obj.transform.SetParent(canvas.transform);
+            _bagUI = obj.GetComponent<BagUI>();
+            _bagUI.RectTransform.offsetMax = Vector3.zero;
+            _bagUI.RectTransform.offsetMin = Vector3.zero;
+        }
+        return _bagUI;
     }
 
     public void SetNormalState() 
@@ -183,7 +186,7 @@ public class BagUI : MonoBehaviour
         }
     }
 
-    private void CloseOnClick() 
+    public void Close() 
     {
         if (CloseHandler != null) 
         {
@@ -192,14 +195,11 @@ public class BagUI : MonoBehaviour
 
         TipLabel.Stop();
         Destroy(gameObject);
+        _bagUI = null;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.I)) 
-        {
-            CloseOnClick();
-        }
     }
 
     private void Awake()
@@ -213,6 +213,6 @@ public class BagUI : MonoBehaviour
         BagEquipGroup.ScrollHandler += ScrollOnClick;
 
         UseButton.onClick.AddListener(UseOnClick);
-        CloseButton.onClick.AddListener(CloseOnClick);
+        CloseButton.onClick.AddListener(Close);
     }
 }

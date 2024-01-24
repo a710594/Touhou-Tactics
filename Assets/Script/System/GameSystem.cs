@@ -14,6 +14,7 @@ public class GameSystem : MonoBehaviour
         SceneController.Instance.Init();
         ItemManager.Instance.Init();
         CharacterManager.Instance.Init();
+        InputMamager.Instance.Init();
         if (SystemManager.Instance.SystemInfo.CurrentScene == "Explore")
         {
             Explore.ExploreManager.Instance.Init();

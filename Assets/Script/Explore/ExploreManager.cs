@@ -31,7 +31,7 @@ namespace Explore
 
         private Timer _timer = new Timer();
         private ExploreInfo _info;
-        private List<AI> _enemyList = new List<AI>();
+        private List<ExploreEnemyController> _enemyList = new List<ExploreEnemyController>();
 
         public void Init() 
         {
@@ -39,27 +39,32 @@ namespace Explore
             if (file != null)
             {
                 _info = new ExploreInfo(file);
-                Reload();
             }
             else if(SystemManager.Instance.SystemInfo.MaxFloor == 1)
             {
                 file = DataContext.Instance.Load<ExploreFile>("Explore/Floor_1", DataContext.PrePathEnum.Map);
                 _info = new ExploreInfo(file);
-                Reload();
             }
             else
             {
                 Generator2D generator2D = GameObject.Find("Generator2D").GetComponent<Generator2D>();
-                generator2D.Generate(SystemManager.Instance.SystemInfo.MaxFloor);
+                _info = generator2D.Generate(SystemManager.Instance.SystemInfo.MaxFloor);
             }
+
+            SetObject();
         }
 
-        public void SetData(ExploreInfo info)
+        public void Init(int floor) 
         {
-            _info = info;
-            _info.PlayerPosition = info.Start;
-            _info.PlayerRotation = 0;
-            _info.VisitedList.Clear();
+            Generator2D generator2D = GameObject.Find("Generator2D").GetComponent<Generator2D>();
+            _info = generator2D.Generate(floor);
+            SetObject();
+        }
+
+        public void Test() 
+        {
+            ExploreFile file = DataContext.Instance.Load<ExploreFile>("Explore/Floor_1", DataContext.PrePathEnum.Map);
+            _info = new ExploreInfo(file);
             SetObject();
         }
 
@@ -67,17 +72,7 @@ namespace Explore
         {
             if (SceneController.Instance.CurrentScene == "Explore")
             {
-                _info.PlayerPosition = Utility.ConvertToVector2Int(Player.MoveTo);
-                _info.PlayerRotation = Mathf.RoundToInt(Player.transform.eulerAngles.y);
-                for (int i = 0; i < _enemyList.Count; i++)
-                {
-                    ExploreEnemyInfo info = new ExploreEnemyInfo();
-                    info.Prefab = _enemyList[i].Prefab;
-                    info.Map = _enemyList[i].Map;
-                    info.Position = Utility.ConvertToVector2Int(_enemyList[i].MoveTo);
-                    info.Rotation = Mathf.RoundToInt(_enemyList[i].transform.eulerAngles.y);
-                    _info.EnemyInfoList.Add(info);
-                }
+                SetInfo();
                 ExploreFile file = new ExploreFile(_info);
                 DataContext.Instance.Save(file, _fileName, DataContext.PrePathEnum.Save);
             }
@@ -103,14 +98,14 @@ namespace Explore
             }
         }
 
-        public bool IsWalkable(AI enemy, Vector3 position) //for enemy
+        public bool IsWalkable(ExploreEnemyController enemy, Vector3 position) //for enemy
         {
             Vector2Int v2 = Utility.ConvertToVector2Int(position);
             if (InBound(Utility.ConvertToVector2Int(position)))
             {
                 if (_info.WalkableList.Contains(v2) && !_info.TreasureDic.ContainsKey(v2))
                 {
-                    for (int i = 0; i < _enemyList.Count; i++)
+                    for(int i=0; i<_enemyList.Count; i++)
                     {
                         if (enemy != _enemyList[i] && Utility.ComparePosition(position, _enemyList[i].MoveTo))
                         {
@@ -148,35 +143,25 @@ namespace Explore
             {
                 if (Utility.ComparePosition(_enemyList[i].MoveTo, Player.MoveTo))
                 {
-                    Player.CanMove = false;
-                    _info.PlayerPosition = Utility.ConvertToVector2Int(Player.MoveTo);
-                    _info.PlayerRotation = Mathf.RoundToInt(Player.transform.eulerAngles.y);
-                    for (int j=0; j<_enemyList.Count; j++) 
-                    {
-                        if (_enemyList[j] != _enemyList[i]) 
-                        {
-                            ExploreEnemyInfo info = new ExploreEnemyInfo();
-                            info.Prefab = _enemyList[j].Prefab;
-                            info.Position = Utility.ConvertToVector2Int(_enemyList[j].MoveTo);
-                            info.Rotation = Mathf.RoundToInt(_enemyList[j].transform.eulerAngles.y);
-                            _info.EnemyInfoList.Add(info);
-                        }
-                    }
+                    InputMamager.Instance.Lock();
+                    SetInfo();
+                    _info.EnemyInfoList.Remove(_enemyList[i].Info);
                     _timer.Start(1f, ()=> 
                     {
                         SceneController.Instance.ChangeScene("Battle", () =>
                         {
-                            BattleMapBuilder randomMapGenerator = GameObject.Find("BattleMapGenerator").GetComponent<BattleMapBuilder>();
+                            InputMamager.Instance.Unlock();
+                            BattleMapBuilder battleMapBuilder = GameObject.Find("BattleMapGenerator").GetComponent<BattleMapBuilder>();
                             BattleInfo battleInfo;
-                            if (_enemyList[i].Map != null)
+                            if (_enemyList[i].Info.Map != null && _enemyList[i].Info.Map != "")
                             {
-                                randomMapGenerator.Get(_enemyList[i].Map, out battleInfo);
+                                battleInfo = battleMapBuilder.Get(_enemyList[i].Info.Map);
                             }
                             else
                             {
-                                randomMapGenerator.Generate(out battleInfo);
+                                battleInfo = battleMapBuilder.Generate();
                             }
-                            PathManager.Instance.LoadData(battleInfo.TileInfoDic);
+                            PathManager.Instance.LoadData(battleInfo.TileAttachInfoDic);
                             BattleController.Instance.Init(_info.Floor, _info.Floor, battleInfo);
                         });
                     });
@@ -187,26 +172,44 @@ namespace Explore
 
             if(Utility.ConvertToVector2Int(Player.MoveTo) == _info.Start) 
             {
+                InputMamager.Instance.Lock();
                 _timer.Start(1f, () => 
                 { 
-                    SceneController.Instance.ChangeScene("Camp", () =>
+                    ConfirmUI.Open("要回到營地嗎？", "確定", "取消", () =>
                     {
+                        SceneController.Instance.ChangeScene("Camp", () =>
+                        {
+                            CharacterManager.Instance.RecoverAllHP();
+                            InputMamager.Instance.Unlock();
+                        });
+                    }, ()=> 
+                    {
+                        InputMamager.Instance.Unlock();
                     });
                 });
             }
             else if(Utility.ConvertToVector2Int(Player.MoveTo) == _info.Goal) 
             {
-                _info.Floor++;
-                if (_info.Floor > SystemManager.Instance.SystemInfo.MaxFloor)
+                InputMamager.Instance.Lock();
+                ConfirmUI.Open("要前往下一層並回到營地嗎？", "確定", "取消", () =>
                 {
-                    SystemManager.Instance.SystemInfo.MaxFloor = _info.Floor;
-                }
-
-                _timer.Start(1f, () =>
-                {
-                    SceneController.Instance.ChangeScene("Camp", () =>
+                    _info.Floor++;
+                    if (_info.Floor > SystemManager.Instance.SystemInfo.MaxFloor)
                     {
+                        SystemManager.Instance.SystemInfo.MaxFloor = _info.Floor;
+                    }
+
+                    _timer.Start(1f, () =>
+                    {
+                        SceneController.Instance.ChangeScene("Camp", () =>
+                        {
+                            CharacterManager.Instance.RecoverAllHP();
+                            InputMamager.Instance.Unlock();
+                        });
                     });
+                }, ()=> 
+                {
+                    InputMamager.Instance.Unlock();
                 });
             }
         }
@@ -263,13 +266,27 @@ namespace Explore
 
         public void Reload() 
         {
-            Generator2D generator2D = GameObject.Find("Generator2D").GetComponent<Generator2D>();
-            generator2D.Relod(_info);
             SetObject();
-            if(_info.PlayerPosition == _info.Goal) 
+
+            //foreach (KeyValuePair<Vector2Int, TileObject> pair in _info.TileDic)
+            //{
+            //    if (_info.VisitedList.Contains(pair.Key))
+            //    {
+            //        if (pair.Value.Quad != null)
+            //        {
+            //            pair.Value.Quad.layer = MapLayer;
+            //        }
+            //        if (pair.Value.Icon != null)
+            //        {
+            //            pair.Value.Icon.layer = MapLayer;
+            //        }
+            //    }
+            //}
+
+            if (_info.PlayerPosition == _info.Goal) 
             {
                 _info.TileDic[_info.Goal].Icon.transform.GetChild(0).gameObject.SetActive(true); //顯示粒子
-                ConfirmUI.Open("你已經打倒了出口的守衛！要前往下一層樓嗎？", "確定", "取消", ()=> 
+                ConfirmUI.Open("你已經打倒了出口的守衛！要前往下一層並回到營地嗎？", "確定", "取消", ()=> 
                 {
                     _info.Floor++;
                     if(_info.Floor > SystemManager.Instance.SystemInfo.MaxFloor) 
@@ -279,13 +296,8 @@ namespace Explore
 
                     SceneController.Instance.ChangeScene("Camp", () =>
                     {
+                        CharacterManager.Instance.RecoverAllHP();
                     });
-
-                    //SceneController.Instance.ChangeScene("Explore", ()=> 
-                    //{
-                    //    Generator2D generator2D = (GameObject.Find("Generator2D")).GetComponent<Generator2D>();
-                    //    generator2D.Generate(_info.Floor + 1);
-                    //});
                 }, null);
             }
         }
@@ -320,9 +332,64 @@ namespace Explore
 
         private void SetObject() 
         {
+            GameObject obj = null;
+            Transform parent = GameObject.Find("Generator2D").transform;
+            foreach (KeyValuePair<Vector2Int, TileObject> pair in _info.TileDic)
+            {
+                obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + pair.Value.Name), Vector3.zero, Quaternion.identity);
+
+                if (obj != null)
+                {
+                    obj.transform.position = new Vector3(pair.Key.x, 0, pair.Key.y);
+                    obj.transform.SetParent(parent);
+                    _info.TileDic[pair.Key].Cube = obj;
+                    _info.TileDic[pair.Key].Quad = obj.transform.GetChild(0).gameObject;
+
+                    if (_info.VisitedList.Contains(pair.Key))
+                    {
+                        pair.Value.Quad.layer = MapLayer;
+                    }
+                }
+            }
+
+            foreach (KeyValuePair<Vector2Int, Treasure> pair in _info.TreasureDic)
+            {
+                obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + pair.Value.Prefab), Vector3.zero, Quaternion.identity);
+                obj.transform.position = new Vector3(pair.Key.x, pair.Value.Height, pair.Key.y);
+                _info.TileDic[pair.Key].Treasure = obj;
+                if (obj.transform.childCount > 0)
+                {
+                    _info.TileDic[pair.Key].Icon = obj.transform.GetChild(0).gameObject;
+                    if (_info.VisitedList.Contains(pair.Key))
+                    {
+                        _info.TileDic[pair.Key].Icon.layer = MapLayer;
+                    }
+                }
+            }
+
+            obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Start"), Vector3.zero, Quaternion.identity);
+            obj.transform.position = new Vector3(_info.Start.x, 0, _info.Start.y);
+            obj.transform.eulerAngles = new Vector3(90, 0, 0);
+            obj.transform.SetParent(parent);
+            _info.TileDic[_info.Start].Icon = obj;
+            if (_info.VisitedList.Contains(_info.Start))
+            {
+                _info.TileDic[_info.Start].Icon.layer = MapLayer;
+            }
+
+            obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Goal"), Vector3.zero, Quaternion.identity);
+            obj.transform.position = new Vector3(_info.Goal.x, 0, _info.Goal.y);
+            obj.transform.eulerAngles = new Vector3(90, 0, 0);
+            obj.transform.SetParent(parent);
+            _info.TileDic[_info.Goal].Icon = obj;
+            if (_info.VisitedList.Contains(_info.Goal))
+            {
+                _info.TileDic[_info.Goal].Icon.layer = MapLayer;
+            }
+
             _enemyList.Clear();
-            GameObject obj;
-            AI mashroom;
+            ExploreEnemyInfo info;
+            ExploreEnemyController controller;
             if (_info.EnemyInfoList.Count == 0)
             {
                 int random;
@@ -337,27 +404,28 @@ namespace Explore
                 for (int i = 0; i < 5; i++)
                 {
                     obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Mashroom"), Vector3.zero, Quaternion.identity);
-                    mashroom = obj.GetComponent<AI>();
+                    controller = obj.GetComponent<ExploreEnemyController>();
                     random = UnityEngine.Random.Range(0, walkableList.Count);
-                    mashroom.Init("Mashroom", null, walkableList[random], 0);
+                    info = new ExploreEnemyInfo("Mashroom", null, walkableList[random], 0);
+                    controller.Init(info);
                     walkableList.RemoveAt(random);
-                    _enemyList.Add(mashroom);
+                    _enemyList.Add(controller);
                 }
                 obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Mashroom_NotMove"), Vector3.zero, Quaternion.identity);
-                mashroom = obj.GetComponent<AI>();
-                mashroom.Init("Mashroom_NotMove", null, _info.Goal, 0);
-                _enemyList.Add(mashroom);
+                controller = obj.GetComponent<ExploreEnemyController>();
+                info = new ExploreEnemyInfo("FloorBOSS", null, _info.Goal, 0);
+                controller.Init(info);
+                _enemyList.Add(controller);
             }
             else 
             {
                 for (int i=0; i< _info.EnemyInfoList.Count; i++) 
                 {
                     obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + _info.EnemyInfoList[i].Prefab), Vector3.zero, Quaternion.identity);
-                    mashroom = obj.GetComponent<AI>();
-                    mashroom.Init(_info.EnemyInfoList[i].Prefab, _info.EnemyInfoList[i].Map, _info.EnemyInfoList[i].Position, _info.EnemyInfoList[i].Rotation);
-                    _enemyList.Add(mashroom);
+                    controller = obj.GetComponent<ExploreEnemyController>();
+                    controller.Init(_info.EnemyInfoList[i]);
+                    _enemyList.Add(controller);
                 }
-                _info.EnemyInfoList.Clear();
             }
 
             Camera.main.transform.position = new Vector3(_info.PlayerPosition.x, 1, _info.PlayerPosition.y);
@@ -367,6 +435,22 @@ namespace Explore
             Player.MoveHandler += OnPlayerMove;
             Player.RotateHandler += OnPlayerRotate;
             CheckVidsit(Player.transform);
+        }
+
+        private void SetInfo() 
+        {
+            _info.PlayerPosition = Utility.ConvertToVector2Int(Player.MoveTo);
+            _info.PlayerRotation = Mathf.RoundToInt(Player.transform.eulerAngles.y);
+
+            _info.EnemyInfoList.Clear();
+            for (int i = 0; i < _enemyList.Count; i++)
+            {
+                _enemyList[i].Info.Prefab = _enemyList[i].Info.Prefab;
+                _enemyList[i].Info.Map = _enemyList[i].Info.Map;
+                _enemyList[i].Info.Position = Utility.ConvertToVector2Int(_enemyList[i].MoveTo);
+                _enemyList[i].Info.Rotation = Mathf.RoundToInt(_enemyList[i].transform.eulerAngles.y);
+                _info.EnemyInfoList.Add(_enemyList[i].Info);
+            }
         }
 
         private void OnPlayerMove() 

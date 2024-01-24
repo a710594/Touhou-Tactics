@@ -21,6 +21,7 @@ namespace Explore
             int minY = int.MinValue;
             int maxY = int.MinValue;
             Vector2Int pos;
+            _info = new ExploreInfo();
             foreach (Transform child in Tilemap)
             {
                 pos = Utility.ConvertToVector2Int(child.position);
@@ -54,10 +55,7 @@ namespace Explore
             ExploreEnemyInfo enemyInfo;
             for(int i=0; i<Enemys.Length; i++)
             {
-                enemyInfo = new ExploreEnemyInfo();
-                enemyInfo.Prefab = Enemys[i].Prefab;
-                enemyInfo.Map = Enemys[i].Map;
-                enemyInfo.Position = Utility.ConvertToVector2Int(Enemys[i].transform.position);
+                enemyInfo = new ExploreEnemyInfo(Enemys[i].Prefab, Enemys[i].Map, Utility.ConvertToVector2Int(Enemys[i].transform.position), (int)Enemys[i].transform.eulerAngles.y);
                 _info.EnemyInfoList.Add(enemyInfo);
             }
 

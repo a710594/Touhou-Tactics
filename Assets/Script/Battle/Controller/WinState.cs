@@ -26,7 +26,7 @@ namespace Battle
                 }
                 Instance._battleUI.gameObject.SetActive(false);
                 Instance._battleResultUI.gameObject.SetActive(true);
-                Instance._battleResultUI.SetData(CharacterManager.Instance.Info.Lv, CharacterManager.Instance.Info.Exp, Instance._exp, itemList);
+                Instance._battleResultUI.SetData(CharacterManager.Instance.Info.Lv, CharacterManager.Instance.Info.Exp, Instance.Info.Exp, itemList);
 
                 List<BattleCharacterInfo> playerList = new List<BattleCharacterInfo>();
                 for (int i=0; i<Instance.CharacterList.Count; i++) 
@@ -36,8 +36,12 @@ namespace Battle
                         playerList.Add(Instance.CharacterList[i]);
                     }
                 }
+                for (int i=0; i<Instance.DeadCharacterList.Count; i++) 
+                {
+                    playerList.Add(Instance.DeadCharacterList[i]);
+                }
                 CharacterManager.Instance.Refresh(playerList);
-                CharacterManager.Instance.AddExp(Instance._exp);
+                CharacterManager.Instance.AddExp(Instance.Info.Exp);
             }
         }
     }

@@ -29,6 +29,7 @@ public class TreasureUI : MonoBehaviour
         }
 
         gameObject.SetActive(false);
+        InputMamager.Instance.Unlock();
     }
 
     private void Update()

@@ -60,7 +60,7 @@ public class CharacterManager
         int needExp;
         while (addExp>0) 
         {
-            needExp = (int)Mathf.Pow(Info.Lv, 3) - Info.Exp;
+            needExp = NeedExp(Info.Lv) - Info.Exp;
             if (addExp >= needExp) 
             {
                 addExp -= needExp;
@@ -77,6 +77,18 @@ public class CharacterManager
         for (int i=0; i<Info.CharacterList.Count; i++) 
         {
             Info.CharacterList[i].SetLv(Info.Lv);
+        }
+    }
+
+    public int NeedExp(int lv) 
+    {
+        if (lv == 1)
+        {
+            return 2;
+        }
+        else
+        {
+            return (int)Mathf.Pow(Info.Lv, 3);
         }
     }
 
@@ -102,6 +114,14 @@ public class CharacterManager
                     Info.CharacterList[i].Refresh(list[j]);
                 }
             }
+        }
+    }
+
+    public void RecoverAllHP() 
+    {
+        for (int i = 0; i < Info.CharacterList.Count; i++) 
+        {
+            Info.CharacterList[i].CurrentHP = Info.CharacterList[i].MaxHP;
         }
     }
 }

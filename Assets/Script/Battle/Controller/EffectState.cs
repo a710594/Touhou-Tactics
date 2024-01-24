@@ -159,7 +159,11 @@ namespace Battle
                     {
                         _characterList.Remove(_targetList[i]);
                         Instance._controllerDic[_targetList[i].Index].gameObject.SetActive(false);
-                        Instance.Info.TileInfoDic[Utility.ConvertToVector2Int(_targetList[i].Position)].HasCharacter = false;
+                        Instance.Info.TileAttachInfoDic[Utility.ConvertToVector2Int(_targetList[i].Position)].HasCharacter = false;
+                        if (_targetList[i].Faction == BattleCharacterInfo.FactionEnum.Player)
+                        {
+                            Instance.DeadCharacterList.Add(_targetList[i]);
+                        }
                     }
                 }
 

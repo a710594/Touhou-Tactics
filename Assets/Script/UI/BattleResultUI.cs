@@ -26,12 +26,12 @@ public class BattleResultUI : MonoBehaviour
 
     public void SetExpBar(int lv, int exp, int addExp) 
     {
-        int needExp = (int)Mathf.Pow(lv, 3) - exp;
-        if (addExp >= needExp)
+        int needExp = CharacterManager.Instance.NeedExp(lv);
+        if (addExp + exp >= needExp)
         {
             ExpBar.SetValueTween(exp, needExp, needExp, ()=> 
             {
-                addExp -= needExp;
+                addExp -= (needExp - exp);
                 lv++;
                 exp = 0;
                 LvLabel.text = "Lv." + lv;

@@ -12,132 +12,129 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
     public string[] SeedFile;
 
     private string _prePath = Application.streamingAssetsPath;
-    public Dictionary<string, TileSetting> _tileSettingDic = new Dictionary<string, TileSetting>();
-    public Dictionary<string, AttachSetting> _attachDic = new Dictionary<string, AttachSetting>();
+    private BattleFileReader _reader = new BattleFileReader();
+    private BattleInfo _info;
 
-    private void Awake()
-    {
-        _tileSettingDic.Add("1_1", DataContext.Instance.Load<TileSetting>("1_1", DataContext.PrePathEnum.Setting));
-        _tileSettingDic.Add("1_2", DataContext.Instance.Load<TileSetting>("1_2", DataContext.PrePathEnum.Setting));
-        _tileSettingDic.Add("1_3", DataContext.Instance.Load<TileSetting>("1_3", DataContext.PrePathEnum.Setting));
-        _tileSettingDic.Add("1_4", DataContext.Instance.Load<TileSetting>("1_4", DataContext.PrePathEnum.Setting));
-        _tileSettingDic.Add("1_5", DataContext.Instance.Load<TileSetting>("1_5", DataContext.PrePathEnum.Setting));
-
-        _attachDic.Add("Grass", DataContext.Instance.Load<AttachSetting>("Grass", DataContext.PrePathEnum.Setting));
-        _attachDic.Add("Tree", DataContext.Instance.Load<AttachSetting>("Tree", DataContext.PrePathEnum.Setting));
-    }
-
-    public void Generate(out BattleInfo battleInfo) //有隨機成分的地圖
+    public BattleInfo Generate() //有隨機成分的地圖
     {
         string path = Path.Combine(_prePath, "MapSeed/" + SeedFile[UnityEngine.Random.Range(0, SeedFile.Length)] + ".txt");
-        string text = File.ReadAllText(path);
-        string[] stringSeparators = new string[] { "\n", "\r\n" };
-        string[] lines = text.Split(stringSeparators, StringSplitOptions.None);
-        string[] str;
-        Vector2Int position = new Vector2Int();
-        TileSetting tileSetting;
-        AttachSetting attachSetting;
-        Dictionary<Vector2Int, TileSetting> visitedDic = new Dictionary<Vector2Int, TileSetting>();
-        Queue<Vector2Int> queue = new Queue<Vector2Int>();
-        GameObject tileObj;
-        GameObject attachObj;
-        battleInfo = new BattleInfo();
+        _info = _reader.Read(path);
 
         for (int i = this.transform.childCount; i > 0; --i)
         {
             DestroyImmediate(this.transform.GetChild(0).gameObject);
         }
 
-        str = lines[0].Split(' ');
-        battleInfo.Width = int.Parse(str[0]);
-        battleInfo.Height = int.Parse(str[1]);
+        //str = lines[0].Split(' ');
+        //battleInfo.Width = int.Parse(str[0]);
+        //battleInfo.Height = int.Parse(str[1]);
 
-        try
+
+        Vector2Int position = new Vector2Int();
+        TileSetting tileSetting;
+        TileSetting adjacentTileSetting;
+        AttachSetting attachSetting;
+        //Dictionary<Vector2Int, TileSetting> visitedDic = new Dictionary<Vector2Int, TileSetting>();
+        Queue<Vector2Int> queue = new Queue<Vector2Int>();
+        GameObject tileObj;
+        GameObject attachObj;
+        //battleInfo = new BattleInfo();
+
+        foreach (KeyValuePair<Vector2Int, TileAttachInfo> pair in _info.TileAttachInfoDic)
         {
-            for (int i = 1; i < lines.Length; i++) //第一行是長寬,忽視之
+            tileSetting = DataContext.Instance.TileSettingDic[pair.Value.TileID];
+            if (tileSetting.Enqueue)
             {
-                if (lines[i] != "")
-                {
-                    if (i <= battleInfo.Width)
-                    {
-                        str = lines[i].Split(' ');
-                        for (int j = 0; j < str.Length; j++)
-                        {
-                            position = new Vector2Int(i - 1, j);
-                            if (str[j] == "X")
-                            {
-                                visitedDic.Add(position, null);
-                                battleInfo.TileInfoDic.Add(position, null);
-                                continue;
-                            }
-                            else
-                            {
-                                tileSetting = _tileSettingDic[str[j]];
-                                visitedDic.Add(position, tileSetting);
-                                battleInfo.TileInfoDic.Add(position, new TileInfo(tileSetting));
-                                if (tileSetting.Enqueue)
-                                {
-                                    queue.Enqueue(position);
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        List<int[]> list = JsonConvert.DeserializeObject<List<int[]>>(lines[i]);
-                        for (int j=0; j<list.Count; j++) 
-                        {
-                            battleInfo.NoAttachList.Add(new Vector2Int(list[j][0], list[j][1]));
-                        }
-                        //battleInfo.NoAttachList = JsonConvert.DeserializeObject<List<Vector2Int>>(lines[i]);
-                    }
-
-                }
+                queue.Enqueue(pair.Key);
             }
         }
-        catch (Exception ex) 
-        {
-            Debug.Log(ex);
-        }
+
+        //try
+        //{
+        //    for (int i = 1; i < lines.Length; i++) //第一行是長寬,忽視之
+        //    {
+        //        if (lines[i] != "")
+        //        {
+        //            if (i <= battleInfo.Width)
+        //            {
+        //                str = lines[i].Split(' ');
+        //                for (int j = 0; j < str.Length; j++)
+        //                {
+        //                    position = new Vector2Int(i - 1, j);
+        //                    if (str[j] == "X")
+        //                    {
+        //                        visitedDic.Add(position, null);
+        //                        battleInfo.TileInfoDic.Add(position, null);
+        //                        continue;
+        //                    }
+        //                    else
+        //                    {
+        //                        tileSetting = DataContext.Instance.TileSettingDic[str[j]];
+        //                        visitedDic.Add(position, tileSetting);
+        //                        battleInfo.TileInfoDic.Add(position, new TileInfo(tileSetting));
+        //                        if (tileSetting.Enqueue)
+        //                        {
+        //                            queue.Enqueue(position);
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //            else if (i == battleInfo.Width + 2)
+        //            {
+        //                List<int[]> list = JsonConvert.DeserializeObject<List<int[]>>(lines[i]);
+        //                for (int j=0; j<list.Count; j++) 
+        //                {
+        //                    battleInfo.NoAttachList.Add(new Vector2Int(list[j][0], list[j][1]));
+        //                }
+        //                //battleInfo.NoAttachList = JsonConvert.DeserializeObject<List<Vector2Int>>(lines[i]);
+        //            }
+
+        //        }
+        //    }
+        //}
+        //catch (Exception ex) 
+        //{
+        //    Debug.Log(ex);
+        //}
 
         //BFS
         while (queue.Count != 0)
         {
             position = queue.Dequeue();
+            tileSetting = DataContext.Instance.TileSettingDic[_info.TileAttachInfoDic[position].TileID];
 
-            tileSetting = visitedDic[position];
-            if ((position + Vector2Int.up).y < battleInfo.Height && visitedDic[position + Vector2Int.up] == null)
+            if ((position + Vector2Int.up).y < _info.Height && !_info.TileAttachInfoDic.ContainsKey(position + Vector2Int.up))
             {
-                visitedDic[position + Vector2Int.up] = GetAdjacentTile(tileSetting, Vector2Int.up);
-                battleInfo.TileInfoDic[position + Vector2Int.up] = new TileInfo(visitedDic[position + Vector2Int.up]);
-                if (visitedDic[position + Vector2Int.up].Enqueue)
+                adjacentTileSetting = GetAdjacentTile(tileSetting, Vector2Int.up);
+                _info.TileAttachInfoDic.Add(position + Vector2Int.up, new TileAttachInfo(adjacentTileSetting));
+                if (adjacentTileSetting.Enqueue)
                 {
                     queue.Enqueue(position + Vector2Int.up);
                 }
             }
-            if ((position + Vector2Int.down).y >= 0 && visitedDic[position + Vector2Int.down] == null)
+            if ((position + Vector2Int.down).y >= 0 && !_info.TileAttachInfoDic.ContainsKey(position + Vector2Int.down))
             {
-                visitedDic[position + Vector2Int.down] = GetAdjacentTile(tileSetting, Vector2Int.down);
-                battleInfo.TileInfoDic[position + Vector2Int.down] = new TileInfo(visitedDic[position + Vector2Int.down]);
-                if (visitedDic[position + Vector2Int.down].Enqueue)
+                adjacentTileSetting = GetAdjacentTile(tileSetting, Vector2Int.down);
+                _info.TileAttachInfoDic.Add(position + Vector2Int.down, new TileAttachInfo(adjacentTileSetting));
+                if (adjacentTileSetting.Enqueue)
                 {
                     queue.Enqueue(position + Vector2Int.down);
                 }
             }
-            if ((position + Vector2Int.left).x >= 0 && visitedDic[position + Vector2Int.left] == null)
+            if ((position + Vector2Int.left).x >= 0 && !_info.TileAttachInfoDic.ContainsKey(position + Vector2Int.left))
             {
-                visitedDic[position + Vector2Int.left] = GetAdjacentTile(tileSetting, Vector2Int.left);
-                battleInfo.TileInfoDic[position + Vector2Int.left] = new TileInfo(visitedDic[position + Vector2Int.left]);
-                if (visitedDic[position + Vector2Int.left].Enqueue)
+                adjacentTileSetting = GetAdjacentTile(tileSetting, Vector2Int.left);
+                _info.TileAttachInfoDic.Add(position + Vector2Int.left, new TileAttachInfo(adjacentTileSetting));
+                if (adjacentTileSetting.Enqueue)
                 {
                     queue.Enqueue(position + Vector2Int.left);
                 }
             }
-            if ((position + Vector2Int.right).x < battleInfo.Width && visitedDic[position + Vector2Int.right] == null)
+            if ((position + Vector2Int.right).x < _info.Width && !_info.TileAttachInfoDic.ContainsKey(position + Vector2Int.right))
             {
-                visitedDic[position + Vector2Int.right] = GetAdjacentTile(tileSetting, Vector2Int.right);
-                battleInfo.TileInfoDic[position + Vector2Int.right] = new TileInfo(visitedDic[position + Vector2Int.right]);
-                if (visitedDic[position + Vector2Int.right].Enqueue)
+                adjacentTileSetting = GetAdjacentTile(tileSetting, Vector2Int.right);
+                _info.TileAttachInfoDic.Add(position + Vector2Int.right, new TileAttachInfo(adjacentTileSetting));
+                if (adjacentTileSetting.Enqueue)
                 {
                     queue.Enqueue(position + Vector2Int.right);
                 }
@@ -145,18 +142,19 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
         }
 
         //Attach
-        foreach (KeyValuePair<Vector2Int, TileSetting> pair in visitedDic)
+        foreach (KeyValuePair<Vector2Int, TileAttachInfo> pair in _info.TileAttachInfoDic)
         {
-            if (!battleInfo.NoAttachList.Contains(pair.Key))
+            if (!_info.NoAttachList.Contains(pair.Key))
             {
-                attachSetting = GetAttachIDRRandomly(pair.Value.Attachs); ;
+                tileSetting = DataContext.Instance.TileSettingDic[pair.Value.TileID];
+                attachSetting = GetAttachIDRRandomly(tileSetting.Attachs); ;
                 if (attachSetting != null)
                 {
-                    battleInfo.TileInfoDic[pair.Key].SetAttach(attachSetting.ID, attachSetting.MoveCost);
+                    _info.TileAttachInfoDic[pair.Key].SetAttach(attachSetting.ID, attachSetting.MoveCost);
                 }
                 else
                 {
-                    battleInfo.TileInfoDic[pair.Key].SetAttach(null, 0);
+                    _info.TileAttachInfoDic[pair.Key].SetAttach(null, 0);
                 }
             }
         }
@@ -165,7 +163,7 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
         int count = 5;
         while (count > 0)
         {
-            NextGeneration(battleInfo.Width, battleInfo.Height, battleInfo.TileInfoDic, battleInfo.NoAttachList);
+            NextGeneration(_info.Width, _info.Height, _info.TileAttachInfoDic, _info.NoAttachList);
             count--;
         }
 
@@ -174,124 +172,57 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
             DestroyImmediate(this.transform.GetChild(0).gameObject);
         }
 
-        foreach (KeyValuePair<Vector2Int, TileInfo> pair in battleInfo.TileInfoDic) 
+        foreach (KeyValuePair<Vector2Int, TileAttachInfo> pair in _info.TileAttachInfoDic) 
         {
             tileObj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + pair.Value.TileID), Vector3.zero, Quaternion.identity);
             tileObj.transform.SetParent(Tilemap);
             tileObj.transform.position = new Vector3(pair.Key.x, 0, pair.Key.y);
-            battleInfo.TileComponentDic.Add(pair.Key, tileObj.GetComponent<TileComponent>());
+            _info.TileComponentDic.Add(pair.Key, tileObj.GetComponent<TileComponent>());
 
             if (pair.Value.AttachID != null)
             {
                 attachObj = (GameObject)GameObject.Instantiate(Resources.Load("Attach/" + pair.Value.AttachID), Vector3.zero, Quaternion.identity);
                 attachObj.transform.position = tileObj.transform.position + new Vector3(0, pair.Value.Height - 0.5f, 0);
                 attachObj.transform.parent = tileObj.transform;
-                battleInfo.AttachDic.Add(pair.Key, attachObj);
+                _info.AttachDic.Add(pair.Key, attachObj);
             }
-        } 
+        }
+
+        return _info;
     }
 
-    public void Get(string map,out BattleInfo battleInfo) //固定的地圖
+    public BattleInfo Get(string map) //固定的地圖
     {
         string path = Path.Combine(_prePath, "Map/Battle/" + map + ".txt");
-        string text = File.ReadAllText(path);
-        string[] stringSeparators = new string[] { "\n", "\r\n" };
-        string[] lines = text.Split(stringSeparators, StringSplitOptions.None);
-        string[] str;
-        Vector2Int position = new Vector2Int();
-        TileSetting tileSetting;
-        AttachSetting attachSetting;
-        Dictionary<Vector2Int, TileSetting> visitedDic = new Dictionary<Vector2Int, TileSetting>();
-        Queue<Vector2Int> queue = new Queue<Vector2Int>();
-        GameObject tileObj;
-        GameObject attachObj;
-        battleInfo = new BattleInfo();
+        _info = _reader.Read(path);
+        //string text = File.ReadAllText(path);
+        //string[] stringSeparators = new string[] { "\n", "\r\n" };
+        //string[] lines = text.Split(stringSeparators, StringSplitOptions.None);
+        //string[] str;
+        //Vector2Int position = new Vector2Int();
+        //TileSetting tileSetting;
+        //AttachSetting attachSetting;
+        //Dictionary<Vector2Int, TileSetting> visitedDic = new Dictionary<Vector2Int, TileSetting>();
+        //Queue<Vector2Int> queue = new Queue<Vector2Int>();
+        //GameObject tileObj;
+        //GameObject attachObj;
+        //battleInfo = new BattleInfo();
 
         for (int i = this.transform.childCount; i > 0; --i)
         {
             DestroyImmediate(this.transform.GetChild(0).gameObject);
         }
 
-        battleInfo.IsTutorial = bool.Parse(lines[0]);
+        CreateObject(_info);
 
-        str = lines[1].Split(' ');
-        battleInfo.Width = int.Parse(str[0]);
-        battleInfo.Height = int.Parse(str[1]);
-
-        try
-        {
-            for (int i = 2; i < lines.Length; i++)
-            {
-                if (lines[i] != "")
-                {
-                    if (i < battleInfo.Width + 2)
-                    {
-                        str = lines[i].Split(' ');
-                        for (int j = 0; j < str.Length; j++)
-                        {
-                            position = new Vector2Int(i - 2, j);
-                            if (str[j] == "X")
-                            {
-                                visitedDic.Add(position, null);
-                                battleInfo.TileInfoDic.Add(position, null);
-                                continue;
-                            }
-                            else
-                            {
-                                tileSetting = _tileSettingDic[str[j]];
-                                visitedDic.Add(position, tileSetting);
-                                battleInfo.TileInfoDic.Add(position, new TileInfo(tileSetting));
-                                if (tileSetting.Enqueue)
-                                {
-                                    queue.Enqueue(position);
-                                }
-                            }
-                        }
-                    }
-                    else if (i == battleInfo.Width + 2)
-                    {
-                        //battleInfo.NoAttachList = JsonConvert.DeserializeObject<List<Vector2Int>>(lines[i]);
-                        List<int[]> noAttachList = JsonConvert.DeserializeObject<List<int[]>>(lines[i]);
-                        for (int j = 0; j < noAttachList.Count; j++)
-                        {
-                            battleInfo.NoAttachList.Add(new Vector2Int(noAttachList[j][0], noAttachList[j][1]));
-                        }
-                    }
-                    else if (i == battleInfo.Width + 3)
-                    {
-                        Vector3Int v3;
-                        List<int[]> enemyList = JsonConvert.DeserializeObject<List<int[]>>(lines[i]);
-                        for (int j = 0; j < enemyList.Count; j++)
-                        {
-                            v3 = new Vector3Int(enemyList[j][0], enemyList[j][1], enemyList[j][2]);
-                            battleInfo.EnemyDic.Add(v3, enemyList[j][3]);
-                        }
-                    }
-                    else
-                    {
-                        battleInfo.PlayerCount = Convert.ToInt32(lines[i]);
-                    }
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.Log(ex);
-        }
-
-        for (int i = this.transform.childCount; i > 0; --i)
-        {
-            DestroyImmediate(this.transform.GetChild(0).gameObject);
-        }
-
-        CreateObject(battleInfo);
+        return _info;
     }
 
     public void CreateObject(BattleInfo battleInfo)
     {
         GameObject tileObj;
         GameObject attachObj;
-        foreach (KeyValuePair<Vector2Int, TileInfo> pair in battleInfo.TileInfoDic)
+        foreach (KeyValuePair<Vector2Int, TileAttachInfo> pair in battleInfo.TileAttachInfoDic)
         {
             tileObj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + pair.Value.TileID), Vector3.zero, Quaternion.identity);
             tileObj.transform.SetParent(Tilemap);
@@ -318,25 +249,25 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
         {
             pool = GetTilePool(tile.Up);
             random = UnityEngine.Random.Range(0, pool.Count);
-            adjacentTile = _tileSettingDic[pool[random]];
+            adjacentTile = DataContext.Instance.TileSettingDic[pool[random]];
         }
         else if (direction == Vector2Int.down)
         {
             pool = GetTilePool(tile.Down);
             random = UnityEngine.Random.Range(0, pool.Count);
-            adjacentTile = _tileSettingDic[pool[random]];
+            adjacentTile = DataContext.Instance.TileSettingDic[pool[random]];
         }
         else if (direction == Vector2Int.left)
         {
             pool = GetTilePool(tile.Left);
             random = UnityEngine.Random.Range(0, pool.Count);
-            adjacentTile = _tileSettingDic[pool[random]];
+            adjacentTile = DataContext.Instance.TileSettingDic[pool[random]];
         }
         else if (direction == Vector2Int.right)
         {
             pool = GetTilePool(tile.Right);
             random = UnityEngine.Random.Range(0, pool.Count);
-            adjacentTile = _tileSettingDic[pool[random]];
+            adjacentTile = DataContext.Instance.TileSettingDic[pool[random]];
         }
 
         return adjacentTile;
@@ -370,7 +301,7 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
 
         if (id != null)
         {
-            return _attachDic[id];
+            return DataContext.Instance.AttachSettingDic[id];
         }
         else
         {
@@ -405,7 +336,7 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
 
         if (id != null)
         {
-            return _attachDic[id];
+            return DataContext.Instance.AttachSettingDic[id];
         }
         else
         {
@@ -414,10 +345,10 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
     }
 
     // 計算 Life Game 下一代的棋盤
-    private Dictionary<Vector2Int, TileInfo> NextGeneration(int width, int height, Dictionary<Vector2Int, TileInfo> tileInfoDic, List<Vector2Int> noAttachList)
+    private Dictionary<Vector2Int, TileAttachInfo> NextGeneration(int width, int height, Dictionary<Vector2Int, TileAttachInfo> tileInfoDic, List<Vector2Int> noAttachList)
     {
         AttachSetting attach;
-        foreach(KeyValuePair<Vector2Int, TileInfo> pair in tileInfoDic) 
+        foreach(KeyValuePair<Vector2Int, TileAttachInfo> pair in tileInfoDic) 
         {
             int neighbors = CountNeighbors(width, height, tileInfoDic, pair.Key, null);
             int grassNeighbors = CountNeighbors(width, height, tileInfoDic, pair.Key, "Grass");
@@ -442,7 +373,7 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
             {
                 if (neighbors == 3 && !noAttachList.Contains(pair.Key))
                 {
-                    attach = GetAttachID(_tileSettingDic[pair.Value.TileID].Attachs);
+                    attach = GetAttachID(DataContext.Instance.TileSettingDic[pair.Value.TileID].Attachs);
                     if (attach != null)
                     {
                         pair.Value.SetAttach(attach.ID, attach.MoveCost);
@@ -458,7 +389,7 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
         return tileInfoDic;
     }
 
-    private int CountNeighbors(int width, int height, Dictionary<Vector2Int, TileInfo> tileInfoDic, Vector2Int position, string attach)
+    private int CountNeighbors(int width, int height, Dictionary<Vector2Int, TileAttachInfo> tileInfoDic, Vector2Int position, string attach)
     {
         int count = 0;
 

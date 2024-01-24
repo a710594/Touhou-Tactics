@@ -78,25 +78,24 @@ public class MashroomAI : AI
             int minDistance = int.MaxValue;
             if (_targetDic.Count > 0)
             {
+                _inRange = true;
                 _target = GetTarget(new List<BattleCharacterInfo>(_targetDic.Keys));
-
                 List<Vector2Int> list = _targetDic[_target];
                 Vector2Int start = Utility.ConvertToVector2Int(_info.Position);
                 for (int i = 0; i < list.Count; i++)
                 {
                     distance = BattleController.Instance.GetDistance(start, list[i], _info.Faction);
-                    if (distance > maxDistance)
+                    if (distance < minDistance)
                     {
-                        maxDistance = distance;
+                        minDistance = distance;
                         _moveTo = list[i];
                     }
                 }
-                _inRange = true;
             }
             else
             {
+                _inRange = false;
                 _target = GetTarget(characterList);
-
                 v2 = Utility.ConvertToVector2Int(_target.Position);
                 for (int i=0; i<_stepList.Count; i++) 
                 {
@@ -108,7 +107,9 @@ public class MashroomAI : AI
                     }
                 }
             }
-            Debug.Log(_moveTo);
+
+                Debug.Log(_info.Position + " " + _moveTo);
+            
             BattleController.Instance.SetMoveState();
             BattleController.Instance.Click(_moveTo);
             BattleController.Instance.Click(_moveTo);

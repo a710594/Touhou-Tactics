@@ -22,7 +22,7 @@ namespace Battle
                 _character = Instance.SelectedCharacter;
                 _characterList = Instance.CharacterList;
                 Instance._controllerDic[_character.Index].transform.position = _character.Position;
-                Instance.Info.TileInfoDic[Utility.ConvertToVector2Int(_character.Position)].HasCharacter = false;
+                Instance.Info.TileAttachInfoDic[Utility.ConvertToVector2Int(_character.Position)].HasCharacter = false;
                 Instance._battleUI.ActionButtonGroup.gameObject.SetActive(false);
                 _stepList = Instance.GetStepList(Utility.ConvertToVector2Int(_character.Position), _character);
                 Instance.SetQuad(_stepList, Instance._white);
@@ -51,11 +51,11 @@ namespace Battle
                         Instance.ClearQuad();
                         List<Vector2Int> path = Instance.GetPath(Utility.ConvertToVector2Int(_character.Position), position, _character.Faction);
                         Instance._controllerDic[_character.Index].Move(path);
-                        Instance.Info.TileInfoDic[Utility.ConvertToVector2Int(_character.Position)].HasCharacter = false;
+                        Instance.Info.TileAttachInfoDic[Utility.ConvertToVector2Int(_character.Position)].HasCharacter = false;
                         _character.LastPosition = _character.Position;
-                        _character.Position = new Vector3(position.x, Instance.Info.TileInfoDic[position].Height, position.y);
+                        _character.Position = new Vector3(position.x, Instance.Info.TileAttachInfoDic[position].Height, position.y);
                         _character.HasMove = true;
-                        Instance.Info.TileInfoDic[Utility.ConvertToVector2Int(_character.Position)].HasCharacter = true;
+                        Instance.Info.TileAttachInfoDic[Utility.ConvertToVector2Int(_character.Position)].HasCharacter = true;
                     }
                     else
                     {

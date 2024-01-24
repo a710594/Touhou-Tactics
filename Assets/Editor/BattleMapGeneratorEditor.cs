@@ -13,7 +13,7 @@ public class BattleMapGeneratorEditor : Editor
         BattleMapBuilder nodeGenerator = (BattleMapBuilder)target;
         if (GUILayout.Button("產生地圖"))
         {
-            nodeGenerator.Generate(out BattleInfo battleInfo);
+            nodeGenerator.Generate();
             //BattleController.Instance.Init(tileComponentDic, tileInfoDic, attachDic, noAttachList);
         
         }
