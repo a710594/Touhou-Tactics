@@ -20,9 +20,28 @@ public class EnemyModel
     public int DOWN;
     public int WT;
     public string Controller;
+    public string Sprite_1;
+    public string Sprite_2;
     public int Drop_1;
     public int Drop_2;
+    public string AI;
+    public int Skill_1;
+    public int Skill_2;
+    public List<string> SpriteList = new List<string>();
     public List<int> DropList = new List<int>();
+    public List<int> SkillList = new List<int>();
+
+    public void GetSpriteList()
+    {
+        if (Sprite_1 != "x")
+        {
+            SpriteList.Add(Sprite_1);
+        }
+        if (Sprite_2 != "x")
+        {
+            SpriteList.Add(Sprite_2);
+        }
+    }
 
     public void GetDropList()
     {
@@ -33,6 +52,18 @@ public class EnemyModel
         if (Drop_2 != -1)
         {
             DropList.Add(Drop_2);
+        }
+    }
+
+    public void GetSkillList()
+    {
+        if (Skill_1 != -1)
+        {
+            SkillList.Add(Skill_1);
+        }
+        if (Skill_2 != -1)
+        {
+            SkillList.Add(Skill_2);
         }
     }
 }

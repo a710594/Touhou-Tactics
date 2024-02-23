@@ -160,7 +160,7 @@ namespace Battle
             {
             }
 
-            public override void Begin(object obj)
+            public override void Begin()
             {
                 Vector3 offset = new Vector3(-200, 0, 0);
                 TutorialArrowUI.Open("選擇移動。", Instance._battleUI.ActionButtonGroup.MoveButton.transform, offset, Vector2Int.right, null);
@@ -190,7 +190,7 @@ namespace Battle
             {
             }
 
-            public override void Begin(object obj)
+            public override void Begin()
             {
                 TutorialUI.Open("地圖上白色的區域代表可移動的範圍。\n請點選箭頭指示的位置。", "Tutorial_2", ()=> 
                 {
@@ -229,7 +229,7 @@ namespace Battle
             {
             }
 
-            public override void Begin(object obj)
+            public override void Begin()
             {
                 TutorialArrowUI.Open("再次點選同樣的位置代表確定位置。", new Vector3(4, 1, 3), Vector2Int.down, null);
             }
@@ -260,7 +260,7 @@ namespace Battle
             {
             }
 
-            public override void Begin(object obj)
+            public override void Begin()
             {
                 Vector3 offset = new Vector3(-200, 0, 0);
                 TutorialArrowUI.Open("選擇技能。", Instance._battleUI.ActionButtonGroup.SkillButton.transform, offset, Vector2Int.right, null);
@@ -290,7 +290,7 @@ namespace Battle
             {
             }
 
-            public override void Begin(object obj)
+            public override void Begin()
             {
                 Vector3 offset = new Vector3(-200, 160, 0);
                 TutorialArrowUI.Open("選擇攻擊。", Instance._battleUI.ActionButtonGroup.ScrollView.Background.transform, offset, Vector2Int.right, null);
@@ -327,7 +327,7 @@ namespace Battle
             {
             }
 
-            public override void Begin(object obj)
+            public override void Begin()
             {
                 TutorialUI.Open("現在地圖上白色的範圍是可以放技能的地方。\n請點選箭頭指示的位置。", "Tutorial_3", () =>
                 {
@@ -366,7 +366,7 @@ namespace Battle
             {
             }
 
-            public override void Begin(object obj)
+            public override void Begin()
             {
                 TutorialArrowUI.Open("再次點選同樣的位置確認。", new Vector3(4, 2, 4), Vector2Int.down, null);
             }
@@ -391,7 +391,7 @@ namespace Battle
             {
             }
 
-            public override void Begin(object obj)
+            public override void Begin()
             {
                 TutorialUI.Open("以上就是移動與攻擊的基本流程。\n一個角色一回合中可以有兩次行動的機會。除了移動和使用技能外還有其他的選項。", ()=> 
                 {

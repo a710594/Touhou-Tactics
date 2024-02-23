@@ -17,7 +17,7 @@ namespace Battle
             {
             }
 
-            public override void Begin(object obj)
+            public override void Begin()
             {
                 Instance._battleUI.SetCharacterInfoUI_2(null);
                 Instance.ClearQuad();
@@ -32,6 +32,13 @@ namespace Battle
                     }
 
                 }
+                for (int i=0; i<Instance.DyingList.Count; i++) 
+                {
+                    if (CheckEffectArea(Instance._areaList, Utility.ConvertToVector2Int(Instance.DyingList[i].Position)))
+                    {
+                        _targetList.Add(Instance.DyingList[i]);
+                    }
+                }
                 if (_targetList.Count > 0)
                 {
                     _maxFloatingCount = 0;
@@ -40,9 +47,15 @@ namespace Battle
                         Skill skill = (Skill)_character.SelectedObject;
                         for (int i = 0; i < _targetList.Count; i++)
                         {
-                            List<FloatingNumberData> floatingList = new List<FloatingNumberData>();
-                            skill.Effect.Use(_character, _targetList[i], floatingList, _characterList);
-                            SetUI(_targetList[i], floatingList);
+                            if (skill.Effect.Type == EffectModel.TypeEnum.Summon)
+                            {
+                                Vector3 v3 = new Vector3(Instance._selectedPosition.x, Instance.Info.TileAttachInfoDic[Instance._selectedPosition].Height, Instance._selectedPosition.y);
+                                UseEffect(skill.Effect, v3);
+                            }
+                            else
+                            {
+                                UseEffect(skill.Effect, _targetList[i]);
+                            }
                         }
                         _character.HasUseSkill = true;
                         _character.ActionCount--;
@@ -60,9 +73,7 @@ namespace Battle
                         Support support = (Support)_character.SelectedObject;
                         for (int i = 0; i < _targetList.Count; i++)
                         {
-                            List<FloatingNumberData> floatingList = new List<FloatingNumberData>();
-                            support.Effect.Use(_character, _targetList[i], floatingList, _characterList);
-                            SetUI(_targetList[i], floatingList);
+                            UseEffect(support.Effect, _targetList[i]);
                         }
                         _character.HasUseSupport = true;
                         if (_character.CurrentPP < BattleCharacterInfo.MaxPP)
@@ -79,9 +90,7 @@ namespace Battle
                         Card card = (Card)_character.SelectedObject;
                         for (int i = 0; i < _targetList.Count; i++)
                         {
-                            List<FloatingNumberData> floatingList = new List<FloatingNumberData>();
-                            card.Effect.Use(_character, _targetList[i], floatingList, _characterList);
-                            SetUI(_targetList[i], floatingList);
+                            UseEffect(card.Effect, _targetList[i]);
                         }
                         _character.HasUseItem = true;
                         _character.ActionCount--;
@@ -93,9 +102,7 @@ namespace Battle
                         Consumables consumables = (Consumables)_character.SelectedObject;
                         for (int i = 0; i < _targetList.Count; i++)
                         {
-                            List<FloatingNumberData> floatingList = new List<FloatingNumberData>();
-                            consumables.Effect.Use(_character, _targetList[i], floatingList, _characterList);
-                            SetUI(_targetList[i], floatingList);
+                            UseEffect(consumables.Effect, _targetList[i]);
                         }
                         _character.HasUseItem = true;
                         _character.ActionCount--;
@@ -119,23 +126,55 @@ namespace Battle
                 }
                 else
                 {
-                    Instance._battleUI.TipLabel.SetLabel("毫無反應...");
-                    if (_character.SelectedObject is Skill)
+                    if (_character.SelectedObject is Skill && ((Skill)_character.SelectedObject).Effect.Type == EffectModel.TypeEnum.Summon)
                     {
+                        Skill skill = (Skill)_character.SelectedObject;
+                        Vector3 v3 = new Vector3(Instance._selectedPosition.x, Instance.Info.TileAttachInfoDic[Instance._selectedPosition].Height, Instance._selectedPosition.y);
+                        UseEffect(skill.Effect, v3);
                         _character.HasUseSkill = true;
                         _character.ActionCount--;
+                        if (_character.CurrentPP < BattleCharacterInfo.MaxPP)
+                        {
+                            _character.CurrentPP++;
+                        }
+                        if (skill.Data.CD > 0)
+                        {
+                            skill.CurrentCD = skill.Data.CD + 1; //要加一的原因是為了抵銷本回合的 CheckCD
+                        }
+                        _timer.Start(_maxFloatingCount, CheckResult);
                     }
-                    else if (_character.SelectedObject is Support)
+                    else
                     {
-                        _character.HasUseSupport = true;
+                        Instance._battleUI.TipLabel.SetLabel("毫無反應...");
+                        if (_character.SelectedObject is Skill)
+                        {
+                            _character.HasUseSkill = true;
+                            _character.ActionCount--;
+                        }
+                        else if (_character.SelectedObject is Support)
+                        {
+                            _character.HasUseSupport = true;
+                        }
+                        else if (_character.SelectedObject is Card || _character.SelectedObject is Consumables || _character.SelectedObject is Food)
+                        {
+                            _character.HasUseItem = true;
+                            _character.ActionCount--;
+                        }
+                        _context.SetState<EndState>();
                     }
-                    else if (_character.SelectedObject is Card || _character.SelectedObject is Consumables || _character.SelectedObject is Food)
-                    {
-                        _character.HasUseItem = true;
-                        _character.ActionCount--;
-                    }
-                    _context.SetState<EndState>();
                 }
+            }
+
+            private void UseEffect(Effect effect, BattleCharacterInfo target) 
+            {
+                List<FloatingNumberData> floatingList = new List<FloatingNumberData>();
+                effect.Use(_character, target, floatingList, _characterList);
+                SetUI(target, floatingList);
+            }
+
+            public void UseEffect(Effect effect, Vector3 position) 
+            {
+                effect.Use(_character, position);
             }
 
             private void SetUI(BattleCharacterInfo target, List<FloatingNumberData> floatingList) 
@@ -157,13 +196,32 @@ namespace Battle
                 {
                     if (_targetList[i].CurrentHP <= 0)
                     {
-                        _characterList.Remove(_targetList[i]);
-                        Instance._controllerDic[_targetList[i].Index].gameObject.SetActive(false);
-                        Instance.Info.TileAttachInfoDic[Utility.ConvertToVector2Int(_targetList[i].Position)].HasCharacter = false;
                         if (_targetList[i].Faction == BattleCharacterInfo.FactionEnum.Player)
                         {
-                            Instance.DeadCharacterList.Add(_targetList[i]);
+                            if (Instance.DyingList.Contains(_targetList[i]))
+                            {
+                                Instance._controllerDic[_targetList[i].Index].gameObject.SetActive(false);
+                                Instance.DyingList.Remove(_targetList[i]);
+                                Instance.DeadList.Add(_targetList[i]);
+                            }
+                            else
+                            {
+                                _characterList.Remove(_targetList[i]);
+                                Instance.DyingList.Add(_targetList[i]);
+                                Instance._controllerDic[_targetList[i].Index].SetGray(true);
+                            }
                         }
+                        else
+                        {
+                            _characterList.Remove(_targetList[i]);
+                            Instance._controllerDic[_targetList[i].Index].gameObject.SetActive(false);
+                        }
+                    }
+                    else if (Instance.DyingList.Contains(_targetList[i])) 
+                    {
+                        _characterList.Add(_targetList[i]);
+                        Instance.DyingList.Remove(_targetList[i]);
+                        Instance._controllerDic[_targetList[i].Index].SetGray(false);
                     }
                 }
 
@@ -183,8 +241,7 @@ namespace Battle
 
                 if (playerCount == 0)
                 {
-                    Instance._battleUI.TipLabel.SetLabel("You Lose");
-                    _context.SetState<WinState>();
+                    _context.SetState<LoseState>();
                 }
                 else if (enemyCount == 0)
                 {

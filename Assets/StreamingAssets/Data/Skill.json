@@ -15,4 +15,6 @@
 {"ID":15,"Name":"催眠術","Comment":"使目標睡著","CD":2,"SP":0,"EffectID":32},
 {"ID":16,"Name":"軟化術","Comment":"使目標的物理和魔法防禦力下降","CD":1,"SP":0,"EffectID":27},
 {"ID":17,"Name":"大治癒術","Comment":"使目標回復大量HP","CD":1,"SP":0,"EffectID":17},
-{"ID":18,"Name":"狙擊","Comment":"射程極長的物理攻擊","CD":1,"SP":0,"EffectID":9}]
+{"ID":18,"Name":"狙擊","Comment":"射程極長的物理攻擊","CD":1,"SP":0,"EffectID":9},
+{"ID":19,"Name":"羽毛攻擊","Comment":"庭渡久侘歌的專用技能，射程無限","CD":0,"SP":0,"EffectID":33},
+{"ID":20,"Name":"下蛋","Comment":"蛋會生出小雞","CD":0,"SP":0,"EffectID":34}]

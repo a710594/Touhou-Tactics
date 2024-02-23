@@ -7,6 +7,7 @@ namespace Explore
     public class ExploreFileGenerator : MonoBehaviour
     {
         public int Floor;
+        public string FileName;
         public Transform Tilemap;
         public Transform Start;
         public Transform Goal;
@@ -25,6 +26,10 @@ namespace Explore
             foreach (Transform child in Tilemap)
             {
                 pos = Utility.ConvertToVector2Int(child.position);
+                if(pos.x == 6 && pos.y == 5) 
+                {
+                    Debug.Log(child.name);
+                }
                 _info.TileDic.Add(pos, new TileObject(child.name));
                 if(child.name != "Wall")
                     _info.WalkableList.Add(pos);
@@ -60,12 +65,12 @@ namespace Explore
             }
 
             ExploreFile file = new ExploreFile(_info);
-            DataContext.Instance.Save(file, "Explore/Floor_1", DataContext.PrePathEnum.Map);
+            DataContext.Instance.Save(file, "Explore/" + FileName, DataContext.PrePathEnum.Map);
         }
 
         public void LoadFile() 
         {
-            ExploreFile file = DataContext.Instance.Load<ExploreFile>(Application.streamingAssetsPath + "/Map/Explore/Floor_1", DataContext.PrePathEnum.Map);
+            ExploreFile file = DataContext.Instance.Load<ExploreFile>(Application.streamingAssetsPath + "/Map/Explore/" + FileName, DataContext.PrePathEnum.Map);
             for (int i = Tilemap.childCount; i > 0; --i)
             {
                 DestroyImmediate(Tilemap.GetChild(0).gameObject);

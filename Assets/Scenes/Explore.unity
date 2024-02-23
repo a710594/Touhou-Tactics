@@ -1955,7 +1955,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b814248a4d9e36438230940dcd677a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CanMove: 1
   MoveTo: {x: 0, y: 0, z: 0}
   RotateTo: {x: 0, y: 0, z: 0}
 --- !u!1 &1595835416

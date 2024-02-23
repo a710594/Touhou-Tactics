@@ -154,6 +154,14 @@ namespace Battle
                 }
             }
 
+            for (int i = 0; i < DyingList.Count; i++)
+            {
+                if (DyingList[i] != selectedCharacter)
+                {
+                    stepList.Remove(Utility.ConvertToVector2Int(DyingList[i].Position));
+                }
+            }
+
             return stepList;
         }
 

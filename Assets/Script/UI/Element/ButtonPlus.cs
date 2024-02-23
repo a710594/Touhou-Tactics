@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ButtonPlus : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler, IPointerEnterHandler
+public class ButtonPlus : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler, IPointerEnterHandler, IPointerClickHandler
 {
     public Action<ButtonPlus> ClickHandler;
     public Action<ButtonPlus> PressHandler;
@@ -111,9 +111,14 @@ public class ButtonPlus : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     protected void Awake()
     {
-        if (Button != null)
-        {
-            Button.onClick.AddListener(OnClick);
-        }
+        //if (Button != null)
+        //{
+        //    Button.onClick.AddListener(OnClick);
+        //}
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        OnClick();
     }
 }

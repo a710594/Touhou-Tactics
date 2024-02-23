@@ -16,7 +16,7 @@ namespace Battle
             {
             }
 
-            public override void Begin(object obj)
+            public override void Begin()
             {
                 _info = Instance.Info;
                 _character = Instance.SelectedCharacter;
@@ -33,22 +33,6 @@ namespace Battle
                 }
 
                 Instance.RemoveByFaction(_effect, _rangeList);
-
-                //Vector2Int v2;
-                //for (int i=0; i< _characterList.Count; i++) 
-                //{
-                //    v2 = Utility.ConvertToVector2Int(_characterList[i].Position);
-                //    if (_rangeList.Contains(v2)) 
-                //    {
-                //        if(_effect.Target == EffectModel.TargetEnum.None ||
-                //           (_effect.Target == EffectModel.TargetEnum.Us && _character.Faction != _characterList[i].Faction) ||
-                //           (_effect.Target == EffectModel.TargetEnum.Them && _character.Faction == _characterList[i].Faction)) 
-                //        {
-                //            _rangeList.Remove(v2);
-                //            i--;
-                //        }
-                //    }
-                //}
 
                 Instance.SetQuad(_rangeList, Instance._white);
                 Instance._battleUI.SetActionVisible(false);
@@ -81,13 +65,13 @@ namespace Battle
                     Vector3 p = new Vector3(position.x, tileDic[position].Height, position.y);
                     if (_effect.Track == EffectModel.TrackEnum.Straight)
                     {
-                        CheckLine(_character.Position, p, characterList, tileDic, out bool isBlock, out Vector3 result);
+                        Utility.CheckLine(_character.Position, p, characterList, tileDic, out bool isBlock, out Vector3 result);
                         Instance._cameraController.DrawLine(_character.Position, result, isBlock);
                         Instance._selectedPosition = Utility.ConvertToVector2Int(result);
                     }
                     else if (_effect.Track == EffectModel.TrackEnum.Parabola)
                     {
-                        CheckParabola(_character.Position, p, 4, tileDic, out bool isBlock, out List<Vector3> result); //要補拋物線的高度
+                        Utility.CheckParabola(_character.Position, p, 4, characterList, tileDic, out bool isBlock, out List<Vector3> result); //要補拋物線的高度
                         Instance._cameraController.DrawParabola(result, isBlock);
                         Instance._selectedPosition = Utility.ConvertToVector2Int(result.Last());
                     }

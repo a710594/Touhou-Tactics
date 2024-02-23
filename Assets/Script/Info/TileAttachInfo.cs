@@ -1,10 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TileAttachInfo
 {
-    public bool HasCharacter;
     public string TileID;
     public int Height;
     public string AttachID; //Tile 上面的東西,例如草,樹,石頭...
@@ -29,10 +29,17 @@ public class TileAttachInfo
 
     public TileAttachInfo(string id)
     {
-        TileSetting tileSetting = DataContext.Instance.TileSettingDic[id];
-        TileID = id;
-        Height = tileSetting.Height;
-        _tileMoveCost = tileSetting.MoveCost;
+        try
+        {
+            TileSetting tileSetting = DataContext.Instance.TileSettingDic[id];
+            TileID = id;
+            Height = tileSetting.Height;
+            _tileMoveCost = tileSetting.MoveCost;
+        }
+        catch(Exception ex) 
+        {
+            Debug.Log(id);
+        }
     }
 
     public TileAttachInfo(TileSetting tile)

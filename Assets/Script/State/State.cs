@@ -13,7 +13,7 @@ public class State
         _context = context;
     }
 
-    public virtual void Begin(object obj)
+    public virtual void Begin()
     {
     }
 

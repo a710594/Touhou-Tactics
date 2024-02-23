@@ -21,7 +21,7 @@ public class StateContext
         _stateDic.Clear();
     }
 
-    public void SetState<T>(object obj = null)
+    public void SetState<T>()
     {
         if (CurrentState != null)
         {
@@ -31,7 +31,7 @@ public class StateContext
         if (_stateDic.ContainsKey(typeof(T)))
         {
             CurrentState = _stateDic[typeof(T)];
-            CurrentState.Begin(obj);
+            CurrentState.Begin();
         }
         else
         {

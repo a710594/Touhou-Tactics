@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Battle;
 
 public class CharacterListGroup : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class CharacterListGroup : MonoBehaviour
     public Image Image;
 
     private List<BattleCharacterInfo> _characterList = new List<BattleCharacterInfo>();
-    private Dictionary<BattleCharacterInfo, Image> _imageDic = new Dictionary<BattleCharacterInfo, Image>();
+    private List<Image> _imageList = new List<Image>();
     private Dictionary<int, Sprite> _spriteDic = new Dictionary<int, Sprite>();
 
     public void Init(List<BattleCharacterInfo> characterList)
@@ -22,33 +23,63 @@ public class CharacterListGroup : MonoBehaviour
         {
             image = Instantiate(Image);
             image.transform.SetParent(transform);
-            sprite = Resources.Load<Sprite>("Image/" + _characterList[i].Controller + "_F");
-            image.sprite = sprite;
-            _spriteDic.Add(_characterList[i].Index, sprite);
-
-            _imageDic.Add(_characterList[i], image);
-            if (i > _max) 
+            if (i > _max)
             {
                 image.gameObject.SetActive(false);
             }
+            _imageList.Add(image);
+            sprite = Resources.Load<Sprite>("Image/" + _characterList[i].Sprite + "_F");
+            _spriteDic.Add(_characterList[i].Index, sprite);
         }
+    }
+
+    public void Add(BattleCharacterInfo character)
+    {
+        Image image;
+        Sprite sprite;
+        image = Instantiate(Image);
+        image.transform.SetParent(transform);
+        image.gameObject.SetActive(false);
+        _imageList.Add(image);
+        sprite = Resources.Load<Sprite>("Image/" + character.Sprite + "_F");
+        _spriteDic.Add(character.Index, sprite);
+        
+    }
+
+    public void ChangeSprite(int index, string sprite) 
+    {
+        _spriteDic[index] = Resources.Load<Sprite>("Image/" + sprite + "_F");
+        Refresh();
     }
 
     public void Refresh() 
     {
-        int index = 0;
-        foreach(KeyValuePair<BattleCharacterInfo, Image> pair in _imageDic) 
+        for (int i=0; i<_characterList.Count; i++) 
         {
-            if (index != -1 && index < _max && index < _characterList.Count) 
+            if (i < _max)
             {
-                pair.Value.gameObject.SetActive(true);
-                pair.Value.sprite = _spriteDic[_characterList[index].Index];
-                index++;
+                _imageList[i].gameObject.SetActive(true);
+                _imageList[i].sprite = _spriteDic[_characterList[i].Index];
             }
             else
             {
-                pair.Value.gameObject.SetActive(false);
+                _imageList[i].gameObject.SetActive(false);
             }
         }
+
+        //int index = 0;
+        //foreach(KeyValuePair<BattleCharacterInfo, Image> pair in _imageDic) 
+        //{
+        //    if (index != -1 && index < _max && index < _characterList.Count) 
+        //    {
+        //        pair.Value.gameObject.SetActive(true);
+        //        pair.Value.sprite = _spriteDic[_characterList[index].Index];
+        //        index++;
+        //    }
+        //    else
+        //    {
+        //        pair.Value.gameObject.SetActive(false);
+        //    }
+        //}
     }
 }

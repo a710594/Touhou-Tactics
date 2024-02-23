@@ -7,6 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using Battle;
 
 public static class Utility
 {
@@ -31,34 +32,49 @@ public static class Utility
         Vector2Int position;
         List<Vector2Int> list = new List<Vector2Int>();
 
-        //BFS
-        Queue<Vector2Int> queue = new Queue<Vector2Int>();
-        queue.Enqueue(start);
-        while (queue.Count != 0)
+        //range == -1 代表射程無限
+        if (range == -1)
         {
-            position = queue.Dequeue();
-            if (!list.Contains(position))
+            for (int i = 0; i < width; i++)
             {
-                list.Add(position);
-            }
-
-            if (!list.Contains(position + Vector2Int.up) && (position + Vector2Int.up).y < height && ManhattanDistance(position + Vector2Int.up, start) <= range)
-            {
-                queue.Enqueue(position + Vector2Int.up);
-            }
-            if (!list.Contains(position + Vector2Int.down) && (position + Vector2Int.down).y >= 0 && ManhattanDistance(position + Vector2Int.down, start) <= range)
-            {
-                queue.Enqueue(position + Vector2Int.down);
-            }
-            if (!list.Contains(position + Vector2Int.left) && (position + Vector2Int.left).x >= 0 && ManhattanDistance(position + Vector2Int.left, start) <= range)
-            {
-                queue.Enqueue(position + Vector2Int.left);
-            }
-            if (!list.Contains(position + Vector2Int.right) && (position + Vector2Int.right).x < width && ManhattanDistance(position + Vector2Int.right, start) <= range)
-            {
-                queue.Enqueue(position + Vector2Int.right);
+                for (int j = 0; j < height; j++)
+                {
+                    list.Add(new Vector2Int(i, j));
+                }
             }
         }
+        else
+        {
+            //BFS
+            Queue<Vector2Int> queue = new Queue<Vector2Int>();
+            queue.Enqueue(start);
+            while (queue.Count != 0)
+            {
+                position = queue.Dequeue();
+                if (!list.Contains(position))
+                {
+                    list.Add(position);
+                }
+
+                if (!list.Contains(position + Vector2Int.up) && (position + Vector2Int.up).y < height && ManhattanDistance(position + Vector2Int.up, start) <= range)
+                {
+                    queue.Enqueue(position + Vector2Int.up);
+                }
+                if (!list.Contains(position + Vector2Int.down) && (position + Vector2Int.down).y >= 0 && ManhattanDistance(position + Vector2Int.down, start) <= range)
+                {
+                    queue.Enqueue(position + Vector2Int.down);
+                }
+                if (!list.Contains(position + Vector2Int.left) && (position + Vector2Int.left).x >= 0 && ManhattanDistance(position + Vector2Int.left, start) <= range)
+                {
+                    queue.Enqueue(position + Vector2Int.left);
+                }
+                if (!list.Contains(position + Vector2Int.right) && (position + Vector2Int.right).x < width && ManhattanDistance(position + Vector2Int.right, start) <= range)
+                {
+                    queue.Enqueue(position + Vector2Int.right);
+                }
+            }
+        }
+
         return list;
     }
 
@@ -396,19 +412,103 @@ public static class Utility
             return null;
         }
     }
-}
 
-public static class ExtensionMethods
-{
-    // Deep clone
-    public static T DeepClone<T>(this T a)
+    public static void CheckLine(Vector3 from, Vector3 to, List<BattleCharacterInfo> characterList, Dictionary<Vector2Int, TileAttachInfo> tileDic, out bool isBlock, out Vector3 result)
     {
-        using (MemoryStream stream = new MemoryStream())
+        isBlock = false;
+        int height;
+        Vector2Int position;
+        List<Vector3> list = DrawLine3D(from, to);
+        for (int i = 0; i < list.Count; i++)
         {
-            BinaryFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(stream, a);
-            stream.Position = 0;
-            return (T)formatter.Deserialize(stream);
+            position = ConvertToVector2Int(list[i]);
+            if (tileDic.ContainsKey(position))
+            {
+                height = tileDic[position].Height;
+                if (tileDic[position].AttachID != null)
+                {
+                    height += DataContext.Instance.AttachSettingDic[tileDic[position].AttachID].Height;
+                }
+
+                for (int j = 0; j < characterList.Count; j++)
+                {
+                    if (ConvertToVector2Int(from) != ConvertToVector2Int(characterList[j].Position) && ConvertToVector2Int(to) != ConvertToVector2Int(characterList[j].Position) && position == ConvertToVector2Int(characterList[j].Position))
+                    {
+                        height++;
+                    }
+                }
+
+                if (height > list[i].y)
+                {
+                    isBlock = true;
+                    result = list[i];
+                    return;
+                }
+            }
         }
+
+        result = to;
+    }
+
+    //和 CheckLine 相似,但是無視 attach 和 character
+    public static void CheckThrough(Vector3 from, Vector3 to, Dictionary<Vector2Int, TileAttachInfo> tileDic, out bool isBlock, out Vector3 result)
+    {
+        isBlock = false;
+        int height;
+        Vector2Int position;
+        List<Vector3> list = DrawLine3D(from, to);
+        for (int i = 0; i < list.Count; i++)
+        {
+            position = ConvertToVector2Int(list[i]);
+            if (tileDic.ContainsKey(position))
+            {
+                height = tileDic[position].Height;
+
+                if (height > list[i].y)
+                {
+                    isBlock = true;
+                    result = list[i];
+                    return;
+                }
+            }
+        }
+
+        result = to;
+    }
+
+    public static void CheckParabola(Vector3 from, Vector3 to, int parabolaHeight, List<BattleCharacterInfo> characterList, Dictionary<Vector2Int, TileAttachInfo> tileDic, out bool isBlock, out List<Vector3> result)
+    {
+        isBlock = false;
+        int height;
+        Vector2Int position;
+        List<Vector3> list = DrawParabola(from, to, parabolaHeight, true);
+        for (int i = 0; i < list.Count; i++)
+        {
+            position = ConvertToVector2Int(list[i]);
+            if (tileDic.ContainsKey(position))
+            {
+                height = tileDic[position].Height;
+                if (tileDic[position].AttachID != null)
+                {
+                    height += DataContext.Instance.AttachSettingDic[tileDic[position].AttachID].Height;
+                }
+                for (int j = 0; j < characterList.Count; j++)
+                {
+                    if (ConvertToVector2Int(from) != ConvertToVector2Int(characterList[j].Position) && ConvertToVector2Int(to) != ConvertToVector2Int(characterList[j].Position) && position == ConvertToVector2Int(characterList[j].Position))
+                    {
+                        height++;
+                    }
+                }
+
+                if (height > list[i].y)
+                {
+                    isBlock = true;
+                    to = list[i];
+                    break;
+                }
+            }
+        }
+
+        result = DrawParabola(from, to, parabolaHeight, false);
     }
 }

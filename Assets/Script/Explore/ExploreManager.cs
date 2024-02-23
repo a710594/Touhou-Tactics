@@ -8,6 +8,7 @@ namespace Explore
 {
     public class ExploreManager
     {
+        private readonly int _maxFloor = 5;
         private readonly string _fileName = "ExploreFile";
 
         private static ExploreManager _instance;
@@ -40,7 +41,7 @@ namespace Explore
             {
                 _info = new ExploreInfo(file);
             }
-            else if(SystemManager.Instance.SystemInfo.MaxFloor == 1)
+            else if(SystemManager.Instance.SystemInfo.MaxFloor == 1) //初始檔案
             {
                 file = DataContext.Instance.Load<ExploreFile>("Explore/Floor_1", DataContext.PrePathEnum.Map);
                 _info = new ExploreInfo(file);
@@ -56,8 +57,17 @@ namespace Explore
 
         public void Init(int floor) 
         {
-            Generator2D generator2D = GameObject.Find("Generator2D").GetComponent<Generator2D>();
-            _info = generator2D.Generate(floor);
+            FloorModel data = DataContext.Instance.FloorDic[floor];
+            if (data.Name != "x")
+            {
+                ExploreFile file = DataContext.Instance.Load<ExploreFile>("Explore/" + data.Name, DataContext.PrePathEnum.Map);
+                _info = new ExploreInfo(file);
+            }
+            else
+            {
+                Generator2D generator2D = GameObject.Find("Generator2D").GetComponent<Generator2D>();
+                _info = generator2D.Generate(floor);
+            }
             SetObject();
         }
 
@@ -268,37 +278,32 @@ namespace Explore
         {
             SetObject();
 
-            //foreach (KeyValuePair<Vector2Int, TileObject> pair in _info.TileDic)
-            //{
-            //    if (_info.VisitedList.Contains(pair.Key))
-            //    {
-            //        if (pair.Value.Quad != null)
-            //        {
-            //            pair.Value.Quad.layer = MapLayer;
-            //        }
-            //        if (pair.Value.Icon != null)
-            //        {
-            //            pair.Value.Icon.layer = MapLayer;
-            //        }
-            //    }
-            //}
-
             if (_info.PlayerPosition == _info.Goal) 
             {
-                _info.TileDic[_info.Goal].Icon.transform.GetChild(0).gameObject.SetActive(true); //顯示粒子
-                ConfirmUI.Open("你已經打倒了出口的守衛！要前往下一層並回到營地嗎？", "確定", "取消", ()=> 
+                if (_info.Floor == _maxFloor)
                 {
-                    _info.Floor++;
-                    if(_info.Floor > SystemManager.Instance.SystemInfo.MaxFloor) 
+                    ConfirmUI.Open("感謝遊玩！", "確認", () =>
                     {
-                        SystemManager.Instance.SystemInfo.MaxFloor = _info.Floor;
-                    }
-
-                    SceneController.Instance.ChangeScene("Camp", () =>
-                    {
-                        CharacterManager.Instance.RecoverAllHP();
+                        Application.Quit();
                     });
-                }, null);
+                }
+                else
+                {
+                    _info.TileDic[_info.Goal].Icon.transform.GetChild(0).gameObject.SetActive(true); //顯示粒子
+                    ConfirmUI.Open("你已經打倒了出口的守衛！要前往下一層並回到營地嗎？", "確定", "取消", () =>
+                    {
+                        _info.Floor++;
+                        if (_info.Floor > SystemManager.Instance.SystemInfo.MaxFloor)
+                        {
+                            SystemManager.Instance.SystemInfo.MaxFloor = _info.Floor;
+                        }
+
+                        SceneController.Instance.ChangeScene("Camp", () =>
+                        {
+                            CharacterManager.Instance.RecoverAllHP();
+                        });
+                    }, null);
+                }
             }
         }
 

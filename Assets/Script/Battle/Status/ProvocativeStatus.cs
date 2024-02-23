@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProvocativeStatus : Status
+namespace Battle
 {
-    public BattleCharacterInfo Target; //攻擊目標
 
-    public ProvocativeStatus(StatusModel data) : base(data)
+    public class ProvocativeStatus : Status
     {
+        public BattleCharacterInfo Target; //攻擊目標
+
+        public ProvocativeStatus(StatusModel data) : base(data)
+        {
+        }
     }
 }

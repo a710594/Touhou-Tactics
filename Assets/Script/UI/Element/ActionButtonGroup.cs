@@ -147,7 +147,7 @@ public class ActionButtonGroup : MonoBehaviour
 
         if (canUse)
         {
-            BattleController.Instance.SelectObject(obj);
+            BattleController.Instance.SetTargetState(obj);
         }
         else
         {

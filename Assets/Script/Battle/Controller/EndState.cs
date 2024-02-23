@@ -12,7 +12,7 @@ namespace Battle
             {
             }
 
-            public override void Begin(object obj)
+            public override void Begin()
             {
                 _characterList = Instance.CharacterList;
                 _character = Instance.SelectedCharacter;
@@ -33,6 +33,10 @@ namespace Battle
                         {
                             _character.SkillList[i].CheckCD();
                         }
+                        for (int i = 0; i < _character.SupportList.Count; i++)
+                        {
+                            _character.SupportList[i].CheckCD();
+                        }
                         _character.CurrentWT = _character.WT;
                         _character.ActionCount = 2;
                         _character.HasUseSkill = false;
@@ -43,7 +47,14 @@ namespace Battle
                         _characterList.Add(_character);
                         Instance.SortCharacterList(false);
 
-                        _context.SetState<CharacterState>();
+                        if (_character.Faction == BattleCharacterInfo.FactionEnum.Player)
+                        {
+                            _context.SetState<DirectionState>();
+                        }
+                        else
+                        {
+                            _context.SetState<CharacterState>();
+                        }
                     }
                     else
                     {

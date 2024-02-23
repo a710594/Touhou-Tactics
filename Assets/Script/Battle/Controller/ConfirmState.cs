@@ -12,7 +12,7 @@ namespace Battle
             {
             }
 
-            public override void Begin(object obj)
+            public override void Begin()
             {
                 _character = Instance.SelectedCharacter;
                 _characterList = Instance.CharacterList;

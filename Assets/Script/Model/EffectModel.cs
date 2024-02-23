@@ -22,6 +22,7 @@ public class EffectModel
         Purify,
         Medicine,
         Sleep,
+        Summon,
     }
 
     public enum TargetEnum

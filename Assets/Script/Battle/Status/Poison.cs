@@ -2,14 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Poison : Status
+namespace Battle
 {
-    public Poison(StatusModel data) :base(data)
+    public class Poison : Status
     {
-    }
+        public Poison(StatusModel data) : base(data)
+        {
+        }
 
-    public int GetDamage(BattleCharacterInfo target) 
-    {
-        return Mathf.RoundToInt(target.MaxHP * Value / 100f);
+        public int GetDamage(BattleCharacterInfo target)
+        {
+            return Mathf.RoundToInt(target.MaxHP * Value / 100f);
+        }
     }
 }

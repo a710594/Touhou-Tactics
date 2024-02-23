@@ -29,8 +29,14 @@ public class Generator2D : MonoBehaviour {
         //Generate();
     }
 
-    public ExploreInfo Generate(int floor) {
+    public ExploreInfo Generate(int floor)
+    {
         FloorModel data = DataContext.Instance.FloorDic[floor];
+        
+        return Generate(data);
+    }
+
+    public ExploreInfo Generate(FloorModel data) {
         _floorSize = new Vector2Int(data.Width, data.Height);
         _roomCount = data.RoomCount;
 
@@ -41,7 +47,7 @@ public class Generator2D : MonoBehaviour {
         rooms = new List<Room>();
         info = new ExploreInfo();
         info.Size = _floorSize;
-        info.Floor = floor;
+        info.Floor = data.Floor;
 
         PlaceRooms();
         Triangulate();

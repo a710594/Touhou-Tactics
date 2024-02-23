@@ -16,10 +16,14 @@ namespace Battle
                 _characterList = Instance.CharacterList;
             }
 
-            public override void Begin(object obj)
+            public override void Begin()
             {
                 _info = Instance.Info;
                 Camera.main.transform.position = new Vector3(_info.NoAttachList[0].x-10, 10, _info.NoAttachList[0].y-10);
+
+                Instance.Arrow = GameObject.Find("Arrow");
+                Instance.DirectionGroup = GameObject.Find("DirectionGroup");
+                Instance.DirectionGroup.SetActive(false);
 
                 for (int i=0; i< _info.NoAttachList.Count; i++) 
                 {
@@ -33,11 +37,12 @@ namespace Battle
                 foreach (KeyValuePair<CharacterInfo, GameObject> pair in _tempDic)
                 {
                     battleCharacter = new BattleCharacterInfo(pair.Key, CharacterManager.Instance.Info.Lv);
-                    battleCharacter.Index = _characterList.Count + 1;
+                    Instance._maxIndex++;
+                    battleCharacter.Index = Instance._maxIndex;
                     battleCharacter.Position = pair.Value.transform.position;
                     _characterList.Add(battleCharacter);
-                    _info.TileAttachInfoDic[Utility.ConvertToVector2Int(battleCharacter.Position)].HasCharacter = true;
                     Instance._controllerDic.Add(battleCharacter.Index, pair.Value.GetComponent<BattleCharacterController>());
+                    Instance._controllerDic[battleCharacter.Index].SetSprite(battleCharacter.Sprite);
                     Instance._controllerDic[battleCharacter.Index].MoveEndHandler += Instance.OnMoveEnd;
                     Instance._controllerDic[battleCharacter.Index].SetDirectionHandler += Instance.SetDirection;
                     Instance._battleUI.SetLittleHpBarAnchor(battleCharacter.Index, Instance._controllerDic[battleCharacter.Index]);
@@ -51,7 +56,7 @@ namespace Battle
 
                 Instance._battleUI.CharacterListGroupInit(_characterList);
 
-                Instance.Arrow = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Other/Arrow"), Vector3.zero, Quaternion.identity);
+                //Instance.Arrow = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Other/Arrow"), Vector3.zero, Quaternion.identity);
             }
 
             public GameObject PlaceCharacter(Vector2Int position, CharacterInfo characterInfo)
@@ -88,13 +93,21 @@ namespace Battle
                 }
             }
 
-            public void HideCharacter(CharacterInfo characterInfo) 
+            public void SetCharacterSpriteVisible(CharacterInfo characterInfo, bool isVisible) 
             {
-                Instance._dragCameraUI.DontDrag = true;
+                Instance._dragCameraUI.DontDrag = !isVisible;
                 if (_tempDic.ContainsKey(characterInfo))
                 {
-                    _tempDic[characterInfo].gameObject.SetActive(false);
+                    _tempDic[characterInfo].SetActive(isVisible);
                 }
+            }
+
+            public void RemoveCharacterSprite(CharacterInfo characterInfo)
+            {
+                Instance._dragCameraUI.DontDrag = false;
+                GameObject obj = _tempDic[characterInfo];
+                _tempDic.Remove(characterInfo);
+                GameObject.Destroy(obj);
             }
         }
     }

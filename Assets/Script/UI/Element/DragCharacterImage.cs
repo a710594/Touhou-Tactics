@@ -6,12 +6,13 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Battle;
 
-public class DragCharacterImage : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler, IPointerExitHandler, IPointerEnterHandler
+public class DragCharacterImage : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler, IPointerExitHandler, IPointerEnterHandler, IPointerClickHandler
 {
     public Action<CharacterInfo> DragBeginHandler;
     public Action<CharacterInfo> DragEndHandler;
     public Action<CharacterInfo> EnterHandler;
     public Action<CharacterInfo> ExitHandler;
+    public Action<CharacterInfo> RightClickHandler;
 
     public Image Image;
 
@@ -30,7 +31,7 @@ public class DragCharacterImage : MonoBehaviour, IDragHandler, IEndDragHandler, 
     public void OnBeginDrag(PointerEventData eventData)
     {
         _drag = true;
-        BattleController.Instance.HideCharacter(_character);
+        BattleController.Instance.SetCharacterSpriteVisible(_character, false);
         Image.color = Color.white;
     }
 
@@ -61,12 +62,16 @@ public class DragCharacterImage : MonoBehaviour, IDragHandler, IEndDragHandler, 
             }
             else
             {
+                BattleController.Instance.SetCharacterSpriteVisible(_character, true);
                 transform.localPosition = Vector3.zero;
+                Image.color = Color.white;
             }
         }
         else
         {
+            BattleController.Instance.SetCharacterSpriteVisible(_character, true);
             transform.localPosition = Vector3.zero;
+            Image.color = Color.white;
         }
     }
 
@@ -91,6 +96,22 @@ public class DragCharacterImage : MonoBehaviour, IDragHandler, IEndDragHandler, 
         if (ExitHandler != null)
         {
             ExitHandler(_character);
+        }
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if(eventData.button == PointerEventData.InputButton.Right) 
+        {
+            if (RightClickHandler != null)
+            {
+                RightClickHandler(_character);
+            }
+            _drag = false;
+            _anchor = null;
+            BattleController.Instance.RemoveCharacterSprite(_character);
+            transform.localPosition = Vector3.zero;
+            Image.color = Color.white;
         }
     }
 }

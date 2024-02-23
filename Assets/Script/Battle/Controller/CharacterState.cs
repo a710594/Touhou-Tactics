@@ -15,7 +15,7 @@ namespace Battle
             {
             }
 
-            public override void Begin(object obj)
+            public override void Begin()
             {
                 info = Instance.CharacterList[0];
                 Instance.SelectedCharacter = info;
@@ -34,7 +34,7 @@ namespace Battle
 
                 Vector3 position = new Vector3();
                 BattleCharacterController controller = Instance._controllerDic[info.Index];
-                if (Instance._cameraRotate.CurrentState == CameraRotate.StateEnum.Slope)
+                if (Instance.CameraRotate.CurrentState == CameraRotate.StateEnum.Slope)
                 {
                     position = controller.transform.position + new Vector3(-10, 10, -10);
                 }

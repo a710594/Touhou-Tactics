@@ -2,34 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StatusFactory
+namespace Battle
 {
-    public static Status GetStatus(int id)
+    public class StatusFactory
     {
-        return GetStatus(DataContext.Instance.StatusDic[id]);
-    }
-
-    public static Status GetStatus(StatusModel data)
-    {
-        Status status = null;
-
-        if (data.Type == StatusModel.TypeEnum.Provocative)
+        public static Status GetStatus(int id)
         {
-            status = new ProvocativeStatus(data);
-        }
-        else if (data.Type == StatusModel.TypeEnum.Poison) 
-        {
-            status = new Poison(data);
-        }
-        else if (data.Type == StatusModel.TypeEnum.Sleep)
-        {
-            status = new Sleep(data);
-        }
-        else 
-        {
-            status = new Status(data);
+            return GetStatus(DataContext.Instance.StatusDic[id]);
         }
 
-        return status;
+        public static Status GetStatus(StatusModel data)
+        {
+            Status status = null;
+
+            if (data.Type == StatusModel.TypeEnum.Provocative)
+            {
+                status = new ProvocativeStatus(data);
+            }
+            else if (data.Type == StatusModel.TypeEnum.Poison)
+            {
+                status = new Poison(data);
+            }
+            else if (data.Type == StatusModel.TypeEnum.Sleep)
+            {
+                status = new Sleep(data);
+            }
+            else
+            {
+                status = new Status(data);
+            }
+
+            return status;
+        }
     }
 }

@@ -39,6 +39,14 @@ namespace Battle
             else
             {
                 _tempCharacterList = new List<CharacterInfo>(CharacterManager.Instance.Info.CharacterList);
+                for (int i=0; i<_tempCharacterList.Count; i++) 
+                {
+                    if (_tempCharacterList[i].CurrentHP == 0) 
+                    {
+                        _tempCharacterList.RemoveAt(i);
+                        i--;
+                    }
+                }
             }
 
             Image dragCharacterBG;
@@ -55,6 +63,7 @@ namespace Battle
                 dragCharacterImage.DragEndHandler += OnDragEnd;
                 dragCharacterImage.EnterHandler += OnEnter;
                 dragCharacterImage.ExitHandler += OnExit;
+                dragCharacterImage.RightClickHandler += OnRightClick;
                 _dragCharacterImageDic.Add(_tempCharacterList[i], dragCharacterImage);
             }
         }
@@ -79,6 +88,14 @@ namespace Battle
             }
             _dragCharacterImageDic[character].transform.SetParent(this.transform);
             _dragCharacterBGDic[character].gameObject.SetActive(false);
+        }
+
+        private void OnRightClick(CharacterInfo character)
+        {
+            _tempCharacterList.Add(character);
+            _selectedCharacterList.Remove(character);
+            _dragCharacterImageDic[character].transform.SetParent(_dragCharacterBGDic[character].transform);
+            _dragCharacterBGDic[character].gameObject.SetActive(true);
         }
 
         private void OnEnter(CharacterInfo character)
@@ -106,12 +123,6 @@ namespace Battle
 
         private void Update()
         {
-#if UNITY_EDITOR
-            if (Input.GetKeyDown(KeyCode.V))
-            {
-                BattleController.Instance.SetWin();
-            }
-#endif
         }
     }
 }

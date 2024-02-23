@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,8 +13,11 @@ public class BattleResultUI : MonoBehaviour
     public ScrollView ScrollView;
     public Button ConfirmButton;
 
-    public void SetData(int lv, int exp, int addExp, List<int> itemList) 
+    private Action _callback;
+
+    public void SetWin(int lv, int exp, int addExp, List<int> itemList, Action callback) 
     {
+        TitleLabel.text = "You Win!";
         LvLabel.text = "Lv." + lv;
         SetExpBar(lv, exp, addExp);
         List<object> list = new List<object>();
@@ -22,9 +26,19 @@ public class BattleResultUI : MonoBehaviour
             list.Add(itemList[i]);
         }
         ScrollView.SetData(list);
+        _callback = callback;
     }
 
-    public void SetExpBar(int lv, int exp, int addExp) 
+    public void SetLose(Action callback) 
+    {
+        TitleLabel.text = "You Lose...";
+        LvLabel.gameObject.SetActive(false);
+        ExpBar.gameObject.SetActive(false);
+        ScrollView.transform.parent.gameObject.SetActive(false);
+        _callback = callback;
+    }
+
+    private void SetExpBar(int lv, int exp, int addExp) 
     {
         int needExp = CharacterManager.Instance.NeedExp(lv);
         if (addExp + exp >= needExp)
@@ -48,10 +62,7 @@ public class BattleResultUI : MonoBehaviour
 
     private void ConfirmOnClick() 
     {
-        SceneController.Instance.ChangeScene("Explore", ()=> 
-        {
-            ExploreManager.Instance.Reload();
-        });
+        _callback();
     }
 
     private void Awake()

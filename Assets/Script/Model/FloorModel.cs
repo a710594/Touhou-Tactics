@@ -5,6 +5,7 @@ using UnityEngine;
 public class FloorModel
 {
     public int Floor;
+    public string Name;
     public int Width;
     public int Height;
     public int RoomCount;

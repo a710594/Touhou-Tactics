@@ -60,6 +60,11 @@ public class TipLabel : MonoBehaviour
         CanvasGroup.DOKill();
     }
 
+    private void OnDestroy()
+    {
+        CanvasGroup.DOKill();
+    }
+
     void Awake()
     {
         CanvasGroup.alpha = 0;

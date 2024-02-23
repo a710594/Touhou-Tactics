@@ -105,6 +105,7 @@ public class BattleUI : MonoBehaviour
         AnchorValueBar hpBar = _littleHpBarDic[id];
         if (characterInfo.CurrentHP > 0)
         {
+            hpBar.gameObject.SetActive(true);
             hpBar.SetValue(characterInfo.CurrentHP, characterInfo.MaxHP);
         }
         else 
@@ -162,11 +163,5 @@ public class BattleUI : MonoBehaviour
 
     private void Update()
     {
-#if UNITY_EDITOR
-        if (Input.GetKeyDown(KeyCode.V)) 
-        {
-            BattleController.Instance.SetWin();
-        }
-#endif
     }
 }

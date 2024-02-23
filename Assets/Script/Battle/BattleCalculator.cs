@@ -52,7 +52,7 @@ namespace Battle
         public List<Vector2Int> GetTroughAreaList(Vector3 from, Vector3 to)
         {
             List<Vector2Int> list = new List<Vector2Int>();
-            CheckThrough(from, to, out bool isBlock, out Vector3 result);
+            Utility.CheckThrough(from, to, Info.TileAttachInfoDic, out bool isBlock, out Vector3 result);
             List<Vector3> line = Utility.DrawLine3D(from, result);
             for (int i = 0; i < line.Count; i++)
             {
@@ -63,7 +63,7 @@ namespace Battle
             return list;
         }
 
-        private void RemoveByFaction(Effect effect, List<Vector2Int> list) 
+        public void RemoveByFaction(Effect effect, List<Vector2Int> list) 
         {
             Vector2Int v2;
             for (int i = 0; i < CharacterList.Count; i++)
@@ -275,100 +275,6 @@ namespace Battle
             {
                 return prediction;
             }
-        }
-
-        public static void CheckLine(Vector3 from, Vector3 to, List<BattleCharacterInfo> characterList, Dictionary<Vector2Int, TileAttachInfo> tileDic, out bool isBlock, out Vector3 result)
-        {
-            isBlock = false;
-            int height;
-            Vector2Int position;
-            List<Vector3> list = Utility.DrawLine3D(from, to);
-            for (int i = 0; i < list.Count; i++)
-            {
-                position = Utility.ConvertToVector2Int(list[i]);
-                if (tileDic.ContainsKey(position))
-                {
-                    height = tileDic[position].Height;
-                    if (tileDic[position].AttachID != null)
-                    {
-                        height += DataContext.Instance.AttachSettingDic[tileDic[position].AttachID].Height;
-                    }
-
-                    for (int j = 0; j < characterList.Count; j++)
-                    {
-                        if (Utility.ConvertToVector2Int(from) != Utility.ConvertToVector2Int(characterList[j].Position) && Utility.ConvertToVector2Int(to) != Utility.ConvertToVector2Int(characterList[j].Position) && position == Utility.ConvertToVector2Int(characterList[j].Position))
-                        {
-                            height++;
-                        }
-                    }
-
-                    if (height > list[i].y)
-                    {
-                        isBlock = true;
-                        result = list[i];
-                        return;
-                    }
-                }
-            }
-
-            result = to;
-        }
-
-        //和 CheckLine 相似,但是無視 attach 和 character
-        public void CheckThrough(Vector3 from, Vector3 to, out bool isBlock, out Vector3 result)
-        {
-            isBlock = false;
-            int height;
-            Vector2Int position;
-            List<Vector3> list = Utility.DrawLine3D(from, to);
-            Dictionary<Vector2Int, TileAttachInfo> tileDic = Info.TileAttachInfoDic;
-            for (int i = 0; i < list.Count; i++)
-            {
-                position = Utility.ConvertToVector2Int(list[i]);
-                if (tileDic.ContainsKey(position))
-                {
-                    height = tileDic[position].Height;
-
-                    if (height > list[i].y)
-                    {
-                        isBlock = true;
-                        result = list[i];
-                        return;
-                    }
-                }
-            }
-
-            result = to;
-        }
-
-        public static void CheckParabola(Vector3 from, Vector3 to, int parabolaHeight, Dictionary<Vector2Int, TileAttachInfo> tileDic, out bool isBlock, out List<Vector3> result)
-        {
-            isBlock = false;
-            result = new List<Vector3>();
-            int height;
-            Vector2Int position;
-            List<Vector3> list = Utility.DrawParabola(from, to, parabolaHeight, true);
-            for (int i = 0; i < list.Count; i++)
-            {
-                position = Utility.ConvertToVector2Int(list[i]);
-                if (tileDic.ContainsKey(position))
-                {
-                    height = tileDic[position].Height;
-                    if (tileDic[position].AttachID != null)
-                    {
-                        height += DataContext.Instance.AttachSettingDic[tileDic[position].AttachID].Height;
-                    }
-
-                    if (height > list[i].y)
-                    {
-                        isBlock = true;
-                        to = list[i];
-                        break;
-                    }
-                }
-            }
-
-            result = Utility.DrawParabola(from, to, parabolaHeight, false);
         }
 
         public Vector3 RandomCharacterPosition(BattleCharacterInfo.FactionEnum faction) 

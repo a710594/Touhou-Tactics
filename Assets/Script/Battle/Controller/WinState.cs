@@ -12,7 +12,7 @@ namespace Battle
             {
             }
 
-            public override void Begin(object obj) 
+            public override void Begin() 
             {
                 int itemId;
                 EnemyModel enemy;
@@ -20,13 +20,22 @@ namespace Battle
                 for (int i=0; i<Instance._enemyList.Count; i++) 
                 {
                     enemy = DataContext.Instance.EnemyDic[Instance._enemyList[i]];
-                    itemId = enemy.DropList[Random.Range(0, enemy.DropList.Count)];
-                    itemList.Add(itemId);
-                    ItemManager.Instance.AddItem(itemId, 1);
+                    if (enemy.DropList.Count > 0)
+                    {
+                        itemId = enemy.DropList[Random.Range(0, enemy.DropList.Count)];
+                        itemList.Add(itemId);
+                        ItemManager.Instance.AddItem(itemId, 1);
+                    }
                 }
                 Instance._battleUI.gameObject.SetActive(false);
                 Instance._battleResultUI.gameObject.SetActive(true);
-                Instance._battleResultUI.SetData(CharacterManager.Instance.Info.Lv, CharacterManager.Instance.Info.Exp, Instance.Info.Exp, itemList);
+                Instance._battleResultUI.SetWin(CharacterManager.Instance.Info.Lv, CharacterManager.Instance.Info.Exp, Instance.Info.Exp, itemList, ()=> 
+                {
+                    SceneController.Instance.ChangeScene("Explore", () =>
+                    {
+                        Explore.ExploreManager.Instance.Reload();
+                    });
+                });
 
                 List<BattleCharacterInfo> playerList = new List<BattleCharacterInfo>();
                 for (int i=0; i<Instance.CharacterList.Count; i++) 
@@ -36,9 +45,13 @@ namespace Battle
                         playerList.Add(Instance.CharacterList[i]);
                     }
                 }
-                for (int i=0; i<Instance.DeadCharacterList.Count; i++) 
+                for (int i = 0; i < Instance.DyingList.Count; i++)
                 {
-                    playerList.Add(Instance.DeadCharacterList[i]);
+                    playerList.Add(Instance.DyingList[i]);
+                }
+                for (int i=0; i<Instance.DeadList.Count; i++) 
+                {
+                    playerList.Add(Instance.DeadList[i]);
                 }
                 CharacterManager.Instance.Refresh(playerList);
                 CharacterManager.Instance.AddExp(Instance.Info.Exp);

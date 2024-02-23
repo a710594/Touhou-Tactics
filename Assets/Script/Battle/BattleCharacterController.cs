@@ -11,28 +11,21 @@ public class BattleCharacterController : MonoBehaviour
     public Action<Vector2Int> SetDirectionHandler;
 
     public Transform HpAnchor;
-    public Sprite Front;
-    public Sprite Back;
     public SpriteRenderer SpriteRenderer;
 
+    private Sprite _front;
+    private Sprite _back;
     private Vector2Int _direction = Vector2Int.left;
     private CameraRotate _cameraRotate;
 
-    //public void Move(Vector2 position)
-    //{
-    //    List<Vector2> paths = PathManager.Instance.GetPath(new Vector2(transform.position.x, transform.position.z), position);
-    //    if (paths.Count > 0)
-    //    {
-    //        Move(paths);
-    //    }
-    //    else 
-    //    {
-    //        if (MoveEndHandler != null)
-    //        {
-    //            MoveEndHandler();
-    //        }
-    //    }
-    //}
+    public void SetSprite(string sprite) 
+    {
+        _front = Resources.Load<Sprite>("Image/" + sprite + "_F");
+        _back = Resources.Load<Sprite>("Image/" + sprite + "_B");
+        SpriteRenderer.sprite = _front;
+        SpriteRenderer.flipX = true;
+        _direction = Vector2Int.down;
+    }
 
     public void Move(List<Vector2Int> paths)
     {
@@ -71,25 +64,25 @@ public class BattleCharacterController : MonoBehaviour
         {
             if (position.x > transform.position.x)
             {
-                SpriteRenderer.sprite = Back;
+                SpriteRenderer.sprite = _back;
                 SpriteRenderer.flipX = false;
                 _direction = Vector2Int.right;
             }
             else if (position.x < transform.position.x)
             {
-                SpriteRenderer.sprite = Front;
+                SpriteRenderer.sprite = _front;
                 SpriteRenderer.flipX = false;
                 _direction = Vector2Int.left;
             }
             else if (position.y > transform.position.z)
             {
-                SpriteRenderer.sprite = Back;
+                SpriteRenderer.sprite = _back;
                 SpriteRenderer.flipX = true;
                 _direction = Vector2Int.up;
             }
             else if (position.y < transform.position.z)
             {
-                SpriteRenderer.sprite = Front;
+                SpriteRenderer.sprite = _front;
                 SpriteRenderer.flipX = true;
                 _direction = Vector2Int.down;
             }
@@ -98,22 +91,22 @@ public class BattleCharacterController : MonoBehaviour
         {
             if (position.x > transform.position.x)
             {
-                SpriteRenderer.sprite = Front;
+                SpriteRenderer.sprite = _front;
                 SpriteRenderer.flipX = true;
             }
             else if (position.x < transform.position.x)
             {
-                SpriteRenderer.sprite = Front;
+                SpriteRenderer.sprite = _front;
                 SpriteRenderer.flipX = false;
             }
             else if (position.y > transform.position.z)
             {
-                SpriteRenderer.sprite = Back;
+                SpriteRenderer.sprite = _back;
                 SpriteRenderer.flipX = true;
             }
             else if (position.y < transform.position.z)
             {
-                SpriteRenderer.sprite = Front;
+                SpriteRenderer.sprite = _front;
                 SpriteRenderer.flipX = true;
             }
         }
@@ -122,6 +115,14 @@ public class BattleCharacterController : MonoBehaviour
         {
             SetDirectionHandler(_direction);
         }
+    }
+
+    public void SetGray(bool isGray)
+    {
+        MaterialPropertyBlock mpb = new MaterialPropertyBlock();
+        SpriteRenderer.GetPropertyBlock(mpb);
+        mpb.SetInteger("IsGray", isGray ? 1 : 0);
+        SpriteRenderer.SetPropertyBlock(mpb);
     }
 
     private void Rotate(Vector3 angle) 

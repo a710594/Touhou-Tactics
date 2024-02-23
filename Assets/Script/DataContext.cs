@@ -116,7 +116,9 @@ public class DataContext
         EnemyDic.Clear();
         for (int i = 0; i < EnemyList.Count; i++)
         {
+            EnemyList[i].GetSpriteList();
             EnemyList[i].GetDropList();
+            EnemyList[i].GetSkillList();
             EnemyDic.Add(EnemyList[i].ID, EnemyList[i]);
         }
 

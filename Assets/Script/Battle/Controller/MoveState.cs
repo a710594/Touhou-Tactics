@@ -15,14 +15,13 @@ namespace Battle
             {
             }
 
-            public override void Begin(object obj)
+            public override void Begin()
             {
                 _originalPosition = new Vector2Int(int.MaxValue, int.MaxValue);
                 BattleInfo info = Instance.Info;
                 _character = Instance.SelectedCharacter;
                 _characterList = Instance.CharacterList;
                 Instance._controllerDic[_character.Index].transform.position = _character.Position;
-                Instance.Info.TileAttachInfoDic[Utility.ConvertToVector2Int(_character.Position)].HasCharacter = false;
                 Instance._battleUI.ActionButtonGroup.gameObject.SetActive(false);
                 _stepList = Instance.GetStepList(Utility.ConvertToVector2Int(_character.Position), _character);
                 Instance.SetQuad(_stepList, Instance._white);
@@ -51,11 +50,9 @@ namespace Battle
                         Instance.ClearQuad();
                         List<Vector2Int> path = Instance.GetPath(Utility.ConvertToVector2Int(_character.Position), position, _character.Faction);
                         Instance._controllerDic[_character.Index].Move(path);
-                        Instance.Info.TileAttachInfoDic[Utility.ConvertToVector2Int(_character.Position)].HasCharacter = false;
                         _character.LastPosition = _character.Position;
                         _character.Position = new Vector3(position.x, Instance.Info.TileAttachInfoDic[position].Height, position.y);
                         _character.HasMove = true;
-                        Instance.Info.TileAttachInfoDic[Utility.ConvertToVector2Int(_character.Position)].HasCharacter = true;
                     }
                     else
                     {
