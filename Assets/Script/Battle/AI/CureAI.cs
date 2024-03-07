@@ -9,8 +9,8 @@ namespace Battle
         public override void Start()
         {
             Vector2Int start = Utility.ConvertToVector2Int(_info.Position);
-            _skill = _info.SkillList[0];
-            _stepList = BattleController.Instance.GetStepList(start, _info);
+            SelectedSkill = _info.SkillList[0];
+            _stepList = BattleController.Instance.GetStepList(_info);
             List<BattleCharacterInfo> targetList = GetTargetList(BattleCharacterInfo.FactionEnum.Enemy); //尋找夥伴
             Dictionary<BattleCharacterInfo, List<Vector2Int>> canHitDic = GetCanHitDic(targetList);
             Vector2Int moveTo;
@@ -29,7 +29,7 @@ namespace Battle
             }
             else //否則就尋找可攻擊的敵人
             {
-                _skill = _info.SkillList[1];
+                SelectedSkill = _info.SkillList[1];
                 targetList = GetTargetList(BattleCharacterInfo.FactionEnum.Player);
                 canHitDic = GetCanHitDic(targetList);
                 if (canHitDic.Count > 0) //有可以攻擊的目標

@@ -24,6 +24,7 @@ public class EnemyModel
     public string Sprite_2;
     public int Drop_1;
     public int Drop_2;
+    public int Drop_3;
     public string AI;
     public int Skill_1;
     public int Skill_2;
@@ -52,6 +53,10 @@ public class EnemyModel
         if (Drop_2 != -1)
         {
             DropList.Add(Drop_2);
+        }
+        if (Drop_3 != -1)
+        {
+            DropList.Add(Drop_3);
         }
     }
 

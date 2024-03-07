@@ -19,4 +19,6 @@ public class FloorModel
     public int Probability_4;
     public int Room_5;
     public int Probability_5;
+    public string EnemyName;
+    public int EnemyCount;
 }

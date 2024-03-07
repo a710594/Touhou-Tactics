@@ -72,7 +72,10 @@ public class SceneController
     private void SceneLoaded(Scene scene, LoadSceneMode mode)
     {
         _isLock = false;
-        CurrentScene = _tempType;
+        if (_tempType != null)
+        {
+            CurrentScene = _tempType;
+        }
         LoadingUI.Close();
 
         if (AfterSceneLoadedHandler != null)

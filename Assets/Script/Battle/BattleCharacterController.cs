@@ -23,8 +23,8 @@ public class BattleCharacterController : MonoBehaviour
         _front = Resources.Load<Sprite>("Image/" + sprite + "_F");
         _back = Resources.Load<Sprite>("Image/" + sprite + "_B");
         SpriteRenderer.sprite = _front;
-        SpriteRenderer.flipX = true;
-        _direction = Vector2Int.down;
+        SpriteRenderer.flipX = false;
+        _direction = Vector2Int.left;
     }
 
     public void Move(List<Vector2Int> paths)
@@ -125,16 +125,28 @@ public class BattleCharacterController : MonoBehaviour
         SpriteRenderer.SetPropertyBlock(mpb);
     }
 
-    private void Rotate(Vector3 angle) 
+    private void Rotate(CameraRotate.StateEnum state) 
     {
-        transform.eulerAngles = angle;
+        if (state == CameraRotate.StateEnum.Slope) 
+        {
+            transform.eulerAngles = new Vector3(30, 45, 0);
+        }
+        else
+        {
+            transform.eulerAngles = new Vector3(90, 0, 0);
+        }
     }
 
     private void Awake()
     {
-        transform.eulerAngles = new Vector3(0, 45, 0);
+        transform.eulerAngles = new Vector3(30, 45, 0);
 
         _cameraRotate = Camera.main.GetComponent<CameraRotate>();
         _cameraRotate.RotateHandler += Rotate;
+    }
+
+    private void OnDestroy()
+    {
+        _cameraRotate.RotateHandler -= Rotate;
     }
 }

@@ -9448,7 +9448,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22c9a62d7e32afb4cb2827d4a2be8f46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Prefab: Mashroom_NotMove
+  Prefab: NotMoveAI
   Map: Tutorial
 --- !u!1 &476834972
 GameObject:
@@ -40152,6 +40152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Floor: 1
+  FileName: Floor_1
   Tilemap: {fileID: 1621708670}
   Start: {fileID: 1483853291}
   Goal: {fileID: 282856675}

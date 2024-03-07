@@ -7,4 +7,5 @@ public class TileComponent : MonoBehaviour
     public string ID;
     public MeshRenderer Quad;
     public SpriteRenderer Select;
+    public GameObject Buff;
 }

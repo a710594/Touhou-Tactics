@@ -68,7 +68,7 @@ public class ItemManager
 
     public void Delete()
     {
-        DataContext.Instance.DeleteData(_fileName);
+        DataContext.Instance.DeleteData(_fileName, DataContext.PrePathEnum.Save);
     }
 
     public void AddItem(int id, int amount)

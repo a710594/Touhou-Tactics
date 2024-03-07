@@ -9,6 +9,7 @@ namespace Explore
     {
         public override void Move() 
         {
+            ExploreManager.Instance.Info.WalkableList.Add(Utility.ConvertToVector2Int(MoveTo));
             if (ExploreManager.Instance.IsWalkable(this, transform.position + transform.forward))
             {
                 MoveTo = transform.position + transform.forward;
@@ -32,6 +33,7 @@ namespace Explore
                 transform.DOMove(transform.position - transform.forward, 0.5f).SetEase(Ease.Linear);
                 transform.DORotate(transform.localEulerAngles + Vector3.up * 180, 0.5f).SetEase(Ease.Linear);
             }
+            ExploreManager.Instance.Info.WalkableList.Remove(Utility.ConvertToVector2Int(MoveTo));
         }
     }
 }

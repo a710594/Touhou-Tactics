@@ -1,6 +1,0 @@
-Floor	Name	Width	Height	RoomCount	Room_1	Probability_1	Room_2	Probability_2	Room_3	Probability_3	Room_4	Probability_4	Room_5	Probability_5
-1	Floor_1	30	30	30	1	4	2	2	3	2	4	1	-1	-1
-2	x	40	40	40	1	4	2	2	3	2	4	1	-1	-1
-3	x	50	50	50	1	4	2	2	3	2	4	1	-1	-1
-4	x	60	60	60	1	4	2	2	3	2	4	1	-1	-1
-5	Floor_5	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1

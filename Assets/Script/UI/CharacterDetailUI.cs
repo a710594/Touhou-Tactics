@@ -57,7 +57,7 @@ public class CharacterDetailUI : MonoBehaviour
     {
         _battleCharacterInfo = character;
         NameLabel.text = character.Name;
-        LvLabel.text = "¶¤¥îµ¥¯Å¡G" + CharacterManager.Instance.Info.Lv;
+        LvLabel.text = "Lv. " + character.Lv;
         ExpLabel.text = "¸gÅç­È¡G" + CharacterManager.Instance.Info.Exp + "/" + CharacterManager.Instance.NeedExp(CharacterManager.Instance.Info.Lv);
         if (character.PassiveList.Count>0)
         {

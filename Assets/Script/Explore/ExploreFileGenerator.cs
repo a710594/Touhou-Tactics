@@ -8,48 +8,37 @@ namespace Explore
     {
         public int Floor;
         public string FileName;
-        public Transform Tilemap;
+        public Transform Ground;
+        public Transform Wall;
         public Transform Start;
         public Transform Goal;
         public ExploreEnemyInfoObject[] Enemys;
+        public GameObject[] Triggers;
 
+        int minX;
+        int maxX;
+        int minY;
+        int maxY;
         private ExploreInfo _info = new ExploreInfo();
 
         public void BuildFile()
         {
-            int minX = int.MinValue;
-            int maxX = int.MinValue;
-            int minY = int.MinValue;
-            int maxY = int.MinValue;
+            minX = int.MinValue;
+            maxX = int.MinValue;
+            minY = int.MinValue;
+            maxY = int.MinValue;
             Vector2Int pos;
             _info = new ExploreInfo();
-            foreach (Transform child in Tilemap)
+            foreach (Transform child in Ground)
             {
                 pos = Utility.ConvertToVector2Int(child.position);
-                if(pos.x == 6 && pos.y == 5) 
-                {
-                    Debug.Log(child.name);
-                }
-                _info.TileDic.Add(pos, new TileObject(child.name));
-                if(child.name != "Wall")
-                    _info.WalkableList.Add(pos);
-
-                if(minX == int.MinValue || pos.x < minX)
-                {
-                    minX = pos.x;
-                }
-                if (maxX == int.MinValue || pos.x > maxX)
-                {
-                    maxX = pos.x;
-                }
-                if (minY == int.MinValue || pos.y < minY)
-                {
-                    minY = pos.y;
-                }
-                if (maxY == int.MinValue || pos.y > maxY)
-                {
-                    maxY = pos.y;
-                }
+                AddTile(pos, child.name);
+                _info.GroundList.Add(pos);
+            }
+            foreach (Transform child in Wall)
+            {
+                pos = Utility.ConvertToVector2Int(child.position);
+                AddTile(pos, child.name);
             }
             _info.Floor = Floor;
             _info.Start = Utility.ConvertToVector2Int(Start.position);
@@ -64,16 +53,47 @@ namespace Explore
                 _info.EnemyInfoList.Add(enemyInfo);
             }
 
+            for (int i=0; i<Triggers.Length; i++) 
+            {
+                _info.TriggerDic.Add(Utility.ConvertToVector2Int(Triggers[i].transform.position), Triggers[i].name);
+            }
+
             ExploreFile file = new ExploreFile(_info);
             DataContext.Instance.Save(file, "Explore/" + FileName, DataContext.PrePathEnum.Map);
+        }
+
+        private void AddTile(Vector2Int pos, string name) 
+        {
+            _info.TileDic.Add(pos, new TileObject(name));
+
+            if (minX == int.MinValue || pos.x < minX)
+            {
+                minX = pos.x;
+            }
+            if (maxX == int.MinValue || pos.x > maxX)
+            {
+                maxX = pos.x;
+            }
+            if (minY == int.MinValue || pos.y < minY)
+            {
+                minY = pos.y;
+            }
+            if (maxY == int.MinValue || pos.y > maxY)
+            {
+                maxY = pos.y;
+            }
         }
 
         public void LoadFile() 
         {
             ExploreFile file = DataContext.Instance.Load<ExploreFile>(Application.streamingAssetsPath + "/Map/Explore/" + FileName, DataContext.PrePathEnum.Map);
-            for (int i = Tilemap.childCount; i > 0; --i)
+            for (int i = Ground.childCount; i > 0; --i)
             {
-                DestroyImmediate(Tilemap.GetChild(0).gameObject);
+                DestroyImmediate(Ground.GetChild(0).gameObject);
+            }
+            for (int i = Wall.childCount; i > 0; --i)
+            {
+                DestroyImmediate(Wall.GetChild(0).gameObject);
             }
 
             GameObject obj;
@@ -82,7 +102,14 @@ namespace Explore
                 obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + file.TileValues[i]), Vector3.zero, Quaternion.identity);
                 obj.name = file.TileValues[i];
                 obj.transform.position = new Vector3(file.TileKeys[i].x, 0, file.TileKeys[i].y);
-                obj.transform.SetParent(Tilemap);
+                if (obj.name == "Wall")
+                {
+                    obj.transform.SetParent(Wall);
+                }
+                else
+                {
+                    obj.transform.SetParent(Ground);
+                }
             }
         }
     }

@@ -82,6 +82,12 @@ public class DataContext
 
     public void Init() 
     {
+        if (!Directory.Exists(Application.streamingAssetsPath + "/Save/"))
+        {
+            DirectoryInfo b = Directory.CreateDirectory(Application.streamingAssetsPath + "/Save/");
+            Debug.Log(b);
+        }
+
         JobList = Load<List<JobModel>>("Job", PrePathEnum.Data);
         JobDic.Clear();
         for (int i=0; i<JobList.Count; i++) 
@@ -378,14 +384,39 @@ public class DataContext
         }
     }
 
-    public void DeleteData<T>()
+    public void DeleteData(string fileName, PrePathEnum prePathEnum)
     {
-        string path = Path.Combine(_dataPrePath, typeof(T).Name + ".json");
-        File.Delete(path);
+        File.Delete(GetPath(fileName, prePathEnum));
     }
 
-    public void DeleteData(string fileName = "")
+    public bool IsSaveEmpty()
     {
-        File.Delete(Path.Combine(_dataPrePath, fileName + ".json"));
+        return !Directory.EnumerateFileSystemEntries(_savePrePath).Any();
+    }
+
+    private string GetPath(string fileName, PrePathEnum prePathEnum) 
+    {
+        string path;
+        string prePath = "";
+        if (prePathEnum == PrePathEnum.Data)
+        {
+            prePath = _dataPrePath;
+        }
+        else if (prePathEnum == PrePathEnum.Save)
+        {
+            prePath = _savePrePath;
+        }
+        else if (prePathEnum == PrePathEnum.Setting)
+        {
+            prePath = _settingPrePath;
+        }
+        else if (prePathEnum == PrePathEnum.Map)
+        {
+            prePath = _mapPrePath;
+        }
+
+        path = Path.Combine(prePath, fileName + ".json");
+
+        return path;
     }
 }

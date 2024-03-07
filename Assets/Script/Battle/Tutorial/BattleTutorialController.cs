@@ -35,6 +35,7 @@ namespace Battle
             _context.AddState(new State_6(_context));
             _context.AddState(new State_7(_context));
             _context.AddState(new State_8(_context));
+            _context.AddState(new State_9(_context));
         }
 
         public void Start() 
@@ -101,6 +102,14 @@ namespace Battle
             if (_context.CurrentState is State_7)
             {
                 _context.SetState<State_8>();
+            }
+        }
+
+        public void ToState_9()
+        {
+            if (_context.CurrentState is State_8)
+            {
+                _context.SetState<State_9>();
             }
         }
 
@@ -371,6 +380,45 @@ namespace Battle
                 TutorialArrowUI.Open("再次點選同樣的位置確認。", new Vector3(4, 2, 4), Vector2Int.down, null);
             }
 
+            //public override void End()
+            //{
+            //    TutorialArrowUI.Close();
+            //}
+
+            public override bool CheckClick(Vector2Int position)
+            {
+                if (position == new Vector2Int(4, 4))
+                {
+                    TutorialArrowUI.Close();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            //public override void Next()
+            //{
+            //    _context.SetState<State_8>();
+            //}
+        }
+
+        //選擇方向
+        private class State_8 : TutorialState
+        {
+            public State_8(StateContext context) : base(context)
+            {
+            }
+
+            public override void Begin()
+            {
+                TutorialUI.Open("回合結束後需要選擇角色面對的方向。\n角色面對的方向會影響命中率。\n比方說如果攻擊敵人的正面，命中率會比較低。\n反之從背後偷襲，命中率就會變高。\n盡量面向敵人，避免被偷襲吧。", "Tutorial_4", ()=> 
+                {
+                    TutorialArrowUI.Open("選擇方向。", new Vector3(4, 2, 4), Vector2Int.down, null);
+                });
+            }
+
             public override bool CheckClick(Vector2Int position)
             {
                 if (position == new Vector2Int(4, 4))
@@ -385,9 +433,9 @@ namespace Battle
             }
         }
 
-        private class State_8 : TutorialState
+        private class State_9 : TutorialState
         {
-            public State_8(StateContext context) : base(context)
+            public State_9(StateContext context) : base(context)
             {
             }
 

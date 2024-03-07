@@ -159,7 +159,7 @@ namespace Battle
                         {
                             for (int k = 0; k < CharacterList[i].StatusList[j].AreaList.Count; k++)
                             {
-                                if (Utility.ConvertToVector2(CharacterList[i].Position) + CharacterList[i].StatusList[j].AreaList[k] == Utility.ConvertToVector2(user.Position))
+                                if (Utility.ConvertToVector2Int(CharacterList[i].Position) + CharacterList[i].StatusList[j].AreaList[k] == Utility.ConvertToVector2Int(user.Position))
                                 {
                                     atk *= CharacterList[i].StatusList[j].Value / 100f;
                                 }
@@ -169,7 +169,7 @@ namespace Battle
                         {
                             for (int k = 0; k < CharacterList[i].StatusList[j].AreaList.Count; k++)
                             {
-                                if (Utility.ConvertToVector2(CharacterList[i].Position) + CharacterList[i].StatusList[j].AreaList[k] == Utility.ConvertToVector2(target.Position))
+                                if (Utility.ConvertToVector2Int(CharacterList[i].Position) + CharacterList[i].StatusList[j].AreaList[k] == Utility.ConvertToVector2Int(target.Position))
                                 {
                                     def *= CharacterList[i].StatusList[j].Value / 100f;
                                 }
@@ -192,7 +192,7 @@ namespace Battle
                         {
                             for (int k = 0; k < CharacterList[i].StatusList[j].AreaList.Count; k++)
                             {
-                                if (Utility.ConvertToVector2(CharacterList[i].Position) + CharacterList[i].StatusList[j].AreaList[k] == Utility.ConvertToVector2(user.Position))
+                                if (Utility.ConvertToVector2Int(CharacterList[i].Position) + CharacterList[i].StatusList[j].AreaList[k] == Utility.ConvertToVector2Int(user.Position))
                                 {
                                     mtk *= CharacterList[i].StatusList[j].Value / 100f;
                                 }
@@ -202,7 +202,7 @@ namespace Battle
                         {
                             for (int k = 0; k < CharacterList[i].StatusList[j].AreaList.Count; k++)
                             {
-                                if (Utility.ConvertToVector2(CharacterList[i].Position) + CharacterList[i].StatusList[j].AreaList[k] == Utility.ConvertToVector2(target.Position))
+                                if (Utility.ConvertToVector2Int(CharacterList[i].Position) + CharacterList[i].StatusList[j].AreaList[k] == Utility.ConvertToVector2Int(target.Position))
                                 {
                                     mef *= CharacterList[i].StatusList[j].Value / 100f;
                                 }
@@ -342,7 +342,7 @@ namespace Battle
 
             for (int i=0; i<CharacterList.Count; i++) 
             {
-            if(Utility.ConvertToVector2(CharacterList[i].Position) == target) 
+            if(Utility.ConvertToVector2Int(CharacterList[i].Position) == target) 
                 {
                     hasCharacter = true;
                     break;

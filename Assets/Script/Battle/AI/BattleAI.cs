@@ -7,9 +7,10 @@ namespace Battle
 {
     public class BattleAI
     {
+        public Skill SelectedSkill;
+
         protected BattleCharacterInfo _info;
         protected List<Vector2Int> _stepList;
-        protected Skill _skill;
         protected bool _useSkill;
         protected BattleCharacterInfo _target;
         protected Timer _timer = new Timer();
@@ -17,6 +18,7 @@ namespace Battle
         public virtual void Init(BattleCharacterInfo info)
         {
             _info = info;
+            SelectedSkill = _info.SkillList[0];
         }
 
         public virtual void Start()
@@ -27,7 +29,7 @@ namespace Battle
         {
             if (_useSkill)
             {
-                BattleController.Instance.SetTargetState(_skill);
+                BattleController.Instance.SetTargetState(SelectedSkill);
                 BattleController.Instance.Click(Utility.ConvertToVector2Int(_target.Position));
                 MoveCamera(_target.Position, () =>
                 {
@@ -73,7 +75,7 @@ namespace Battle
 
             for (int i = 0; i < _stepList.Count; i++) //我可以移動的範圍
             {
-                rangeList = Utility.GetRange(_skill.Effect.Range, battleInfo.Width, battleInfo.Height, _stepList[i]);
+                rangeList = Utility.GetRange(SelectedSkill.Effect.Range, battleInfo.Width, battleInfo.Height, _stepList[i]);
                 for (int j = 0; j < targetList.Count; j++)
                 {
                     targetPosition_v2 = Utility.ConvertToVector2Int(targetList[j].Position);
@@ -82,13 +84,13 @@ namespace Battle
                     {
                         bool isBlock = false;
                         //檢查射擊是否會被地形阻礙
-                        if (_skill.Effect.Track == EffectModel.TrackEnum.Straight)
+                        if (SelectedSkill.Effect.Track == EffectModel.TrackEnum.Straight)
                         {
                             Utility.CheckLine(step_v3, targetList[j].Position, BattleController.Instance.CharacterList, BattleController.Instance.Info.TileAttachInfoDic, out isBlock, out Vector3 result);
                             //Instance._cameraController.DrawLine(_character.Position, result, isBlock);
                             //Instance._selectedPosition = Utility.ConvertToVector2Int(result);
                         }
-                        else if (_skill.Effect.Track == EffectModel.TrackEnum.Parabola)
+                        else if (SelectedSkill.Effect.Track == EffectModel.TrackEnum.Parabola)
                         {
                             Utility.CheckParabola(step_v3, targetList[j].Position, 4, BattleController.Instance.CharacterList, BattleController.Instance.Info.TileAttachInfoDic, out isBlock, out List<Vector3> result); //要補拋物線的高度
                             //Instance._cameraController.DrawParabola(result, isBlock);
@@ -204,7 +206,7 @@ namespace Battle
             //挑選能打出最大傷害的目標
             for (int i = 0; i < list.Count; i++)
             {
-                damage = BattleController.Instance.GetDamage(_skill.Effect, _info, list[i]);
+                damage = BattleController.Instance.GetDamage(SelectedSkill.Effect, _info, list[i]);
                 if (damage > maxDamage)
                 {
                     maxDamage = damage;

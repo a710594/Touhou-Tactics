@@ -12,7 +12,7 @@ namespace Explore
         public Vector2Int Goal;
         public Vector2Int PlayerPosition;
         public int PlayerRotation;
-        public List<Vector2Int> WalkableList = new List<Vector2Int>(); //房間或走廊等可行走的地形
+        public List<Vector2Int> GroundList = new List<Vector2Int>(); //房間或走廊等可行走的地形
         public List<Vector2Int> VisitedList = new List<Vector2Int>();
         public List<ExploreEnemyInfo> EnemyInfoList = new List<ExploreEnemyInfo>();
         //json 不能以 Vector2Int 作為 dictionary 的 key
@@ -21,6 +21,8 @@ namespace Explore
         public List<string> TileValues = new List<string>();
         public List<Vector2Int> TreasureKeys = new List<Vector2Int>();
         public List<Treasure> TreasureValues = new List<Treasure>();
+        public List<Vector2Int> TriggerKeys = new List<Vector2Int>();
+        public List<string> TriggerValues = new List<string>();
 
         public ExploreFile() { }
 
@@ -32,7 +34,7 @@ namespace Explore
             Goal = info.Goal;
             PlayerPosition = info.PlayerPosition;
             PlayerRotation = info.PlayerRotation;
-            WalkableList = info.WalkableList;
+            GroundList = info.GroundList;
             VisitedList = info.VisitedList;
             EnemyInfoList = info.EnemyInfoList;
             TileKeys = new List<Vector2Int>(info.TileDic.Keys);
@@ -43,6 +45,8 @@ namespace Explore
             }
             TreasureKeys = new List<Vector2Int>(info.TreasureDic.Keys);
             TreasureValues = new List<Treasure>(info.TreasureDic.Values);
+            TriggerKeys = new List<Vector2Int>(info.TriggerDic.Keys);
+            TriggerValues = new List<string>(info.TriggerDic.Values);
         }
     }
 }

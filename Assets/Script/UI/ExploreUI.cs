@@ -6,20 +6,25 @@ using Explore;
 
 public class ExploreUI : MonoBehaviour
 {
-    public GameObject BigMap; 
+    public GameObject BigMap;
+    public GameObject SpaceLabel;
     public TreasureUI TreasureUI;
     public Text fpsText;
+    public Text FloorLabel;
     public Camera BigMapCamera;
 
     private float deltaTime;
 
-    // Start is called before the first frame update
-    void Awake()
+    public void SetCameraPosition(int x, int y) 
     {
-        TreasureUI.gameObject.SetActive(false);
+        BigMapCamera.transform.position = new Vector3(x, 5, y);
     }
 
-    // Update is called once per frame
+    private void Awake()
+    {
+        SpaceLabel.SetActive(false);
+    }
+
     void Update()
     {
         if (!InputMamager.Instance.IsLock)
@@ -41,12 +46,19 @@ public class ExploreUI : MonoBehaviour
             if (BigMap.activeSelf)
             {
                 BigMapCamera.Render();
+                FloorLabel.text = ExploreManager.Instance.Info.Floor + "F";
                 InputMamager.Instance.Lock();
             }
             else
             {
                 InputMamager.Instance.Unlock();
             }
+        }
+
+        if (ExploreManager.Instance.Info != null)
+        {
+            Vector2Int v2 = Utility.ConvertToVector2Int(Camera.main.transform.position + Camera.main.transform.forward);
+            SpaceLabel.SetActive(ExploreManager.Instance.Info.TreasureDic.ContainsKey(v2));
         }
 
         deltaTime += (Time.deltaTime - deltaTime) * 0.1f;

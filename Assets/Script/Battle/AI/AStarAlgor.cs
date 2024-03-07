@@ -132,14 +132,15 @@ namespace Battle
             }
         }
 
-        public List<Vector2Int> GetStepList(Vector2Int start, BattleCharacterInfo selectedCharacter)
+        public List<Vector2Int> GetStepList(BattleCharacterInfo character)
         {
             int distance;
-            List<Vector2Int> stepList = Utility.GetRange(selectedCharacter.MOV, Info.Width, Info.Height, start);
+            Vector2Int start = Utility.ConvertToVector2Int(character.Position);
+            List<Vector2Int> stepList = Utility.GetRange(character.MOV, Info.Width, Info.Height, start);
             for (int i = 0; i < stepList.Count; i++)
             {
-                distance = GetDistance(start, stepList[i], selectedCharacter.Faction);
-                if (distance > selectedCharacter.MOV || distance == -1)
+                distance = GetDistance(start, stepList[i], character.Faction);
+                if (distance > character.MOV || distance == -1)
                 {
                     stepList.RemoveAt(i);
                     i--;
@@ -148,7 +149,7 @@ namespace Battle
 
             for (int i = 0; i < CharacterList.Count; i++)
             {
-                if (CharacterList[i] != selectedCharacter)
+                if (CharacterList[i] != character)
                 {
                     stepList.Remove(Utility.ConvertToVector2Int(CharacterList[i].Position));
                 }
@@ -156,7 +157,7 @@ namespace Battle
 
             for (int i = 0; i < DyingList.Count; i++)
             {
-                if (DyingList[i] != selectedCharacter)
+                if (DyingList[i] != character)
                 {
                     stepList.Remove(Utility.ConvertToVector2Int(DyingList[i].Position));
                 }
@@ -220,7 +221,7 @@ namespace Battle
                 for (int i = 0; i < CharacterList.Count; i++)
                 {
                     //如果有角色不為目標且與自己陣營不同,就視為障礙物
-                    if (Utility.ConvertToVector2(CharacterList[i].Position) == to && Utility.ConvertToVector2(CharacterList[i].Position) != goal)
+                    if (Utility.ConvertToVector2Int(CharacterList[i].Position) == to && Utility.ConvertToVector2Int(CharacterList[i].Position) != goal)
                     {
                         if (faction != BattleCharacterInfo.FactionEnum.None && CharacterList[i].Faction != faction)
                         {

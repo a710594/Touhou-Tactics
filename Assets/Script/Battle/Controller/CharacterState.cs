@@ -20,9 +20,9 @@ namespace Battle
                 info = Instance.CharacterList[0];
                 Instance.SelectedCharacter = info;
 
-                if (Instance.Info.IsTutorial && info.Faction == BattleCharacterInfo.FactionEnum.Enemy)
+                if (Instance.Info.IsTutorial && info.Faction == BattleCharacterInfo.FactionEnum.Player)
                 {
-                    BattleTutorialController.Instance.ToState_8(); //to State_8
+                    BattleTutorialController.Instance.ToState_9(); //to State_9
                 }
 
                 int wt = info.CurrentWT;

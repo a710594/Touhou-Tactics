@@ -86,27 +86,27 @@ public static class Utility
         return new string(charArray);
     }
 
-    public static Vector2 ConvertToVector2(Vector3 vector3)
-    {
-        return new Vector2(vector3.x, vector3.z);
-    }
+    //public static Vector2 ConvertToVector2(Vector3 vector3)
+    //{
+    //    return new Vector2(vector3.x, vector3.z);
+    //}
 
     public static Vector2Int ConvertToVector2Int(Vector3 vector3)
     {
         return new Vector2Int(Mathf.RoundToInt(vector3.x), Mathf.RoundToInt(vector3.z));
     }
 
-    public static List<Vector2> DrawLine2D(Vector2 a, Vector2 b)
+    public static List<Vector2Int> DrawLine2D(Vector2Int a, Vector2Int b)
     {
         int dx = (int)Math.Abs(b.x - a.x);
         int dy = (int)Math.Abs(b.y - a.y);
-        List<Vector2> list = new List<Vector2>();
+        List<Vector2Int> list = new List<Vector2Int>();
 
         if (dx > dy) //dx 最大
         {
             if (a.x > b.x)
             {
-                Vector3 temp = a;
+                Vector2Int temp = a;
                 a = b;
                 b = temp;
             }
@@ -123,14 +123,14 @@ public static class Utility
                     y = (int)MathF.Round(a.y + dy * (i - a.x) / dx);
                 }
                 Console.WriteLine(i + " " + y);
-                list.Add(new Vector2(i, y));
+                list.Add(new Vector2Int(i, y));
             }
         }
         else if (dy > dx) //dy 最大
         {
             if (a.y > b.y)
             {
-                Vector3 temp = a;
+                Vector2Int temp = a;
                 a = b;
                 b = temp;
             }
@@ -147,7 +147,7 @@ public static class Utility
                     x = (int)MathF.Round(a.x + dx * (i - a.y) / dy);
                 }
                 Console.WriteLine(x + " " + i);
-                list.Add(new Vector2(x, i));
+                list.Add(new Vector2Int(x, i));
             }
         }
 

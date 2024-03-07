@@ -35,8 +35,8 @@ namespace Battle
         private void NearCombat() 
         {
             Vector2Int start = Utility.ConvertToVector2Int(_info.Position);
-            _skill = _info.SkillList[0];
-            _stepList = BattleController.Instance.GetStepList(start, _info);
+            SelectedSkill = _info.SkillList[0];
+            _stepList = BattleController.Instance.GetStepList(_info);
             List<BattleCharacterInfo> targetList = GetTargetList(BattleCharacterInfo.FactionEnum.Player);
             Dictionary<BattleCharacterInfo, List<Vector2Int>> canHitDic = GetCanHitDic(targetList);
             Vector2Int moveTo;

@@ -20,7 +20,9 @@ public class BattleUI : MonoBehaviour
     public CharacterListGroup CharacterListGroup;
     //public GameObject PowerPoint;
     public TipLabel TipLabel;
+    public GameObject DirectionGroup;
 
+    private Vector3 _directionPosition = new Vector3();
     private PointerEventData _pointerEventData = new PointerEventData(null);
     private List<RaycastResult> _graphicHitList = new List<RaycastResult>();
     private Dictionary<int, AnchorValueBar> _littleHpBarDic = new Dictionary<int, AnchorValueBar>();
@@ -138,6 +140,16 @@ public class BattleUI : MonoBehaviour
         CharacterListGroup.Refresh();
     }
 
+    public void SetDirectionGroupVisible(bool isVisible)
+    {
+        DirectionGroup.SetActive(isVisible);
+    }
+
+    public void SetDirectionGroupPosition(Vector3 position) 
+    {
+        _directionPosition = position;
+    }
+
     //public void DropPowerPoint(List<BattleCharacterInfo> targetList)
     //{
     //    GameObject obj;
@@ -161,7 +173,27 @@ public class BattleUI : MonoBehaviour
     //    });
     //}
 
+    private void Rotate(CameraRotate.StateEnum state)
+    {
+        if (state == CameraRotate.StateEnum.Slope)
+        {
+            DirectionGroup.transform.eulerAngles = new Vector3(60, 0, 45);
+        }
+        else
+        {
+            DirectionGroup.transform.eulerAngles = new Vector3(0, 0, 0);
+        }
+    }
+
+    private void Awake()
+    {
+        SetDirectionGroupVisible(false);
+        CameraRotate cameraRotate = Camera.main.GetComponent<CameraRotate>();
+        cameraRotate.RotateHandler += Rotate;
+    }
+
     private void Update()
     {
+        DirectionGroup.transform.position = Camera.main.WorldToScreenPoint(_directionPosition + Vector3.down * 0.4f);
     }
 }

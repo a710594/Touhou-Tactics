@@ -34,6 +34,7 @@ namespace Battle
 
                 Instance.RemoveByFaction(_effect, _rangeList);
 
+                Instance.ClearQuad();
                 Instance.SetQuad(_rangeList, Instance._white);
                 Instance._battleUI.SetActionVisible(false);
                 Instance._battleUI.SetSkillVisible(false);

@@ -27,6 +27,7 @@ public class InputMamager
 
     private BagUI _bagUI;
     private SelectCharacterUI _selectCharacterUI;
+    private SystemUI _systemUI;
 
     public void Init() 
     {
@@ -49,10 +50,10 @@ public class InputMamager
         {
             if (!IsLock)
             {
-                if (Input.GetKeyDown(KeyCode.S))
-                {
-                    FileSystem.Instance.Save();
-                }
+                //if (Input.GetKeyDown(KeyCode.S))
+                //{
+                //    FileSystem.Instance.Save();
+                //}
                 if (Input.GetKeyDown(KeyCode.I))
                 {
                     if (_bagUI == null)
@@ -72,14 +73,13 @@ public class InputMamager
                         Lock();
                     }
                 }
-
-                //debug
-                if (Input.GetKeyDown(KeyCode.T)) 
+                if (Input.GetKeyDown(KeyCode.Escape))
                 {
-                    SceneController.Instance.ChangeScene("Explore", () =>
+                    if (_systemUI == null)
                     {
-                        Explore.ExploreManager.Instance.Test();
-                    });
+                        _systemUI = SystemUI.Open();
+                        Lock();
+                    }
                 }
 
                 if (Input.GetKey(KeyCode.UpArrow))
@@ -110,6 +110,20 @@ public class InputMamager
                         RightHandler();
                     }
                 }
+
+#if UNITY_EDITOR
+                if (Input.GetKeyDown(KeyCode.O))
+                {
+                    Explore.ExploreManager.Instance.OpenAllMap();
+                }
+                if (Input.GetKeyDown(KeyCode.T))
+                {
+                    SceneController.Instance.ChangeScene("Explore", () =>
+                    {
+                        Explore.ExploreManager.Instance.Test();
+                    });
+                }
+#endif
             }
             else
             {
@@ -127,6 +141,15 @@ public class InputMamager
                     {
                         _selectCharacterUI.Close();
                         _selectCharacterUI = null;
+                    }
+                }
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    if (_systemUI != null)
+                    {
+                        _systemUI.Close();
+                        _systemUI = null;
+                        Unlock();
                     }
                 }
             }

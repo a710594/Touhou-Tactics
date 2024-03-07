@@ -23,7 +23,8 @@ namespace Battle
                 _characterList = Instance.CharacterList;
                 Instance._controllerDic[_character.Index].transform.position = _character.Position;
                 Instance._battleUI.ActionButtonGroup.gameObject.SetActive(false);
-                _stepList = Instance.GetStepList(Utility.ConvertToVector2Int(_character.Position), _character);
+                _stepList = Instance.GetStepList(_character);
+                Instance.ClearQuad();
                 Instance.SetQuad(_stepList, Instance._white);
             }
 
@@ -37,8 +38,6 @@ namespace Battle
 
             public override void Click(Vector2Int position)
             {
-                Instance.SetCharacterInfoUI_2(position);
-
                 if (_stepList.Contains(position))
                 {
                     if (position == _originalPosition) //½T©w²¾°Ê

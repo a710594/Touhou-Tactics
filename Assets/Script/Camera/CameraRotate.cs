@@ -6,7 +6,7 @@ using DG.Tweening;
 
 public class CameraRotate : MonoBehaviour
 {
-    public Action<Vector3> RotateHandler;
+    public Action<StateEnum> RotateHandler;
 
     public enum StateEnum
     {
@@ -41,22 +41,16 @@ public class CameraRotate : MonoBehaviour
                 transform.DORotate(new Vector3(90, 0, 0), 1f);
                 transform.DOMove(transform.position + new Vector3(10, 0, 10), 1f);
                 CurrentState = StateEnum.Vertical;
-
-                if(RotateHandler != null) 
-                {
-                    RotateHandler(new Vector3(90, 0, 0));
-                }
             }
             else
             {
                 transform.DORotate(new Vector3(30, 45, 0), 1f);
                 transform.DOMove(transform.position + new Vector3(-10, 0, -10), 1f);
                 CurrentState = StateEnum.Slope;
-
-                if (RotateHandler != null)
-                {
-                    RotateHandler(new Vector3(30, 45, 0));
-                }
+            }
+            if (RotateHandler != null)
+            {
+                RotateHandler(CurrentState);
             }
         }
     }

@@ -37,4 +37,9 @@ public class SystemManager
         SystemInfo.CurrentScene = SceneController.Instance.CurrentScene;
         DataContext.Instance.Save(SystemInfo, _fileName, DataContext.PrePathEnum.Save);
     }
+
+    public void Delete()
+    {
+        DataContext.Instance.DeleteData(_fileName, DataContext.PrePathEnum.Save);
+    }
 }

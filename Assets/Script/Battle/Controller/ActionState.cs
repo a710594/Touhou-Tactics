@@ -24,6 +24,7 @@ namespace Battle
                 Instance._battleUI.SetCharacterInfoUI_2(null);
                 Instance._battleUI.ActionButtonGroup.SkillInfoGroup.gameObject.SetActive(false);
                 Instance.ClearQuad();
+                Instance.ShowTileBuff(_character);
 
                 bool sleep = false;
                 for (int i = 0; i < _character.StatusList.Count; i++)
@@ -52,6 +53,7 @@ namespace Battle
 
             public override void Click(Vector2Int position)
             {
+                Instance.ClearQuad();
                 Instance.SetCharacterInfoUI_2(position);
             }
         }

@@ -31,7 +31,6 @@ namespace Explore
                         _isMoving = false;
                     });
                     MoveTo = position;
-                    ExploreManager.Instance.CheckCollision();
                     if (MoveHandler != null)
                     {
                         MoveHandler();
@@ -54,7 +53,6 @@ namespace Explore
                         ExploreManager.Instance.CheckVidsit(transform);
                     });
                     MoveTo = position;
-                    ExploreManager.Instance.CheckCollision();
                     if (MoveHandler != null)
                     {
                         MoveHandler();
@@ -64,6 +62,50 @@ namespace Explore
         }
 
         private void Left()
+        {
+            if (!_isMoving)
+            {
+                position = transform.position - transform.right;
+                if (ExploreManager.Instance.IsWalkable(position))
+                {
+                    _isMoving = true;
+                    transform.DOMove(position, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
+                    {
+                        _isMoving = false;
+                        ExploreManager.Instance.CheckVidsit(transform);
+                    });
+                    MoveTo = position;
+                    if (MoveHandler != null)
+                    {
+                        MoveHandler();
+                    }
+                }
+            }
+        }
+
+        private void Right()
+        {
+            if (!_isMoving)
+            {
+                position = transform.position + transform.right;
+                if (ExploreManager.Instance.IsWalkable(position))
+                {
+                    _isMoving = true;
+                    transform.DOMove(position, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
+                    {
+                        _isMoving = false;
+                        ExploreManager.Instance.CheckVidsit(transform);
+                    });
+                    MoveTo = position;
+                    if (MoveHandler != null)
+                    {
+                        MoveHandler();
+                    }
+                }
+            }
+        }
+
+        private void TurnLeft()
         {
             if (!_isMoving)
             {
@@ -81,7 +123,7 @@ namespace Explore
             }
         }
 
-        private void Right()
+        private void TurnRight()
         {
             if (!_isMoving)
             {
@@ -101,91 +143,49 @@ namespace Explore
 
         private void Awake()
         {
-            InputMamager.Instance.UpHandler += Up;
-            InputMamager.Instance.DownHandler += Down;
-            InputMamager.Instance.LeftHandler += Left;
-            InputMamager.Instance.RightHandler += Right;
+            //InputMamager.Instance.UpHandler += Up;
+            //InputMamager.Instance.DownHandler += Down;
+            //InputMamager.Instance.LeftHandler += TurnLeft;
+            //InputMamager.Instance.RightHandler += TurnRight;
         }
 
         private void OnDestroy()
         {
-            InputMamager.Instance.UpHandler -= Up;
-            InputMamager.Instance.DownHandler -= Down;
-            InputMamager.Instance.LeftHandler -= Left;
-            InputMamager.Instance.RightHandler -= Right;
+            //InputMamager.Instance.UpHandler -= Up;
+            //InputMamager.Instance.DownHandler -= Down;
+            //InputMamager.Instance.LeftHandler -= TurnLeft;
+            //InputMamager.Instance.RightHandler -= TurnRight;
         }
 
-        /*private void Update()
+        private void Update()
         {
-            if (CanMove && !_isMoving)
+            if (!InputMamager.Instance.IsLock) 
             {
-                if (Input.GetKey(KeyCode.UpArrow))
+                if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
                 {
-                    position = transform.position + transform.forward;
-                    if (ExploreManager.Instance.IsWalkable(position))
-                    {
-                        _isMoving = true;
-                        transform.DOMove(position, 0.5f).SetEase(Ease.Linear).OnComplete(() => 
-                        {
-                            ExploreManager.Instance.CheckVidsit(transform);
-                            _isMoving = false; 
-                        });
-                        MoveTo = position;
-                        ExploreManager.Instance.CheckCollision();
-                        if (MoveHandler != null)
-                        {
-                            MoveHandler();
-                        }
-                    }
+                    Up();
                 }
-                else if (Input.GetKey(KeyCode.DownArrow))
+                else if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
                 {
-                    position = transform.position - transform.forward;
-                    if (ExploreManager.Instance.IsWalkable(position))
-                    {
-                        _isMoving = true;
-                        transform.DOMove(position, 0.5f).SetEase(Ease.Linear).OnComplete(() => 
-                        {
-                            _isMoving = false;
-                            ExploreManager.Instance.CheckVidsit(transform);
-                        });
-                        MoveTo = position;
-                        ExploreManager.Instance.CheckCollision();
-                        if (MoveHandler != null)
-                        {
-                            MoveHandler();
-                        }
-                    }
+                    Down();
                 }
-                else if (Input.GetKey(KeyCode.LeftArrow))
+                else if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
                 {
-                    _isMoving = true;
-                    RotateTo = transform.localEulerAngles + Vector3.down * 90;
-                    transform.DORotate(RotateTo, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
-                    {
-                        _isMoving = false;
-                        ExploreManager.Instance.CheckVidsit(transform);
-                    });
-                    if (RotateHandler != null) 
-                    {
-                        RotateHandler();
-                    }
+                    TurnLeft();
                 }
-                else if (Input.GetKey(KeyCode.RightArrow))
+                else if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
                 {
-                    _isMoving = true;
-                    RotateTo = transform.localEulerAngles + Vector3.up * 90;
-                    transform.DORotate(RotateTo, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
-                    {
-                        _isMoving = false;
-                        ExploreManager.Instance.CheckVidsit(transform);
-                    });
-                    if (RotateHandler != null)
-                    {
-                        RotateHandler();
-                    }
+                    TurnRight();
+                }
+                else if (Input.GetKey(KeyCode.Q)) 
+                {
+                    Left();
+                }
+                else if (Input.GetKey(KeyCode.E))
+                {
+                    Right();
                 }
             }
-        }*/
+        }
     }
 }

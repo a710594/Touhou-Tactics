@@ -207,8 +207,6 @@ namespace Battle
 
         public void SetQuad(List<Vector2Int> list, Color color)
         {
-            ClearQuad();
-
             for (int i = 0; i < list.Count; i++)
             {
                 Info.TileComponentDic[list[i]].Quad.gameObject.SetActive(true);
@@ -228,6 +226,7 @@ namespace Battle
             }
 
             RemoveByFaction(effect, _areaList);
+            ClearQuad();
             SetQuad(_areaList, _yellow);
         }
 
@@ -236,6 +235,7 @@ namespace Battle
             foreach (KeyValuePair<Vector2Int, TileComponent> pair in Info.TileComponentDic)
             {
                 pair.Value.Quad.gameObject.SetActive(false);
+                pair.Value.Buff.gameObject.SetActive(false);
             }
         }
 
@@ -279,7 +279,9 @@ namespace Battle
             {
                 if (CharacterList[i] != Instance.SelectedCharacter && position == new Vector2(CharacterList[i].Position.x, CharacterList[i].Position.z))
                 {
-                    Instance._battleUI.SetCharacterInfoUI_2(CharacterList[i]);
+                    _battleUI.SetCharacterInfoUI_2(CharacterList[i]);
+                    ShowTileBuff(CharacterList[i]);
+                    ShowRange(CharacterList[i]);
                     return true;
                 }
             }
@@ -363,6 +365,48 @@ namespace Battle
                     }
                 }
             });
+        }
+
+        private void ShowTileBuff(BattleCharacterInfo character) 
+        {
+            Vector2Int position;
+            for (int i = 0; i < character.StatusList.Count; i++)
+            {
+                if (character.StatusList[i].AreaList.Count > 0)
+                {
+                    for (int j = 0; j < character.StatusList[i].AreaList.Count; j++)
+                    {
+                        position = Utility.ConvertToVector2Int(character.Position) + character.StatusList[i].AreaList[j];
+                        if (Info.TileComponentDic.ContainsKey(position))
+                        {
+                            Info.TileComponentDic[position].Buff.SetActive(true);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void ShowRange(BattleCharacterInfo character) 
+        {
+            List<Vector2Int> stepList = GetStepList(character);
+            Instance.SetQuad(stepList, _white);
+            if (character.AI != null)
+            {
+                List<Vector2Int> tempList = new List<Vector2Int>();
+                List<Vector2Int> rangeList = new List<Vector2Int>();
+                for (int i = 0; i < stepList.Count; i++) //我可以移動的範圍
+                {
+                    tempList = Utility.GetRange(character.AI.SelectedSkill.Effect.Range, Info.Width, Info.Height, stepList[i]);
+                    for (int j=0; j<tempList.Count; j++) 
+                    {
+                        if(!stepList.Contains(tempList[j]) && !rangeList.Contains(tempList[j])) 
+                        {
+                            rangeList.Add(tempList[j]);
+                        }
+                    }
+                }
+                Instance.SetQuad(rangeList, _yellow);
+            }
         }
 
         public void SetWin() 

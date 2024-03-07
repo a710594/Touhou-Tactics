@@ -53,7 +53,7 @@ public class CharacterManager
 
     public void Delete()
     {
-        DataContext.Instance.DeleteData(_fileName);
+        DataContext.Instance.DeleteData(_fileName, DataContext.PrePathEnum.Save);
     }
 
     public void AddExp(int addExp) 

@@ -22,8 +22,6 @@ public class Generator2D : MonoBehaviour {
 
     private Vector2Int _floorSize;
     private int _roomCount;
-    private Vector2Int _start;
-    private Vector2Int _goal;
 
     void Start() {
         //Generate();
@@ -55,9 +53,8 @@ public class Generator2D : MonoBehaviour {
         PathfindHallways();
         PlaceWall();
         PlaceStartAndGoal();
-        info.Start = _start;
-        info.Goal = _goal;
-        info.PlayerPosition = _start;
+        CreateEnemy(data);
+        info.PlayerPosition = info.Start;
 
         return info;
     }
@@ -115,7 +112,7 @@ public class Generator2D : MonoBehaviour {
                     if (!info.TileDic.ContainsKey(pos)) 
                     {
                         info.TileDic.Add(pos, new TileObject("Ground"));
-                        info.WalkableList.Add(pos);
+                        info.GroundList.Add(pos);
                     }
                 }
 
@@ -228,7 +225,7 @@ public class Generator2D : MonoBehaviour {
                             if (grid[pos] == CellType.Hallway)
                             {
                                 info.TileDic.Add(pos, new TileObject("Ground"));
-                                info.WalkableList.Add(pos);
+                                info.GroundList.Add(pos);
                             }
                         }
                     }
@@ -386,7 +383,7 @@ public class Generator2D : MonoBehaviour {
         {
             positionList.Remove(pair.Key);
         }
-        _start = positionList[random.Next(0, positionList.Count)];
+        info.Start = positionList[random.Next(0, positionList.Count)];
 
         List<Room> tempList = new List<Room>(rooms);
         tempList.Remove(startRoom);
@@ -398,24 +395,6 @@ public class Generator2D : MonoBehaviour {
                 goalRoom = tempList[i];
             }
         }
-
-        //Room current = null;
-        //Stack<Room> stack = new Stack<Room>();
-        //List<Room> visitedList = new List<Room>();
-        //stack.Push(startRoom);
-        //while (stack.Count > 0)
-        //{
-        //    current = stack.Pop(); //当前访问的
-        //    visitedList.Add(current);
-        //    for (int i=0; i<current.AdjRoomList.Count; i++)
-        //    {
-        //        if (!visitedList.Contains(current.AdjRoomList[i]))
-        //        {
-        //            stack.Push(current.AdjRoomList[i]);
-        //        }
-        //    }
-        //}
-        //goalRoom = current;
 
         positionList.Clear();
         for (int i = 0; i < goalRoom.bounds.size.x; i++)
@@ -430,7 +409,30 @@ public class Generator2D : MonoBehaviour {
             positionList.Remove(pair.Key);
         }
 
-        _goal = positionList[random.Next(0, positionList.Count)];
+        info.Goal = positionList[random.Next(0, positionList.Count)];
+    }
+
+    private void CreateEnemy(FloorModel data) 
+    {
+        int random;
+        List<Vector2Int> walkableList = new List<Vector2Int>(info.GroundList);
+        walkableList.Remove(info.Start);
+        walkableList.Remove(info.Goal);
+        foreach (KeyValuePair<Vector2Int, Treasure> pair in info.TreasureDic)
+        {
+            walkableList.Remove(pair.Key);
+        }
+
+        ExploreEnemyInfo enemyInfo;
+        for (int i = 0; i < data.EnemyCount; i++)
+        {
+            random = UnityEngine.Random.Range(0, walkableList.Count);
+            enemyInfo = new ExploreEnemyInfo(data.EnemyName, null, walkableList[random], 0);
+            info.EnemyInfoList.Add(enemyInfo);
+            walkableList.RemoveAt(random);
+        }
+        enemyInfo = new ExploreEnemyInfo("FloorBOSS", null, info.Goal, 0);
+        info.EnemyInfoList.Add(enemyInfo);
     }
 
     private bool InBound(int x, int y)
