@@ -1,0 +1,6 @@
+[{"ID":1,"Name":"烤肉","Material_1":9,"Material_2":-1,"Material_3":-1,"Material_4":-1,"Material_5":-1,"Result":15},
+{"ID":2,"Name":"烤香菇","Material_1":7,"Material_2":-1,"Material_3":-1,"Material_4":-1,"Material_5":-1,"Result":16},
+{"ID":3,"Name":"烤馬鈴薯","Material_1":11,"Material_2":-1,"Material_3":-1,"Material_4":-1,"Material_5":-1,"Result":17},
+{"ID":4,"Name":"馬鈴薯燉肉","Material_1":9,"Material_2":11,"Material_3":-1,"Material_4":-1,"Material_5":-1,"Result":18},
+{"ID":5,"Name":"香菇烤肉串","Material_1":9,"Material_2":7,"Material_3":-1,"Material_4":-1,"Material_5":-1,"Result":19},
+{"ID":6,"Name":"綜合燉肉","Material_1":9,"Material_2":7,"Material_3":11,"Material_4":-1,"Material_5":-1,"Result":20}]

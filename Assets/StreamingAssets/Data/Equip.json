@@ -1,0 +1,4 @@
+[{"Category":1,"ID":21,"Name":"獸牙手環","Weight":-1,"ATK":10,"DEF":0,"MTK":0,"MEF":0,"HP":0,"STR":0,"CON":0,"INT":0,"MEN":0,"DEX":0,"AGI":0,"MOV":0},
+{"Category":1,"ID":22,"Name":"玉石手環","Weight":-1,"ATK":0,"DEF":0,"MTK":10,"MEF":0,"HP":0,"STR":0,"CON":0,"INT":0,"MEN":0,"DEX":0,"AGI":0,"MOV":0},
+{"Category":2,"ID":23,"Name":"厚重的項鍊","Weight":2,"ATK":0,"DEF":10,"MTK":0,"MEF":10,"HP":0,"STR":0,"CON":0,"INT":0,"MEN":0,"DEX":0,"AGI":0,"MOV":0},
+{"Category":2,"ID":24,"Name":"輕巧的項鍊","Weight":1,"ATK":0,"DEF":5,"MTK":0,"MEF":5,"HP":0,"STR":0,"CON":0,"INT":0,"MEN":0,"DEX":0,"AGI":0,"MOV":0}]

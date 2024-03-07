@@ -1,0 +1,4 @@
+[{"ID":1,"Name":"普通房間","MinWidth":5,"MaxWidth":7,"MinHeight":5,"MaxHeight":7,"TreasureID":-1,"MinTreasureCount":-1,"MaxTreasureCount":-1},
+{"ID":2,"Name":"蔬菜房間","MinWidth":5,"MaxWidth":7,"MinHeight":5,"MaxHeight":7,"TreasureID":1,"MinTreasureCount":1,"MaxTreasureCount":3},
+{"ID":3,"Name":"礦石房間","MinWidth":5,"MaxWidth":7,"MinHeight":5,"MaxHeight":7,"TreasureID":2,"MinTreasureCount":1,"MaxTreasureCount":2},
+{"ID":4,"Name":"寶藏房間","MinWidth":5,"MaxWidth":5,"MinHeight":5,"MaxHeight":5,"TreasureID":3,"MinTreasureCount":1,"MaxTreasureCount":1}]

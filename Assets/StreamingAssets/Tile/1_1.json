@@ -1,0 +1,26 @@
+{
+  "ID": "1_1",
+  "Comment": "1",
+  "Height": 1,
+  "MoveCost": 1,
+  "Enqueue": 1,
+  "Attachs":[
+	  {"ID": "Tree",
+	  "Probability": 1},
+	  {"ID": "Grass",
+	  "Probability": 10},
+	  {"ID":null, 
+	  "Probability": 11}],
+  "Up":[
+	  {"ID": "1_1",
+	  "Probability": 1}],
+  "Down":[
+	  {"ID": "1_1",
+	  "Probability": 1}],
+  "Left":[
+	  {"ID": "1_1",
+	  "Probability": 1}],
+  "Right":[
+	  {"ID": "1_1",
+	  "Probability": 1}]
+ }
