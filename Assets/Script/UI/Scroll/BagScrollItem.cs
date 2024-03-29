@@ -37,12 +37,6 @@ public class BagScrollItem : ScrollItem
             NameLabel.text = consumables.ItemData.Name;
             AmountLabel.text = consumables.Amount.ToString();
         }
-        else if (obj is Card)
-        {
-            Card card = (Card)obj;
-            NameLabel.text = card.ItemData.Name;
-            AmountLabel.text = card.Amount.ToString();
-        }
         else if(obj is Food)
         {
             Food food = (Food)obj;

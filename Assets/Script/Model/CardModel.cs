@@ -8,4 +8,6 @@ public class CardModel
     public int EffectID;
     public int Job;
     public int PP;
+    public string Name;
+    public string Comment;
 }

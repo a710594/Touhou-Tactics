@@ -280,14 +280,19 @@ namespace Explore
         public void CheckVidsit(Transform transform) 
         {
             Vector2Int v2;
-            for (int i = 0; i <= 1; i++)
+            for (int i = 0; i <= 2; i++)
             {
-                v2 = Utility.ConvertToVector2Int(transform.position + transform.forward * i);
-                CheckVidsit(v2);
-                v2 = Utility.ConvertToVector2Int(transform.position + transform.forward * i + transform.right);
-                CheckVidsit(v2);
-                v2 = Utility.ConvertToVector2Int(transform.position + transform.forward * i - transform.right);
-                CheckVidsit(v2);
+                for (int j=-2; j<=2; j++) 
+                {
+                    v2 = Utility.ConvertToVector2Int(transform.position + transform.forward * i + transform.right * j);
+                    CheckVidsit(v2);
+                }
+                //v2 = Utility.ConvertToVector2Int(transform.position + transform.forward * i);
+                //CheckVidsit(v2);
+                //v2 = Utility.ConvertToVector2Int(transform.position + transform.forward * i + transform.right);
+                //CheckVidsit(v2);
+                //v2 = Utility.ConvertToVector2Int(transform.position + transform.forward * i - transform.right);
+                //CheckVidsit(v2);
             }
 
             for (int i=0; i<_enemyList.Count; i++) 
@@ -305,7 +310,7 @@ namespace Explore
 
         private void CheckVidsit(Vector2Int v2) 
         {
-            if (!Info.VisitedList.Contains(v2))
+            if (!Info.VisitedList.Contains(v2) && Info.TileDic.ContainsKey(v2))
             {
                 Info.VisitedList.Add(v2);
                 Info.TileDic[v2].Quad.layer = MapLayer;
@@ -416,6 +421,11 @@ namespace Explore
             {
                 obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + pair.Value.Prefab), Vector3.zero, Quaternion.identity);
                 obj.transform.position = new Vector3(pair.Key.x, pair.Value.Height, pair.Key.y);
+                obj.transform.eulerAngles = new Vector3(0, 0, pair.Value.RotationZ);
+                if(pair.Value.Prefab == "SpellCard") 
+                {
+                    Debug.Log(obj.transform.eulerAngles);
+                }
                 Info.TileDic[pair.Key].Treasure = obj;
                 if (obj.transform.childCount > 0)
                 {
@@ -468,7 +478,7 @@ namespace Explore
             CheckEvent();
 
             ExploreUI exploreUI = GameObject.Find("ExploreUI").GetComponent<ExploreUI>();
-            exploreUI.SetCameraPosition(Info.Size.x / 2, Info.Size.y / 2);
+            exploreUI.SetCameraPosition(Info.Size.x / 2, Info.Size.y / 2 - 2);
         }
 
         private void SetInfo() 

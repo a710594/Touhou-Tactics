@@ -11,12 +11,10 @@ public class CharacterInfoUI : MonoBehaviour
     public Text HitRateLabel;
     public BattleValueBar HpBar;
     public ValueBar PpBar;
-    public StatusIcon StatusIcon;
-    public Transform StatusGrid;
+    public StatusIconGroup StatusIconGroup;
     public Button Button;
 
     private BattleCharacterInfo _character;
-    private List<StatusIcon> _statusIconList = new List<StatusIcon>();
 
     public void SetVisible(bool isVisible) 
     {
@@ -42,21 +40,7 @@ public class CharacterInfoUI : MonoBehaviour
             PpBar.gameObject.SetActive(false);
         }
 
-        for (int i=0; i<_statusIconList.Count; i++) 
-        {
-            _statusIconList[i].gameObject.SetActive(false);
-        }
-        for (int i=0; i<character.StatusList.Count; i++) 
-        {
-            if (i >= _statusIconList.Count) 
-            {
-                icon = Instantiate(StatusIcon);
-                icon.transform.SetParent(StatusGrid);
-                _statusIconList.Add(icon);
-            }
-            _statusIconList[i].gameObject.SetActive(true);
-            _statusIconList[i].SetData(character.StatusList[i]);
-        }
+        StatusIconGroup.SetData(character);
     }
 
     public void SetData(CharacterInfo character)

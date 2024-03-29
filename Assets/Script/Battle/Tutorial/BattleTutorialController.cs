@@ -64,6 +64,11 @@ namespace Battle
             return ((TutorialState)_context.CurrentState).CanSupport();
         }
 
+        public bool CanSpell()
+        {
+            return ((TutorialState)_context.CurrentState).CanSpell();
+        }
+
         public bool CanItem()
         {
             return ((TutorialState)_context.CurrentState).CanItem();
@@ -132,6 +137,11 @@ namespace Battle
             }
 
             public virtual bool CanSupport()
+            {
+                return false;
+            }
+
+            public virtual bool CanSpell()
             {
                 return false;
             }

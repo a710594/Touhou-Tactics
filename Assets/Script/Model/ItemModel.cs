@@ -8,9 +8,8 @@ public class ItemModel
     {
         Consumables = 1,
         Food,
-        Card,
         Equip,
-        Item,
+        Item, //¯À§÷
     }
 
     public CategoryEnum Category;

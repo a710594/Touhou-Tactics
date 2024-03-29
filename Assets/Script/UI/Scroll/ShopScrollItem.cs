@@ -18,9 +18,9 @@ public class ShopScrollItem : ScrollItem
             ShopModel shopData = (ShopModel)obj;
             ItemModel itemData = DataContext.Instance.ItemDic[shopData.ID];
             NameLabel.text = itemData.Name;
-            if(itemData.Category == ItemModel.CategoryEnum.Card || itemData.Category == ItemModel.CategoryEnum.Consumables || itemData.Category == ItemModel.CategoryEnum.Item) 
+            if(itemData.Category == ItemModel.CategoryEnum.Consumables || itemData.Category == ItemModel.CategoryEnum.Item) 
             {
-                AmountLabel.text = ItemManager.Instance.GetAmount(itemData.Category, shopData.ID).ToString();
+                AmountLabel.text = ItemManager.Instance.GetAmount(shopData.ID).ToString();
             }
             else 
             {
@@ -50,13 +50,6 @@ public class ShopScrollItem : ScrollItem
                 NameLabel.text = food.Name;
                 AmountLabel.text = "";
                 PriceLabel.text = food.Price + "$";
-            }
-            else if(obj is Card) 
-            {
-                Card card = (Card)obj;
-                NameLabel.text = card.ItemData.Name;
-                AmountLabel.text = card.Amount.ToString();
-                PriceLabel.text = card.ItemData.Price + "$";
             }
             else
             {

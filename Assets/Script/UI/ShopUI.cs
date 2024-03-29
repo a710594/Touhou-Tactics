@@ -7,7 +7,6 @@ public partial class ShopUI : MonoBehaviour
 {
     public Button ConsumablesButton;
     public Button FoodButton;
-    public Button CardButton;
     public Button EquipButton;
     public Button ItemButton;
     public Button BuyButton;
@@ -33,7 +32,6 @@ public partial class ShopUI : MonoBehaviour
         _selectedSell = null;
         ConsumablesButton.gameObject.SetActive(true);
         FoodButton.gameObject.SetActive(false);
-        CardButton.gameObject.SetActive(true);
         EquipButton.gameObject.SetActive(true);
         ItemButton.gameObject.SetActive(false);
         ShopItemGroup.gameObject.SetActive(true);
@@ -53,11 +51,6 @@ public partial class ShopUI : MonoBehaviour
     private void FoodOnClick()
     {
         ((ShopState)_context.CurrentState).FoodOnClick();
-    }
-
-    private void CardOnClick()
-    {
-        ((ShopState)_context.CurrentState).CardOnClick();
     }
 
     private void EquipOnClick()
@@ -95,7 +88,7 @@ public partial class ShopUI : MonoBehaviour
                 bool canBuy = true;
                 for (int i=0; i<_selectedShopData.MaterialIDList.Count; i++) 
                 {
-                    if (ItemManager.Instance.GetAmount(ItemModel.CategoryEnum.Item, _selectedShopData.MaterialIDList[i]) <  _selectedShopData.MaterialAmountList[i]) 
+                    if (ItemManager.Instance.GetAmount(_selectedShopData.MaterialIDList[i]) <  _selectedShopData.MaterialAmountList[i]) 
                     {
                         canBuy = false;
                         break;
@@ -157,19 +150,6 @@ public partial class ShopUI : MonoBehaviour
                 ItemManager.Instance.MinusItem(item.ID, 1);
                 ShopItemGroup.SetScrollViewSell(item.Data.Category);
                 if (item.Amount == 0)
-                {
-                    _selectedSell = null;
-                    ShopItemGroup.CancelScrollViewSelect();
-                }
-            }
-            else if (_selectedSell is Card)
-            {
-                Card card = (Card)_selectedSell;
-                ItemManager.Instance.BagInfo.Money += card.ItemData.Price;
-                MoneyLabel.text = ItemManager.Instance.BagInfo.Money + "$";
-                ItemManager.Instance.MinusItem(card.ID, 1);
-                ShopItemGroup.SetScrollViewSell(card.ItemData.Category);
-                if (card.Amount == 0)
                 {
                     _selectedSell = null;
                     ShopItemGroup.CancelScrollViewSelect();
@@ -262,8 +242,6 @@ public partial class ShopUI : MonoBehaviour
 
         public virtual void FoodOnClick() { }
 
-        public virtual void CardOnClick() { }
-
         public virtual void ItemOnClick() { }
 
         public virtual void EquipOnClick() { }
@@ -282,7 +260,6 @@ public partial class ShopUI : MonoBehaviour
 
         ConsumablesButton.onClick.AddListener(ConsumablesOnClick);
         FoodButton.onClick.AddListener(FoodOnClick);
-        CardButton.onClick.AddListener(CardOnClick);
         ItemButton.onClick.AddListener(ItemOnClick);
         EquipButton.onClick.AddListener(EquipOnClick);
         BuyButton.onClick.AddListener(BuyOnClick);

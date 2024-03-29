@@ -214,7 +214,7 @@ namespace Battle
             }
         }
 
-        public void SetSkillArea(Effect effect)
+        public List<Vector2Int> GetAreaList(Effect effect) 
         {
             if (effect.Area == "Through")
             {
@@ -225,6 +225,11 @@ namespace Battle
                 _areaList = GetNormalAreaList(Utility.ConvertToVector2Int(SelectedCharacter.Position), _selectedPosition, effect);
             }
 
+            return _areaList;
+        }
+
+        public void SetArea(Effect effect)
+        {
             RemoveByFaction(effect, _areaList);
             ClearQuad();
             SetQuad(_areaList, _yellow);

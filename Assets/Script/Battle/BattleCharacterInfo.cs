@@ -47,6 +47,7 @@ namespace Battle
         public List<Skill> SkillList = new List<Skill>();
         public List<Support> SupportList = new List<Support>();
         public List<Passive> PassiveList = new List<Passive>();
+        public List<Card> CardList = new List<Card>();
 
         //當前屬性
         public int Index; //戰鬥的時候用
@@ -55,8 +56,9 @@ namespace Battle
         public bool HasUseSupport = false;
         public bool HasUseItem = false;
         public bool HasMove = false;
+        public bool HasUseSpell = false;
         public int CurrentHP;
-        public int CurrentPP = 0; //符卡點數
+        public int CurrentPP = 2; //符卡點數
         public int CurrentWT;
         public int ActionCount = 2; //每個角色都有兩次的行動機會
         public Vector3 Position = new Vector3();
@@ -137,6 +139,11 @@ namespace Battle
             {
                 SupportList.Add(new Support(DataContext.Instance.SupportDic[job.Support_5]));
             }
+
+            if (job.Spell_1 != -1) 
+            {
+                CardList.Add(new Card(DataContext.Instance.CardList[job.Spell_1]));
+            }
         }
 
         public BattleCharacterInfo(int lv, EnemyModel enemy)
@@ -199,6 +206,7 @@ namespace Battle
 
             SkillList = info.SkillList;
             SupportList = info.SupportList;
+            CardList = info.CardList;
 
             Weapon = info.Weapon;
             Armor = info.Armor;

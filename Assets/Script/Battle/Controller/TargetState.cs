@@ -42,26 +42,11 @@ namespace Battle
 
             public override void Click(Vector2Int position)
             {
-                if (_rangeList.Contains(position))
+                if (_rangeList.Contains(position))          
                 {
-                    //顯示角色資料
                     List<BattleCharacterInfo> characterList = Instance.CharacterList;
-                    for (int i = 0; i < characterList.Count; i++)
-                    {
-                        if (characterList[i] != Instance.SelectedCharacter && position == Utility.ConvertToVector2Int(characterList[i].Position))
-                        {
-                            Instance._battleUI.SetCharacterInfoUI_2(characterList[i]);
-                            int predictionHp = Instance.GetPredictionHp(characterList[i].CurrentHP, _effect, _character, characterList[i], characterList);
-                            if (predictionHp != -1)
-                            {
-                                Instance._battleUI.SetHpPrediction(characterList[i].CurrentHP, predictionHp, characterList[i].MaxHP);
-                            }
-                            float hitRate = Instance.GetHitRate(_effect, _character, characterList[i]);
-                            Instance._battleUI.SetHitRate(Mathf.RoundToInt(hitRate * 100));
-                            break;
-                        }
-                    }
 
+                    //draw line
                     Dictionary<Vector2Int, TileAttachInfo> tileDic = Instance.Info.TileAttachInfoDic;
                     Vector3 p = new Vector3(position.x, tileDic[position].Height, position.y);
                     if (_effect.Track == EffectModel.TrackEnum.Straight)
@@ -79,6 +64,26 @@ namespace Battle
                     else
                     {
                         Instance._selectedPosition = position;
+                    }
+
+                    List<Vector2Int> areaList = Instance.GetAreaList(Utility.GetEffect(_character.SelectedObject));
+                    Instance.SetArea(Utility.GetEffect(_character.SelectedObject));
+
+                    //顯示角色資料
+                    for (int i = 0; i < characterList.Count; i++)
+                    {
+                        if (areaList.Contains(Utility.ConvertToVector2Int(characterList[i].Position)))
+                        {
+                            int predictionHp = Instance.GetPredictionHp(characterList[i].CurrentHP, _effect, _character, characterList[i], characterList);
+                            Instance._battleUI.SetPredictionLittleHpBar(characterList[i], predictionHp);
+                            if (characterList[i] != Instance.SelectedCharacter && position == Utility.ConvertToVector2Int(characterList[i].Position))
+                            {
+                                Instance._battleUI.SetCharacterInfoUI_2(characterList[i]);
+                                Instance._battleUI.SetPredictionInfo(characterList[i], predictionHp);
+                                float hitRate = Instance.GetHitRate(_effect, _character, characterList[i]);
+                                Instance._battleUI.SetHitRate(Mathf.RoundToInt(hitRate * 100));
+                            }
+                        }
                     }
 
                     Instance._controllerDic[_character.Index].SetDirection(Instance._selectedPosition);

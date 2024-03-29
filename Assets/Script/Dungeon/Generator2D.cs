@@ -116,10 +116,13 @@ public class Generator2D : MonoBehaviour {
                     }
                 }
 
-                Dictionary<Vector2Int, Treasure> treasures = newRoom.GetTreasures();
-                foreach(KeyValuePair<Vector2Int, Treasure> pair in treasures) 
+                if (rooms.Count > 1) //第一個房間沒有寶箱
                 {
-                    info.TreasureDic.Add(pair.Key, pair.Value);
+                    Dictionary<Vector2Int, Treasure> treasures = newRoom.GetTreasures();
+                    foreach (KeyValuePair<Vector2Int, Treasure> pair in treasures)
+                    {
+                        info.TreasureDic.Add(pair.Key, pair.Value);
+                    }
                 }
             }
         }
@@ -370,7 +373,7 @@ public class Generator2D : MonoBehaviour {
 
     private void PlaceStartAndGoal()
     {
-        Room startRoom = rooms[random.Next(0, rooms.Count)];
+        Room startRoom = rooms[0];
         List<Vector2Int> positionList = new List<Vector2Int>();
         for (int i = 0; i < startRoom.bounds.size.x; i++)
         {

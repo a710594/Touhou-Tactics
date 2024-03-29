@@ -8,6 +8,7 @@ public class StatusIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 {
     public Image Icon;
     public Text Label;
+    public GameObject LabelBG;
 
     public void SetData(Status status) 
     {
@@ -20,16 +21,16 @@ public class StatusIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Label.gameObject.SetActive(true);
+        LabelBG.SetActive(true);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Label.gameObject.SetActive(false);
+        LabelBG.SetActive(false);
     }
 
     private void Awake()
     {
-        Label.gameObject.SetActive(false);
+        LabelBG.gameObject.SetActive(false);
     }
 }

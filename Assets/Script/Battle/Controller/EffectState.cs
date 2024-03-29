@@ -11,7 +11,6 @@ namespace Battle
             int _maxFloatingCount;
             private List<BattleCharacterInfo> _targetList;
             private Timer _timer = new Timer();
-            private Effect effect;
 
             public EffectState(StateContext context) : base(context)
             {
@@ -59,10 +58,6 @@ namespace Battle
                         }
                         _character.HasUseSkill = true;
                         _character.ActionCount--;
-                        if (_character.CurrentPP < BattleCharacterInfo.MaxPP)
-                        {
-                            _character.CurrentPP++;
-                        }
                         if (skill.Data.CD > 0)
                         {
                             skill.CurrentCD = skill.Data.CD + 1; //要加一的原因是為了抵銷本回合的 CheckCD
@@ -76,10 +71,6 @@ namespace Battle
                             UseEffect(support.Effect, _targetList[i]);
                         }
                         _character.HasUseSupport = true;
-                        if (_character.CurrentPP < BattleCharacterInfo.MaxPP)
-                        {
-                            _character.CurrentPP++;
-                        }
                         if (support.Data.CD > 0)
                         {
                             support.CurrentCD = support.Data.CD + 1; //要加一的原因是為了抵銷本回合的 CheckCD
@@ -94,8 +85,8 @@ namespace Battle
                         }
                         _character.HasUseItem = true;
                         _character.ActionCount--;
-                        _character.CurrentPP -= card.CardData.PP;
-                        ItemManager.Instance.MinusItem(card.ID, 1);
+                        _character.CurrentPP -= card.Data.PP;
+                        ItemManager.Instance.MinusItem(ItemManager.CardID, 1);
                     }
                     else if(_character.SelectedObject is Consumables) 
                     {
@@ -133,10 +124,6 @@ namespace Battle
                         UseEffect(skill.Effect, v3);
                         _character.HasUseSkill = true;
                         _character.ActionCount--;
-                        if (_character.CurrentPP < BattleCharacterInfo.MaxPP)
-                        {
-                            _character.CurrentPP++;
-                        }
                         if (skill.Data.CD > 0)
                         {
                             skill.CurrentCD = skill.Data.CD + 1; //要加一的原因是為了抵銷本回合的 CheckCD

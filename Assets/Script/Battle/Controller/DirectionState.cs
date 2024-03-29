@@ -19,8 +19,7 @@ namespace Battle
             {
                 _character = Instance.SelectedCharacter;
                 Instance._battleUI.ActionButtonGroup.gameObject.SetActive(false);
-                //Instance.DirectionGroup.transform.position = _character.Position;
-                //Instance.DirectionGroup.SetActive(true);
+                Instance._battleUI.SetCharacterInfoUI_1(null);
                 Instance._battleUI.SetDirectionGroupVisible(true);
                 Instance._battleUI.SetDirectionGroupPosition(_character.Position);
 

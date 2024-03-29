@@ -93,9 +93,9 @@ public class SkillInfoGroup : MonoBehaviour
 
     public void SetData(Card card)
     {
-        NameLabel.text = card.ItemData.Name;
-        CommentLabel.text = card.ItemData.Comment;
-        CDLabel.text = "®ø¯ÓPP¡G" + card.CardData.PP;
+        NameLabel.text = card.Data.Name;
+        CommentLabel.text = card.Data.Comment;
+        CDLabel.text = "®ø¯ÓPP¡G" + card.Data.PP;
 
         if (card.Effect.Target == EffectModel.TargetEnum.All)
         {

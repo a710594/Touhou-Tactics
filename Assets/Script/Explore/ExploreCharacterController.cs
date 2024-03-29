@@ -111,10 +111,12 @@ namespace Explore
             {
                 _isMoving = true;
                 RotateTo = transform.localEulerAngles + Vector3.down * 90;
+                InputMamager.Instance.Lock();
                 transform.DORotate(RotateTo, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
                 {
                     _isMoving = false;
                     ExploreManager.Instance.CheckVidsit(transform);
+                    InputMamager.Instance.Unlock();
                 });
                 if (RotateHandler != null)
                 {
@@ -129,10 +131,12 @@ namespace Explore
             {
                 _isMoving = true;
                 RotateTo = transform.localEulerAngles + Vector3.up * 90;
+                InputMamager.Instance.Lock();
                 transform.DORotate(RotateTo, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
                 {
                     _isMoving = false;
                     ExploreManager.Instance.CheckVidsit(transform);
+                    InputMamager.Instance.Unlock();
                 });
                 if (RotateHandler != null)
                 {

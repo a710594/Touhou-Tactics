@@ -48,7 +48,7 @@ public class DragCharacterImage : MonoBehaviour, IDragHandler, IEndDragHandler, 
         Vector2Int position = new Vector2Int();
         if (Physics.Raycast(ray, out hit, 100))
         {
-            position = Utility.ConvertToVector2Int(hit.transform.position);
+            position = Utility.ConvertToVector2Int(hit.point);
             GameObject obj = BattleController.Instance.PlaceCharacter(position, _character);
             if (obj != null)
             {

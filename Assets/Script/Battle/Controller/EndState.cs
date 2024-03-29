@@ -24,10 +24,10 @@ namespace Battle
                     {
                         List<FloatingNumberData> floatingList = new List<FloatingNumberData>();
                         _character.CheckStatus(floatingList);
+                        Instance._battleUI.SetLittleHpBarValue(_character.Index, _character);
                         for (int j = 0; j < floatingList.Count; j++)
                         {
                             Instance._battleUI.PlayFloatingNumberPool(_character.Index, floatingList[j].Type, floatingList[j].Text);
-                            Instance._battleUI.SetLittleHpBarValue(_character.Index, _character);
                         }
                         for (int i = 0; i < _character.SkillList.Count; i++)
                         {
@@ -36,6 +36,10 @@ namespace Battle
                         for (int i = 0; i < _character.SupportList.Count; i++)
                         {
                             _character.SupportList[i].CheckCD();
+                        }
+                        if (_character.CurrentPP < BattleCharacterInfo.MaxPP)
+                        {
+                            _character.CurrentPP++;
                         }
                         _character.CurrentWT = _character.WT;
                         _character.ActionCount = 2;

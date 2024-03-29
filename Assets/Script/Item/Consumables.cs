@@ -23,6 +23,10 @@ public class Consumables
         ItemData = DataContext.Instance.ItemDic[id];
         ConsumablesData = DataContext.Instance.ConsumablesDic[id];
         Amount = amount;
+        if (ConsumablesData.EffectID != -1)
+        {
+            Effect = EffectFactory.GetEffect(ConsumablesData.EffectID);
+        }
     }
 
     public void Init()
@@ -34,17 +38,4 @@ public class Consumables
             Effect = EffectFactory.GetEffect(ConsumablesData.EffectID);
         }
     }
-
-    public virtual void UseEffect(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)
-    {
-        Effect.Use(user, target, floatingList, characterList);
-        user.HasUseItem = true;
-        user.ActionCount--;
-        if (user.CurrentPP < BattleCharacterInfo.MaxPP)
-        {
-            user.CurrentPP++;
-        }
-        ItemManager.Instance.MinusItem(ID, 1);
-    }
-
 }

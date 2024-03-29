@@ -10,10 +10,12 @@ public class ActionButtonGroup : MonoBehaviour
     public Button MoveButton;
     public Button SkillButton;
     public Button SupportButton;
+    public Button SpellButton;
     public Button ItemButton;
     public Button IdleButton;
     public Button ResetButton;
     public Text ActionCountLabel;
+    public Text CardCountLabel;
     public ScrollView ScrollView;
     public TipLabel TipLabel;
     public SkillInfoGroup SkillInfoGroup;
@@ -23,7 +25,9 @@ public class ActionButtonGroup : MonoBehaviour
         SkillButton.interactable = !character.HasUseSkill;
         SupportButton.interactable = !character.HasUseSupport;
         ItemButton.interactable = !character.HasUseItem;
-        ActionCountLabel.text = "Action Count: " + character.ActionCount.ToString();
+        SpellButton.interactable = !character.HasUseSpell;
+        ActionCountLabel.text = "剩餘行動次數：" + character.ActionCount.ToString();
+        CardCountLabel.text = "剩餘符卡數量：" + ItemManager.Instance.GetAmount(ItemManager.CardID);
         ScrollView.transform.parent.gameObject.SetActive(false);
     }
 
@@ -68,6 +72,21 @@ public class ActionButtonGroup : MonoBehaviour
         {
             ScrollView.transform.parent.gameObject.SetActive(true);
             ScrollView.SetData(new List<object>(character.SupportList));
+        }
+    }
+
+    private void SpellOnClick()
+    {
+        if (BattleController.Instance.Info.IsTutorial && !BattleTutorialController.Instance.CanSpell())
+        {
+            return;
+        }
+
+        BattleCharacterInfo character = BattleController.Instance.SelectedCharacter;
+        if (!character.IsAuto)
+        {
+            ScrollView.transform.parent.gameObject.SetActive(true);
+            ScrollView.SetData(new List<object>(character.CardList));
         }
     }
 
@@ -138,10 +157,15 @@ public class ActionButtonGroup : MonoBehaviour
         else if (obj is Card)
         {
             Card card = (Card)obj;
-            if (BattleController.Instance.SelectedCharacter.CurrentPP < card.CardData.PP)
+            if (BattleController.Instance.SelectedCharacter.CurrentPP < card.Data.PP)
             {
                 canUse = false;
-                tip = "PP不足";
+                tip = "PP不足，還需要" + (card.Data.PP - BattleController.Instance.SelectedCharacter.CurrentPP);
+            }
+            else if(ItemManager.Instance.GetAmount(ItemManager.CardID) < 1) 
+            {
+                canUse = false;
+                tip = "沒有符卡";
             }
         }
 
@@ -200,6 +224,7 @@ public class ActionButtonGroup : MonoBehaviour
         MoveButton.onClick.AddListener(MoveOnClick);
         SkillButton.onClick.AddListener(SkillOnClick);
         SupportButton.onClick.AddListener(SupportOnClick);
+        SpellButton.onClick.AddListener(SpellOnClick);
         ItemButton.onClick.AddListener(ItemOnClick);
         IdleButton.onClick.AddListener(IdleOnClick);
         ResetButton.onClick.AddListener(ResetOnClick);

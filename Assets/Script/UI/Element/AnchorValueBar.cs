@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class AnchorValueBar : ValueBar //顯示在戰場上的小HP條
+public class AnchorValueBar : BattleValueBar //顯示在戰場上的小HP條
 {
     private Transform _anchor;
 

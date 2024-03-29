@@ -5,6 +5,7 @@ using Battle;
 
 public class ItemManager
 {
+    public static readonly int CardID = 13;
     private readonly string _fileName = "BagInfo";
     private readonly int _maxEquipCount = 10;
 
@@ -36,11 +37,6 @@ public class ItemManager
             BagInfo = baginfo;
 
             foreach(KeyValuePair<int, Consumables> pair in baginfo.ConsumablesDic)
-            {
-                pair.Value.Init();
-            }
-
-            foreach (KeyValuePair<int, Card> pair in baginfo.CardDic)
             {
                 pair.Value.Init();
             }
@@ -99,18 +95,6 @@ public class ItemManager
                 BagInfo.ConsumablesDic[id].Amount += amount;
             }
         }
-        else if (data.Category == ItemModel.CategoryEnum.Card)
-        {
-            if (!BagInfo.CardDic.ContainsKey(id))
-            {
-                Card card = new Card(id, amount);
-                BagInfo.CardDic.Add(id, card);
-            }
-            else
-            {
-                BagInfo.CardDic[id].Amount += amount;
-            }
-        }
     }
 
     public bool MinusItem(int id, int amount)
@@ -142,23 +126,6 @@ public class ItemManager
                 if (consumables.Amount == 0)
                 {
                     BagInfo.ConsumablesDic.Remove(consumables.ItemData.ID);
-                }
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else if (data.Category == ItemModel.CategoryEnum.Card)
-        {
-            Card card = BagInfo.CardDic[id];
-            if (amount <= card.Amount)
-            {
-                card.Amount -= amount;
-                if (card.Amount == 0)
-                {
-                    BagInfo.CardDic.Remove(card.ItemData.ID);
                 }
                 return true;
             }
@@ -212,14 +179,6 @@ public class ItemManager
     {
         List<object> resultList = new List<object>();
 
-        foreach (KeyValuePair<int, Card> pair in BagInfo.CardDic)
-        {
-            if (pair.Value.CardData.Job == -1 || (character.Job != null && pair.Value.CardData.Job == character.Job.ID))
-            {
-                resultList.Add(pair.Value);
-            }
-        }
-
         foreach (KeyValuePair<int, Consumables> pair in BagInfo.ConsumablesDic) 
         {
             resultList.Add(pair.Value);
@@ -233,9 +192,10 @@ public class ItemManager
         return resultList;
     }
 
-    public int GetAmount(ItemModel.CategoryEnum category, int id)
+    public int GetAmount(int id)
     {
-        if (category == ItemModel.CategoryEnum.Item)
+        ItemModel data = DataContext.Instance.ItemDic[id];
+        if (data.Category == ItemModel.CategoryEnum.Item)
         {
             if (BagInfo.ItemDic.TryGetValue(id, out Item item))
             {
@@ -246,22 +206,11 @@ public class ItemManager
                 return 0;
             }
         }
-        else if (category == ItemModel.CategoryEnum.Consumables)
+        else if (data.Category == ItemModel.CategoryEnum.Consumables)
         {
             if (BagInfo.ConsumablesDic.TryGetValue(id, out Consumables consumables))
             {
                 return consumables.Amount;
-            }
-            else
-            {
-                return 0;
-            }
-        }
-        else if (category == ItemModel.CategoryEnum.Card)
-        {
-            if (BagInfo.CardDic.TryGetValue(id, out Card card))
-            {
-                return card.Amount;
             }
             else
             {

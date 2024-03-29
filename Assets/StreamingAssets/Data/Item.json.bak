@@ -18,7 +18,9 @@
 {"Category":2,"ID":18,"Name":"馬鈴薯燉肉","Comment":"將馬鈴薯與肉一同燉煮，口感濃郁","Price":1},
 {"Category":2,"ID":19,"Name":"香菇烤肉串","Comment":"將走路菇與肉串在菌類的香味讓烤肉更加美味肉更加美味","Price":1},
 {"Category":2,"ID":20,"Name":"綜合燉肉","Comment":"將獸肉、走路菇、馬鈴薯一同燉煮，非常營養","Price":1},
-{"Category":4,"ID":21,"Name":"金屬手環","Comment":"由普通的金屬製成的手環，可以稍微增加攻擊力","Price":50},
-{"Category":4,"ID":22,"Name":"玉石手環","Comment":"由普通的玉石製成的手環，可以稍微增加魔法攻擊力","Price":50},
+{"Category":4,"ID":21,"Name":"獸牙手環","Comment":"裝飾著獸牙的手環，可以稍微增加攻擊力","Price":50},
+{"Category":4,"ID":22,"Name":"玉石手環","Comment":"裝飾著玉石的手環，可以稍微增加魔法攻擊力","Price":50},
 {"Category":4,"ID":23,"Name":"厚重的項鍊","Comment":"有點厚重的項鍊，但也因此比較結實。","Price":50},
-{"Category":4,"ID":24,"Name":"輕巧的項鍊","Comment":"比較輕巧的項鍊，但也因此比較脆弱。","Price":50}]
+{"Category":4,"ID":24,"Name":"輕巧的項鍊","Comment":"比較輕巧的項鍊，但也因此比較脆弱。","Price":50},
+{"Category":5,"ID":25,"Name":"銳利的牙齒","Comment":"野獸的牙齒，相當銳利","Price":2},
+{"Category":5,"ID":26,"Name":"圓滾滾的石頭","Comment":"動物攜帶的石頭，圓滾滾地手感很好","Price":2}]

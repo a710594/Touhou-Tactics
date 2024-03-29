@@ -18,7 +18,6 @@ public class BagUI : MonoBehaviour
 
     public Button ConsumablesButton;
     public Button FoodButton;
-    public Button CardButton;
     public Button ItemButton;
     public Button EquipButton;
     public Button CloseButton;
@@ -73,7 +72,6 @@ public class BagUI : MonoBehaviour
         _currentState = StateEnum.Use;
         BagItemGroup.gameObject.SetActive(true);
         BagEquipGroup.gameObject.SetActive(false);
-        CardButton.gameObject.SetActive(false);
         ItemButton.gameObject.SetActive(false);
         EquipButton.gameObject.SetActive(false);
         BagItemGroup.SetScrollView(ItemModel.CategoryEnum.Consumables);
@@ -96,15 +94,6 @@ public class BagUI : MonoBehaviour
         BagEquipGroup.gameObject.SetActive(false);
         BagItemGroup.ScrollView.CancelSelect();
         BagItemGroup.SetScrollView(ItemModel.CategoryEnum.Food);
-        BagItemGroup.SetComment("");
-    }
-
-    private void CardOnClick()
-    {
-        BagItemGroup.gameObject.SetActive(true);
-        BagEquipGroup.gameObject.SetActive(false);
-        BagItemGroup.ScrollView.CancelSelect();
-        BagItemGroup.SetScrollView(ItemModel.CategoryEnum.Card);
         BagItemGroup.SetComment("");
     }
 
@@ -168,11 +157,6 @@ public class BagUI : MonoBehaviour
                 Consumables consumables = (Consumables)_selectedObj;
                 ItemManager.Instance.MinusItem(consumables.ID, 1);
             }
-            else if (_selectedObj is Card)
-            {
-                Card card = (Card)_selectedObj;
-                ItemManager.Instance.MinusItem(card.ID, 1);
-            }
 
             if (UseHandler != null)
             {
@@ -206,7 +190,6 @@ public class BagUI : MonoBehaviour
     {
         ConsumablesButton.onClick.AddListener(ConsumablesOnClick);
         FoodButton.onClick.AddListener(FoodOnClick);
-        CardButton.onClick.AddListener(CardOnClick);
         ItemButton.onClick.AddListener(ItemOnClick);
         EquipButton.onClick.AddListener(EquipOnClick);
         BagItemGroup.ScrollHandler += ScrollOnClick;

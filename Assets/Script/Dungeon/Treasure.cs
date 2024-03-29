@@ -9,6 +9,7 @@ public class Treasure
     public int ID;
     public string Prefab;
     public float Height;
+    public float RotationZ;
 
     public Treasure() { }
 
@@ -20,5 +21,6 @@ public class Treasure
         ID = data.IDList[random];
         Prefab = data.Prefab;
         Height = data.Height;
+        RotationZ = data.RotationZ;
     }
 }

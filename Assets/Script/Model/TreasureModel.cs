@@ -14,6 +14,7 @@ public class TreasureModel
     public TypeEnum Type;
     public string Prefab;
     public float Height;
+    public float RotationZ;
     public int ID_1;
     public int ID_2;
     public int ID_3;

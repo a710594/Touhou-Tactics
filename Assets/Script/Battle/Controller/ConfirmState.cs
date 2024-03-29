@@ -16,14 +16,17 @@ namespace Battle
             {
                 _character = Instance.SelectedCharacter;
                 _characterList = Instance.CharacterList;
-                Instance.SetSkillArea(Utility.GetEffect(_character.SelectedObject));
 
                 Instance.Info.TileComponentDic[Instance._selectedPosition].Select.gameObject.SetActive(true);
             }
 
             public override void Click(Vector2Int position)
             {
-                Instance._battleUI.StopHpPrediction();
+                for (int i=0; i<_characterList.Count; i++) 
+                {
+                    Instance._battleUI.StopPredictionLittleHpBar(_characterList[i]);
+                }
+                Instance._battleUI.StopPredictionInfo();
                 Instance._battleUI.HideHitRate();
 
                 if (position == Instance._selectedPosition)

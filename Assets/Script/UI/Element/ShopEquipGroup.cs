@@ -120,7 +120,7 @@ public class ShopEquipGroup : MonoBehaviour
         for (int i = 0; i < shopData.MaterialIDList.Count; i++)
         {
             itemData = DataContext.Instance.ItemDic[shopData.MaterialIDList[i]];
-            MaterialLabel.text += itemData.Name + " " + ItemManager.Instance.GetAmount(itemData.Category, itemData.ID) + "/" + shopData.MaterialAmountList[i] + " ";
+            MaterialLabel.text += itemData.Name + " " + ItemManager.Instance.GetAmount(itemData.ID) + "/" + shopData.MaterialAmountList[i] + " ";
         }
     }
 

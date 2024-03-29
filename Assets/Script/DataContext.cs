@@ -69,13 +69,13 @@ public class DataContext
     public Dictionary<int, Dictionary<int, EnemyGroupModel>> EnemyGroupDic = new Dictionary<int, Dictionary<int, EnemyGroupModel>>();
     public Dictionary<int, FloorModel> FloorDic = new Dictionary<int, FloorModel>();
     public Dictionary<int, RoomModel> RoomDic = new Dictionary<int, RoomModel>();
-    public Dictionary<int, List<int>> RoomPool = new Dictionary<int, List<int>>(); //機率池 <Floor, idList>
     public Dictionary<int, TreasureModel> TreasureDic = new Dictionary<int, TreasureModel>();
     public Dictionary<ItemModel.CategoryEnum, List<ShopModel>> ShopItemDic = new Dictionary<ItemModel.CategoryEnum, List<ShopModel>>();
     public Dictionary<int, FoodMaterial> FoodMaterialDic = new Dictionary<int, FoodMaterial>();
     public Dictionary<int, FoodResult> FoodResultDic = new Dictionary<int, FoodResult>();
     public Dictionary<int, ConsumablesModel> ConsumablesDic = new Dictionary<int, ConsumablesModel>();
     public Dictionary<int, CardModel> CardDic = new Dictionary<int, CardModel>();
+    public Dictionary<int, List<CardModel>> JobCardDic = new Dictionary<int, List<CardModel>>();
 
     public Dictionary<string, TileSetting> TileSettingDic = new Dictionary<string, TileSetting>();
     public Dictionary<string, AttachSetting> AttachSettingDic = new Dictionary<string, AttachSetting>();
@@ -172,6 +172,7 @@ public class DataContext
         FloorDic.Clear();
         for (int i = 0; i < FloorList.Count; i++)
         {
+            FloorList[i].GetRoomPool();
             FloorDic.Add(FloorList[i].Floor, FloorList[i]);
         }
 
@@ -179,40 +180,8 @@ public class DataContext
         RoomDic.Clear();
         for (int i = 0; i < RoomList.Count; i++)
         {
+            RoomList[i].GetTreasurePool();
             RoomDic.Add(RoomList[i].ID, RoomList[i]);
-        }
-
-        RoomPool.Clear();
-        for (int i=0; i< FloorList.Count; i++) 
-        {
-            RoomPool.Add(FloorList[i].Floor, new List<int>());
-            if (FloorList[i].Room_1 != -1) 
-            {
-                for (int j = 0; j < FloorList[i].Probability_1; j++)
-                {
-                    RoomPool[FloorList[i].Floor].Add(FloorList[i].Room_1);
-                }
-
-                for (int j = 0; j < FloorList[i].Probability_2; j++)
-                {
-                    RoomPool[FloorList[i].Floor].Add(FloorList[i].Room_2);
-                }
-
-                for (int j = 0; j < FloorList[i].Probability_3; j++)
-                {
-                    RoomPool[FloorList[i].Floor].Add(FloorList[i].Room_3);
-                }
-
-                for (int j = 0; j < FloorList[i].Probability_4; j++)
-                {
-                    RoomPool[FloorList[i].Floor].Add(FloorList[i].Room_4);
-                }
-
-                for (int j = 0; j < FloorList[i].Probability_5; j++)
-                {
-                    RoomPool[FloorList[i].Floor].Add(FloorList[i].Room_5);
-                }
-            }
         }
 
         TreasureList = Load<List<TreasureModel>>("Treasure", PrePathEnum.Data);
@@ -269,6 +238,11 @@ public class DataContext
         for (int i = 0; i < CardList.Count; i++)
         {
             CardDic.Add(CardList[i].ID, CardList[i]);
+            if (!JobCardDic.ContainsKey(CardList[i].Job)) 
+            {
+                JobCardDic.Add(CardList[i].Job, new List<CardModel>());
+            }
+            JobCardDic[CardList[i].Job].Add(CardList[i]);
         }
 
         DirectoryInfo d;

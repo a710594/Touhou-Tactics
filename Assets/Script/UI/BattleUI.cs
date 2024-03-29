@@ -14,7 +14,7 @@ public class BattleUI : MonoBehaviour
     public CharacterInfoUI CharacterInfoUI_2;
     public ActionButtonGroup ActionButtonGroup;
     //public SkillGroup SkillGroup;
-    public AnchorValueBar LittleHpBar;
+    public LittleHpBarWithStatus LittleHpBarWithStatus;
     public Transform HPGroup;
     public FloatingNumberPool FloatingNumberPool;
     public CharacterListGroup CharacterListGroup;
@@ -25,7 +25,7 @@ public class BattleUI : MonoBehaviour
     private Vector3 _directionPosition = new Vector3();
     private PointerEventData _pointerEventData = new PointerEventData(null);
     private List<RaycastResult> _graphicHitList = new List<RaycastResult>();
-    private Dictionary<int, AnchorValueBar> _littleHpBarDic = new Dictionary<int, AnchorValueBar>();
+    private Dictionary<int, LittleHpBarWithStatus> _littleHpBarDic = new Dictionary<int, LittleHpBarWithStatus>();
     private Dictionary<int, FloatingNumberPool> _floatingNumberPoolDic  = new Dictionary<int, FloatingNumberPool>();
 
     public void SetVisible(bool isVisible) 
@@ -74,14 +74,26 @@ public class BattleUI : MonoBehaviour
         ActionButtonGroup.SetScrollView(list);
     }
 
-    public void SetHpPrediction(int origin, int prediction, int max)
+    public void SetPredictionInfo(BattleCharacterInfo info, int predictionHp)
     {
-        CharacterInfoUI_2.SetHpPrediction(origin, prediction, max);
+        CharacterInfoUI_2.SetHpPrediction(info.CurrentHP, predictionHp, info.MaxHP);
     }
 
-    public void StopHpPrediction()
+    public void SetPredictionLittleHpBar(BattleCharacterInfo info, int predictionHp)
+    {
+        LittleHpBarWithStatus hpBar = _littleHpBarDic[info.Index];
+        hpBar.SetPrediction(info.CurrentHP, predictionHp, info.MaxHP);
+    }
+
+    public void StopPredictionInfo()
     {
         CharacterInfoUI_2.StopHpPrediction();
+    }
+
+    public void StopPredictionLittleHpBar(BattleCharacterInfo info)
+    {
+        LittleHpBarWithStatus hpBar = _littleHpBarDic[info.Index];
+        hpBar.StopPrediction();
     }
 
     public void SetHitRate(int hitRate)
@@ -96,7 +108,7 @@ public class BattleUI : MonoBehaviour
 
     public void SetLittleHpBarAnchor(int id, BattleCharacterController characterController) 
     {
-        AnchorValueBar hpBar = Instantiate(LittleHpBar);
+        LittleHpBarWithStatus hpBar = Instantiate(LittleHpBarWithStatus);
         hpBar.transform.SetParent(HPGroup);
         hpBar.SetAnchor(characterController.HpAnchor);
         _littleHpBarDic.Add(id, hpBar);
@@ -104,11 +116,11 @@ public class BattleUI : MonoBehaviour
 
     public void SetLittleHpBarValue(int id, BattleCharacterInfo characterInfo)
     {
-        AnchorValueBar hpBar = _littleHpBarDic[id];
+        LittleHpBarWithStatus hpBar = _littleHpBarDic[id];
         if (characterInfo.CurrentHP > 0)
         {
             hpBar.gameObject.SetActive(true);
-            hpBar.SetValue(characterInfo.CurrentHP, characterInfo.MaxHP);
+            hpBar.SetData(characterInfo);
         }
         else 
         {

@@ -1,3 +1,4 @@
-[{"ID":1,"Type":1,"Prefab":"Flower","Height":0.4,"ID_1":11,"ID_2":-1,"ID_3":-1,"ID_4":-1},
-{"ID":2,"Type":1,"Prefab":"Stone","Height":0.4,"ID_1":12,"ID_2":14,"ID_3":-1,"ID_4":-1},
-{"ID":3,"Type":2,"Prefab":"TreasureBox","Height":0.85,"ID_1":21,"ID_2":22,"ID_3":23,"ID_4":24}]
+[{"ID":1,"Type":1,"Prefab":"Flower","Height":0.4,"RotationZ":0,"ID_1":11,"ID_2":-1,"ID_3":-1,"ID_4":-1},
+{"ID":2,"Type":1,"Prefab":"Stone","Height":0.4,"RotationZ":0,"ID_1":12,"ID_2":14,"ID_3":-1,"ID_4":-1},
+{"ID":3,"Type":2,"Prefab":"TreasureBox","Height":0.85,"RotationZ":0,"ID_1":21,"ID_2":22,"ID_3":23,"ID_4":24},
+{"ID":4,"Type":1,"Prefab":"SpellCard","Height":1,"RotationZ":30,"ID_1":13,"ID_2":-1,"ID_3":-1,"ID_4":-1}]

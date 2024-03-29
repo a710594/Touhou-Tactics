@@ -31,6 +31,8 @@ public class CharacterInfo
     public List<Support> SupportList = new List<Support>();
     [NonSerialized]
     public List<Passive> PassiveList = new List<Passive>();
+    [NonSerialized]
+    public List<Card> CardList = new List<Card>();
 
     public int JobId;
 
@@ -110,6 +112,11 @@ public class CharacterInfo
         if (job.Passive != -1)
         {
             PassiveList.Add(PassiveFactory.GetPassive(job.Passive));
+        }
+
+        if (job.Spell_1 != -1)
+        {
+            CardList.Add(new Card(DataContext.Instance.CardDic[job.Spell_1]));
         }
     }
 

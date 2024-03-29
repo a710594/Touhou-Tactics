@@ -20,11 +20,7 @@ public class ShopItemGroup : MonoBehaviour
 
     public void SetScrollViewSell(ItemModel.CategoryEnum category)
     {
-        if (category == ItemModel.CategoryEnum.Card)
-        {
-            ScrollView.SetData(new List<object>(ItemManager.Instance.BagInfo.CardDic.Values));
-        }
-        else if(category == ItemModel.CategoryEnum.Consumables) 
+        if(category == ItemModel.CategoryEnum.Consumables) 
         {
             ScrollView.SetData(new List<object>(ItemManager.Instance.BagInfo.ConsumablesDic.Values));
         }
@@ -60,7 +56,7 @@ public class ShopItemGroup : MonoBehaviour
         for (int i = 0; i < shopData.MaterialIDList.Count; i++)
         {
             itemData = DataContext.Instance.ItemDic[shopData.MaterialIDList[i]];
-            MaterialLabel.text += itemData.Name + " " + ItemManager.Instance.GetAmount(itemData.Category, itemData.ID) + "/" + shopData.MaterialAmountList[i] + " ";
+            MaterialLabel.text += itemData.Name + " " + ItemManager.Instance.GetAmount(itemData.ID) + "/" + shopData.MaterialAmountList[i] + " ";
         }
     }
 
@@ -85,11 +81,6 @@ public class ShopItemGroup : MonoBehaviour
             {
                 Consumables consumables = (Consumables)obj;
                 SetComment(consumables.ItemData.Comment);
-            }
-            else if(obj is Card) 
-            {
-                Card card = (Card)obj;
-                SetComment(card.ItemData.Comment);
             }
             else if(obj is Food) 
             {

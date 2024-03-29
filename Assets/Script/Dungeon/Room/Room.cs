@@ -29,11 +29,8 @@ public class Room
     public Dictionary<Vector2Int, Treasure> GetTreasures()
     {
         Dictionary<Vector2Int, Treasure> treasures = new Dictionary<Vector2Int, Treasure>();
-        if (Data.TreasureID != -1)
+        if (Data.TreasurePool.Count > 0)
         {
-            TreasureModel treasureData = DataContext.Instance.TreasureDic[Data.TreasureID];
-            int treasureCount = Random.Range(Data.MinTreasureCount, Data.MaxTreasureCount + 1);
-            Vector2Int treasurePosition;
             List<Vector2Int> positionList = new List<Vector2Int>();
             int random;
             for (int i = 0; i < bounds.size.x; i++)
@@ -43,18 +40,16 @@ public class Room
                     positionList.Add(new Vector2Int(i, j));
                 }
             }
+
+            int treasureCount = Random.Range(Data.MinTreasureCount, Data.MaxTreasureCount + 1);
+            Vector2Int treasurePosition;
+            TreasureModel treasureData;
             for (int i = 0; i < treasureCount; i++)
             {
-                if (treasureCount == 1)
-                {
-                    treasurePosition = new Vector2Int(bounds.x + bounds.size.x / 2, bounds.y + bounds.size.y / 2);
-                }
-                else
-                {
-                    random = Random.Range(0, positionList.Count);
-                    treasurePosition = bounds.min + positionList[random];
-                    positionList.RemoveAt(random);
-                }
+                random = Random.Range(0, positionList.Count);
+                treasurePosition = bounds.min + positionList[random];
+                positionList.RemoveAt(random);
+                treasureData = DataContext.Instance.TreasureDic[Data.TreasurePool[Random.Range(0, Data.TreasurePool.Count)]];
                 treasures.Add(treasurePosition, new Treasure(treasurePosition, treasureData));
             }
         }

@@ -54,8 +54,8 @@ public class ActionScrollItem : ScrollItem
         else if (obj is Card)
         {
             Card card = (Card)obj;
-            Label.text = card.ItemData.Name;
-            if (BattleController.Instance.SelectedCharacter.CurrentPP >= card.CardData.PP)
+            Label.text = card.Data.Name;
+            if (BattleController.Instance.SelectedCharacter.CurrentPP >= card.Data.PP)
             {
                 Background.color = _canUseColor;
             }
