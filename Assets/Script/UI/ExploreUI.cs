@@ -15,10 +15,13 @@ public class ExploreUI : MonoBehaviour
     public Camera BigMapCamera;
 
     private float deltaTime;
+    private float _scale;
 
-    public void SetCameraPosition(int x, int y) 
+    public void SetCameraPosition(int x, int y, float scale) 
     {
+        _scale = scale;
         BigMapCamera.transform.position = new Vector3(x, 5, y);
+        BigMap.localScale = new Vector3(scale, scale, 1);
     }
 
     private void Awake()
@@ -47,10 +50,10 @@ public class ExploreUI : MonoBehaviour
             if (BigMapBG.activeSelf)
             {
                 ExploreInfo info = ExploreManager.Instance.Info;
-                float x = (info.Size.x / 2 - Camera.main.transform.position.x) / info.Size.x * 1080;
-                float y = (info.Size.y / 2 - Camera.main.transform.position.z) / info.Size.y * 1080;
+                float x = (info.Size.x / 2 - Camera.main.transform.position.x) / info.Size.x * 1080 * _scale;
+                float y = (info.Size.y / 2 - Camera.main.transform.position.z) / info.Size.y * 1080 * _scale;
                 Debug.Log(x + " " + y);
-                BigMap.anchoredPosition = new Vector2((info.Size.x / 2 - Camera.main.transform.position.x) / info.Size.x * 1080, (info.Size.y / 2 - Camera.main.transform.position.z) / info.Size.y * 1080);
+                BigMap.anchoredPosition = new Vector2(x, y);
                 BigMapCamera.Render();
                 FloorLabel.text = ExploreManager.Instance.Info.Floor + "F";
                 InputMamager.Instance.Lock();

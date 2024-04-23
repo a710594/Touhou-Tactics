@@ -76,6 +76,7 @@ namespace Battle
                     {
                         GameObject obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/" + characterInfo.Controller), Vector3.zero, Quaternion.identity);
                         obj.transform.position = new Vector3(position.x, _info.TileAttachInfoDic[position].Height, position.y);
+                        obj.transform.SetParent(Instance._root);
                         _tempDic.Add(characterInfo, obj);
                     }
                     else

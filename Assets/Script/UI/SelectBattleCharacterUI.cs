@@ -15,9 +15,8 @@ namespace Battle
         public Button ConfirmButton;
         public TipLabel TipLabel;
         public CharacterInfoUI CharacterInfoUI;
-        [System.NonSerialized]
-        public int PlayerCount;
 
+        private int _playerCount;
         private Timer _timer = new Timer();
         private List<CharacterInfo> _tempCharacterList = new List<CharacterInfo>();
         private List<CharacterInfo> _selectedCharacterList = new List<CharacterInfo>();
@@ -26,7 +25,11 @@ namespace Battle
 
         public void Init(BattleInfo info)
         {
-            PlayerCount = info.PlayerCount;
+            _playerCount = info.PlayerCount;
+            if (CharacterManager.Instance.SurvivalCount() <_playerCount) 
+            {
+                _playerCount = CharacterManager.Instance.SurvivalCount();
+            }
             if (info.IsTutorial)
             {
                 _tempCharacterList.Clear();
@@ -111,13 +114,17 @@ namespace Battle
 
         private void ConfirmOnClick()
         {
-            if (_selectedCharacterList.Count == PlayerCount)
+            if (_selectedCharacterList.Count == _playerCount)
             {
                 BattleController.Instance.SetCharacterState();
             }
             else
             {
-                TipLabel.SetLabel("要有" + PlayerCount + "個角色參戰才能開始戰鬥");
+                ConfirmUI.Open("還可以再放置" + (_playerCount - _selectedCharacterList.Count) + "個角色，確定要開始戰鬥嗎？", "確定", "取消", ()=> 
+                {
+                    BattleController.Instance.SetCharacterState();
+                }, null);
+                //TipLabel.SetLabel("要有" + _playerCount + "個角色參戰才能開始戰鬥");
             }
         }
 

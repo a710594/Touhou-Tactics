@@ -125,4 +125,17 @@ public class CharacterManager
             Info.CharacterList[i].CurrentHP = Info.CharacterList[i].MaxHP;
         }
     }
+
+    public int SurvivalCount() 
+    {
+        int count = 0;
+        for (int i=0; i<Info.CharacterList.Count; i++) 
+        {
+            if(Info.CharacterList[i].CurrentHP > 0) 
+            {
+                count++;
+            }
+        }
+        return count;
+    }
 }

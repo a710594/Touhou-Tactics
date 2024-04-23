@@ -16,7 +16,30 @@ public class SkillInfoGroup : MonoBehaviour
     public void SetData(Skill skill) 
     {
         NameLabel.text = skill.Data.Name;
-        CommentLabel.text = skill.Data.Comment;
+        string comment = skill.Data.Comment;
+        int index;
+        Effect effect = skill.Effect;
+        while (comment.Contains("{")) 
+        {
+            index = comment.IndexOf("{");
+            if (effect.Status != null)
+            {
+                if (effect.Status.Value > 100)
+                {
+                    comment = comment.Remove(index, 3).Insert(index, (effect.Status.Value - 100).ToString());
+                }
+                else
+                {
+                    comment = comment.Remove(index, 3).Insert(index, (100 - effect.Status.Value).ToString());
+                }
+            }
+            else
+            {
+                comment = comment.Remove(index, 3).Insert(index, effect.Value.ToString());
+            }
+            effect = skill.Effect.SubEffect;
+        }
+        CommentLabel.text = comment;
         CDLabel.text = "冷卻：" + skill.Data.CD + "回合";
         
         if (skill.Effect.Target == EffectModel.TargetEnum.All)
@@ -55,7 +78,30 @@ public class SkillInfoGroup : MonoBehaviour
     public void SetData(Support support)
     {
         NameLabel.text = support.Data.Name;
-        CommentLabel.text = support.Data.Comment;
+        string comment = support.Data.Comment;
+        int index;
+        Effect effect = support.Effect;
+        while (comment.Contains("{"))
+        {
+            index = comment.IndexOf("{");
+            if (effect.Status != null)
+            {
+                if (effect.Status.Value > 100)
+                {
+                    comment = comment.Remove(index, 3).Insert(index, (effect.Status.Value - 100).ToString());
+                }
+                else
+                {
+                    comment = comment.Remove(index, 3).Insert(index, (100 - effect.Status.Value).ToString());
+                }
+            }
+            else
+            {
+                comment = comment.Remove(index, 3).Insert(index, effect.Value.ToString());
+            }
+            effect = support.Effect.SubEffect;
+        }
+        CommentLabel.text = comment;
         CDLabel.text = "冷卻：" + support.Data.CD + "回合";
 
         if (support.Effect.Target == EffectModel.TargetEnum.All)

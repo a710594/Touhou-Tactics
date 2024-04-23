@@ -194,7 +194,7 @@ namespace Explore
                         SceneController.Instance.ChangeScene("Battle", () =>
                         {
                             InputMamager.Instance.Unlock();
-                            BattleMapBuilder battleMapBuilder = GameObject.Find("BattleMapGenerator").GetComponent<BattleMapBuilder>();
+                            BattleMapBuilder battleMapBuilder = GameObject.Find("BattleMapBuilder").GetComponent<BattleMapBuilder>();
                             BattleInfo battleInfo;
                             if (_enemyList[i].Info.Map != null && _enemyList[i].Info.Map != "")
                             {
@@ -205,7 +205,7 @@ namespace Explore
                                 battleInfo = battleMapBuilder.Generate();
                             }
                             PathManager.Instance.LoadData(battleInfo.TileAttachInfoDic);
-                            BattleController.Instance.Init(Info.Floor, Info.Floor, battleInfo);
+                            BattleController.Instance.Init(Info.Floor, Info.Floor, battleInfo, battleMapBuilder.transform);
                         });
                     });
 
@@ -477,8 +477,22 @@ namespace Explore
             CheckVidsit(Player.transform);
             CheckEvent();
 
+            float x = 1;
+            float y = 1;
+            if(Info.Size.x > 60) 
+            {
+                x = Info.Size.x / 60f;
+            }
+            if (Info.Size.y > 60)
+            {
+                y = Info.Size.y / 60f;
+            }
+            Camera bigMapCamera = GameObject.Find("BigMapCamera").GetComponent<Camera>();
+            bigMapCamera.orthographicSize = (bigMapCamera.orthographicSize * x) + 2;
+            bigMapCamera.gameObject.SetActive(false);
+
             ExploreUI exploreUI = GameObject.Find("ExploreUI").GetComponent<ExploreUI>();
-            exploreUI.SetCameraPosition(Info.Size.x / 2, Info.Size.y / 2 - 2);
+            exploreUI.SetCameraPosition(Info.Size.x / 2, Info.Size.y / 2 - 2, x);
         }
 
         private void SetInfo() 

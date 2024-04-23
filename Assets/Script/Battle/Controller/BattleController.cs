@@ -43,12 +43,14 @@ namespace Battle
         private BattleResultUI _battleResultUI;
         public GameObject Arrow;
         public GameObject DirectionGroup;
+        private Transform _root;
         private List<int> _enemyList = new List<int>();
         private List<Vector2Int> _areaList = new List<Vector2Int>();
         private Dictionary<int, BattleCharacterController> _controllerDic = new Dictionary<int, BattleCharacterController>();
 
-        public void Init(int floor, int lv, BattleInfo info)
+        public void Init(int floor, int lv, BattleInfo info, Transform root)
         {
+            _root = root;
             _battleUI = GameObject.Find("BattleUI").GetComponent<BattleUI>();
             _selectBattleCharacterUI = GameObject.Find("SelectBattleCharacterUI").GetComponent<SelectBattleCharacterUI>();
             _selectBattleCharacterUI.Init(info);
@@ -104,6 +106,7 @@ namespace Battle
             {
                 obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/" + CharacterList[i].Controller), Vector3.zero, Quaternion.identity);
                 obj.transform.position = CharacterList[i].Position;
+                obj.transform.SetParent(_root);
                 _controllerDic.Add(CharacterList[i].Index, obj.GetComponent<BattleCharacterController>());
                 _controllerDic[CharacterList[i].Index].SetSprite(CharacterList[i].Sprite);
                 _controllerDic[CharacterList[i].Index].MoveEndHandler += OnMoveEnd;

@@ -23,6 +23,7 @@ public class DragCameraUI : MonoBehaviour
     {
         _width = width;
         _height = height;
+        Debug.Log(_width + " " + _height);
     }
 
     private void BackgroundDown(ButtonPlus button)
@@ -42,20 +43,70 @@ public class DragCameraUI : MonoBehaviour
         {
             float x;
             float z;
-            Vector3 move;
+            float angle = Camera.main.transform.parent.eulerAngles.y;
             Vector3 v1 = Camera.main.ScreenToViewportPoint(_dragOrigin - Input.mousePosition);
+            Vector3 v2;
+            Vector3 v3;
             if (_cameraRotate.CurrentState == CameraRotate.StateEnum.Slope)
             {
-                Vector3 v2 = new Vector3(v1.x * Mathf.Sin(45) + v1.y * Mathf.Cos(45), 0, v1.x * Mathf.Sin(-45) + v1.y * Mathf.Cos(-45));
-                move = new Vector3(v2.x * CameraDragSpeed, 0, v2.z * CameraDragSpeed);
-                x = Mathf.Clamp(Camera.main.transform.position.x + move.x, -10, _width - 10);
-                z = Mathf.Clamp(Camera.main.transform.position.z + move.z, -10, _height - 10);
+                if (Math.Abs(angle - 0) < 1)
+                {
+                    v2 = new Vector3(v1.x + v1.y, 0, -v1.x + v1.y);
+                    v3 = new Vector3(v2.x * CameraDragSpeed, 0, v2.z * CameraDragSpeed);
+                    x = Camera.main.transform.position.x + v3.x;
+                    z = Camera.main.transform.position.z + v3.z;
+                    x = Mathf.Clamp(Camera.main.transform.position.x + v3.x, -10, _width - 10);
+                    z = Mathf.Clamp(Camera.main.transform.position.z + v3.z, -10, _height - 10);
+                }
+                else if (Math.Abs(angle - 90) < 1)
+                {
+                    v2 = new Vector3(v1.x - v1.y, 0, v1.x + v1.y);
+                    v3 = new Vector3(v2.x * CameraDragSpeed, 0, v2.z * CameraDragSpeed);
+                    x = Camera.main.transform.position.x + v3.x;
+                    z = Camera.main.transform.position.z + v3.z;
+                    x = Mathf.Clamp(Camera.main.transform.position.x + v3.x, -10, _width - 10);
+                    z = Mathf.Clamp(Camera.main.transform.position.z + v3.z, 10, _height + 10);
+                }
+                else if (Math.Abs(angle - 180) < 1) 
+                {
+                    v2 = new Vector3(v1.x + v1.y, 0, -v1.x + v1.y);
+                    v3 = new Vector3(v2.x * CameraDragSpeed, 0, v2.z * CameraDragSpeed);
+                    x = Camera.main.transform.position.x + v3.x;
+                    z = Camera.main.transform.position.z + v3.z;
+                    x = Mathf.Clamp(Camera.main.transform.position.x + v3.x, 10, _width + 10);
+                    z = Mathf.Clamp(Camera.main.transform.position.z + v3.z, 10, _height + 10);
+                }
+                else
+                {
+                    v2 = new Vector3(v1.x - v1.y, 0, v1.x + v1.y);
+                    v3 = new Vector3(v2.x * CameraDragSpeed, 0, v2.z * CameraDragSpeed);
+                    x = Camera.main.transform.position.x + v3.x;
+                    z = Camera.main.transform.position.z + v3.z;
+                    x = Mathf.Clamp(Camera.main.transform.position.x + v3.x, 10, _width + 10);
+                    z = Mathf.Clamp(Camera.main.transform.position.z + v3.z, -10, _height - 10);
+                }
             }
             else
             {
-                move = new Vector3(v1.x * CameraDragSpeed, 0, v1.y * CameraDragSpeed);
-                x = Mathf.Clamp(Camera.main.transform.position.x + move.x, 0, _width);
-                z = Mathf.Clamp(Camera.main.transform.position.z + move.z, 0, _height);
+                if (Math.Abs(angle - 0) < 1)
+                {
+                    v3 = new Vector3(v1.x * CameraDragSpeed, 0, v1.y * CameraDragSpeed);
+                }
+                else if (Math.Abs(angle - 90) < 1)
+                {
+                    v3 = new Vector3(v1.y * CameraDragSpeed, 0, -v1.x * CameraDragSpeed);
+                }
+                else if (Math.Abs(angle - 180) < 1)
+                {
+                    v3 = new Vector3(-v1.x * CameraDragSpeed, 0, -v1.y * CameraDragSpeed);
+                }
+                else
+                {
+                    v3 = new Vector3(-v1.y * CameraDragSpeed, 0, v1.x * CameraDragSpeed);
+                }
+                x = Mathf.Clamp(Camera.main.transform.position.x + v3.x, 0, _width);
+                z = Mathf.Clamp(Camera.main.transform.position.z + v3.z, 0, _height);
+
             }
 
             Camera.main.transform.DOMove(new Vector3(x, Camera.main.transform.position.y, z), 1f);

@@ -20,9 +20,9 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
         string path = Path.Combine(_prePath, "MapSeed/" + SeedFile[UnityEngine.Random.Range(0, SeedFile.Length)] + ".txt");
         _info = _reader.Read(path);
 
-        for (int i = this.transform.childCount; i > 0; --i)
+        for (int i = Tilemap.childCount; i > 0; --i)
         {
-            DestroyImmediate(this.transform.GetChild(0).gameObject);
+            DestroyImmediate(Tilemap.GetChild(0).gameObject);
         }
 
         //str = lines[0].Split(' ');
@@ -48,54 +48,6 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
                 queue.Enqueue(pair.Key);
             }
         }
-
-        //try
-        //{
-        //    for (int i = 1; i < lines.Length; i++) //第一行是長寬,忽視之
-        //    {
-        //        if (lines[i] != "")
-        //        {
-        //            if (i <= battleInfo.Width)
-        //            {
-        //                str = lines[i].Split(' ');
-        //                for (int j = 0; j < str.Length; j++)
-        //                {
-        //                    position = new Vector2Int(i - 1, j);
-        //                    if (str[j] == "X")
-        //                    {
-        //                        visitedDic.Add(position, null);
-        //                        battleInfo.TileInfoDic.Add(position, null);
-        //                        continue;
-        //                    }
-        //                    else
-        //                    {
-        //                        tileSetting = DataContext.Instance.TileSettingDic[str[j]];
-        //                        visitedDic.Add(position, tileSetting);
-        //                        battleInfo.TileInfoDic.Add(position, new TileInfo(tileSetting));
-        //                        if (tileSetting.Enqueue)
-        //                        {
-        //                            queue.Enqueue(position);
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //            else if (i == battleInfo.Width + 2)
-        //            {
-        //                List<int[]> list = JsonConvert.DeserializeObject<List<int[]>>(lines[i]);
-        //                for (int j=0; j<list.Count; j++) 
-        //                {
-        //                    battleInfo.NoAttachList.Add(new Vector2Int(list[j][0], list[j][1]));
-        //                }
-        //                //battleInfo.NoAttachList = JsonConvert.DeserializeObject<List<Vector2Int>>(lines[i]);
-        //            }
-
-        //        }
-        //    }
-        //}
-        //catch (Exception ex) 
-        //{
-        //    Debug.Log(ex);
-        //}
 
         //BFS
         while (queue.Count != 0)
@@ -167,10 +119,10 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
             count--;
         }
 
-        for (int i = this.transform.childCount; i > 0; --i)
-        {
-            DestroyImmediate(this.transform.GetChild(0).gameObject);
-        }
+        //for (int i = this.transform.childCount; i > 0; --i)
+        //{
+        //    DestroyImmediate(this.transform.GetChild(0).gameObject);
+        //}
 
         foreach (KeyValuePair<Vector2Int, TileAttachInfo> pair in _info.TileAttachInfoDic) 
         {
