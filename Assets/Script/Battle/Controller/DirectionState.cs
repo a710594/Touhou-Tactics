@@ -10,9 +10,11 @@ namespace Battle
         {
             private bool _lock = false;
             private Timer _timer = new Timer();
+            private CameraRotate _cameraRotate;
 
             public DirectionState(StateContext context) : base(context)
             {
+                _cameraRotate = Camera.main.GetComponent<CameraRotate>();
             }
 
             public override void Begin()
@@ -31,12 +33,13 @@ namespace Battle
 
             public override void Click(Vector2Int position)
             {
+                BattleCharacterController _controller = Instance._controllerDic[_character.Index];
                 if (!_lock)
                 {
                     if (Vector2Int.Distance(position, Utility.ConvertToVector2Int(_character.Position)) == 1)
                     {
                         _lock = true;
-                        Instance._controllerDic[_character.Index].SetDirection(position);
+                        _controller.SetDirection(_cameraRotate.CurrentState, position - Utility.ConvertToVector2Int(_controller.transform.position), Camera.main.transform.eulerAngles.y);
                         _timer.Start(0.5f, () =>
                         {
                             _lock = false;

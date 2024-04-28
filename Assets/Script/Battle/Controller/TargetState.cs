@@ -11,9 +11,11 @@ namespace Battle
         {
             private Effect _effect;
             private List<Vector2Int> _rangeList;
+            private CameraRotate _cameraRotate;
 
             public TargetState(StateContext context) : base(context)
             {
+                _cameraRotate = Camera.main.GetComponent<CameraRotate>();
             }
 
             public override void Begin()
@@ -86,7 +88,8 @@ namespace Battle
                         }
                     }
 
-                    Instance._controllerDic[_character.Index].SetDirection(Instance._selectedPosition);
+                    BattleCharacterController _controller = Instance._controllerDic[_character.Index];
+                    _controller.SetDirection(_cameraRotate.CurrentState, position - Utility.ConvertToVector2Int(_controller.transform.position), Camera.main.transform.eulerAngles.y);
 
                     _context.SetState<ConfirmState>();
                 }

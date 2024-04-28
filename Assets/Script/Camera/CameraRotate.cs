@@ -6,7 +6,7 @@ using DG.Tweening;
 
 public class CameraRotate : MonoBehaviour
 {
-    public Action<StateEnum> RotateHandler;
+    public Action<StateEnum, float> RotateHandler;
 
     public enum StateEnum
     {
@@ -67,9 +67,14 @@ public class CameraRotate : MonoBehaviour
                         _enable = true;
                     });
 
-                    float y = transform.parent.transform.eulerAngles.y;
+                    float y = transform.parent.eulerAngles.y;
                     transform.DOLocalMove(new Vector3(-10, 10, -10), 1f);
-                    transform.parent.transform.DORotate(new Vector3(0, y + 90, 0), 1f);
+                    transform.parent.DORotate(new Vector3(0, y + 90, 0), 1f);
+
+                    if (RotateHandler != null)
+                    {
+                        RotateHandler(CurrentState, y + 90);
+                    }
                 }
                 else if (Input.GetKeyDown(KeyCode.D))
                 {
@@ -79,9 +84,14 @@ public class CameraRotate : MonoBehaviour
                         _enable = true;
                     });
 
-                    float y = transform.parent.transform.eulerAngles.y;
+                    float y = transform.parent.eulerAngles.y;
                     transform.DOLocalMove(new Vector3(-10, 10, -10), 1f);
-                    transform.parent.transform.DORotate(new Vector3(0, y - 90, 0), 1f);
+                    transform.parent.DORotate(new Vector3(0, y - 90, 0), 1f);
+
+                    if (RotateHandler != null)
+                    {
+                        RotateHandler(CurrentState, y - 90);
+                    }
                 }
                 else if (Input.GetKeyDown(KeyCode.W))
                 {
@@ -98,7 +108,7 @@ public class CameraRotate : MonoBehaviour
 
                     if (RotateHandler != null)
                     {
-                        RotateHandler(CurrentState);
+                        RotateHandler(CurrentState, transform.parent.eulerAngles.y);
                     }     
                 }
             }
@@ -118,7 +128,7 @@ public class CameraRotate : MonoBehaviour
 
                     if (RotateHandler != null)
                     {
-                        RotateHandler(CurrentState);
+                        RotateHandler(CurrentState, transform.parent.eulerAngles.y);
                     }
                 }
             }

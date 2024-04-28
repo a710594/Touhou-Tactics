@@ -185,7 +185,7 @@ public class BattleUI : MonoBehaviour
     //    });
     //}
 
-    private void Rotate(CameraRotate.StateEnum state)
+    private void Rotate(CameraRotate.StateEnum state, float angle)
     {
         if (state == CameraRotate.StateEnum.Slope)
         {

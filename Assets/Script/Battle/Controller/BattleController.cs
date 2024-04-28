@@ -276,7 +276,10 @@ namespace Battle
 
         public void SetDirection(Vector2Int direction) 
         {
-            SelectedCharacter.Direction = direction;
+            if (SelectedCharacter != null)
+            {
+                SelectedCharacter.Direction = direction;
+            }
         }
 
         public bool SetCharacterInfoUI_2(Vector2 position)
