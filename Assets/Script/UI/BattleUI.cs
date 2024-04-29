@@ -23,8 +23,7 @@ public class BattleUI : MonoBehaviour
     public GameObject DirectionGroup;
 
     private Vector3 _directionPosition = new Vector3();
-    private PointerEventData _pointerEventData = new PointerEventData(null);
-    private List<RaycastResult> _graphicHitList = new List<RaycastResult>();
+private CameraRotate _cameraRotate;
     private Dictionary<int, LittleHpBarWithStatus> _littleHpBarDic = new Dictionary<int, LittleHpBarWithStatus>();
     private Dictionary<int, FloatingNumberPool> _floatingNumberPoolDic  = new Dictionary<int, FloatingNumberPool>();
 
@@ -185,9 +184,9 @@ public class BattleUI : MonoBehaviour
     //    });
     //}
 
-    private void Rotate(CameraRotate.StateEnum state, float angle)
+    private void Rotate()
     {
-        if (state == CameraRotate.StateEnum.Slope)
+        if (_cameraRotate.CurrentState == CameraRotate.StateEnum.Slope)
         {
             DirectionGroup.transform.eulerAngles = new Vector3(60, 0, 45);
         }
@@ -200,8 +199,8 @@ public class BattleUI : MonoBehaviour
     private void Awake()
     {
         SetDirectionGroupVisible(false);
-        CameraRotate cameraRotate = Camera.main.GetComponent<CameraRotate>();
-        cameraRotate.RotateHandler += Rotate;
+        _cameraRotate = Camera.main.GetComponent<CameraRotate>();
+        _cameraRotate.RotateHandler += Rotate;
     }
 
     private void Update()

@@ -24,9 +24,9 @@ namespace Battle
 
         public BattleInfo Info;
         public BattleCharacterInfo SelectedCharacter;
-        public List<BattleCharacterInfo> CharacterList = new List<BattleCharacterInfo>(); //¦s¬¡ªº¨¤¦â
-        public List<BattleCharacterInfo> DyingList = new List<BattleCharacterInfo>(); //Ãx¦ºªº§Ú¤è¨¤¦â
-        public List<BattleCharacterInfo> DeadList = new List<BattleCharacterInfo>(); //¦º¤`ªº§Ú¤è¨¤¦â
+        public List<BattleCharacterInfo> CharacterList = new List<BattleCharacterInfo>(); //ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        public List<BattleCharacterInfo> DyingList = new List<BattleCharacterInfo>(); //ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½Ú¤è¨¤ï¿½ï¿½
+        public List<BattleCharacterInfo> DeadList = new List<BattleCharacterInfo>(); //ï¿½ï¿½ï¿½`ï¿½ï¿½ï¿½Ú¤è¨¤ï¿½ï¿½
 
         private readonly Color _white = new Color(1, 1, 1, 0.5f);
         private readonly Color _yellow = new Color(1, 1, 0, 0.5f);
@@ -108,9 +108,8 @@ namespace Battle
                 obj.transform.position = CharacterList[i].Position;
                 obj.transform.SetParent(_root);
                 _controllerDic.Add(CharacterList[i].Index, obj.GetComponent<BattleCharacterController>());
-                _controllerDic[CharacterList[i].Index].SetSprite(CharacterList[i].Sprite);
+                _controllerDic[CharacterList[i].Index].Init(CharacterList[i].Sprite);
                 _controllerDic[CharacterList[i].Index].MoveEndHandler += OnMoveEnd;
-                _controllerDic[CharacterList[i].Index].SetDirectionHandler += SetDirection;
                 _battleUI.SetLittleHpBarAnchor(CharacterList[i].Index, _controllerDic[CharacterList[i].Index]);
                 _battleUI.SetLittleHpBarValue(CharacterList[i].Index, CharacterList[i]);
                 _battleUI.SetFloatingNumberPoolAnchor(CharacterList[i].Index, _controllerDic[CharacterList[i].Index]);
@@ -284,7 +283,7 @@ namespace Battle
 
         public bool SetCharacterInfoUI_2(Vector2 position)
         {
-            //Åã¥Ü¨¤¦â¸ê®Æ
+            //ï¿½ï¿½Ü¨ï¿½ï¿½ï¿½ï¿½ï¿½
             Instance._battleUI.SetCharacterInfoUI_2(null);
             for (int i = 0; i < CharacterList.Count; i++)
             {
@@ -324,9 +323,8 @@ namespace Battle
             GameObject obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/" + info.Controller), Vector3.zero, Quaternion.identity);
             obj.transform.position = info.Position;
             _controllerDic.Add(info.Index, obj.GetComponent<BattleCharacterController>());
-            _controllerDic[info.Index].SetSprite(info.Sprite);
+            _controllerDic[info.Index].Init(info.Sprite);
             _controllerDic[info.Index].MoveEndHandler += OnMoveEnd;
-            _controllerDic[info.Index].SetDirectionHandler += SetDirection;
             _battleUI.SetLittleHpBarAnchor(info.Index, _controllerDic[info.Index]);
             _battleUI.SetLittleHpBarValue(info.Index, info);
             _battleUI.SetFloatingNumberPoolAnchor(info.Index, _controllerDic[info.Index]);
@@ -334,7 +332,7 @@ namespace Battle
 
         public void ChangeSprite(int index, string sprite) 
         {
-            _controllerDic[index].SetSprite(sprite);
+            _controllerDic[index].Init(sprite);
             _battleUI.CharacterListGroup.ChangeSprite(index, sprite);
         }
 
@@ -405,7 +403,7 @@ namespace Battle
             {
                 List<Vector2Int> tempList = new List<Vector2Int>();
                 List<Vector2Int> rangeList = new List<Vector2Int>();
-                for (int i = 0; i < stepList.Count; i++) //§Ú¥i¥H²¾°Êªº½d³ò
+                for (int i = 0; i < stepList.Count; i++) //ï¿½Ú¥iï¿½Hï¿½ï¿½ï¿½Êªï¿½ï¿½dï¿½ï¿½
                 {
                     tempList = Utility.GetRange(character.AI.SelectedSkill.Effect.Range, Info.Width, Info.Height, stepList[i]);
                     for (int j=0; j<tempList.Count; j++) 

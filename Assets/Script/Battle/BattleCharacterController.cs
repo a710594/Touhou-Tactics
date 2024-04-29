@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Battle;
+using UnityEngine.UIElements;
 
 public class BattleCharacterController : MonoBehaviour
 {
     public Action MoveEndHandler;
-    public Action<Vector2Int> SetDirectionHandler;
 
     public Transform HpAnchor;
     public SpriteRenderer SpriteRenderer;
@@ -18,20 +18,20 @@ public class BattleCharacterController : MonoBehaviour
     private CameraRotate _cameraRotate;
     private Vector2 _direction = Vector2Int.left;
 
-    public void SetSprite(string sprite) 
+    public void Init(string sprite) 
     {
         _front = Resources.Load<Sprite>("Image/" + sprite + "_F");
         _back = Resources.Load<Sprite>("Image/" + sprite + "_B");
         SpriteRenderer.sprite = _front;
         SpriteRenderer.flipX = false;
-        //_direction = Vector2Int.left;
     }
 
     public void Move(List<Vector2Int> paths)
     {
         if (paths.Count > 0)
         {
-            SetDirection(_cameraRotate.CurrentState, paths[0] - Utility.ConvertToVector2Int(transform.position), Camera.main.transform.eulerAngles.y);
+            SetDirection(paths[0] - Utility.ConvertToVector2Int(transform.position));
+            SetSprite();
 
             transform.DOMove(new Vector3(paths[0].x, BattleController.Instance.Info.TileAttachInfoDic[paths[0]].Height, paths[0].y), 0.25f).SetEase(Ease.Linear).OnComplete(() =>
             {
@@ -58,75 +58,15 @@ public class BattleCharacterController : MonoBehaviour
         }
     }
 
-    //public void SetDirection(Vector2 position) 
-    //{
-    //    Vector2Int direction = new Vector2Int();
-    //    if (_cameraRotate.CurrentState == CameraRotate.StateEnum.Slope)
-    //    {
-    //        if (position.x > transform.position.x)
-    //        {
-    //            SpriteRenderer.sprite = _back;
-    //            SpriteRenderer.flipX = false;
-    //            direction = Vector2Int.right;
-    //        }
-    //        else if (position.x < transform.position.x)
-    //        {
-    //            SpriteRenderer.sprite = _front;
-    //            SpriteRenderer.flipX = false;
-    //            direction = Vector2Int.left;
-    //        }
-    //        else if (position.y > transform.position.z)
-    //        {
-    //            SpriteRenderer.sprite = _back;
-    //            SpriteRenderer.flipX = true;
-    //            direction = Vector2Int.up;
-    //        }
-    //        else if (position.y < transform.position.z)
-    //        {
-    //            SpriteRenderer.sprite = _front;
-    //            SpriteRenderer.flipX = true;
-    //            direction = Vector2Int.down;
-    //        }
-    //    }
-    //    else 
-    //    {
-    //        if (position.x > transform.position.x)
-    //        {
-    //            SpriteRenderer.sprite = _front;
-    //            SpriteRenderer.flipX = true;
-    //            direction = Vector2Int.right;
-    //        }
-    //        else if (position.x < transform.position.x)
-    //        {
-    //            SpriteRenderer.sprite = _front;
-    //            SpriteRenderer.flipX = false;
-    //            direction = Vector2Int.left;
-    //        }
-    //        else if (position.y > transform.position.z)
-    //        {
-    //            SpriteRenderer.sprite = _back;
-    //            SpriteRenderer.flipX = true;
-    //            direction = Vector2Int.up;
-    //        }
-    //        else if (position.y < transform.position.z)
-    //        {
-    //            SpriteRenderer.sprite = _front;
-    //            SpriteRenderer.flipX = true;
-    //            direction = Vector2Int.down;
-    //        }
-    //    }
-
-    //    if (SetDirectionHandler != null) 
-    //    {
-    //        SetDirectionHandler(direction);
-    //    }
-    //}
-
-    public void SetDirection(CameraRotate.StateEnum state, Vector2Int direction, float angle)
+    public void SetDirection(Vector2Int direction)
     {
         _direction = direction;
-        Vector2Int localDirection = Vector2Int.RoundToInt(Quaternion.AngleAxis(angle, Vector3.forward) * _direction);
-        if (state == CameraRotate.StateEnum.Slope)
+    }
+
+    public void SetSprite()
+    {
+        Vector2Int localDirection = Vector2Int.RoundToInt(Quaternion.AngleAxis(_cameraRotate.Angle, Vector3.forward) * _direction);
+        if (_cameraRotate.CurrentState == CameraRotate.StateEnum.Slope)
         {
             if (localDirection == Vector2Int.right)
             {
@@ -171,11 +111,6 @@ public class BattleCharacterController : MonoBehaviour
                 SpriteRenderer.sprite = _front;
                 SpriteRenderer.flipX = true;
             }
-        }
-
-        if (SetDirectionHandler != null)
-        {
-            SetDirectionHandler(direction);
         }
     }
 
@@ -187,18 +122,20 @@ public class BattleCharacterController : MonoBehaviour
         SpriteRenderer.SetPropertyBlock(mpb);
     }
 
-    private void Rotate(CameraRotate.StateEnum state, float angle) 
+    private void Rotate() 
     {
-        if (state == CameraRotate.StateEnum.Slope) 
+        if (_cameraRotate.CurrentState == CameraRotate.StateEnum.Slope) 
         {
-            transform.eulerAngles = new Vector3(30, 45 + angle, 0);
+            //transform.eulerAngles = new Vector3(30, 45 + _cameraRotate.Angle, 0);
+            transform.DORotate(new Vector3(30, 45 + _cameraRotate.Angle, 0), 1f);
         }
         else
         {
-            transform.eulerAngles = new Vector3(90, angle, 0);
+            //transform.eulerAngles = new Vector3(90, _cameraRotate.Angle, 0);
+            transform.DORotate(new Vector3(90, _cameraRotate.Angle, 0), 1f);
         }
 
-        SetDirection(_cameraRotate.CurrentState, Vector2Int.RoundToInt(_direction), angle);
+        SetSprite();
     }
 
     private void Awake()
@@ -211,6 +148,5 @@ public class BattleCharacterController : MonoBehaviour
 
     private void OnDestroy()
     {
-        _cameraRotate.RotateHandler -= Rotate;
     }
 }

@@ -59,7 +59,7 @@ namespace Battle
                     }
                     else if (_effect.Track == EffectModel.TrackEnum.Parabola)
                     {
-                        Utility.CheckParabola(_character.Position, p, 4, characterList, tileDic, out bool isBlock, out List<Vector3> result); //­n¸É©ßª«½uªº°ª«×
+                        Utility.CheckParabola(_character.Position, p, 4, characterList, tileDic, out bool isBlock, out List<Vector3> result); //ï¿½nï¿½É©ßªï¿½ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                         Instance._cameraController.DrawParabola(result, isBlock);
                         Instance._selectedPosition = Utility.ConvertToVector2Int(result.Last());
                     }
@@ -71,7 +71,7 @@ namespace Battle
                     List<Vector2Int> areaList = Instance.GetAreaList(Utility.GetEffect(_character.SelectedObject));
                     Instance.SetArea(Utility.GetEffect(_character.SelectedObject));
 
-                    //Åã¥Ü¨¤¦â¸ê®Æ
+                    //ï¿½ï¿½Ü¨ï¿½ï¿½ï¿½ï¿½ï¿½
                     for (int i = 0; i < characterList.Count; i++)
                     {
                         if (areaList.Contains(Utility.ConvertToVector2Int(characterList[i].Position)))
@@ -89,7 +89,8 @@ namespace Battle
                     }
 
                     BattleCharacterController _controller = Instance._controllerDic[_character.Index];
-                    _controller.SetDirection(_cameraRotate.CurrentState, position - Utility.ConvertToVector2Int(_controller.transform.position), Camera.main.transform.eulerAngles.y);
+                    _controller.SetDirection(position - Utility.ConvertToVector2Int(_controller.transform.position));
+                    _controller.SetSprite();
 
                     _context.SetState<ConfirmState>();
                 }

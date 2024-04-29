@@ -6,7 +6,7 @@ using DG.Tweening;
 
 public class CameraRotate : MonoBehaviour
 {
-    public Action<StateEnum, float> RotateHandler;
+    public Action RotateHandler;
 
     public enum StateEnum
     {
@@ -15,6 +15,9 @@ public class CameraRotate : MonoBehaviour
     }
 
     public StateEnum CurrentState = StateEnum.Slope;
+
+    [System.NonSerialized]
+    public float Angle;
 
     private bool _enable = true;
     private Timer _timer = new Timer();
@@ -31,32 +34,6 @@ public class CameraRotate : MonoBehaviour
     {
         if (_enable) 
         {
-            //if (Input.GetKeyDown(KeyCode.R))
-            //{
-            //    _enable = false;
-            //    _timer.Start(1, () =>
-            //    {
-            //        _enable = true;
-            //    });
-
-            //    if (CurrentState == StateEnum.Slope)
-            //    {
-            //        transform.DOLocalRotate(new Vector3(90, 0, 0), 1f);
-            //        transform.DOLocalMove(transform.localPosition + new Vector3(10, 0, 10), 1f);
-            //        CurrentState = StateEnum.Vertical;
-            //    }
-            //    else
-            //    {
-            //        transform.DOLocalRotate(new Vector3(30, 45, 0), 1f);
-            //        transform.DOLocalMove(transform.localPosition + new Vector3(-10, 0, -10), 1f);
-            //        CurrentState = StateEnum.Slope;
-            //    }
-            //    if (RotateHandler != null)
-            //    {
-            //        RotateHandler(CurrentState);
-            //    }
-            //}
-
             if (CurrentState == StateEnum.Slope) 
             {
                 if (Input.GetKeyDown(KeyCode.A))
@@ -67,13 +44,13 @@ public class CameraRotate : MonoBehaviour
                         _enable = true;
                     });
 
-                    float y = transform.parent.eulerAngles.y;
+                    Angle = transform.parent.eulerAngles.y + 90;
                     transform.DOLocalMove(new Vector3(-10, 10, -10), 1f);
-                    transform.parent.DORotate(new Vector3(0, y + 90, 0), 1f);
+                    transform.parent.DORotate(new Vector3(0, Angle, 0), 1f);
 
                     if (RotateHandler != null)
                     {
-                        RotateHandler(CurrentState, y + 90);
+                        RotateHandler();
                     }
                 }
                 else if (Input.GetKeyDown(KeyCode.D))
@@ -84,13 +61,13 @@ public class CameraRotate : MonoBehaviour
                         _enable = true;
                     });
 
-                    float y = transform.parent.eulerAngles.y;
+                    Angle = transform.parent.eulerAngles.y - 90;
                     transform.DOLocalMove(new Vector3(-10, 10, -10), 1f);
-                    transform.parent.DORotate(new Vector3(0, y - 90, 0), 1f);
+                    transform.parent.DORotate(new Vector3(0, Angle, 0), 1f);
 
                     if (RotateHandler != null)
                     {
-                        RotateHandler(CurrentState, y - 90);
+                        RotateHandler();
                     }
                 }
                 else if (Input.GetKeyDown(KeyCode.W))
@@ -108,7 +85,7 @@ public class CameraRotate : MonoBehaviour
 
                     if (RotateHandler != null)
                     {
-                        RotateHandler(CurrentState, transform.parent.eulerAngles.y);
+                        RotateHandler();
                     }     
                 }
             }
@@ -128,7 +105,7 @@ public class CameraRotate : MonoBehaviour
 
                     if (RotateHandler != null)
                     {
-                        RotateHandler(CurrentState, transform.parent.eulerAngles.y);
+                        RotateHandler();
                     }
                 }
             }

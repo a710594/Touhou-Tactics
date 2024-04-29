@@ -39,7 +39,8 @@ namespace Battle
                     if (Vector2Int.Distance(position, Utility.ConvertToVector2Int(_character.Position)) == 1)
                     {
                         _lock = true;
-                        _controller.SetDirection(_cameraRotate.CurrentState, position - Utility.ConvertToVector2Int(_controller.transform.position), Camera.main.transform.eulerAngles.y);
+                        _controller.SetDirection(position - Utility.ConvertToVector2Int(_controller.transform.position));
+                        _controller.SetSprite();
                         _timer.Start(0.5f, () =>
                         {
                             _lock = false;

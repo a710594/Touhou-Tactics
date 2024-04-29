@@ -44,7 +44,6 @@ namespace Battle
                     Instance._controllerDic.Add(battleCharacter.Index, pair.Value.GetComponent<BattleCharacterController>());
                     //Instance._controllerDic[battleCharacter.Index].SetSprite(battleCharacter.Sprite);
                     Instance._controllerDic[battleCharacter.Index].MoveEndHandler += Instance.OnMoveEnd;
-                    Instance._controllerDic[battleCharacter.Index].SetDirectionHandler += Instance.SetDirection;
                     Instance._battleUI.SetLittleHpBarAnchor(battleCharacter.Index, Instance._controllerDic[battleCharacter.Index]);
                     Instance._battleUI.SetLittleHpBarValue(battleCharacter.Index, battleCharacter);
                     Instance._battleUI.SetFloatingNumberPoolAnchor(battleCharacter.Index, Instance._controllerDic[battleCharacter.Index]);
@@ -63,7 +62,7 @@ namespace Battle
             {
                 if (_info.NoAttachList.Contains(position))
                 {
-                    //¤£¯à©M¨ä¥L¨¤¦â­«Å|
+                    //ï¿½ï¿½ï¿½ï¿½Mï¿½ï¿½Lï¿½ï¿½ï¿½â­«ï¿½|
                     foreach (KeyValuePair<CharacterInfo, BattleCharacterController> pair in _tempDic)
                     {
                         if (pair.Key != characterInfo && Utility.ConvertToVector2Int(pair.Value.transform.position) == position)
@@ -77,7 +76,7 @@ namespace Battle
                         BattleCharacterController character = ((GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/" + characterInfo.Controller), Vector3.zero, Quaternion.identity)).GetComponent<BattleCharacterController>();
                         character.transform.position = new Vector3(position.x, _info.TileAttachInfoDic[position].Height, position.y);
                         character.transform.SetParent(Instance._root);
-                        character.SetSprite(characterInfo.Controller);
+                        character.Init(characterInfo.Controller);
                         _tempDic.Add(characterInfo, character);
                     }
                     else
