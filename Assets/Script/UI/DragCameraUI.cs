@@ -4,11 +4,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DragCameraUI : MonoBehaviour
 {
     public float CameraDragSpeed = 100;
     public ButtonPlus BackgroundButton;
+    public Text Label;
 
     [NonSerialized]
     public bool DontDrag = false;
@@ -124,7 +126,7 @@ public class DragCameraUI : MonoBehaviour
                 }
                 BattleController.Instance.Click(v2);
             }
-            else //¥Nªí«ö¨ì¨S¦³«öÁäªº¦a¤è
+            else //ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Sï¿½ï¿½ï¿½ï¿½ï¿½äªºï¿½aï¿½ï¿½
             {
                 if (BattleController.Instance.Info.IsTutorial)
                 {
@@ -135,9 +137,23 @@ public class DragCameraUI : MonoBehaviour
         }
     }
 
+    private void SetLabel()
+    {
+        if(_cameraRotate.CurrentState == CameraRotate.StateEnum.Slope)
+        {
+          Label.text = "Aï¼šå‘å·¦æ—‹è½‰ Dï¼šå‘å³æ—‹è½‰ Wï¼šå‘ä¸Šæ—‹è½‰";  
+        }
+        else
+        {
+            Label.text = "Sï¼šå‘ä¸‹æ—‹è½‰";
+        }
+
+    }
+
     private void Awake()
     {
         _cameraRotate = Camera.main.GetComponent<CameraRotate>();
+        _cameraRotate.RotateHandler += SetLabel;
 
         //IdleButton.onClick.AddListener(IdleOnClick);
         BackgroundButton.DownHandler += BackgroundDown;

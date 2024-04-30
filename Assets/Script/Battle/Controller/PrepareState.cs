@@ -62,7 +62,7 @@ namespace Battle
             {
                 if (_info.NoAttachList.Contains(position))
                 {
-                    //����M��L���⭫�|
+                    //????M??L?????|
                     foreach (KeyValuePair<CharacterInfo, BattleCharacterController> pair in _tempDic)
                     {
                         if (pair.Key != characterInfo && Utility.ConvertToVector2Int(pair.Value.transform.position) == position)
@@ -77,6 +77,7 @@ namespace Battle
                         character.transform.position = new Vector3(position.x, _info.TileAttachInfoDic[position].Height, position.y);
                         character.transform.SetParent(Instance._root);
                         character.Init(characterInfo.Controller);
+                        character.SetAngle();
                         _tempDic.Add(characterInfo, character);
                     }
                     else

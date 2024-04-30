@@ -122,17 +122,29 @@ public class BattleCharacterController : MonoBehaviour
         SpriteRenderer.SetPropertyBlock(mpb);
     }
 
-    private void Rotate() 
+    public void Rotate() 
     {
         if (_cameraRotate.CurrentState == CameraRotate.StateEnum.Slope) 
         {
-            //transform.eulerAngles = new Vector3(30, 45 + _cameraRotate.Angle, 0);
             transform.DORotate(new Vector3(30, 45 + _cameraRotate.Angle, 0), 1f);
         }
         else
         {
-            //transform.eulerAngles = new Vector3(90, _cameraRotate.Angle, 0);
             transform.DORotate(new Vector3(90, _cameraRotate.Angle, 0), 1f);
+        }
+
+        SetSprite();
+    }
+
+    public void SetAngle() 
+    {
+        if (_cameraRotate.CurrentState == CameraRotate.StateEnum.Slope) 
+        {
+            transform.eulerAngles = new Vector3(30, 45 + _cameraRotate.Angle, 0);
+        }
+        else
+        {
+            transform.eulerAngles = new Vector3(90, _cameraRotate.Angle, 0);
         }
 
         SetSprite();
