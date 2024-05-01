@@ -15,9 +15,12 @@ namespace Battle
         protected BattleCharacterInfo _target;
         protected Timer _timer = new Timer();
 
+        private CameraMove _cameraMove;
+
         public virtual void Init(BattleCharacterInfo info)
         {
             _info = info;
+            _cameraMove = Camera.main.transform.parent.gameObject.GetComponent<CameraMove>();
             SelectedSkill = _info.SkillList[0];
         }
 
@@ -242,19 +245,20 @@ namespace Battle
 
         protected void MoveCamera(Vector3 position, Action callback) 
         {
-            if (BattleController.Instance.CameraRotate.CurrentState == CameraRotate.StateEnum.Slope)
-            {
-                position += new Vector3(-10, 10, -10);
-            }
-            else
-            {
-                position += new Vector3(0, 10, 0);
-            }
-            float distance = Vector3.Distance(Camera.main.transform.position, position);
-            Camera.main.transform.DOMove(position, 0.1f * distance).OnComplete(() =>
-            {
-                callback();
-            });
+            _cameraMove.Move(position, callback);
+            //if (BattleController.Instance.CameraRotate.CurrentState == CameraRotate.StateEnum.Slope)
+            //{
+            //    position += new Vector3(-10, 10, -10);
+            //}
+            //else
+            //{
+            //    position += new Vector3(0, 10, 0);
+            //}
+            //float distance = Vector3.Distance(Camera.main.transform.position, position);
+            //Camera.main.transform.DOMove(position, 0.1f * distance).OnComplete(() =>
+            //{
+            //    callback();
+            //});
         }
     }
 }

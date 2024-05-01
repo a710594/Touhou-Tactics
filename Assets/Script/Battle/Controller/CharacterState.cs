@@ -10,9 +10,11 @@ namespace Battle
         private class CharacterState : BattleControllerState
         {
             private BattleCharacterInfo info;
+            private CameraMove _cameraMove;
 
             public CharacterState(StateContext context) : base(context)
             {
+                _cameraMove = Camera.main.transform.parent.gameObject.GetComponent<CameraMove>();
             }
 
             public override void Begin()
@@ -34,20 +36,30 @@ namespace Battle
 
                 Vector3 position = new Vector3();
                 BattleCharacterController controller = Instance._controllerDic[info.Index];
-                if (Instance.CameraRotate.CurrentState == CameraRotate.StateEnum.Slope)
-                {
-                    position = controller.transform.position + new Vector3(-10, 10, -10);
-                }
-                else
-                {
-                    position = controller.transform.position + new Vector3(0, 10, 0);
-                }
+                position = controller.transform.position;
+                //if (Instance.CameraRotate.CurrentState == CameraRotate.StateEnum.Slope)
+                //{
+                //    position = controller.transform.position + new Vector3(-10, 10, -10);
+                //}
+                //else
+                //{
+                //    position = controller.transform.position + new Vector3(0, 10, 0);
+                //}
                 Instance._battleUI.ActionButtonGroup.gameObject.SetActive(false);
-                float distance = Vector3.Distance(Camera.main.transform.position, position);
-                Camera.main.transform.DOMove(position, 0.1f * distance).OnComplete(() =>
+                _cameraMove.Move(position, ()=> 
                 {
                     _context.SetState<ActionState>();
                 });
+                //float distance = Vector3.Distance(Camera.main.transform.parent.position, position);
+                //Camera.main.transform.parent.DOMove(position, 0.1f * distance).OnComplete(() =>
+                //{
+                //    Vector3 moveTo = new Vector3(-10, 10, -10);
+                //    distance = Vector3.Distance(Camera.main.transform.localPosition, moveTo);
+                //    Camera.main.transform.DOLocalMove(moveTo, 0.1f * distance).OnComplete(()=> 
+                //    {
+                //        _context.SetState<ActionState>();
+                //    });
+                //});
                 Instance.Arrow.transform.SetParent(controller.transform);
                 Instance.Arrow.transform.localPosition = new Vector3(0, 1.3f, 0);
                 Instance.Arrow.transform.localEulerAngles = Vector3.zero;

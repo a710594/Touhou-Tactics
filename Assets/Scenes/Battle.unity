@@ -4220,8 +4220,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 842473267}
+  - component: {fileID: 842473268}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: CameraRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4243,6 +4244,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &842473268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 842473266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f7e3cf8a2c7b1d439cf812173e9e864, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Root: {fileID: 842473267}
+  Main: {fileID: 1702431280}
 --- !u!224 &861492190 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2951477782299983371, guid: f8355bc93c4c2fa419ebbda064be0ab0, type: 3}
