@@ -904,8 +904,9 @@ GameObject:
   - component: {fileID: 283183150}
   - component: {fileID: 283183152}
   - component: {fileID: 283183151}
+  - component: {fileID: 283183153}
   m_Layer: 5
-  m_Name: Image (3)
+  m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -945,7 +946,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -969,6 +970,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 283183149}
   m_CullTransparentMesh: 1
+--- !u!114 &283183153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 283183149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ee6fd6768fd3484d9b5e8db4072d073, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CameraRotate: {fileID: 1702431283}
+  Direction: {x: 1, y: 0}
 --- !u!1 &337115487
 GameObject:
   m_ObjectHideFlags: 0
@@ -2018,8 +2033,9 @@ GameObject:
   - component: {fileID: 496298310}
   - component: {fileID: 496298312}
   - component: {fileID: 496298311}
+  - component: {fileID: 496298313}
   m_Layer: 5
-  m_Name: Image (2)
+  m_Name: Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2059,7 +2075,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2083,6 +2099,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 496298309}
   m_CullTransparentMesh: 1
+--- !u!114 &496298313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 496298309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ee6fd6768fd3484d9b5e8db4072d073, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CameraRotate: {fileID: 1702431283}
+  Direction: {x: -1, y: 0}
 --- !u!1 &508898740
 GameObject:
   m_ObjectHideFlags: 0
@@ -5532,8 +5562,9 @@ GameObject:
   - component: {fileID: 1327005838}
   - component: {fileID: 1327005840}
   - component: {fileID: 1327005839}
+  - component: {fileID: 1327005841}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5573,7 +5604,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -5597,6 +5628,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1327005837}
   m_CullTransparentMesh: 1
+--- !u!114 &1327005841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1327005837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ee6fd6768fd3484d9b5e8db4072d073, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CameraRotate: {fileID: 1702431283}
+  Direction: {x: 0, y: 1}
 --- !u!1 &1329876799
 GameObject:
   m_ObjectHideFlags: 0
@@ -6563,6 +6608,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1461733668}
+  - component: {fileID: 1461733669}
   m_Layer: 5
   m_Name: DirectionGroup
   m_TagString: Untagged
@@ -6594,6 +6640,23 @@ RectTransform:
   m_AnchoredPosition: {x: -609, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1461733669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1461733667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 390555706ea8a9a47b7bc0eec89be97b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DirectionButtons:
+  - {fileID: 1327005841}
+  - {fileID: 1579185415}
+  - {fileID: 496298313}
+  - {fileID: 283183153}
 --- !u!1 &1463075691
 GameObject:
   m_ObjectHideFlags: 0
@@ -6972,8 +7035,9 @@ GameObject:
   - component: {fileID: 1579185412}
   - component: {fileID: 1579185414}
   - component: {fileID: 1579185413}
+  - component: {fileID: 1579185415}
   m_Layer: 5
-  m_Name: Image (1)
+  m_Name: Down
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7013,7 +7077,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -7037,6 +7101,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1579185411}
   m_CullTransparentMesh: 1
+--- !u!114 &1579185415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1579185411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ee6fd6768fd3484d9b5e8db4072d073, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CameraRotate: {fileID: 1702431283}
+  Direction: {x: 0, y: -1}
 --- !u!1 &1583604449
 GameObject:
   m_ObjectHideFlags: 0
@@ -7179,7 +7257,8 @@ MonoBehaviour:
   FloatingNumberPool: {fileID: 1128759233}
   CharacterListGroup: {fileID: 24386309}
   TipLabel: {fileID: 861492191}
-  DirectionGroup: {fileID: 1461733667}
+  DirectionGroup: {fileID: 1461733669}
+  CameraRotate: {fileID: 1702431283}
 --- !u!1 &1617185577
 GameObject:
   m_ObjectHideFlags: 0

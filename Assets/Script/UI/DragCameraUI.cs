@@ -126,7 +126,7 @@ public class DragCameraUI : MonoBehaviour
                 }
                 BattleController.Instance.Click(v2);
             }
-            else //ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Sï¿½ï¿½ï¿½ï¿½ï¿½äªºï¿½aï¿½ï¿½
+            else //?N??????S???????a??
             {
                 if (BattleController.Instance.Info.IsTutorial)
                 {
@@ -141,11 +141,11 @@ public class DragCameraUI : MonoBehaviour
     {
         if(_cameraRotate.CurrentState == CameraRotate.StateEnum.Slope)
         {
-          Label.text = "Aï¼šå‘å·¦æ—‹è½‰ Dï¼šå‘å³æ—‹è½‰ Wï¼šå‘ä¸Šæ—‹è½‰";  
+          Label.text = "A¡G¦V¥ª±ÛÂà D¡G¦V¥k±ÛÂà W¡G¦V¤W±ÛÂà";  
         }
         else
         {
-            Label.text = "Sï¼šå‘ä¸‹æ—‹è½‰";
+            Label.text = "S¡G¦V¤U±ÛÂà";
         }
 
     }

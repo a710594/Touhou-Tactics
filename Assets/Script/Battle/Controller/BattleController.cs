@@ -275,9 +275,10 @@ namespace Battle
 
         public void SetDirection(Vector2Int direction) 
         {
-            if (SelectedCharacter != null)
+            if(_context.CurrentState is DirectionState)
             {
-                SelectedCharacter.Direction = direction;
+                Vector2Int globalDirection = Vector2Int.RoundToInt(Quaternion.AngleAxis(CameraRotate.Angle, Vector3.back) * (Vector2)direction);
+                ((DirectionState)_context.CurrentState).SetDirection(globalDirection);
             }
         }
 

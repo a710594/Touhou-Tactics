@@ -1,5 +1,6 @@
 using Battle;
 using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,8 @@ using UnityEngine.UI;
 
 public class BattleUI : MonoBehaviour
 {
+public Action<Vector2Int> DirectionButtonHandler;
+
     //public Button IdleButton;
     public ButtonPlus BackgroundButton;
     public CharacterInfoUI CharacterInfoUI_1;
@@ -20,11 +23,11 @@ public class BattleUI : MonoBehaviour
     public CharacterListGroup CharacterListGroup;
     //public GameObject PowerPoint;
     public TipLabel TipLabel;
-    public GameObject DirectionGroup;
+    public DirectionGroup DirectionGroup;
+    public CameraRotate CameraRotate;
 
-    private Vector3 _directionPosition = new Vector3();
-private CameraRotate _cameraRotate;
-    private Dictionary<int, LittleHpBarWithStatus> _littleHpBarDic = new Dictionary<int, LittleHpBarWithStatus>();
+
+    private Vector3 _directionPosition = new Vector3();    private Dictionary<int, LittleHpBarWithStatus> _littleHpBarDic = new Dictionary<int, LittleHpBarWithStatus>();
     private Dictionary<int, FloatingNumberPool> _floatingNumberPoolDic  = new Dictionary<int, FloatingNumberPool>();
 
     public void SetVisible(bool isVisible) 
@@ -153,7 +156,7 @@ private CameraRotate _cameraRotate;
 
     public void SetDirectionGroupVisible(bool isVisible)
     {
-        DirectionGroup.SetActive(isVisible);
+        DirectionGroup.gameObject.SetActive(isVisible);
     }
 
     public void SetDirectionGroupPosition(Vector3 position) 
@@ -186,7 +189,7 @@ private CameraRotate _cameraRotate;
 
     private void Rotate()
     {
-        if (_cameraRotate.CurrentState == CameraRotate.StateEnum.Slope)
+        if (CameraRotate.CurrentState == CameraRotate.StateEnum.Slope)
         {
             DirectionGroup.transform.eulerAngles = new Vector3(60, 0, 45);
         }
@@ -196,11 +199,16 @@ private CameraRotate _cameraRotate;
         }
     }
 
+    private void DirectionButtonOnClick(Vector2Int direction)
+    {
+        BattleController.Instance.SetDirection(direction);
+    }
+
     private void Awake()
     {
         SetDirectionGroupVisible(false);
-        _cameraRotate = Camera.main.GetComponent<CameraRotate>();
-        _cameraRotate.RotateHandler += Rotate;
+        CameraRotate.RotateHandler += Rotate;
+        DirectionGroup.ClickHandler += DirectionButtonOnClick;
     }
 
     private void Update()

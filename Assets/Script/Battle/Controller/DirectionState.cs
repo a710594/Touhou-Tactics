@@ -31,7 +31,7 @@ namespace Battle
                 }
             }
 
-            public override void Click(Vector2Int position)
+            /*public override void Click(Vector2Int position)
             {
                 BattleCharacterController _controller = Instance._controllerDic[_character.Index];
                 if (!_lock)
@@ -47,6 +47,22 @@ namespace Battle
                             _context.SetState<CharacterState>();
                         });
                     }
+                }
+            }*/
+
+            public void SetDirection(Vector2Int direction)
+            {
+                if (!_lock)
+                {
+                    BattleCharacterController _controller = Instance._controllerDic[_character.Index];
+                    _lock = true;
+                    _controller.SetDirection(direction);
+                    _controller.SetSprite();
+                    _timer.Start(0.5f, () =>
+                    {
+                        _lock = false;
+                        _context.SetState<CharacterState>();
+                    });
                 }
             }
 

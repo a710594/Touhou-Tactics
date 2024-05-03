@@ -66,6 +66,7 @@ public class BattleCharacterController : MonoBehaviour
     public void SetSprite()
     {
         Vector2Int localDirection = Vector2Int.RoundToInt(Quaternion.AngleAxis(_cameraRotate.Angle, Vector3.forward) * _direction);
+        Debug.Log(_direction + " " + localDirection);
         if (_cameraRotate.CurrentState == CameraRotate.StateEnum.Slope)
         {
             if (localDirection == Vector2Int.right)
