@@ -26,8 +26,8 @@ public class ActionButtonGroup : MonoBehaviour
         SupportButton.interactable = !character.HasUseSupport;
         ItemButton.interactable = !character.HasUseItem;
         SpellButton.interactable = !character.HasUseSpell;
-        ActionCountLabel.text = "剩餘行動次數：" + character.ActionCount.ToString();
-        CardCountLabel.text = "剩餘符卡數量：" + ItemManager.Instance.GetAmount(ItemManager.CardID);
+        ActionCountLabel.text = "嚙諸餘嚙踝蕭呇嚙踝蕭?：" + character.ActionCount.ToString();
+        CardCountLabel.text = "嚙諸餘嚙褐卡嚙複量嚙瘦" + ItemManager.Instance.GetAmount(ItemManager.CardID);
         ScrollView.transform.parent.gameObject.SetActive(false);
     }
 
@@ -157,10 +157,10 @@ public class ActionButtonGroup : MonoBehaviour
         else if (obj is Card)
         {
             Card card = (Card)obj;
-            if (BattleController.Instance.SelectedCharacter.CurrentPP < card.Data.PP)
+            if (card.CurrentCD > 0)
             {
                 canUse = false;
-                tip = "PP不足，還需要" + (card.Data.PP - BattleController.Instance.SelectedCharacter.CurrentPP);
+                tip = "還需要" + card.CurrentCD + "回合冷卻";
             }
             else if(ItemManager.Instance.GetAmount(ItemManager.CardID) < 1) 
             {

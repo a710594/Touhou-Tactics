@@ -141,7 +141,7 @@ public class SkillInfoGroup : MonoBehaviour
     {
         NameLabel.text = card.Data.Name;
         CommentLabel.text = card.Data.Comment;
-        CDLabel.text = "消耗PP：" + card.Data.PP;
+        CDLabel.text = "冷卻：" + card.Data.CD + "回合";
 
         if (card.Effect.Target == EffectModel.TargetEnum.All)
         {

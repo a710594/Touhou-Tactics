@@ -6,6 +6,7 @@ using Battle;
 
 public class Card
 {
+    public int CurrentCD;
     public CardModel Data;
     public Effect Effect;
 
@@ -15,5 +16,13 @@ public class Card
     {
         Data = data;
         Effect = EffectFactory.GetEffect(data.EffectID);
+    }
+
+    public void CheckCD() 
+    {
+        if (CurrentCD > 0) 
+        {
+            CurrentCD--;
+        }
     }
 }

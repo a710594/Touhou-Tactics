@@ -4288,6 +4288,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Root: {fileID: 842473267}
   Main: {fileID: 1702431280}
+  CameraRotate: {fileID: 1702431283}
 --- !u!224 &861492190 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2951477782299983371, guid: f8355bc93c4c2fa419ebbda064be0ab0, type: 3}

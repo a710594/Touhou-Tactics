@@ -7,7 +7,7 @@ public class CardModel
     public int ID;
     public int EffectID;
     public int Job;
-    public int PP;
+    public int CD;
     public string Name;
     public string Comment;
 }
