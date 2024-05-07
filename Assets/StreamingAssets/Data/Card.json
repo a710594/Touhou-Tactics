@@ -1,5 +1,0 @@
-[{"ID":2,"Name":"夢想封印","Comment":"對範圍內目標造成傷害並降低物理攻擊與魔法攻擊","EffectID":6,"Job":1,"PP":2},
-{"ID":3,"Name":"極限火花","Comment":"對敵人造成大量魔法傷害的遠距離貫穿攻擊","EffectID":13,"Job":2,"PP":2},
-{"ID":4,"Name":"天文密葬法","Comment":"範圍與射程超大的物理攻擊","EffectID":7,"Job":3,"PP":2},
-{"ID":5,"Name":"未來永劫斬","Comment":"威力超高的近距離物理攻擊","EffectID":8,"Job":4,"PP":2},
-{"ID":6,"Name":"奇美拉的惡夢","Comment":"威力超高的遠距離魔法攻擊","EffectID":14,"Job":5,"PP":2}]

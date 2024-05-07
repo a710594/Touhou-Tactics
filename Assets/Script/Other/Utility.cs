@@ -395,9 +395,9 @@ public static class Utility
         {
             return ((Support)obj).Effect;
         }
-        else if (obj is Card)
+        else if (obj is Spell)
         {
-            return ((Card)obj).Effect;
+            return ((Spell)obj).Effect;
         }
         else if (obj is Consumables)
         {

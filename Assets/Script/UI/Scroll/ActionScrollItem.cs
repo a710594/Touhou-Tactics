@@ -51,9 +51,9 @@ public class ActionScrollItem : ScrollItem
             Label.text = ((Food)obj).Name;
             Background.color = _canUseColor;
         }
-        else if (obj is Card)
+        else if (obj is Spell)
         {
-            Card card = (Card)obj;
+            Spell card = (Spell)obj;
             Label.text = card.Data.Name;
             if (card.CurrentCD == 0 && ItemManager.Instance.GetAmount(ItemManager.CardID) > 0)
             {

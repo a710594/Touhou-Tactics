@@ -75,9 +75,9 @@ namespace Battle
                         support.CurrentCD = support.Data.CD + 1; // n [ @    ] O   F  P   ^ X   CheckCD
                     }
                 }
-                else if(_character.SelectedObject is Card) 
+                else if(_character.SelectedObject is Spell) 
                 {
-                    Card card = (Card)_character.SelectedObject;
+                    Spell card = (Spell)_character.SelectedObject;
                     for (int i = 0; i < _targetList.Count; i++)
                     {
                         UseEffect(card.Effect, _targetList[i]);

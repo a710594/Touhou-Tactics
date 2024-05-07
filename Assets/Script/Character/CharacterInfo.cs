@@ -32,7 +32,7 @@ public class CharacterInfo
     [NonSerialized]
     public List<Passive> PassiveList = new List<Passive>();
     [NonSerialized]
-    public List<Card> CardList = new List<Card>();
+    public List<Spell> CardList = new List<Spell>();
 
     public int JobId;
 
@@ -116,7 +116,7 @@ public class CharacterInfo
 
         if (job.Spell_1 != -1)
         {
-            CardList.Add(new Card(DataContext.Instance.CardDic[job.Spell_1]));
+            CardList.Add(new Spell(DataContext.Instance.SpellDic[job.Spell_1]));
         }
     }
 

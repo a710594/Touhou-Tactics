@@ -154,13 +154,13 @@ public class ActionButtonGroup : MonoBehaviour
                 tip = "還需要" + support.CurrentCD + "回合冷卻";
             }
         }
-        else if (obj is Card)
+        else if (obj is Spell)
         {
-            Card card = (Card)obj;
-            if (card.CurrentCD > 0)
+            Spell spell = (Spell)obj;
+            if (spell.CurrentCD > 0)
             {
                 canUse = false;
-                tip = "還需要" + card.CurrentCD + "回合冷卻";
+                tip = "還需要" + spell.CurrentCD + "回合冷卻";
             }
             else if(ItemManager.Instance.GetAmount(ItemManager.CardID) < 1) 
             {
@@ -194,9 +194,9 @@ public class ActionButtonGroup : MonoBehaviour
             SkillInfoGroup.SetData(support);
             SkillInfoGroup.gameObject.SetActive(true);
         }
-        else if (obj is Card)
+        else if (obj is Spell)
         {
-            Card card = (Card)obj;
+            Spell card = (Spell)obj;
             SkillInfoGroup.SetData(card);
             SkillInfoGroup.gameObject.SetActive(true);
         }

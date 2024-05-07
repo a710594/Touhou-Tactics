@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CardModel
+public class SpellModel
 {
     public int ID;
     public int EffectID;

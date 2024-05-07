@@ -47,7 +47,7 @@ namespace Battle
         public List<Skill> SkillList = new List<Skill>();
         public List<Support> SupportList = new List<Support>();
         public List<Passive> PassiveList = new List<Passive>();
-        public List<Card> CardList = new List<Card>();
+        public List<Spell> CardList = new List<Spell>();
 
         //當前屬性
         public int Index; //戰鬥的時候用
@@ -142,7 +142,7 @@ namespace Battle
 
             if (job.Spell_1 != -1) 
             {
-                CardList.Add(new Card(DataContext.Instance.CardList[job.Spell_1]));
+                CardList.Add(new Spell(DataContext.Instance.SpellList[job.Spell_1]));
             }
         }
 

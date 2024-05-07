@@ -55,7 +55,7 @@ public class DataContext
     public List<FoodMaterial> FoodMaterialList = new List<FoodMaterial>();
     public List<FoodResult> FoodResultList = new List<FoodResult>();
     public List<ConsumablesModel> ConsumablesList = new List<ConsumablesModel>();
-    public List<CardModel> CardList = new List<CardModel>();
+    public List<SpellModel> SpellList = new List<SpellModel>();
 
     public Dictionary<int, JobModel> JobDic = new Dictionary<int, JobModel>();
     public Dictionary<int, SkillModel> SkillDic = new Dictionary<int, SkillModel>();
@@ -74,8 +74,8 @@ public class DataContext
     public Dictionary<int, FoodMaterial> FoodMaterialDic = new Dictionary<int, FoodMaterial>();
     public Dictionary<int, FoodResult> FoodResultDic = new Dictionary<int, FoodResult>();
     public Dictionary<int, ConsumablesModel> ConsumablesDic = new Dictionary<int, ConsumablesModel>();
-    public Dictionary<int, CardModel> CardDic = new Dictionary<int, CardModel>();
-    public Dictionary<int, List<CardModel>> JobCardDic = new Dictionary<int, List<CardModel>>();
+    public Dictionary<int, SpellModel> SpellDic = new Dictionary<int, SpellModel>();
+    public Dictionary<int, List<SpellModel>> JobCardDic = new Dictionary<int, List<SpellModel>>();
 
     public Dictionary<string, TileSetting> TileSettingDic = new Dictionary<string, TileSetting>();
     public Dictionary<string, AttachSetting> AttachSettingDic = new Dictionary<string, AttachSetting>();
@@ -233,16 +233,16 @@ public class DataContext
             ConsumablesDic.Add(ConsumablesList[i].ID, ConsumablesList[i]);
         }
 
-        CardList = Load<List<CardModel>>("Card", PrePathEnum.Data);
-        CardDic.Clear();
-        for (int i = 0; i < CardList.Count; i++)
+        SpellList = Load<List<SpellModel>>("Spell", PrePathEnum.Data);
+        SpellDic.Clear();
+        for (int i = 0; i < SpellList.Count; i++)
         {
-            CardDic.Add(CardList[i].ID, CardList[i]);
-            if (!JobCardDic.ContainsKey(CardList[i].Job)) 
+            SpellDic.Add(SpellList[i].ID, SpellList[i]);
+            if (!JobCardDic.ContainsKey(SpellList[i].Job)) 
             {
-                JobCardDic.Add(CardList[i].Job, new List<CardModel>());
+                JobCardDic.Add(SpellList[i].Job, new List<SpellModel>());
             }
-            JobCardDic[CardList[i].Job].Add(CardList[i]);
+            JobCardDic[SpellList[i].Job].Add(SpellList[i]);
         }
 
         DirectoryInfo d;

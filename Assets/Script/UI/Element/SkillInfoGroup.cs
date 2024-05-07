@@ -137,7 +137,7 @@ public class SkillInfoGroup : MonoBehaviour
         RangeLabel.text = "®gµ{¡G" + support.Effect.Range;
     }
 
-    public void SetData(Card card)
+    public void SetData(Spell card)
     {
         NameLabel.text = card.Data.Name;
         CommentLabel.text = card.Data.Comment;

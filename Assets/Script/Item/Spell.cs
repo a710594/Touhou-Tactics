@@ -4,15 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using Battle;
 
-public class Card
+public class Spell
 {
     public int CurrentCD;
-    public CardModel Data;
+    public SpellModel Data;
     public Effect Effect;
 
-    public Card() { }
+    public Spell() { }
 
-    public Card(CardModel data)
+    public Spell(SpellModel data)
     {
         Data = data;
         Effect = EffectFactory.GetEffect(data.EffectID);
