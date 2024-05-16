@@ -201,6 +201,11 @@ public Action<Vector2Int> DirectionButtonHandler;
 
     private void DirectionButtonOnClick(Vector2Int direction)
     {
+        if (BattleController.Instance.Info.IsTutorial && !BattleTutorialController.Instance.CheckClick(direction))
+        {
+            return;
+        }
+
         BattleController.Instance.SetDirection(direction);
     }
 

@@ -31,6 +31,7 @@ public class InputMamager
 
     public void Init() 
     {
+        TimerUpdater.UpdateHandler -= Update;
         TimerUpdater.UpdateHandler += Update;
     }
 

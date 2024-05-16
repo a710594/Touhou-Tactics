@@ -86,7 +86,11 @@ namespace Battle
 
         public bool CheckClick(Vector2Int position)
         {
-            return ((TutorialState)_context.CurrentState).CheckClick(position);
+            if (_context != null && _context.CurrentState != null)
+            {
+                return ((TutorialState)_context.CurrentState).CheckClick(position);
+            }
+            return true;
         }
 
         public bool CheckScrollItem(object obj) 
@@ -431,7 +435,7 @@ namespace Battle
 
             public override bool CheckClick(Vector2Int position)
             {
-                if (position == new Vector2Int(4, 4))
+                if (position == new Vector2Int(0, 1))
                 {
                     TutorialArrowUI.Close();
                     return true;
@@ -453,7 +457,7 @@ namespace Battle
             {
                 TutorialUI.Open("以上就是移動與攻擊的基本流程。\n一個角色一回合中可以有兩次行動的機會。除了移動和使用技能外還有其他的選項。", ()=> 
                 {
-                    TutorialUI.Open("1.移動：一回合最多可以移動兩次\n2.技能：一回合只能使用一次\n3.支援：與技能類似，大多是強化自己的效果。不消耗行動次數，但一樣一回合只能使用一次\n4.道具：使用規則和技能相同，但是需要消耗道具\n5.待機：如果該回合沒有其他想做的事，可以選擇待機結束該回合。", null);
+                    TutorialUI.Open("1.移動：一回合最多可以移動兩次\n2.技能：一回合只能使用一次\n3.支援：與技能類似，大多是強化自己的效果。不消耗行動次數，但一樣一回合只能使用一次\n4.符卡：使用規則和技能相同，但是需要消耗符卡，且使所有隊員的符卡都進入冷卻\n5.道具：使用規則和技能相同，但是需要消耗道具\n6.待機：如果該回合沒有其他想做的事，可以選擇待機結束該回合。", null);
                 });
 
                 BattleController.Instance.Info.IsTutorial = false;

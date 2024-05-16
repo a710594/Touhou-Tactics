@@ -8107,6 +8107,7 @@ MonoBehaviour:
   CameraDragSpeed: 50
   BackgroundButton: {fileID: 1749139752}
   Label: {fileID: 1941571975}
+  CameraRoot: {fileID: 842473267}
 --- !u!114 &1749139752
 MonoBehaviour:
   m_ObjectHideFlags: 0
