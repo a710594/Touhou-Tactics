@@ -78,6 +78,61 @@ public class FloatingNumber : MonoBehaviour
         });
     }
 
+    public void Play(Battle.Log log, Vector2 position)
+    {
+        if (int.TryParse(log.Text, out int n))
+        {
+            Label.fontSize = 50;
+        }
+        else
+        {
+            Label.fontSize = 30;
+        }
+
+        this.transform.position = position;
+        Label.text = log.Text;
+
+        if (log.Type == EffectModel.TypeEnum.MagicAttack || log.Type == EffectModel.TypeEnum.PhysicalAttack)
+        {
+            if (log.HitType == Battle.BattleController.HitType.Critical)
+            {
+                Label.color = Color.yellow;
+            }
+            else if (log.HitType == Battle.BattleController.HitType.Hit)
+            {
+                Label.color = Color.red;
+            }
+            else
+            {
+                Label.color = Color.blue;
+            }
+        }
+        else if (log.Type == EffectModel.TypeEnum.Poison)
+        {
+            Label.color = new Color32(180, 0, 180, 255);
+        }
+        else if (log.Type == EffectModel.TypeEnum.Recover || log.Type == EffectModel.TypeEnum.Medicine || log.Type == EffectModel.TypeEnum.Purify)
+        {
+            Label.color = Color.green;
+        }
+        else if (log.Type == EffectModel.TypeEnum.Sleep)
+        {
+            Label.color = new Color32(0, 150, 200, 255);
+        }
+        else
+        {
+            Label.color = Color.black;
+        }
+
+        this.transform.DOMoveY(position.y + Height, Duration).SetEase(Ease.OutCubic).OnComplete(() =>
+        {
+        });
+
+        Label.DOFade(0, Duration).SetEase(Ease.InCubic).OnComplete(() =>
+        {
+        });
+    }
+
     void Awake()
     {
         Label.color = Color.clear;

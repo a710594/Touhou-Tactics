@@ -144,6 +144,12 @@ public Action<Vector2Int> DirectionButtonHandler;
         floatingNumberPool.Play(text, type);
     }
 
+    public void PlayFloatingNumberPool(int id, List<Log> logList)
+    {
+        FloatingNumberPool floatingNumberPool = _floatingNumberPoolDic[id];
+        floatingNumberPool.Play(new Queue<Log>(logList));
+    }
+
     public void CharacterListGroupInit(List<BattleCharacterInfo> characterList)
     {
         CharacterListGroup.Init(characterList);

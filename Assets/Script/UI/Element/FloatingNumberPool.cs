@@ -16,6 +16,7 @@ public class FloatingNumberPool : MonoBehaviour
     private Timer _recycleTimer = new Timer();
     private Queue<FloatingNumber> _poolQueue = new Queue<FloatingNumber>();
     private Queue<FloatingNumberData> _dataQueue = new Queue<FloatingNumberData>();
+    private Queue<Battle.Log> _logQueue = new Queue<Battle.Log>();
 
     public void SetAnchor(Transform anchor)
     {
@@ -57,6 +58,32 @@ public class FloatingNumberPool : MonoBehaviour
         {
             FloatingNumberData data = new FloatingNumberData(type, text);
             _dataQueue.Enqueue(data);
+        }
+    }
+
+    public void Play(Queue<Battle.Log> logQueue)
+    {
+        if (logQueue != null && logQueue.Count > 0)
+        {
+            FloatingNumber floatingNumber;
+            if (_poolQueue.Count == 0)
+            {
+                floatingNumber = Instantiate(FloatingNumber);
+                floatingNumber.transform.SetParent(transform);
+                _poolQueue.Enqueue(floatingNumber);
+            }
+            floatingNumber = _poolQueue.Dequeue();
+            floatingNumber.Play(logQueue.Dequeue(), transform.position);
+
+            _unlockTimer.Start(NextTime, () => //顯示下一個數字
+            {
+                Play(logQueue);
+            });
+
+            _recycleTimer.Start(ShowTime, () => //當前的數字消失
+            {
+                _poolQueue.Enqueue(floatingNumber);
+            });
         }
     }
 

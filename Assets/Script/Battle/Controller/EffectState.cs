@@ -153,6 +153,16 @@ namespace Battle
                 }
             }
 
+            private void SetUI(BattleCharacterInfo target, List<Log> logList)
+            {
+                Instance._battleUI.SetLittleHpBarValue(target.Index, target);
+                Instance._battleUI.PlayFloatingNumberPool(target.Index, logList);
+                if (logList.Count > _maxFloatingCount)
+                {
+                    _maxFloatingCount = logList.Count;
+                }
+            }
+
             private void CheckResult()
             {
                 for (int i = 0; i < _targetList.Count; i++)
