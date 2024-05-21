@@ -52,7 +52,7 @@ namespace Battle
                     {
                         for (int i = 0; i < _targetList.Count; i++)
                         {
-                            UseEffect(skill.Effect, _targetList[i]);
+                            UseEffect_New(skill.Effect, _targetList[i]);
                         }
                     }
                     _character.HasUseSkill = true;
@@ -116,9 +116,10 @@ namespace Battle
                     Food food = (Food)_character.SelectedObject;
                     for (int i = 0; i < _targetList.Count; i++)
                     {
-                        List<FloatingNumberData> floatingList = new List<FloatingNumberData>();
-                        food.Effect.Use(_character, _targetList[i], floatingList, _characterList);
-                        SetUI(_targetList[i], floatingList);
+                        // List<FloatingNumberData> floatingList = new List<FloatingNumberData>();
+                        // food.Effect.Use(_character, _targetList[i], floatingList, _characterList);
+                        // SetUI(_targetList[i], floatingList);
+                        UseEffect(food.Effect, _targetList[i]);
                     }
                     _character.HasUseItem = true;
                     _character.ActionCount--;
@@ -138,6 +139,48 @@ namespace Battle
             public void UseEffect(Effect effect, Vector3 position) 
             {
                 effect.Use(_character, position);
+            }
+
+            private void UseEffect_New(Effect effect, BattleCharacterInfo target) 
+            {
+                List<Log> logList = new List<Log>();
+                effect.Use(_character, target, logList);
+                SetUI(target, logList);
+
+                for(int i=0; i<logList.Count; i++)
+                {
+                    if (logList[i].Type == EffectModel.TypeEnum.MagicAttack || logList[i].Type == EffectModel.TypeEnum.PhysicalAttack)
+                    {
+                        if (logList[i].HitType == Battle.BattleController.HitType.Critical)
+                        {
+                            Debug.Log(_character.Name + " 對 " + target + " 造成了 " + logList[i].Text + " 爆擊傷害");
+                        }
+                        else if (logList[i].HitType == Battle.BattleController.HitType.Hit)
+                        {
+                            Debug.Log(_character.Name + " 對 " + target + " 造成了 " + logList[i].Text + " 傷害");
+                        }
+                        else
+                        {
+                            Debug.Log(_character.Name + " 對 " + target + " 的攻擊沒有命中");
+                        }
+                    }
+                    else if (logList[i].Type == EffectModel.TypeEnum.Poison)
+                    {
+                        Debug.Log(_character.Name + " 使 " + target + " 中毒了");
+                    }
+                    else if (logList[i].Type == EffectModel.TypeEnum.Recover || logList[i].Type == EffectModel.TypeEnum.Medicine || logList[i].Type == EffectModel.TypeEnum.Purify)
+                    {
+                        Debug.Log(_character.Name + " 使 " + target + " 回復了 " + logList[i].Text + " HP");
+                    }
+                    else if (logList[i].Type == EffectModel.TypeEnum.Sleep)
+                    {
+                        Debug.Log(_character.Name + " 使 " + target + " 睡著了");
+                    }
+                    else
+                    {
+                        Debug.Log(_character.Name + " 使 " + target + " " + logList[i].Text);
+                    }   
+                }
             }
 
             private void SetUI(BattleCharacterInfo target, List<FloatingNumberData> floatingList) 
