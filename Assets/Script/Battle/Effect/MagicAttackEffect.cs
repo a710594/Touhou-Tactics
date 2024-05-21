@@ -63,9 +63,12 @@ public class MagicAttackEffect : Effect
                 damage *= 2;
             }
             target.SetDamage(damage);
+            logList.Add(new Log(this, hitType, damage.ToString()));
         }
-
-        logList.Add(new Log(this, hitType, ""));
+        else
+        {
+            logList.Add(new Log(this, hitType, "Miss"));
+        }
 
 
         if (SubEffect != null && hitType != BattleController.HitType.Miss)

@@ -53,4 +53,30 @@ public class PhysicalAttackEffect : Effect
             SubEffect.Use(user, target, floatingList, characterList);
         }
     }
+
+    public override void Use(BattleCharacterInfo user, BattleCharacterInfo target, List<Log> logList)
+    {
+        BattleController.HitType hitType = BattleController.Instance.CheckHit(this, user, target);
+
+        if (hitType != BattleController.HitType.Miss)
+        {
+            int damage = BattleController.Instance.GetDamage(this, user, target);
+            if (hitType == BattleController.HitType.Critical)
+            {
+                damage *= 2;
+            }
+            target.SetDamage(damage);
+            logList.Add(new Log(this, hitType, damage.ToString()));
+        }
+        else
+        {
+            logList.Add(new Log(this, hitType, "Miss"));
+        }
+
+
+        if (SubEffect != null && hitType != BattleController.HitType.Miss)
+        {
+            SubEffect.Use(user, target, logList);
+        }
+    }
 }
