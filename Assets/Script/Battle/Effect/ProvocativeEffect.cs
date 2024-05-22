@@ -3,29 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//¬DÆ]
+//ï¿½Dï¿½]
 public class ProvocativeEffect : Effect
 {
     public ProvocativeEffect(EffectModel data) : base(data)
     {
-        //Data = data;
-        //if (data.SubID != -1)
-        //{
-        //    EffectModel subData = DataContext.Instance.EffectDic[data.SubID];
-        //    SubEffect = EffectFactory.GetEffect(subData);
-        //}
     }
 
     public override void Use(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)
     {
         FloatingNumberData floatingNumberData;
-        BattleController.HitType hitType = BattleController.HitType.Hit; //¬DÆ]ªº©R¤¤§P©w¤ñ¸û¯S§O,¥H«á¦A»¡...
+        BattleController.HitType hitType = BattleController.HitType.Hit; //ï¿½Dï¿½]ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½Pï¿½wï¿½ï¿½ï¿½ï¿½Sï¿½O,ï¿½Hï¿½ï¿½Aï¿½ï¿½...
 
         if (hitType != BattleController.HitType.Miss)
         {
             ((ProvocativeStatus)Status).Target = user;
             target.AddStatus(Status);
-            floatingNumberData = new FloatingNumberData(FloatingNumberData.TypeEnum.Other, "¬DÆ]");
+            floatingNumberData = new FloatingNumberData(FloatingNumberData.TypeEnum.Other, "ï¿½Dï¿½]");
         }
         else
         {
@@ -37,6 +31,27 @@ public class ProvocativeEffect : Effect
         if (SubEffect != null && hitType != BattleController.HitType.Miss)
         {
             SubEffect.Use(user, target, floatingList, characterList);
+        }
+    }
+
+    public override void Use(BattleCharacterInfo user, BattleCharacterInfo target, List<Log> logList)
+    {
+        BattleController.HitType hitType = BattleController.HitType.Hit; //ï¿½Dï¿½]ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½Pï¿½wï¿½ï¿½ï¿½ï¿½Sï¿½O,ï¿½Hï¿½ï¿½Aï¿½ï¿½...
+
+        if (hitType != BattleController.HitType.Miss)
+        {
+            ((ProvocativeStatus)Status).Target = user;
+            target.AddStatus(Status);
+            logList.Add(new Log(this, hitType, Status.Name));
+        }
+        else
+        {
+            logList.Add(new Log(this, hitType, "Miss"));  
+        }
+
+        if (SubEffect != null && hitType != BattleController.HitType.Miss)
+        {
+            SubEffect.Use(user, target, logList);
         }
     }
 }

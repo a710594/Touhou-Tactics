@@ -33,13 +33,13 @@ public class PurifyEffect : Effect
         {
             for (int i=0; i<target.StatusList.Count; i++) 
             {
-                if(target.StatusList[i] is Poison || target.StatusList[i] is Sleep) //¥H«áÁÙ·|¦³§ó¦hºØÃþªº²§±`ª¬ºA
+                if(target.StatusList[i] is Poison || target.StatusList[i] is Sleep) //ï¿½Hï¿½ï¿½ï¿½Ù·|ï¿½ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½ï¿½ï¿½A
                 {
                     target.StatusList.RemoveAt(i);
                     i--;
                 }
             }
-            floatingNumberData = new FloatingNumberData(FloatingNumberData.TypeEnum.Recover, "²b¤Æ");
+            floatingNumberData = new FloatingNumberData(FloatingNumberData.TypeEnum.Recover, "ï¿½bï¿½ï¿½");
         }
         else
         {
@@ -51,6 +51,42 @@ public class PurifyEffect : Effect
         if (SubEffect != null && hitType != BattleController.HitType.Miss)
         {
             SubEffect.Use(user, target, floatingList, characterList);
+        }
+    }
+
+    public override void Use(BattleCharacterInfo user, BattleCharacterInfo target, List<Log> logList)
+    {
+        BattleController.HitType hitType;
+
+        if (Target == EffectModel.TargetEnum.Us)
+        {
+            hitType = BattleController.HitType.Hit;
+        }
+        else
+        {
+            hitType = BattleController.Instance.CheckHit(this, user, target);
+        }
+
+        if (hitType != BattleController.HitType.Miss)
+        {
+            for (int i=0; i<target.StatusList.Count; i++) 
+            {
+                if(target.StatusList[i] is Poison || target.StatusList[i] is Sleep) //ï¿½Hï¿½ï¿½ï¿½Ù·|ï¿½ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½ï¿½ï¿½A
+                {
+                    target.StatusList.RemoveAt(i);
+                    i--;
+                }
+            }
+            logList.Add(new Log(this, hitType, "æ·¨åŒ–"));
+        }
+        else
+        {
+            logList.Add(new Log(this, hitType, "Miss"));  
+        }
+
+        if (SubEffect != null && hitType != BattleController.HitType.Miss)
+        {
+            SubEffect.Use(user, target, logList);
         }
     }
 }

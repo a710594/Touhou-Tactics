@@ -67,7 +67,7 @@ namespace Battle
                     Support support = (Support)_character.SelectedObject;
                     for (int i = 0; i < _targetList.Count; i++)
                     {
-                        UseEffect(support.Effect, _targetList[i]);
+                        UseEffect_New(support.Effect, _targetList[i]);
                     }
                     _character.HasUseSupport = true;
                     if (support.Data.CD > 0)
@@ -80,7 +80,7 @@ namespace Battle
                     Spell card = (Spell)_character.SelectedObject;
                     for (int i = 0; i < _targetList.Count; i++)
                     {
-                        UseEffect(card.Effect, _targetList[i]);
+                        UseEffect_New(card.Effect, _targetList[i]);
                     }
                     _character.HasUseItem = true;
                     _character.ActionCount--;
@@ -90,7 +90,8 @@ namespace Battle
                         {
                             if(_characterList[i].Faction == BattleCharacterInfo.FactionEnum.Player)
                             {
-                                for(int j=0; j<_characterList[i].CardList.Count; i++)
+                                Debug.Log(_characterList[i].Name);
+                                for(int j=0; j<_characterList[i].CardList.Count; j++)
                                 {
                                     _characterList[i].CardList[j].CurrentCD = card.Data.CD + 1;
                                 }
@@ -105,7 +106,7 @@ namespace Battle
                     Consumables consumables = (Consumables)_character.SelectedObject;
                     for (int i = 0; i < _targetList.Count; i++)
                     {
-                        UseEffect(consumables.Effect, _targetList[i]);
+                        UseEffect_New(consumables.Effect, _targetList[i]);
                     }
                     _character.HasUseItem = true;
                     _character.ActionCount--;
@@ -119,7 +120,7 @@ namespace Battle
                         // List<FloatingNumberData> floatingList = new List<FloatingNumberData>();
                         // food.Effect.Use(_character, _targetList[i], floatingList, _characterList);
                         // SetUI(_targetList[i], floatingList);
-                        UseEffect(food.Effect, _targetList[i]);
+                        UseEffect_New(food.Effect, _targetList[i]);
                     }
                     _character.HasUseItem = true;
                     _character.ActionCount--;
@@ -153,32 +154,32 @@ namespace Battle
                     {
                         if (logList[i].HitType == Battle.BattleController.HitType.Critical)
                         {
-                            Debug.Log(_character.Name + " 對 " + target + " 造成了 " + logList[i].Text + " 爆擊傷害");
+                            Debug.Log(_character.Name + " 對 " + target.Name + " 造成了 " + logList[i].Text + " 爆擊傷害");
                         }
                         else if (logList[i].HitType == Battle.BattleController.HitType.Hit)
                         {
-                            Debug.Log(_character.Name + " 對 " + target + " 造成了 " + logList[i].Text + " 傷害");
+                            Debug.Log(_character.Name + " 對 " + target.Name + " 造成了 " + logList[i].Text + " 傷害");
                         }
                         else
                         {
-                            Debug.Log(_character.Name + " 對 " + target + " 的攻擊沒有命中");
+                            Debug.Log(_character.Name + " 對 " + target.Name + " 的攻擊沒有命中");
                         }
                     }
                     else if (logList[i].Type == EffectModel.TypeEnum.Poison)
                     {
-                        Debug.Log(_character.Name + " 使 " + target + " 中毒了");
+                        Debug.Log(_character.Name + " 使 " + target.Name + " 中毒了");
                     }
                     else if (logList[i].Type == EffectModel.TypeEnum.Recover || logList[i].Type == EffectModel.TypeEnum.Medicine || logList[i].Type == EffectModel.TypeEnum.Purify)
                     {
-                        Debug.Log(_character.Name + " 使 " + target + " 回復了 " + logList[i].Text + " HP");
+                        Debug.Log(_character.Name + " 使 " + target.Name + " 回復了 " + logList[i].Text + " HP");
                     }
                     else if (logList[i].Type == EffectModel.TypeEnum.Sleep)
                     {
-                        Debug.Log(_character.Name + " 使 " + target + " 睡著了");
+                        Debug.Log(_character.Name + " 使 " + target.Name + " 睡著了");
                     }
                     else
                     {
-                        Debug.Log(_character.Name + " 使 " + target + " " + logList[i].Text);
+                        Debug.Log(_character.Name + " 使 " + target.Name + " " + logList[i].Text);
                     }   
                 }
             }

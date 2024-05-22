@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//©T©w¦^¦å
+//ï¿½Tï¿½wï¿½^ï¿½ï¿½
 public class MedicineEffect : Effect
 {
     public MedicineEffect(EffectModel data) : base(data)
@@ -59,4 +59,33 @@ public class MedicineEffect : Effect
         }
     }
 
+    public override void Use(BattleCharacterInfo user, BattleCharacterInfo target, List<Log> logList)
+    {
+        BattleController.HitType hitType;
+
+        if (Target == EffectModel.TargetEnum.Us)
+        {
+            hitType = BattleController.HitType.Hit;
+        }
+        else
+        {
+            hitType = BattleController.Instance.CheckHit(this, user, target);
+        }
+
+        if (hitType != BattleController.HitType.Miss)
+        {
+            int recover = Value;
+            target.SetRecover(recover);
+            logList.Add(new Log(this, hitType, recover.ToString()));
+        }
+        else
+        {
+            logList.Add(new Log(this, hitType, "Miss"));
+        }
+
+        if (SubEffect != null && hitType != BattleController.HitType.Miss)
+        {
+            SubEffect.Use(user, target, logList);
+        }        
+    }
 }
