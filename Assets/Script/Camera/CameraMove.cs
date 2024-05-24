@@ -28,13 +28,13 @@ public class CameraMove : MonoBehaviour
 
     private void Update()
     {
-        if (CameraRotate.CurrentState == CameraRotate.StateEnum.Slope)
-        {
-            Camera.main.transform.localPosition = _slopePosition;
-        }
-        else
-        {
-            Camera.main.transform.localPosition = _verticalPosition;
-        }
+        // if (CameraRotate.CurrentState == CameraRotate.StateEnum.Slope)
+        // {
+        //     Camera.main.transform.localPosition = _slopePosition;
+        // }
+        // else
+        // {
+        //     Camera.main.transform.localPosition = _verticalPosition;
+        // }
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Battle;
 using UnityEngine;
+using DG.Tweening;
 
 public class LogGroup : MonoBehaviour
 {
@@ -19,6 +20,10 @@ public class LogGroup : MonoBehaviour
         else
         {
             LogPanel[_index].gameObject.SetActive(true);
+            LogPanel[_index].Fade((logPanel)=>
+            {
+                logPanel.transform.SetAsLastSibling();
+            });
         }
         _index = (_index + 1) % LogPanel.Length;
     }

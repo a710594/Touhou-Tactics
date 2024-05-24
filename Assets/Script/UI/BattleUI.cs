@@ -25,6 +25,7 @@ public Action<Vector2Int> DirectionButtonHandler;
     public TipLabel TipLabel;
     public DirectionGroup DirectionGroup;
     public CameraRotate CameraRotate;
+    public LogGroup LogGroup;
 
 
     private Vector3 _directionPosition = new Vector3();    private Dictionary<int, LittleHpBarWithStatus> _littleHpBarDic = new Dictionary<int, LittleHpBarWithStatus>();
@@ -170,28 +171,10 @@ public Action<Vector2Int> DirectionButtonHandler;
         _directionPosition = position;
     }
 
-    //public void DropPowerPoint(List<BattleCharacterInfo> targetList)
-    //{
-    //    GameObject obj;
-    //    for (int i = 0; i < targetList.Count; i++)
-    //    {
-    //        obj = Instantiate(PowerPoint, Vector3.zero, Quaternion.identity);
-    //        obj.transform.SetParent(PowerPoint.transform.parent);
-    //        obj.transform.position = Camera.main.WorldToScreenPoint(targetList[i].Position + Vector3.up * 0.5f);
-    //        JumpPowerPoint(obj);
-    //    }
-    //}
-
-    //private void JumpPowerPoint(GameObject obj)
-    //{
-    //    obj.transform.DOLocalJump(obj.transform.localPosition + Vector3.right * UnityEngine.Random.Range(-50, 50), 50, 1, 0.5f).OnComplete(() =>
-    //    {
-    //        obj.transform.DOMove(PPGroup.transform.position, 0.5f).OnComplete(() =>
-    //        {
-    //            Destroy(obj);
-    //        });
-    //    });
-    //}
+    public void AddLog(string text)
+    {
+        LogGroup.AddLog(text);
+    }
 
     private void Rotate()
     {

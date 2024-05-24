@@ -148,38 +148,47 @@ namespace Battle
                 effect.Use(_character, target, logList);
                 SetUI(target, logList);
 
+                string targetName;
+                if(_character == target)
+                {
+                    targetName = "自己";
+                }
+                else
+                {
+                    targetName = target.Name;
+                }
                 for(int i=0; i<logList.Count; i++)
                 {
                     if (logList[i].Type == EffectModel.TypeEnum.MagicAttack || logList[i].Type == EffectModel.TypeEnum.PhysicalAttack)
                     {
-                        if (logList[i].HitType == Battle.BattleController.HitType.Critical)
+                        if (logList[i].HitType == HitType.Critical)
                         {
-                            Debug.Log(_character.Name + " 對 " + target.Name + " 造成了 " + logList[i].Text + " 爆擊傷害");
+                            Instance._battleUI.AddLog(_character.Name + " 對 " + targetName + " 造成了 " + logList[i].Text + " 爆擊傷害");
                         }
-                        else if (logList[i].HitType == Battle.BattleController.HitType.Hit)
+                        else if (logList[i].HitType == HitType.Hit)
                         {
-                            Debug.Log(_character.Name + " 對 " + target.Name + " 造成了 " + logList[i].Text + " 傷害");
+                            Instance._battleUI.AddLog(_character.Name + " 對 " + targetName + " 造成了 " + logList[i].Text + " 傷害");
                         }
                         else
                         {
-                            Debug.Log(_character.Name + " 對 " + target.Name + " 的攻擊沒有命中");
+                            Instance._battleUI.AddLog(_character.Name + " 對 " + targetName + " 的攻擊沒有命中");
                         }
                     }
                     else if (logList[i].Type == EffectModel.TypeEnum.Poison)
                     {
-                        Debug.Log(_character.Name + " 使 " + target.Name + " 中毒了");
+                        Instance._battleUI.AddLog(_character.Name + " 使 " + targetName + " 中毒了");
                     }
                     else if (logList[i].Type == EffectModel.TypeEnum.Recover || logList[i].Type == EffectModel.TypeEnum.Medicine || logList[i].Type == EffectModel.TypeEnum.Purify)
                     {
-                        Debug.Log(_character.Name + " 使 " + target.Name + " 回復了 " + logList[i].Text + " HP");
+                        Instance._battleUI.AddLog(_character.Name + " 使 " + targetName + " 回復了 " + logList[i].Text + " HP");
                     }
                     else if (logList[i].Type == EffectModel.TypeEnum.Sleep)
                     {
-                        Debug.Log(_character.Name + " 使 " + target.Name + " 睡著了");
+                        Instance._battleUI.AddLog(_character.Name + " 使 " + targetName + " 睡著了");
                     }
                     else
                     {
-                        Debug.Log(_character.Name + " 使 " + target.Name + " " + logList[i].Text);
+                        Instance._battleUI.AddLog(_character.Name + " 使 " + targetName + " " + logList[i].Text);
                     }   
                 }
             }

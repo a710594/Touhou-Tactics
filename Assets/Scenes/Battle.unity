@@ -1450,8 +1450,8 @@ RectTransform:
   - {fileID: 1563496218}
   - {fileID: 1802419120}
   - {fileID: 1710514412}
-  m_Father: {fileID: 671032489}
-  m_RootOrder: 6
+  m_Father: {fileID: 1605776055}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3825,7 +3825,6 @@ RectTransform:
   - {fileID: 896168155}
   - {fileID: 861492190}
   - {fileID: 520209890}
-  - {fileID: 387557015}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5507,6 +5506,7 @@ GameObject:
   - component: {fileID: 1173187503}
   - component: {fileID: 1173187505}
   - component: {fileID: 1173187504}
+  - component: {fileID: 1173187507}
   - component: {fileID: 1173187506}
   m_Layer: 5
   m_Name: LogPanel
@@ -5587,6 +5587,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Label: {fileID: 277128382}
+  CanvasGroup: {fileID: 1173187507}
+--- !u!225 &1173187507
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1173187502}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1269338805
 GameObject:
   m_ObjectHideFlags: 0
@@ -7511,6 +7524,7 @@ GameObject:
   - component: {fileID: 1563496218}
   - component: {fileID: 1563496221}
   - component: {fileID: 1563496220}
+  - component: {fileID: 1563496222}
   - component: {fileID: 1563496219}
   m_Layer: 5
   m_Name: LogPanel (1)
@@ -7553,6 +7567,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Label: {fileID: 461690812}
+  CanvasGroup: {fileID: 1563496222}
 --- !u!114 &1563496220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7591,6 +7606,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1563496217}
   m_CullTransparentMesh: 1
+--- !u!225 &1563496222
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1563496217}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!224 &1574039722 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5186426718895496911, guid: 7e33b1c52e9743e4998556e1203bfbd2, type: 3}
@@ -7811,6 +7838,7 @@ RectTransform:
   - {fileID: 940986352}
   - {fileID: 1780275029}
   - {fileID: 422615531}
+  - {fileID: 387557015}
   m_Father: {fileID: 671032489}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7842,6 +7870,7 @@ MonoBehaviour:
   TipLabel: {fileID: 861492191}
   DirectionGroup: {fileID: 1461733669}
   CameraRotate: {fileID: 1702431283}
+  LogGroup: {fileID: 387557017}
 --- !u!1 &1617185577
 GameObject:
   m_ObjectHideFlags: 0
@@ -8643,6 +8672,7 @@ GameObject:
   - component: {fileID: 1710514412}
   - component: {fileID: 1710514415}
   - component: {fileID: 1710514414}
+  - component: {fileID: 1710514416}
   - component: {fileID: 1710514413}
   m_Layer: 5
   m_Name: LogPanel (3)
@@ -8685,6 +8715,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Label: {fileID: 1661100805}
+  CanvasGroup: {fileID: 1710514416}
 --- !u!114 &1710514414
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8723,6 +8754,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1710514411}
   m_CullTransparentMesh: 1
+--- !u!225 &1710514416
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1710514411}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1741497494
 GameObject:
   m_ObjectHideFlags: 0
@@ -9334,6 +9377,7 @@ GameObject:
   - component: {fileID: 1802419120}
   - component: {fileID: 1802419123}
   - component: {fileID: 1802419122}
+  - component: {fileID: 1802419124}
   - component: {fileID: 1802419121}
   m_Layer: 5
   m_Name: LogPanel (2)
@@ -9376,6 +9420,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Label: {fileID: 972984525}
+  CanvasGroup: {fileID: 1802419124}
 --- !u!114 &1802419122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9414,6 +9459,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1802419119}
   m_CullTransparentMesh: 1
+--- !u!225 &1802419124
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1802419119}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1813211260
 GameObject:
   m_ObjectHideFlags: 0

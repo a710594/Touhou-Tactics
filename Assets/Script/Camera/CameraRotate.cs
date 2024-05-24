@@ -80,7 +80,8 @@ public class CameraRotate : MonoBehaviour
                     });
 
                     transform.DOLocalRotate(new Vector3(90, 0, 0), 1f);
-                    transform.DOLocalMove(transform.localPosition + new Vector3(10, 0, 10), 1f);
+                    Vector3 local = transform.localPosition + new Vector3(10, 0, 10);
+                    transform.DOLocalMove(local, 1f);
                     CurrentState = StateEnum.Vertical;
 
                     if (RotateHandler != null)
@@ -100,7 +101,8 @@ public class CameraRotate : MonoBehaviour
                     });
 
                     transform.DOLocalRotate(new Vector3(30, 45, 0), 1f);
-                    transform.DOLocalMove(transform.localPosition + new Vector3(-10, 0, -10), 1f);
+                    Vector3 local = transform.localPosition + new Vector3(-10, 0, -10);
+                    transform.DOLocalMove(local, 1f);
                     CurrentState = StateEnum.Slope;
 
                     if (RotateHandler != null)
