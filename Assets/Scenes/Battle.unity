@@ -1494,6 +1494,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e2066d7b4c869b4e8b33103cf12c2c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FadeTime: 10
   LogPanel:
   - {fileID: 1173187506}
   - {fileID: 1563496219}

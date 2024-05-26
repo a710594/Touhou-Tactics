@@ -17,9 +17,9 @@ public class LogPanel : MonoBehaviour
         Label.text = text;
     }
 
-    public void Fade(Action<LogPanel> callback)
+    public void Fade(float time, Action<LogPanel> callback)
     {
-        _timer.Start(20, ()=>
+        _timer.Start(time, ()=>
         {
             CanvasGroup.DOFade(0, 1).OnComplete(()=>
             {

@@ -382,7 +382,7 @@ namespace Battle
             Vector2Int position;
             for (int i = 0; i < character.StatusList.Count; i++)
             {
-                if (character.StatusList[i].AreaList.Count > 0)
+                if (character.StatusList[i].AreaList.Count > 1)
                 {
                     for (int j = 0; j < character.StatusList[i].AreaList.Count; j++)
                     {
