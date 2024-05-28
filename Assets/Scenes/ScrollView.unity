@@ -306,6 +306,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5268101871429733705, guid: 4335952fe4221004c9dfb002e53effea, type: 3}
   m_PrefabInstance: {fileID: 5268101871975039153}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1541440719 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5268101871429733709, guid: 4335952fe4221004c9dfb002e53effea, type: 3}
+  m_PrefabInstance: {fileID: 5268101871975039153}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b427451918d3a8141abee16679327dd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1661662424
 GameObject:
   m_ObjectHideFlags: 0
@@ -385,6 +396,7 @@ GameObject:
   - component: {fileID: 2086970898}
   - component: {fileID: 2086970897}
   - component: {fileID: 2086970896}
+  - component: {fileID: 2086970900}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -474,6 +486,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &2086970900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2086970895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a47a132440bd7549a4654c6587e4447, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ScrollView: {fileID: 1541440719}
 --- !u!1001 &5268101871975039153
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -574,9 +599,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6512655964204905964, guid: ffe3a7101027d8846961999574adb368, type: 3}
     - target: {fileID: 5268101871429733709, guid: 4335952fe4221004c9dfb002e53effea, type: 3}
+      propertyPath: SpacingX
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5268101871429733709, guid: 4335952fe4221004c9dfb002e53effea, type: 3}
+      propertyPath: SpacingY
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5268101871429733709, guid: 4335952fe4221004c9dfb002e53effea, type: 3}
+      propertyPath: CellSizeX
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 5268101871429733709, guid: 4335952fe4221004c9dfb002e53effea, type: 3}
       propertyPath: ScrollItem
       value: 
-      objectReference: {fileID: 2804734915500781829, guid: 26d1b09ac847c224389f504c5ca204b1, type: 3}
+      objectReference: {fileID: 9026463942651615255, guid: 9f772d1e2e6dafb4f8fb68555d996230, type: 3}
     - target: {fileID: 5268101871546434442, guid: 4335952fe4221004c9dfb002e53effea, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -596,6 +633,14 @@ PrefabInstance:
     - target: {fileID: 5268101871660992263, guid: 4335952fe4221004c9dfb002e53effea, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5268101872003109207, guid: 4335952fe4221004c9dfb002e53effea, type: 3}
+      propertyPath: m_Spacing.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5268101872003109207, guid: 4335952fe4221004c9dfb002e53effea, type: 3}
+      propertyPath: m_CellSize.x
+      value: 400
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4335952fe4221004c9dfb002e53effea, type: 3}
