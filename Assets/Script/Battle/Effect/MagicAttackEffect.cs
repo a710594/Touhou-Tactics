@@ -63,11 +63,11 @@ public class MagicAttackEffect : Effect
                 damage *= 2;
             }
             target.SetDamage(damage);
-            logList.Add(new Log(this, hitType, damage.ToString()));
+            logList.Add(new Log(user, target, this, hitType, damage.ToString()));
         }
         else
         {
-            logList.Add(new Log(this, hitType, "Miss"));
+            logList.Add(new Log(user, target, this, hitType, "Miss"));
         }
 
 

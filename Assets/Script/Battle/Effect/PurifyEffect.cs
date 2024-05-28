@@ -77,11 +77,11 @@ public class PurifyEffect : Effect
                     i--;
                 }
             }
-            logList.Add(new Log(this, hitType, "淨化"));
+            logList.Add(new Log(user, target, this, hitType, "淨化"));
         }
         else
         {
-            logList.Add(new Log(this, hitType, "Miss"));  
+            logList.Add(new Log(user, target, this, hitType, "Miss"));  
         }
 
         if (SubEffect != null && hitType != BattleController.HitType.Miss)

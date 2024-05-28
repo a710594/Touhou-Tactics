@@ -76,11 +76,11 @@ public class MedicineEffect : Effect
         {
             int recover = Value;
             target.SetRecover(recover);
-            logList.Add(new Log(this, hitType, recover.ToString()));
+            logList.Add(new Log(user, target, this, hitType, recover.ToString()));
         }
         else
         {
-            logList.Add(new Log(this, hitType, "Miss"));
+            logList.Add(new Log(user, target, this, hitType, "Miss"));
         }
 
         if (SubEffect != null && hitType != BattleController.HitType.Miss)

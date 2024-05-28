@@ -146,6 +146,7 @@ namespace Battle
             {
                 List<Log> logList = new List<Log>();
                 effect.Use(_character, target, logList);
+                Instance._logList.AddRange(logList);
                 SetUI(target, logList);
 
                 string targetName;
@@ -159,37 +160,7 @@ namespace Battle
                 }
                 for(int i=0; i<logList.Count; i++)
                 {
-                    if (logList[i].Type == EffectModel.TypeEnum.MagicAttack || logList[i].Type == EffectModel.TypeEnum.PhysicalAttack)
-                    {
-                        if (logList[i].HitType == HitType.Critical)
-                        {
-                            Instance._battleUI.AddLog(_character.Name + " 對 " + targetName + " 造成了 " + logList[i].Text + " 爆擊傷害");
-                        }
-                        else if (logList[i].HitType == HitType.Hit)
-                        {
-                            Instance._battleUI.AddLog(_character.Name + " 對 " + targetName + " 造成了 " + logList[i].Text + " 傷害");
-                        }
-                        else
-                        {
-                            Instance._battleUI.AddLog(_character.Name + " 對 " + targetName + " 的攻擊沒有命中");
-                        }
-                    }
-                    else if (logList[i].Type == EffectModel.TypeEnum.Poison)
-                    {
-                        Instance._battleUI.AddLog(_character.Name + " 使 " + targetName + " 中毒了");
-                    }
-                    else if (logList[i].Type == EffectModel.TypeEnum.Recover || logList[i].Type == EffectModel.TypeEnum.Medicine || logList[i].Type == EffectModel.TypeEnum.Purify)
-                    {
-                        Instance._battleUI.AddLog(_character.Name + " 使 " + targetName + " 回復了 " + logList[i].Text + " HP");
-                    }
-                    else if (logList[i].Type == EffectModel.TypeEnum.Sleep)
-                    {
-                        Instance._battleUI.AddLog(_character.Name + " 使 " + targetName + " 睡著了");
-                    }
-                    else
-                    {
-                        Instance._battleUI.AddLog(_character.Name + " 使 " + targetName + " " + logList[i].Text);
-                    }   
+                    Instance._battleUI.AddLog(logList[i].FullText);  
                 }
             }
 

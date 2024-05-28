@@ -48,6 +48,8 @@ namespace Battle
         private List<Vector2Int> _areaList = new List<Vector2Int>();
         private Dictionary<int, BattleCharacterController> _controllerDic = new Dictionary<int, BattleCharacterController>();
 
+        private List<Log> _logList = new List<Log>();
+
         public void Init(int floor, int lv, BattleInfo info, Transform root)
         {
             _root = root;
@@ -140,6 +142,8 @@ namespace Battle
             _context.AddState(new DirectionState(_context));
 
             _context.SetState<PrepareState>();
+
+            _logList.Clear();
         }
 
         public void Click(Vector2Int position)

@@ -569,6 +569,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5268101871429733709, guid: 4335952fe4221004c9dfb002e53effea, type: 3}
+      propertyPath: SubGrid
+      value: 
+      objectReference: {fileID: 6512655964204905964, guid: ffe3a7101027d8846961999574adb368, type: 3}
+    - target: {fileID: 5268101871429733709, guid: 4335952fe4221004c9dfb002e53effea, type: 3}
+      propertyPath: ScrollItem
+      value: 
+      objectReference: {fileID: 2804734915500781829, guid: 26d1b09ac847c224389f504c5ca204b1, type: 3}
     - target: {fileID: 5268101871546434442, guid: 4335952fe4221004c9dfb002e53effea, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

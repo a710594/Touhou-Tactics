@@ -71,7 +71,7 @@ public class BuffEffect : Effect
         else
         {
         }
-        logList.Add(new Log(this, hitType, Status.Name));
+        logList.Add(new Log(user, target, this, hitType, Status.Name));
 
 
         if (SubEffect != null && hitType != BattleController.HitType.Miss)
