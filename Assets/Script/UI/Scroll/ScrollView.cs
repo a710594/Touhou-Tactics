@@ -193,7 +193,7 @@ public class ScrollView : MonoBehaviour
             }
             else if (MainGrid.transform.position.x - _gridOrign.x > -0.1f)
             {
-                MainGrid.transform.localPosition = new Vector2(MainGrid.transform.localPosition.x - CellSizeX - SpacingX, MainGrid.transform.localPosition.yS);
+                MainGrid.transform.localPosition = new Vector2(MainGrid.transform.localPosition.x - CellSizeX - SpacingX, MainGrid.transform.localPosition.y);
                 _currentIndex--;
                 Refresh(_currentIndex);
             }

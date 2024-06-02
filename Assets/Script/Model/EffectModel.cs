@@ -23,6 +23,8 @@ public class EffectModel
         Medicine,
         Sleep,
         Summon,
+        SelfInjury,
+        RecoverAll
     }
 
     public enum TargetEnum

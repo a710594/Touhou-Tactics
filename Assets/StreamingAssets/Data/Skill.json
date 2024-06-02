@@ -17,4 +17,6 @@
 {"ID":17,"Name":"大治癒術","Comment":"使目標回復大量HP","CD":1,"SP":0,"EffectID":17},
 {"ID":18,"Name":"狙擊","Comment":"對敵人造成{1}%物理傷害","CD":1,"SP":0,"EffectID":9},
 {"ID":19,"Name":"羽毛攻擊","Comment":"庭渡久侘歌的專用技能，射程無限","CD":0,"SP":0,"EffectID":33},
-{"ID":20,"Name":"下蛋","Comment":"蛋會生出小雞","CD":0,"SP":0,"EffectID":34}]
+{"ID":20,"Name":"下蛋","Comment":"蛋會生出小雞","CD":0,"SP":0,"EffectID":34},
+{"ID":21,"Name":"火焰拳","Comment":"對敵人造成{1}%物理傷害，對自己造成{2}%自身最大HP的傷害","CD":1,"SP":0,"EffectID":35},
+{"ID":22,"Name":"火焰踢","Comment":"對敵人造成{1}%物理傷害","CD":1,"SP":0,"EffectID":37}]

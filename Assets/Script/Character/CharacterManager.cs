@@ -43,6 +43,7 @@ public class CharacterManager
             Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[3]));
             Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[4]));
             Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[5]));
+            Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[6]));
         }
     }
 

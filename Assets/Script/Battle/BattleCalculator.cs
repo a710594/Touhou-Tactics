@@ -225,6 +225,10 @@ namespace Battle
                 {
                     damage = Mathf.RoundToInt(damage * MagicianPassive.GetValue(user));
                 }
+                if (Passive.Contains<PhoenixPassive>(user.PassiveList))
+                {
+                    damage = Mathf.RoundToInt(damage * PhoenixPassive.GetValue(user));
+                }
                 if (Passive.Contains<DreamEaterPassive>(user.PassiveList))
                 {
                     if (target.IsSleep())
