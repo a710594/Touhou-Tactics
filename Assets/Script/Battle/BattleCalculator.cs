@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -137,7 +137,6 @@ namespace Battle
             if (Passive.Contains<SwordmanPassive>(user.PassiveList) && angle > 90)
             {
                 angle = 90;
-
             }
             hitRate = (angle * (-1 / 180f) + 1.5f) * hitRate;
 

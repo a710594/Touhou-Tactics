@@ -27,6 +27,7 @@ namespace Battle
         public List<BattleCharacterInfo> CharacterList = new List<BattleCharacterInfo>(); //�s��������
         public List<BattleCharacterInfo> DyingList = new List<BattleCharacterInfo>(); //�x�����ڤ訤��
         public List<BattleCharacterInfo> DeadList = new List<BattleCharacterInfo>(); //���`���ڤ訤��
+        public List<Log> LogList = new List<Log>();
 
         private readonly Color _white = new Color(1, 1, 1, 0.5f);
         private readonly Color _yellow = new Color(1, 1, 0, 0.5f);
@@ -47,8 +48,6 @@ namespace Battle
         private List<int> _enemyList = new List<int>();
         private List<Vector2Int> _areaList = new List<Vector2Int>();
         private Dictionary<int, BattleCharacterController> _controllerDic = new Dictionary<int, BattleCharacterController>();
-
-        private List<Log> _logList = new List<Log>();
 
         public void Init(int floor, int lv, BattleInfo info, Transform root)
         {
@@ -143,7 +142,7 @@ namespace Battle
 
             _context.SetState<PrepareState>();
 
-            _logList.Clear();
+            LogList.Clear();
         }
 
         public void Click(Vector2Int position)

@@ -146,7 +146,7 @@ namespace Battle
             {
                 List<Log> logList = new List<Log>();
                 effect.Use(_character, target, logList);
-                Instance._logList.AddRange(logList);
+                Instance.LogList.AddRange(logList);
                 SetUI(target, logList);
 
                 string targetName;
