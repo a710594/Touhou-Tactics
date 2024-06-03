@@ -613,7 +613,7 @@ PrefabInstance:
     - target: {fileID: 5268101871429733709, guid: 4335952fe4221004c9dfb002e53effea, type: 3}
       propertyPath: ScrollItem
       value: 
-      objectReference: {fileID: 9026463942651615255, guid: 9f772d1e2e6dafb4f8fb68555d996230, type: 3}
+      objectReference: {fileID: 4290480296013984269, guid: 180eaff8a25a71943af9008bbe7b5abb, type: 3}
     - target: {fileID: 5268101871546434442, guid: 4335952fe4221004c9dfb002e53effea, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

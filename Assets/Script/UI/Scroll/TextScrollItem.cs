@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LogScrollItem : ScrollItem
+public class TextScrollItem : ScrollItem
 {
     public Text Label;
 
@@ -11,6 +11,6 @@ public class LogScrollItem : ScrollItem
     {
         base.SetData(obj);
 
-        Label.text = ((Battle.Log)obj).FullText;
+        Label.text = (string)obj;
     }
 }

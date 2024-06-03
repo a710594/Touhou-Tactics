@@ -143,7 +143,7 @@ namespace Battle
                 List<Log> logList = new List<Log>();
                 effect.Use(_character, target, logList);
                 _currentLogList.AddRange(logList);
-                Instance._logList.AddRange(logList);
+                Instance.LogList.AddRange(logList);
                 //SetUI(target, logList);
 
                 //for(int i=0; i<logList.Count; i++)

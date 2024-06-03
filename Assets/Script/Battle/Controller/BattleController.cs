@@ -48,7 +48,7 @@ namespace Battle
         private List<Vector2Int> _areaList = new List<Vector2Int>();
         private Dictionary<int, BattleCharacterController> _controllerDic = new Dictionary<int, BattleCharacterController>();
 
-        private List<Log> _logList = new List<Log>();
+        public List<Log> LogList = new List<Log>();
 
         public void Init(int floor, int lv, BattleInfo info, Transform root)
         {
@@ -143,7 +143,7 @@ namespace Battle
 
             _context.SetState<PrepareState>();
 
-            _logList.Clear();
+            LogList.Clear();
         }
 
         public void Click(Vector2Int position)

@@ -55,20 +55,24 @@ public class ScrollGrid : MonoBehaviour
 
     public void RefreshData(int index, List<object> list)
     {
-        for (int i = 0; i < _scrollItemList.Count; i++)
+        if(index >= 0)
         {
-            if (index * ItemAmount + i < list.Count)
+            for (int i = 0; i < _scrollItemList.Count; i++)
             {
-                gameObject.SetActive(true);
-                _scrollItemList[i].gameObject.SetActive(true);
-                _scrollItemList[i].SetData(list[index * ItemAmount + i]);
-            }
-            else
-            {
-                _scrollItemList[i].gameObject.SetActive(false);
-                if (i == 0) 
+                if (index * ItemAmount + i < list.Count)
                 {
-                    gameObject.SetActive(false);
+                    gameObject.SetActive(true);
+                    _scrollItemList[i].gameObject.SetActive(true);
+                    Debug.Log(i + " " + (index * ItemAmount + i));
+                    _scrollItemList[i].SetData(list[index * ItemAmount + i]);
+                }
+                else
+                {
+                    _scrollItemList[i].gameObject.SetActive(false);
+                    if (i == 0) 
+                    {
+                        gameObject.SetActive(false);
+                    }
                 }
             }
         }
