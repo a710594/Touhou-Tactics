@@ -57,6 +57,14 @@ namespace Battle
             {
                 effect = new SummonEffect(data);
             }
+            else if (data.Type == EffectModel.TypeEnum.SelfInjury)
+            {
+                effect = new SelfInjuryEffect(data);
+            }
+            else if (data.Type == EffectModel.TypeEnum.RecoverAll)
+            {
+                effect = new RecoverAllEffect(data);
+            }
 
             return effect;
         }

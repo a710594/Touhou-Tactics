@@ -11,6 +11,7 @@ namespace Battle
             int _maxFloatingCount;
             private List<BattleCharacterInfo> _targetList;
             private Timer _timer = new Timer();
+            private List<Log> _currentLogList = new List<Log>(); //當前回合的 log 總和
 
             public EffectState(StateContext context) : base(context)
             {
@@ -23,6 +24,7 @@ namespace Battle
                 _characterList = Instance.CharacterList;
                 _character = Instance.SelectedCharacter;
                 _targetList = new List<BattleCharacterInfo>();
+                _currentLogList.Clear();
                 for (int i = 0; i < _characterList.Count; i++)
                 {
                     if (CheckEffectArea(Instance._areaList, Utility.ConvertToVector2Int(_characterList[i].Position)))
@@ -52,7 +54,7 @@ namespace Battle
                     {
                         for (int i = 0; i < _targetList.Count; i++)
                         {
-                            UseEffect_New(skill.Effect, _targetList[i]);
+                            UseEffect(skill.Effect, _targetList[i]);
                         }
                     }
                     _character.HasUseSkill = true;
@@ -67,7 +69,7 @@ namespace Battle
                     Support support = (Support)_character.SelectedObject;
                     for (int i = 0; i < _targetList.Count; i++)
                     {
-                        UseEffect_New(support.Effect, _targetList[i]);
+                        UseEffect(support.Effect, _targetList[i]);
                     }
                     _character.HasUseSupport = true;
                     if (support.Data.CD > 0)
@@ -80,7 +82,7 @@ namespace Battle
                     Spell card = (Spell)_character.SelectedObject;
                     for (int i = 0; i < _targetList.Count; i++)
                     {
-                        UseEffect_New(card.Effect, _targetList[i]);
+                        UseEffect(card.Effect, _targetList[i]);
                     }
                     _character.HasUseItem = true;
                     _character.ActionCount--;
@@ -106,7 +108,7 @@ namespace Battle
                     Consumables consumables = (Consumables)_character.SelectedObject;
                     for (int i = 0; i < _targetList.Count; i++)
                     {
-                        UseEffect_New(consumables.Effect, _targetList[i]);
+                        UseEffect(consumables.Effect, _targetList[i]);
                     }
                     _character.HasUseItem = true;
                     _character.ActionCount--;
@@ -120,21 +122,15 @@ namespace Battle
                         // List<FloatingNumberData> floatingList = new List<FloatingNumberData>();
                         // food.Effect.Use(_character, _targetList[i], floatingList, _characterList);
                         // SetUI(_targetList[i], floatingList);
-                        UseEffect_New(food.Effect, _targetList[i]);
+                        UseEffect(food.Effect, _targetList[i]);
                     }
                     _character.HasUseItem = true;
                     _character.ActionCount--;
                     ItemManager.Instance.MinusItem(food.ID, 1);
                 }
 
+                RerangeLog();
                 _timer.Start(_maxFloatingCount, CheckResult);
-            }
-
-            private void UseEffect(Effect effect, BattleCharacterInfo target) 
-            {
-                List<FloatingNumberData> floatingList = new List<FloatingNumberData>();
-                effect.Use(_character, target, floatingList, _characterList);
-                SetUI(target, floatingList);
             }
 
             public void UseEffect(Effect effect, Vector3 position) 
@@ -142,38 +138,35 @@ namespace Battle
                 effect.Use(_character, position);
             }
 
-            private void UseEffect_New(Effect effect, BattleCharacterInfo target) 
+            private void UseEffect(Effect effect, BattleCharacterInfo target) 
             {
                 List<Log> logList = new List<Log>();
                 effect.Use(_character, target, logList);
+                _currentLogList.AddRange(logList);
                 Instance._logList.AddRange(logList);
-                SetUI(target, logList);
+                //SetUI(target, logList);
 
-                string targetName;
-                if(_character == target)
-                {
-                    targetName = "自己";
-                }
-                else
-                {
-                    targetName = target.Name;
-                }
-                for(int i=0; i<logList.Count; i++)
-                {
-                    Instance._battleUI.AddLog(logList[i].FullText);  
-                }
+                //for(int i=0; i<logList.Count; i++)
+                //{
+                //    Instance._battleUI.AddLog(logList[i].FullText);  
+                //}
             }
 
-            private void SetUI(BattleCharacterInfo target, List<FloatingNumberData> floatingList) 
+            private void RerangeLog()
             {
-                Instance._battleUI.SetLittleHpBarValue(target.Index, target);
-                for (int j = 0; j < floatingList.Count; j++)
+                Dictionary<BattleCharacterInfo, List<Log>> rerangeDic = new Dictionary<BattleCharacterInfo, List<Log>>();
+                for (int i=0; i< _currentLogList.Count; i++) 
                 {
-                    Instance._battleUI.PlayFloatingNumberPool(target.Index, floatingList[j].Type, floatingList[j].Text);
+                    if (!rerangeDic.ContainsKey(_currentLogList[i].Target)) 
+                    {
+                        rerangeDic.Add(_currentLogList[i].Target, new List<Log>());
+                    }
+                    rerangeDic[_currentLogList[i].Target].Add(_currentLogList[i]);
                 }
-                if (floatingList.Count > _maxFloatingCount)
+
+                foreach(KeyValuePair<BattleCharacterInfo, List<Log>> pair in rerangeDic) 
                 {
-                    _maxFloatingCount = floatingList.Count;
+                    SetUI(pair.Key, pair.Value);
                 }
             }
 

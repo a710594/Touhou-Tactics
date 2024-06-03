@@ -29,6 +29,10 @@ namespace Battle
             {
                 passive = new DreamEaterPassive(DataContext.Instance.PassiveDic[id]);
             }
+            else if (id == 6)
+            {
+                passive = new PhoenixPassive(DataContext.Instance.PassiveDic[id]);
+            }
 
             return passive;
         }
