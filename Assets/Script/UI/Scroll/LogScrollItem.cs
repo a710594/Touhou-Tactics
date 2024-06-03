@@ -11,6 +11,6 @@ public class LogScrollItem : ScrollItem
     {
         base.SetData(obj);
 
-        Label.text = ((Battle.Log)obj).FullText;
+        Label.text = (string)obj;
     }
 }

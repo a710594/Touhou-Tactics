@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,22 +31,19 @@ public class ScrollView : MonoBehaviour
     public ScrollGrid SubGrid;
     public ScrollItem ScrollItem;
 
-    private bool _isLock = false;
     private int _currentIndex = 0;
     private int _subGridAmount = 0;
     private int _scrollItemAmount = 0;
-    private Vector2 _originGridPosition = new Vector2();
-    private Vector2 _originGridLocalPosition = new Vector2();
-    private Vector2 _originContentPosition = new Vector2();
+    private Vector2 _gridOrign = new Vector2();
     private List<ScrollGrid> _gridList = new List<ScrollGrid>();
     private List<object> _dataList = new List<object>();
 
-    public void Init()
+    private void Init()
     {
         float length = 0;
         if (Type == TypeEnum.Horizontal)
         {
-            _subGridAmount = Mathf.FloorToInt(Background.sizeDelta.x / CellSizeX) + 1;
+            _subGridAmount = Mathf.FloorToInt(Background.sizeDelta.x / CellSizeX);
             MainGridRect.sizeDelta = new Vector2((CellSizeX + SpacingX) * _subGridAmount, Background.sizeDelta.y);
             MainGrid.cellSize = new Vector2(CellSizeX, Background.sizeDelta.y);
             MainGrid.spacing = new Vector2(SpacingX, 0);
@@ -57,7 +53,7 @@ public class ScrollView : MonoBehaviour
         }
         else if (Type == TypeEnum.Vertical)
         {
-            _subGridAmount = Mathf.FloorToInt(Background.sizeDelta.y / CellSizeY) + 1;
+            _subGridAmount = Mathf.FloorToInt(Background.sizeDelta.y / CellSizeY);
             MainGridRect.sizeDelta = new Vector2(Background.sizeDelta.x, (CellSizeY + SpacingY) * _subGridAmount);
             MainGrid.cellSize = new Vector2(Background.sizeDelta.x, CellSizeY);
             MainGrid.spacing = new Vector2(0, SpacingY);
@@ -99,9 +95,7 @@ public class ScrollView : MonoBehaviour
             Content.sizeDelta = new Vector2(Content.sizeDelta.x, count * CellSizeY + count * SpacingY);
             MainGrid.transform.localPosition = new Vector2(MainGridRect.sizeDelta.x / 2f, -MainGridRect.sizeDelta.y / 2f);
         }
-        _originGridPosition = MainGrid.transform.position;
-        _originGridLocalPosition = MainGrid.transform.localPosition;
-        _originContentPosition = Content.transform.position;
+        _gridOrign = MainGrid.transform.position;
     }
 
     public void CancelSelect() 
@@ -110,53 +104,6 @@ public class ScrollView : MonoBehaviour
         {
             _gridList[i].SetSelect(null);
         }
-    }
-
-    public void SetIndex(int index)
-    {
-        if(_dataList.Count<_subGridAmount)
-        {
-            return;
-        }
-        else if(index <= _dataList.Count - _subGridAmount)
-        {
-            _currentIndex = index;
-            if (Type == TypeEnum.Horizontal)
-            {
-                Content.transform.position = new Vector2(_originContentPosition.x + _currentIndex * (CellSizeX + SpacingX), _originContentPosition.y);
-                MainGrid.transform.localPosition = new Vector2(_originGridLocalPosition.x - _currentIndex * (CellSizeX + SpacingX), _originGridLocalPosition.y);
-                Refresh(_currentIndex);
-            }
-            else if (Type == TypeEnum.Vertical)
-            {
-                Content.transform.position = new Vector2(_originContentPosition.x, _originContentPosition.y + _currentIndex * (CellSizeY + SpacingY));
-                MainGrid.transform.localPosition = new Vector2(_originGridLocalPosition.x, _originGridLocalPosition.y - _currentIndex * (CellSizeY + SpacingY));
-                Refresh(_currentIndex);
-            }
-        }
-        else
-        {
-            _currentIndex = _dataList.Count - _subGridAmount;
-            if (Type == TypeEnum.Horizontal)
-            {
-                Content.transform.position = new Vector2(_originContentPosition.x + (_currentIndex + 1) * (CellSizeX + SpacingX), _originContentPosition.y);
-                MainGrid.transform.localPosition = new Vector2(_originGridLocalPosition.x - _currentIndex * (CellSizeX + SpacingX), _originGridLocalPosition.y);
-                Refresh(_currentIndex);
-            }
-            else if (Type == TypeEnum.Vertical)
-            {
-                Content.transform.position = new Vector2(_originContentPosition.x, _originContentPosition.y + (_currentIndex + 1) * (CellSizeY + SpacingY));
-                MainGrid.transform.localPosition = new Vector2(_originGridLocalPosition.x, _originGridLocalPosition.y - _currentIndex * (CellSizeY + SpacingY));
-                Refresh(_currentIndex);
-            }
-        }
-    }
-
-    private IEnumerator WaitOneFrame()
-    {
-        _isLock = true;
-        yield return new WaitForEndOfFrame();
-        _isLock = false;
     }
 
     private void Refresh(int index) 
@@ -236,41 +183,36 @@ public class ScrollView : MonoBehaviour
 
     private void Update()
     {
-        if(_isLock)
-        {
-            return;
-        }
-
         if (Type == TypeEnum.Horizontal)
         {
-            if (MainGrid.transform.position.x - _originGridPosition.x < (CellSizeX + SpacingX))
+            if (MainGrid.transform.position.x - _gridOrign.x < (CellSizeX + SpacingX))
             {
                 MainGrid.transform.localPosition = new Vector2(MainGrid.transform.localPosition.x + CellSizeX + SpacingX, MainGrid.transform.localPosition.y);
                 _currentIndex++;
                 Refresh(_currentIndex);
             }
-            else if (MainGrid.transform.position.x - _originGridPosition.x > -0.1f)
+            else if (MainGrid.transform.position.x - _gridOrign.x > -0.1f)
             {
-                MainGrid.transform.localPosition = new Vector2(MainGrid.transform.localPosition.x - CellSizeX - SpacingX, MainGrid.transform.localPosition.y);
+                MainGrid.transform.localPosition = new Vector2(MainGrid.transform.localPosition.x - CellSizeX - SpacingX, MainGrid.transform.localPosition.yS);
                 _currentIndex--;
                 Refresh(_currentIndex);
             }
         }
         else if (Type == TypeEnum.Vertical)
         {
-            if (MainGrid.transform.position.y - _originGridPosition.y >  (CellSizeY + SpacingY))
+            if (MainGrid.transform.position.y - _gridOrign.y >  (CellSizeY + SpacingY))
             {
                 MainGrid.transform.localPosition = new Vector2(MainGrid.transform.localPosition.x, MainGrid.transform.localPosition.y - CellSizeY - SpacingY);
                 _currentIndex++;
                 Refresh(_currentIndex);
             }
-            else if (MainGrid.transform.position.y - _originGridPosition.y < -0.1f)
+            else if (MainGrid.transform.position.y - _gridOrign.y < -0.1f)
             {
-                Debug.Log(MainGrid.transform.position.y + " " + _originGridPosition.y);
                 MainGrid.transform.localPosition = new Vector2(MainGrid.transform.localPosition.x, MainGrid.transform.localPosition.y + CellSizeY + SpacingY);
                 _currentIndex--;
                 Refresh(_currentIndex);
             }
         }
+        //Debug.Log(Content.transform.localPosition.y);
     }
 }

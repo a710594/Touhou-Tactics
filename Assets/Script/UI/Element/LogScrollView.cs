@@ -9,21 +9,11 @@ public class LogScrollView : MonoBehaviour
     private void Start()
     {
         List<string> list = new List<string>();
-        for (int i=0; i<20; i++) 
+        for (int i=0; i<10; i++) 
         {
             list.Add(i.ToString());
         }
 
         ScrollView.SetData(new List<object>(list));
-
-    }  
-
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            ScrollView.SetIndex(5);
-
-        }
     }
 }
