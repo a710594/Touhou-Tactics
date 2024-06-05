@@ -22,7 +22,7 @@ namespace Battle
                 _character = Instance.SelectedCharacter;
                 _characterList = Instance.CharacterList;
                 Instance._controllerDic[_character.Index].transform.position = _character.Position;
-                Instance._battleUI.ActionButtonGroup.gameObject.SetActive(false);
+                Instance._battleUI.SetActionVisible(false);
                 _stepList = Instance.GetStepList(_character);
                 Instance.ClearQuad();
                 Instance.SetQuad(_stepList, Instance._white);
@@ -40,7 +40,7 @@ namespace Battle
             {
                 if (_stepList.Contains(position))
                 {
-                    if (position == _originalPosition) //½T©w²¾°Ê
+                    if (position == _originalPosition) //ï¿½Tï¿½wï¿½ï¿½ï¿½ï¿½
                     {
                         Instance._canClick = false;
                         Instance._controllerDic[_character.Index].transform.position = _character.Position;

@@ -47,21 +47,21 @@ public class ScrollView : MonoBehaviour
         float length = 0;
         if (Type == TypeEnum.Horizontal)
         {
-            _subGridAmount = Mathf.FloorToInt(Background.sizeDelta.x / CellSizeX) + 1;
-            MainGridRect.sizeDelta = new Vector2((CellSizeX + SpacingX) * _subGridAmount, Background.sizeDelta.y);
-            MainGrid.cellSize = new Vector2(CellSizeX, Background.sizeDelta.y);
+            _subGridAmount = Mathf.FloorToInt(Background.rect.width / CellSizeX) + 1;
+            MainGridRect.sizeDelta = new Vector2((CellSizeX + SpacingX) * _subGridAmount, Background.rect.height);
+            MainGrid.cellSize = new Vector2(CellSizeX, Background.rect.height);
             MainGrid.spacing = new Vector2(SpacingX, 0);
-            length = Background.sizeDelta.y;
+            length = Background.rect.height;
             Content.sizeDelta = new Vector2(Content.sizeDelta.x, length);
             _scrollItemAmount = Mathf.FloorToInt(length / (CellSizeY + SubGrid.Grid.spacing.y));
         }
         else if (Type == TypeEnum.Vertical)
         {
-            _subGridAmount = Mathf.FloorToInt(Background.sizeDelta.y / CellSizeY) + 1;
-            MainGridRect.sizeDelta = new Vector2(Background.sizeDelta.x, (CellSizeY + SpacingY) * _subGridAmount);
-            MainGrid.cellSize = new Vector2(Background.sizeDelta.x, CellSizeY);
+            _subGridAmount = Mathf.FloorToInt(Background.rect.height / CellSizeY) + 1;
+            MainGridRect.sizeDelta = new Vector2(Background.rect.width, (CellSizeY + SpacingY) * _subGridAmount);
+            MainGrid.cellSize = new Vector2(Background.rect.width, CellSizeY);
             MainGrid.spacing = new Vector2(0, SpacingY);
-            length = Background.sizeDelta.x;
+            length = Background.rect.width;
             Content.sizeDelta = new Vector2(length, Content.sizeDelta.y);
             _scrollItemAmount = Mathf.FloorToInt(length / (CellSizeX + SubGrid.Grid.spacing.x));
         }

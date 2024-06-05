@@ -20,7 +20,7 @@ namespace Battle
             public override void Begin()
             {
                 _character = Instance.SelectedCharacter;
-                Instance._battleUI.ActionButtonGroup.gameObject.SetActive(false);
+                Instance._battleUI.SetActionVisible(false);
                 Instance._battleUI.SetCharacterInfoUI_1(null);
                 Instance._battleUI.SetDirectionGroupVisible(true);
                 Instance._battleUI.SetDirectionGroupPosition(_character.Position);

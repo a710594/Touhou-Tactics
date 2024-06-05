@@ -178,6 +178,10 @@ namespace Battle
                 {
                     _maxFloatingCount = logList.Count;
                 }
+                for(int i=0; i<logList.Count; i++)
+                {
+                    Instance._battleUI.AddLog(logList[i].FullText);  
+                }
             }
 
             private void CheckResult()

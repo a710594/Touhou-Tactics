@@ -107,8 +107,8 @@ namespace Battle
             public void RemoveCharacterSprite(CharacterInfo characterInfo)
             {
                 Instance._dragCameraUI.DontDrag = false;
-                _tempDic.Remove(characterInfo);
                 GameObject.Destroy(_tempDic[characterInfo].gameObject);
+                _tempDic.Remove(characterInfo);
             }
         }
     }

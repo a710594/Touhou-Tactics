@@ -37,7 +37,7 @@ namespace Battle
                 Vector3 position = new Vector3();
                 BattleCharacterController controller = Instance._controllerDic[info.Index];
                 position = controller.transform.position;
-                Instance._battleUI.ActionButtonGroup.gameObject.SetActive(false);
+                Instance._battleUI.SetActionVisible(false);
                 _cameraMove.Move(position, ()=> 
                 {
                     _context.SetState<ActionState>();

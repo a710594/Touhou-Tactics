@@ -65,6 +65,7 @@ public Action<Vector2Int> DirectionButtonHandler;
     public void SetActionVisible(bool isVisible)
     {
         ActionButtonGroup.gameObject.SetActive(isVisible);
+        LogGroup.Button.gameObject.SetActive(isVisible);
     }
 
     public void SetSkillVisible(bool isVisible) 

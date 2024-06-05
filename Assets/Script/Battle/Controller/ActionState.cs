@@ -17,7 +17,7 @@ namespace Battle
                 _info = Instance.Info;
                 _character = Instance.SelectedCharacter;
                 _characterList = Instance.CharacterList;
-                Instance._battleUI.ActionButtonGroup.gameObject.SetActive(true);
+                Instance._battleUI.SetActionVisible(true);
                 Instance._battleUI.ActionButtonGroup.SetButton(_character);
                 Instance._battleUI.ActionButtonGroup.ResetButton.gameObject.SetActive(_character.HasMove);
                 Instance._battleUI.SetCharacterInfoUI_1(_character);

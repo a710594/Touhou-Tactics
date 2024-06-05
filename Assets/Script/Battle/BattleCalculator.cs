@@ -19,21 +19,22 @@ namespace Battle
 
         public List<Vector2Int> GetNormalAreaList(Vector2Int from, Vector2Int to, Effect effect)
         {
+            Vector2 v2 = to - from;
+            float angle = Vector2.Angle(v2, Vector2.up);
+            Vector3 cross = Vector3.Cross(v2, Vector2.up);
+            if (cross.z > 0)
+            {
+                angle = 360 - angle;
+            }
+
+            Quaternion rotation = Quaternion.Euler(0, 0, angle);
+            Matrix4x4 m = Matrix4x4.Rotate(rotation);
             Vector3 v3;
             List<Vector2Int> areaList = new List<Vector2Int>();
-            if (to - from == Vector2Int.right || to - from == Vector2Int.left)
+            for (int i = 0; i < effect.AreaList.Count; i++)
             {
-                Quaternion rotation = Quaternion.Euler(0, 0, 90);
-                Matrix4x4 m = Matrix4x4.Rotate(rotation);
-                for (int i = 0; i < effect.AreaList.Count; i++)
-                {
-                    v3 = m.MultiplyPoint3x4(new Vector3(effect.AreaList[i].x, effect.AreaList[i].y, 0));
-                    areaList.Add(new Vector2Int(Mathf.RoundToInt(v3.x), Mathf.RoundToInt(v3.y)));
-                }
-            }
-            else
-            {
-                areaList = effect.AreaList;
+                v3 = m.MultiplyPoint3x4(new Vector3(effect.AreaList[i].x, effect.AreaList[i].y, 0));
+                areaList.Add(new Vector2Int(Mathf.RoundToInt(v3.x), Mathf.RoundToInt(v3.y)));
             }
 
             Vector2Int position;
