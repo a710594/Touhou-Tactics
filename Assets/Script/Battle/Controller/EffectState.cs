@@ -42,9 +42,9 @@ namespace Battle
                 }
 
                 _maxFloatingCount = 0;
-                if (_character.SelectedObject is Skill)
+                if (_character.SelectedCommand is Skill)
                 {
-                    Skill skill = (Skill)_character.SelectedObject;
+                    Skill skill = (Skill)_character.SelectedCommand;
                     if(skill.Effect.Type == EffectModel.TypeEnum.Summon)
                     {
                         Vector3 v3 = new Vector3(Instance._selectedPosition.x, Instance.Info.TileAttachInfoDic[Instance._selectedPosition].Height, Instance._selectedPosition.y);
@@ -59,14 +59,14 @@ namespace Battle
                     }
                     _character.HasUseSkill = true;
                     _character.ActionCount--;
-                    if (skill.Data.CD > 0)
+                    if (skill.CD > 0)
                     {
                         skill.CurrentCD = skill.Data.CD + 1; // n [ @    ] O   F  P   ^ X   CheckCD
                     }
                 }
-                else if(_character.SelectedObject is Support) 
+                else if(_character.SelectedCommand is Support) 
                 {
-                    Support support = (Support)_character.SelectedObject;
+                    Support support = (Support)_character.SelectedCommand;
                     for (int i = 0; i < _targetList.Count; i++)
                     {
                         UseEffect(support.Effect, _targetList[i]);
@@ -77,9 +77,9 @@ namespace Battle
                         support.CurrentCD = support.Data.CD + 1; // n [ @    ] O   F  P   ^ X   CheckCD
                     }
                 }
-                else if(_character.SelectedObject is Spell) 
+                else if(_character.SelectedCommand is Spell) 
                 {
-                    Spell card = (Spell)_character.SelectedObject;
+                    Spell card = (Spell)_character.SelectedCommand;
                     for (int i = 0; i < _targetList.Count; i++)
                     {
                         UseEffect(card.Effect, _targetList[i]);
@@ -103,9 +103,9 @@ namespace Battle
                     }
                     ItemManager.Instance.MinusItem(ItemManager.CardID, 1);
                 }
-                else if(_character.SelectedObject is Consumables) 
+                else if(_character.SelectedCommand is Consumables) 
                 {
-                    Consumables consumables = (Consumables)_character.SelectedObject;
+                    Consumables consumables = (Consumables)_character.SelectedCommand;
                     for (int i = 0; i < _targetList.Count; i++)
                     {
                         UseEffect(consumables.Effect, _targetList[i]);
@@ -114,9 +114,9 @@ namespace Battle
                     _character.ActionCount--;
                     ItemManager.Instance.MinusItem(consumables.ID, 1);
                 }
-                else if(_character.SelectedObject is Food) 
+                else if(_character.SelectedCommand is Food) 
                 {
-                    Food food = (Food)_character.SelectedObject;
+                    Food food = (Food)_character.SelectedCommand;
                     for (int i = 0; i < _targetList.Count; i++)
                     {
                         // List<FloatingNumberData> floatingList = new List<FloatingNumberData>();

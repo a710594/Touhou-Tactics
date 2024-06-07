@@ -78,7 +78,12 @@ public Action<Vector2Int> DirectionButtonHandler;
         ActionButtonGroup.SetScrollView(list);
     }
 
-    public void SetPredictionInfo(BattleCharacterInfo info, int predictionHp)
+    public void SetPredictionInfo_1(BattleCharacterInfo info, int predictionHp)
+    {
+        CharacterInfoUI_1.SetHpPrediction(info.CurrentHP, predictionHp, info.MaxHP);
+    }
+
+    public void SetPredictionInfo_2(BattleCharacterInfo info, int predictionHp)
     {
         CharacterInfoUI_2.SetHpPrediction(info.CurrentHP, predictionHp, info.MaxHP);
     }

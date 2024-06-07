@@ -7,7 +7,7 @@ public class TileAttachInfo
 {
     public string TileID;
     public int Height;
-    public string AttachID; //Tile ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½Fï¿½ï¿½,ï¿½Ò¦pï¿½ï¿½,ï¿½ï¿½,ï¿½ï¿½ï¿½Y...
+    public string AttachID; //Tile ¤W­±ªºªF¦è,¨Ò¦p¯ó,¾ð,¥ÛÀY...
 
     public int MoveCost
     {

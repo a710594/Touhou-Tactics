@@ -125,7 +125,7 @@ public class ItemManager
                 consumables.Amount -= amount;
                 if (consumables.Amount == 0)
                 {
-                    BagInfo.ConsumablesDic.Remove(consumables.ItemData.ID);
+                    BagInfo.ConsumablesDic.Remove(consumables.ID);
                 }
                 return true;
             }

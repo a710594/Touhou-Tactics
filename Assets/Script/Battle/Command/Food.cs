@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Battle;
 
-public class Food
+public class Food : Command
 {
     public int ID;
     public string Name;
@@ -19,9 +19,6 @@ public class Food
     public int MOV = 0;
     public int Time = 0;
     public int Price;
-
-    [NonSerialized]
-    public Effect Effect;
 
     public Food() { }
 
@@ -40,6 +37,13 @@ public class Food
         MOV = food.MOV;
         Time = food.Time;
         Price = item.Price;
+        
+        Hit = 100;
+        Range = 1;
+        CastTarget = TargetEnum.Us;
+        EffectTarget = TargetEnum.Us;
+        Track = TrackEnum.None;
+        AreaList = new List<Vector2Int>(){Vector2Int.zero};
 
         FoodMaterial foodMaterial;
         for (int i=0; i<materialList.Count; i++) 
@@ -78,6 +82,13 @@ public class Food
         MOV = food.MOV;
         Time = food.Time;
         Price = item.Price;
+
+        Hit = 100;
+        Range = 1;
+        CastTarget = TargetEnum.Us;
+        EffectTarget = TargetEnum.Us;
+        Track = TrackEnum.None;
+        AreaList = new List<Vector2Int>(){Vector2Int.zero};
 
         SetComment();
         SetEffect();
@@ -171,17 +182,11 @@ public class Food
         }
 
         Effect = effectList[0];
-        Effect.Range = 1;
-        Effect.Area = "(0,0)";
-        Effect.AreaList = new List<Vector2Int>() { new Vector2Int(0, 0) };
         effect = Effect;
         for (int i=1; i<effectList.Count; i++) 
         {
             effect.SubEffect = effectList[i];
             effect = effect.SubEffect;
-            effect.Range = -1;
-            effect.Area = "-1";
-            effect.AreaList = new List<Vector2Int>();
         }
     }
 }

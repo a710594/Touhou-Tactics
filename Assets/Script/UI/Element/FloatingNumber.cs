@@ -92,7 +92,7 @@ public class FloatingNumber : MonoBehaviour
         this.transform.position = position;
         Label.text = log.Text;
 
-        if (log.Effect.Type == EffectModel.TypeEnum.MagicAttack || log.Effect.Type == EffectModel.TypeEnum.PhysicalAttack || log.Effect.Type == EffectModel.TypeEnum.SelfInjury)
+        if (log.Effect.Type == EffectModel.TypeEnum.MagicAttack || log.Effect.Type == EffectModel.TypeEnum.PhysicalAttack || log.Effect.Type == EffectModel.TypeEnum.RatioDamage)
         {
             if (log.HitType == Battle.BattleController.HitType.Critical)
             {

@@ -23,7 +23,7 @@ public class EffectModel
         Medicine,
         Sleep,
         Summon,
-        SelfInjury,
+        RatioDamage,
         RecoverAll
     }
 
@@ -47,17 +47,18 @@ public class EffectModel
     public int ID;
     public string Name;
     public int Value;
-    public int Hit;
-    public int Range;
-    public string Area;
-    public List<Vector2Int> AreaList = new List<Vector2Int>();
-    public TargetEnum Target;
-    public TrackEnum Track;
+    // public int Hit;
+    // public int Range;
+    // public string Area;
+    // public List<Vector2Int> AreaList = new List<Vector2Int>();
+    // public TargetEnum Target;
+    // public TrackEnum Track;
     public int StatusID;
     public int SubID;
+    public int SelfID;
 
-    public void GetAreaList() 
-    {
-        AreaList = Utility.GetAreaList(Area);
-    }
+    // public void GetAreaList() 
+    // {
+    //     AreaList = Utility.GetAreaList(Area);
+    // }
 }

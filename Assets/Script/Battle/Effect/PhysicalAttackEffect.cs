@@ -8,16 +8,6 @@ using Battle;
 
 public class PhysicalAttackEffect : Effect
 {
-    public PhysicalAttackEffect(EffectModel data) : base(data)
-    {
-        //Data = data;
-        //if (data.SubID != -1)
-        //{
-        //    EffectModel subData = DataContext.Instance.EffectDic[data.SubID];
-        //    SubEffect = EffectFactory.GetEffect(subData);
-        //}
-    }
-
     public override void Use(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)
     {
         FloatingNumberData floatingNumberData;
@@ -77,6 +67,11 @@ public class PhysicalAttackEffect : Effect
         if (SubEffect != null && hitType != BattleController.HitType.Miss)
         {
             SubEffect.Use(user, target, logList);
+        }
+
+        if (SelfEffect != null && hitType != BattleController.HitType.Miss)
+        {
+            SelfEffect.Use(user, user, logList);
         }
     }
 }

@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Battle;
 
-public class Spell
+public class Spell : Command
 {
     public int CurrentCD;
     public SpellModel Data;
-    public Effect Effect;
 
     public Spell() { }
 

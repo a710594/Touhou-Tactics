@@ -45,7 +45,6 @@ namespace Battle
         public GameObject DirectionGroup;
         private Transform _root;
         private List<int> _enemyList = new List<int>();
-        private List<Vector2Int> _areaList = new List<Vector2Int>();
         private Dictionary<int, BattleCharacterController> _controllerDic = new Dictionary<int, BattleCharacterController>();
 
         public List<Log> LogList = new List<Log>();
@@ -205,9 +204,9 @@ namespace Battle
             _context.SetState<EndState>();
         }
 
-        public void SetTargetState(object obj)
+        public void SetTargetState(Command command)
         {
-            SelectedCharacter.SelectedObject = obj;
+            SelectedCharacter.SelectedCommand = command;
             _context.SetState<TargetState>();
         }
 
@@ -220,25 +219,38 @@ namespace Battle
             }
         }
 
-        public List<Vector2Int> GetAreaList(Effect effect) 
+        // public List<Vector2Int> GetAreaList(Command command) 
+        // {
+        //     List<Vector2Int> areaList = new List<Vector2Int>();
+        //     if (command.Track == TrackEnum.Through)
+        //     {
+        //         areaList = GetTroughAreaList(SelectedCharacter.Position, new Vector3(_selectedPosition.x, Instance.Info.TileAttachInfoDic[_selectedPosition].Height, _selectedPosition.y));
+        //     }
+        //     else
+        //     {
+        //         areaList = GetNormalAreaList(Utility.ConvertToVector2Int(SelectedCharacter.Position), _selectedPosition, command.AreaList);
+        //     }
+
+        //     return areaList;
+        // }
+
+        public List<Vector2Int> SetEffectPosition(Command command)
         {
-            if (effect.Area == "Through")
+            List<Vector2Int> effectPositionList = new List<Vector2Int>();
+            if (command.Track == TrackEnum.Through)
             {
-                _areaList = GetTroughAreaList(SelectedCharacter.Position, new Vector3(_selectedPosition.x, Instance.Info.TileAttachInfoDic[_selectedPosition].Height, _selectedPosition.y));
+                effectPositionList = GetTroughAreaList(SelectedCharacter.Position, new Vector3(_selectedPosition.x, Instance.Info.TileAttachInfoDic[_selectedPosition].Height, _selectedPosition.y));
             }
             else
             {
-                _areaList = GetNormalAreaList(Utility.ConvertToVector2Int(SelectedCharacter.Position), _selectedPosition, effect);
+                effectPositionList = GetNormalAreaList(Utility.ConvertToVector2Int(SelectedCharacter.Position), _selectedPosition, command.AreaList);
             }
 
-            return _areaList;
-        }
-
-        public void SetArea(Effect effect)
-        {
-            RemoveByFaction(effect, _areaList);
+            RemoveByFaction(command.EffectTarget, effectPositionList);
             ClearQuad();
-            SetQuad(_areaList, _yellow);
+            SetQuad(effectPositionList, _yellow); 
+            
+            return effectPositionList;
         }
 
         public void ClearQuad()
@@ -410,7 +422,7 @@ namespace Battle
                 List<Vector2Int> rangeList = new List<Vector2Int>();
                 for (int i = 0; i < stepList.Count; i++) //�ڥi�H���ʪ��d��
                 {
-                    tempList = Utility.GetRange(character.AI.SelectedSkill.Effect.Range, Info.Width, Info.Height, stepList[i]);
+                    tempList = Utility.GetRange(character.AI.SelectedSkill.Range, Info.Width, Info.Height, stepList[i]);
                     for (int j=0; j<tempList.Count; j++) 
                     {
                         if(!stepList.Contains(tempList[j]) && !rangeList.Contains(tempList[j])) 

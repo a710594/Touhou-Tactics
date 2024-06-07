@@ -8,12 +8,12 @@ namespace Battle
     {
         public BattleCharacterInfo User;
         public BattleCharacterInfo Target;
-        public BattleController.HitType HitType;
+        public HitType HitType;
         public Effect Effect;
         public string Text;
         public string FullText;
 
-        public Log(BattleCharacterInfo user, BattleCharacterInfo target, Effect effect, BattleController.HitType hitType, string text) 
+        public Log(BattleCharacterInfo user, BattleCharacterInfo target, Effect effect, HitType hitType, string text) 
         {
             User = user;
             Target = target;
@@ -33,11 +33,11 @@ namespace Battle
 
             if (effect.Type == EffectModel.TypeEnum.MagicAttack || effect.Type == EffectModel.TypeEnum.PhysicalAttack)
             {
-                if (HitType == BattleController.HitType.Critical)
+                if (HitType == HitType.Critical)
                 {
                     FullText = user.Name + " 對 " + targetName + " 造成了 " + text + " 爆擊傷害";
                 }
-                else if (HitType == BattleController.HitType.Hit)
+                else if (HitType == HitType.Hit)
                 {
                     FullText = user.Name + " 對 " + targetName + " 造成了 " + text + " 傷害";
                 }

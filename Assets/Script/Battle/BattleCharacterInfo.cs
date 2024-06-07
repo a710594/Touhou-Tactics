@@ -63,7 +63,7 @@ namespace Battle
         public int ActionCount = 2; //每個角色都有兩次的行動機會
         public Vector3 Position = new Vector3();
         public Vector3 LastPosition = new Vector3();
-        public object SelectedObject = null; //可能是技能,輔助,或道具(消耗品,料理,符卡)
+        public Command SelectedCommand = null; //可能是技能,輔助,或道具(消耗品,料理,符卡)
         public BattleAI AI = null;
         public Vector2Int Direction = Vector2Int.left;
         public List<Status> StatusList = new List<Status>();

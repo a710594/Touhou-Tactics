@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,15 +9,7 @@ namespace Battle
 {
     public partial class BattleController
     {
-        public enum HitType
-        {
-            Miss,
-            Hit,
-            Critical,
-            NoDamage,
-        }
-
-        public List<Vector2Int> GetNormalAreaList(Vector2Int from, Vector2Int to, Effect effect)
+        public List<Vector2Int> GetNormalAreaList(Vector2Int from, Vector2Int to, List<Vector2Int> areaList)
         {
             Vector2 v2 = to - from;
             float angle = Vector2.Angle(v2, Vector2.up);
@@ -30,24 +22,24 @@ namespace Battle
             Quaternion rotation = Quaternion.Euler(0, 0, angle);
             Matrix4x4 m = Matrix4x4.Rotate(rotation);
             Vector3 v3;
-            List<Vector2Int> areaList = new List<Vector2Int>();
-            for (int i = 0; i < effect.AreaList.Count; i++)
+            List<Vector2Int> mulList = new List<Vector2Int>();
+            for (int i = 0; i < areaList.Count; i++)
             {
-                v3 = m.MultiplyPoint3x4(new Vector3(effect.AreaList[i].x, effect.AreaList[i].y, 0));
-                areaList.Add(new Vector2Int(Mathf.RoundToInt(v3.x), Mathf.RoundToInt(v3.y)));
+                v3 = m.MultiplyPoint3x4(new Vector3(areaList[i].x, areaList[i].y, 0));
+                mulList.Add(new Vector2Int(Mathf.RoundToInt(v3.x), Mathf.RoundToInt(v3.y)));
             }
 
             Vector2Int position;
-            List<Vector2Int> list = new List<Vector2Int>();
-            for (int i = 0; i < areaList.Count; i++)
+            List<Vector2Int> result = new List<Vector2Int>();
+            for (int i = 0; i < mulList.Count; i++)
             {
-                position = to + areaList[i];
+                position = to + mulList[i];
                 if (position.x < Info.Width && position.x >= 0 && position.y < Info.Height && position.y >= 0)
                 {
-                    list.Add(position);
+                    result.Add(position);
                 }
             }
-            return list;
+            return result;
         }
 
         public List<Vector2Int> GetTroughAreaList(Vector3 from, Vector3 to)
@@ -64,7 +56,7 @@ namespace Battle
             return list;
         }
 
-        public void RemoveByFaction(Effect effect, List<Vector2Int> list) 
+        public void RemoveByFaction(TargetEnum target, List<Vector2Int> list) 
         {
             Vector2Int v2;
             for (int i = 0; i < CharacterList.Count; i++)
@@ -72,9 +64,9 @@ namespace Battle
                 v2 = Utility.ConvertToVector2Int(CharacterList[i].Position);
                 if (list.Contains(v2))
                 {
-                    if (effect.Target == EffectModel.TargetEnum.None ||
-                       (effect.Target == EffectModel.TargetEnum.Us && SelectedCharacter.Faction != CharacterList[i].Faction) ||
-                       (effect.Target == EffectModel.TargetEnum.Them && SelectedCharacter.Faction == CharacterList[i].Faction))
+                    if (target == TargetEnum.None ||
+                       (target == TargetEnum.Us && SelectedCharacter.Faction != CharacterList[i].Faction) ||
+                       (target == TargetEnum.Them && SelectedCharacter.Faction == CharacterList[i].Faction))
                     {
                         list.Remove(v2);
                         i--;
@@ -96,9 +88,9 @@ namespace Battle
         }
 
 
-        public HitType CheckHit(Effect effect, BattleCharacterInfo user, BattleCharacterInfo target)
+        public HitType CheckHit(int hit, BattleCharacterInfo user, BattleCharacterInfo target, bool noCritical = false)
         {
-            float hitRate = GetHitRate(effect, user, target);
+            float hitRate = GetHitRate(hit, user, target);
 
             if (hitRate <= 1)
             {
@@ -113,7 +105,7 @@ namespace Battle
             }
             else
             {
-                if ((hitRate - 1) * 1f > UnityEngine.Random.Range(0f, 1f))
+                if (!noCritical && (hitRate - 1) * 1f > UnityEngine.Random.Range(0f, 1f))
                 {
                     return HitType.Critical;
                 }
@@ -124,9 +116,9 @@ namespace Battle
             }
         }
 
-        public float GetHitRate(Effect effect, BattleCharacterInfo user, BattleCharacterInfo target) 
+        public float GetHitRate(int hit, BattleCharacterInfo user, BattleCharacterInfo target) 
         {
-            float hitRate = user.DEX * (effect.Hit / 100f) / target.AGI;
+            float hitRate = user.DEX * (hit / 100f) / target.AGI;
 
             //角色互相面對時角度為180,方向相同時角度為0
             //角度越大則命中越低
@@ -246,7 +238,7 @@ namespace Battle
             return damage;
         }
 
-        public int GetPredictionHp(int targetCurrentHp, Effect effect, BattleCharacterInfo user, BattleCharacterInfo target, List<BattleCharacterInfo> characterList)
+        public int GetPredictionHp(BattleCharacterInfo user, BattleCharacterInfo target, int targetCurrentHp, Effect effect)
         {
             int prediction = targetCurrentHp;
 
@@ -274,7 +266,7 @@ namespace Battle
 
             if (effect.SubEffect != null)
             {
-                return GetPredictionHp(prediction, effect.SubEffect, user, target, characterList);
+                return GetPredictionHp(user, target, prediction, effect.SubEffect);
             }
             else
             {

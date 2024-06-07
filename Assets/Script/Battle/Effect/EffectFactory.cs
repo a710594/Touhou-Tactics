@@ -57,9 +57,9 @@ namespace Battle
             {
                 effect = new SummonEffect(data);
             }
-            else if (data.Type == EffectModel.TypeEnum.SelfInjury)
+            else if (data.Type == EffectModel.TypeEnum.RatioDamage)
             {
-                effect = new SelfInjuryEffect(data);
+                effect = new RatioDamageEffect(data);
             }
             else if (data.Type == EffectModel.TypeEnum.RecoverAll)
             {
