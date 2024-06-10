@@ -7,8 +7,6 @@ using Battle;
 public class Food : Command
 {
     public int ID;
-    public string Name;
-    public string Comment;
     public int HP = 0;
     public int STR = 0;
     public int CON = 0;

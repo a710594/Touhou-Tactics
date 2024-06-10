@@ -8,8 +8,6 @@ public class Consumables : Command
 {
     public int ID;
     public int Amount;
-    public string Name;
-    public string Comment;
     public int Price;
 
     public Consumables() { }

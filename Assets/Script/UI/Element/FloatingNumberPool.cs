@@ -15,7 +15,7 @@ public class FloatingNumberPool : MonoBehaviour
     private Timer _unlockTimer = new Timer();
     private Timer _recycleTimer = new Timer();
     private Queue<FloatingNumber> _poolQueue = new Queue<FloatingNumber>();
-    private Queue<FloatingNumberData> _dataQueue = new Queue<FloatingNumberData>();
+    //private Queue<FloatingNumberData> _dataQueue = new Queue<FloatingNumberData>();
     private Queue<Battle.Log> _logQueue = new Queue<Battle.Log>();
 
     public void SetAnchor(Transform anchor)
@@ -23,7 +23,7 @@ public class FloatingNumberPool : MonoBehaviour
         _anchor = anchor;
     }
 
-    public void Play(string text, FloatingNumberData.TypeEnum type)
+    /*public void Play(string text, FloatingNumberData.TypeEnum type)
     {
         FloatingNumber floatingNumber;
 
@@ -59,7 +59,7 @@ public class FloatingNumberPool : MonoBehaviour
             FloatingNumberData data = new FloatingNumberData(type, text);
             _dataQueue.Enqueue(data);
         }
-    }
+    }*/
 
     public void Play(Queue<Battle.Log> logQueue)
     {

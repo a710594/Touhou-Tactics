@@ -64,5 +64,10 @@ namespace Battle
             }   
             
         }
+
+        public Log(BattleCharacterInfo target, string text) 
+        {
+            FullText = "中毒 對 " + target.Name + " 造成了 " + text + " 傷害";
+        }
     }
 }

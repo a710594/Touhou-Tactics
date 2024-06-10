@@ -8,50 +8,12 @@ using Battle;
 
 public class PhysicalAttackEffect : Effect
 {
-    public override void Use(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)
+    public override void Use(HitType hitType, BattleCharacterInfo user, BattleCharacterInfo target, List<Log> logList)
     {
-        FloatingNumberData floatingNumberData;
-        BattleController.HitType hitType = BattleController.Instance.CheckHit(this, user, target);
-
-        if (hitType != BattleController.HitType.Miss)
+        if (hitType != HitType.Miss)
         {
             int damage = BattleController.Instance.GetDamage(this, user, target);
-            if (hitType == BattleController.HitType.Critical)
-            {
-                damage *= 2;
-            }
-            target.SetDamage(damage);
-
-            if (hitType == BattleController.HitType.Hit)
-            {
-                floatingNumberData = new FloatingNumberData(FloatingNumberData.TypeEnum.Damage, damage.ToString());
-            }
-            else
-            {
-                floatingNumberData = new FloatingNumberData(FloatingNumberData.TypeEnum.Critical, damage.ToString());
-            }
-        }
-        else
-        {
-            floatingNumberData = new FloatingNumberData(FloatingNumberData.TypeEnum.Miss, "Miss");
-        }
-        floatingList.Add(floatingNumberData);
-        
-
-        if (SubEffect != null && hitType != BattleController.HitType.Miss)
-        {
-            SubEffect.Use(user, target, floatingList, characterList);
-        }
-    }
-
-    public override void Use(BattleCharacterInfo user, BattleCharacterInfo target, List<Log> logList)
-    {
-        BattleController.HitType hitType = BattleController.Instance.CheckHit(this, user, target);
-
-        if (hitType != BattleController.HitType.Miss)
-        {
-            int damage = BattleController.Instance.GetDamage(this, user, target);
-            if (hitType == BattleController.HitType.Critical)
+            if (hitType == HitType.Critical)
             {
                 damage *= 2;
             }
@@ -64,14 +26,14 @@ public class PhysicalAttackEffect : Effect
         }
 
 
-        if (SubEffect != null && hitType != BattleController.HitType.Miss)
+        if (SubEffect != null && hitType != HitType.Miss)
         {
-            SubEffect.Use(user, target, logList);
+            SubEffect.Use(hitType, user, target, logList);
         }
 
-        if (SelfEffect != null && hitType != BattleController.HitType.Miss)
+        if (SelfEffect != null && hitType != HitType.Miss)
         {
-            SelfEffect.Use(user, user, logList);
+            SelfEffect.Use(hitType, user, user, logList);
         }
     }
 }

@@ -12,6 +12,8 @@ namespace Battle
 
         public Support(SupportModel data)
         {
+            Name = data.Name;
+            Comment = data.Comment;
             Hit = data.Hit;
             Range = data.Range;
             CastTarget = data.CastTarget;

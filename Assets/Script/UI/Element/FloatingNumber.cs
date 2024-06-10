@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using Battle;
 
 public class FloatingNumber : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class FloatingNumber : MonoBehaviour
         Duration = duration;
     }
 
-    public void Play(string text, FloatingNumberData.TypeEnum type, Vector2 position)
+    /*public void Play(string text, FloatingNumberData.TypeEnum type, Vector2 position)
     {
         if (int.TryParse(text, out int n))
         {
@@ -76,7 +77,7 @@ public class FloatingNumber : MonoBehaviour
         Label.DOFade(0, Duration).SetEase(Ease.InCubic).OnComplete(() =>
         {
         });
-    }
+    }*/
 
     public void Play(Battle.Log log, Vector2 position)
     {
@@ -94,11 +95,11 @@ public class FloatingNumber : MonoBehaviour
 
         if (log.Effect.Type == EffectModel.TypeEnum.MagicAttack || log.Effect.Type == EffectModel.TypeEnum.PhysicalAttack || log.Effect.Type == EffectModel.TypeEnum.RatioDamage)
         {
-            if (log.HitType == Battle.BattleController.HitType.Critical)
+            if (log.HitType == HitType.Critical)
             {
                 Label.color = Color.yellow;
             }
-            else if (log.HitType == Battle.BattleController.HitType.Hit)
+            else if (log.HitType == HitType.Hit)
             {
                 Label.color = Color.red;
             }

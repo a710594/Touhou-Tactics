@@ -9,34 +9,10 @@ public class SleepEffect : Effect
     {
     }
 
-    public override void Use(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)
+
+    public override void Use(HitType hitType, BattleCharacterInfo user, BattleCharacterInfo target, List<Log> logList)
     {
-        FloatingNumberData floatingNumberData;
-        BattleController.HitType hitType = BattleController.Instance.CheckHit(this, user, target);
-
-        if (hitType != BattleController.HitType.Miss)
-        {
-            target.AddStatus(Status);
-            floatingNumberData = new FloatingNumberData(FloatingNumberData.TypeEnum.Sleeping, "�ε�");
-        }
-        else
-        {
-            floatingNumberData = new FloatingNumberData(FloatingNumberData.TypeEnum.Miss, "Miss");
-        }
-        floatingList.Add(floatingNumberData);
-
-
-        if (SubEffect != null && hitType != BattleController.HitType.Miss)
-        {
-            SubEffect.Use(user, target, floatingList, characterList);
-        }
-    }
-
-    public override void Use(BattleCharacterInfo user, BattleCharacterInfo target, List<Log> logList)
-    {
-        BattleController.HitType hitType = BattleController.Instance.CheckHit(this, user, target);
-
-        if (hitType != BattleController.HitType.Miss)
+        if (hitType != HitType.Miss)
         {
             target.AddStatus(Status);
             logList.Add(new Log(user, target, this, hitType, Status.Name));
@@ -46,9 +22,9 @@ public class SleepEffect : Effect
             logList.Add(new Log(user, target, this, hitType, "Miss")); 
         }
 
-        if (SubEffect != null && hitType != BattleController.HitType.Miss)
+        if (SubEffect != null && hitType != HitType.Miss)
         {
-            SubEffect.Use(user, target, logList);
+            SubEffect.Use(hitType, user, target, logList);
         }
     }
 }

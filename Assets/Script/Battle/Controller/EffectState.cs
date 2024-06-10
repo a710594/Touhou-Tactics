@@ -25,7 +25,81 @@ namespace Battle
                 _character = Instance.SelectedCharacter;
                 _targetList = new List<BattleCharacterInfo>();
                 _currentLogList.Clear();
-                for (int i = 0; i < _characterList.Count; i++)
+
+                foreach(KeyValuePair<Command, List<BattleCharacterInfo>> pair in Instance._commandTargetDic) 
+                {
+                    if (pair.Key.Effect.Type == EffectModel.TypeEnum.Summon)
+                    {
+                        Vector3 v3 = new Vector3(Instance._selectedPosition.x, Instance.Info.TileAttachInfoDic[Instance._selectedPosition].Height, Instance._selectedPosition.y);
+                        UseEffect(pair.Key.Effect, v3);
+                    }
+                    else
+                    {
+                        for (int i = 0; i < pair.Value.Count; i++)
+                        {
+                            UseEffect(pair.Key, pair.Value[i]);
+                        }
+                    }
+
+                    if (pair.Key is Skill)
+                    {
+                        Skill skill = (Skill)pair.Key;
+                        _character.HasUseSkill = true;
+                        _character.ActionCount--;
+                        if (skill.CD > 0)
+                        {
+                            skill.CurrentCD = skill.CD + 1;
+                        }
+                    }
+                    else if(pair.Key is Support) 
+                    {
+                        Support support = (Support)pair.Key;
+                        _character.HasUseSupport = true;
+                        if (support.Data.CD > 0)
+                        {
+                            support.CurrentCD = support.Data.CD + 1;
+                        }
+                    }
+                    else if(pair.Key is Spell) 
+                    {
+                        Spell spell = (Spell)pair.Key;
+                        _character.HasUseSpell = true;
+                        _character.ActionCount--;
+                        if (spell.CD > 0)
+                        {
+                            for (int i = 0; i < _characterList.Count; i++)
+                            {
+                                if (_characterList[i].Faction == BattleCharacterInfo.FactionEnum.Player)
+                                {
+                                    for (int j = 0; j < _characterList[i].SpellList.Count; j++)
+                                    {
+                                        _characterList[i].SpellList[j].CurrentCD = spell.CD + 1;
+                                    }
+                                }
+                            }
+                        }
+                        ItemManager.Instance.MinusItem(ItemManager.CardID, 1);
+                    }
+                    else if(pair.Key is Consumables) 
+                    {
+                        Consumables consumables = (Consumables)pair.Key;
+                        _character.HasUseItem = true;
+                        _character.ActionCount--;
+                        ItemManager.Instance.MinusItem(consumables.ID, 1);
+                    }
+                    else if(pair.Key is Food) 
+                    {
+                        Food food = (Food)pair.Key;
+                        _character.HasUseItem = true;
+                        _character.ActionCount--;
+                        ItemManager.Instance.MinusItem(food.ID, 1);
+                    }
+                }
+
+                RerangeLog();
+                _timer.Start(_maxFloatingCount, CheckResult); 
+
+                /*for (int i = 0; i < _characterList.Count; i++)
                 {
                     if (CheckEffectArea(Instance._areaList, Utility.ConvertToVector2Int(_characterList[i].Position)))
                     {
@@ -130,7 +204,7 @@ namespace Battle
                 }
 
                 RerangeLog();
-                _timer.Start(_maxFloatingCount, CheckResult);
+                _timer.Start(_maxFloatingCount, CheckResult);*/
             }
 
             public void UseEffect(Effect effect, Vector3 position) 
@@ -138,10 +212,21 @@ namespace Battle
                 effect.Use(_character, position);
             }
 
-            private void UseEffect(Effect effect, BattleCharacterInfo target) 
+            private void UseEffect(Command command, BattleCharacterInfo target) 
             {
+                HitType hitType;
+
+                if (command.EffectTarget == TargetEnum.Us)
+                {
+                    hitType = HitType.Hit;
+                }
+                else
+                {
+                    hitType = Instance.CheckHit(command.Hit, _character, target);
+                }
+
                 List<Log> logList = new List<Log>();
-                effect.Use(_character, target, logList);
+                command.Effect.Use(hitType, _character, target, logList);
                 _currentLogList.AddRange(logList);
                 Instance.LogList.AddRange(logList);
                 //SetUI(target, logList);

@@ -11,6 +11,8 @@ namespace Battle
         public Effect Effect;
         public int Hit;
         public int Range;
+        public string Name;
+        public string Comment;
         public TargetEnum CastTarget;
         public TargetEnum EffectTarget;
         public TrackEnum Track;

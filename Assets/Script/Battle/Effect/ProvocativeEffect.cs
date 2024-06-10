@@ -10,35 +10,9 @@ public class ProvocativeEffect : Effect
     {
     }
 
-    public override void Use(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)
+    public override void Use(HitType hitType, BattleCharacterInfo user, BattleCharacterInfo target, List<Log> logList)
     {
-        FloatingNumberData floatingNumberData;
-        BattleController.HitType hitType = BattleController.HitType.Hit; //�D�]���R���P�w����S�O,�H��A��...
-
-        if (hitType != BattleController.HitType.Miss)
-        {
-            ((ProvocativeStatus)Status).Target = user;
-            target.AddStatus(Status);
-            floatingNumberData = new FloatingNumberData(FloatingNumberData.TypeEnum.Other, "�D�]");
-        }
-        else
-        {
-            floatingNumberData = new FloatingNumberData(FloatingNumberData.TypeEnum.Miss, "Miss");
-        }
-        floatingList.Add(floatingNumberData);
-
-
-        if (SubEffect != null && hitType != BattleController.HitType.Miss)
-        {
-            SubEffect.Use(user, target, floatingList, characterList);
-        }
-    }
-
-    public override void Use(BattleCharacterInfo user, BattleCharacterInfo target, List<Log> logList)
-    {
-        BattleController.HitType hitType = BattleController.HitType.Hit; //�D�]���R���P�w����S�O,�H��A��...
-
-        if (hitType != BattleController.HitType.Miss)
+        if (hitType != HitType.Miss)
         {
             ((ProvocativeStatus)Status).Target = user;
             target.AddStatus(Status);
@@ -49,9 +23,9 @@ public class ProvocativeEffect : Effect
             logList.Add(new Log(user, target, this, hitType, "Miss"));  
         }
 
-        if (SubEffect != null && hitType != BattleController.HitType.Miss)
+        if (SubEffect != null && hitType != HitType.Miss)
         {
-            SubEffect.Use(user, target, logList);
+            SubEffect.Use(hitType, user, target, logList);
         }
     }
 }

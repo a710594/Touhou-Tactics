@@ -86,7 +86,7 @@ public class ActionButtonGroup : MonoBehaviour
         if (!character.IsAuto)
         {
             ScrollView.transform.parent.gameObject.SetActive(true);
-            ScrollView.SetData(new List<object>(character.CardList));
+            ScrollView.SetData(new List<object>(character.SpellList));
         }
     }
 
@@ -128,35 +128,35 @@ public class ActionButtonGroup : MonoBehaviour
 
     private void ScrollItemOnClick(ScrollItem scrollItem)
     {
-        object obj = scrollItem.Data;
-        if (BattleController.Instance.Info.IsTutorial && !BattleTutorialController.Instance.CheckScrollItem(obj))
+        Command command = (Command)scrollItem.Data;
+        if (BattleController.Instance.Info.IsTutorial && !BattleTutorialController.Instance.CheckScrollItem(command))
         {
             return;
         }
 
         bool canUse = true;
         string tip = "";
-        if (obj is Skill)
+        if (command is Skill)
         {
-            Skill skill = (Skill)obj;
+            Skill skill = (Skill)command;
             if (skill.CurrentCD > 0)
             {
                 canUse = false;
                 tip = "還需要" + skill.CurrentCD + "回合冷卻";
             }
         }
-        else if (obj is Support)
+        else if (command is Support)
         {
-            Support support = (Support)obj;
+            Support support = (Support)command;
             if (support.CurrentCD > 0)
             {
                 canUse = false;
                 tip = "還需要" + support.CurrentCD + "回合冷卻";
             }
         }
-        else if (obj is Spell)
+        else if (command is Spell)
         {
-            Spell spell = (Spell)obj;
+            Spell spell = (Spell)command;
             if (spell.CurrentCD > 0)
             {
                 canUse = false;
@@ -171,7 +171,7 @@ public class ActionButtonGroup : MonoBehaviour
 
         if (canUse)
         {
-            BattleController.Instance.SetTargetState(obj);
+            BattleController.Instance.SetTargetState(command);
         }
         else
         {
@@ -181,34 +181,34 @@ public class ActionButtonGroup : MonoBehaviour
 
     private void ShowInfo(ScrollItem scrollItem)
     {
-        object obj = scrollItem.Data;
-        if (obj is Skill)
+        Command command = (Command)scrollItem.Data;
+        if (command is Skill)
         {
-            Skill skill = (Skill)obj;
+            Skill skill = (Skill)command;
             SkillInfoGroup.SetData(skill);
             SkillInfoGroup.gameObject.SetActive(true);
         }
-        else if (obj is Support)
+        else if (command is Support)
         {
-            Support support = (Support)obj;
+            Support support = (Support)command;
             SkillInfoGroup.SetData(support);
             SkillInfoGroup.gameObject.SetActive(true);
         }
-        else if (obj is Spell)
+        else if (command is Spell)
         {
-            Spell card = (Spell)obj;
+            Spell card = (Spell)command;
             SkillInfoGroup.SetData(card);
             SkillInfoGroup.gameObject.SetActive(true);
         }
-        else if (obj is Consumables)
+        else if (command is Consumables)
         {
-            Consumables consumbles = (Consumables)obj;
+            Consumables consumbles = (Consumables)command;
             SkillInfoGroup.SetData(consumbles);
             SkillInfoGroup.gameObject.SetActive(true);
         }
-        else if (obj is Food)
+        else if (command is Food)
         {
-            Food food = (Food)obj;
+            Food food = (Food)command;
             SkillInfoGroup.SetData(food);
             SkillInfoGroup.gameObject.SetActive(true);
         }

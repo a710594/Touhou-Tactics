@@ -22,12 +22,11 @@ namespace Battle
                 {
                     if (_character.ActionCount == 0)
                     {
-                        List<FloatingNumberData> floatingList = new List<FloatingNumberData>();
-                        _character.CheckStatus(floatingList);
+                        List<Log> logList = _character.CheckStatus();
                         Instance._battleUI.SetLittleHpBarValue(_character.Index, _character);
-                        for (int j = 0; j < floatingList.Count; j++)
+                        if(logList.Count > 0)
                         {
-                            Instance._battleUI.PlayFloatingNumberPool(_character.Index, floatingList[j].Type, floatingList[j].Text);
+                            Instance._battleUI.PlayFloatingNumberPool(_character.Index, logList);
                         }
                         for (int i = 0; i < _character.SkillList.Count; i++)
                         {

@@ -9,53 +9,9 @@ public class RecoverEffect : Effect
     {
     }
 
-    public override void Use(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)
+    public override void Use(HitType hitType, BattleCharacterInfo user, BattleCharacterInfo target, List<Log> logList)
     {
-        FloatingNumberData floatingNumberData;
-        BattleController.HitType hitType;
-
-        if (Target == EffectModel.TargetEnum.Us)
-        {
-            hitType = BattleController.HitType.Hit;
-        }
-        else
-        {
-            hitType = BattleController.Instance.CheckHit(this, user, target);
-        }
-
-        if (hitType != BattleController.HitType.Miss)
-        {
-            int recover = Mathf.RoundToInt((float)Value * (float)user.MEN / 100f);
-            target.SetRecover(recover);
-            floatingNumberData = new FloatingNumberData(FloatingNumberData.TypeEnum.Recover, recover.ToString());
-        }
-        else
-        {
-            floatingNumberData = new FloatingNumberData(FloatingNumberData.TypeEnum.Miss, "Miss");
-        }
-        floatingList.Add(floatingNumberData);
-
-
-        if (SubEffect != null && hitType != BattleController.HitType.Miss)
-        {
-            SubEffect.Use(user, target, floatingList, characterList);
-        }
-    }
-
-    public override void Use(BattleCharacterInfo user, BattleCharacterInfo target, List<Log> logList)
-    {
-        BattleController.HitType hitType;
-
-        if (Target == EffectModel.TargetEnum.Us)
-        {
-            hitType = BattleController.HitType.Hit;
-        }
-        else
-        {
-            hitType = BattleController.Instance.CheckHit(this, user, target);
-        }
-
-        if (hitType != BattleController.HitType.Miss)
+        if (hitType != HitType.Miss)
         {
             int recover = Mathf.RoundToInt((float)Value * (float)user.MEN / 100f);
             target.SetRecover(recover);
@@ -66,9 +22,9 @@ public class RecoverEffect : Effect
             logList.Add(new Log(user, target, this, hitType, "Miss"));  
         }
 
-        if (SubEffect != null && hitType != BattleController.HitType.Miss)
+        if (SubEffect != null && hitType != HitType.Miss)
         {
-            SubEffect.Use(user, target, logList);
+            SubEffect.Use(hitType, user, target, logList);
         }
     }
 }

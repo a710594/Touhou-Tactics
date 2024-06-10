@@ -15,8 +15,8 @@ public class SkillInfoGroup : MonoBehaviour
 
     public void SetData(Skill skill) 
     {
-        NameLabel.text = skill.Data.Name;
-        string comment = skill.Data.Comment;
+        NameLabel.text = skill.Name;
+        string comment = skill.Comment;
         int index;
         Effect effect = skill.Effect;
         while (comment.Contains("{")) 
@@ -40,9 +40,9 @@ public class SkillInfoGroup : MonoBehaviour
             effect = skill.Effect.SubEffect;
         }
         CommentLabel.text = comment;
-        CDLabel.text = "玱" + skill.Data.CD + "";
+        CDLabel.text = "玱" + skill.CD + "";
         
-        if (skill.Effect.Target == EffectModel.TargetEnum.All)
+        /*if (skill.Effect.Target == EffectModel.TargetEnum.All)
         {
             TargetLabel.text = "ヘ夹ぃだ寄и";
         }
@@ -53,26 +53,26 @@ public class SkillInfoGroup : MonoBehaviour
         else if (skill.Effect.Target == EffectModel.TargetEnum.Us)
         {
             TargetLabel.text = "ヘ夹иよ";
-        }
+        }*/
 
-        if(skill.Effect.Track == EffectModel.TrackEnum.None) 
+        if(skill.Track == TrackEnum.None) 
         {
             TrackLabel.text = "瓂格礚跌";
         }
-        else if (skill.Effect.Track == EffectModel.TrackEnum.Parabola)
+        else if (skill.Track == TrackEnum.Parabola)
         {
             TrackLabel.text = "瓂格┻絬";
         }
-        else if (skill.Effect.Track == EffectModel.TrackEnum.Straight)
+        else if (skill.Track == TrackEnum.Straight)
         {
             TrackLabel.text = "瓂格絬";
         }
-        else if (skill.Effect.Track == EffectModel.TrackEnum.Through)
+        else if (skill.Track == TrackEnum.Through)
         {
             TrackLabel.text = "瓂格砮";
         }
 
-        RangeLabel.text = "甮祘" + skill.Effect.Range;
+        RangeLabel.text = "甮祘" + skill.Range;
     }
 
     public void SetData(Support support)
@@ -104,7 +104,7 @@ public class SkillInfoGroup : MonoBehaviour
         CommentLabel.text = comment;
         CDLabel.text = "玱" + support.Data.CD + "";
 
-        if (support.Effect.Target == EffectModel.TargetEnum.All)
+        /*if (support.Effect.Target == EffectModel.TargetEnum.All)
         {
             TargetLabel.text = "ヘ夹ぃだ寄и";
         }
@@ -115,74 +115,74 @@ public class SkillInfoGroup : MonoBehaviour
         else if (support.Effect.Target == EffectModel.TargetEnum.Us)
         {
             TargetLabel.text = "ヘ夹иよ";
-        }
+        }*/
 
-        if (support.Effect.Track == EffectModel.TrackEnum.None)
+        if (support.Track == TrackEnum.None)
         {
             TrackLabel.text = "瓂格礚跌";
         }
-        else if (support.Effect.Track == EffectModel.TrackEnum.Parabola)
+        else if (support.Track == TrackEnum.Parabola)
         {
             TrackLabel.text = "瓂格┻絬";
         }
-        else if (support.Effect.Track == EffectModel.TrackEnum.Straight)
+        else if (support.Track == TrackEnum.Straight)
         {
             TrackLabel.text = "瓂格絬";
         }
-        else if (support.Effect.Track == EffectModel.TrackEnum.Through)
+        else if (support.Track == TrackEnum.Through)
         {
             TrackLabel.text = "瓂格砮";
         }
 
-        RangeLabel.text = "甮祘" + support.Effect.Range;
+        RangeLabel.text = "甮祘" + support.Range;
     }
 
-    public void SetData(Spell card)
+    public void SetData(Spell spell)
     {
-        NameLabel.text = card.Data.Name;
-        CommentLabel.text = card.Data.Comment;
-        CDLabel.text = "玱" + card.Data.CD + "";
+        NameLabel.text = spell.Name;
+        CommentLabel.text = spell.Comment;
+        CDLabel.text = "玱" + spell.CD + "";
 
-        if (card.Effect.Target == EffectModel.TargetEnum.All)
+        /*if (spell.Effect.Target == EffectModel.TargetEnum.All)
         {
             TargetLabel.text = "ヘ夹ぃだ寄и";
         }
-        else if (card.Effect.Target == EffectModel.TargetEnum.Them)
+        else if (spell.Effect.Target == EffectModel.TargetEnum.Them)
         {
             TargetLabel.text = "ヘ夹寄よ";
         }
-        else if (card.Effect.Target == EffectModel.TargetEnum.Us)
+        else if (spell.Effect.Target == EffectModel.TargetEnum.Us)
         {
             TargetLabel.text = "ヘ夹иよ";
-        }
+        }*/
 
-        if (card.Effect.Track == EffectModel.TrackEnum.None)
+        if (spell.Track == TrackEnum.None)
         {
             TrackLabel.text = "瓂格礚跌";
         }
-        else if (card.Effect.Track == EffectModel.TrackEnum.Parabola)
+        else if (spell.Track == TrackEnum.Parabola)
         {
             TrackLabel.text = "瓂格┻絬";
         }
-        else if (card.Effect.Track == EffectModel.TrackEnum.Straight)
+        else if (spell.Track == TrackEnum.Straight)
         {
             TrackLabel.text = "瓂格絬";
         }
-        else if (card.Effect.Track == EffectModel.TrackEnum.Through)
+        else if (spell.Track == TrackEnum.Through)
         {
             TrackLabel.text = "瓂格砮";
         }
 
-        RangeLabel.text = "甮祘" + card.Effect.Range;
+        RangeLabel.text = "甮祘" + spell.Range;
     }
 
     public void SetData(Consumables consumbles)
     {
-        NameLabel.text = consumbles.ItemData.Name;
-        CommentLabel.text = consumbles.ItemData.Comment;
+        NameLabel.text = consumbles.Name;
+        CommentLabel.text = consumbles.Comment;
         CDLabel.text = "";
 
-        if (consumbles.Effect.Target == EffectModel.TargetEnum.All)
+        /*if (consumbles.Effect.Target == EffectModel.TargetEnum.All)
         {
             TargetLabel.text = "ヘ夹ぃだ寄и";
         }
@@ -193,26 +193,26 @@ public class SkillInfoGroup : MonoBehaviour
         else if (consumbles.Effect.Target == EffectModel.TargetEnum.Us)
         {
             TargetLabel.text = "ヘ夹иよ";
-        }
+        }*/
 
-        if (consumbles.Effect.Track == EffectModel.TrackEnum.None)
+        if (consumbles.Track == TrackEnum.None)
         {
             TrackLabel.text = "瓂格礚跌";
         }
-        else if (consumbles.Effect.Track == EffectModel.TrackEnum.Parabola)
+        else if (consumbles.Track == TrackEnum.Parabola)
         {
             TrackLabel.text = "瓂格┻絬";
         }
-        else if (consumbles.Effect.Track == EffectModel.TrackEnum.Straight)
+        else if (consumbles.Track == TrackEnum.Straight)
         {
             TrackLabel.text = "瓂格絬";
         }
-        else if (consumbles.Effect.Track == EffectModel.TrackEnum.Through)
+        else if (consumbles.Track == TrackEnum.Through)
         {
             TrackLabel.text = "瓂格砮";
         }
 
-        RangeLabel.text = "甮祘" + consumbles.Effect.Range;
+        RangeLabel.text = "甮祘" + consumbles.Range;
     }
 
     public void SetData(Food food)
@@ -221,7 +221,7 @@ public class SkillInfoGroup : MonoBehaviour
         CommentLabel.text = food.Comment;
         CDLabel.text = "";
 
-        if (food.Effect.Target == EffectModel.TargetEnum.All)
+        /*if (food.Effect.Target == EffectModel.TargetEnum.All)
         {
             TargetLabel.text = "ヘ夹ぃだ寄и";
         }
@@ -232,25 +232,25 @@ public class SkillInfoGroup : MonoBehaviour
         else if (food.Effect.Target == EffectModel.TargetEnum.Us)
         {
             TargetLabel.text = "ヘ夹иよ";
-        }
+        }*/
 
-        if (food.Effect.Track == EffectModel.TrackEnum.None)
+        if (food.Track == TrackEnum.None)
         {
             TrackLabel.text = "瓂格礚跌";
         }
-        else if (food.Effect.Track == EffectModel.TrackEnum.Parabola)
+        else if (food.Track == TrackEnum.Parabola)
         {
             TrackLabel.text = "瓂格┻絬";
         }
-        else if (food.Effect.Track == EffectModel.TrackEnum.Straight)
+        else if (food.Track == TrackEnum.Straight)
         {
             TrackLabel.text = "瓂格絬";
         }
-        else if (food.Effect.Track == EffectModel.TrackEnum.Through)
+        else if (food.Track == TrackEnum.Through)
         {
             TrackLabel.text = "瓂格砮";
         }
 
-        RangeLabel.text = "甮祘" + food.Effect.Range;
+        RangeLabel.text = "甮祘" + food.Range;
     }
 }

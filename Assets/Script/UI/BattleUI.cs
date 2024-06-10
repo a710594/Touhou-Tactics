@@ -145,11 +145,11 @@ public Action<Vector2Int> DirectionButtonHandler;
         _floatingNumberPoolDic.Add(id, floatingNumberPool);
     }
 
-    public void PlayFloatingNumberPool(int id, FloatingNumberData.TypeEnum type, string text)
-    {
-        FloatingNumberPool floatingNumberPool = _floatingNumberPoolDic[id];
-        floatingNumberPool.Play(text, type);
-    }
+    //public void PlayFloatingNumberPool(int id, FloatingNumberData.TypeEnum type, string text)
+    //{
+    //    FloatingNumberPool floatingNumberPool = _floatingNumberPoolDic[id];
+    //    floatingNumberPool.Play(text, type);
+    //}
 
     public void PlayFloatingNumberPool(int id, List<Log> logList)
     {

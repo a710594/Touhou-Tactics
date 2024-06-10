@@ -15,6 +15,8 @@ public class Skill : Command
 
     public Skill(SkillModel data)
     {
+        Name = data.Name;
+        Comment = data.Comment;
         Hit = data.Hit;
         Range = data.Range;
         CastTarget = data.CastTarget;

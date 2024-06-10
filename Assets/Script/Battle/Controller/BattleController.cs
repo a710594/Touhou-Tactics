@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using DG.Tweening;
 using System.Linq;
+using UnityEngine;
 
 namespace Battle
 {
@@ -46,6 +44,7 @@ namespace Battle
         private Transform _root;
         private List<int> _enemyList = new List<int>();
         private Dictionary<int, BattleCharacterController> _controllerDic = new Dictionary<int, BattleCharacterController>();
+        private Dictionary<Command, List<BattleCharacterInfo>> _commandTargetDic = new Dictionary<Command, List<BattleCharacterInfo>>();
 
         public List<Log> LogList = new List<Log>();
 
@@ -234,23 +233,23 @@ namespace Battle
         //     return areaList;
         // }
 
-        public List<Vector2Int> SetEffectPosition(Command command)
+        public List<Vector2Int> SetCommandPosition(Command command)
         {
-            List<Vector2Int> effectPositionList = new List<Vector2Int>();
+            List<Vector2Int> commandPositionList;
             if (command.Track == TrackEnum.Through)
             {
-                effectPositionList = GetTroughAreaList(SelectedCharacter.Position, new Vector3(_selectedPosition.x, Instance.Info.TileAttachInfoDic[_selectedPosition].Height, _selectedPosition.y));
+                commandPositionList = GetTroughAreaList(SelectedCharacter.Position, new Vector3(_selectedPosition.x, Instance.Info.TileAttachInfoDic[_selectedPosition].Height, _selectedPosition.y));
             }
             else
             {
-                effectPositionList = GetNormalAreaList(Utility.ConvertToVector2Int(SelectedCharacter.Position), _selectedPosition, command.AreaList);
+                commandPositionList = GetNormalAreaList(Utility.ConvertToVector2Int(SelectedCharacter.Position), _selectedPosition, command.AreaList);
             }
 
-            RemoveByFaction(command.EffectTarget, effectPositionList);
+            RemoveByFaction(command.EffectTarget, commandPositionList);
             ClearQuad();
-            SetQuad(effectPositionList, _yellow); 
+            SetQuad(commandPositionList, _yellow); 
             
-            return effectPositionList;
+            return commandPositionList;
         }
 
         public void ClearQuad()
@@ -450,6 +449,7 @@ namespace Battle
             protected BattleInfo _info;
             protected BattleCharacterInfo _character;
             protected List<BattleCharacterInfo> _characterList;
+            protected List<BattleCharacterInfo> _allCharacterList; //Include dying character
 
             public BattleControllerState(StateContext context) : base(context)
             {
@@ -459,6 +459,13 @@ namespace Battle
 
             public virtual void Click(Vector2Int position)
             {
+            }
+
+            public List<BattleCharacterInfo> GetAllCharacterList() 
+            {
+                List<BattleCharacterInfo> list = new List<BattleCharacterInfo>(Instance.CharacterList);
+                list.AddRange(Instance.DyingList);
+                return list;
             }
         }
     }

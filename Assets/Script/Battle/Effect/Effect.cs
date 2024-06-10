@@ -44,10 +44,6 @@ namespace Battle
             }
         }
 
-        public virtual void Use(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)
-        {
-        }
-
         public virtual void Use(BattleCharacterInfo user, Vector3 position) { }
 
         public virtual void Use(HitType hitType, BattleCharacterInfo user, BattleCharacterInfo target, List<Log> logList)

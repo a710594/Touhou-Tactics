@@ -47,7 +47,7 @@ namespace Battle
         public List<Skill> SkillList = new List<Skill>();
         public List<Support> SupportList = new List<Support>();
         public List<Passive> PassiveList = new List<Passive>();
-        public List<Spell> CardList = new List<Spell>();
+        public List<Spell> SpellList = new List<Spell>();
 
         //當前屬性
         public int Index; //戰鬥的時候用
@@ -142,7 +142,7 @@ namespace Battle
 
             if (job.Spell_1 != -1) 
             {
-                CardList.Add(new Spell(DataContext.Instance.SpellList[job.Spell_1]));
+                SpellList.Add(new Spell(DataContext.Instance.SpellList[job.Spell_1]));
             }
         }
 
@@ -206,7 +206,7 @@ namespace Battle
 
             SkillList = info.SkillList;
             SupportList = info.SupportList;
-            CardList = info.CardList;
+            SpellList = info.CardList;
 
             Weapon = info.Weapon;
             Armor = info.Armor;
@@ -245,14 +245,16 @@ namespace Battle
             StatusList.Add((Status)status.Clone()); ;
         }
 
-        public void CheckStatus(List<FloatingNumberData> floatingList)
+        public List<Log> CheckStatus()
         {
+            List<Log> logList = new List<Log>();
             for (int i = 0; i < StatusList.Count; i++)
             {
                 if (StatusList[i] is Poison)
                 {
                     int damage = ((Poison)StatusList[i]).GetDamage(this);
                     FloatingNumberData floatingNumberData = new FloatingNumberData(FloatingNumberData.TypeEnum.Poison, damage.ToString());
+                    Log log = new Log();
                     floatingList.Add(floatingNumberData);
                     SetDamage(damage);
                 }

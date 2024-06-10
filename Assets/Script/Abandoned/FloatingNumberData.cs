@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FloatingNumberData
+/*public class FloatingNumberData
 {
     public enum TypeEnum
     {
@@ -25,4 +25,4 @@ public class FloatingNumberData
         Type = type;
         Text = text;
     }
-}
+}*/
