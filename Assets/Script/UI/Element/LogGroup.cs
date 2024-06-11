@@ -7,7 +7,8 @@ using UnityEngine.UI;
 public class LogGroup : MonoBehaviour
 {
     public float FadeTime;
-    public Button Button;
+    public Button OpenButton;
+    public Button CloseButton;
     public ScrollView ScrollView;
     public LogPanel[] LogPanel;
 
@@ -32,24 +33,23 @@ public class LogGroup : MonoBehaviour
         _index = (_index + 1) % LogPanel.Length;
     }
 
-    private void ButtonOnClick()
+    private void OpenButtonOnClick()
     {
-        /*if(!_isInit)
-        {
-            ScrollView.Init();
-            _isInit = true;
-        }*/
+        ScrollView.gameObject.SetActive(true);
+        OpenButton.gameObject.SetActive(false);
+        ScrollView.SetData(new List<object>(BattleController.Instance.LogList));
+    }
 
-        ScrollView.gameObject.SetActive(!ScrollView.gameObject.activeSelf);
-        if(ScrollView.gameObject.activeSelf)
-        {
-            ScrollView.SetData(new List<object> (BattleController.Instance.LogList));
-        }
+    private void CloseButtonOnClick()
+    {
+        ScrollView.gameObject.SetActive(false);
+        OpenButton.gameObject.SetActive(true);
     }
 
     void Awake()
     {
         ScrollView.gameObject.SetActive(false);
-        Button.onClick.AddListener(ButtonOnClick);
+        OpenButton.onClick.AddListener(OpenButtonOnClick);
+        CloseButton.onClick.AddListener(CloseButtonOnClick);
     }
 }
