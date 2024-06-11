@@ -74,28 +74,28 @@ namespace Battle
             Vector3 step_v3;
             BattleInfo battleInfo = BattleController.Instance.Info;
             List<Vector2Int> rangeList = new List<Vector2Int>();
-            Dictionary<BattleCharacterInfo, List<Vector2Int>> canHitDic = new Dictionary<BattleCharacterInfo, List<Vector2Int>>(); //<¥Ø¼Ð,¥i¥H§ðÀ»¨ì¸Ó¥Ø¼Ðªº¦aÂI>
+            Dictionary<BattleCharacterInfo, List<Vector2Int>> canHitDic = new Dictionary<BattleCharacterInfo, List<Vector2Int>>(); //<ï¿½Ø¼ï¿½,ï¿½iï¿½Hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¥Ø¼Ðªï¿½ï¿½aï¿½I>
 
-            for (int i = 0; i < _stepList.Count; i++) //§Ú¥i¥H²¾°Êªº½d³ò
+            for (int i = 0; i < _stepList.Count; i++) //æˆ‘å¯ä»¥ç§»å‹•çš„ç¯„åœ
             {
-                rangeList = Utility.GetRange(SelectedSkill.Effect.Range, battleInfo.Width, battleInfo.Height, _stepList[i]);
+                rangeList = Utility.GetRange(SelectedSkill.Range, battleInfo.Width, battleInfo.Height, _stepList[i]);
                 for (int j = 0; j < targetList.Count; j++)
                 {
                     targetPosition_v2 = Utility.ConvertToVector2Int(targetList[j].Position);
                     step_v3 = new Vector3(_stepList[i].x, BattleController.Instance.Info.TileAttachInfoDic[_stepList[i]].Height, _stepList[i].y);
-                    if (targetPosition_v2 != _stepList[i] && rangeList.Contains(targetPosition_v2)) //¥Ø¼Ð¦ì¸m»P§Ú¤£¦P¥B¦b®gµ{¤º
+                    if (targetPosition_v2 != _stepList[i] && rangeList.Contains(targetPosition_v2)) //ï¿½Ø¼Ð¦ï¿½mï¿½Pï¿½Ú¤ï¿½ï¿½Pï¿½Bï¿½bï¿½gï¿½{ï¿½ï¿½
                     {
                         bool isBlock = false;
-                        //ÀË¬d®gÀ»¬O§_·|³Q¦a§ÎªýÃª
-                        if (SelectedSkill.Effect.Track == EffectModel.TrackEnum.Straight)
+                        //æª¢æŸ¥å°„æ“Šæ˜¯å¦æœƒè¢«åœ°å½¢é˜»ç¤™
+                        if (SelectedSkill.Track == TrackEnum.Straight)
                         {
                             Utility.CheckLine(step_v3, targetList[j].Position, BattleController.Instance.CharacterList, BattleController.Instance.Info.TileAttachInfoDic, out isBlock, out Vector3 result);
                             //Instance._cameraController.DrawLine(_character.Position, result, isBlock);
                             //Instance._selectedPosition = Utility.ConvertToVector2Int(result);
                         }
-                        else if (SelectedSkill.Effect.Track == EffectModel.TrackEnum.Parabola)
+                        else if (SelectedSkill.Track == TrackEnum.Parabola)
                         {
-                            Utility.CheckParabola(step_v3, targetList[j].Position, 4, BattleController.Instance.CharacterList, BattleController.Instance.Info.TileAttachInfoDic, out isBlock, out List<Vector3> result); //­n¸É©ßª«½uªº°ª«×
+                            Utility.CheckParabola(step_v3, targetList[j].Position, 4, BattleController.Instance.CharacterList, BattleController.Instance.Info.TileAttachInfoDic, out isBlock, out List<Vector3> result); //ï¿½nï¿½É©ßªï¿½ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                             //Instance._cameraController.DrawParabola(result, isBlock);
                             //Instance._selectedPosition = Utility.ConvertToVector2Int(result.Last());
                         }
@@ -193,7 +193,7 @@ namespace Battle
             int maxDamage = -1;
             BattleCharacterInfo target = null;
 
-            //¦pªG¨ü¨ì¬DÆ],·|Àu¥ý§ðÀ»¬DÆ]ªÌ
+            //ï¿½pï¿½Gï¿½ï¿½ï¿½ï¿½Dï¿½],ï¿½|ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Dï¿½]ï¿½ï¿½
             for (int i = 0; i < _info.StatusList.Count; i++)
             {
                 if (_info.StatusList[i] is ProvocativeStatus)
@@ -206,7 +206,7 @@ namespace Battle
                 }
             }
 
-            //¬D¿ï¯à¥´¥X³Ì¤j¶Ë®`ªº¥Ø¼Ð
+            //ï¿½Dï¿½ï¿½à¥´ï¿½Xï¿½Ì¤jï¿½Ë®`ï¿½ï¿½ï¿½Ø¼ï¿½
             for (int i = 0; i < list.Count; i++)
             {
                 damage = BattleController.Instance.GetDamage(SelectedSkill.Effect, _info, list[i]);
@@ -226,7 +226,7 @@ namespace Battle
             int minHp = int.MaxValue;
             BattleCharacterInfo target = null;
 
-            //¬D¿ïHP³Ì¤Öªº¥Ø¼Ð
+            //ï¿½Dï¿½ï¿½HPï¿½Ì¤Öªï¿½ï¿½Ø¼ï¿½
             for (int i = 0; i < list.Count; i++)
             {
                 if (list[i].CurrentHP < list[i].MaxHP)

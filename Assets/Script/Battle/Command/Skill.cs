@@ -15,6 +15,7 @@ public class Skill : Command
 
     public Skill(SkillModel data)
     {
+        ID = data.ID;
         Name = data.Name;
         Comment = data.Comment;
         Hit = data.Hit;
@@ -27,6 +28,10 @@ public class Skill : Command
         CD = data.CD;
         CurrentCD = 0;
         Effect = EffectFactory.GetEffect(data.EffectID);
+        if(data.SubSkillID != -1)
+        {
+            SubCommand = new Skill(DataContext.Instance.SkillDic[data.SubSkillID]);
+        }
     }
 
     public void CheckCD() 

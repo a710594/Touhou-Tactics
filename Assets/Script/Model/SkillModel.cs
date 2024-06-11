@@ -18,4 +18,5 @@ public class SkillModel
     public Battle.TargetEnum CastTarget;
     public Battle.TargetEnum EffectTarget;
     public Battle.TrackEnum Track;
+    public int SubSkillID;
 }

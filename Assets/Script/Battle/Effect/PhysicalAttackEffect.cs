@@ -8,6 +8,10 @@ using Battle;
 
 public class PhysicalAttackEffect : Effect
 {
+        public PhysicalAttackEffect(EffectModel data) : base(data)
+        {
+        }
+
     public override void Use(HitType hitType, BattleCharacterInfo user, BattleCharacterInfo target, List<Log> logList)
     {
         if (hitType != HitType.Miss)

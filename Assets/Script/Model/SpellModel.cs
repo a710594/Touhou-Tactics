@@ -16,4 +16,5 @@ public class SpellModel
     public Battle.TargetEnum CastTarget;
     public Battle.TargetEnum EffectTarget;
     public Battle.TrackEnum Track;
+    public int SubSpellID;
 }

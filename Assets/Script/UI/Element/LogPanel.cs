@@ -30,6 +30,11 @@ public class LogPanel : MonoBehaviour
         });
     }
 
+    private void OnDestroy()
+    {
+        CanvasGroup.DOKill();
+    }
+
     void Awake()
     {
         gameObject.SetActive(false);

@@ -6,9 +6,9 @@ using Battle;
 
 public class Consumables : Command
 {
-    public int ID;
     public int Amount;
     public int Price;
+    public ItemModel.CategoryEnum Category;
 
     public Consumables() { }
 
@@ -18,12 +18,21 @@ public class Consumables : Command
         ConsumablesModel consumablesData = DataContext.Instance.ConsumablesDic[id];
         ID = id;
         Amount = amount;
+        Price = itemData.Price;
+        Category = itemData.Category;
         Name = itemData.Name;
         Comment = itemData.Comment;
         if (consumablesData.EffectID != -1)
         {
             Effect = EffectFactory.GetEffect(consumablesData.EffectID);
         }
+
+        Hit = consumablesData.Hit;
+        Range = consumablesData.Range;
+        CastTarget = consumablesData.CastTarget;
+        EffectTarget = consumablesData.EffectTarget;
+        Track = consumablesData.Track;
+        AreaList = Utility.GetAreaList(consumablesData.Area);
     }
 
     public void Init()

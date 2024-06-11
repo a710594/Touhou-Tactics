@@ -17,7 +17,7 @@ public class ItemGroup : MonoBehaviour
 
     private void ItemScrollItemOnClick(ScrollItem scrollItem)
     {
-        BattleController.Instance.SetTargetState(scrollItem.Data);
+        BattleController.Instance.SetTargetState((Command)scrollItem.Data);
     }
 
     private void Awake()

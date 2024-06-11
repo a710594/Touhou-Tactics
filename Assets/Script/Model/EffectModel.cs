@@ -55,7 +55,6 @@ public class EffectModel
     // public TrackEnum Track;
     public int StatusID;
     public int SubID;
-    public int SelfID;
 
     // public void GetAreaList() 
     // {

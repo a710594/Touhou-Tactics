@@ -38,10 +38,6 @@ namespace Battle
             {
                 SubEffect = EffectFactory.GetEffect(data.SubID);
             }
-            if(data.SelfID != -1)
-            {
-                SelfEffect = EffectFactory.GetEffect(data.SelfID);
-            }
         }
 
         public virtual void Use(BattleCharacterInfo user, Vector3 position) { }

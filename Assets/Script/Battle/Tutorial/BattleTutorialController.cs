@@ -176,7 +176,7 @@ namespace Battle
             }
         }
 
-        //²Ä¤@¨B:¿ï¾Ü²¾°Ê
+        //ç¬¬ä¸€æ­¥:é¸æ“‡ç§»å‹•
         private class State_1 : TutorialState 
         {
             public State_1(StateContext context) : base(context)
@@ -186,7 +186,7 @@ namespace Battle
             public override void Begin()
             {
                 Vector3 offset = new Vector3(-200, 0, 0);
-                TutorialArrowUI.Open("¿ï¾Ü²¾°Ê¡C", Instance._battleUI.ActionButtonGroup.MoveButton.transform, offset, Vector2Int.right, null);
+                TutorialArrowUI.Open("é¸æ“‡ç§»å‹•ã€‚", Instance._battleUI.ActionButtonGroup.MoveButton.transform, offset, Vector2Int.right, null);
             }
 
             public override void End()
@@ -206,7 +206,7 @@ namespace Battle
             }
         }
 
-        //«ü©w¦ì¸m
+        //æŒ‡å®šä½ç½®
         private class State_2 : TutorialState 
         {
             public State_2(StateContext context) : base(context)
@@ -215,9 +215,9 @@ namespace Battle
 
             public override void Begin()
             {
-                TutorialUI.Open("¦a¹Ï¤W¥Õ¦âªº°Ï°ì¥Nªí¥i²¾°Êªº½d³ò¡C\n½ÐÂI¿ï½bÀY«ü¥Üªº¦ì¸m¡C", "Tutorial_2", ()=> 
+                TutorialUI.Open("åœ°åœ–ä¸Šç™½è‰²çš„å€åŸŸä»£è¡¨å¯ç§»å‹•çš„ç¯„åœã€‚\nè«‹é»žé¸ç®­é ­æŒ‡ç¤ºçš„ä½ç½®ã€‚", "Tutorial_2", ()=> 
                 {
-                    TutorialArrowUI.Open("¿ï¾Ü²¾°Ê¡C", new Vector3(4, 1, 3), Vector2Int.down, null);
+                    TutorialArrowUI.Open("é¸æ“‡ç§»å‹•ã€‚", new Vector3(4, 1, 3), Vector2Int.down, null);
                 });
             }
 
@@ -245,7 +245,7 @@ namespace Battle
             }
         }
 
-        //½T»{¦ì¸m
+        //ç¢ºèªä½ç½®
         private class State_3 : TutorialState
         {
             public State_3(StateContext context) : base(context)
@@ -254,7 +254,7 @@ namespace Battle
 
             public override void Begin()
             {
-                TutorialArrowUI.Open("¦A¦¸ÂI¿ï¦P¼Ëªº¦ì¸m¥Nªí½T©w¦ì¸m¡C", new Vector3(4, 1, 3), Vector2Int.down, null);
+                TutorialArrowUI.Open("å†æ¬¡é»žé¸åŒæ¨£çš„ä½ç½®ä»£è¡¨ç¢ºå®šä½ç½®ã€‚", new Vector3(4, 1, 3), Vector2Int.down, null);
             }
 
             public override bool CheckClick(Vector2Int position)
@@ -276,7 +276,7 @@ namespace Battle
             }
         }
 
-        //¿ï¾Ü§Þ¯à
+        //é¸æ“‡æŠ€èƒ½
         private class State_4 : TutorialState
         {
             public State_4(StateContext context) : base(context)
@@ -286,7 +286,7 @@ namespace Battle
             public override void Begin()
             {
                 Vector3 offset = new Vector3(-200, 0, 0);
-                TutorialArrowUI.Open("¿ï¾Ü§Þ¯à¡C", Instance._battleUI.ActionButtonGroup.SkillButton.transform, offset, Vector2Int.right, null);
+                TutorialArrowUI.Open("é¸æ“‡æŠ€èƒ½ã€‚", Instance._battleUI.ActionButtonGroup.SkillButton.transform, offset, Vector2Int.right, null);
             }
 
             public override void End()
@@ -306,7 +306,7 @@ namespace Battle
             }
         }
 
-        //§ðÀ»
+        //æ”»æ“Š
         private class State_5 : TutorialState
         {
             public State_5(StateContext context) : base(context)
@@ -316,7 +316,7 @@ namespace Battle
             public override void Begin()
             {
                 Vector3 offset = new Vector3(-200, 160, 0);
-                TutorialArrowUI.Open("¿ï¾Ü§ðÀ»¡C", Instance._battleUI.ActionButtonGroup.ScrollView.Background.transform, offset, Vector2Int.right, null);
+                TutorialArrowUI.Open("é¸æ“‡æ”»æ“Šã€‚", Instance._battleUI.ActionButtonGroup.ScrollView.Background.transform, offset, Vector2Int.right, null);
             }
 
             public override void End()
@@ -326,7 +326,7 @@ namespace Battle
 
             public override bool CheckScrollItem(object obj)
             {
-                if(obj is Skill &&((Skill)obj).Data.ID == 1) 
+                if(obj is Skill &&((Skill)obj).ID == 1) 
                 {
                     Next();
                     return true;
@@ -343,7 +343,7 @@ namespace Battle
             }
         }
 
-        //¿ï¾Ü§ðÀ»¦ì¸m
+        //ï¿½ï¿½Ü§ï¿½ï¿½ï¿½ï¿½ï¿½m
         private class State_6 : TutorialState
         {
             public State_6(StateContext context) : base(context)
@@ -352,9 +352,9 @@ namespace Battle
 
             public override void Begin()
             {
-                TutorialUI.Open("²{¦b¦a¹Ï¤W¥Õ¦âªº½d³ò¬O¥i¥H©ñ§Þ¯àªº¦a¤è¡C\n½ÐÂI¿ï½bÀY«ü¥Üªº¦ì¸m¡C", "Tutorial_3", () =>
+                TutorialUI.Open("ï¿½{ï¿½bï¿½aï¿½Ï¤Wï¿½Õ¦âªºï¿½dï¿½ï¿½Oï¿½iï¿½Hï¿½ï¿½Þ¯àªºï¿½aï¿½ï¿½C\nï¿½ï¿½ï¿½Iï¿½ï¿½bï¿½Yï¿½ï¿½ï¿½Üªï¿½ï¿½ï¿½mï¿½C", "Tutorial_3", () =>
                 {
-                    TutorialArrowUI.Open("¿ï¾Ü¥Ø¼Ð¡C", new Vector3(4, 2, 4), Vector2Int.down, null);
+                    TutorialArrowUI.Open("ï¿½ï¿½Ü¥Ø¼Ð¡C", new Vector3(4, 2, 4), Vector2Int.down, null);
                 });
             }
 
@@ -382,7 +382,7 @@ namespace Battle
             }
         }
 
-        //½T»{§ðÀ»¦ì¸m
+        //ï¿½Tï¿½{ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½m
         private class State_7 : TutorialState
         {
             public State_7(StateContext context) : base(context)
@@ -391,7 +391,7 @@ namespace Battle
 
             public override void Begin()
             {
-                TutorialArrowUI.Open("¦A¦¸ÂI¿ï¦P¼Ëªº¦ì¸m½T»{¡C", new Vector3(4, 2, 4), Vector2Int.down, null);
+                TutorialArrowUI.Open("ï¿½Aï¿½ï¿½ï¿½Iï¿½ï¿½Pï¿½Ëªï¿½ï¿½ï¿½mï¿½Tï¿½{ï¿½C", new Vector3(4, 2, 4), Vector2Int.down, null);
             }
 
             //public override void End()
@@ -418,7 +418,7 @@ namespace Battle
             //}
         }
 
-        //¿ï¾Ü¤è¦V
+        //ï¿½ï¿½Ü¤ï¿½V
         private class State_8 : TutorialState
         {
             public State_8(StateContext context) : base(context)
@@ -427,9 +427,9 @@ namespace Battle
 
             public override void Begin()
             {
-                TutorialUI.Open("¦^¦Xµ²§ô«á»Ý­n¿ï¾Ü¨¤¦â­±¹ïªº¤è¦V¡C\n¨¤¦â­±¹ïªº¤è¦V·|¼vÅT©R¤¤²v¡C\n¤ñ¤è»¡¦pªG§ðÀ»¼Ä¤Hªº¥¿­±¡A©R¤¤²v·|¤ñ¸û§C¡C\n¤Ï¤§±q­I«á°½Å§¡A©R¤¤²v´N·|ÅÜ°ª¡C\nºÉ¶q­±¦V¼Ä¤H¡AÁ×§K³Q°½Å§§a¡C", "Tutorial_4", ()=> 
+                TutorialUI.Open("ï¿½^ï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý­nï¿½ï¿½Ü¨ï¿½ï¿½â­±ï¿½ïªºï¿½ï¿½Vï¿½C\nï¿½ï¿½ï¿½â­±ï¿½ïªºï¿½ï¿½Vï¿½|ï¿½vï¿½Tï¿½Rï¿½ï¿½ï¿½vï¿½C\nï¿½ï¿½è»¡ï¿½pï¿½Gï¿½ï¿½ï¿½ï¿½ï¿½Ä¤Hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Rï¿½ï¿½ï¿½vï¿½|ï¿½ï¿½ï¿½ï¿½Cï¿½C\nï¿½Ï¤ï¿½ï¿½qï¿½Iï¿½á°½Å§ï¿½Aï¿½Rï¿½ï¿½ï¿½vï¿½Nï¿½|ï¿½Ü°ï¿½ï¿½C\nï¿½É¶qï¿½ï¿½ï¿½Vï¿½Ä¤Hï¿½Aï¿½×§Kï¿½Qï¿½ï¿½Å§ï¿½aï¿½C", "Tutorial_4", ()=> 
                 {
-                    TutorialArrowUI.Open("¿ï¾Ü¤è¦V¡C", new Vector3(4, 2, 4), Vector2Int.down, null);
+                    TutorialArrowUI.Open("ï¿½ï¿½Ü¤ï¿½Vï¿½C", new Vector3(4, 2, 4), Vector2Int.down, null);
                 });
             }
 
@@ -455,9 +455,9 @@ namespace Battle
 
             public override void Begin()
             {
-                TutorialUI.Open("¥H¤W´N¬O²¾°Ê»P§ðÀ»ªº°ò¥»¬yµ{¡C\n¤@­Ó¨¤¦â¤@¦^¦X¤¤¥i¥H¦³¨â¦¸¦æ°Êªº¾÷·|¡C°£¤F²¾°Ê©M¨Ï¥Î§Þ¯à¥~ÁÙ¦³¨ä¥Lªº¿ï¶µ¡C", ()=> 
+                TutorialUI.Open("ï¿½Hï¿½Wï¿½Nï¿½Oï¿½ï¿½ï¿½Ê»Pï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ò¥»¬yï¿½{ï¿½C\nï¿½@ï¿½Ó¨ï¿½ï¿½ï¿½@ï¿½^ï¿½Xï¿½ï¿½ï¿½iï¿½Hï¿½ï¿½ï¿½â¦¸ï¿½ï¿½Êªï¿½ï¿½ï¿½ï¿½|ï¿½Cï¿½ï¿½ï¿½Fï¿½ï¿½ï¿½Ê©Mï¿½Ï¥Î§Þ¯ï¿½~ï¿½Ù¦ï¿½ï¿½ï¿½Lï¿½ï¿½ï¿½ï¶µï¿½C", ()=> 
                 {
-                    TutorialUI.Open("1.²¾°Ê¡G¤@¦^¦X³Ì¦h¥i¥H²¾°Ê¨â¦¸\n2.§Þ¯à¡G¤@¦^¦X¥u¯à¨Ï¥Î¤@¦¸\n3.¤ä´©¡G»P§Þ¯àÃþ¦ü¡A¤j¦h¬O±j¤Æ¦Û¤vªº®ÄªG¡C¤£®ø¯Ó¦æ°Ê¦¸¼Æ¡A¦ý¤@¼Ë¤@¦^¦X¥u¯à¨Ï¥Î¤@¦¸\n4.²Å¥d¡G¨Ï¥Î³W«h©M§Þ¯à¬Û¦P¡A¦ý¬O»Ý­n®ø¯Ó²Å¥d¡A¥B¨Ï©Ò¦³¶¤­ûªº²Å¥d³£¶i¤J§N«o\n5.¹D¨ã¡G¨Ï¥Î³W«h©M§Þ¯à¬Û¦P¡A¦ý¬O»Ý­n®ø¯Ó¹D¨ã\n6.«Ý¾÷¡G¦pªG¸Ó¦^¦X¨S¦³¨ä¥L·Q°µªº¨Æ¡A¥i¥H¿ï¾Ü«Ý¾÷µ²§ô¸Ó¦^¦X¡C", null);
+                    TutorialUI.Open("1.ï¿½ï¿½ï¿½Ê¡Gï¿½@ï¿½^ï¿½Xï¿½Ì¦hï¿½iï¿½Hï¿½ï¿½ï¿½Ê¨â¦¸\n2.ï¿½Þ¯ï¿½Gï¿½@ï¿½^ï¿½Xï¿½uï¿½ï¿½Ï¥Î¤@ï¿½ï¿½\n3.ï¿½ä´©ï¿½Gï¿½Pï¿½Þ¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½jï¿½hï¿½Oï¿½jï¿½Æ¦Û¤vï¿½ï¿½ï¿½ÄªGï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½Ê¦ï¿½ï¿½Æ¡Aï¿½ï¿½ï¿½@ï¿½Ë¤@ï¿½^ï¿½Xï¿½uï¿½ï¿½Ï¥Î¤@ï¿½ï¿½\n4.ï¿½Å¥dï¿½Gï¿½Ï¥Î³Wï¿½hï¿½Mï¿½Þ¯ï¿½Û¦Pï¿½Aï¿½ï¿½ï¿½Oï¿½Ý­nï¿½ï¿½ï¿½Ó²Å¥dï¿½Aï¿½Bï¿½Ï©Ò¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¥dï¿½ï¿½ï¿½iï¿½Jï¿½Nï¿½o\n5.ï¿½Dï¿½ï¿½Gï¿½Ï¥Î³Wï¿½hï¿½Mï¿½Þ¯ï¿½Û¦Pï¿½Aï¿½ï¿½ï¿½Oï¿½Ý­nï¿½ï¿½ï¿½Ó¹Dï¿½ï¿½\n6.ï¿½Ý¾ï¿½ï¿½Gï¿½pï¿½Gï¿½Ó¦^ï¿½Xï¿½Sï¿½ï¿½ï¿½ï¿½Lï¿½Qï¿½ï¿½ï¿½ï¿½ï¿½Æ¡Aï¿½iï¿½Hï¿½ï¿½Ü«Ý¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦^ï¿½Xï¿½C", null);
                 });
 
                 BattleController.Instance.Info.IsTutorial = false;

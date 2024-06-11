@@ -40,9 +40,9 @@ public class ShopScrollItem : ScrollItem
             else if(obj is Consumables) 
             {
                 Consumables consumables = (Consumables)obj;
-                NameLabel.text = consumables.ItemData.Name;
+                NameLabel.text = consumables.Name;
                 AmountLabel.text = consumables.Amount.ToString();
-                PriceLabel.text = consumables.ItemData.Price + "$";
+                PriceLabel.text = consumables.Price + "$";
             }
             else if(obj is Food) 
             {

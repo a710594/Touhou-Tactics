@@ -67,11 +67,11 @@ public partial class ShopUI : MonoBehaviour
     {
         if(_selectedShopData==null)
         {
-            TipLabel.SetLabel("©|¥¼¿ï¾Üª««~");
+            TipLabel.SetLabel("ï¿½|ï¿½ï¿½ï¿½ï¿½Üªï¿½ï¿½~");
         }
         else if(_selectedShopData.Price > ItemManager.Instance.BagInfo.Money)
         {
-            TipLabel.SetLabel("¾lÃB¤£¨¬");
+            TipLabel.SetLabel("ï¿½lï¿½Bï¿½ï¿½ï¿½ï¿½");
         }
         else
         {
@@ -119,7 +119,7 @@ public partial class ShopUI : MonoBehaviour
                 }
                 else
                 {
-                    TipLabel.SetLabel("§÷®Æ¤£¨¬");
+                    TipLabel.SetLabel("ï¿½ï¿½ï¿½Æ¤ï¿½ï¿½ï¿½");
                 }
             }
         }
@@ -132,10 +132,10 @@ public partial class ShopUI : MonoBehaviour
             if(_selectedSell is Consumables) 
             {
                 Consumables consumables = (Consumables)_selectedSell;
-                ItemManager.Instance.BagInfo.Money += consumables.ItemData.Price;
+                ItemManager.Instance.BagInfo.Money += consumables.Price;
                 MoneyLabel.text = ItemManager.Instance.BagInfo.Money + "$";
                 ItemManager.Instance.MinusItem(consumables.ID, 1);
-                ShopItemGroup.SetScrollViewSell(consumables.ItemData.Category);
+                ShopItemGroup.SetScrollViewSell(consumables.Category);
                 if (consumables.Amount == 0)
                 {
                     _selectedSell = null;
@@ -178,7 +178,7 @@ public partial class ShopUI : MonoBehaviour
         }
         else
         {
-            TipLabel.SetLabel("©|¥¼¿ï¾Üª««~");
+            TipLabel.SetLabel("ï¿½|ï¿½ï¿½ï¿½ï¿½Üªï¿½ï¿½~");
         }
     }
 

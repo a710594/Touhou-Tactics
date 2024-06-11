@@ -15,10 +15,11 @@ public class ActionScrollItem : ScrollItem
     {
         base.SetData(obj);
 
+        Command command = (Command)obj;
         if(obj is Skill) 
         {
             Skill skill = (Skill)obj;
-            Label.text = skill.Data.Name;
+            Label.text = command.Name;
             if (skill.CurrentCD == 0)
             {
                 Background.color = _canUseColor;
@@ -31,7 +32,7 @@ public class ActionScrollItem : ScrollItem
         else if(obj is Support) 
         {
             Support support = (Support)obj;
-            Label.text = support.Data.Name;
+            Label.text = support.Name;
             if (support.CurrentCD == 0)
             {
                 Background.color = _canUseColor;
@@ -43,7 +44,7 @@ public class ActionScrollItem : ScrollItem
         }
         else if(obj is Consumables) 
         {
-            Label.text = ((Consumables)obj).ItemData.Name;
+            Label.text = ((Consumables)obj).Name;
             Background.color = _canUseColor;
         }
         else if (obj is Food)
@@ -53,9 +54,9 @@ public class ActionScrollItem : ScrollItem
         }
         else if (obj is Spell)
         {
-            Spell card = (Spell)obj;
-            Label.text = card.Data.Name;
-            if (card.CurrentCD == 0 && ItemManager.Instance.GetAmount(ItemManager.CardID) > 0)
+            Spell spell = (Spell)obj;
+            Label.text = spell.Name;
+            if (spell.CurrentCD == 0 && ItemManager.Instance.GetAmount(ItemManager.CardID) > 0)
             {
                 Background.color = _canUseColor;
             }

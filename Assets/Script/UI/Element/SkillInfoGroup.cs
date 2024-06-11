@@ -40,45 +40,45 @@ public class SkillInfoGroup : MonoBehaviour
             effect = skill.Effect.SubEffect;
         }
         CommentLabel.text = comment;
-        CDLabel.text = "§N«o¡G" + skill.CD + "¦^¦X";
+        CDLabel.text = "ï¿½Nï¿½oï¿½G" + skill.CD + "ï¿½^ï¿½X";
         
         /*if (skill.Effect.Target == EffectModel.TargetEnum.All)
         {
-            TargetLabel.text = "¥Ø¼Ð¡G¤£¤À¼Ä§Ú";
+            TargetLabel.text = "ï¿½Ø¼Ð¡Gï¿½ï¿½ï¿½ï¿½ï¿½Ä§ï¿½";
         }
         else if(skill.Effect.Target == EffectModel.TargetEnum.Them) 
         {
-            TargetLabel.text = "¥Ø¼Ð¡G¼Ä¤è";
+            TargetLabel.text = "ï¿½Ø¼Ð¡Gï¿½Ä¤ï¿½";
         }
         else if (skill.Effect.Target == EffectModel.TargetEnum.Us)
         {
-            TargetLabel.text = "¥Ø¼Ð¡G§Ú¤è";
+            TargetLabel.text = "ï¿½Ø¼Ð¡Gï¿½Ú¤ï¿½";
         }*/
 
         if(skill.Track == TrackEnum.None) 
         {
-            TrackLabel.text = "­y¸ñ¡GµLµø¦a§Î";
+            TrackLabel.text = "ï¿½yï¿½ï¿½Gï¿½Lï¿½ï¿½ï¿½aï¿½ï¿½";
         }
         else if (skill.Track == TrackEnum.Parabola)
         {
-            TrackLabel.text = "­y¸ñ¡G©ßª«½u";
+            TrackLabel.text = "ï¿½yï¿½ï¿½Gï¿½ßªï¿½ï¿½u";
         }
         else if (skill.Track == TrackEnum.Straight)
         {
-            TrackLabel.text = "­y¸ñ¡Gª½½u";
+            TrackLabel.text = "ï¿½yï¿½ï¿½Gï¿½ï¿½ï¿½u";
         }
         else if (skill.Track == TrackEnum.Through)
         {
-            TrackLabel.text = "­y¸ñ¡G³e¬ï";
+            TrackLabel.text = "ï¿½yï¿½ï¿½Gï¿½eï¿½ï¿½";
         }
 
-        RangeLabel.text = "®gµ{¡G" + skill.Range;
+        RangeLabel.text = "ï¿½gï¿½{ï¿½G" + skill.Range;
     }
 
     public void SetData(Support support)
     {
-        NameLabel.text = support.Data.Name;
-        string comment = support.Data.Comment;
+        NameLabel.text = support.Name;
+        string comment = support.Comment;
         int index;
         Effect effect = support.Effect;
         while (comment.Contains("{"))
@@ -102,78 +102,78 @@ public class SkillInfoGroup : MonoBehaviour
             effect = support.Effect.SubEffect;
         }
         CommentLabel.text = comment;
-        CDLabel.text = "§N«o¡G" + support.Data.CD + "¦^¦X";
+        CDLabel.text = "ï¿½Nï¿½oï¿½G" + support.CD + "ï¿½^ï¿½X";
 
         /*if (support.Effect.Target == EffectModel.TargetEnum.All)
         {
-            TargetLabel.text = "¥Ø¼Ð¡G¤£¤À¼Ä§Ú";
+            TargetLabel.text = "ï¿½Ø¼Ð¡Gï¿½ï¿½ï¿½ï¿½ï¿½Ä§ï¿½";
         }
         else if (support.Effect.Target == EffectModel.TargetEnum.Them)
         {
-            TargetLabel.text = "¥Ø¼Ð¡G¼Ä¤è";
+            TargetLabel.text = "ï¿½Ø¼Ð¡Gï¿½Ä¤ï¿½";
         }
         else if (support.Effect.Target == EffectModel.TargetEnum.Us)
         {
-            TargetLabel.text = "¥Ø¼Ð¡G§Ú¤è";
+            TargetLabel.text = "ï¿½Ø¼Ð¡Gï¿½Ú¤ï¿½";
         }*/
 
         if (support.Track == TrackEnum.None)
         {
-            TrackLabel.text = "­y¸ñ¡GµLµø¦a§Î";
+            TrackLabel.text = "ï¿½yï¿½ï¿½Gï¿½Lï¿½ï¿½ï¿½aï¿½ï¿½";
         }
         else if (support.Track == TrackEnum.Parabola)
         {
-            TrackLabel.text = "­y¸ñ¡G©ßª«½u";
+            TrackLabel.text = "ï¿½yï¿½ï¿½Gï¿½ßªï¿½ï¿½u";
         }
         else if (support.Track == TrackEnum.Straight)
         {
-            TrackLabel.text = "­y¸ñ¡Gª½½u";
+            TrackLabel.text = "ï¿½yï¿½ï¿½Gï¿½ï¿½ï¿½u";
         }
         else if (support.Track == TrackEnum.Through)
         {
-            TrackLabel.text = "­y¸ñ¡G³e¬ï";
+            TrackLabel.text = "ï¿½yï¿½ï¿½Gï¿½eï¿½ï¿½";
         }
 
-        RangeLabel.text = "®gµ{¡G" + support.Range;
+        RangeLabel.text = "ï¿½gï¿½{ï¿½G" + support.Range;
     }
 
     public void SetData(Spell spell)
     {
         NameLabel.text = spell.Name;
         CommentLabel.text = spell.Comment;
-        CDLabel.text = "§N«o¡G" + spell.CD + "¦^¦X";
+        CDLabel.text = "ï¿½Nï¿½oï¿½G" + spell.CD + "ï¿½^ï¿½X";
 
         /*if (spell.Effect.Target == EffectModel.TargetEnum.All)
         {
-            TargetLabel.text = "¥Ø¼Ð¡G¤£¤À¼Ä§Ú";
+            TargetLabel.text = "ï¿½Ø¼Ð¡Gï¿½ï¿½ï¿½ï¿½ï¿½Ä§ï¿½";
         }
         else if (spell.Effect.Target == EffectModel.TargetEnum.Them)
         {
-            TargetLabel.text = "¥Ø¼Ð¡G¼Ä¤è";
+            TargetLabel.text = "ï¿½Ø¼Ð¡Gï¿½Ä¤ï¿½";
         }
         else if (spell.Effect.Target == EffectModel.TargetEnum.Us)
         {
-            TargetLabel.text = "¥Ø¼Ð¡G§Ú¤è";
+            TargetLabel.text = "ï¿½Ø¼Ð¡Gï¿½Ú¤ï¿½";
         }*/
 
         if (spell.Track == TrackEnum.None)
         {
-            TrackLabel.text = "­y¸ñ¡GµLµø¦a§Î";
+            TrackLabel.text = "ï¿½yï¿½ï¿½Gï¿½Lï¿½ï¿½ï¿½aï¿½ï¿½";
         }
         else if (spell.Track == TrackEnum.Parabola)
         {
-            TrackLabel.text = "­y¸ñ¡G©ßª«½u";
+            TrackLabel.text = "ï¿½yï¿½ï¿½Gï¿½ßªï¿½ï¿½u";
         }
         else if (spell.Track == TrackEnum.Straight)
         {
-            TrackLabel.text = "­y¸ñ¡Gª½½u";
+            TrackLabel.text = "ï¿½yï¿½ï¿½Gï¿½ï¿½ï¿½u";
         }
         else if (spell.Track == TrackEnum.Through)
         {
-            TrackLabel.text = "­y¸ñ¡G³e¬ï";
+            TrackLabel.text = "ï¿½yï¿½ï¿½Gï¿½eï¿½ï¿½";
         }
 
-        RangeLabel.text = "®gµ{¡G" + spell.Range;
+        RangeLabel.text = "ï¿½gï¿½{ï¿½G" + spell.Range;
     }
 
     public void SetData(Consumables consumbles)
@@ -184,35 +184,35 @@ public class SkillInfoGroup : MonoBehaviour
 
         /*if (consumbles.Effect.Target == EffectModel.TargetEnum.All)
         {
-            TargetLabel.text = "¥Ø¼Ð¡G¤£¤À¼Ä§Ú";
+            TargetLabel.text = "ï¿½Ø¼Ð¡Gï¿½ï¿½ï¿½ï¿½ï¿½Ä§ï¿½";
         }
         else if (consumbles.Effect.Target == EffectModel.TargetEnum.Them)
         {
-            TargetLabel.text = "¥Ø¼Ð¡G¼Ä¤è";
+            TargetLabel.text = "ï¿½Ø¼Ð¡Gï¿½Ä¤ï¿½";
         }
         else if (consumbles.Effect.Target == EffectModel.TargetEnum.Us)
         {
-            TargetLabel.text = "¥Ø¼Ð¡G§Ú¤è";
+            TargetLabel.text = "ï¿½Ø¼Ð¡Gï¿½Ú¤ï¿½";
         }*/
 
         if (consumbles.Track == TrackEnum.None)
         {
-            TrackLabel.text = "­y¸ñ¡GµLµø¦a§Î";
+            TrackLabel.text = "ï¿½yï¿½ï¿½Gï¿½Lï¿½ï¿½ï¿½aï¿½ï¿½";
         }
         else if (consumbles.Track == TrackEnum.Parabola)
         {
-            TrackLabel.text = "­y¸ñ¡G©ßª«½u";
+            TrackLabel.text = "ï¿½yï¿½ï¿½Gï¿½ßªï¿½ï¿½u";
         }
         else if (consumbles.Track == TrackEnum.Straight)
         {
-            TrackLabel.text = "­y¸ñ¡Gª½½u";
+            TrackLabel.text = "ï¿½yï¿½ï¿½Gï¿½ï¿½ï¿½u";
         }
         else if (consumbles.Track == TrackEnum.Through)
         {
-            TrackLabel.text = "­y¸ñ¡G³e¬ï";
+            TrackLabel.text = "ï¿½yï¿½ï¿½Gï¿½eï¿½ï¿½";
         }
 
-        RangeLabel.text = "®gµ{¡G" + consumbles.Range;
+        RangeLabel.text = "ï¿½gï¿½{ï¿½G" + consumbles.Range;
     }
 
     public void SetData(Food food)
@@ -223,34 +223,34 @@ public class SkillInfoGroup : MonoBehaviour
 
         /*if (food.Effect.Target == EffectModel.TargetEnum.All)
         {
-            TargetLabel.text = "¥Ø¼Ð¡G¤£¤À¼Ä§Ú";
+            TargetLabel.text = "ï¿½Ø¼Ð¡Gï¿½ï¿½ï¿½ï¿½ï¿½Ä§ï¿½";
         }
         else if (food.Effect.Target == EffectModel.TargetEnum.Them)
         {
-            TargetLabel.text = "¥Ø¼Ð¡G¼Ä¤è";
+            TargetLabel.text = "ï¿½Ø¼Ð¡Gï¿½Ä¤ï¿½";
         }
         else if (food.Effect.Target == EffectModel.TargetEnum.Us)
         {
-            TargetLabel.text = "¥Ø¼Ð¡G§Ú¤è";
+            TargetLabel.text = "ï¿½Ø¼Ð¡Gï¿½Ú¤ï¿½";
         }*/
 
         if (food.Track == TrackEnum.None)
         {
-            TrackLabel.text = "­y¸ñ¡GµLµø¦a§Î";
+            TrackLabel.text = "ï¿½yï¿½ï¿½Gï¿½Lï¿½ï¿½ï¿½aï¿½ï¿½";
         }
         else if (food.Track == TrackEnum.Parabola)
         {
-            TrackLabel.text = "­y¸ñ¡G©ßª«½u";
+            TrackLabel.text = "ï¿½yï¿½ï¿½Gï¿½ßªï¿½ï¿½u";
         }
         else if (food.Track == TrackEnum.Straight)
         {
-            TrackLabel.text = "­y¸ñ¡Gª½½u";
+            TrackLabel.text = "ï¿½yï¿½ï¿½Gï¿½ï¿½ï¿½u";
         }
         else if (food.Track == TrackEnum.Through)
         {
-            TrackLabel.text = "­y¸ñ¡G³e¬ï";
+            TrackLabel.text = "ï¿½yï¿½ï¿½Gï¿½eï¿½ï¿½";
         }
 
-        RangeLabel.text = "®gµ{¡G" + food.Range;
+        RangeLabel.text = "ï¿½gï¿½{ï¿½G" + food.Range;
     }
 }

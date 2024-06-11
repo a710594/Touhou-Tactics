@@ -253,9 +253,8 @@ namespace Battle
                 if (StatusList[i] is Poison)
                 {
                     int damage = ((Poison)StatusList[i]).GetDamage(this);
-                    FloatingNumberData floatingNumberData = new FloatingNumberData(FloatingNumberData.TypeEnum.Poison, damage.ToString());
-                    Log log = new Log();
-                    floatingList.Add(floatingNumberData);
+                    Log log = new Log(this, damage.ToString());
+                    logList.Add(log);
                     SetDamage(damage);
                 }
 
@@ -266,6 +265,7 @@ namespace Battle
                     i--;
                 }
             }
+            return logList;
         }
 
         public bool IsSleep()

@@ -106,7 +106,6 @@ public class DataContext
         EffectDic.Clear();
         for (int i=0; i<EffectList.Count; i++) 
         {
-            EffectList[i].GetAreaList();
             EffectDic.Add(EffectList[i].ID, EffectList[i]);
         }
 

@@ -13,6 +13,7 @@ public class Spell : Command
 
     public Spell(SpellModel data)
     {
+        ID = data.ID;
         Name = data.Name;
         Comment = data.Comment;
         Hit = data.Hit;
@@ -25,6 +26,11 @@ public class Spell : Command
         CD = data.CD;
         CurrentCD = 0;
         Effect = EffectFactory.GetEffect(data.EffectID);
+
+        if(data.SubSpellID != -1)
+        {
+            SubCommand = new Spell(DataContext.Instance.SpellDic[data.SubSpellID]);
+        }
     }
 
     public void CheckCD() 

@@ -43,7 +43,7 @@ public class BagItemGroup : MonoBehaviour
         else if(obj is Consumables) 
         {
             Consumables consumables = (Consumables)obj;
-            SetComment(consumables.ItemData.Comment);
+            SetComment(consumables.Comment);
         }
         else if(obj is Food) 
         {

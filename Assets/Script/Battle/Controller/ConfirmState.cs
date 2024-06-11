@@ -16,6 +16,7 @@ namespace Battle
             public override void Begin()
             {
                 Vector2Int selectedPosition = Instance._selectedPosition;
+                _character = Instance.SelectedCharacter;
                 _allCharacterList = GetAllCharacterList();
                 List<Vector2Int> commandPositionList;
                 Dictionary<Command, List<Vector2Int>> effectPositionDic = new Dictionary<Command, List<Vector2Int>>();
@@ -48,12 +49,13 @@ namespace Battle
                 float hitRate = Instance.GetHitRate(command.Hit, _character, target);
                 Instance._battleUI.SetHitRate(Mathf.RoundToInt(hitRate * 100));
 
-                //all character in main commandPositionList
-                for (int i = 0; i < _allCharacterList.Count; i++)
+                
+                foreach(KeyValuePair<Command, List<Vector2Int>> pair in effectPositionDic)
                 {
-                    foreach(KeyValuePair<Command, List<Vector2Int>> pair in effectPositionDic)
+                    Instance._commandTargetDic.Add(pair.Key, new List<BattleCharacterInfo>());
+                    //all character in main commandPositionList
+                    for (int i = 0; i < _allCharacterList.Count; i++)
                     {
-                        Instance._commandTargetDic.Add(pair.Key, new List<BattleCharacterInfo>());
                         if (pair.Value.Contains(Utility.ConvertToVector2Int(_allCharacterList[i].Position)))
                         {
                             predictionHp = Instance.GetPredictionHp(_character, _allCharacterList[i], _allCharacterList[i].CurrentHP, pair.Key.Effect);
@@ -62,6 +64,7 @@ namespace Battle
                         }
                     }
                 }
+                
 
                 BattleCharacterController _controller = Instance._controllerDic[_character.Index];
                 _controller.SetDirection(selectedPosition - Utility.ConvertToVector2Int(_controller.transform.position));

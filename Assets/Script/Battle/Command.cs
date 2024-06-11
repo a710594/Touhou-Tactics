@@ -9,6 +9,7 @@ namespace Battle
     {
         [NonSerialized]
         public Effect Effect;
+        public int ID;
         public int Hit;
         public int Range;
         public string Name;

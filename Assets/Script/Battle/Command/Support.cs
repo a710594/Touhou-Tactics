@@ -8,10 +8,9 @@ namespace Battle
     {
         public int CD;
         public int CurrentCD;
-        public SupportModel Data;
-
         public Support(SupportModel data)
         {
+            ID = data.ID;
             Name = data.Name;
             Comment = data.Comment;
             Hit = data.Hit;
@@ -23,12 +22,6 @@ namespace Battle
             CD = data.CD;
             CurrentCD = 0;
             Effect = EffectFactory.GetEffect(data.EffectID);
-        }
-
-        public virtual void UseEffect(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)
-        {
-            Effect.Use(user, target, floatingList, characterList);
-            user.HasUseSupport = true;
         }
 
         public void CheckCD()

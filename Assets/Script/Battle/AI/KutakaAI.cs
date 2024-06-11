@@ -46,8 +46,8 @@ namespace Battle
             SelectedSkill = _info.SkillList[1];
             BattleController.Instance.SetTargetState(SelectedSkill);
             BattleInfo battleInfo = BattleController.Instance.Info;
-            List<Vector2Int> rangeList = Utility.GetRange(SelectedSkill.Effect.Range, battleInfo.Width, battleInfo.Height, Utility.ConvertToVector2Int(_info.Position));
-            BattleController.Instance.RemoveByFaction(SelectedSkill.Effect, rangeList);
+            List<Vector2Int> rangeList = Utility.GetRange(SelectedSkill.Range, battleInfo.Width, battleInfo.Height, Utility.ConvertToVector2Int(_info.Position));
+            BattleController.Instance.RemoveByFaction(SelectedSkill.CastTarget, rangeList);
             Vector2Int targetPosition = rangeList[UnityEngine.Random.Range(0, rangeList.Count)];
             BattleController.Instance.Click(targetPosition);
             Vector3 v3 = new Vector3(targetPosition.x, BattleController.Instance.Info.TileAttachInfoDic[targetPosition].Height, targetPosition.y);

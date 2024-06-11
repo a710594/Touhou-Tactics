@@ -9,7 +9,6 @@ namespace Battle
         private class EffectState : BattleControllerState
         {
             int _maxFloatingCount;
-            private List<BattleCharacterInfo> _targetList;
             private Timer _timer = new Timer();
             private List<Log> _currentLogList = new List<Log>(); //當前回合的 log 總和
 
@@ -23,7 +22,6 @@ namespace Battle
                 Instance.ClearQuad();
                 _characterList = Instance.CharacterList;
                 _character = Instance.SelectedCharacter;
-                _targetList = new List<BattleCharacterInfo>();
                 _currentLogList.Clear();
 
                 foreach(KeyValuePair<Command, List<BattleCharacterInfo>> pair in Instance._commandTargetDic) 
@@ -55,9 +53,9 @@ namespace Battle
                     {
                         Support support = (Support)pair.Key;
                         _character.HasUseSupport = true;
-                        if (support.Data.CD > 0)
+                        if (support.CD > 0)
                         {
-                            support.CurrentCD = support.Data.CD + 1;
+                            support.CurrentCD = support.CD + 1;
                         }
                     }
                     else if(pair.Key is Spell) 
@@ -271,38 +269,43 @@ namespace Battle
 
             private void CheckResult()
             {
-                for (int i = 0; i < _targetList.Count; i++)
-                {
-                    if (_targetList[i].CurrentHP <= 0)
+                BattleCharacterInfo target;
+                foreach(KeyValuePair<Command, List<BattleCharacterInfo>> pair in Instance._commandTargetDic)
+                 {
+                    for(int i=0; i<pair.Value.Count; i++)
                     {
-                        if (_targetList[i].Faction == BattleCharacterInfo.FactionEnum.Player)
+                        target = pair.Value[i];
+                        if (target.CurrentHP <= 0)
                         {
-                            if (Instance.DyingList.Contains(_targetList[i]))
+                            if (target.Faction == BattleCharacterInfo.FactionEnum.Player)
                             {
-                                Instance._controllerDic[_targetList[i].Index].gameObject.SetActive(false);
-                                Instance.DyingList.Remove(_targetList[i]);
-                                Instance.DeadList.Add(_targetList[i]);
+                                if (Instance.DyingList.Contains(target))
+                                {
+                                    Instance._controllerDic[target.Index].gameObject.SetActive(false);
+                                    Instance.DyingList.Remove(target);
+                                    Instance.DeadList.Add(target);
+                                }
+                                else
+                                {
+                                    _characterList.Remove(target);
+                                    Instance.DyingList.Add(target);
+                                    Instance._controllerDic[target.Index].SetGray(true);
+                                }
                             }
                             else
                             {
-                                _characterList.Remove(_targetList[i]);
-                                Instance.DyingList.Add(_targetList[i]);
-                                Instance._controllerDic[_targetList[i].Index].SetGray(true);
+                                _characterList.Remove(target);
+                                Instance._controllerDic[target.Index].gameObject.SetActive(false);
                             }
                         }
-                        else
+                        else if (Instance.DyingList.Contains(target)) 
                         {
-                            _characterList.Remove(_targetList[i]);
-                            Instance._controllerDic[_targetList[i].Index].gameObject.SetActive(false);
+                            _characterList.Add(target);
+                            Instance.DyingList.Remove(target);
+                            Instance._controllerDic[target.Index].SetGray(false);
                         }
                     }
-                    else if (Instance.DyingList.Contains(_targetList[i])) 
-                    {
-                        _characterList.Add(_targetList[i]);
-                        Instance.DyingList.Remove(_targetList[i]);
-                        Instance._controllerDic[_targetList[i].Index].SetGray(false);
-                    }
-                }
+                 }
 
                 int playerCount = 0;
                 int enemyCount = 0;
