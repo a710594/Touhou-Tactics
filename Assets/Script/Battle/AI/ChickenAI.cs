@@ -7,7 +7,6 @@ namespace Battle
     public class ChickenAI : BattleAI
     {
         private int _count = 0;
-        private Timer _timer = new Timer();
 
         public override void Init(BattleCharacterInfo info)
         {
@@ -40,13 +39,13 @@ namespace Battle
             List<BattleCharacterInfo> targetList = GetTargetList(BattleCharacterInfo.FactionEnum.Player);
             Dictionary<BattleCharacterInfo, List<Vector2Int>> canHitDic = GetCanHitDic(targetList);
             Vector2Int moveTo;
-            if (canHitDic.Count > 0) //¦³¥i¥H§ðÀ»ªº¥Ø¼Ð
+            if (canHitDic.Count > 0) //ï¿½ï¿½ï¿½iï¿½Hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½
             {
                 _useSkill = true;
                 _target = GetAttackTarget(new List<BattleCharacterInfo>(canHitDic.Keys));
-                moveTo = GetMoveTo(MoveToEnum.Near, start, canHitDic[_target]); //¿ï¾Ü¶ZÂ÷¥Ø¼Ðªñªº¦ì¸m
+                moveTo = GetMoveTo(MoveToEnum.Near, start, canHitDic[_target]); //ï¿½ï¿½Ü¶Zï¿½ï¿½ï¿½Ø¼Ðªñªº¦ï¿½m
             }
-            else //ºÉ¶q¾aªñ·Q§ðÀ»ªº¥Ø¼Ð
+            else //ï¿½É¶qï¿½aï¿½ï¿½Qï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½
             {
                 _useSkill = false;
                 int distance;

@@ -9,10 +9,10 @@ namespace Battle
 {
     public partial class BattleController
     {
-        public List<Vector2Int> GetNormalAreaList(Vector2Int from, Vector2Int to, List<Vector2Int> areaList)
+        public List<Vector2Int> GetNormalAreaList(Vector2Int from, Vector2Int to, TargetEnum areaTarget, List<Vector2Int> areaList)
         {
             Vector2 v2 = to - from;
-            float angle = Vector2.Angle(v2, Vector2.up);
+            int angle = (int)Vector2.Angle(v2, Vector2.up) / 90 * 90; //取最接近90的倍數的數
             Vector3 cross = Vector3.Cross(v2, Vector2.up);
             if (cross.z > 0)
             {
@@ -39,6 +39,9 @@ namespace Battle
                     result.Add(position);
                 }
             }
+
+            RemoveByFaction(areaTarget, result);
+
             return result;
         }
 

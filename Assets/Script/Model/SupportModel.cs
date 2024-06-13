@@ -1,5 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using Battle;
 
 public class SupportModel
 {
@@ -10,8 +11,9 @@ public class SupportModel
     public int EffectID;
     public int Hit;
     public int Range;
-    public string Area;
-    public Battle.TargetEnum CastTarget;
-    public Battle.TargetEnum EffectTarget;
-    public Battle.TrackEnum Track;
+    public string Array;
+    public TargetEnum RangeTarget;
+    public TargetEnum AreaTarget;
+    public AreaTypeEnum AreaType;
+    public TrackEnum Track;
 }

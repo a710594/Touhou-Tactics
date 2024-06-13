@@ -63,7 +63,6 @@ public class ScrollGrid : MonoBehaviour
                 {
                     gameObject.SetActive(true);
                     _scrollItemList[i].gameObject.SetActive(true);
-                    Debug.Log(i + " " + (index * ItemAmount + i));
                     _scrollItemList[i].SetData(list[index * ItemAmount + i]);
                 }
                 else

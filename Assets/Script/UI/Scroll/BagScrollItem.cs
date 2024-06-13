@@ -9,7 +9,7 @@ public class BagScrollItem : ScrollItem
     public Text AmountLabel;
     public ButtonColorSetting ColorSetting;
 
-    public class Data
+    public new class Data
     {
         public Equip Equip;
         public int Weight;

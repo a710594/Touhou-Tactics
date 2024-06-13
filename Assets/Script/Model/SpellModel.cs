@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Battle;
 
 public class SpellModel
 {
@@ -12,9 +13,10 @@ public class SpellModel
     public string Comment;
     public int Hit;
     public int Range;
-    public string Area;
-    public Battle.TargetEnum CastTarget;
-    public Battle.TargetEnum EffectTarget;
-    public Battle.TrackEnum Track;
+    public string Array;
+    public TargetEnum RangeTarget;
+    public TargetEnum AreaTarget;
+    public AreaTypeEnum AreaType;
+    public TrackEnum Track;
     public int SubSpellID;
 }

@@ -320,35 +320,42 @@ public static class Utility
 
     public static List<Vector2Int> GetAreaList(string area)
     {
-        string str;
-        string[] arr;
-        Vector2Int v;
-        Stack<char> stack = new Stack<char>();
-        List<Vector2Int> areaList = new List<Vector2Int>();
-        for (int i = 0; i < area.Length; i++)
+        if(area!=null)
         {
-            if (area[i] != ')')
+            string str;
+            string[] arr;
+            Vector2Int v;
+            Stack<char> stack = new Stack<char>();
+            List<Vector2Int> areaList = new List<Vector2Int>();
+            for (int i = 0; i < area.Length; i++)
             {
-                stack.Push(area[i]);
-            }
-            else
-            {
-                str = "";
-                while (stack.Peek() != '(')
+                if (area[i] != ')')
                 {
-                    str += stack.Pop();
+                    stack.Push(area[i]);
                 }
-                while (stack.Count > 0)
+                else
                 {
-                    stack.Pop();
+                    str = "";
+                    while (stack.Peek() != '(')
+                    {
+                        str += stack.Pop();
+                    }
+                    while (stack.Count > 0)
+                    {
+                        stack.Pop();
+                    }
+                    str = Reverse(str);
+                    arr = str.Split(',');
+                    v = new Vector2Int(int.Parse(arr[0]), int.Parse(arr[1]));
+                    areaList.Add(v);
                 }
-                str = Reverse(str);
-                arr = str.Split(',');
-                v = new Vector2Int(int.Parse(arr[0]), int.Parse(arr[1]));
-                areaList.Add(v);
             }
+            return areaList;
         }
-        return areaList;
+        else
+        {
+            return null;
+        }
     }
 
     public static float RandomGaussian(float minValue = 0.0f, float maxValue = 1.0f)

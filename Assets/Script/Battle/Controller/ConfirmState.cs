@@ -19,22 +19,22 @@ namespace Battle
                 _character = Instance.SelectedCharacter;
                 _allCharacterList = GetAllCharacterList();
                 List<Vector2Int> commandPositionList;
-                Dictionary<Command, List<Vector2Int>> effectPositionDic = new Dictionary<Command, List<Vector2Int>>();
+                Dictionary<Command, List<Vector2Int>> commandPositionDic = new Dictionary<Command, List<Vector2Int>>();
                 Instance._commandTargetDic.Clear();
 
                 Command command = _character.SelectedCommand;
                 while(command != null)
                 {
-                    commandPositionList = Instance.SetCommandPosition(command);
-                    effectPositionDic.Add(command, commandPositionList);
+                    commandPositionList = Instance.SetCommandPosition(Utility.ConvertToVector2Int(_character.Position), selectedPosition, command);
+                    commandPositionDic.Add(command, commandPositionList);
                     command = command.SubCommand;
                 }
 
                 //one character in main commandPositionList
                 int predictionHp;
                 BattleCharacterInfo target = null;
-                command = effectPositionDic.First().Key;
-                commandPositionList = effectPositionDic.First().Value;
+                command = commandPositionDic.First().Key;
+                commandPositionList = commandPositionDic.First().Value;
                 for (int i = 0; i < _allCharacterList.Count; i++)
                 {
                     if (commandPositionList.Contains(Utility.ConvertToVector2Int(_allCharacterList[i].Position)))
@@ -43,16 +43,21 @@ namespace Battle
                         break;
                     }
                 }
-                predictionHp = Instance.GetPredictionHp(_character, target, target.CurrentHP, command.Effect);
-                Instance._battleUI.SetCharacterInfoUI_2(target);
-                Instance._battleUI.SetPredictionInfo_2(target, predictionHp);
-                float hitRate = Instance.GetHitRate(command.Hit, _character, target);
-                Instance._battleUI.SetHitRate(Mathf.RoundToInt(hitRate * 100));
 
+                if(target!=null)
+                {
+                    predictionHp = Instance.GetPredictionHp(_character, target, target.CurrentHP, command.Effect);
+                    Instance._battleUI.SetCharacterInfoUI_2(target);
+                    Instance._battleUI.SetPredictionInfo_2(target, predictionHp);
+                    float hitRate = Instance.GetHitRate(command.Hit, _character, target);
+                    Instance._battleUI.SetHitRate(Mathf.RoundToInt(hitRate * 100));
+                }
                 
-                foreach(KeyValuePair<Command, List<Vector2Int>> pair in effectPositionDic)
+                Instance.ClearQuad();
+                foreach(KeyValuePair<Command, List<Vector2Int>> pair in commandPositionDic)
                 {
                     Instance._commandTargetDic.Add(pair.Key, new List<BattleCharacterInfo>());
+                    Instance.SetQuad(pair.Value, Instance._yellow); 
                     //all character in main commandPositionList
                     for (int i = 0; i < _allCharacterList.Count; i++)
                     {
@@ -60,7 +65,7 @@ namespace Battle
                         {
                             predictionHp = Instance.GetPredictionHp(_character, _allCharacterList[i], _allCharacterList[i].CurrentHP, pair.Key.Effect);
                             Instance._battleUI.SetPredictionLittleHpBar(_allCharacterList[i], predictionHp);
-                            Instance._commandTargetDic[command].Add(_allCharacterList[i]);
+                            Instance._commandTargetDic[pair.Key].Add(_allCharacterList[i]);
                         }
                     }
                 }

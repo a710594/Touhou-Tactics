@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using Battle;
 
 public class SkillModel
 {
@@ -14,9 +15,10 @@ public class SkillModel
     public int EffectID;
     public int Hit;
     public int Range;
-    public string Area;
-    public Battle.TargetEnum CastTarget;
-    public Battle.TargetEnum EffectTarget;
+    public string Array;
+    public TargetEnum RangeTarget;
+    public TargetEnum AreaTarget;
+    public AreaTypeEnum AreaType;
     public Battle.TrackEnum Track;
     public int SubSkillID;
 }

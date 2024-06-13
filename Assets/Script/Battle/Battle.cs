@@ -4,13 +4,22 @@ using UnityEngine;
 
 namespace Battle
 {
-    public enum TargetEnum
+    //for main skill
+    public enum TargetEnum 
     {
-        Us = 1,
-        Them,
-        All,
-        None, //只能在空地上使用
+        All=0,
+        Self,
+        Us,
+        Them, 
+        None
     }
+
+public enum AreaTypeEnum
+{
+    Point=1,
+    Array,
+    Global,
+}
 
     public enum TrackEnum 
     {

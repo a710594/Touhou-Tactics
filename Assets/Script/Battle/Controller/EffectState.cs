@@ -96,113 +96,6 @@ namespace Battle
 
                 RerangeLog();
                 _timer.Start(_maxFloatingCount, CheckResult); 
-
-                /*for (int i = 0; i < _characterList.Count; i++)
-                {
-                    if (CheckEffectArea(Instance._areaList, Utility.ConvertToVector2Int(_characterList[i].Position)))
-                    {
-                        _targetList.Add(_characterList[i]);
-                    }
-                }
-
-                for (int i=0; i<Instance.DyingList.Count; i++) 
-                {
-                    if (CheckEffectArea(Instance._areaList, Utility.ConvertToVector2Int(Instance.DyingList[i].Position)))
-                    {
-                        _targetList.Add(Instance.DyingList[i]);
-                    }
-                }
-
-                _maxFloatingCount = 0;
-                if (_character.SelectedCommand is Skill)
-                {
-                    Skill skill = (Skill)_character.SelectedCommand;
-                    if(skill.Effect.Type == EffectModel.TypeEnum.Summon)
-                    {
-                        Vector3 v3 = new Vector3(Instance._selectedPosition.x, Instance.Info.TileAttachInfoDic[Instance._selectedPosition].Height, Instance._selectedPosition.y);
-                        UseEffect(skill.Effect, v3);
-                    }
-                    else
-                    {
-                        for (int i = 0; i < _targetList.Count; i++)
-                        {
-                            UseEffect(skill.Effect, _targetList[i]);
-                        }
-                    }
-                    _character.HasUseSkill = true;
-                    _character.ActionCount--;
-                    if (skill.CD > 0)
-                    {
-                        skill.CurrentCD = skill.Data.CD + 1; // n [ @    ] O   F  P   ^ X   CheckCD
-                    }
-                }
-                else if(_character.SelectedCommand is Support) 
-                {
-                    Support support = (Support)_character.SelectedCommand;
-                    for (int i = 0; i < _targetList.Count; i++)
-                    {
-                        UseEffect(support.Effect, _targetList[i]);
-                    }
-                    _character.HasUseSupport = true;
-                    if (support.Data.CD > 0)
-                    {
-                        support.CurrentCD = support.Data.CD + 1; // n [ @    ] O   F  P   ^ X   CheckCD
-                    }
-                }
-                else if(_character.SelectedCommand is Spell) 
-                {
-                    Spell card = (Spell)_character.SelectedCommand;
-                    for (int i = 0; i < _targetList.Count; i++)
-                    {
-                        UseEffect(card.Effect, _targetList[i]);
-                    }
-                    _character.HasUseItem = true;
-                    _character.ActionCount--;
-                    if (card.Data.CD > 0)
-                    {
-                        for(int i=0; i<_characterList.Count; i++)
-                        {
-                            if(_characterList[i].Faction == BattleCharacterInfo.FactionEnum.Player)
-                            {
-                                Debug.Log(_characterList[i].Name);
-                                for(int j=0; j<_characterList[i].CardList.Count; j++)
-                                {
-                                    _characterList[i].CardList[j].CurrentCD = card.Data.CD + 1;
-                                }
-                            }
-                        }
-                        //card.CurrentCD = card.Data.CD + 1; // n [ @    ] O   F  P   ^ X   CheckCD
-                    }
-                    ItemManager.Instance.MinusItem(ItemManager.CardID, 1);
-                }
-                else if(_character.SelectedCommand is Consumables) 
-                {
-                    Consumables consumables = (Consumables)_character.SelectedCommand;
-                    for (int i = 0; i < _targetList.Count; i++)
-                    {
-                        UseEffect(consumables.Effect, _targetList[i]);
-                    }
-                    _character.HasUseItem = true;
-                    _character.ActionCount--;
-                    ItemManager.Instance.MinusItem(consumables.ID, 1);
-                }
-                else if(_character.SelectedCommand is Food) 
-                {
-                    Food food = (Food)_character.SelectedCommand;
-                    for (int i = 0; i < _targetList.Count; i++)
-                    {
-                        // List<FloatingNumberData> floatingList = new List<FloatingNumberData>();
-                        // food.Effect.Use(_character, _targetList[i], floatingList, _characterList);
-                        // SetUI(_targetList[i], floatingList);
-                        UseEffect(food.Effect, _targetList[i]);
-                    }
-                    _character.HasUseItem = true;
-                    _character.ActionCount--;
-                    ItemManager.Instance.MinusItem(food.ID, 1);
-                }
-
-                RerangeLog();
-                _timer.Start(_maxFloatingCount, CheckResult);*/
             }
 
             public void UseEffect(Effect effect, Vector3 position) 
@@ -214,7 +107,7 @@ namespace Battle
             {
                 HitType hitType;
 
-                if (command.EffectTarget == TargetEnum.Us)
+                if (command.AreaTarget == TargetEnum.Us || command.AreaTarget == TargetEnum.Self)
                 {
                     hitType = HitType.Hit;
                 }

@@ -18,26 +18,35 @@ public class SkillInfoGroup : MonoBehaviour
         NameLabel.text = skill.Name;
         string comment = skill.Comment;
         int index;
-        Effect effect = skill.Effect;
+        Skill tempSkill = skill;
+        Effect tempEffect = skill.Effect;
         while (comment.Contains("{")) 
         {
             index = comment.IndexOf("{");
-            if (effect.Status != null)
+            if (tempEffect.Status != null)
             {
-                if (effect.Status.Value > 100)
+                if (tempEffect.Status.Value > 100)
                 {
-                    comment = comment.Remove(index, 3).Insert(index, (effect.Status.Value - 100).ToString());
+                    comment = comment.Remove(index, 3).Insert(index, (tempEffect.Status.Value - 100).ToString());
                 }
                 else
                 {
-                    comment = comment.Remove(index, 3).Insert(index, (100 - effect.Status.Value).ToString());
+                    comment = comment.Remove(index, 3).Insert(index, (100 - tempEffect.Status.Value).ToString());
                 }
             }
             else
             {
-                comment = comment.Remove(index, 3).Insert(index, effect.Value.ToString());
+                comment = comment.Remove(index, 3).Insert(index, tempEffect.Value.ToString());
             }
-            effect = skill.Effect.SubEffect;
+            if(tempSkill.Effect.SubEffect!=null)
+            {
+                tempEffect = tempSkill.Effect.SubEffect;
+            }
+            else if(tempSkill.SubCommand!=null)
+            {
+                tempSkill = (Skill)tempSkill.SubCommand;
+                tempEffect = tempSkill.Effect;
+            }
         }
         CommentLabel.text = comment;
         CDLabel.text = "�N�o�G" + skill.CD + "�^�X";

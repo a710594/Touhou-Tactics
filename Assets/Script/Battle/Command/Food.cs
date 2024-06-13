@@ -37,10 +37,11 @@ public class Food : Command
         
         Hit = 100;
         Range = 1;
-        CastTarget = TargetEnum.Us;
-        EffectTarget = TargetEnum.Us;
+        RangeTarget = TargetEnum.Us;
+        AreaTarget = TargetEnum.Us;
+        AreaType = AreaTypeEnum.Point;;
         Track = TrackEnum.None;
-        AreaList = new List<Vector2Int>(){Vector2Int.zero};
+        ArrayList = new List<Vector2Int>(){Vector2Int.zero};
 
         FoodMaterial foodMaterial;
         for (int i=0; i<materialList.Count; i++) 
@@ -82,10 +83,11 @@ public class Food : Command
 
         Hit = 100;
         Range = 1;
-        CastTarget = TargetEnum.Us;
-        EffectTarget = TargetEnum.Us;
+        RangeTarget = TargetEnum.Us;
+        AreaTarget = TargetEnum.Us;
+        AreaType = AreaTypeEnum.Point;
         Track = TrackEnum.None;
-        AreaList = new List<Vector2Int>(){Vector2Int.zero};
+        ArrayList = new List<Vector2Int>(){Vector2Int.zero};
 
         SetComment();
         SetEffect();

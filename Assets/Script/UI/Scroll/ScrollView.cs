@@ -114,6 +114,7 @@ public class ScrollView : MonoBehaviour
 
     public void SetIndex(int index)
     {
+        WaitOneFrame();
         if(_dataList.Count<_subGridAmount)
         {
             return;

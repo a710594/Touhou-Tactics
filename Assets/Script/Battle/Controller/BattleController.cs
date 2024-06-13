@@ -233,21 +233,55 @@ namespace Battle
         //     return areaList;
         // }
 
-        public List<Vector2Int> SetCommandPosition(Command command)
+        public List<Vector2Int> SetCommandPosition(Vector2Int from, Vector2Int to, Command command)
         {
-            List<Vector2Int> commandPositionList;
-            if (command.Track == TrackEnum.Through)
+            List<Vector2Int> commandPositionList =new List<Vector2Int>();
+            if(command.AreaType == AreaTypeEnum.Point)
             {
-                commandPositionList = GetTroughAreaList(SelectedCharacter.Position, new Vector3(_selectedPosition.x, Instance.Info.TileAttachInfoDic[_selectedPosition].Height, _selectedPosition.y));
+                commandPositionList.Add(to);
+            }
+            else if(command.AreaType == AreaTypeEnum.Array)
+            {
+                commandPositionList = GetNormalAreaList(from, to, command.AreaTarget, command.ArrayList);
             }
             else
             {
-                commandPositionList = GetNormalAreaList(Utility.ConvertToVector2Int(SelectedCharacter.Position), _selectedPosition, command.AreaList);
+                if(command.AreaTarget == TargetEnum.Self)
+                {
+                    commandPositionList.Add(from);
+                }
+                else
+                {
+                    for(int i=0; i<CharacterList.Count; i++)
+                    {
+                        if(command.AreaTarget == TargetEnum.Us && SelectedCharacter.Faction == CharacterList[i].Faction)
+                        {
+                            commandPositionList.Add(Utility.ConvertToVector2Int(CharacterList[i].Position));  
+                        }   
+                        else if(command.AreaTarget == TargetEnum.Them && SelectedCharacter.Faction != CharacterList[i].Faction)
+                        {
+                            commandPositionList.Add(Utility.ConvertToVector2Int(CharacterList[i].Position)); 
+                        }
+                        else if(command.AreaTarget == TargetEnum.All)
+                        {
+                            commandPositionList.Add(Utility.ConvertToVector2Int(CharacterList[i].Position));  
+                        }
+                    }
+                }
             }
 
-            RemoveByFaction(command.EffectTarget, commandPositionList);
-            ClearQuad();
-            SetQuad(commandPositionList, _yellow); 
+            if(command.Track == TrackEnum.Through)
+            {
+                List<Vector2Int> line = Utility.DrawLine2D(from, to);
+                line.Remove(from);
+                for(int i=0; i<line.Count; i++)
+                {
+                    if(!commandPositionList.Contains(line[i]))
+                    {
+                        commandPositionList.Add(line[i]);
+                    }
+                }
+            }
             
             return commandPositionList;
         }

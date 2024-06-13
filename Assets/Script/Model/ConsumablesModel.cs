@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Battle;
 
 public class ConsumablesModel
 {
@@ -10,7 +11,8 @@ public class ConsumablesModel
     public int Hit;
     public int Range;
     public string Area;
-    public Battle.TargetEnum CastTarget;
-    public Battle.TargetEnum EffectTarget;
-    public Battle.TrackEnum Track;
+    public TargetEnum RangeTarget;
+    public TargetEnum AreaTarget;
+    public AreaTypeEnum AreaType;
+    public TrackEnum Track;
 }

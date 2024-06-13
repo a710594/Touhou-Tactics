@@ -34,7 +34,7 @@ namespace Battle
                     _rangeList = Utility.GetRange(_character.SelectedCommand.Range, _info.Width, _info.Height, Utility.ConvertToVector2Int(_character.Position));
                 }
 
-                Instance.RemoveByFaction(_command.CastTarget, _rangeList);
+                Instance.RemoveByFaction(_command.RangeTarget, _rangeList);
 
                 Instance.ClearQuad();
                 Instance.SetQuad(_rangeList, Instance._white);

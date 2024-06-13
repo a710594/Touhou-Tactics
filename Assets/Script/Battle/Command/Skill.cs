@@ -20,10 +20,11 @@ public class Skill : Command
         Comment = data.Comment;
         Hit = data.Hit;
         Range = data.Range;
-        CastTarget = data.CastTarget;
-        EffectTarget = data.EffectTarget;
+        RangeTarget = data.RangeTarget;
+        AreaTarget = data.AreaTarget;
+        AreaType = data.AreaType;
         Track = data.Track;
-        AreaList = Utility.GetAreaList(data.Area);
+        ArrayList = Utility.GetAreaList(data.Array);
 
         CD = data.CD;
         CurrentCD = 0;

@@ -38,6 +38,7 @@ public class LogGroup : MonoBehaviour
         ScrollView.gameObject.SetActive(true);
         OpenButton.gameObject.SetActive(false);
         ScrollView.SetData(new List<object>(BattleController.Instance.LogList));
+        ScrollView.SetIndex(BattleController.Instance.LogList.Count - 1);
     }
 
     private void CloseButtonOnClick()

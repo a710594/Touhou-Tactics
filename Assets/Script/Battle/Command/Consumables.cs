@@ -29,10 +29,11 @@ public class Consumables : Command
 
         Hit = consumablesData.Hit;
         Range = consumablesData.Range;
-        CastTarget = consumablesData.CastTarget;
-        EffectTarget = consumablesData.EffectTarget;
+        RangeTarget = consumablesData.RangeTarget;
+        AreaTarget = consumablesData.AreaTarget;
+        AreaType = consumablesData.AreaType;
         Track = consumablesData.Track;
-        AreaList = Utility.GetAreaList(consumablesData.Area);
+        ArrayList = Utility.GetAreaList(consumablesData.Area);
     }
 
     public void Init()
