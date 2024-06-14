@@ -26,8 +26,8 @@ public class ActionButtonGroup : MonoBehaviour
         SupportButton.interactable = !character.HasUseSupport;
         ItemButton.interactable = !character.HasUseItem;
         SpellButton.interactable = !character.HasUseSpell;
-        ActionCountLabel.text = "�Ѿl��ʦ��?�G" + character.ActionCount.ToString();
-        CardCountLabel.text = "�Ѿl�ťd�ƶq�G" + ItemManager.Instance.GetAmount(ItemManager.CardID);
+        ActionCountLabel.text = "剩餘行動次數：" + character.ActionCount.ToString();
+        CardCountLabel.text = "剩餘符卡數量：" + ItemManager.Instance.GetAmount(ItemManager.CardID);
         ScrollView.transform.parent.gameObject.SetActive(false);
     }
 
@@ -142,7 +142,7 @@ public class ActionButtonGroup : MonoBehaviour
             if (skill.CurrentCD > 0)
             {
                 canUse = false;
-                tip = "�ٻݭn" + skill.CurrentCD + "�^�X�N�o";
+                tip = "還需要" + skill.CurrentCD + "回合冷卻";
             }
         }
         else if (command is Support)
@@ -151,7 +151,7 @@ public class ActionButtonGroup : MonoBehaviour
             if (support.CurrentCD > 0)
             {
                 canUse = false;
-                tip = "�ٻݭn" + support.CurrentCD + "�^�X�N�o";
+                tip = "還需要" + support.CurrentCD + "回合冷卻";
             }
         }
         else if (command is Spell)
@@ -160,12 +160,12 @@ public class ActionButtonGroup : MonoBehaviour
             if (spell.CurrentCD > 0)
             {
                 canUse = false;
-                tip = "�ٻݭn" + spell.CurrentCD + "�^�X�N�o";
+                tip = "還需要" + spell.CurrentCD + "回合冷卻";
             }
             else if(ItemManager.Instance.GetAmount(ItemManager.CardID) < 1) 
             {
                 canUse = false;
-                tip = "�S���ťd";
+                tip = "沒有符卡";
             }
         }
 

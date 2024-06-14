@@ -31,7 +31,7 @@ namespace Battle
                 targetName = target.Name;
             }
 
-            if (effect.Type == EffectModel.TypeEnum.MagicAttack || effect.Type == EffectModel.TypeEnum.PhysicalAttack)
+            if (effect.Type == EffectModel.TypeEnum.MagicAttack || effect.Type == EffectModel.TypeEnum.RatioDamage)
             {
                 if (HitType == HitType.Critical)
                 {
@@ -50,9 +50,13 @@ namespace Battle
             {
                 FullText = user.Name + " 使 " + targetName + " 中毒了";
             }
-            else if (effect.Type == EffectModel.TypeEnum.Recover || effect.Type == EffectModel.TypeEnum.Medicine || effect.Type == EffectModel.TypeEnum.Purify)
+            else if (effect.Type == EffectModel.TypeEnum.Recover || effect.Type == EffectModel.TypeEnum.Medicine || effect.Type == EffectModel.TypeEnum.RecoverAll)
             {
                 FullText = user.Name + " 使 " + targetName + " 回復了 " + text + " HP";
+            }
+            else if(effect.Type == EffectModel.TypeEnum.Purify)
+            {
+                FullText = user.Name + " 使 " + targetName + " 的異常狀態回復了";
             }
             else if (effect.Type == EffectModel.TypeEnum.Sleep)
             {

@@ -112,7 +112,7 @@ public class FloatingNumber : MonoBehaviour
         {
             Label.color = new Color32(180, 0, 180, 255);
         }
-        else if (log.Effect.Type == EffectModel.TypeEnum.Recover || log.Effect.Type == EffectModel.TypeEnum.Medicine || log.Effect.Type == EffectModel.TypeEnum.Purify)
+        else if (log.Effect.Type == EffectModel.TypeEnum.Recover || log.Effect.Type == EffectModel.TypeEnum.Medicine || log.Effect.Type == EffectModel.TypeEnum.Purify || log.Effect.Type == EffectModel.TypeEnum.RecoverAll)
         {
             Label.color = Color.green;
         }
