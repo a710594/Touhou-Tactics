@@ -26,9 +26,11 @@ public Action<Vector2Int> DirectionButtonHandler;
     public DirectionGroup DirectionGroup;
     public CameraRotate CameraRotate;
     public LogGroup LogGroup;
+    public Image Arrow;
 
-
+    private Vector3 _arrowOffset = new Vector3(0, 1.5f, 0);
     private Vector3 _directionPosition = new Vector3();    private Dictionary<int, LittleHpBarWithStatus> _littleHpBarDic = new Dictionary<int, LittleHpBarWithStatus>();
+    private Transform _arrowTransform = null;
     private Dictionary<int, FloatingNumberPool> _floatingNumberPoolDic  = new Dictionary<int, FloatingNumberPool>();
 
     public void SetVisible(bool isVisible) 
@@ -177,20 +179,48 @@ public Action<Vector2Int> DirectionButtonHandler;
         _directionPosition = position;
     }
 
+    public void SetArrowVisible(bool isVisible)
+    {
+        Arrow.gameObject.SetActive(isVisible);
+    }
+
+    public void SetArrowTransform(Transform transform)
+    {
+        _arrowTransform = transform;
+    }
+
     public void AddLog(string text)
     {
         LogGroup.AddLog(text);
     }
 
-    private void Rotate()
+    private void Rotate(int angle)
     {
         if (CameraRotate.CurrentState == CameraRotate.StateEnum.Slope)
         {
             DirectionGroup.transform.eulerAngles = new Vector3(60, 0, 45);
+            _arrowOffset = new Vector3(0, 1.5f, 0);
         }
         else
         {
             DirectionGroup.transform.eulerAngles = new Vector3(0, 0, 0);
+            angle = angle % 360;;
+            if (angle == 0)
+            {
+                _arrowOffset = new Vector3(0, 0, 1.5f);
+            }
+            else if(angle == 90) 
+            {
+                _arrowOffset = new Vector3(1.5f, 0, 0);
+            }
+            else if (angle == 180)
+            {
+                _arrowOffset = new Vector3(0, 0, -1.5f);
+            }
+            else if (angle == 270 || angle == -90)
+            {
+                _arrowOffset = new Vector3(-1.5f, 0, 0);
+            }
         }
     }
 
@@ -214,5 +244,9 @@ public Action<Vector2Int> DirectionButtonHandler;
     private void Update()
     {
         DirectionGroup.transform.position = Camera.main.WorldToScreenPoint(_directionPosition + Vector3.down * 0.4f);
+        if (_arrowTransform != null) 
+        {
+            Arrow.transform.position = Camera.main.WorldToScreenPoint(_arrowTransform.position + _arrowOffset);
+        }
     }
 }

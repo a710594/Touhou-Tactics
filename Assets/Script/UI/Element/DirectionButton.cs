@@ -8,7 +8,6 @@ public class DirectionButton : MonoBehaviour, IPointerClickHandler
 {
     public Action<Vector2Int> ClickHandler;
 
-    public CameraRotate CameraRotate;
     public Vector2Int Direction;
 
     public void OnPointerClick(PointerEventData eventData)

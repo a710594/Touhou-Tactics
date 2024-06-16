@@ -31,7 +31,7 @@ namespace Battle
                 targetName = target.Name;
             }
 
-            if (effect.Type == EffectModel.TypeEnum.MagicAttack || effect.Type == EffectModel.TypeEnum.RatioDamage)
+            if (effect.Type == EffectModel.TypeEnum.MagicAttack || effect.Type == EffectModel.TypeEnum.PhysicalAttack || effect.Type == EffectModel.TypeEnum.RatioDamage)
             {
                 if (HitType == HitType.Critical)
                 {

@@ -42,9 +42,7 @@ namespace Battle
                 {
                     _context.SetState<ActionState>();
                 });
-                Instance.Arrow.transform.SetParent(controller.transform);
-                Instance.Arrow.transform.localPosition = new Vector3(0, 1.3f, 0);
-                Instance.Arrow.transform.localEulerAngles = Vector3.zero;
+                Instance._battleUI.SetArrowTransform(controller.transform);
                 Instance._battleUI.CharacterListGroupRefresh();
             }
         }

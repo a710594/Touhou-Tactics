@@ -44,8 +44,8 @@ namespace Battle
             {
                 _hasStarted = true;
                 _battleUI = GameObject.Find("BattleUI").GetComponent<BattleUI>();
+                _battleUI.SetArrowVisible(false);
                 _context.SetState<State_1>();
-                BattleController.Instance.Arrow.SetActive(false);
             }
         }
 
@@ -461,7 +461,7 @@ namespace Battle
                 });
 
                 BattleController.Instance.Info.IsTutorial = false;
-                BattleController.Instance.Arrow.SetActive(true);
+                Instance._battleUI.SetArrowVisible(true);
             }
         }
     }

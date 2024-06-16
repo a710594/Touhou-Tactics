@@ -39,7 +39,7 @@ namespace Battle
         private DragCameraUI _dragCameraUI;
         private SelectBattleCharacterUI _selectBattleCharacterUI;
         private BattleResultUI _battleResultUI;
-        public GameObject Arrow;
+        //public GameObject Arrow;
         public GameObject DirectionGroup;
         private Transform _root;
         private List<int> _enemyList = new List<int>();

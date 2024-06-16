@@ -6,7 +6,7 @@ using DG.Tweening;
 
 public class CameraRotate : MonoBehaviour
 {
-    public Action RotateHandler;
+    public Action<int> RotateHandler;
 
     public enum StateEnum
     {
@@ -50,7 +50,7 @@ public class CameraRotate : MonoBehaviour
 
                     if (RotateHandler != null)
                     {
-                        RotateHandler();
+                        RotateHandler(Mathf.RoundToInt(Angle));
                     }
                 }
                 else if (Input.GetKeyDown(KeyCode.D))
@@ -67,7 +67,7 @@ public class CameraRotate : MonoBehaviour
 
                     if (RotateHandler != null)
                     {
-                        RotateHandler();
+                        RotateHandler(Mathf.RoundToInt(Angle));
                     }
                 }
                 else if (Input.GetKeyDown(KeyCode.W))
@@ -80,13 +80,13 @@ public class CameraRotate : MonoBehaviour
                     });
 
                     transform.DOLocalRotate(new Vector3(90, 0, 0), 1f);
-                    Vector3 local = transform.localPosition + new Vector3(10, 0, 10);
-                    transform.DOLocalMove(local, 1f);
+                    //Vector3 local = transform.localPosition + new Vector3(10, 0, 10);
+                    transform.DOLocalMove(new Vector3(0, 10, 0), 1f);
                     CurrentState = StateEnum.Vertical;
 
                     if (RotateHandler != null)
                     {
-                        RotateHandler();
+                        RotateHandler(Mathf.RoundToInt(Angle));
                     }     
                 }
             }
@@ -101,13 +101,13 @@ public class CameraRotate : MonoBehaviour
                     });
 
                     transform.DOLocalRotate(new Vector3(30, 45, 0), 1f);
-                    Vector3 local = transform.localPosition + new Vector3(-10, 0, -10);
-                    transform.DOLocalMove(local, 1f);
+                    //Vector3 local = transform.localPosition + new Vector3(-10, 0, -10);
+                    transform.DOLocalMove(new Vector3(-10, 10, -10), 1f);
                     CurrentState = StateEnum.Slope;
 
                     if (RotateHandler != null)
                     {
-                        RotateHandler();
+                        RotateHandler(Mathf.RoundToInt(Angle));
                     }
                 }
             }

@@ -132,7 +132,7 @@ public class DragCameraUI : MonoBehaviour
         }
     }
 
-    private void SetLabel()
+    private void SetLabel(int angle)
     {
         if(_cameraRotate.CurrentState == CameraRotate.StateEnum.Slope)
         {

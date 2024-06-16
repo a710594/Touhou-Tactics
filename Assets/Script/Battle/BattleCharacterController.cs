@@ -122,15 +122,15 @@ public class BattleCharacterController : MonoBehaviour
         SpriteRenderer.SetPropertyBlock(mpb);
     }
 
-    public void Rotate() 
+    public void Rotate(int angle) 
     {
         if (_cameraRotate.CurrentState == CameraRotate.StateEnum.Slope) 
         {
-            transform.DORotate(new Vector3(30, 45 + _cameraRotate.Angle, 0), 1f);
+            transform.DORotate(new Vector3(30, 45 + angle, 0), 1f);
         }
         else
         {
-            transform.DORotate(new Vector3(90, _cameraRotate.Angle, 0), 1f);
+            transform.DORotate(new Vector3(90, angle, 0), 1f);
         }
 
         SetSprite();

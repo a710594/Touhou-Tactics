@@ -21,7 +21,6 @@ namespace Battle
                 _info = Instance.Info;
                 Camera.main.transform.position = new Vector3(_info.NoAttachList[0].x-10, 10, _info.NoAttachList[0].y-10);
 
-                Instance.Arrow = GameObject.Find("Arrow");
                 Instance.DirectionGroup = GameObject.Find("DirectionGroup");
                 Instance.DirectionGroup.SetActive(false);
 
