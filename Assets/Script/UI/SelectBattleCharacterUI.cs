@@ -16,41 +16,20 @@ namespace Battle
         public TipLabel TipLabel;
         public CharacterInfoUI CharacterInfoUI;
 
-        private int _playerCount;
+        private int _needCount;
+        private bool _mustBeEqualToNeedCount;
+        
         private Timer _timer = new Timer();
         private List<CharacterInfo> _tempCharacterList = new List<CharacterInfo>();
         private List<CharacterInfo> _selectedCharacterList = new List<CharacterInfo>();
         private Dictionary<CharacterInfo, DragCharacterImage> _dragCharacterImageDic = new Dictionary<CharacterInfo, DragCharacterImage>();
         private Dictionary<CharacterInfo, Image> _dragCharacterBGDic = new Dictionary<CharacterInfo, Image>();
 
-        public void Init(BattleInfo info)
+        public void Init(int needCount, bool mustBeEqualToNeedCount, List<CharacterInfo> list)
         {
-            _playerCount = info.PlayerCount;
-            if (CharacterManager.Instance.SurvivalCount() <_playerCount) 
-            {
-                _playerCount = CharacterManager.Instance.SurvivalCount();
-            }
-            if (info.IsTutorial)
-            {
-                _tempCharacterList.Clear();
-                _tempCharacterList.Add(CharacterManager.Instance.Info.CharacterList[3]); //§¯¹Ú
-                _timer.Start(0.5f, ()=> 
-                {
-                    TutorialUI.Open("±N¨¤¦â±q¤U¤è©ì¦²¦Ü³õ´ºªº¥Õ¦â°Ï°ì¤¤¡C\n¥Õ¦âªº°Ï°ì¥Nªí¥i©ñ¸m¨¤¦âªº¦ì¸m¡C\n±N¨¤¦â°t¸m§¹«á«ö¶}©l¾Ô°«¡C", "Tutorial_1", null);
-                });
-            }
-            else
-            {
-                _tempCharacterList = new List<CharacterInfo>(CharacterManager.Instance.Info.CharacterList);
-                for (int i=0; i<_tempCharacterList.Count; i++) 
-                {
-                    if (_tempCharacterList[i].CurrentHP == 0) 
-                    {
-                        _tempCharacterList.RemoveAt(i);
-                        i--;
-                    }
-                }
-            }
+            _needCount = needCount;
+            _mustBeEqualToNeedCount = mustBeEqualToNeedCount;
+            _tempCharacterList = list;
 
             Image dragCharacterBG;
             DragCharacterImage dragCharacterImage;
@@ -114,17 +93,23 @@ namespace Battle
 
         private void ConfirmOnClick()
         {
-            if (_selectedCharacterList.Count == _playerCount)
+            if (_selectedCharacterList.Count == _needCount)
             {
                 BattleController.Instance.SetCharacterState();
             }
             else
             {
-                ConfirmUI.Open("ÁÙ¥i¥H¦A©ñ¸m" + (_playerCount - _selectedCharacterList.Count) + "­Ó¨¤¦â¡A½T©w­n¶}©l¾Ô°«¶Ü¡H", "½T©w", "¨ú®ø", ()=> 
+                if(_mustBeEqualToNeedCount)
                 {
-                    BattleController.Instance.SetCharacterState();
-                }, null);
-                //TipLabel.SetLabel("­n¦³" + _playerCount + "­Ó¨¤¦â°Ñ¾Ô¤~¯à¶}©l¾Ô°«");
+                    ConfirmUI.Open("å¿…éœ€æ”¾ç½®" + _needCount + "å€‹è§’è‰²æ‰èƒ½é–‹å§‹æˆ°é¬¥", "ç¢ºå®š", null);
+                }
+                else
+                {
+                    ConfirmUI.Open("é‚„å¯ä»¥å†æ”¾ç½®" + (_needCount - _selectedCharacterList.Count) + "å€‹è§’è‰²ï¼Œç¢ºå®šè¦é–‹å§‹æˆ°é¬¥å—Žï¼Ÿ", "ç¢ºå®š", "å–æ¶ˆ", ()=> 
+                    {
+                        BattleController.Instance.SetCharacterState();
+                    }, null);
+                }
             }
         }
 

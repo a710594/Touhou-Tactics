@@ -16,17 +16,20 @@ public class DragCameraUI : MonoBehaviour
     [NonSerialized]
     public bool DontDrag = false;
 
-    private int _width;
-    private int _height;
+    private int _minX;
+    private int _maxX;
+    private int _minY;
+    private int _maxY;
     private Vector3 _dragOrigin;
     private CameraRotate _cameraRotate;
     private float _distance = 20;
 
-    public void Init(int width, int height)
+    public void Init(BattleInfo info)
     {
-        _width = width;
-        _height = height;
-        Debug.Log(_width + " " + _height);
+        _minX = info.MinX;
+        _maxX = info.MaxX;
+        _minY = info.MinY;
+        _maxY = info.MaxY;
     }
 
     private void BackgroundDown(ButtonPlus button)
@@ -80,8 +83,8 @@ public class DragCameraUI : MonoBehaviour
                     //x = Camera.main.transform.position.x + v3.x;
                     //z = Camera.main.transform.position.z + v3.z;
                 }
-                x = Mathf.Clamp(CameraRoot.position.x + v3.x, 0, _width);
-                z = Mathf.Clamp(CameraRoot.position.z + v3.z, 0, _height);
+                x = Mathf.Clamp(CameraRoot.position.x + v3.x, _minX, _maxX);
+                z = Mathf.Clamp(CameraRoot.position.z + v3.z, _minY, _maxY);
             }
             else
             {
@@ -101,8 +104,8 @@ public class DragCameraUI : MonoBehaviour
                 {
                     v3 = new Vector3(-v1.y * CameraDragSpeed, 0, v1.x * CameraDragSpeed);
                 }
-                x = Mathf.Clamp(CameraRoot.position.x + v3.x, 0, _width);
-                z = Mathf.Clamp(CameraRoot.position.z + v3.z, 0, _height);
+                x = Mathf.Clamp(CameraRoot.position.x + v3.x, _minX, _maxX);
+                z = Mathf.Clamp(CameraRoot.position.z + v3.z, _minY, _minY);
 
             }
 
@@ -115,7 +118,7 @@ public class DragCameraUI : MonoBehaviour
             if (Physics.Raycast(ray, out hit, 100))
             {
                 Vector2Int v2 = Utility.ConvertToVector2Int(hit.point);
-                if (BattleController.Instance.Info.IsTutorial && !BattleTutorialController.Instance.CheckClick(v2))
+                if (BattleController.Instance.IsTutorial && !BattleController.Instance.Tutorial.CheckClick(v2))
                 {
                     return;
                 }
@@ -123,7 +126,7 @@ public class DragCameraUI : MonoBehaviour
             }
             else //?N??????S???????a??
             {
-                if (BattleController.Instance.Info.IsTutorial)
+                if (BattleController.Instance.IsTutorial)
                 {
                     return;
                 }
@@ -136,11 +139,11 @@ public class DragCameraUI : MonoBehaviour
     {
         if(_cameraRotate.CurrentState == CameraRotate.StateEnum.Slope)
         {
-          Label.text = "A¡G¦V¥ª±ÛÂà D¡G¦V¥k±ÛÂà W¡G¦V¤W±ÛÂà";  
+          Label.text = "Aï¿½Gï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Dï¿½Gï¿½Vï¿½kï¿½ï¿½ï¿½ï¿½ Wï¿½Gï¿½Vï¿½Wï¿½ï¿½ï¿½ï¿½";  
         }
         else
         {
-            Label.text = "S¡G¦V¤U±ÛÂà";
+            Label.text = "Sï¿½Gï¿½Vï¿½Uï¿½ï¿½ï¿½ï¿½";
         }
 
     }

@@ -3,13 +3,16 @@ using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class BattleUI : MonoBehaviour
 {
-public Action<Vector2Int> DirectionButtonHandler;
+    public Action<Vector2Int> DirectionButtonHandler;
+
+    public static BattleUI Instance = null;
 
     //public Button IdleButton;
     public ButtonPlus BackgroundButton;
@@ -226,7 +229,7 @@ public Action<Vector2Int> DirectionButtonHandler;
 
     private void DirectionButtonOnClick(Vector2Int direction)
     {
-        if (BattleController.Instance.Info.IsTutorial && !BattleTutorialController.Instance.CheckClick(direction))
+        if (BattleController.Instance.IsTutorial && !BattleController.Instance.Tutorial.CheckClick(direction))
         {
             return;
         }
@@ -236,6 +239,7 @@ public Action<Vector2Int> DirectionButtonHandler;
 
     private void Awake()
     {
+        Instance = this;
         SetDirectionGroupVisible(false);
         CameraRotate.RotateHandler += Rotate;
         DirectionGroup.ClickHandler += DirectionButtonOnClick;
@@ -248,5 +252,10 @@ public Action<Vector2Int> DirectionButtonHandler;
         {
             Arrow.transform.position = Camera.main.WorldToScreenPoint(_arrowTransform.position + _arrowOffset);
         }
+    }
+
+    void Destroy()
+    {
+        Instance = null;
     }
 }

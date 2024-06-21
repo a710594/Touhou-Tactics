@@ -34,7 +34,7 @@ namespace Battle
             for (int i = 0; i < mulList.Count; i++)
             {
                 position = to + mulList[i];
-                if (position.x < Info.Width && position.x >= 0 && position.y < Info.Height && position.y >= 0)
+                if (position.x <= Info.MaxX && position.x >= Info.MinY && position.y <= Info.MaxY && position.y >= Info.MinY)
                 {
                     result.Add(position);
                 }
@@ -287,7 +287,7 @@ namespace Battle
 
             while (true) 
             {
-                v2 = new Vector2Int(Mathf.RoundToInt(Utility.RandomGaussian(0, Info.Width - 1)), Mathf.RoundToInt(Utility.RandomGaussian(0, Info.Height - 1)));
+                v2 = new Vector2Int(Mathf.RoundToInt(Utility.RandomGaussian(Info.MinX, Info.MaxX)), Mathf.RoundToInt(Utility.RandomGaussian(Info.MinY, Info.MaxY)));
                 if(Info.TileAttachInfoDic[v2].MoveCost > 0) 
                 {
                     //檢查是否為保留區

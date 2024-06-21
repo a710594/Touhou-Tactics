@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,8 @@ namespace Explore
         public Transform Wall;
         public Transform Start;
         public Transform Goal;
+        public Transform Enemy;
+        public Transform Trigger;
         public ExploreEnemyInfoObject[] Enemys;
         public GameObject[] Triggers;
 
@@ -47,15 +50,17 @@ namespace Explore
             _info.Size = new Vector2Int(maxX - minX, maxY - minY);
 
             ExploreEnemyInfo enemyInfo;
-            for(int i=0; i<Enemys.Length; i++)
+            ExploreEnemyInfoObject enemyObj;
+            foreach (Transform child in Enemy)
             {
-                enemyInfo = new ExploreEnemyInfo(Enemys[i].Prefab, Enemys[i].Map, Utility.ConvertToVector2Int(Enemys[i].transform.position), (int)Enemys[i].transform.eulerAngles.y);
+                enemyObj = child.gameObject.GetComponent<ExploreEnemyInfoObject>();
+                enemyInfo = new ExploreEnemyInfo(enemyObj.Prefab, enemyObj.Map, enemyObj.Tutorial, Utility.ConvertToVector2Int(enemyObj.transform.position), (int)enemyObj.transform.eulerAngles.y);
                 _info.EnemyInfoList.Add(enemyInfo);
             }
 
-            for (int i=0; i<Triggers.Length; i++) 
+            foreach (Transform child in Trigger)
             {
-                _info.TriggerDic.Add(Utility.ConvertToVector2Int(Triggers[i].transform.position), Triggers[i].name);
+                _info.TriggerDic.Add(Utility.ConvertToVector2Int(child.position), child.name);
             }
 
             ExploreFile file = new ExploreFile(_info);
@@ -97,6 +102,7 @@ namespace Explore
             }
 
             GameObject obj;
+
             for(int i=0; i<file.TileValues.Count; i++)
             {
                 obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + file.TileValues[i]), Vector3.zero, Quaternion.identity);
@@ -110,6 +116,22 @@ namespace Explore
                 {
                     obj.transform.SetParent(Ground);
                 }
+            }
+
+            for(int i=0; i<file.EnemyInfoList.Count; i++)
+            {
+                obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/ExploreEnemyInfoObject"), Vector3.zero, Quaternion.identity);
+                ExploreEnemyInfoObject exploreEnemyInfoObject = obj.GetComponent<ExploreEnemyInfoObject>();
+                exploreEnemyInfoObject.Prefab = file.EnemyInfoList[i].Prefab;
+                exploreEnemyInfoObject.Map = file.EnemyInfoList[i].Map;
+                exploreEnemyInfoObject.Tutorial = file.EnemyInfoList[i].Tutorial;
+            }
+
+            for(int i=0; i<file.TriggerKeys.Count; i++)
+            {
+                obj = new GameObject();
+                obj.transform.position = new Vector3(file.TileKeys[i].x, 0, file.TileKeys[i].y);
+                obj.name = file.TriggerValues[i];
             }
         }
     }

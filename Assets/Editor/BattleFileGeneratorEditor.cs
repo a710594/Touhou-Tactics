@@ -11,13 +11,9 @@ public class MapFileGeneratorEditor : Editor
         DrawDefaultInspector();
 
         BattleFileGenerator nodeGenerator = (BattleFileGenerator)target;
-        if (GUILayout.Button("«Ø¥ßÀÉ®×"))
+        if (GUILayout.Button("å»ºç«‹æª”æ¡ˆ"))
         {
             nodeGenerator.BuildFile();
-        }
-        if (GUILayout.Button("¸ü¤JÀÉ®×"))
-        {
-            nodeGenerator.LoadFile();
         }
     }
 }

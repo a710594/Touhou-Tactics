@@ -14,6 +14,11 @@ namespace Battle
 
             public override void Begin()
             {
+                if(Instance.ActionStateBeginHandler != null)
+                {
+                    Instance.ActionStateBeginHandler();
+                }
+
                 _info = Instance.Info;
                 _character = Instance.SelectedCharacter;
                 _characterList = Instance.CharacterList;
@@ -44,10 +49,6 @@ namespace Battle
                 else if (_character.IsAuto)
                 {
                     _character.AI.Start();
-                }
-                else if (_info.IsTutorial) 
-                {
-                    BattleTutorialController.Instance.Start();
                 }
             }
 

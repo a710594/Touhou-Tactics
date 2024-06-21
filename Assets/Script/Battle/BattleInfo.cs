@@ -7,10 +7,12 @@ using UnityEngine;
 
 public class BattleInfo
 {
-    public bool IsTutorial;
-    public int Width;
-    public int Height;
-    public int PlayerCount;
+    public int MinX;
+    public int MaxX;
+    public int MinY;
+    public int MaxY;
+    public int NeedCount;
+    public bool MustBeEqualToNeedCount = false;
     public int Exp;
     public List<Vector2Int> NoAttachList = new List<Vector2Int>();
     public Dictionary<Vector2Int, TileAttachInfo> TileAttachInfoDic = new Dictionary<Vector2Int, TileAttachInfo>();

@@ -38,7 +38,7 @@ public class ActionButtonGroup : MonoBehaviour
 
     private void MoveOnClick() 
     {
-        if (BattleController.Instance.Info.IsTutorial && !BattleTutorialController.Instance.CanMove())
+        if (BattleController.Instance.IsTutorial && !BattleController.Instance.Tutorial.CanMove())
         {
             return;
         }
@@ -47,7 +47,7 @@ public class ActionButtonGroup : MonoBehaviour
 
     private void SkillOnClick() 
     {
-        if (BattleController.Instance.Info.IsTutorial && !BattleTutorialController.Instance.CanSkill())
+        if (BattleController.Instance.IsTutorial && !BattleController.Instance.Tutorial.CanSkill())
         {
             return;
         }
@@ -62,7 +62,7 @@ public class ActionButtonGroup : MonoBehaviour
 
     private void SupportOnClick()
     {
-        if (BattleController.Instance.Info.IsTutorial && !BattleTutorialController.Instance.CanSupport())
+        if (BattleController.Instance.IsTutorial && !BattleController.Instance.Tutorial.CanSupport())
         {
             return;
         }
@@ -77,7 +77,7 @@ public class ActionButtonGroup : MonoBehaviour
 
     private void SpellOnClick()
     {
-        if (BattleController.Instance.Info.IsTutorial && !BattleTutorialController.Instance.CanSpell())
+        if (BattleController.Instance.IsTutorial && !BattleController.Instance.Tutorial.CanSpell())
         {
             return;
         }
@@ -92,7 +92,7 @@ public class ActionButtonGroup : MonoBehaviour
 
     private void ItemOnClick() 
     {
-        if (BattleController.Instance.Info.IsTutorial && !BattleTutorialController.Instance.CanItem())
+        if (BattleController.Instance.IsTutorial && !BattleController.Instance.Tutorial.CanItem())
         {
             return;
         }
@@ -107,7 +107,7 @@ public class ActionButtonGroup : MonoBehaviour
 
     private void IdleOnClick() 
     {
-        if (BattleController.Instance.Info.IsTutorial && !BattleTutorialController.Instance.CanIdle())
+        if (BattleController.Instance.IsTutorial && !BattleController.Instance.Tutorial.CanIdle())
         {
             return;
         }
@@ -117,7 +117,7 @@ public class ActionButtonGroup : MonoBehaviour
 
     private void ResetOnClick() 
     {
-        if (BattleController.Instance.Info.IsTutorial && !BattleTutorialController.Instance.CanReset())
+        if (BattleController.Instance.IsTutorial && !BattleController.Instance.Tutorial.CanReset())
         {
             return;
         }
@@ -129,7 +129,7 @@ public class ActionButtonGroup : MonoBehaviour
     private void ScrollItemOnClick(ScrollItem scrollItem)
     {
         Command command = (Command)scrollItem.Data;
-        if (BattleController.Instance.Info.IsTutorial && !BattleTutorialController.Instance.CheckScrollItem(command))
+        if (BattleController.Instance.IsTutorial && !BattleController.Instance.Tutorial.CheckScrollItem(command))
         {
             return;
         }
@@ -181,36 +181,39 @@ public class ActionButtonGroup : MonoBehaviour
 
     private void ShowInfo(ScrollItem scrollItem)
     {
-        Command command = (Command)scrollItem.Data;
-        if (command is Skill)
+        if(!BattleController.Instance.IsTutorial)
         {
-            Skill skill = (Skill)command;
-            SkillInfoGroup.SetData(skill);
-            SkillInfoGroup.gameObject.SetActive(true);
-        }
-        else if (command is Support)
-        {
-            Support support = (Support)command;
-            SkillInfoGroup.SetData(support);
-            SkillInfoGroup.gameObject.SetActive(true);
-        }
-        else if (command is Spell)
-        {
-            Spell card = (Spell)command;
-            SkillInfoGroup.SetData(card);
-            SkillInfoGroup.gameObject.SetActive(true);
-        }
-        else if (command is Consumables)
-        {
-            Consumables consumbles = (Consumables)command;
-            SkillInfoGroup.SetData(consumbles);
-            SkillInfoGroup.gameObject.SetActive(true);
-        }
-        else if (command is Food)
-        {
-            Food food = (Food)command;
-            SkillInfoGroup.SetData(food);
-            SkillInfoGroup.gameObject.SetActive(true);
+            Command command = (Command)scrollItem.Data;
+            if (command is Skill)
+            {
+                Skill skill = (Skill)command;
+                SkillInfoGroup.SetData(skill);
+                SkillInfoGroup.gameObject.SetActive(true);
+            }
+            else if (command is Support)
+            {
+                Support support = (Support)command;
+                SkillInfoGroup.SetData(support);
+                SkillInfoGroup.gameObject.SetActive(true);
+            }
+            else if (command is Spell)
+            {
+                Spell card = (Spell)command;
+                SkillInfoGroup.SetData(card);
+                SkillInfoGroup.gameObject.SetActive(true);
+            }
+            else if (command is Consumables)
+            {
+                Consumables consumbles = (Consumables)command;
+                SkillInfoGroup.SetData(consumbles);
+                SkillInfoGroup.gameObject.SetActive(true);
+            }
+            else if (command is Food)
+            {
+                Food food = (Food)command;
+                SkillInfoGroup.SetData(food);
+                SkillInfoGroup.gameObject.SetActive(true);
+            }
         }
     }
 

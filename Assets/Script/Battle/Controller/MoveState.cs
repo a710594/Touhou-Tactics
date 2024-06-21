@@ -30,9 +30,9 @@ namespace Battle
 
             public override void End()
             {
-                if (Instance.Info.IsTutorial)
+                if(Instance.MoveStateEndHandler!=null)
                 {
-                    BattleTutorialController.Instance.ToState_4();
+                    Instance.MoveStateEndHandler();
                 }
             }
 

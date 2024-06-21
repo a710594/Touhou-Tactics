@@ -27,11 +27,11 @@ namespace Battle
 
                 if (Passive.Contains<ArcherPassive>(_character.PassiveList))
                 {
-                    _rangeList = ArcherPassive.GetRange(_character.SelectedCommand.Range, _info.Width, _info.Height, Utility.ConvertToVector2Int(_character.Position), _info.TileAttachInfoDic);
+                    _rangeList = ArcherPassive.GetRange(_character.SelectedCommand.Range, Utility.ConvertToVector2Int(_character.Position), _info);
                 }
                 else
                 {
-                    _rangeList = Utility.GetRange(_character.SelectedCommand.Range, _info.Width, _info.Height, Utility.ConvertToVector2Int(_character.Position));
+                    _rangeList = Utility.GetRange(_character.SelectedCommand.Range, Utility.ConvertToVector2Int(_character.Position), _info);
                 }
 
                 Instance.RemoveByFaction(_command.RangeTarget, _rangeList);

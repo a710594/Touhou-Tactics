@@ -1,128 +1,76 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Battle
-{ 
+{
     public class BattleTutorialController
     {
-        private static BattleTutorialController _instance;
-        public static BattleTutorialController Instance
+        protected bool _enable;
+        protected StateContext _context = new StateContext();
+
+        public virtual List<CharacterInfo> GetCharacterList()
         {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new BattleTutorialController();
-                }
-                return _instance;
-            }
+            return null;
         }
 
-        private bool _hasStarted = false;
-        private StateContext _context = new StateContext();
-        private BattleUI _battleUI;
-
-        public BattleTutorialController() 
+        public virtual void Start() 
         {
-            _context.ClearState();
-            _context.AddState(new State_1(_context));
-            _context.AddState(new State_2(_context));
-            _context.AddState(new State_3(_context));
-            _context.AddState(new State_4(_context));
-            _context.AddState(new State_5(_context));
-            _context.AddState(new State_6(_context));
-            _context.AddState(new State_7(_context));
-            _context.AddState(new State_8(_context));
-            _context.AddState(new State_9(_context));
         }
 
-        public void Start() 
+        public virtual bool CheckClick(Vector2Int position)
         {
-            if (!_hasStarted)
-            {
-                _hasStarted = true;
-                _battleUI = GameObject.Find("BattleUI").GetComponent<BattleUI>();
-                _battleUI.SetArrowVisible(false);
-                _context.SetState<State_1>();
-            }
-        }
-
-        public bool CanMove() 
-        {
-            return ((TutorialState)_context.CurrentState).CanMove();
-        }
-
-        public bool CanSkill()
-        {
-            return ((TutorialState)_context.CurrentState).CanSkill();
-        }
-
-        public bool CanSupport()
-        {
-            return ((TutorialState)_context.CurrentState).CanSupport();
-        }
-
-        public bool CanSpell()
-        {
-            return ((TutorialState)_context.CurrentState).CanSpell();
-        }
-
-        public bool CanItem()
-        {
-            return ((TutorialState)_context.CurrentState).CanItem();
-        }
-
-        public bool CanIdle()
-        {
-            return ((TutorialState)_context.CurrentState).CanIdle();
-        }
-
-        public bool CanReset()
-        {
-            return ((TutorialState)_context.CurrentState).CanReset();
-        }
-
-        public bool CheckClick(Vector2Int position)
-        {
-            if (_context != null && _context.CurrentState != null)
+            if(_context.CurrentState!=null)
             {
                 return ((TutorialState)_context.CurrentState).CheckClick(position);
             }
-            return true;
+            else
+            {
+                return false;
+            }
         }
 
-        public bool CheckScrollItem(object obj) 
+        public virtual bool CheckScrollItem(object obj) 
         {
             return ((TutorialState)_context.CurrentState).CheckScrollItem(obj);
         }
 
-        public void ToState_4() 
+        public virtual bool CanMove() 
         {
-            if (_context.CurrentState is State_3)
-            {
-                _context.SetState<State_4>();
-            }
+            return ((TutorialState)_context.CurrentState).CanMove();
         }
 
-        public void ToState_8()
+        public virtual bool CanSkill()
         {
-            if (_context.CurrentState is State_7)
-            {
-                _context.SetState<State_8>();
-            }
+            return ((TutorialState)_context.CurrentState).CanSkill();
         }
 
-        public void ToState_9()
+        public virtual bool CanSupport()
         {
-            if (_context.CurrentState is State_8)
-            {
-                _context.SetState<State_9>();
-            }
+            return ((TutorialState)_context.CurrentState).CanSupport();
         }
 
-        private class TutorialState : State
+        public virtual bool CanSpell()
+        {
+            return ((TutorialState)_context.CurrentState).CanSpell();
+        }
+
+        public virtual bool CanItem()
+        {
+            return ((TutorialState)_context.CurrentState).CanItem();
+        }
+
+        public virtual bool CanIdle()
+        {
+            return ((TutorialState)_context.CurrentState).CanIdle();
+        }
+
+        public virtual bool CanReset()
+        {
+            return ((TutorialState)_context.CurrentState).CanReset();
+        }
+
+        protected class TutorialState : State
         {
             public TutorialState(StateContext context) : base(context)
             {
@@ -173,295 +121,6 @@ namespace Battle
             public virtual bool CheckScrollItem(object obj)
             {
                 return false;
-            }
-        }
-
-        //第一步:選擇移動
-        private class State_1 : TutorialState 
-        {
-            public State_1(StateContext context) : base(context)
-            {
-            }
-
-            public override void Begin()
-            {
-                Vector3 offset = new Vector3(-200, 0, 0);
-                TutorialArrowUI.Open("選擇移動。", Instance._battleUI.ActionButtonGroup.MoveButton.transform, offset, Vector2Int.right, null);
-            }
-
-            public override void End()
-            {
-                TutorialArrowUI.Close();
-            }
-
-            public override bool CanMove()
-            {
-                Next();
-                return true;
-            }
-
-            public override void Next()
-            {
-                _context.SetState<State_2>();
-            }
-        }
-
-        //指定位置
-        private class State_2 : TutorialState 
-        {
-            public State_2(StateContext context) : base(context)
-            {
-            }
-
-            public override void Begin()
-            {
-                TutorialUI.Open("地圖上白色的區域代表可移動的範圍。\n請點選箭頭指示的位置。", "Tutorial_2", ()=> 
-                {
-                    TutorialArrowUI.Open("選擇移動。", new Vector3(4, 1, 3), Vector2Int.down, null);
-                });
-            }
-
-            public override void End()
-            {
-                TutorialArrowUI.Close();
-            }
-
-            public override bool CheckClick(Vector2Int position)
-            {
-                if (position == new Vector2Int(4, 3))
-                {
-                    Next();
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            public override void Next()
-            {
-                _context.SetState<State_3>();
-            }
-        }
-
-        //確認位置
-        private class State_3 : TutorialState
-        {
-            public State_3(StateContext context) : base(context)
-            {
-            }
-
-            public override void Begin()
-            {
-                TutorialArrowUI.Open("再次點選同樣的位置代表確定位置。", new Vector3(4, 1, 3), Vector2Int.down, null);
-            }
-
-            public override bool CheckClick(Vector2Int position)
-            {
-                if (position == new Vector2Int(4, 3))
-                {
-                    TutorialArrowUI.Close();
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            public override void Next()
-            {
-                _context.SetState<State_4>();
-            }
-        }
-
-        //選擇技能
-        private class State_4 : TutorialState
-        {
-            public State_4(StateContext context) : base(context)
-            {
-            }
-
-            public override void Begin()
-            {
-                Vector3 offset = new Vector3(-200, 0, 0);
-                TutorialArrowUI.Open("選擇技能。", Instance._battleUI.ActionButtonGroup.SkillButton.transform, offset, Vector2Int.right, null);
-            }
-
-            public override void End()
-            {
-                TutorialArrowUI.Close();
-            }
-
-            public override bool CanSkill()
-            {
-                Next();
-                return true;
-            }
-
-            public override void Next()
-            {
-                _context.SetState<State_5>();
-            }
-        }
-
-        //攻擊
-        private class State_5 : TutorialState
-        {
-            public State_5(StateContext context) : base(context)
-            {
-            }
-
-            public override void Begin()
-            {
-                Vector3 offset = new Vector3(-200, 160, 0);
-                TutorialArrowUI.Open("選擇攻擊。", Instance._battleUI.ActionButtonGroup.ScrollView.Background.transform, offset, Vector2Int.right, null);
-            }
-
-            public override void End()
-            {
-                TutorialArrowUI.Close();
-            }
-
-            public override bool CheckScrollItem(object obj)
-            {
-                if(obj is Skill &&((Skill)obj).ID == 1) 
-                {
-                    Next();
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            public override void Next()
-            {
-                _context.SetState<State_6>();
-            }
-        }
-
-        //��ܧ�����m
-        private class State_6 : TutorialState
-        {
-            public State_6(StateContext context) : base(context)
-            {
-            }
-
-            public override void Begin()
-            {
-                TutorialUI.Open("�{�b�a�ϤW�զ⪺�d��O�i�H��ޯ઺�a��C\n���I��b�Y���ܪ���m�C", "Tutorial_3", () =>
-                {
-                    TutorialArrowUI.Open("��ܥؼСC", new Vector3(4, 2, 4), Vector2Int.down, null);
-                });
-            }
-
-            public override void End()
-            {
-                TutorialArrowUI.Close();
-            }
-
-            public override bool CheckClick(Vector2Int position)
-            {
-                if (position == new Vector2Int(4, 4))
-                {
-                    Next();
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            public override void Next()
-            {
-                _context.SetState<State_7>();
-            }
-        }
-
-        //�T�{������m
-        private class State_7 : TutorialState
-        {
-            public State_7(StateContext context) : base(context)
-            {
-            }
-
-            public override void Begin()
-            {
-                TutorialArrowUI.Open("�A���I��P�˪���m�T�{�C", new Vector3(4, 2, 4), Vector2Int.down, null);
-            }
-
-            //public override void End()
-            //{
-            //    TutorialArrowUI.Close();
-            //}
-
-            public override bool CheckClick(Vector2Int position)
-            {
-                if (position == new Vector2Int(4, 4))
-                {
-                    TutorialArrowUI.Close();
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            //public override void Next()
-            //{
-            //    _context.SetState<State_8>();
-            //}
-        }
-
-        //��ܤ�V
-        private class State_8 : TutorialState
-        {
-            public State_8(StateContext context) : base(context)
-            {
-            }
-
-            public override void Begin()
-            {
-                TutorialUI.Open("�^�X������ݭn��ܨ��⭱�諸��V�C\n���⭱�諸��V�|�v�T�R���v�C\n��軡�p�G�����ĤH�������A�R���v�|����C�C\n�Ϥ��q�I�᰽ŧ�A�R���v�N�|�ܰ��C\n�ɶq���V�ĤH�A�קK�Q��ŧ�a�C", "Tutorial_4", ()=> 
-                {
-                    TutorialArrowUI.Open("��ܤ�V�C", new Vector3(4, 2, 4), Vector2Int.down, null);
-                });
-            }
-
-            public override bool CheckClick(Vector2Int position)
-            {
-                if (position == new Vector2Int(0, 1))
-                {
-                    TutorialArrowUI.Close();
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
-
-        private class State_9 : TutorialState
-        {
-            public State_9(StateContext context) : base(context)
-            {
-            }
-
-            public override void Begin()
-            {
-                TutorialUI.Open("�H�W�N�O���ʻP�������򥻬y�{�C\n�@�Ө���@�^�X���i�H���⦸��ʪ����|�C���F���ʩM�ϥΧޯ�~�٦���L���ﶵ�C", ()=> 
-                {
-                    TutorialUI.Open("1.���ʡG�@�^�X�̦h�i�H���ʨ⦸\n2.�ޯ�G�@�^�X�u��ϥΤ@��\n3.�䴩�G�P�ޯ������A�j�h�O�j�Ʀۤv���ĪG�C�����Ӧ�ʦ��ơA���@�ˤ@�^�X�u��ϥΤ@��\n4.�ťd�G�ϥγW�h�M�ޯ�ۦP�A���O�ݭn���Ӳťd�A�B�ϩҦ��������ťd���i�J�N�o\n5.�D��G�ϥγW�h�M�ޯ�ۦP�A���O�ݭn���ӹD��\n6.�ݾ��G�p�G�Ӧ^�X�S����L�Q�����ơA�i�H��ܫݾ������Ӧ^�X�C", null);
-                });
-
-                BattleController.Instance.Info.IsTutorial = false;
-                Instance._battleUI.SetArrowVisible(true);
             }
         }
     }

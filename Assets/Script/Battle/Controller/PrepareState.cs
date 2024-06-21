@@ -8,12 +8,14 @@ namespace Battle
     {
         private class PrepareState : BattleControllerState 
         {
+            private SelectBattleCharacterUI _selectBattleCharacterUI;
             private Dictionary<CharacterInfo, BattleCharacterController> _tempDic = new Dictionary<CharacterInfo, BattleCharacterController>();
 
             public PrepareState(StateContext context) : base(context)
             {
                 _info = Instance.Info;
                 _characterList = Instance.CharacterList;
+                _selectBattleCharacterUI = GameObject.Find("SelectBattleCharacterUI").GetComponent<SelectBattleCharacterUI>();
             }
 
             public override void Begin()
@@ -24,9 +26,39 @@ namespace Battle
                 Instance.DirectionGroup = GameObject.Find("DirectionGroup");
                 Instance.DirectionGroup.SetActive(false);
 
+                int needCount = _info.NeedCount;
+                if (CharacterManager.Instance.SurvivalCount() < needCount) 
+                {
+                    needCount = CharacterManager.Instance.SurvivalCount();
+                }
+
+                List<CharacterInfo> tempCharacterList = new List<CharacterInfo>();
+                if (Instance.IsTutorial)
+                {
+                    tempCharacterList = Instance.Tutorial.GetCharacterList();
+                    //Instance.Tutorial.Start();
+                }
+                else
+                {
+                    for (int i=0; i<tempCharacterList.Count; i++) 
+                    {
+                        if (tempCharacterList[i].CurrentHP == 0) 
+                        {
+                            tempCharacterList.RemoveAt(i);
+                            i--;
+                        }
+                    }
+                }
+                _selectBattleCharacterUI.Init(needCount, _info.MustBeEqualToNeedCount, tempCharacterList);
+
                 for (int i=0; i< _info.NoAttachList.Count; i++) 
                 {
                     _info.TileComponentDic[_info.NoAttachList[i]].Quad.gameObject.SetActive(true);
+                }
+
+                if(Instance.PrepareStateBeginHandler!=null)
+                {
+                    Instance.PrepareStateBeginHandler();
                 }
             }
 
@@ -48,7 +80,7 @@ namespace Battle
                     Instance._battleUI.SetFloatingNumberPoolAnchor(battleCharacter.Index, Instance._controllerDic[battleCharacter.Index]);
                 }
                 Instance._battleUI.gameObject.SetActive(true);
-                Instance._selectBattleCharacterUI.gameObject.SetActive(false);
+                _selectBattleCharacterUI.gameObject.SetActive(false);
 
                 Instance.SortCharacterList(true);
 

@@ -430,11 +430,11 @@ public class Generator2D : MonoBehaviour {
         for (int i = 0; i < data.EnemyCount; i++)
         {
             random = UnityEngine.Random.Range(0, walkableList.Count);
-            enemyInfo = new ExploreEnemyInfo(data.EnemyName, null, walkableList[random], 0);
+            enemyInfo = new ExploreEnemyInfo(data.EnemyName, null, null, walkableList[random], 0);
             info.EnemyInfoList.Add(enemyInfo);
             walkableList.RemoveAt(random);
         }
-        enemyInfo = new ExploreEnemyInfo("FloorBOSS", null, info.Goal, 0);
+        enemyInfo = new ExploreEnemyInfo("FloorBOSS", null, null, info.Goal, 0);
         info.EnemyInfoList.Add(enemyInfo);
     }
 

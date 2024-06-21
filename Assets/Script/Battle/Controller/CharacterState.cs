@@ -21,10 +21,10 @@ namespace Battle
             {
                 info = Instance.CharacterList[0];
                 Instance.SelectedCharacter = info;
-
-                if (Instance.Info.IsTutorial && info.Faction == BattleCharacterInfo.FactionEnum.Player)
+                
+                if(Instance.CharacterStateBeginHandler != null)
                 {
-                    BattleTutorialController.Instance.ToState_9(); //to State_9
+                    Instance.CharacterStateBeginHandler();
                 }
 
                 int wt = info.CurrentWT;

@@ -78,7 +78,7 @@ namespace Battle
 
             for (int i = 0; i < _stepList.Count; i++) //我可以移動的範圍
             {
-                rangeList = Utility.GetRange(SelectedSkill.Range, battleInfo.Width, battleInfo.Height, _stepList[i]);
+                rangeList = Utility.GetRange(SelectedSkill.Range, _stepList[i], battleInfo);
                 for (int j = 0; j < targetList.Count; j++)
                 {
                     targetPosition_v2 = Utility.ConvertToVector2Int(targetList[j].Position);

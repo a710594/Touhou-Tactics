@@ -15,8 +15,12 @@ public class BattleFileReader
         BattleFile file = JsonConvert.DeserializeObject<BattleFile>(jsonString);
         BattleInfo battleInfo = new BattleInfo();
 
-        battleInfo.IsTutorial = file.IsTutorial;
-        battleInfo.PlayerCount = file.PlayerCount;
+        battleInfo.MinX = file.MinX;
+        battleInfo.MaxX = file.MaxX;
+        battleInfo.MinY = file.MinY;
+        battleInfo.MinY = file.MinY;
+        battleInfo.NeedCount = file.PlayerCount;
+        battleInfo.MustBeEqualToNeedCount = file.MustBeEqualToNeedCount;
         battleInfo.Exp = file.Exp;
 
         int x;
@@ -26,14 +30,6 @@ public class BattleFileReader
             x = int.Parse(file.TileList[i][0]);
             y = int.Parse(file.TileList[i][1]);
             battleInfo.TileAttachInfoDic.Add(new Vector2Int(x, y), new TileAttachInfo(file.TileList[i][2])); ;
-            if (x > battleInfo.Width) 
-            {
-                battleInfo.Width = x;
-            }
-            if (y > battleInfo.Height) 
-            {
-                battleInfo.Height = y;
-            }
         }
 
         for (int i=0; i<file.NoAttachList.Count; i++) 

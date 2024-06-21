@@ -7,10 +7,10 @@ using UnityEngine;
 
 public class BattleFileGenerator : MonoBehaviour
 {
-    public bool IsTutorial;
-    public bool IsSeed;
+    //public bool IsSeed;
     public string FileName;
-    public int PlayerCount;
+    public int NeedCount;
+    public bool MustBeEqualToNeedCount;
     public int Exp;
     public Transform Tilemap;
     public Transform EnemyGroup;
@@ -26,103 +26,31 @@ public class BattleFileGenerator : MonoBehaviour
         foreach (Transform child in Tilemap)
         {
             component = child.GetComponent<TileComponent>();
-            tileList.Add(new string[3] { child.position.x.ToString(), child.position.z.ToString(), component.ID });
+            tileList.Add(new string[3] { Mathf.RoundToInt(child.position.x).ToString(), Mathf.RoundToInt(child.position.z).ToString(), component.ID });
         }
 
-        List<int[]> noAttachList = new List<int[]>(); //¸T«Ø°Ï,¤£·|¦³ªþ¥[ª«¥ó,©ñ¸mª±®a¨¤¦âªº°Ï°ì
+        List<int[]> noAttachList = new List<int[]>(); //ï¿½Tï¿½Ø°ï¿½,ï¿½ï¿½ï¿½|ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½mï¿½ï¿½ï¿½aï¿½ï¿½ï¿½âªºï¿½Ï°ï¿½
         for (int i=0; i<NoAttach.Length; i++) 
         {
-            noAttachList.Add(new int[2] { (int)NoAttach[i].position.x, (int)NoAttach[i].position.z });
+            noAttachList.Add(new int[2] { Mathf.RoundToInt(NoAttach[i].position.x), Mathf.RoundToInt(NoAttach[i].position.z) });
         }
 
         BattleMapEnemy battleMapEnemy;
-        List<int[]> enemyList = new List<int[]>(); //¼Ä¤Hªº¦ì¸m©MID
+        List<int[]> enemyList = new List<int[]>(); //ï¿½Ä¤Hï¿½ï¿½ï¿½ï¿½mï¿½MID
         foreach (Transform child in EnemyGroup) 
         {
             battleMapEnemy = child.GetComponent<BattleMapEnemy>();
-            enemyList.Add(new int[4] { (int)child.position.x, (int)child.position.y, (int)child.position.z , battleMapEnemy.ID});
+            enemyList.Add(new int[4] { Mathf.RoundToInt(child.position.x), Mathf.RoundToInt(child.position.y), Mathf.RoundToInt(child.position.z) , battleMapEnemy.ID});
         }
 
-        string path = GetPath();
+        string path = Application.streamingAssetsPath + "/Map/Battle/" + FileName + ".txt";
         BattleFile battleFile = new BattleFile();
-        battleFile.IsTutorial = IsTutorial;
-        battleFile.PlayerCount = PlayerCount;
+        battleFile.PlayerCount = NeedCount;
+        battleFile.MustBeEqualToNeedCount = MustBeEqualToNeedCount;
         battleFile.Exp = Exp;
         battleFile.TileList = tileList;
         battleFile.NoAttachList = noAttachList;
         battleFile.EnemyList = enemyList;
         File.WriteAllText(path, JsonConvert.SerializeObject(battleFile));
-    }
-
-    public void LoadFile() 
-    {
-        NewLoad();
-        //OldLoad();
-    }
-
-    private void NewLoad() 
-    {
-        string path = GetPath();
-
-        DataContext.Instance.Init();
-
-        BattleFileReader reader = new BattleFileReader();
-        BattleInfo battleInfo = reader.Read(path);
-
-        IsTutorial = battleInfo.IsTutorial;
-        PlayerCount = battleInfo.PlayerCount;
-        Exp = battleInfo.Exp;
-
-        for (int i = Tilemap.childCount; i > 0; --i)
-        {
-            DestroyImmediate(Tilemap.GetChild(0).gameObject);
-        }
-
-        for (int i = EnemyGroup.childCount; i > 0; --i)
-        {
-            DestroyImmediate(EnemyGroup.GetChild(0).gameObject);
-        }
-
-        GameObject obj;
-        int count = 0;
-        NoAttach = new Transform[battleInfo.NoAttachList.Count];
-        foreach (KeyValuePair<Vector2Int, TileAttachInfo> pair in battleInfo.TileAttachInfoDic)
-        {
-            obj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + pair.Value.TileID), Vector3.zero, Quaternion.identity);
-            obj.transform.SetParent(Tilemap);
-            obj.transform.position = new Vector3(pair.Key.x, 0, pair.Key.y);
-            if (battleInfo.NoAttachList.Contains(pair.Key))
-            {
-                NoAttach[count] = obj.transform;
-                count++;
-            }
-        }
-
-        BattleMapEnemy battleMapEnemy;
-        foreach (KeyValuePair<Vector3Int, int> pair in battleInfo.EnemyDic)
-        {
-            obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Other/BattleMapEnemy"), Vector3.zero, Quaternion.identity);
-            battleMapEnemy = obj.GetComponent<BattleMapEnemy>();
-            battleMapEnemy.Init(pair.Value);
-            battleMapEnemy.transform.SetParent(EnemyGroup);
-            battleMapEnemy.transform.position = pair.Key;
-        }
-    }
-
-    private string GetPath() 
-    {
-        _prePath = Application.streamingAssetsPath;
-        if (IsSeed)
-        {
-            _prePath += "/MapSeed";
-        }
-        else
-        {
-            _prePath += "/Map/Battle";
-        }
-
-        string path = Path.Combine(_prePath, FileName + ".txt");
-
-        return path;
     }
 }

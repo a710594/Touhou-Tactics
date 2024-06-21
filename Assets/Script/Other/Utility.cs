@@ -27,7 +27,7 @@ public static class Utility
      xxx
       x
     */
-    public static List<Vector2Int> GetRange(int range, int width, int height, Vector2Int start)
+    public static List<Vector2Int> GetRange(int range, Vector2Int start, BattleInfo info)
     {
         Vector2Int position;
         List<Vector2Int> list = new List<Vector2Int>();
@@ -35,9 +35,9 @@ public static class Utility
         //range == -1 代表射程無限
         if (range == -1)
         {
-            for (int i = 0; i < width; i++)
+            for (int i = info.MinX; i <= info.MaxX; i++)
             {
-                for (int j = 0; j < height; j++)
+                for (int j = info.MinY; j <= info.MaxY; j++)
                 {
                     list.Add(new Vector2Int(i, j));
                 }
@@ -56,19 +56,19 @@ public static class Utility
                     list.Add(position);
                 }
 
-                if (!list.Contains(position + Vector2Int.up) && (position + Vector2Int.up).y < height && ManhattanDistance(position + Vector2Int.up, start) <= range)
+                if (!list.Contains(position + Vector2Int.up) && info.TileAttachInfoDic.ContainsKey(position + Vector2Int.up) && ManhattanDistance(position + Vector2Int.up, start) <= range)
                 {
                     queue.Enqueue(position + Vector2Int.up);
                 }
-                if (!list.Contains(position + Vector2Int.down) && (position + Vector2Int.down).y >= 0 && ManhattanDistance(position + Vector2Int.down, start) <= range)
+                if (!list.Contains(position + Vector2Int.down) &&  info.TileAttachInfoDic.ContainsKey(position + Vector2Int.down)  && ManhattanDistance(position + Vector2Int.down, start) <= range)
                 {
                     queue.Enqueue(position + Vector2Int.down);
                 }
-                if (!list.Contains(position + Vector2Int.left) && (position + Vector2Int.left).x >= 0 && ManhattanDistance(position + Vector2Int.left, start) <= range)
+                if (!list.Contains(position + Vector2Int.left) &&  info.TileAttachInfoDic.ContainsKey(position + Vector2Int.left) && ManhattanDistance(position + Vector2Int.left, start) <= range)
                 {
                     queue.Enqueue(position + Vector2Int.left);
                 }
-                if (!list.Contains(position + Vector2Int.right) && (position + Vector2Int.right).x < width && ManhattanDistance(position + Vector2Int.right, start) <= range)
+                if (!list.Contains(position + Vector2Int.right) &&  info.TileAttachInfoDic.ContainsKey(position + Vector2Int.right) && ManhattanDistance(position + Vector2Int.right, start) <= range)
                 {
                     queue.Enqueue(position + Vector2Int.right);
                 }

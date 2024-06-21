@@ -20,7 +20,22 @@ namespace Battle
             }
         }
 
+        public bool IsTutorial
+        {
+            get
+            {
+                return Tutorial != null;
+            }
+        }
+
+        public Action PrepareStateBeginHandler;
+        public Action ActionStateBeginHandler;
+        public Action MoveStateEndHandler;
+        public Action DirectionStateBeginHandler;
+        public Action CharacterStateBeginHandler;
+
         public BattleInfo Info;
+        public BattleTutorialController Tutorial = null;
         public BattleCharacterInfo SelectedCharacter;
         public List<BattleCharacterInfo> CharacterList = new List<BattleCharacterInfo>(); //�s��������
         public List<BattleCharacterInfo> DyingList = new List<BattleCharacterInfo>(); //�x�����ڤ訤��
@@ -37,7 +52,6 @@ namespace Battle
         private StateContext _context = new StateContext();
         private BattleUI _battleUI;
         private DragCameraUI _dragCameraUI;
-        private SelectBattleCharacterUI _selectBattleCharacterUI;
         private BattleResultUI _battleResultUI;
         //public GameObject Arrow;
         public GameObject DirectionGroup;
@@ -48,12 +62,16 @@ namespace Battle
 
         public List<Log> LogList = new List<Log>();
 
-        public void Init(int floor, int lv, BattleInfo info, Transform root)
+        public void Init(int floor, int lv, string tutorial, BattleInfo info, Transform root)
         {
+            if(tutorial!=null)
+            {
+                var objectType = Type.GetType("Battle." + tutorial);
+                Tutorial = (BattleTutorialController)Activator.CreateInstance(objectType);
+            }
+
             _root = root;
             _battleUI = GameObject.Find("BattleUI").GetComponent<BattleUI>();
-            _selectBattleCharacterUI = GameObject.Find("SelectBattleCharacterUI").GetComponent<SelectBattleCharacterUI>();
-            _selectBattleCharacterUI.Init(info);
             _battleResultUI = GameObject.Find("BattleResultUI").GetComponent<BattleResultUI>();
             _cameraController = Camera.main.GetComponent<CameraDraw>();
             CameraRotate = Camera.main.GetComponent<CameraRotate>();
@@ -98,7 +116,7 @@ namespace Battle
             }
 
             _dragCameraUI = GameObject.Find("DragCameraUI").GetComponent<DragCameraUI>();
-            _dragCameraUI.Init(info.Width, info.Height);
+            _dragCameraUI.Init(info);
 
             GameObject obj;
             _controllerDic.Clear();
@@ -455,7 +473,7 @@ namespace Battle
                 List<Vector2Int> rangeList = new List<Vector2Int>();
                 for (int i = 0; i < stepList.Count; i++) //�ڥi�H���ʪ��d��
                 {
-                    tempList = Utility.GetRange(character.AI.SelectedSkill.Range, Info.Width, Info.Height, stepList[i]);
+                    tempList = Utility.GetRange(character.AI.SelectedSkill.Range, stepList[i], Info);
                     for (int j=0; j<tempList.Count; j++) 
                     {
                         if(!stepList.Contains(tempList[j]) && !rangeList.Contains(tempList[j])) 
@@ -476,6 +494,11 @@ namespace Battle
         public void SetLose()
         {
             _context.SetState<LoseState>();
+        }
+
+        public void EndTutorial()
+        {
+            Tutorial = null;
         }
 
         private class BattleControllerState : State

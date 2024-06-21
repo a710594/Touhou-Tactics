@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class BattleFile
 {
-    public bool IsTutorial;
+    public int MinX;
+    public int MaxX;
+    public int MinY;
+    public int MaxY;
     public int PlayerCount;
+    public bool MustBeEqualToNeedCount;
     public int Exp;
     public List<string[]> TileList = new List<string[]>();
-    public List<int[]> NoAttachList = new List<int[]>(); //¸T«Ø°Ï,¤£·|¦³ªþ¥[ª«¥ó,©ñ¸mª±®a¨¤¦âªº°Ï°ì
-    public List<int[]> EnemyList = new List<int[]>(); //¼Ä¤Hªº¦ì¸m©MID
+    public List<int[]> NoAttachList = new List<int[]>(); //ï¿½Tï¿½Ø°ï¿½,ï¿½ï¿½ï¿½|ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½mï¿½ï¿½ï¿½aï¿½ï¿½ï¿½âªºï¿½Ï°ï¿½
+    public List<int[]> EnemyList = new List<int[]>(); //ï¿½Ä¤Hï¿½ï¿½ï¿½ï¿½mï¿½MID
 }

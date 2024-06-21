@@ -49,39 +49,26 @@ public class SkillInfoGroup : MonoBehaviour
             }
         }
         CommentLabel.text = comment;
-        CDLabel.text = "�N�o�G" + skill.CD + "�^�X";
+        CDLabel.text = "冷卻：" + skill.CD + "回合";
         
-        /*if (skill.Effect.Target == EffectModel.TargetEnum.All)
-        {
-            TargetLabel.text = "�ؼСG�����ħ�";
-        }
-        else if(skill.Effect.Target == EffectModel.TargetEnum.Them) 
-        {
-            TargetLabel.text = "�ؼСG�Ĥ�";
-        }
-        else if (skill.Effect.Target == EffectModel.TargetEnum.Us)
-        {
-            TargetLabel.text = "�ؼСG�ڤ�";
-        }*/
-
         if(skill.Track == TrackEnum.None) 
         {
-            TrackLabel.text = "�y��G�L���a��";
+            TrackLabel.text = "軌跡：無視地形";
         }
         else if (skill.Track == TrackEnum.Parabola)
         {
-            TrackLabel.text = "�y��G�ߪ��u";
+            TrackLabel.text = "軌跡：拋物線";
         }
         else if (skill.Track == TrackEnum.Straight)
         {
-            TrackLabel.text = "�y��G���u";
+            TrackLabel.text = "軌跡：直線";
         }
         else if (skill.Track == TrackEnum.Through)
         {
-            TrackLabel.text = "�y��G�e��";
+            TrackLabel.text = "軌跡：貫穿";
         }
 
-        RangeLabel.text = "�g�{�G" + skill.Range;
+        RangeLabel.text = "射程：" + skill.Range;
     }
 
     public void SetData(Support support)
@@ -111,7 +98,7 @@ public class SkillInfoGroup : MonoBehaviour
             effect = support.Effect.SubEffect;
         }
         CommentLabel.text = comment;
-        CDLabel.text = "�N�o�G" + support.CD + "�^�X";
+        CDLabel.text = "冷卻：" + support.CD + "回合";
 
         /*if (support.Effect.Target == EffectModel.TargetEnum.All)
         {
@@ -128,29 +115,29 @@ public class SkillInfoGroup : MonoBehaviour
 
         if (support.Track == TrackEnum.None)
         {
-            TrackLabel.text = "�y��G�L���a��";
+            TrackLabel.text = "軌跡：無視地形";
         }
         else if (support.Track == TrackEnum.Parabola)
         {
-            TrackLabel.text = "�y��G�ߪ��u";
+            TrackLabel.text = "軌跡：拋物線";
         }
         else if (support.Track == TrackEnum.Straight)
         {
-            TrackLabel.text = "�y��G���u";
+            TrackLabel.text = "軌跡：直線";
         }
         else if (support.Track == TrackEnum.Through)
         {
-            TrackLabel.text = "�y��G�e��";
+            TrackLabel.text = "軌跡：貫穿";
         }
 
-        RangeLabel.text = "�g�{�G" + support.Range;
+        RangeLabel.text = "射程：" + support.Range;
     }
 
     public void SetData(Spell spell)
     {
         NameLabel.text = spell.Name;
         CommentLabel.text = spell.Comment;
-        CDLabel.text = "�N�o�G" + spell.CD + "�^�X";
+        CDLabel.text = "冷卻：" + spell.CD + "回合";
 
         /*if (spell.Effect.Target == EffectModel.TargetEnum.All)
         {
@@ -167,22 +154,22 @@ public class SkillInfoGroup : MonoBehaviour
 
         if (spell.Track == TrackEnum.None)
         {
-            TrackLabel.text = "�y��G�L���a��";
+            TrackLabel.text = "軌跡：無視地形";
         }
         else if (spell.Track == TrackEnum.Parabola)
         {
-            TrackLabel.text = "�y��G�ߪ��u";
+            TrackLabel.text = "軌跡：拋物線";
         }
         else if (spell.Track == TrackEnum.Straight)
         {
-            TrackLabel.text = "�y��G���u";
+            TrackLabel.text = "軌跡：直線";
         }
         else if (spell.Track == TrackEnum.Through)
         {
-            TrackLabel.text = "�y��G�e��";
+            TrackLabel.text = "軌跡：貫穿";
         }
 
-        RangeLabel.text = "�g�{�G" + spell.Range;
+        RangeLabel.text = "射程：" + spell.Range;
     }
 
     public void SetData(Consumables consumbles)
@@ -206,22 +193,22 @@ public class SkillInfoGroup : MonoBehaviour
 
         if (consumbles.Track == TrackEnum.None)
         {
-            TrackLabel.text = "�y��G�L���a��";
+            TrackLabel.text = "軌跡：無視地形";
         }
         else if (consumbles.Track == TrackEnum.Parabola)
         {
-            TrackLabel.text = "�y��G�ߪ��u";
+            TrackLabel.text = "軌跡：拋物線";
         }
         else if (consumbles.Track == TrackEnum.Straight)
         {
-            TrackLabel.text = "�y��G���u";
+            TrackLabel.text = "軌跡：直線";
         }
         else if (consumbles.Track == TrackEnum.Through)
         {
-            TrackLabel.text = "�y��G�e��";
+            TrackLabel.text = "軌跡：貫穿";
         }
 
-        RangeLabel.text = "�g�{�G" + consumbles.Range;
+        RangeLabel.text = "射程：" + consumbles.Range;
     }
 
     public void SetData(Food food)
@@ -245,21 +232,21 @@ public class SkillInfoGroup : MonoBehaviour
 
         if (food.Track == TrackEnum.None)
         {
-            TrackLabel.text = "�y��G�L���a��";
+            TrackLabel.text = "軌跡：無視地形";
         }
         else if (food.Track == TrackEnum.Parabola)
         {
-            TrackLabel.text = "�y��G�ߪ��u";
+            TrackLabel.text = "軌跡：拋物線";
         }
         else if (food.Track == TrackEnum.Straight)
         {
-            TrackLabel.text = "�y��G���u";
+            TrackLabel.text =  "軌跡：直線";
         }
         else if (food.Track == TrackEnum.Through)
         {
-            TrackLabel.text = "�y��G�e��";
+            TrackLabel.text = "軌跡：貫穿";
         }
 
-        RangeLabel.text = "�g�{�G" + food.Range;
+        RangeLabel.text = "射程：" + food.Range;
     }
 }

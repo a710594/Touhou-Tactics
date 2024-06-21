@@ -26,9 +26,9 @@ namespace Battle
                 Instance._battleUI.SetDirectionGroupVisible(true);
                 Instance._battleUI.SetDirectionGroupPosition(_character.Position);
 
-                if (Instance.Info.IsTutorial)
+                if(Instance.DirectionStateBeginHandler!=null)
                 {
-                    BattleTutorialController.Instance.ToState_8();
+                    Instance.DirectionStateBeginHandler();
                 }
             }
 

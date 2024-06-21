@@ -8016,9 +8016,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Tilemap: {fileID: 376429049}
   SeedFile:
-  - "\u5C71\u5761_1"
-  - "\u5C71\u5761_2"
-  - "\u5C71\u5761_3"
+  - Hill_1
+  - Hill_2
+  - Hill_3
+  - Hill_4
 --- !u!1 &1422444326
 GameObject:
   m_ObjectHideFlags: 0
@@ -14019,6 +14020,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8555846946550176016, guid: 2461db3e418d0ec47a34631f88583bd4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8555846946550176018, guid: 2461db3e418d0ec47a34631f88583bd4, type: 3}
+      propertyPath: m_RaycastTarget
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8555846946550176023, guid: 2461db3e418d0ec47a34631f88583bd4, type: 3}

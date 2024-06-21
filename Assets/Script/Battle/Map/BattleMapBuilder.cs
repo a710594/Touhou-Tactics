@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 
-public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
+public class BattleMapBuilder : MonoBehaviour //嚙諍造嚙諂堆蕭嚙踝蕭嚙踝蕭嚙踝蕭嚙踝蕭嚙瞌
 {
     public Transform Tilemap;
     public string[] SeedFile;
@@ -15,7 +15,7 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
     private BattleFileReader _reader = new BattleFileReader();
     private BattleInfo _info;
 
-    public BattleInfo Generate() //有隨機成分的地圖
+    public BattleInfo Generate() //嚙踝蕭嚙瘡嚙踝蕭嚙踝蕭嚙踝蕭嚙踝蕭嚙窮嚙踝蕭
     {
         string path = Path.Combine(_prePath, "MapSeed/" + SeedFile[UnityEngine.Random.Range(0, SeedFile.Length)] + ".txt");
         _info = _reader.Read(path);
@@ -55,7 +55,7 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
             position = queue.Dequeue();
             tileSetting = DataContext.Instance.TileSettingDic[_info.TileAttachInfoDic[position].TileID];
 
-            if ((position + Vector2Int.up).y < _info.Height && !_info.TileAttachInfoDic.ContainsKey(position + Vector2Int.up))
+            if ((position + Vector2Int.up).y <= _info.MaxY && !_info.TileAttachInfoDic.ContainsKey(position + Vector2Int.up))
             {
                 adjacentTileSetting = GetAdjacentTile(tileSetting, Vector2Int.up);
                 _info.TileAttachInfoDic.Add(position + Vector2Int.up, new TileAttachInfo(adjacentTileSetting));
@@ -64,7 +64,7 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
                     queue.Enqueue(position + Vector2Int.up);
                 }
             }
-            if ((position + Vector2Int.down).y >= 0 && !_info.TileAttachInfoDic.ContainsKey(position + Vector2Int.down))
+            if ((position + Vector2Int.down).y >= _info.MinY && !_info.TileAttachInfoDic.ContainsKey(position + Vector2Int.down))
             {
                 adjacentTileSetting = GetAdjacentTile(tileSetting, Vector2Int.down);
                 _info.TileAttachInfoDic.Add(position + Vector2Int.down, new TileAttachInfo(adjacentTileSetting));
@@ -73,7 +73,7 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
                     queue.Enqueue(position + Vector2Int.down);
                 }
             }
-            if ((position + Vector2Int.left).x >= 0 && !_info.TileAttachInfoDic.ContainsKey(position + Vector2Int.left))
+            if ((position + Vector2Int.left).x >= _info.MinX && !_info.TileAttachInfoDic.ContainsKey(position + Vector2Int.left))
             {
                 adjacentTileSetting = GetAdjacentTile(tileSetting, Vector2Int.left);
                 _info.TileAttachInfoDic.Add(position + Vector2Int.left, new TileAttachInfo(adjacentTileSetting));
@@ -82,7 +82,7 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
                     queue.Enqueue(position + Vector2Int.left);
                 }
             }
-            if ((position + Vector2Int.right).x < _info.Width && !_info.TileAttachInfoDic.ContainsKey(position + Vector2Int.right))
+            if ((position + Vector2Int.right).x <= _info.MaxX && !_info.TileAttachInfoDic.ContainsKey(position + Vector2Int.right))
             {
                 adjacentTileSetting = GetAdjacentTile(tileSetting, Vector2Int.right);
                 _info.TileAttachInfoDic.Add(position + Vector2Int.right, new TileAttachInfo(adjacentTileSetting));
@@ -111,11 +111,11 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
             }
         }
 
-        //使用 Life Game 去調整 Attach 的分布
+        //嚙誕伐蕭 Life Game 嚙篁嚙調橘蕭 Attach 嚙踝蕭嚙踝蕭嚙踝蕭
         int count = 5;
         while (count > 0)
         {
-            NextGeneration(_info.Width, _info.Height, _info.TileAttachInfoDic, _info.NoAttachList);
+            NextGeneration(_info.MinX, _info.MaxX, _info.MinY, _info.MaxY, _info.TileAttachInfoDic, _info.NoAttachList);
             count--;
         }
 
@@ -143,22 +143,10 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
         return _info;
     }
 
-    public BattleInfo Get(string map) //固定的地圖
+    public BattleInfo Get(string map) //嚙確嚙緩嚙踝蕭嚙窮嚙踝蕭
     {
         string path = Path.Combine(_prePath, "Map/Battle/" + map + ".txt");
         _info = _reader.Read(path);
-        //string text = File.ReadAllText(path);
-        //string[] stringSeparators = new string[] { "\n", "\r\n" };
-        //string[] lines = text.Split(stringSeparators, StringSplitOptions.None);
-        //string[] str;
-        //Vector2Int position = new Vector2Int();
-        //TileSetting tileSetting;
-        //AttachSetting attachSetting;
-        //Dictionary<Vector2Int, TileSetting> visitedDic = new Dictionary<Vector2Int, TileSetting>();
-        //Queue<Vector2Int> queue = new Queue<Vector2Int>();
-        //GameObject tileObj;
-        //GameObject attachObj;
-        //battleInfo = new BattleInfo();
 
         for (int i = this.transform.childCount; i > 0; --i)
         {
@@ -239,7 +227,7 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
         return pool;
     }
 
-    private AttachSetting GetAttachIDRRandomly(List<TileSetting.Attach> attachs) //隨機取得物件,包含 null
+    private AttachSetting GetAttachIDRRandomly(List<TileSetting.Attach> attachs) //嚙瘡嚙踝蕭嚙踝蕭嚙緻嚙踝蕭嚙踝蕭,嚙稽嚙緣 null
     {
         int random = UnityEngine.Random.Range(0, attachs.Count + 1);
         string id = null;
@@ -261,7 +249,7 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
         }
     }
 
-    private AttachSetting GetAttachID(List<TileSetting.Attach> attachs) //根據機率來取得物件,不包含 null
+    private AttachSetting GetAttachID(List<TileSetting.Attach> attachs) //嚙誹據橘蕭嚙緞嚙諉剁蕭嚙緻嚙踝蕭嚙踝蕭,嚙踝蕭嚙稽嚙緣 null
     {
         List<string> pool = new List<string>();
         for (int i = 0; i < attachs.Count; i++)
@@ -296,15 +284,15 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
         }
     }
 
-    // 計算 Life Game 下一代的棋盤
-    private Dictionary<Vector2Int, TileAttachInfo> NextGeneration(int width, int height, Dictionary<Vector2Int, TileAttachInfo> tileInfoDic, List<Vector2Int> noAttachList)
+    // 嚙緘嚙踝蕭 Life Game 嚙磊嚙瑾嚙瞇嚙踝蕭嚙諸盤
+    private Dictionary<Vector2Int, TileAttachInfo> NextGeneration(int minX, int maxX, int minY, int maxY, Dictionary<Vector2Int, TileAttachInfo> tileInfoDic, List<Vector2Int> noAttachList)
     {
         AttachSetting attach;
         foreach(KeyValuePair<Vector2Int, TileAttachInfo> pair in tileInfoDic) 
         {
-            int neighbors = CountNeighbors(width, height, tileInfoDic, pair.Key, null);
-            int grassNeighbors = CountNeighbors(width, height, tileInfoDic, pair.Key, "Grass");
-            int treeNeighbors = CountNeighbors(width, height, tileInfoDic, pair.Key, "Tree");
+            int neighbors = CountNeighbors(minX, maxX, minY, maxY, tileInfoDic, pair.Key, null);
+            int grassNeighbors = CountNeighbors(minX, maxX, minY, maxY, tileInfoDic, pair.Key, "Grass");
+            int treeNeighbors = CountNeighbors(minX, maxX, minY, maxY, tileInfoDic, pair.Key, "Tree");
 
             if (pair.Value.AttachID != null)
             {
@@ -341,7 +329,7 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
         return tileInfoDic;
     }
 
-    private int CountNeighbors(int width, int height, Dictionary<Vector2Int, TileAttachInfo> tileInfoDic, Vector2Int position, string attach)
+    private int CountNeighbors(int minX, int maxX, int minY, int maxY, Dictionary<Vector2Int, TileAttachInfo> tileInfoDic, Vector2Int position, string attach)
     {
         int count = 0;
 
@@ -352,7 +340,7 @@ public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
                 int x = position.x + i;
                 int y = position.y + j;
 
-                if (x < 0 || x >= width || y < 0 || y >= height || (i == 0 && j == 0))
+                if (x <= minX || x >= maxX || y <= minY || y >= maxY || (i == 0 && j == 0))
                 {
                     continue;
                 }

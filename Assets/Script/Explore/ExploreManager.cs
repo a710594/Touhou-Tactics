@@ -41,7 +41,7 @@ namespace Explore
             {
                 Info = new ExploreInfo(file);
             }
-            else if(SystemManager.Instance.SystemInfo.MaxFloor == 1) //ªì©lÀÉ®×
+            else if(SystemManager.Instance.SystemInfo.MaxFloor == 1) //ï¿½ï¿½lï¿½É®ï¿½
             {
                 file = DataContext.Instance.Load<ExploreFile>("Explore/Floor_1", DataContext.PrePathEnum.Map);
                 Info = new ExploreInfo(file);
@@ -205,7 +205,7 @@ namespace Explore
                                 battleInfo = battleMapBuilder.Generate();
                             }
                             PathManager.Instance.LoadData(battleInfo.TileAttachInfoDic);
-                            BattleController.Instance.Init(Info.Floor, Info.Floor, battleInfo, battleMapBuilder.transform);
+                            BattleController.Instance.Init(Info.Floor, Info.Floor, _enemyList[i].Info.Tutorial, battleInfo, battleMapBuilder.transform);
                         });
                     });
 
@@ -219,7 +219,7 @@ namespace Explore
                 InputMamager.Instance.Lock();
                 _timer.Start(1f, () => 
                 { 
-                    ConfirmUI.Open("­n¦^¨ìÀç¦a¶Ü¡H", "½T©w", "¨ú®ø", () =>
+                    ConfirmUI.Open("ï¿½nï¿½^ï¿½ï¿½ï¿½ï¿½aï¿½Ü¡H", "ï¿½Tï¿½w", "ï¿½ï¿½ï¿½ï¿½", () =>
                     {
                         SceneController.Instance.ChangeScene("Camp", () =>
                         {
@@ -235,7 +235,7 @@ namespace Explore
             else if(v2 == Info.Goal) 
             {
                 InputMamager.Instance.Lock();
-                ConfirmUI.Open("­n«e©¹¤U¤@¼h¨Ã¦^¨ìÀç¦a¶Ü¡H", "½T©w", "¨ú®ø", () =>
+                ConfirmUI.Open("ï¿½nï¿½eï¿½ï¿½ï¿½Uï¿½@ï¿½hï¿½Ã¦^ï¿½ï¿½ï¿½ï¿½aï¿½Ü¡H", "ï¿½Tï¿½w", "ï¿½ï¿½ï¿½ï¿½", () =>
                 {
                     Info.Floor++;
                     if (Info.Floor > SystemManager.Instance.SystemInfo.MaxFloor)
@@ -342,15 +342,15 @@ namespace Explore
             {
                 if (Info.Floor == _maxFloor)
                 {
-                    ConfirmUI.Open("·PÁÂ¹Cª±¡I", "½T»{", () =>
+                    ConfirmUI.Open("ï¿½Pï¿½Â¹Cï¿½ï¿½ï¿½I", "ï¿½Tï¿½{", () =>
                     {
                         Application.Quit();
                     });
                 }
                 else
                 {
-                    Info.TileDic[Info.Goal].Icon.transform.GetChild(0).gameObject.SetActive(true); //Åã¥Ü²É¤l
-                    ConfirmUI.Open("§A¤w¸g¥´­Ë¤F¥X¤fªº¦u½Ã¡I­n«e©¹¤U¤@¼h¨Ã¦^¨ìÀç¦a¶Ü¡H", "½T©w", "¨ú®ø", () =>
+                    Info.TileDic[Info.Goal].Icon.transform.GetChild(0).gameObject.SetActive(true); //ï¿½ï¿½Ü²É¤l
+                    ConfirmUI.Open("ï¿½Aï¿½wï¿½gï¿½ï¿½ï¿½Ë¤Fï¿½Xï¿½fï¿½ï¿½ï¿½uï¿½Ã¡Iï¿½nï¿½eï¿½ï¿½ï¿½Uï¿½@ï¿½hï¿½Ã¦^ï¿½ï¿½ï¿½ï¿½aï¿½Ü¡H", "ï¿½Tï¿½w", "ï¿½ï¿½ï¿½ï¿½", () =>
                     {
                         Info.Floor++;
                         if (Info.Floor > SystemManager.Instance.SystemInfo.MaxFloor)

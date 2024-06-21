@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//ExploreFileGenerator ³õ´º¤¤¥Î¨Ó³]©w ExploreEnemyInfo ªºª«¥ó
+//ExploreFileGenerator ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î¨Ó³]ï¿½w ExploreEnemyInfo ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 public class ExploreEnemyInfoObject : MonoBehaviour
 {
     public string Prefab;
     public string Map;
+    public string Tutorial;
 }

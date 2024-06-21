@@ -9,8 +9,8 @@ public class ArcherPassive : Passive
         Data = data;
     }
 
-    //¾Ö¦³ª®À»ªÌ³Q°Êªº¨¤¦â±M¥Î,¯¸ªº¶V°ª®gµ{¶V»·
-    public static List<Vector2Int> GetRange(int range, int width, int height, Vector2Int start, Dictionary<Vector2Int, TileAttachInfo> tileInfoDic)
+    //ï¿½Ö¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì³Qï¿½Êªï¿½ï¿½ï¿½ï¿½ï¿½Mï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½Vï¿½ï¿½ï¿½gï¿½{ï¿½Vï¿½ï¿½
+    public static List<Vector2Int> GetRange(int range, Vector2Int start, BattleInfo info)
     {
         int heightDiff;
         int newRange;
@@ -27,9 +27,9 @@ public class ArcherPassive : Passive
             list.Add(position);
 
             newPosition = position + Vector2Int.up;
-            if (!list.Contains(newPosition) && newPosition.y < height)
+            if (!list.Contains(newPosition) && newPosition.y <= info.MaxY)
             {
-                heightDiff = tileInfoDic[start].Height - tileInfoDic[newPosition].Height;
+                heightDiff = info.TileAttachInfoDic[start].Height - info.TileAttachInfoDic[newPosition].Height;
                 newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
                 if (Utility.ManhattanDistance(newPosition, start) <= newRange)
                 {
@@ -38,9 +38,9 @@ public class ArcherPassive : Passive
             }
 
             newPosition = position + Vector2Int.down;
-            if (!list.Contains(newPosition) && newPosition.y >= 0)
+            if (!list.Contains(newPosition) && newPosition.y >= info.MinY)
             {
-                heightDiff = tileInfoDic[start].Height - tileInfoDic[newPosition].Height;
+                heightDiff = info.TileAttachInfoDic[start].Height - info.TileAttachInfoDic[newPosition].Height;
                 newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
                 if (Utility.ManhattanDistance(newPosition, start) <= newRange)
                 {
@@ -49,9 +49,9 @@ public class ArcherPassive : Passive
             }
 
             newPosition = position + Vector2Int.left;
-            if (!list.Contains(newPosition) && newPosition.x >= 0)
+            if (!list.Contains(newPosition) && newPosition.x >= info.MinX)
             {
-                heightDiff = tileInfoDic[start].Height - tileInfoDic[newPosition].Height;
+                heightDiff = info.TileAttachInfoDic[start].Height - info.TileAttachInfoDic[newPosition].Height;
                 newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
                 if (Utility.ManhattanDistance(newPosition, start) <= newRange)
                 {
@@ -60,9 +60,9 @@ public class ArcherPassive : Passive
             }
 
             newPosition = position + Vector2Int.right;
-            if (!list.Contains(newPosition) && newPosition.x < width)
+            if (!list.Contains(newPosition) && newPosition.x <= info.MaxX)
             {
-                heightDiff = tileInfoDic[start].Height - tileInfoDic[newPosition].Height;
+                heightDiff = info.TileAttachInfoDic[start].Height - info.TileAttachInfoDic[newPosition].Height;
                 newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
                 if (Utility.ManhattanDistance(newPosition, start) <= newRange)
                 {
