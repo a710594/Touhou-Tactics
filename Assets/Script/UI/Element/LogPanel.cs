@@ -32,6 +32,7 @@ public class LogPanel : MonoBehaviour
 
     private void OnDestroy()
     {
+        _timer.Stop();
         CanvasGroup.DOKill();
     }
 

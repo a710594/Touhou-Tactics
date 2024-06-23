@@ -18,6 +18,10 @@ namespace Battle
         {
         }
 
+        public virtual void Deregister() 
+        {
+        }
+
         public virtual bool CheckClick(Vector2Int position)
         {
             if(_context.CurrentState!=null)
@@ -121,6 +125,10 @@ namespace Battle
             public virtual bool CheckScrollItem(object obj)
             {
                 return false;
+            }
+
+            public virtual void Deregister()
+            {
             }
         }
     }

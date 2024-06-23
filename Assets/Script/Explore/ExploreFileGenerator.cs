@@ -9,6 +9,7 @@ namespace Explore
     {
         public int Floor;
         public string FileName;
+        public Transform Tilemap;
         public Transform Ground;
         public Transform Wall;
         public Transform Start;

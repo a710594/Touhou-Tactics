@@ -148,9 +148,9 @@ public class BattleMapBuilder : MonoBehaviour //�سy�԰�������
         string path = Path.Combine(_prePath, "Map/Battle/" + map + ".txt");
         _info = _reader.Read(path);
 
-        for (int i = this.transform.childCount; i > 0; --i)
+        for (int i = Tilemap.childCount; i > 0; --i)
         {
-            DestroyImmediate(this.transform.GetChild(0).gameObject);
+            DestroyImmediate(Tilemap.GetChild(0).gameObject);
         }
 
         CreateObject(_info);

@@ -38,6 +38,12 @@ namespace Battle
             _context.SetState<State_1>();
         }
 
+        public override void Deregister()
+        {
+            BattleController.Instance.PrepareStateBeginHandler -= Start;
+            ((TutorialState)_context.CurrentState).Deregister();
+        }
+
         private class State_1 : TutorialState
         {
             private Timer _timer = new Timer();
@@ -58,6 +64,11 @@ namespace Battle
             {
                 BattleController.Instance.ActionStateBeginHandler -= Next;
                 _context.SetState<State_2>();
+            }
+
+            public override void Deregister()
+            {
+                BattleController.Instance.ActionStateBeginHandler -= Next;
             }
         }
 
@@ -161,6 +172,11 @@ namespace Battle
             {
                 BattleController.Instance.MoveStateEndHandler -= Next;
                 _context.SetState<State_5>();
+            }
+
+            public override void Deregister()
+            {
+                BattleController.Instance.MoveStateEndHandler -= Next;
             }
         }
 
@@ -301,6 +317,11 @@ namespace Battle
                 BattleController.Instance.DirectionStateBeginHandler -= Next;
                _context.SetState<State_9>();
             }
+
+            public override void Deregister()
+            {
+                BattleController.Instance.DirectionStateBeginHandler -= Next;
+            }
         }
 
         //選擇方向
@@ -340,6 +361,11 @@ namespace Battle
                     _context.SetState<State_10>();
                 }
             }
+
+            public override void Deregister()
+            {
+                BattleController.Instance.CharacterStateBeginHandler -= Next;
+            }
         }
 
         private class State_10 : TutorialState
@@ -350,10 +376,10 @@ namespace Battle
 
             public override void Begin()
             {
-                TutorialUI.Open("以上就是移動與攻擊的基本流程。\n一個角色一回合中可以有兩次行動的機會。除了移動和使用技能外還有其他的選項。", ()=> 
-                {
-                    TutorialUI.Open("1.移動：一回合最多可以移動兩次\n2.技能：一回合只能使用一次\n3.支援：與技能類似，大多是強化自己的效果。不消耗行動次數，但一樣一回合只能使用一次\n4.符卡：使用規則和技能相同，但是需要消耗符卡，且使所有隊員的符卡都進入冷卻\n5.道具：使用規則和技能相同，但是需要消耗道具\n6.待機：如果該回合沒有其他想做的事，可以選擇待機結束該回合。", null);
-                });
+                //TutorialUI.Open("以上就是移動與攻擊的基本流程。\n一個角色一回合中可以有兩次行動的機會。除了移動和使用技能外還有其他的選項。", ()=> 
+                //{
+                //    TutorialUI.Open("1.移動：一回合最多可以移動兩次\n2.技能：一回合只能使用一次\n3.支援：與技能類似，大多是強化自己的效果。不消耗行動次數，但一樣一回合只能使用一次\n4.符卡：使用規則和技能相同，但是需要消耗符卡，且使所有隊員的符卡都進入冷卻\n5.道具：使用規則和技能相同，但是需要消耗道具\n6.待機：如果該回合沒有其他想做的事，可以選擇待機結束該回合。", null);
+                //});
 
                 BattleController.Instance.EndTutorial();
                 BattleUI.Instance.SetArrowVisible(true);

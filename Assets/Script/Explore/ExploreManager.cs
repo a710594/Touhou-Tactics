@@ -218,8 +218,8 @@ namespace Explore
             {
                 InputMamager.Instance.Lock();
                 _timer.Start(1f, () => 
-                { 
-                    ConfirmUI.Open("�n�^����a�ܡH", "�T�w", "����", () =>
+                {
+                    ConfirmUI.Open("要回到營地嗎？", "確定", "取消", () =>
                     {
                         SceneController.Instance.ChangeScene("Camp", () =>
                         {
@@ -235,7 +235,7 @@ namespace Explore
             else if(v2 == Info.Goal) 
             {
                 InputMamager.Instance.Lock();
-                ConfirmUI.Open("�n�e���U�@�h�æ^����a�ܡH", "�T�w", "����", () =>
+                ConfirmUI.Open("要前往下一層並回到營地嗎？", "確定", "取消", () =>
                 {
                     Info.Floor++;
                     if (Info.Floor > SystemManager.Instance.SystemInfo.MaxFloor)

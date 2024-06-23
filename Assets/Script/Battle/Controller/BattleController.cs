@@ -498,6 +498,7 @@ namespace Battle
 
         public void EndTutorial()
         {
+            Tutorial.Deregister();
             Tutorial = null;
         }
 

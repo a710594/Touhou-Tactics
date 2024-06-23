@@ -103,12 +103,14 @@ namespace Battle
 
             public override void Begin()
             {
-                TutorialArrowUI.Open("選擇目標。", new Vector3(1, 2, 1), Vector2Int.down, null);
+                Vector3 v = BattleController.Instance.SelectedCharacter.Position;
+                TutorialArrowUI.Open("選擇目標。", new Vector3(v.x, v.y + 1, v.z), Vector2Int.down, null);
             }
 
             public override bool CheckClick(Vector2Int position)
             {
-                if (position == new Vector2Int(1, 1))
+                Vector3 v = BattleController.Instance.SelectedCharacter.Position;
+                if (position == new Vector2Int((int)v.x, (int)v.z))
                 {
                     Next();
                     return true;
@@ -135,12 +137,14 @@ namespace Battle
 
             public override void Begin()
             {
-                TutorialArrowUI.Open("再次點選同樣的位置確認。", new Vector3(1, 2, 1), Vector2Int.down, null);
+                Vector3 v = BattleController.Instance.SelectedCharacter.Position;
+                TutorialArrowUI.Open("再次點選同樣的位置確認。", new Vector3(v.x, v.y + 1, v.z), Vector2Int.down, null);
             }
 
             public override bool CheckClick(Vector2Int position)
             {
-                if (position == new Vector2Int(1, 1))
+                Vector3 v = BattleController.Instance.SelectedCharacter.Position;
+                if (position == new Vector2Int((int)v.x, (int)v.z))
                 {
                     TutorialArrowUI.Close();
                     Next();
