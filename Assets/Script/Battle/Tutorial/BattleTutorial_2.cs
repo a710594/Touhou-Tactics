@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Battle
 {
-    public class BattleTutorialController_2 : BattleTutorialController
+    public class BattleTutorialController_2 : BattleTutorial
     {
         public BattleTutorialController_2()
         {

@@ -35,7 +35,7 @@ namespace Battle
         public Action CharacterStateBeginHandler;
 
         public BattleInfo Info;
-        public BattleTutorialController Tutorial = null;
+        public BattleTutorial Tutorial = null;
         public BattleCharacterInfo SelectedCharacter;
         public List<BattleCharacterInfo> CharacterList = new List<BattleCharacterInfo>(); //�s��������
         public List<BattleCharacterInfo> DyingList = new List<BattleCharacterInfo>(); //�x�����ڤ訤��
@@ -67,7 +67,7 @@ namespace Battle
             if(tutorial!=null)
             {
                 var objectType = Type.GetType("Battle." + tutorial);
-                Tutorial = (BattleTutorialController)Activator.CreateInstance(objectType);
+                Tutorial = (BattleTutorial)Activator.CreateInstance(objectType);
             }
 
             _root = root;

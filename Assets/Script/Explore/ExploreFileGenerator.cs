@@ -19,75 +19,58 @@ namespace Explore
         public ExploreEnemyInfoObject[] Enemys;
         public GameObject[] Triggers;
 
-        int minX;
-        int maxX;
-        int minY;
-        int maxY;
-        private ExploreInfo _info = new ExploreInfo();
-
         public void BuildFile()
         {
-            minX = int.MinValue;
-            maxX = int.MinValue;
-            minY = int.MinValue;
-            maxY = int.MinValue;
+            int minX = int.MinValue;
+            int maxX = int.MinValue;
+            int minY = int.MinValue;
+            int maxY = int.MinValue;
             Vector2Int pos;
-            _info = new ExploreInfo();
-            foreach (Transform child in Ground)
+            NewExploreFile file = new NewExploreFile();
+            foreach (Transform child in Tilemap)
             {
                 pos = Utility.ConvertToVector2Int(child.position);
-                AddTile(pos, child.name);
-                _info.GroundList.Add(pos);
-            }
-            foreach (Transform child in Wall)
-            {
-                pos = Utility.ConvertToVector2Int(child.position);
-                AddTile(pos, child.name);
-            }
-            _info.Floor = Floor;
-            _info.Start = Utility.ConvertToVector2Int(Start.position);
-            _info.Goal = Utility.ConvertToVector2Int(Goal.position);
-            _info.PlayerPosition = _info.Start;
-            _info.Size = new Vector2Int(maxX - minX, maxY - minY);
+                file.TileList.Add(new NewExploreFile.TileInfo(pos, child.name, child.tag));
 
-            ExploreEnemyInfo enemyInfo;
+                if (minX == int.MinValue || pos.x < minX)
+                {
+                    minX = pos.x;
+                }
+                if (maxX == int.MinValue || pos.x > maxX)
+                {
+                    maxX = pos.x;
+                }
+                if (minY == int.MinValue || pos.y < minY)
+                {
+                    minY = pos.y;
+                }
+                if (maxY == int.MinValue || pos.y > maxY)
+                {
+                    maxY = pos.y;
+                }
+            }
+            file.Floor = Floor;
+            file.Start = Utility.ConvertToVector2Int(Start.position);
+            file.Goal = Utility.ConvertToVector2Int(Goal.position);
+            file.PlayerPosition = file.Start;
+            file.Size = new Vector2Int(maxX - minX, maxY - minY);
+
             ExploreEnemyInfoObject enemyObj;
             foreach (Transform child in Enemy)
             {
                 enemyObj = child.gameObject.GetComponent<ExploreEnemyInfoObject>();
-                enemyInfo = new ExploreEnemyInfo(enemyObj.Prefab, enemyObj.Map, enemyObj.Tutorial, Utility.ConvertToVector2Int(enemyObj.transform.position), (int)enemyObj.transform.eulerAngles.y);
-                _info.EnemyInfoList.Add(enemyInfo);
+                //enemyInfo = new ExploreEnemyInfo(enemyObj.Prefab, enemyObj.Map, enemyObj.Tutorial, Utility.ConvertToVector2Int(enemyObj.transform.position), (int)enemyObj.transform.eulerAngles.y);
+                file.EnemyInfoList.Add(new NewExploreFile.EnemyInfo(enemyObj.Prefab, enemyObj.Map, enemyObj.Tutorial, Utility.ConvertToVector2Int(enemyObj.transform.position), (int)enemyObj.transform.eulerAngles.y));
             }
 
             foreach (Transform child in Trigger)
             {
-                _info.TriggerDic.Add(Utility.ConvertToVector2Int(child.position), child.name);
+                //_info.TriggerDic.Add(Utility.ConvertToVector2Int(child.position), child.name);
+                file.TriggerList.Add(new NewExploreFile.TriggerInfo(Utility.ConvertToVector2Int(child.position), child.name));
             }
 
-            ExploreFile file = new ExploreFile(_info);
+            //ExploreFile file = new ExploreFile(_info);
             DataContext.Instance.Save(file, "Explore/" + FileName, DataContext.PrePathEnum.Map);
-        }
-
-        private void AddTile(Vector2Int pos, string name) 
-        {
-            _info.TileDic.Add(pos, new TileObject(name));
-
-            if (minX == int.MinValue || pos.x < minX)
-            {
-                minX = pos.x;
-            }
-            if (maxX == int.MinValue || pos.x > maxX)
-            {
-                maxX = pos.x;
-            }
-            if (minY == int.MinValue || pos.y < minY)
-            {
-                minY = pos.y;
-            }
-            if (maxY == int.MinValue || pos.y > maxY)
-            {
-                maxY = pos.y;
-            }
         }
 
         public void LoadFile() 

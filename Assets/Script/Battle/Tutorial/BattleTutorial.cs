@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Battle
 {
-    public class BattleTutorialController
+    public class BattleTutorial
     {
         protected bool _enable;
         protected StateContext _context = new StateContext();
