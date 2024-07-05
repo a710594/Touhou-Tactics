@@ -12,13 +12,9 @@ public class ExploreFileGeneratorEditor : Editor
         DrawDefaultInspector();
 
         ExploreFileGenerator exploreFileGenerator = (ExploreFileGenerator)target;
-        if (GUILayout.Button("«Ø¥ßÀÉ®×"))
+        if (GUILayout.Button("ï¿½Ø¥ï¿½ï¿½É®ï¿½"))
         {
             exploreFileGenerator.BuildFile();
-        }
-        if (GUILayout.Button("¸ü¤JÀÉ®×"))
-        {
-            exploreFileGenerator.LoadFile();
         }
     }
 }

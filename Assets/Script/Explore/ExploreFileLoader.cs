@@ -29,7 +29,7 @@ namespace Explore
             }
 
             GameObject obj;
-            NewExploreFile file = DataContext.Instance.Load<NewExploreFile>("Explore/" +FileName, DataContext.PrePathEnum.Map);
+            NewExploreFile file = DataContext.Instance.Load<NewExploreFile>(FileName, DataContext.PrePathEnum.MapExplore);
             for(int i=0; i<file.TileList.Count; i++)
             {
                 obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + file.TileList[i].Prefab), Vector3.zero, Quaternion.identity);

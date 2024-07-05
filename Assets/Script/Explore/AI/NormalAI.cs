@@ -5,35 +5,35 @@ using UnityEngine;
 
 namespace Explore
 {
-    public class NormalAI : ExploreEnemyController //¼²¨ìÀð´NÂàÅs
+    public class NormalAI : ExploreEnemyController //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½s
     {
         public override void Move() 
         {
-            ExploreManager.Instance.Info.WalkableList.Add(Utility.ConvertToVector2Int(MoveTo));
-            if (ExploreManager.Instance.IsWalkable(this, transform.position + transform.forward))
+            ExploreManager.Instance.File.WalkableList.Add(Utility.ConvertToVector2Int(MoveTo));
+            if (ExploreManager.Instance.File.WalkableList.Contains(Utility.ConvertToVector2Int(transform.position + transform.forward)))
             {
                 MoveTo = transform.position + transform.forward;
                 transform.DOMove(transform.position + transform.forward, 0.5f).SetEase(Ease.Linear);
             }
-            else if (ExploreManager.Instance.IsWalkable(this, transform.position + transform.right))
+            else if (ExploreManager.Instance.File.WalkableList.Contains(Utility.ConvertToVector2Int(transform.position + transform.right)))
             {
                 MoveTo = transform.position + transform.right;
                 transform.DOMove(transform.position + transform.right, 0.5f).SetEase(Ease.Linear);
                 transform.DORotate(transform.localEulerAngles + Vector3.up * 90, 0.5f).SetEase(Ease.Linear);
             }
-            else if (ExploreManager.Instance.IsWalkable(this, transform.position - transform.right))
+            else if (ExploreManager.Instance.File.WalkableList.Contains(Utility.ConvertToVector2Int(transform.position - transform.right)))
             {
                 MoveTo = transform.position - transform.right;
                 transform.DOMove(transform.position - transform.right, 0.5f).SetEase(Ease.Linear);
                 transform.DORotate(transform.localEulerAngles - Vector3.up * 90, 0.5f).SetEase(Ease.Linear);
             }
-            else if (ExploreManager.Instance.IsWalkable(this, transform.position - transform.forward))
+            else if (ExploreManager.Instance.File.WalkableList.Contains(Utility.ConvertToVector2Int(transform.position - transform.forward)))
             {
                 MoveTo = transform.position - transform.forward;
                 transform.DOMove(transform.position - transform.forward, 0.5f).SetEase(Ease.Linear);
                 transform.DORotate(transform.localEulerAngles + Vector3.up * 180, 0.5f).SetEase(Ease.Linear);
             }
-            ExploreManager.Instance.Info.WalkableList.Remove(Utility.ConvertToVector2Int(MoveTo));
+            ExploreManager.Instance.File.WalkableList.Remove(Utility.ConvertToVector2Int(MoveTo));
         }
     }
 }

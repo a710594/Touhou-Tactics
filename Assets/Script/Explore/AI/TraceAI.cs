@@ -13,7 +13,7 @@ namespace Explore
 
         public override void Move()
         {
-            ExploreManager.Instance.Info.WalkableList.Add(Utility.ConvertToVector2Int(MoveTo));
+            ExploreManager.Instance.File.WalkableList.Add(Utility.ConvertToVector2Int(MoveTo));
 
             Vector2Int playerPosition = Utility.ConvertToVector2Int(ExploreManager.Instance.Player.MoveTo);
             Vector2Int currentPosition = Utility.ConvertToVector2Int(transform.position);
@@ -32,7 +32,7 @@ namespace Explore
 
                         v3 = transform.position + transform.forward;
                         v2 = Utility.ConvertToVector2Int(v3);
-                        if (ExploreManager.Instance.IsWalkableNew(v2))
+                        if (ExploreManager.Instance.File.WalkableList.Contains(v2))
                         {
                             distance = ExploreManager.Instance.GetDistance(playerPosition, v2);
                             if (distance < min)
@@ -45,7 +45,7 @@ namespace Explore
 
                         v3 = transform.position - transform.forward;
                         v2 = Utility.ConvertToVector2Int(v3);
-                        if (ExploreManager.Instance.IsWalkableNew(v2))
+                        if (ExploreManager.Instance.File.WalkableList.Contains(v2))
                         {
                             distance = ExploreManager.Instance.GetDistance(playerPosition, v2);
                             if (distance < min)
@@ -58,7 +58,7 @@ namespace Explore
 
                         v3 = transform.position + transform.right;
                         v2 = Utility.ConvertToVector2Int(v3);
-                        if (ExploreManager.Instance.IsWalkableNew(v2))
+                        if (ExploreManager.Instance.File.WalkableList.Contains(v2))
                         {
                             distance = ExploreManager.Instance.GetDistance(playerPosition, v2);
                             if (distance < min)
@@ -71,7 +71,7 @@ namespace Explore
 
                         v3 = transform.position - transform.right;
                         v2 = Utility.ConvertToVector2Int(v3);
-                        if (ExploreManager.Instance.IsWalkableNew(v2))
+                        if (ExploreManager.Instance.File.WalkableList.Contains(v2))
                         {
                             distance = ExploreManager.Instance.GetDistance(playerPosition, v2);
                             if (distance < min)
@@ -96,7 +96,7 @@ namespace Explore
             ExclamationMark.SetActive(!_rest);
             ExclamationMark.transform.eulerAngles = new Vector3(90, 0, 0);
 
-            ExploreManager.Instance.Info.WalkableList.Remove(Utility.ConvertToVector2Int(MoveTo));
+            ExploreManager.Instance.File.WalkableList.Remove(Utility.ConvertToVector2Int(MoveTo));
         }
     }
 }

@@ -117,13 +117,6 @@ public class InputMamager
                 {
                     Explore.ExploreManager.Instance.OpenAllMap();
                 }
-                if (Input.GetKeyDown(KeyCode.T))
-                {
-                    SceneController.Instance.ChangeScene("Explore", () =>
-                    {
-                        Explore.ExploreManager.Instance.Test();
-                    });
-                }
 #endif
             }
             else

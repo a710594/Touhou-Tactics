@@ -14,18 +14,18 @@ namespace Explore
             }
             else
             {
-                List<Node> closedset = new List<Node>(); //¤w³Q¦ôºâªº¸`ÂI¶°¦X
-                List<Node> openset = new List<Node>(); //±N­n³Q¦ôºâªº¸`ÂI¶°¦X¡Aªì©l¥u¥]§tstart
+                List<Node> closedset = new List<Node>(); //ï¿½wï¿½Qï¿½ï¿½ï¿½âªºï¿½`ï¿½Iï¿½ï¿½ï¿½X
+                List<Node> openset = new List<Node>(); //ï¿½Nï¿½nï¿½Qï¿½ï¿½ï¿½âªºï¿½`ï¿½Iï¿½ï¿½ï¿½Xï¿½Aï¿½ï¿½lï¿½uï¿½]ï¿½tstart
                 Node startNode = new Node(start);
                 openset.Add(startNode);
                 startNode.G = 0; //g(n)
-                startNode.H = Vector2.Distance(start, goal); //³q¹L¦ô­p¨ç¼Æ ¦ô­ph(start)
-                startNode.F = startNode.H; //f(n)=h(n)+g(n)¡A¥Ñ©óg(n)=0¡A©Ò¥H¬Ù²¤
+                startNode.H = Vector2.Distance(start, goal); //ï¿½qï¿½Lï¿½ï¿½ï¿½pï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ph(start)
+                startNode.F = startNode.H; //f(n)=h(n)+g(n)ï¿½Aï¿½Ñ©ï¿½g(n)=0ï¿½Aï¿½Ò¥Hï¿½Ù²ï¿½
 
-                while (openset.Count > 0) //·í±N³Q¦ôºâªº¸`ÂI¦s¦b®É¡A°õ¦æ´`Àô
+                while (openset.Count > 0) //ï¿½ï¿½ï¿½Nï¿½Qï¿½ï¿½ï¿½âªºï¿½`ï¿½Iï¿½sï¿½bï¿½É¡Aï¿½ï¿½ï¿½ï¿½`ï¿½ï¿½
                 {
                     Node x = openset[0];
-                    for (int i = 1; i < openset.Count; i++) //¦b±N³Q¦ô­pªº¶°¦X¤¤§ä¨ìf(x)³Ì¤pªº¸`ÂI
+                    for (int i = 1; i < openset.Count; i++) //ï¿½bï¿½Nï¿½Qï¿½ï¿½ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½f(x)ï¿½Ì¤pï¿½ï¿½ï¿½`ï¿½I
                     {
                         if (openset[i].F < x.F)
                         {
@@ -36,20 +36,20 @@ namespace Explore
                     if (x.Position == goal)
                     {
                         List<Vector2Int> result = ReconstructPath(x);
-                        return result;   //ªð¦^¨ìxªº³Ì¨Î¸ô®|
+                        return result;   //ï¿½ï¿½^ï¿½ï¿½xï¿½ï¿½ï¿½Ì¨Î¸ï¿½ï¿½|
                     }
 
-                    openset.Remove(x); //±Nx¸`ÂI±q±N³Q¦ôºâªº¸`ÂI¤¤§R°£
-                    closedset.Add(x); //±Nx¸`ÂI´¡¤J¤w¸g³Q¦ôºâªº¸`ÂI
+                    openset.Remove(x); //ï¿½Nxï¿½`ï¿½Iï¿½qï¿½Nï¿½Qï¿½ï¿½ï¿½âªºï¿½`ï¿½Iï¿½ï¿½ï¿½Rï¿½ï¿½
+                    closedset.Add(x); //ï¿½Nxï¿½`ï¿½Iï¿½ï¿½ï¿½Jï¿½wï¿½gï¿½Qï¿½ï¿½ï¿½âªºï¿½`ï¿½I
 
                     bool isBetter;
                     List<Vector2Int> neighborList = GetNeighborPos(x.Position);
-                    for (int i = 0; i < neighborList.Count; i++)  //´`Àô¹M¾ú»Px¬Û¾F¸`ÂI
+                    for (int i = 0; i < neighborList.Count; i++)  //ï¿½`ï¿½ï¿½ï¿½Mï¿½ï¿½ï¿½Pxï¿½Û¾Fï¿½`ï¿½I
                     {
                         Node y = new Node(neighborList[i]);
 
                         bool contains = false;
-                        for (int j = 0; j < closedset.Count; j++) //­Yy¤w³Q¦ô­È¡A¸õ¹L
+                        for (int j = 0; j < closedset.Count; j++) //ï¿½Yyï¿½wï¿½Qï¿½ï¿½ï¿½È¡Aï¿½ï¿½ï¿½L
                         {
                             if (closedset[j].Position == y.Position)
                             {
@@ -62,9 +62,9 @@ namespace Explore
                             continue;
                         }
 
-                        float g = x.G + MoveCost(x.Position, y.Position);    //±q°_ÂI¨ì¸`ÂIyªº¶ZÂ÷
+                        float g = x.G + MoveCost(x.Position, y.Position);    //ï¿½qï¿½_ï¿½Iï¿½ï¿½`ï¿½Iyï¿½ï¿½ï¿½Zï¿½ï¿½
 
-                        for (int j = 0; j < openset.Count; j++) //­Yy¤w³Q¦ô­È¡A¸õ¹L
+                        for (int j = 0; j < openset.Count; j++) //ï¿½Yyï¿½wï¿½Qï¿½ï¿½ï¿½È¡Aï¿½ï¿½ï¿½L
                         {
                             if (openset[j].Position == y.Position)
                             {
@@ -73,24 +73,24 @@ namespace Explore
                             }
                         }
 
-                        if (!openset.Contains(y)) //­Yy¤£¬O±N³Q¦ôºâªº¸`ÂI
+                        if (!openset.Contains(y)) //ï¿½Yyï¿½ï¿½ï¿½Oï¿½Nï¿½Qï¿½ï¿½ï¿½âªºï¿½`ï¿½I
                         {
-                            isBetter = true; //¼È®É§PÂ_¬°§ó¦n
+                            isBetter = true; //ï¿½È®É§Pï¿½_ï¿½ï¿½ï¿½ï¿½n
                         }
                         else if (g < y.G)
                         {
-                            isBetter = true; //¼È®É§PÂ_¬°§ó¦n
+                            isBetter = true; //ï¿½È®É§Pï¿½_ï¿½ï¿½ï¿½ï¿½n
                         }
                         else
                         {
-                            isBetter = false; //¼È®É§PÂ_¬°§ó®t
+                            isBetter = false; //ï¿½È®É§Pï¿½_ï¿½ï¿½ï¿½ï¿½t
                         }
 
                         if (isBetter)
                         {
-                            y.parent = x; //±Nx³]¬°yªº¤÷¸`ÂI
-                            y.G = g; //§ó·sy¨ì­ìÂIªº¶ZÂ÷
-                            y.H = Vector2.Distance(y.Position, goal); //¦ô­py¨ì²×ÂIªº¶ZÂ÷
+                            y.parent = x; //ï¿½Nxï¿½]ï¿½ï¿½yï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½I
+                            y.G = g; //ï¿½ï¿½syï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½Zï¿½ï¿½
+                            y.H = Vector2.Distance(y.Position, goal); //ï¿½ï¿½ï¿½pyï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½Zï¿½ï¿½
                             y.F = y.G + y.H;
                             openset.Add(y);
                         }
@@ -104,7 +104,7 @@ namespace Explore
         public int GetDistance(Vector2Int start, Vector2Int goal)
         {
             int distance = 0;
-            if (!Info.WalkableList.Contains(goal))
+            if (!File.WalkableList.Contains(goal))
             {
                 return -1;
             }
@@ -148,22 +148,22 @@ namespace Explore
         {
             List<Vector2Int> list = new List<Vector2Int>();
 
-            if (IsWalkableNew(current + Vector2Int.left))
+            if (File.WalkableList.Contains(current + Vector2Int.left))
             {
                 list.Add(current + Vector2Int.left);
             }
 
-            if (IsWalkableNew(current + Vector2Int.right))
+            if (File.WalkableList.Contains(current + Vector2Int.right))
             {
                 list.Add(current + Vector2Int.right);
             }
 
-            if (IsWalkableNew(current + Vector2Int.up))
+            if (File.WalkableList.Contains(current + Vector2Int.up))
             {
                 list.Add(current + Vector2Int.up);
             }
 
-            if (IsWalkableNew(current + Vector2Int.down))
+            if (File.WalkableList.Contains(current + Vector2Int.down))
             {
                 list.Add(current + Vector2Int.down);
             }

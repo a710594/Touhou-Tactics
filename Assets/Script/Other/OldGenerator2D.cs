@@ -5,7 +5,7 @@ using Random = System.Random;
 using Graphs;
 using Explore;
 
-public class Generator2D : MonoBehaviour {
+/*public class Generator2D : MonoBehaviour {
     private enum CellType {
         None,
         Room,
@@ -449,4 +449,4 @@ public class Generator2D : MonoBehaviour {
             return false;
         }
     }
-}
+}*/

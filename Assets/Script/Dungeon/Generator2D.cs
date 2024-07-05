@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = System.Random;
@@ -22,6 +22,42 @@ public class Generator2D {
             return !((a.bounds.position.x >= (b.bounds.position.x + b.bounds.size.x)) || ((a.bounds.position.x + a.bounds.size.x) <= b.bounds.position.x)
                 || (a.bounds.position.y >= (b.bounds.position.y + b.bounds.size.y)) || ((a.bounds.position.y + a.bounds.size.y) <= b.bounds.position.y));
         }
+
+        public Vector2Int GetRandomPosition()
+        {
+            Vector2Int position =  bounds.position + new Vector2Int(UnityEngine.Random.Range(0, bounds.size.x),UnityEngine.Random.Range(0, bounds.size.y));
+            return position;
+        }
+
+        /*public Dictionary<Vector2Int, Treasure> GetTreasures()
+        {
+            Dictionary<Vector2Int, Treasure> treasures = new Dictionary<Vector2Int, Treasure>();
+            if (Data.TreasurePool.Count > 0)
+            {
+                List<Vector2Int> positionList = new List<Vector2Int>();
+                int random;
+                for (int i = 0; i < bounds.size.x; i++)
+                {
+                    for (int j = 0; j < bounds.size.y; j++)
+                    {
+                        positionList.Add(new Vector2Int(i, j));
+                    }
+                }
+
+                int treasureCount = Random.Range(Data.MinTreasureCount, Data.MaxTreasureCount + 1);
+                Vector2Int treasurePosition;
+                TreasureModel treasureData;
+                for (int i = 0; i < treasureCount; i++)
+                {
+                    random = Random.Range(0, positionList.Count);
+                    treasurePosition = bounds.min + positionList[random];
+                    positionList.RemoveAt(random);
+                    treasureData = DataContext.Instance.TreasureDic[Data.TreasurePool[Random.Range(0, Data.TreasurePool.Count)]];
+                    treasures.Add(treasurePosition, new Treasure(treasurePosition, treasureData));
+                }
+            }
+            return treasures;
+        }*/
     }
 
     Random random;
@@ -32,7 +68,8 @@ public class Generator2D {
     HashSet<Prim.Edge> selectedEdges;
 
     public void Generate(Vector2Int size, int roomCount, Vector2Int roomMaxSize, out List<Room> roomList, out List<List<Vector2Int>> pathList) {
-        random = new Random(0);
+        int seed = (int)System.DateTime.Now.Ticks;
+        random = new Random(seed);
         grid = new Grid2D<CellType>(size, Vector2Int.zero);
         rooms = new List<Room>();
         paths = new List<List<Vector2Int>>();

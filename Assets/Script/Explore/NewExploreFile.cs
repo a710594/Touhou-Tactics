@@ -14,7 +14,7 @@ public class NewExploreFile
     public List<Vector2Int> WalkableList = new List<Vector2Int>();
     public List<EnemyInfo> EnemyInfoList = new List<EnemyInfo>();
     public List<TileInfo> TileList = new List<TileInfo>();
-    public List<Vector2Int> TreasureList = new List<Vector2Int>();
+    public List<Treasure> TreasureList = new List<Treasure>();
     public List<TriggerInfo> TriggerList = new List<TriggerInfo>();
 
     public class EnemyInfo

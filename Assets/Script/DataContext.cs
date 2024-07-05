@@ -13,7 +13,9 @@ public class DataContext
     private static readonly string _dataPrePath = Application.streamingAssetsPath + "./Data/";
     private static readonly string _savePrePath = Application.streamingAssetsPath + "./Save/";
     private static readonly string _settingPrePath = Application.streamingAssetsPath + "./Setting/";
-    private static readonly string _mapPrePath = Application.streamingAssetsPath + "./Map/";
+    private static readonly string _mapExplorePrePath = Application.streamingAssetsPath + "./Map/Explore/";
+private static readonly string _mapBattlePrePath = Application.streamingAssetsPath + "./Map/Battle/";
+
 
     private static DataContext _instance;
     public static DataContext Instance
@@ -34,7 +36,8 @@ public class DataContext
         Data,
         Save,
         Setting,
-        Map,
+        MapExplore,
+        MapBattle,
     }
 
     public List<JobModel> JobList = new List<JobModel>();
@@ -294,9 +297,13 @@ public class DataContext
             {
                 prePath = _settingPrePath;
             }
-            else if (prePathEnum == PrePathEnum.Map)
+            else if (prePathEnum == PrePathEnum.MapExplore)
             {
-                prePath = _mapPrePath;
+                prePath = _mapExplorePrePath;
+            }
+            else if (prePathEnum == PrePathEnum.MapBattle)
+            {
+                prePath = _mapBattlePrePath;
             }
 
             if (fileName == "")
@@ -336,9 +343,13 @@ public class DataContext
             {
                 prePath = _settingPrePath;
             }
-            else if (prePathEnum == PrePathEnum.Map)
+            else if (prePathEnum == PrePathEnum.MapExplore)
             {
-                prePath = _mapPrePath;
+                prePath = _mapExplorePrePath;
+            }
+            else if (prePathEnum == PrePathEnum.MapBattle)
+            {
+                prePath = _mapBattlePrePath;
             }
 
             if (fileName == "")
@@ -383,9 +394,13 @@ public class DataContext
         {
             prePath = _settingPrePath;
         }
-        else if (prePathEnum == PrePathEnum.Map)
+        else if (prePathEnum == PrePathEnum.MapExplore)
         {
-            prePath = _mapPrePath;
+            prePath = _mapExplorePrePath;
+        }
+        else if (prePathEnum == PrePathEnum.MapBattle)
+        {
+            prePath = _mapBattlePrePath;
         }
 
         path = Path.Combine(prePath, fileName + ".json");

@@ -8,9 +8,9 @@ namespace Explore
     {
         public GameObject Arrow;
         public Vector3 MoveTo;
-        public ExploreEnemyInfo Info;
+        public NewExploreFile.EnemyInfo Info;
 
-        public virtual void Init(ExploreEnemyInfo info)
+        public virtual void Init(NewExploreFile.EnemyInfo info)
         {
             Info = info;
             transform.position = new Vector3(info.Position.x, 1, info.Position.y);

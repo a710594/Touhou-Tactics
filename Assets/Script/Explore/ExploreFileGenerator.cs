@@ -70,10 +70,10 @@ namespace Explore
             }
 
             //ExploreFile file = new ExploreFile(_info);
-            DataContext.Instance.Save(file, "Explore/" + FileName, DataContext.PrePathEnum.Map);
+            DataContext.Instance.Save(file, FileName, DataContext.PrePathEnum.MapExplore);
         }
 
-        public void LoadFile() 
+        /*public void LoadFile() 
         {
             ExploreFile file = DataContext.Instance.Load<ExploreFile>(Application.streamingAssetsPath + "/Map/Explore/" + FileName, DataContext.PrePathEnum.Map);
             for (int i = Ground.childCount; i > 0; --i)
@@ -117,6 +117,6 @@ namespace Explore
                 obj.transform.position = new Vector3(file.TileKeys[i].x, 0, file.TileKeys[i].y);
                 obj.name = file.TriggerValues[i];
             }
-        }
+        }*/
     }
 }

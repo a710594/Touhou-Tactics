@@ -22,20 +22,7 @@ namespace Explore
             if (!_isMoving) 
             {
                 position = transform.position + transform.forward;
-                if (ExploreManager.Instance.IsWalkable(position))
-                {
-                    _isMoving = true;
-                    transform.DOMove(position, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
-                    {
-                        ExploreManager.Instance.CheckVidsit(transform);
-                        _isMoving = false;
-                    });
-                    MoveTo = position;
-                    if (MoveHandler != null)
-                    {
-                        MoveHandler();
-                    }
-                }
+                Move(position);
             }
         }
 
@@ -44,20 +31,7 @@ namespace Explore
             if (!_isMoving) 
             {
                 position = transform.position - transform.forward;
-                if (ExploreManager.Instance.IsWalkable(position))
-                {
-                    _isMoving = true;
-                    transform.DOMove(position, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
-                    {
-                        _isMoving = false;
-                        ExploreManager.Instance.CheckVidsit(transform);
-                    });
-                    MoveTo = position;
-                    if (MoveHandler != null)
-                    {
-                        MoveHandler();
-                    }
-                }
+                Move(position);
             }
         }
 
@@ -66,20 +40,7 @@ namespace Explore
             if (!_isMoving)
             {
                 position = transform.position - transform.right;
-                if (ExploreManager.Instance.IsWalkable(position))
-                {
-                    _isMoving = true;
-                    transform.DOMove(position, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
-                    {
-                        _isMoving = false;
-                        ExploreManager.Instance.CheckVidsit(transform);
-                    });
-                    MoveTo = position;
-                    if (MoveHandler != null)
-                    {
-                        MoveHandler();
-                    }
-                }
+                Move(position);
             }
         }
 
@@ -88,19 +49,24 @@ namespace Explore
             if (!_isMoving)
             {
                 position = transform.position + transform.right;
-                if (ExploreManager.Instance.IsWalkable(position))
+                Move(position);
+            }
+        }
+
+        private void Move(Vector3 position)
+        {
+            if (ExploreManager.Instance.File.WalkableList.Contains(Utility.ConvertToVector2Int(position)))
+            {
+                _isMoving = true;
+                transform.DOMove(position, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
                 {
-                    _isMoving = true;
-                    transform.DOMove(position, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
-                    {
-                        _isMoving = false;
-                        ExploreManager.Instance.CheckVidsit(transform);
-                    });
-                    MoveTo = position;
-                    if (MoveHandler != null)
-                    {
-                        MoveHandler();
-                    }
+                    ExploreManager.Instance.CheckVidsit(transform);
+                    _isMoving = false;
+                });
+                MoveTo = position;
+                if (MoveHandler != null)
+                {
+                    MoveHandler();
                 }
             }
         }

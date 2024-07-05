@@ -31,6 +31,7 @@ public class ExploreUI : MonoBehaviour
 
     void Update()
     {
+        NewExploreFile file = ExploreManager.Instance.File;
         if (!InputMamager.Instance.IsLock)
         {
             if (Input.GetKeyDown(KeyCode.Space))
@@ -49,13 +50,12 @@ public class ExploreUI : MonoBehaviour
             BigMapBG.SetActive(!BigMapBG.activeSelf);
             if (BigMapBG.activeSelf)
             {
-                ExploreInfo info = ExploreManager.Instance.Info;
-                float x = (info.Size.x / 2 - Camera.main.transform.position.x) / info.Size.x * 1080 * _scale;
-                float y = (info.Size.y / 2 - Camera.main.transform.position.z) / info.Size.y * 1080 * _scale;
+                float x = (file.Size.x / 2 - Camera.main.transform.position.x) / file.Size.x * 1080 * _scale;
+                float y = (file.Size.y / 2 - Camera.main.transform.position.z) / file.Size.y * 1080 * _scale;
                 Debug.Log(x + " " + y);
                 BigMap.anchoredPosition = new Vector2(x, y);
                 BigMapCamera.Render();
-                FloorLabel.text = ExploreManager.Instance.Info.Floor + "F";
+                FloorLabel.text = file.Floor + "F";
                 InputMamager.Instance.Lock();
             }
             else
@@ -64,10 +64,10 @@ public class ExploreUI : MonoBehaviour
             }
         }
 
-        if (ExploreManager.Instance.Info != null && !InputMamager.Instance.IsLock)
+        if (file != null && !InputMamager.Instance.IsLock)
         {
             Vector2Int v2 = Utility.ConvertToVector2Int(Camera.main.transform.position + Camera.main.transform.forward);
-            SpaceLabel.SetActive(ExploreManager.Instance.Info.TreasureDic.ContainsKey(v2));
+            SpaceLabel.SetActive(ExploreManager.Instance.TreasureDic.ContainsKey(v2));
         }
 
         deltaTime += (Time.deltaTime - deltaTime) * 0.1f;

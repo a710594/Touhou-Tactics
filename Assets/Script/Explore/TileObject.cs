@@ -11,10 +11,5 @@ namespace Explore
         public GameObject Quad;
         public GameObject Icon;
         public GameObject Treasure;
-
-        public TileObject(string name)
-        {
-            Name = name;
-        }
     }
 }

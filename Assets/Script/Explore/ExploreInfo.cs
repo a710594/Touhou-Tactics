@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Explore
 {
-    public class ExploreInfo
+    /*public class ExploreInfo
     {
         public int Floor;
         public Vector2Int Size;
@@ -13,9 +13,9 @@ namespace Explore
         public Vector2Int Goal;
         public Vector2Int PlayerPosition;
         public int PlayerRotation;
-        public List<Vector2Int> GroundList = new List<Vector2Int>(); //©Ð¶¡©Î¨«´Yµ¥¥i¦æ¨«ªº¦a§Î
-        public List<Vector2Int> VisitedList = new List<Vector2Int>(); //±´¯Á¹Lªº¦a°Ï
-        public List<Vector2Int> WalkableList = new List<Vector2Int>(); //·í«e¥i¦æ¨«ªº¦a°Ï(±Æ°£Ä_½c©M¼Ä¤Hµ¥¾×¸ôªºªF¦è)
+        public List<Vector2Int> GroundList = new List<Vector2Int>(); //ï¿½Ð¶ï¿½ï¿½Î¨ï¿½ï¿½Yï¿½ï¿½ï¿½iï¿½æ¨«ï¿½ï¿½ï¿½aï¿½ï¿½
+        public List<Vector2Int> VisitedList = new List<Vector2Int>(); //ï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½ï¿½ï¿½aï¿½ï¿½
+        public List<Vector2Int> WalkableList = new List<Vector2Int>(); //ï¿½ï¿½ï¿½eï¿½iï¿½æ¨«ï¿½ï¿½ï¿½aï¿½ï¿½(ï¿½Æ°ï¿½ï¿½_ï¿½cï¿½Mï¿½Ä¤Hï¿½ï¿½ï¿½×¸ï¿½ï¿½ï¿½ï¿½Fï¿½ï¿½)
         public List<ExploreEnemyInfo> EnemyInfoList = new List<ExploreEnemyInfo>();
         public Dictionary<Vector2Int, TileObject> TileDic = new Dictionary<Vector2Int, TileObject>();
         public Dictionary<Vector2Int, Treasure> TreasureDic = new Dictionary<Vector2Int, Treasure>();
@@ -103,5 +103,5 @@ namespace Explore
                 WalkableList.Remove(EnemyInfoList[i].Position);
             }
         }
-    }
+    }*/
 }
