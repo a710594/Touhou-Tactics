@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace Battle
 {
-    public class BattleTutorialController_2 : BattleTutorial
+    public class BattleTutorial_2 : BattleTutorial
     {
-        public BattleTutorialController_2()
+        public BattleTutorial_2()
         {
             _context.AddState(new State_1(_context));
             _context.AddState(new State_2(_context));

@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 namespace Battle
 { 
-    public class BattleTutorialController_1 : BattleTutorial
+    public class BattleTutorial_1 : BattleTutorial
     {
-        public BattleTutorialController_1() 
+        public BattleTutorial_1() 
         {
             _context.ClearState();
             _context.AddState(new State_1(_context));

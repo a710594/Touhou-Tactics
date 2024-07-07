@@ -10,13 +10,10 @@ namespace Explore
         public int Floor;
         public string FileName;
         public Transform Tilemap;
-        public Transform Ground;
-        public Transform Wall;
         public Transform Start;
         public Transform Goal;
         public Transform Enemy;
         public Transform Trigger;
-        public ExploreEnemyInfoObject[] Enemys;
         public GameObject[] Triggers;
 
         public void BuildFile()
@@ -72,51 +69,5 @@ namespace Explore
             //ExploreFile file = new ExploreFile(_info);
             DataContext.Instance.Save(file, FileName, DataContext.PrePathEnum.MapExplore);
         }
-
-        /*public void LoadFile() 
-        {
-            ExploreFile file = DataContext.Instance.Load<ExploreFile>(Application.streamingAssetsPath + "/Map/Explore/" + FileName, DataContext.PrePathEnum.Map);
-            for (int i = Ground.childCount; i > 0; --i)
-            {
-                DestroyImmediate(Ground.GetChild(0).gameObject);
-            }
-            for (int i = Wall.childCount; i > 0; --i)
-            {
-                DestroyImmediate(Wall.GetChild(0).gameObject);
-            }
-
-            GameObject obj;
-
-            for(int i=0; i<file.TileValues.Count; i++)
-            {
-                obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + file.TileValues[i]), Vector3.zero, Quaternion.identity);
-                obj.name = file.TileValues[i];
-                obj.transform.position = new Vector3(file.TileKeys[i].x, 0, file.TileKeys[i].y);
-                if (obj.name == "Wall")
-                {
-                    obj.transform.SetParent(Wall);
-                }
-                else
-                {
-                    obj.transform.SetParent(Ground);
-                }
-            }
-
-            for(int i=0; i<file.EnemyInfoList.Count; i++)
-            {
-                obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/ExploreEnemyInfoObject"), Vector3.zero, Quaternion.identity);
-                ExploreEnemyInfoObject exploreEnemyInfoObject = obj.GetComponent<ExploreEnemyInfoObject>();
-                exploreEnemyInfoObject.Prefab = file.EnemyInfoList[i].Prefab;
-                exploreEnemyInfoObject.Map = file.EnemyInfoList[i].Map;
-                exploreEnemyInfoObject.Tutorial = file.EnemyInfoList[i].Tutorial;
-            }
-
-            for(int i=0; i<file.TriggerKeys.Count; i++)
-            {
-                obj = new GameObject();
-                obj.transform.position = new Vector3(file.TileKeys[i].x, 0, file.TileKeys[i].y);
-                obj.name = file.TriggerValues[i];
-            }
-        }*/
     }
 }

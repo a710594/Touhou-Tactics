@@ -76,6 +76,18 @@ namespace Explore
         private void LoadFile(string name, DataContext.PrePathEnum pathEnum)
         {
             File = DataContext.Instance.Load<NewExploreFile>(name, pathEnum);
+            if (File != null)
+            {
+                _tilePositionList = new List<Vector2Int>();
+                for (int i = 0; i < File.TileList.Count; i++)
+                {
+                    _tilePositionList.Add(File.TileList[i].Position);
+                    if(File.TileList[i].Tag != "Wall") 
+                    {
+                        File.WalkableList.Add(File.TileList[i].Position);
+                    }
+                }
+            }
         }
 
         public void CreateNewFile(Vector2Int size, int roomCount, Vector2Int roomMaxSize)
@@ -271,7 +283,10 @@ namespace Explore
 
         public void CheckCollision() 
         {
-            /*for (int i = 0; i < _enemyList.Count; i++)
+            Vector2Int v2 = Utility.ConvertToVector2Int(Player.MoveTo);
+            File.PlayerPosition = v2;
+            File.PlayerRotation = Mathf.RoundToInt(Camera.main.transform.eulerAngles.y);
+            for (int i = 0; i < _enemyList.Count; i++)
             {
                 if (Utility.ComparePosition(_enemyList[i].MoveTo, Player.MoveTo))
                 {
@@ -293,7 +308,7 @@ namespace Explore
                                 battleInfo = battleMapBuilder.Generate();
                             }
                             PathManager.Instance.LoadData(battleInfo.TileAttachInfoDic);
-                            BattleController.Instance.Init(Info.Floor, Info.Floor, _enemyList[i].Info.Tutorial, battleInfo, battleMapBuilder.transform);
+                            BattleController.Instance.Init(File.Floor, File.Floor, _enemyList[i].Info.Tutorial, battleInfo, battleMapBuilder.transform);
                         });
                     });
 
@@ -301,7 +316,6 @@ namespace Explore
                 }
             }
 
-            Vector2Int v2 = Utility.ConvertToVector2Int(Player.MoveTo);
             if (v2 == File.Start) 
             {
                 InputMamager.Instance.Lock();
@@ -347,7 +361,7 @@ namespace Explore
             else 
             {
                 CheckEvent();
-            }*/
+            }
         }
 
         private void CheckEvent() 
@@ -419,6 +433,7 @@ namespace Explore
         public void Reload() 
         {
             CreateObject();
+            SetCamera();
 
             if (File.PlayerPosition == File.Goal) 
             {
@@ -494,7 +509,7 @@ namespace Explore
             for(int i=0; i<File.TileList.Count; i++)
             {
                 tile = File.TileList[i];
-                gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + tile.Prefab), Vector3.zero, Quaternion.identity);
+                gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + tile.Prefab), Vector3.zero, Quaternion.identity);
 
                 if (gameObj != null)
                 {
@@ -517,7 +532,7 @@ namespace Explore
             for(int i=0; i<File.TreasureList.Count; i++)
             {
                 treasure = File.TreasureList[i];
-                gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + treasure.Prefab), Vector3.zero, Quaternion.identity);
+                gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + treasure.Prefab), Vector3.zero, Quaternion.identity);
                 gameObj.transform.position = new Vector3(treasure.Position.x, treasure.Height, treasure.Position.y);
                 gameObj.transform.eulerAngles = new Vector3(0, 0, treasure.RotationZ);
                 gameObj.transform.SetParent(parent);
@@ -557,6 +572,7 @@ namespace Explore
             for (int i = 0; i < File.EnemyInfoList.Count; i++)
             {
                 gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + File.EnemyInfoList[i].Prefab), Vector3.zero, Quaternion.identity);
+                gameObj.transform.position = new Vector3(File.EnemyInfoList[i].Position.x, 1, File.EnemyInfoList[i].Position.y);
                 gameObj.transform.SetParent(parent);
                 controller = gameObj.GetComponent<ExploreEnemyController>();
                 controller.Init(File.EnemyInfoList[i]);
