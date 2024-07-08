@@ -9,7 +9,7 @@ public class Event_2 : MyEvent
         if (!FlagManager.Instance.Info.FlagDic[FlagInfo.FlagEnum.FirstEnemy])
         {
             InputMamager.Instance.IsLock = true;
-            TutorialUI.Open("¦a¹Ï¤¤¶À¦âªº²yÅé¥Nªí¼Ä¤H¡A¸I¨ì¥¦´N·|¶i¤J¾Ô°«", "Floor_1", ()=> 
+            TutorialUI.Open("åœ°åœ–ä¸­é»ƒè‰²çš„çƒé«”ä»£è¡¨æ•µäººï¼Œç¢°åˆ°å®ƒå°±æœƒé€²å…¥æˆ°é¬¥", "Floor_1", ()=> 
             {
                 InputMamager.Instance.IsLock = false;
             });

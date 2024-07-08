@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = System.Random;
 using Graphs;
+using Unity.VisualScripting;
 
 public class Generator2D {
     public enum CellType {
@@ -13,9 +14,17 @@ public class Generator2D {
 
     public class Room {
         public RectInt bounds;
+        public List<Vector2Int> WalkableList = new List<Vector2Int>();
 
         public Room(Vector2Int location, Vector2Int size) {
             bounds = new RectInt(location, size);
+            for(int i=0; i<bounds.size.x; i++)
+            {
+                for(int j=0; j<bounds.size.y; j++)
+                {
+                    WalkableList.Add(bounds.position + new Vector2Int(i, j));
+                }
+            }
         }
 
         public static bool Intersect(Room a, Room b) {
@@ -25,7 +34,7 @@ public class Generator2D {
 
         public Vector2Int GetRandomPosition()
         {
-            Vector2Int position =  bounds.position + new Vector2Int(UnityEngine.Random.Range(0, bounds.size.x),UnityEngine.Random.Range(0, bounds.size.y));
+            Vector2Int position =  WalkableList[UnityEngine.Random.Range(0, WalkableList.Count)];
             return position;
         }
 

@@ -39,7 +39,7 @@ public class ExploreUI : MonoBehaviour
                 Treasure treasure = ExploreManager.Instance.GetTreasure();
                 if (treasure != null)
                 {
-                    TreasureUI.Open(treasure.ID);
+                    TreasureUI.Open(treasure.ItemID);
                     InputMamager.Instance.Lock();
                 }
             }
@@ -67,7 +67,7 @@ public class ExploreUI : MonoBehaviour
         if (file != null && !InputMamager.Instance.IsLock)
         {
             Vector2Int v2 = Utility.ConvertToVector2Int(Camera.main.transform.position + Camera.main.transform.forward);
-            SpaceLabel.SetActive(ExploreManager.Instance.TreasureDic.ContainsKey(v2));
+            SpaceLabel.SetActive(ExploreManager.Instance.CheckTreasure(v2));
         }
 
         deltaTime += (Time.deltaTime - deltaTime) * 0.1f;

@@ -39,7 +39,7 @@ namespace Explore
         private Generator2D _generator2D = new Generator2D();
         private List<Vector2Int> _tilePositionList;
         private Dictionary<Vector2Int, TileObject> _tileDic = new Dictionary<Vector2Int, TileObject>();
-        public Dictionary<Vector2Int, Treasure> TreasureDic = new Dictionary<Vector2Int, Treasure>();
+        private Dictionary<Vector2Int, Treasure> _treasureDic = new Dictionary<Vector2Int, Treasure>();
 
         public void Init() 
         {
@@ -190,21 +190,25 @@ namespace Explore
             Generator2D.Room room;
             Treasure treasure;
             Vector2Int position;
-            TreasureDic.Clear();
+            _treasureDic.Clear();
             for (int i = 0; i < treasureCount; i++)
             {
                 room = roomList[UnityEngine.Random.Range(0, roomList.Count)];
                 position = room.GetRandomPosition();
-                File.WalkableList.Remove(position);
-                TreasureModel treasureModel = new TreasureModel();
-                treasureModel.ID = 1;
-                treasureModel.Type = TreasureModel.TypeEnum.Item;
-                treasureModel.Prefab = "TreasureBox";
-                treasureModel.Height = 0.85f;
-                treasureModel.IDList = new List<int>(){21, 22, 23, 24};
-                treasure = new Treasure(position, treasureModel);
-                File.TreasureList.Add(treasure);
-                TreasureDic.Add(position, treasure);
+                if(!_treasureDic.ContainsKey(position))
+                {
+                    room.WalkableList.Remove(position);
+                    File.WalkableList.Remove(position);
+                    TreasureModel treasureModel = new TreasureModel();
+                    treasureModel.ID = 1;
+                    treasureModel.Type = TreasureModel.TypeEnum.Item;
+                    treasureModel.Prefab = "TreasureBox";
+                    treasureModel.Height = 0.85f;
+                    treasureModel.IDList = new List<int>(){21, 22, 23, 24};
+                    treasure = new Treasure(position, treasureModel);
+                    File.TreasureList.Add(treasure);
+                    _treasureDic.Add(position, treasure);
+                }
             }
 
             //Set Enemy
@@ -214,6 +218,7 @@ namespace Explore
             {
                 room = roomList[UnityEngine.Random.Range(0, roomList.Count)];
                 position = room.GetRandomPosition();
+                room.WalkableList.Remove(position);
                 enemyInfo = new NewExploreFile.EnemyInfo("NormalAI", null, null, position, 0);
                 File.EnemyInfoList.Add(enemyInfo);
                 File.WalkableList.Remove(position);
@@ -464,33 +469,35 @@ namespace Explore
             }
         }
 
+        public bool CheckTreasure(Vector2Int position)
+        {
+            return _treasureDic.ContainsKey(position);
+        }
+
         public Treasure GetTreasure() 
         {
-            /*Treasure treasure = null;
+            Treasure treasure = null;
             Vector2Int v2 = Utility.ConvertToVector2Int(Camera.main.transform.position + Camera.main.transform.forward);
-            if (Info.TreasureDic.ContainsKey(v2)) 
+            if (_treasureDic.ContainsKey(v2)) 
             {
-                treasure = Info.TreasureDic[v2];
-                Info.TreasureDic.Remove(v2);
-                Info.WalkableList.Add(v2);
+                treasure = _treasureDic[v2];
 
-                if (treasure.Type == TreasureModel.TypeEnum.Item)
+                bool bagIsFull = false;
+                if (treasure.Type == TreasureModel.TypeEnum.Equip)
                 {
-                    ItemManager.Instance.AddItem(treasure.ID, 1);
-                    GameObject.Destroy(Info.TileDic[v2].Treasure);
+                    bagIsFull = ItemManager.Instance.AddEquip(treasure.ItemID);
                 }
-                else
+                if (!bagIsFull) 
                 {
-                    bool bagIsFull = ItemManager.Instance.AddEquip(treasure.ID);
-                    if (!bagIsFull) 
-                    {
-                        GameObject.Destroy(Info.TileDic[v2].Treasure);
-                    }
+                    _treasureDic.Remove(v2);
+                    File.TreasureList.Remove(treasure);
+                    File.WalkableList.Add(v2);
+                    ItemManager.Instance.AddItem(treasure.ItemID, 1);
+                    GameObject.Destroy(_tileDic[v2].Treasure);
                 }
             }
 
-            return treasure;*/
-            return null;
+            return treasure;
         }
 
         public void CreateObject() 
@@ -532,9 +539,9 @@ namespace Explore
             for(int i=0; i<File.TreasureList.Count; i++)
             {
                 treasure = File.TreasureList[i];
-                gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + treasure.Prefab), Vector3.zero, Quaternion.identity);
+                gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + treasure.Prefab), Vector3.zero, Quaternion.identity);
                 gameObj.transform.position = new Vector3(treasure.Position.x, treasure.Height, treasure.Position.y);
-                gameObj.transform.eulerAngles = new Vector3(0, 0, treasure.RotationZ);
+                gameObj.transform.eulerAngles = treasure.Rotation;
                 gameObj.transform.SetParent(parent);
                 _tileDic[treasure.Position].Treasure = gameObj;
                 if (gameObj.transform.childCount > 0)

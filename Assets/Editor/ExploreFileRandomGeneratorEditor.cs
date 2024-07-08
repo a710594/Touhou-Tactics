@@ -11,7 +11,7 @@ public class ExploreFileRandomGeneratorEditor : Editor
         DrawDefaultInspector();
 
         ExploreFileRandomGenerator exploreFileRandomGenerator = (ExploreFileRandomGenerator)target;
-        if (GUILayout.Button("�إ��ɮ�"))
+        if (GUILayout.Button("輸出檔案"))
         {
             exploreFileRandomGenerator.BuildFile();
         }

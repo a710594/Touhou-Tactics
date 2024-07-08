@@ -6,10 +6,10 @@ public class Treasure
 {
     public Vector2Int Position;
     public TreasureModel.TypeEnum Type;
-    public int ID;
+    public int ItemID;
     public string Prefab;
     public float Height;
-    public float RotationZ;
+    public Vector3Int Rotation;
 
     public Treasure() { }
 
@@ -18,9 +18,9 @@ public class Treasure
         int random = Random.Range(0, data.IDList.Count);
         Position = position;
         Type = data.Type;
-        ID = data.IDList[random];
+        ItemID = data.IDList[random];
         Prefab = data.Prefab;
         Height = data.Height;
-        RotationZ = data.RotationZ;
+        Rotation = Utility.GetVector3Int(data.Rotation);
     }
 }

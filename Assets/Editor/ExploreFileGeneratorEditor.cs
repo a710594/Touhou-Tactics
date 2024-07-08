@@ -12,7 +12,7 @@ public class ExploreFileGeneratorEditor : Editor
         DrawDefaultInspector();
 
         ExploreFileGenerator exploreFileGenerator = (ExploreFileGenerator)target;
-        if (GUILayout.Button("�إ��ɮ�"))
+        if (GUILayout.Button("輸出檔案"))
         {
             exploreFileGenerator.BuildFile();
         }

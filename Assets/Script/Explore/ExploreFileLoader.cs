@@ -10,6 +10,7 @@ namespace Explore
         public Transform Tilemap;
         public Transform Enemy;
         public Transform Trigger;
+        public Transform Treasure;
 
         public void Load()
         {
@@ -28,11 +29,17 @@ namespace Explore
                 DestroyImmediate(Trigger.GetChild(0).gameObject);
             }
 
+            for (int i = Treasure.childCount; i > 0; --i)
+            {
+                DestroyImmediate(Treasure.GetChild(0).gameObject);
+            }
+
             GameObject obj;
+            GameObject child;
             NewExploreFile file = DataContext.Instance.Load<NewExploreFile>(FileName, DataContext.PrePathEnum.MapExplore);
             for(int i=0; i<file.TileList.Count; i++)
             {
-                obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + file.TileList[i].Prefab), Vector3.zero, Quaternion.identity);
+                obj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + file.TileList[i].Prefab), Vector3.zero, Quaternion.identity);
                 obj.name = file.TileList[i].Prefab;
                 obj.transform.position = new Vector3(file.TileList[i].Position.x, 0, file.TileList[i].Position.y);
                 obj.transform.SetParent(Tilemap);
@@ -44,8 +51,8 @@ namespace Explore
 
             for(int i=0; i<file.EnemyInfoList.Count; i++)
             {
-                obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/ExploreEnemyInfoObject"), Vector3.zero, Quaternion.identity);
-                ExploreEnemyInfoObject exploreEnemyInfoObject = obj.GetComponent<ExploreEnemyInfoObject>();
+                obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/EnemyExploreFileObject"), Vector3.zero, Quaternion.identity);
+                EnemyExploreFileObject exploreEnemyInfoObject = obj.GetComponent<EnemyExploreFileObject>();
                 exploreEnemyInfoObject.Prefab = file.EnemyInfoList[i].Prefab;
                 exploreEnemyInfoObject.Map = file.EnemyInfoList[i].Map;
                 exploreEnemyInfoObject.Tutorial = file.EnemyInfoList[i].Tutorial;
@@ -59,6 +66,23 @@ namespace Explore
                 obj.transform.position = new Vector3(file.TriggerList[i].Position.x, 0, file.TriggerList[i].Position.y);
                 obj.name = file.TriggerList[i].Name;
                 obj.transform.SetParent(Trigger);
+            }
+
+            for(int i=0; i<file.TreasureList.Count; i++)
+            {
+                obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/TreasureExploreFileObject"), Vector3.zero, Quaternion.identity);
+                TreasureExploreFileObject treasureExploreFileObject = obj.GetComponent<TreasureExploreFileObject>();
+                treasureExploreFileObject.Type = file.TreasureList[i].Type;
+                treasureExploreFileObject.ItemID = file.TreasureList[i].ItemID;
+                obj.transform.SetParent(Treasure);
+                obj.transform.position = new Vector3(file.TreasureList[i].Position.x, 1, file.TreasureList[i].Position.y);
+                string prefab = file.TreasureList[i].Prefab;
+                child = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + prefab), Vector3.zero, Quaternion.identity);
+                child.name = prefab;
+                child.transform.position = new Vector3(obj.transform.position.x, file.TreasureList[i].Height, obj.transform.position.z);
+                child.transform.localEulerAngles = file.TreasureList[i].Rotation;
+                child.transform.SetParent(obj.transform);
+                treasureExploreFileObject.Prefab = child;
             }
         }
     }

@@ -14,7 +14,7 @@ namespace Explore
         public Transform Goal;
         public Transform Enemy;
         public Transform Trigger;
-        public GameObject[] Triggers;
+        public Transform Treasure;
 
         public void BuildFile()
         {
@@ -52,18 +52,30 @@ namespace Explore
             file.PlayerPosition = file.Start;
             file.Size = new Vector2Int(maxX - minX, maxY - minY);
 
-            ExploreEnemyInfoObject enemyObj;
+            EnemyExploreFileObject enemyObj;
             foreach (Transform child in Enemy)
             {
-                enemyObj = child.gameObject.GetComponent<ExploreEnemyInfoObject>();
-                //enemyInfo = new ExploreEnemyInfo(enemyObj.Prefab, enemyObj.Map, enemyObj.Tutorial, Utility.ConvertToVector2Int(enemyObj.transform.position), (int)enemyObj.transform.eulerAngles.y);
+                enemyObj = child.gameObject.GetComponent<EnemyExploreFileObject>();
                 file.EnemyInfoList.Add(new NewExploreFile.EnemyInfo(enemyObj.Prefab, enemyObj.Map, enemyObj.Tutorial, Utility.ConvertToVector2Int(enemyObj.transform.position), (int)enemyObj.transform.eulerAngles.y));
             }
 
             foreach (Transform child in Trigger)
             {
-                //_info.TriggerDic.Add(Utility.ConvertToVector2Int(child.position), child.name);
                 file.TriggerList.Add(new NewExploreFile.TriggerInfo(Utility.ConvertToVector2Int(child.position), child.name));
+            }
+
+            TreasureExploreFileObject treasureObj;
+            foreach (Transform child in Treasure)
+            {
+                treasureObj = child.gameObject.GetComponent<TreasureExploreFileObject>();
+                Treasure treasure = new Treasure();
+                treasure.Position = Utility.ConvertToVector2Int(treasureObj.transform.position);
+                treasure.Type = treasureObj.Type;
+                treasure.ItemID = treasureObj.ItemID;
+                treasure.Prefab = treasureObj.Prefab.name;
+                treasure.Height = treasureObj.Prefab.transform.position.y;
+                treasure.Rotation = Vector3Int.RoundToInt(treasureObj.Prefab.transform.localEulerAngles);
+                file.TreasureList.Add(treasure);
             }
 
             //ExploreFile file = new ExploreFile(_info);

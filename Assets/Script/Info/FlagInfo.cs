@@ -7,9 +7,10 @@ public class FlagInfo
 {
     public enum FlagEnum 
     {
-        BasicOperations, //°ò¥»¾Þ§@
-        FirstEnemy, //Floor_1 ²Ä¤@°¦©Çªº»¡©ú
-        FloorBoss, //¼Ó¼hBossªº»¡©ú
+        BasicOperations, //ï¿½ò¥»¾Þ§@
+        FirstEnemy, //Floor_1 ï¿½Ä¤@ï¿½ï¿½ï¿½Çªï¿½ï¿½ï¿½ï¿½ï¿½
+        FloorBoss, //ï¿½Ó¼hBossï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        GetItem,
     }
 
     public Dictionary<FlagEnum, bool> FlagDic;

@@ -358,6 +358,37 @@ public static class Utility
         }
     }
 
+    public static Vector3Int GetVector3Int(string str)
+    {
+        Vector3Int position = new Vector3Int();
+        string[] arr;
+        Stack<char> stack = new Stack<char>();
+
+        for (int i = 0; i < str.Length; i++)
+        {
+            if (str[i] != ')')
+            {
+                stack.Push(str[i]);
+            }
+            else
+            {
+                str = "";
+                while (stack.Peek() != '(')
+                {
+                    str += stack.Pop();
+                }
+                while (stack.Count > 0)
+                {
+                    stack.Pop();
+                }
+                str = Reverse(str);
+                arr = str.Split(',');
+                position = new Vector3Int(int.Parse(arr[0]), int.Parse(arr[1]), int.Parse(arr[2]));
+            }
+        }
+        return position;
+    }
+
     public static float RandomGaussian(float minValue = 0.0f, float maxValue = 1.0f)
     {
         float u, v, S;
