@@ -87,6 +87,11 @@ namespace Explore
                         File.WalkableList.Add(File.TileList[i].Position);
                     }
                 }
+
+                for (int i=0; i<File.TreasureList.Count; i++) 
+                {
+                    _treasureDic.Add(File.TreasureList[i].Position, File.TreasureList[i]);
+                }
             }
         }
 
