@@ -61,15 +61,17 @@ namespace Explore
 
         public void Init(int floor) 
         {
-            FloorModel data = DataContext.Instance.FloorDic[floor];
-            if (data.Name != "x")
+            if(DataContext.Instance.FixedFloorDic.ContainsKey(floor))
             {
-                LoadFile(data.Name, DataContext.PrePathEnum.MapExplore);
+                FixedFloorModel data = DataContext.Instance.FixedFloorDic[floor];
+                LoadFile(data.Name, DataContext.PrePathEnum.MapExplore);                
             }
             else
             {
+                RandomFloorModel data = DataContext.Instance.RandomFloorDic[floor];
                 CreateNewFile(new Vector2Int(data.Width, data.Height), data.RoomCount, new Vector2Int(5, 7));
             }
+            
             CreateObject();
             SetCamera();
         }
