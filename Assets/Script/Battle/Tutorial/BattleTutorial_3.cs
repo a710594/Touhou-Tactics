@@ -43,7 +43,7 @@ namespace Battle
                 BattleUI.Instance.SetArrowVisible(false);
                 TutorialUI.Open("符卡：\n消耗符卡發動強大的效果。使用符卡後所有的我方成員都會進入冷卻時間，需要數回合後才能再次使用符卡。", ()=> 
                 {
-                    Vector3 offset = new Vector3(-200, 0, 0);
+                    Vector3 offset = new Vector3(-200, -50, 0);
                     TutorialArrowUI.Open("選擇符卡。", BattleUI.Instance.ActionButtonGroup.SupportButton.transform, offset, Vector2Int.right, null);
                 });
             }
@@ -76,7 +76,7 @@ namespace Battle
 
             public override bool CheckScrollItem(object obj)
             {
-                if(obj is Support &&((Support)obj).ID == 3) 
+                if(obj is Spell &&((Spell)obj).ID == 1) 
                 {
                     Next();
                     return true;
@@ -103,14 +103,12 @@ namespace Battle
 
             public override void Begin()
             {
-                Vector3 v = BattleController.Instance.SelectedCharacter.Position;
-                TutorialArrowUI.Open("選擇目標。", new Vector3(v.x, v.y + 1, v.z), Vector2Int.down, null);
+                TutorialArrowUI.Open("選擇目標。", new Vector3(4, 2, 4), Vector2Int.down, null);
             }
 
             public override bool CheckClick(Vector2Int position)
             {
-                Vector3 v = BattleController.Instance.SelectedCharacter.Position;
-                if (position == new Vector2Int((int)v.x, (int)v.z))
+                if (position == new Vector2Int(4, 4))
                 {
                     Next();
                     return true;
@@ -136,14 +134,12 @@ namespace Battle
 
             public override void Begin()
             {
-                Vector3 v = BattleController.Instance.SelectedCharacter.Position;
-                TutorialArrowUI.Open("再次點選同樣的位置確認。", new Vector3(v.x, v.y + 1, v.z), Vector2Int.down, null);
+                TutorialArrowUI.Open("再次點選同樣的位置確認。", new Vector3(4, 2, 4), Vector2Int.down, null);
             }
 
             public override bool CheckClick(Vector2Int position)
             {
-                Vector3 v = BattleController.Instance.SelectedCharacter.Position;
-                if (position == new Vector2Int((int)v.x, (int)v.z))
+                if (position == new Vector2Int(4, 4))
                 {
                     TutorialArrowUI.Close();
                     BattleController.Instance.EndTutorial();
