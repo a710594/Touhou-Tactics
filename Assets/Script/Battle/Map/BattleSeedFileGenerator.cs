@@ -16,11 +16,33 @@ public class BattleSeedFileGenerator : MonoBehaviour
 
     public void Generate() 
     {
+        int minX = int.MaxValue;
+        int maxX = int.MinValue;
+        int minY = int.MaxValue;
+        int maxY = int.MinValue;
+        Vector3 position;
         TileComponent component;
         List<string[]> tileList = new List<string[]>();
         foreach (Transform child in Tilemap)
         {
             component = child.GetComponent<TileComponent>();
+            position = child.position;
+            if (position.x < minX)
+            {
+                minX = Mathf.RoundToInt(position.x);
+            }
+            if (position.x > maxX)
+            {
+                maxX = Mathf.RoundToInt(position.x);
+            }
+            if (position.z < minY)
+            {
+                minY = Mathf.RoundToInt(position.z);
+            }
+            if (position.z > maxY)
+            {
+                maxY = Mathf.RoundToInt(position.z);
+            }
             tileList.Add(new string[3] { Mathf.RoundToInt(child.position.x).ToString(), Mathf.RoundToInt(child.position.z).ToString(), component.ID });
         }
 
@@ -45,6 +67,10 @@ public class BattleSeedFileGenerator : MonoBehaviour
         battleFile.TileList = tileList;
         battleFile.NoAttachList = noAttachList;
         battleFile.EnemyList = enemyList;
+        battleFile.MinX = minX;
+        battleFile.MaxX = maxX;
+        battleFile.MinY = minY;
+        battleFile.MaxY = maxY;
         File.WriteAllText(path, JsonConvert.SerializeObject(battleFile));
     }
 }

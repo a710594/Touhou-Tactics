@@ -59,6 +59,7 @@ private static readonly string _mapBattlePrePath = Application.streamingAssetsPa
     public List<FoodResult> FoodResultList = new List<FoodResult>();
     public List<ConsumablesModel> ConsumablesList = new List<ConsumablesModel>();
     public List<SpellModel> SpellList = new List<SpellModel>();
+    public List<ConversationModel> ConversationList = new List<ConversationModel>();
 
     public Dictionary<int, JobModel> JobDic = new Dictionary<int, JobModel>();
     public Dictionary<int, SkillModel> SkillDic = new Dictionary<int, SkillModel>();
@@ -79,6 +80,7 @@ private static readonly string _mapBattlePrePath = Application.streamingAssetsPa
     public Dictionary<int, ConsumablesModel> ConsumablesDic = new Dictionary<int, ConsumablesModel>();
     public Dictionary<int, SpellModel> SpellDic = new Dictionary<int, SpellModel>();
     public Dictionary<int, List<SpellModel>> JobCardDic = new Dictionary<int, List<SpellModel>>();
+    public Dictionary<int, Dictionary<int, ConversationModel>> ConversationDic = new Dictionary<int, Dictionary<int, ConversationModel>>();
 
     public Dictionary<string, TileSetting> TileSettingDic = new Dictionary<string, TileSetting>();
     public Dictionary<string, AttachSetting> AttachSettingDic = new Dictionary<string, AttachSetting>();
@@ -245,6 +247,20 @@ private static readonly string _mapBattlePrePath = Application.streamingAssetsPa
                 JobCardDic.Add(SpellList[i].Job, new List<SpellModel>());
             }
             JobCardDic[SpellList[i].Job].Add(SpellList[i]);
+        }
+
+        ConversationList = Load<List<ConversationModel>>("Conversation", PrePathEnum.Data);
+        ConversationDic.Clear();
+        int id;
+        for (int i = 0; i < ConversationList.Count; i++)
+        {
+            ConversationList[i].GetList();
+            id = ConversationList[i].ID;
+            if (!ConversationDic.ContainsKey(id))
+            {
+                ConversationDic.Add(id, new Dictionary<int, ConversationModel>());
+            }
+            ConversationDic[id].Add(ConversationList[i].Page, ConversationList[i]);
         }
 
         DirectoryInfo d;

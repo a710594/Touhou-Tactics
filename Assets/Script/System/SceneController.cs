@@ -42,10 +42,11 @@ public class SceneController
 
     public void Init()
     {
-        if (!_isInit)
+        GameObject obj = GameObject.Find("LoadingUI");
+        if (!_isInit && obj != null)
         {
             SceneManager.sceneLoaded += SceneLoaded;
-            LoadingUI = GameObject.Find("LoadingUI").GetComponent<LoadingUI>();
+            LoadingUI = obj.GetComponent<LoadingUI>();
             _isInit = true;
         }
     }

@@ -18,7 +18,7 @@ public class BattleFileReader
         battleInfo.MinX = file.MinX;
         battleInfo.MaxX = file.MaxX;
         battleInfo.MinY = file.MinY;
-        battleInfo.MinY = file.MinY;
+        battleInfo.MaxY = file.MaxY;
         battleInfo.NeedCount = file.PlayerCount;
         battleInfo.MustBeEqualToNeedCount = file.MustBeEqualToNeedCount;
         battleInfo.Exp = file.Exp;
