@@ -50,7 +50,8 @@ private static readonly string _mapBattlePrePath = Application.streamingAssetsPa
     public List<PassiveModel> PassiveList = new List<PassiveModel>();
     public List<EquipModel> EquipList = new List<EquipModel>();
     public List<EnemyGroupModel> EnemyGroupList = new List<EnemyGroupModel>();
-    public List<FloorModel> FloorList = new List<FloorModel>();
+    public List<FixedFloorModel> FixedFloorList = new List<FixedFloorModel>();
+    public List<RandomFloorModel> RandomFloorList = new List<RandomFloorModel>();
     public List<RoomModel> RoomList = new List<RoomModel>();
     public List<TreasureModel> TreasureList = new List<TreasureModel>();
     public List<ShopModel> ShopList = new List<ShopModel>();
@@ -71,7 +72,8 @@ private static readonly string _mapBattlePrePath = Application.streamingAssetsPa
     public Dictionary<int, EquipModel> EquipDic = new Dictionary<int, EquipModel>();
     public Dictionary<int, ItemModel> ItemDic = new Dictionary<int, ItemModel>();
     public Dictionary<int, Dictionary<int, EnemyGroupModel>> EnemyGroupDic = new Dictionary<int, Dictionary<int, EnemyGroupModel>>();
-    public Dictionary<int, FloorModel> FloorDic = new Dictionary<int, FloorModel>();
+    public Dictionary<int, FixedFloorModel> FixedFloorDic = new Dictionary<int, FixedFloorModel>();
+    public Dictionary<int, RandomFloorModel> RandomFloorDic = new Dictionary<int, RandomFloorModel>();
     public Dictionary<int, RoomModel> RoomDic = new Dictionary<int, RoomModel>();
     public Dictionary<int, TreasureModel> TreasureDic = new Dictionary<int, TreasureModel>();
     public Dictionary<ItemModel.CategoryEnum, List<ShopModel>> ShopItemDic = new Dictionary<ItemModel.CategoryEnum, List<ShopModel>>();
@@ -172,12 +174,19 @@ private static readonly string _mapBattlePrePath = Application.streamingAssetsPa
             EnemyGroupDic[EnemyGroupList[i].Floor].Add(EnemyGroupList[i].ID, EnemyGroupList[i]);
         }
 
-        FloorList = Load<List<FloorModel>>("Floor", PrePathEnum.Data);
-        FloorDic.Clear();
-        for (int i = 0; i < FloorList.Count; i++)
+        FixedFloorList = Load<List<FixedFloorModel>>("FixedFloor", PrePathEnum.Data);
+        FixedFloorDic.Clear();
+        for (int i = 0; i < FixedFloorList.Count; i++)
         {
-            FloorList[i].GetRoomPool();
-            FloorDic.Add(FloorList[i].Floor, FloorList[i]);
+            FixedFloorDic.Add(FixedFloorList[i].Floor, FixedFloorList[i]);
+        }
+
+        RandomFloorList = Load<List<RandomFloorModel>>("RandomFloor", PrePathEnum.Data);
+        RandomFloorDic.Clear();
+        for (int i = 0; i < RandomFloorList.Count; i++)
+        {
+            RandomFloorList[i].GetRoomPool();
+            RandomFloorDic.Add(RandomFloorList[i].Floor, RandomFloorList[i]);
         }
 
         RoomList = Load<List<RoomModel>>("Room", PrePathEnum.Data);

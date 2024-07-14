@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/*public class FloorModel
+public class RandomFloorModel
 {
     public int Floor;
-    public string Name;
     public int Width;
     public int Height;
     public int RoomCount;
@@ -29,4 +28,4 @@ using UnityEngine;
             RoomPool.Add(Room_2);
         }
     }
-}*/
+}
