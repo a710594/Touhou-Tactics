@@ -11,7 +11,6 @@ public class ConversationUI : MonoBehaviour
 
     public Text NameLabel;
     public Typewriter NormalTypewriter;
-    public Typewriter VOTypewriter;
     public Button NextButton;
     public Button SkipButton;
     public Image Background;
