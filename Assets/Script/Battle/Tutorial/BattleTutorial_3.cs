@@ -6,14 +6,14 @@ namespace Battle
 {
     public class BattleTutorial_3 : BattleTutorial
     {
+        private CameraMove _cameraMove;
+
         public BattleTutorial_3()
         {
             _context.AddState(new State_1(_context));
             _context.AddState(new State_2(_context));
             _context.AddState(new State_3(_context));
             _context.AddState(new State_4(_context));
-            
-            BattleController.Instance.ActionStateBeginHandler += Start;
         }
 
         public override List<CharacterInfo> GetCharacterList()
@@ -28,7 +28,32 @@ namespace Battle
 
         public override void Start() 
         {
-            BattleController.Instance.ActionStateBeginHandler -= Start;
+            //Instance._battleUI.gameObject.SetActive(true);
+            //_selectBattleCharacterUI.gameObject.SetActive(false);
+
+            int lv = CharacterManager.Instance.Info.Lv;
+            List<BattleCharacterInfo> list = new List<BattleCharacterInfo>();
+            list.Add(new BattleCharacterInfo(CharacterManager.Instance.Info.CharacterList[0], lv));
+            //list.Add(CharacterManager.Instance.Info.CharacterList[2], lv);
+            //list.Add(CharacterManager.Instance.Info.CharacterList[3], lv);
+            for (int i=0; i<list.Count; i++) 
+            {
+                BattleController.Instance.CharacterList.Add(list[i]);
+                BattleController.Instance.CreateCharacter(list[i], new Vector2Int(4, 3));
+            }
+            
+            BattleController.Instance.SortCharacterList(true);
+            BattleController.Instance.CharacterListGroupInit();
+            BattleController.Instance.SelectedCharacter = BattleController.Instance.CharacterList[0];
+            BattleController.Instance.SelectBattleCharacterUI.gameObject.SetActive(false);
+            BattleController.Instance.BattleUI.gameObject.SetActive(true);
+            BattleController.Instance.BattleUI.CharacterListGroupRefresh();
+
+            Camera.main.transform.localPosition = new Vector3(-10, 10, -10);
+            _cameraMove = Camera.main.transform.parent.gameObject.GetComponent<CameraMove>();
+            _cameraMove.Move(BattleController.Instance.SelectedCharacter.Position, null); ;
+
+            BattleController.Instance.SetState<BattleController.CommandState>();
             _context.SetState<State_1>();
         }
 

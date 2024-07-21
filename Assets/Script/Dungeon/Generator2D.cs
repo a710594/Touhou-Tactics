@@ -32,10 +32,18 @@ public class Generator2D {
                 || (a.bounds.position.y >= (b.bounds.position.y + b.bounds.size.y)) || ((a.bounds.position.y + a.bounds.size.y) <= b.bounds.position.y));
         }
 
-        public Vector2Int GetRandomPosition()
+        public bool GetRandomPosition(out Vector2Int position)
         {
-            Vector2Int position =  WalkableList[UnityEngine.Random.Range(0, WalkableList.Count)];
-            return position;
+            if (WalkableList.Count > 0)
+            {
+                position = WalkableList[UnityEngine.Random.Range(0, WalkableList.Count)];
+                return true;
+            }
+            else
+            {
+                position = new Vector2Int();
+                return false;
+            }
         }
 
         /*public Dictionary<Vector2Int, Treasure> GetTreasures()

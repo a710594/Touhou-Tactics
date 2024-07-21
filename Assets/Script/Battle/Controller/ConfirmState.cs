@@ -47,10 +47,10 @@ namespace Battle
                 if(target!=null)
                 {
                     predictionHp = Instance.GetPredictionHp(_character, target, target.CurrentHP, command.Effect);
-                    Instance._battleUI.SetCharacterInfoUI_2(target);
-                    Instance._battleUI.SetPredictionInfo_2(target, predictionHp);
+                    Instance.BattleUI.SetCharacterInfoUI_2(target);
+                    Instance.BattleUI.SetPredictionInfo_2(target, predictionHp);
                     float hitRate = Instance.GetHitRate(command.Hit, _character, target);
-                    Instance._battleUI.SetHitRate(Mathf.RoundToInt(hitRate * 100));
+                    Instance.BattleUI.SetHitRate(Mathf.RoundToInt(hitRate * 100));
                 }
                 
                 Instance.ClearQuad();
@@ -64,7 +64,7 @@ namespace Battle
                         if (pair.Value.Contains(Utility.ConvertToVector2Int(_allCharacterList[i].Position)))
                         {
                             predictionHp = Instance.GetPredictionHp(_character, _allCharacterList[i], _allCharacterList[i].CurrentHP, pair.Key.Effect);
-                            Instance._battleUI.SetPredictionLittleHpBar(_allCharacterList[i], predictionHp);
+                            Instance.BattleUI.SetPredictionLittleHpBar(_allCharacterList[i], predictionHp);
                             Instance._commandTargetDic[pair.Key].Add(_allCharacterList[i]);
                         }
                     }
@@ -82,10 +82,10 @@ namespace Battle
             {
                 for (int i=0; i< _allCharacterList.Count; i++) 
                 {
-                    Instance._battleUI.StopPredictionLittleHpBar(_allCharacterList[i]);
+                    Instance.BattleUI.StopPredictionLittleHpBar(_allCharacterList[i]);
                 }
-                Instance._battleUI.StopPredictionInfo();
-                Instance._battleUI.HideHitRate();
+                Instance.BattleUI.StopPredictionInfo();
+                Instance.BattleUI.HideHitRate();
 
                 if (position == Instance._selectedPosition)
                 {
@@ -93,9 +93,9 @@ namespace Battle
                 }
                 else
                 {
-                    Instance._battleUI.SetCharacterInfoUI_2(null);
+                    Instance.BattleUI.SetCharacterInfoUI_2(null);
                     Instance.ClearQuad();
-                    _context.SetState<ActionState>();
+                    _context.SetState<CommandState>();
                 }
             }
 

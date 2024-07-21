@@ -38,7 +38,7 @@ namespace Battle
                 moveTo = GetMoveTo(MoveToEnum.Near, _stepList, Utility.ConvertToVector2Int(_target.Position));
             }
 
-            BattleController.Instance.SetMoveState();
+            BattleController.Instance.SetState<BattleController.MoveState>();
             BattleController.Instance.Click(moveTo);
             BattleController.Instance.Click(moveTo);
         }

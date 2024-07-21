@@ -58,7 +58,7 @@ namespace Battle
                 }
             }
 
-            BattleController.Instance.SetMoveState();
+            BattleController.Instance.SetState<BattleController.MoveState>();
             BattleController.Instance.Click(moveTo);
             BattleController.Instance.Click(moveTo);
         }

@@ -18,7 +18,7 @@ namespace Battle
 
             public override void Begin()
             {
-                Instance._battleUI.SetCharacterInfoUI_2(null);
+                Instance.BattleUI.SetCharacterInfoUI_2(null);
                 Instance.ClearQuad();
                 _characterList = Instance.CharacterList;
                 _character = Instance.SelectedCharacter;
@@ -148,15 +148,15 @@ namespace Battle
 
             private void SetUI(BattleCharacterInfo target, List<Log> logList)
             {
-                Instance._battleUI.SetLittleHpBarValue(target.Index, target);
-                Instance._battleUI.PlayFloatingNumberPool(target.Index, logList);
+                Instance.BattleUI.SetLittleHpBarValue(target.Index, target);
+                Instance.BattleUI.PlayFloatingNumberPool(target.Index, logList);
                 if (logList.Count > _maxFloatingCount)
                 {
                     _maxFloatingCount = logList.Count;
                 }
                 for(int i=0; i<logList.Count; i++)
                 {
-                    Instance._battleUI.AddLog(logList[i].FullText);  
+                    Instance.BattleUI.AddLog(logList[i].FullText);  
                 }
             }
 
@@ -226,7 +226,7 @@ namespace Battle
                 {
                     if (_character.ActionCount > 0)
                     {
-                        _context.SetState<ActionState>();
+                        _context.SetState<CommandState>();
                     }
                     else
                     {

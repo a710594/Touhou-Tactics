@@ -6,9 +6,9 @@ namespace Battle
 {
     public partial class BattleController
     {
-        private class ActionState : BattleControllerState
+        public class CommandState : BattleControllerState
         {
-            public ActionState(StateContext context) : base(context)
+            public CommandState(StateContext context) : base(context)
             {
             }
 
@@ -22,12 +22,12 @@ namespace Battle
                 _info = Instance.Info;
                 _character = Instance.SelectedCharacter;
                 _characterList = Instance.CharacterList;
-                Instance._battleUI.SetActionVisible(true);
-                Instance._battleUI.ActionButtonGroup.SetButton(_character);
-                Instance._battleUI.ActionButtonGroup.ResetButton.gameObject.SetActive(_character.HasMove);
-                Instance._battleUI.SetCharacterInfoUI_1(_character);
-                Instance._battleUI.SetCharacterInfoUI_2(null);
-                Instance._battleUI.ActionButtonGroup.SkillInfoGroup.gameObject.SetActive(false);
+                Instance.BattleUI.SetActionVisible(true);
+                Instance.BattleUI.ActionButtonGroup.SetButton(_character);
+                Instance.BattleUI.ActionButtonGroup.ResetButton.gameObject.SetActive(_character.HasMove);
+                Instance.BattleUI.SetCharacterInfoUI_1(_character);
+                Instance.BattleUI.SetCharacterInfoUI_2(null);
+                Instance.BattleUI.ActionButtonGroup.SkillInfoGroup.gameObject.SetActive(false);
                 Instance.ClearQuad();
                 Instance.ShowTileBuff(_character);
 

@@ -153,10 +153,12 @@ public class InputMamager
 #if UNITY_EDITOR
             if (Input.GetKeyDown(KeyCode.V))
             {
+                Battle.BattleController.Instance.EndTutorial();
                 Battle.BattleController.Instance.SetWin();
             }
             if (Input.GetKeyDown(KeyCode.L))
             {
+                Battle.BattleController.Instance.EndTutorial();
                 Battle.BattleController.Instance.SetLose();
             }
 #endif

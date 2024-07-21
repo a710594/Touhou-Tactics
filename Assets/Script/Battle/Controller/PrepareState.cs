@@ -6,24 +6,21 @@ namespace Battle
 {
     public partial class BattleController
     {
-        private class PrepareState : BattleControllerState 
+        public class PrepareState : BattleControllerState 
         {
-            private SelectBattleCharacterUI _selectBattleCharacterUI;
             private Dictionary<CharacterInfo, BattleCharacterController> _tempDic = new Dictionary<CharacterInfo, BattleCharacterController>();
 
             public PrepareState(StateContext context) : base(context)
             {
                 _info = Instance.Info;
                 _characterList = Instance.CharacterList;
-                _selectBattleCharacterUI = GameObject.Find("SelectBattleCharacterUI").GetComponent<SelectBattleCharacterUI>();
             }
 
             public override void Begin()
             {
                 _info = Instance.Info;
-                Camera.main.transform.position = new Vector3(_info.NoAttachList[0].x-10, 10, _info.NoAttachList[0].y-10);
+                Camera.main.transform.localPosition = new Vector3(_info.NoAttachList[0].x-10, 10, _info.NoAttachList[0].y-10);
 
-                Instance.DirectionGroup = GameObject.Find("DirectionGroup");
                 Instance.DirectionGroup.SetActive(false);
 
                 int needCount = _info.NeedCount;
@@ -36,7 +33,6 @@ namespace Battle
                 if (Instance.IsTutorial)
                 {
                     tempCharacterList = Instance.Tutorial.GetCharacterList();
-                    //Instance.Tutorial.Start();
                 }
                 else
                 {
@@ -49,7 +45,7 @@ namespace Battle
                         }
                     }
                 }
-                _selectBattleCharacterUI.Init(needCount, _info.MustBeEqualToNeedCount, tempCharacterList);
+                Instance.SelectBattleCharacterUI.Init(needCount, _info.MustBeEqualToNeedCount, tempCharacterList);
 
                 for (int i=0; i< _info.NoAttachList.Count; i++) 
                 {
@@ -75,18 +71,15 @@ namespace Battle
                     Instance._controllerDic.Add(battleCharacter.Index, pair.Value.GetComponent<BattleCharacterController>());
                     //Instance._controllerDic[battleCharacter.Index].SetSprite(battleCharacter.Sprite);
                     Instance._controllerDic[battleCharacter.Index].MoveEndHandler += Instance.OnMoveEnd;
-                    Instance._battleUI.SetLittleHpBarAnchor(battleCharacter.Index, Instance._controllerDic[battleCharacter.Index]);
-                    Instance._battleUI.SetLittleHpBarValue(battleCharacter.Index, battleCharacter);
-                    Instance._battleUI.SetFloatingNumberPoolAnchor(battleCharacter.Index, Instance._controllerDic[battleCharacter.Index]);
+                    Instance.BattleUI.SetLittleHpBarAnchor(battleCharacter.Index, Instance._controllerDic[battleCharacter.Index]);
+                    Instance.BattleUI.SetLittleHpBarValue(battleCharacter.Index, battleCharacter);
+                    Instance.BattleUI.SetFloatingNumberPoolAnchor(battleCharacter.Index, Instance._controllerDic[battleCharacter.Index]);
                 }
-                Instance._battleUI.gameObject.SetActive(true);
-                _selectBattleCharacterUI.gameObject.SetActive(false);
+                Instance.BattleUI.gameObject.SetActive(true);
+                Instance.SelectBattleCharacterUI.gameObject.SetActive(false);
 
                 Instance.SortCharacterList(true);
-
-                Instance._battleUI.CharacterListGroupInit(_characterList);
-
-                //Instance.Arrow = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Other/Arrow"), Vector3.zero, Quaternion.identity);
+                Instance.CharacterListGroupInit();
             }
 
             public GameObject PlaceCharacter(Vector2Int position, CharacterInfo characterInfo)
@@ -116,7 +109,7 @@ namespace Battle
                         _tempDic[characterInfo].gameObject.SetActive(true);
                         _tempDic[characterInfo].transform.position = new Vector3(position.x, _info.TileAttachInfoDic[position].Height, position.y);
                     }
-                    Instance._dragCameraUI.DontDrag = false;
+                    Instance.DragCameraUI.DontDrag = false;
 
                     return _tempDic[characterInfo].gameObject;
                 }
@@ -128,7 +121,7 @@ namespace Battle
 
             public void SetCharacterSpriteVisible(CharacterInfo characterInfo, bool isVisible) 
             {
-                Instance._dragCameraUI.DontDrag = !isVisible;
+                Instance.DragCameraUI.DontDrag = !isVisible;
                 if (_tempDic.ContainsKey(characterInfo))
                 {
                     _tempDic[characterInfo].gameObject.SetActive(isVisible);
@@ -137,7 +130,7 @@ namespace Battle
 
             public void RemoveCharacterSprite(CharacterInfo characterInfo)
             {
-                Instance._dragCameraUI.DontDrag = false;
+                Instance.DragCameraUI.DontDrag = false;
                 GameObject.Destroy(_tempDic[characterInfo].gameObject);
                 _tempDic.Remove(characterInfo);
             }

@@ -6,7 +6,7 @@ namespace Battle
 {
     public partial class BattleController
     {
-        private class EndState : BattleControllerState
+        public class EndState : BattleControllerState
         {
             public EndState(StateContext context) : base(context)
             {
@@ -23,10 +23,10 @@ namespace Battle
                     if (_character.ActionCount == 0)
                     {
                         List<Log> logList = _character.CheckStatus();
-                        Instance._battleUI.SetLittleHpBarValue(_character.Index, _character);
+                        Instance.BattleUI.SetLittleHpBarValue(_character.Index, _character);
                         if(logList.Count > 0)
                         {
-                            Instance._battleUI.PlayFloatingNumberPool(_character.Index, logList);
+                            Instance.BattleUI.PlayFloatingNumberPool(_character.Index, logList);
                         }
                         for (int i = 0; i < _character.SkillList.Count; i++)
                         {
@@ -61,7 +61,7 @@ namespace Battle
                     }
                     else
                     {
-                        _context.SetState<ActionState>();
+                        _context.SetState<CommandState>();
                     }
                 }
                 else

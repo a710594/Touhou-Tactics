@@ -18,7 +18,7 @@ public class CameraMove : MonoBehaviour
         position = new Vector3(position.x, position.y - 1, position.z);
         float distance;
         distance = Vector3.Distance(Root.position, position);
-        Camera.main.transform.parent.DOMove(position, 0.1f * distance).OnComplete(() =>
+        Root.DOMove(position, 0.1f * distance).OnComplete(() =>
         {
             if (callback != null)
             {

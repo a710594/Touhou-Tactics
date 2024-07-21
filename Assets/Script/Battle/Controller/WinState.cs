@@ -27,9 +27,9 @@ namespace Battle
                         ItemManager.Instance.AddItem(itemId, 1);
                     }
                 }
-                Instance._battleUI.gameObject.SetActive(false);
-                Instance._battleResultUI.gameObject.SetActive(true);
-                Instance._battleResultUI.SetWin(CharacterManager.Instance.Info.Lv, CharacterManager.Instance.Info.Exp, Instance.Info.Exp, itemList, ()=> 
+                Instance.BattleUI.gameObject.SetActive(false);
+                Instance.BattleResultUI.gameObject.SetActive(true);
+                Instance.BattleResultUI.SetWin(CharacterManager.Instance.Info.Lv, CharacterManager.Instance.Info.Exp, Instance.Info.Exp, itemList, ()=> 
                 {
                     SceneController.Instance.ChangeScene("Explore", () =>
                     {

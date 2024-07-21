@@ -32,7 +32,8 @@ namespace Battle
         {
             if (_useSkill)
             {
-                BattleController.Instance.SetTargetState(SelectedSkill);
+                BattleController.Instance.SetSelectedCommand(SelectedSkill);
+                BattleController.Instance.SetState<BattleController.TargetState>();
                 BattleController.Instance.Click(Utility.ConvertToVector2Int(_target.Position));
                 MoveCamera(_target.Position, () =>
                 {
@@ -41,7 +42,7 @@ namespace Battle
             }
             else
             {
-                BattleController.Instance.Idle();
+                BattleController.Instance.SetState<BattleController.EndState>();
             }
         }
 

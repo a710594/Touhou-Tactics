@@ -95,7 +95,7 @@ namespace Battle
         {
             if (_selectedCharacterList.Count == _needCount)
             {
-                BattleController.Instance.SetCharacterState();
+                BattleController.Instance.SetState<BattleController.CharacterState>();
             }
             else
             {
@@ -107,7 +107,7 @@ namespace Battle
                 {
                     ConfirmUI.Open("還可以再放置" + (_needCount - _selectedCharacterList.Count) + "個角色，確定要開始戰鬥嗎？", "確定", "取消", ()=> 
                     {
-                        BattleController.Instance.SetCharacterState();
+                        BattleController.Instance.SetState<BattleController.CharacterState>();
                     }, null);
                 }
             }

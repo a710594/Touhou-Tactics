@@ -6,7 +6,7 @@ namespace Battle
 {
     public partial class BattleController
     {
-        private class MoveState : BattleControllerState
+        public class MoveState : BattleControllerState
         {
             private Vector2Int _originalPosition;
             private List<Vector2Int> _stepList;
@@ -22,7 +22,7 @@ namespace Battle
                 _character = Instance.SelectedCharacter;
                 _characterList = Instance.CharacterList;
                 Instance._controllerDic[_character.Index].transform.position = _character.Position;
-                Instance._battleUI.SetActionVisible(false);
+                Instance.BattleUI.SetActionVisible(false);
                 _stepList = Instance.GetStepList(_character);
                 Instance.ClearQuad();
                 Instance.SetQuad(_stepList, Instance._white);
@@ -44,7 +44,7 @@ namespace Battle
                     {
                         Instance._canClick = false;
                         Instance._controllerDic[_character.Index].transform.position = _character.Position;
-                        Instance._battleUI.SetSkillVisible(false);
+                        Instance.BattleUI.SetSkillVisible(false);
                         Instance.Info.TileComponentDic[_originalPosition].Select.gameObject.SetActive(false);
                         Instance.ClearQuad();
                         List<Vector2Int> path = Instance.GetPath(Utility.ConvertToVector2Int(_character.Position), position, _character.Faction);
@@ -70,7 +70,7 @@ namespace Battle
                         Instance.Info.TileComponentDic[_originalPosition].Select.gameObject.SetActive(false);
                     }
                     Instance._controllerDic[_character.Index].transform.position = _character.Position;
-                    _context.SetState<ActionState>();
+                    _context.SetState<CommandState>();
                 }
             }
         }

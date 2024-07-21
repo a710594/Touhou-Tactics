@@ -55,6 +55,8 @@ namespace Explore
 
         private void Move(Vector3 position)
         {
+            ExploreManager.Instance.CheckCollision(Utility.ConvertToVector2Int(position));
+
             if (ExploreManager.Instance.File.WalkableList.Contains(Utility.ConvertToVector2Int(position)))
             {
                 _isMoving = true;

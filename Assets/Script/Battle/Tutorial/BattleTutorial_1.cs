@@ -4,10 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace Battle
-{ 
+{
     public class BattleTutorial_1 : BattleTutorial
     {
-        public BattleTutorial_1() 
+        public BattleTutorial_1()
         {
             _context.ClearState();
             _context.AddState(new State_1(_context));
@@ -20,8 +20,14 @@ namespace Battle
             _context.AddState(new State_8(_context));
             _context.AddState(new State_9(_context));
             _context.AddState(new State_10(_context));
-
-            BattleController.Instance.PrepareStateBeginHandler += Start;
+            _context.AddState(new State_11(_context));
+            _context.AddState(new State_12(_context));
+            _context.AddState(new State_13(_context));
+            _context.AddState(new State_14(_context));
+            _context.AddState(new State_15(_context));
+            _context.AddState(new State_16(_context));
+            _context.AddState(new State_17(_context));
+            _context.AddState(new State_18(_context));
         }
 
         public override List<CharacterInfo> GetCharacterList()
@@ -32,15 +38,14 @@ namespace Battle
             return list;
         }
 
-        public override void Start() 
+        public override void Start()
         {
-            BattleController.Instance.PrepareStateBeginHandler -= Start;
+            BattleController.Instance.SetState<BattleController.PrepareState>();
             _context.SetState<State_1>();
         }
 
         public override void Deregister()
         {
-            BattleController.Instance.PrepareStateBeginHandler -= Start;
             ((TutorialState)_context.CurrentState).Deregister();
         }
 
@@ -53,7 +58,7 @@ namespace Battle
 
             public override void Begin()
             {
-                _timer.Start(0.5f, ()=> 
+                _timer.Start(0.5f, () =>
                 {
                     TutorialUI.Open("將角色從下方拖曳至場景的白色區域中。\n白色的區域代表可放置角色的位置。\n將角色配置完後按開始戰鬥。", "Tutorial_1", null);
                 });
@@ -73,7 +78,7 @@ namespace Battle
         }
 
         //第一步:選擇移動
-        private class State_2 : TutorialState 
+        private class State_2 : TutorialState
         {
             public State_2(StateContext context) : base(context)
             {
@@ -104,7 +109,7 @@ namespace Battle
         }
 
         //指定位置
-        private class State_3 : TutorialState 
+        private class State_3 : TutorialState
         {
             public State_3(StateContext context) : base(context)
             {
@@ -112,7 +117,7 @@ namespace Battle
 
             public override void Begin()
             {
-                TutorialUI.Open("地圖上白色的區域代表可移動的範圍。\n請點選箭頭指示的位置。", "Tutorial_2", ()=> 
+                TutorialUI.Open("地圖上白色的區域代表可移動的範圍。\n請點選箭頭指示的位置。", "Tutorial_2", () =>
                 {
                     TutorialArrowUI.Open("選擇移動。", new Vector3(4, 1, 3), Vector2Int.down, null);
                 });
@@ -219,7 +224,7 @@ namespace Battle
 
             public override void Begin()
             {
-                Vector3 offset = new Vector3(-200, 160, 0);
+                Vector3 offset = new Vector3(-200, 170, 0);
                 TutorialArrowUI.Open("選擇攻擊。", BattleUI.Instance.ActionButtonGroup.ScrollView.Background.transform, offset, Vector2Int.right, null);
             }
 
@@ -230,7 +235,7 @@ namespace Battle
 
             public override bool CheckScrollItem(object obj)
             {
-                if(obj is Skill &&((Skill)obj).ID == 1) 
+                if (obj is Skill && ((Skill)obj).ID == 1)
                 {
                     Next();
                     return true;
@@ -315,7 +320,7 @@ namespace Battle
             public override void Next()
             {
                 BattleController.Instance.DirectionStateBeginHandler -= Next;
-               _context.SetState<State_9>();
+                _context.SetState<State_9>();
             }
 
             public override void Deregister()
@@ -333,7 +338,7 @@ namespace Battle
 
             public override void Begin()
             {
-                TutorialUI.Open("回合結束後需要選擇角色面對的方向。\n角色面對的方向會影響命中率。\n比方說如果攻擊敵人的正面，命中率會比較低。\n反之從背後偷襲，命中率就會變高。\n盡量面向敵人，避免被偷襲吧。", "Tutorial_4", ()=> 
+                TutorialUI.Open("回合結束後需要選擇角色面對的方向。\n角色面對的方向會影響命中率。\n比方說如果攻擊敵人的正面，命中率會比較低。\n反之從背後偷襲，命中率就會變高。\n盡量面向敵人，避免被偷襲吧。", "Tutorial_4", () =>
                 {
                     TutorialArrowUI.Open("選擇方向。", new Vector3(4, 2, 4), Vector2Int.down, null);
                 });
@@ -355,7 +360,7 @@ namespace Battle
 
             public override void Next()
             {
-                if(BattleController.Instance.SelectedCharacter.Faction == BattleCharacterInfo.FactionEnum.Player)
+                if (BattleController.Instance.SelectedCharacter.Faction == BattleCharacterInfo.FactionEnum.Player)
                 {
                     BattleController.Instance.CharacterStateBeginHandler -= Next;
                     _context.SetState<State_10>();
@@ -380,7 +385,260 @@ namespace Battle
                 //{
                 //    TutorialUI.Open("1.移動：一回合最多可以移動兩次\n2.技能：一回合只能使用一次\n3.支援：與技能類似，大多是強化自己的效果。不消耗行動次數，但一樣一回合只能使用一次\n4.符卡：使用規則和技能相同，但是需要消耗符卡，且使所有隊員的符卡都進入冷卻\n5.道具：使用規則和技能相同，但是需要消耗道具\n6.待機：如果該回合沒有其他想做的事，可以選擇待機結束該回合。", null);
                 //});
+                TutorialUI.Open("試著使用支援吧\n支援可以強化自身，不消耗行動次數，一個回合只能使用一次。", () =>
+                {
+                    Vector3 offset = new Vector3(-200, 0, 0);
+                    TutorialArrowUI.Open("選擇支援。", BattleUI.Instance.ActionButtonGroup.SupportButton.transform, offset, Vector2Int.right, null);
+                });
 
+                //BattleController.Instance.EndTutorial();
+                //BattleUI.Instance.SetArrowVisible(true);
+            }
+
+            public override bool CanSupport()
+            {
+                Next();
+                return true;
+            }
+
+            public override void Next()
+            {
+                TutorialArrowUI.Close();
+                _context.SetState<State_11>();
+            }
+        }
+
+        private class State_11 : TutorialState
+        {
+            public State_11(StateContext context) : base(context)
+            {
+            }
+
+            public override void Begin()
+            {
+                Vector3 offset = new Vector3(-200, 160, 0);
+                TutorialArrowUI.Open("選擇猛力一擊。", BattleUI.Instance.ActionButtonGroup.ScrollView.Background.transform, offset, Vector2Int.right, null);
+            }
+
+            public override bool CheckScrollItem(object obj)
+            {
+                if (obj is Support && ((Support)obj).ID == 2)
+                {
+                    Next();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            public override void Next()
+            {
+                TutorialArrowUI.Close();
+                _context.SetState<State_12>();
+            }
+        }
+
+        private class State_12 : TutorialState
+        {
+            public State_12(StateContext context) : base(context)
+            {
+            }
+
+            public override void Begin()
+            {
+                Vector3 v = BattleController.Instance.SelectedCharacter.Position;
+                TutorialArrowUI.Open("選擇目標。", new Vector3(v.x, v.y + 1, v.z), Vector2Int.down, null);
+            }
+
+            public override bool CheckClick(Vector2Int position)
+            {
+                Vector3 v = BattleController.Instance.SelectedCharacter.Position;
+                if (position == new Vector2Int((int)v.x, (int)v.z))
+                {
+                    Next();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            public override void Next()
+            {
+                TutorialArrowUI.Close();
+                _context.SetState<State_13>();
+            }
+        }
+
+        private class State_13 : TutorialState
+        {
+            public State_13(StateContext context) : base(context)
+            {
+            }
+
+            public override void Begin()
+            {
+                Vector3 v = BattleController.Instance.SelectedCharacter.Position;
+                TutorialArrowUI.Open("再次點選同樣的位置確認。", new Vector3(v.x, v.y + 1, v.z), Vector2Int.down, null);
+            }
+
+            public override bool CheckClick(Vector2Int position)
+            {
+                Vector3 v = BattleController.Instance.SelectedCharacter.Position;
+                if (position == new Vector2Int((int)v.x, (int)v.z))
+                {
+                    TutorialArrowUI.Close();
+                    Next();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            public override void Next()
+            {
+                _context.SetState<State_14>();
+            }
+        }
+
+        private class State_14 : TutorialState
+        {
+            public State_14(StateContext context) : base(context)
+            {
+            }
+
+            public override void Begin()
+            {
+                TutorialUI.Open("妖夢的攻擊力提升了！\n接著攻擊敵人吧！", () =>
+                {
+                    Vector3 offset = new Vector3(-200, 0, 0);
+                    TutorialArrowUI.Open("選擇技能。", BattleUI.Instance.ActionButtonGroup.SkillButton.transform, offset, Vector2Int.right, null);
+                });
+            }
+
+            public override bool CanSkill()
+            {
+                Next();
+                return true;
+            }
+
+            public override void Next()
+            {
+                TutorialArrowUI.Close();
+                _context.SetState<State_15>();
+            }
+        }
+
+        private class State_15 : TutorialState
+        {
+            public State_15(StateContext context) : base(context)
+            {
+            }
+            public override void Begin()
+            {
+                Vector3 offset = new Vector3(-200, 170, 0);
+                TutorialArrowUI.Open("選擇攻擊。", BattleUI.Instance.ActionButtonGroup.ScrollView.Background.transform, offset, Vector2Int.right, null);
+            }
+
+            public override void End()
+            {
+                TutorialArrowUI.Close();
+            }
+
+            public override bool CheckScrollItem(object obj)
+            {
+                if (obj is Skill && ((Skill)obj).ID == 1)
+                {
+                    Next();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            public override void Next()
+            {
+                _context.SetState<State_16>();
+            }
+        }
+
+        private class State_16 : TutorialState
+        {
+            public State_16(StateContext context) : base(context)
+            {
+            }
+
+            public override void Begin()
+            {
+                TutorialArrowUI.Open("選擇目標。", new Vector3(4, 2, 4), Vector2Int.down, null);
+            }
+
+            public override bool CheckClick(Vector2Int position)
+            {
+                if (position == new Vector2Int(4, 4))
+                {
+                    Next();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            public override void Next()
+            {
+                TutorialArrowUI.Close();
+                _context.SetState<State_17>();
+            }
+        }
+
+        private class State_17 : TutorialState
+        {
+            public State_17(StateContext context) : base(context)
+            {
+            }
+
+            public override void Begin()
+            {
+                TutorialArrowUI.Open("再次點選同樣的位置確認。", new Vector3(4, 2, 4), Vector2Int.down, null);
+            }
+
+            public override bool CheckClick(Vector2Int position)
+            {
+                if (position == new Vector2Int(4, 4))
+                {
+                    TutorialArrowUI.Close();
+                    Next();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            public override void Next()
+            {
+                _context.SetState<State_18>();
+            }
+        }
+
+        private class State_18 : TutorialState
+        {
+            public State_18(StateContext context) : base(context)
+            {
+            }
+
+            public override void Begin()
+            {
                 BattleController.Instance.EndTutorial();
                 BattleUI.Instance.SetArrowVisible(true);
             }

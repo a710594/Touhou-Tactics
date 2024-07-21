@@ -42,7 +42,7 @@ public class ActionButtonGroup : MonoBehaviour
         {
             return;
         }
-        BattleController.Instance.SetMoveState();
+        BattleController.Instance.SetState<BattleController.MoveState>();
     }
 
     private void SkillOnClick() 
@@ -112,7 +112,8 @@ public class ActionButtonGroup : MonoBehaviour
             return;
         }
 
-        BattleController.Instance.Idle();
+        BattleController.Instance.SelectedCharacter.ActionCount = 0;
+        BattleController.Instance.SetState<BattleController.EndState>();
     }
 
     private void ResetOnClick() 
@@ -171,7 +172,8 @@ public class ActionButtonGroup : MonoBehaviour
 
         if (canUse)
         {
-            BattleController.Instance.SetTargetState(command);
+            BattleController.Instance.SetSelectedCommand(command);
+            BattleController.Instance.SetState<BattleController.TargetState>();
         }
         else
         {

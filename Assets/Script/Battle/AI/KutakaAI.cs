@@ -30,7 +30,8 @@ namespace Battle
         {
             _info.ActionCount = 1;
             SelectedSkill = _info.SkillList[0];
-            BattleController.Instance.SetTargetState(SelectedSkill);
+            BattleController.Instance.SetSelectedCommand(SelectedSkill);
+            BattleController.Instance.SetState<BattleController.TargetState>();
             List<BattleCharacterInfo> targetList = GetTargetList(BattleCharacterInfo.FactionEnum.Player);
             _target = GetAttackTarget(targetList);
             BattleController.Instance.Click(Utility.ConvertToVector2Int(_target.Position));
@@ -44,7 +45,8 @@ namespace Battle
         {
             _info.ActionCount = 1;
             SelectedSkill = _info.SkillList[1];
-            BattleController.Instance.SetTargetState(SelectedSkill);
+            BattleController.Instance.SetSelectedCommand(SelectedSkill);
+            BattleController.Instance.SetState<BattleController.TargetState>();
             BattleInfo battleInfo = BattleController.Instance.Info;
             List<Vector2Int> rangeList = Utility.GetRange(SelectedSkill.Range, Utility.ConvertToVector2Int(_info.Position), battleInfo);
             BattleController.Instance.RemoveByFaction(SelectedSkill.RangeTarget, rangeList);

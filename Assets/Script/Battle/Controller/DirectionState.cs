@@ -21,10 +21,10 @@ namespace Battle
             {
                 _character = Instance.SelectedCharacter;
                 Instance.ClearQuad();
-                Instance._battleUI.SetActionVisible(false);
-                Instance._battleUI.SetCharacterInfoUI_1(null);
-                Instance._battleUI.SetDirectionGroupVisible(true);
-                Instance._battleUI.SetDirectionGroupPosition(_character.Position);
+                Instance.BattleUI.SetActionVisible(false);
+                Instance.BattleUI.SetCharacterInfoUI_1(null);
+                Instance.BattleUI.SetDirectionGroupVisible(true);
+                Instance.BattleUI.SetDirectionGroupPosition(_character.Position);
 
                 if(Instance.DirectionStateBeginHandler!=null)
                 {
@@ -70,7 +70,7 @@ namespace Battle
             public override void End()
             {
                 //Instance.DirectionGroup.SetActive(false);
-                Instance._battleUI.SetDirectionGroupVisible(false);
+                Instance.BattleUI.SetDirectionGroupVisible(false);
             }
         }
     }

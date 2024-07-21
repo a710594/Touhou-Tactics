@@ -7,7 +7,7 @@ namespace Battle
 {
     public partial class BattleController
     {
-        private class CharacterState : BattleControllerState
+        public class CharacterState : BattleControllerState
         {
             private BattleCharacterInfo info;
             private CameraMove _cameraMove;
@@ -37,13 +37,13 @@ namespace Battle
                 Vector3 position = new Vector3();
                 BattleCharacterController controller = Instance._controllerDic[info.Index];
                 position = controller.transform.position;
-                Instance._battleUI.SetActionVisible(false);
+                Instance.BattleUI.SetActionVisible(false);
                 _cameraMove.Move(position, ()=> 
                 {
-                    _context.SetState<ActionState>();
+                    _context.SetState<CommandState>();
                 });
-                Instance._battleUI.SetArrowTransform(controller.transform);
-                Instance._battleUI.CharacterListGroupRefresh();
+                Instance.BattleUI.SetArrowTransform(controller.transform);
+                Instance.BattleUI.CharacterListGroupRefresh();
             }
         }
     }

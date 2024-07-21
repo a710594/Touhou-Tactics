@@ -7,7 +7,7 @@ namespace Battle
 {
     public partial class BattleController
     {
-        private class TargetState : BattleControllerState
+        public class TargetState : BattleControllerState
         {
             private Command _command;
             private List<Vector2Int> _rangeList;
@@ -38,8 +38,8 @@ namespace Battle
 
                 Instance.ClearQuad();
                 Instance.SetQuad(_rangeList, Instance._white);
-                Instance._battleUI.SetActionVisible(false);
-                Instance._battleUI.SetSkillVisible(false);
+                Instance.BattleUI.SetActionVisible(false);
+                Instance.BattleUI.SetSkillVisible(false);
             }
 
             public override void Click(Vector2Int position)
@@ -72,7 +72,7 @@ namespace Battle
                 else
                 {
                     Instance.ClearQuad();
-                    _context.SetState<ActionState>();
+                    _context.SetState<CommandState>();
                 }
             }
         }

@@ -14,9 +14,9 @@ namespace Battle
 
             public override void Begin()
             {
-                Instance._battleUI.gameObject.SetActive(false);
-                Instance._battleResultUI.gameObject.SetActive(true);
-                Instance._battleResultUI.SetLose(() =>
+                Instance.BattleUI.gameObject.SetActive(false);
+                Instance.BattleResultUI.gameObject.SetActive(true);
+                Instance.BattleResultUI.SetLose(() =>
                 {
                     SceneController.Instance.ChangeScene("Camp", () =>
                     {

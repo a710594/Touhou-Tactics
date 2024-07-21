@@ -173,6 +173,34 @@ namespace Explore
                 CheckWall(new Vector2Int(x, y));
             }
 
+            //get size
+            int minX = int.MinValue;
+            int maxX = int.MinValue;
+            int minY = int.MinValue;
+            int maxY = int.MinValue;
+            Vector2Int position;
+            for(int i=0; i< _tilePositionList.Count; i++)
+            {
+                position = _tilePositionList[i];
+                if (minX == int.MinValue || position.x < minX)
+                {
+                    minX = position.x;
+                }
+                if (maxX == int.MinValue || position.x > maxX)
+                {
+                    maxX = position.x;
+                }
+                if (minY == int.MinValue || position.y < minY)
+                {
+                    minY = position.y;
+                }
+                if (maxY == int.MinValue || position.y > maxY)
+                {
+                    maxY = position.y;
+                }
+            }
+            File.Size = new Vector2Int(maxX - minX, maxY - minY);
+
             //PlaceStartAndGoal
             Generator2D.Room startRoom = roomList[0];
             File.Start = startRoom.bounds.position + new Vector2Int(UnityEngine.Random.Range(0, startRoom.bounds.size.x),UnityEngine.Random.Range(0, startRoom.bounds.size.y));
@@ -196,27 +224,33 @@ namespace Explore
             int treasureCount = 10;
             Generator2D.Room room;
             Treasure treasure;
-            Vector2Int position;
             _treasureDic.Clear();
             for (int i = 0; i < treasureCount; i++)
             {
                 room = roomList[UnityEngine.Random.Range(0, roomList.Count)];
-                position = room.GetRandomPosition();
-                if(!_treasureDic.ContainsKey(position))
+                if (room.GetRandomPosition(out position))
                 {
-                    room.WalkableList.Remove(position);
-                    File.WalkableList.Remove(position);
-                    TreasureModel treasureModel = new TreasureModel();
-                    treasureModel.ID = 1;
-                    treasureModel.Type = TreasureModel.TypeEnum.Item;
-                    treasureModel.Prefab = "TreasureBox";
-                    treasureModel.Height = 0.85f;
-                    treasureModel.IDList = new List<int>(){21, 22, 23, 24};
-                    treasure = new Treasure(position, treasureModel);
-                    File.TreasureList.Add(treasure);
-                    _treasureDic.Add(position, treasure);
+                    if (!_treasureDic.ContainsKey(position))
+                    {
+                        room.WalkableList.Remove(position);
+                        File.WalkableList.Remove(position);
+                        TreasureModel treasureModel = new TreasureModel();
+                        treasureModel.ID = 1;
+                        treasureModel.Type = TreasureModel.TypeEnum.Item;
+                        treasureModel.Prefab = "TreasureBox";
+                        treasureModel.Height = 0.85f;
+                        treasureModel.IDList = new List<int>() { 21, 22, 23, 24 };
+                        treasureModel.Rotation = "(0, 0, 0)";
+                        treasure = new Treasure(position, treasureModel);
+                        File.TreasureList.Add(treasure);
+                        _treasureDic.Add(position, treasure);
+                    }
                 }
             }
+
+            //Set Player
+            File.PlayerPosition = File.Start;
+            File.PlayerRotation = 0;
 
             //Set Enemy
             int enemyCount = 10;
@@ -224,11 +258,13 @@ namespace Explore
             for (int i = 0; i < enemyCount; i++)
             {
                 room = roomList[UnityEngine.Random.Range(0, roomList.Count)];
-                position = room.GetRandomPosition();
-                room.WalkableList.Remove(position);
-                enemyInfo = new NewExploreFile.EnemyInfo("NormalAI", null, null, position, 0);
-                File.EnemyInfoList.Add(enemyInfo);
-                File.WalkableList.Remove(position);
+                if (room.GetRandomPosition(out position))
+                {
+                    room.WalkableList.Remove(position);
+                    enemyInfo = new NewExploreFile.EnemyInfo("NormalAI", null, null, position, 0);
+                    File.EnemyInfoList.Add(enemyInfo);
+                    File.WalkableList.Remove(position);
+                }
             }
             enemyInfo = new NewExploreFile.EnemyInfo("FloorBOSS", null, null, File.Goal, 0);
             File.EnemyInfoList.Add(enemyInfo);
@@ -293,14 +329,11 @@ namespace Explore
             }
         }
 
-        public void CheckCollision() 
+        public void CheckCollision(Vector2Int v2) 
         {
-            Vector2Int v2 = Utility.ConvertToVector2Int(Player.MoveTo);
-            File.PlayerPosition = v2;
-            File.PlayerRotation = Mathf.RoundToInt(Camera.main.transform.eulerAngles.y);
             for (int i = 0; i < _enemyList.Count; i++)
             {
-                if (Utility.ComparePosition(_enemyList[i].MoveTo, Player.MoveTo))
+                if (Utility.ConvertToVector2Int(_enemyList[i].MoveTo) == v2)
                 {
                     InputMamager.Instance.Lock();
                     File.EnemyInfoList.Remove(_enemyList[i].Info);
@@ -641,12 +674,14 @@ namespace Explore
 
         private void OnPlayerMove() 
         {
-            CheckCollision();
+            Vector2Int v2 = Utility.ConvertToVector2Int(Player.MoveTo);
+            File.PlayerPosition = v2;
+            File.PlayerRotation = Mathf.RoundToInt(Camera.main.transform.eulerAngles.y);
             for (int i=0; i<_enemyList.Count; i++) 
             {
                 _enemyList[i].Move();
             }
-            CheckCollision();
+            CheckCollision(v2);
         }
 
         private void OnPlayerRotate()

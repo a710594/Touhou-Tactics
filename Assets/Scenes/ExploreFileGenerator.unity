@@ -6283,8 +6283,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Prefab: NotMoveAI
-  Map: Tutorial_2
-  Tutorial: BattleTutorial_2
+  Map: Tutorial_1
+  Tutorial: BattleTutorial_3
 --- !u!1 &199969038
 GameObject:
   m_ObjectHideFlags: 0

@@ -22,7 +22,7 @@ namespace Battle
                 BattleController.Instance.ChangeSprite(_info.Index, _info.Sprite);
                 _timer.Start(1f, ()=> 
                 {
-                    BattleController.Instance.Idle();
+                    BattleController.Instance.SetState<BattleController.EndState>();
                 });
             }
             else 
@@ -64,7 +64,7 @@ namespace Battle
                 moveTo = GetMoveTo(MoveToEnum.Near, _stepList, Utility.ConvertToVector2Int(_target.Position));
             }
 
-            BattleController.Instance.SetMoveState();
+            BattleController.Instance.SetState<BattleController.MoveState>();
             BattleController.Instance.Click(moveTo);
             BattleController.Instance.Click(moveTo);
         }
