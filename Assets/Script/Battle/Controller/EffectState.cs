@@ -107,7 +107,7 @@ namespace Battle
             {
                 HitType hitType;
 
-                if (command.AreaTarget == TargetEnum.Us || command.AreaTarget == TargetEnum.Self)
+                if (command.AreaTarget == TargetEnum.Us || command.AreaTarget == TargetEnum.Self || Instance.Tutorial != null)
                 {
                     hitType = HitType.Hit;
                 }
@@ -140,6 +140,7 @@ namespace Battle
                     rerangeDic[_currentLogList[i].Target].Add(_currentLogList[i]);
                 }
 
+                _maxFloatingCount = 0;
                 foreach(KeyValuePair<BattleCharacterInfo, List<Log>> pair in rerangeDic) 
                 {
                     SetUI(pair.Key, pair.Value);

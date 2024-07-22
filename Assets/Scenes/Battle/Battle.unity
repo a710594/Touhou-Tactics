@@ -2824,6 +2824,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DirectionGroup
       objectReference: {fileID: 0}
+    - target: {fileID: 764133495206486603, guid: 6ac6694cbb618994fb8574b284954fa2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5582527218014472092, guid: 6ac6694cbb618994fb8574b284954fa2, type: 3}
       propertyPath: m_RootOrder
       value: 5

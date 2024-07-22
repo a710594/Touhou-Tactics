@@ -16,15 +16,15 @@ namespace Battle
             _context.AddState(new State_4(_context));
         }
 
-        public override List<CharacterInfo> GetCharacterList()
-        {
-            List<CharacterInfo> list = new List<CharacterInfo>();
-            list.Add(CharacterManager.Instance.Info.CharacterList[0]);
-            list.Add(CharacterManager.Instance.Info.CharacterList[2]);
-            list.Add(CharacterManager.Instance.Info.CharacterList[3]);
+        //public override List<CharacterInfo> GetCharacterList()
+        //{
+        //    List<CharacterInfo> list = new List<CharacterInfo>();
+        //    list.Add(CharacterManager.Instance.Info.CharacterList[0]);
+        //    list.Add(CharacterManager.Instance.Info.CharacterList[2]);
+        //    list.Add(CharacterManager.Instance.Info.CharacterList[3]);
 
-            return list;
-        }
+        //    return list;
+        //}
 
         public override void Start() 
         {
@@ -33,7 +33,7 @@ namespace Battle
 
             int lv = CharacterManager.Instance.Info.Lv;
             List<BattleCharacterInfo> list = new List<BattleCharacterInfo>();
-            list.Add(new BattleCharacterInfo(CharacterManager.Instance.Info.CharacterList[0], lv));
+            list.Add(new BattleCharacterInfo(CharacterManager.Instance.Info.CharacterList[3], lv));
             //list.Add(CharacterManager.Instance.Info.CharacterList[2], lv);
             //list.Add(CharacterManager.Instance.Info.CharacterList[3], lv);
             for (int i=0; i<list.Count; i++) 
@@ -86,7 +86,7 @@ namespace Battle
             }
         }
 
-        //夢想封印
+        //未來永劫斬
         private class State_2 : TutorialState
         {
             public State_2(StateContext context) : base(context)
@@ -96,12 +96,12 @@ namespace Battle
             public override void Begin()
             {
                 Vector3 offset = new Vector3(-200, 160, 0);
-                TutorialArrowUI.Open("選擇夢想封印。", BattleUI.Instance.ActionButtonGroup.ScrollView.Background.transform, offset, Vector2Int.right, null);
+                TutorialArrowUI.Open("選擇未來永劫斬。", BattleUI.Instance.ActionButtonGroup.ScrollView.Background.transform, offset, Vector2Int.right, null);
             }
 
             public override bool CheckScrollItem(object obj)
             {
-                if(obj is Spell &&((Spell)obj).ID == 1) 
+                if(obj is Spell &&((Spell)obj).ID == 4) 
                 {
                     Next();
                     return true;
@@ -119,7 +119,7 @@ namespace Battle
             }
         }
 
-                //選擇目標
+        //選擇目標
         private class State_3 : TutorialState
         {
             public State_3(StateContext context) : base(context)
@@ -150,7 +150,7 @@ namespace Battle
                 _context.SetState<State_4>();
             }
         }
-                //確認目標
+        //確認目標
         private class State_4 : TutorialState
         {
             public State_4(StateContext context) : base(context)
