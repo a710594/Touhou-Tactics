@@ -69,7 +69,7 @@ namespace Explore
             else
             {
                 RandomFloorModel data = DataContext.Instance.RandomFloorDic[floor];
-                CreateNewFile(new Vector2Int(data.Width, data.Height), data.RoomCount, new Vector2Int(5, 7));
+                CreateNewFile(floor, new Vector2Int(data.Width, data.Height), data.RoomCount, new Vector2Int(5, 7), data);
             }
             
             CreateObject();
@@ -97,9 +97,10 @@ namespace Explore
             }
         }
 
-        public void CreateNewFile(Vector2Int size, int roomCount, Vector2Int roomMaxSize)
+        public void CreateNewFile(int floor, Vector2Int size, int roomCount, Vector2Int roomMaxSize, RandomFloorModel data)
         {
             File = new NewExploreFile();
+            File.Floor = floor;
             _tilePositionList = new List<Vector2Int>();
             _generator2D.Generate(size, roomCount, roomMaxSize, out List<Generator2D.Room> roomList, out List<List<Vector2Int>> pathList);
 
@@ -255,18 +256,21 @@ namespace Explore
             //Set Enemy
             int enemyCount = 10;
             NewExploreFile.EnemyInfo enemyInfo;
+            string seed;
             for (int i = 0; i < enemyCount; i++)
             {
                 room = roomList[UnityEngine.Random.Range(0, roomList.Count)];
                 if (room.GetRandomPosition(out position))
                 {
                     room.WalkableList.Remove(position);
-                    enemyInfo = new NewExploreFile.EnemyInfo("NormalAI", null, null, position, 0);
+                    seed = data.BattleSeedList[UnityEngine.Random.Range(0, data.BattleSeedList.Count)];
+                    enemyInfo = new NewExploreFile.EnemyInfo("NormalAI", true, seed, null, position, 0);
                     File.EnemyInfoList.Add(enemyInfo);
                     File.WalkableList.Remove(position);
                 }
             }
-            enemyInfo = new NewExploreFile.EnemyInfo("FloorBOSS", null, null, File.Goal, 0);
+            seed = data.BattleSeedList[UnityEngine.Random.Range(0, data.BattleSeedList.Count)];
+            enemyInfo = new NewExploreFile.EnemyInfo("FloorBOSS", true, seed, null, File.Goal, 0);
             File.EnemyInfoList.Add(enemyInfo);
         }
 
@@ -344,13 +348,13 @@ namespace Explore
                             InputMamager.Instance.Unlock();
                             BattleMapBuilder battleMapBuilder = GameObject.Find("BattleMapBuilder").GetComponent<BattleMapBuilder>();
                             BattleInfo battleInfo;
-                            if (_enemyList[i].Info.Map != null && _enemyList[i].Info.Map != "")
+                            if (!_enemyList[i].Info.IsSeed)
                             {
                                 battleInfo = battleMapBuilder.Get(_enemyList[i].Info.Map);
                             }
                             else
                             {
-                                battleInfo = battleMapBuilder.Generate();
+                                battleInfo = battleMapBuilder.Generate(_enemyList[i].Info.Map);
                             }
                             PathManager.Instance.LoadData(battleInfo.TileAttachInfoDic);
                             BattleController.Instance.Init(File.Floor, File.Floor, _enemyList[i].Info.Tutorial, battleInfo, battleMapBuilder.transform);
@@ -676,6 +680,7 @@ namespace Explore
         {
             Vector2Int v2 = Utility.ConvertToVector2Int(Player.MoveTo);
             File.PlayerPosition = v2;
+            File.PlayerRotation = (int)Player.transform.eulerAngles.z;
             File.PlayerRotation = Mathf.RoundToInt(Camera.main.transform.eulerAngles.y);
             for (int i=0; i<_enemyList.Count; i++) 
             {
@@ -686,6 +691,7 @@ namespace Explore
 
         private void OnPlayerRotate()
         {
+            File.PlayerRotation = (int)Player.transform.eulerAngles.z;
             for (int i = 0; i < _enemyList.Count; i++)
             {
                 _enemyList[i].Rotate();

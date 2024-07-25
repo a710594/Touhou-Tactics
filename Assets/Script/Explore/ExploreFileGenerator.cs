@@ -56,7 +56,7 @@ namespace Explore
             foreach (Transform child in Enemy)
             {
                 enemyObj = child.gameObject.GetComponent<EnemyExploreFileObject>();
-                file.EnemyInfoList.Add(new NewExploreFile.EnemyInfo(enemyObj.Prefab, enemyObj.Map, enemyObj.Tutorial, Utility.ConvertToVector2Int(enemyObj.transform.position), (int)enemyObj.transform.eulerAngles.y));
+                file.EnemyInfoList.Add(new NewExploreFile.EnemyInfo(enemyObj.Prefab, false, enemyObj.Map, enemyObj.Tutorial, Utility.ConvertToVector2Int(enemyObj.transform.position), (int)enemyObj.transform.eulerAngles.y));
             }
 
             foreach (Transform child in Trigger)

@@ -42,6 +42,7 @@ namespace Battle
             }
             else
             {
+                BattleController.Instance.SelectedCharacter.ActionCount = 0;
                 BattleController.Instance.SetState<BattleController.EndState>();
             }
         }

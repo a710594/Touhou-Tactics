@@ -8,11 +8,7 @@ namespace Battle
     {
         protected bool _enable;
         protected StateContext _context = new StateContext();
-
-        public virtual List<CharacterInfo> GetCharacterList()
-        {
-            return null;
-        }
+        public ConversationUI ConversationUI;
 
         public virtual void Start() 
         {

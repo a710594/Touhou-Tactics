@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Battle
 {
-    public class BattleTutorial_2 : BattleTutorial
+    /*public class BattleTutorial_2 : BattleTutorial
     {
         public BattleTutorial_2()
         {
@@ -183,5 +183,5 @@ namespace Battle
                 });
             }
         }
-    }
+    }*/
 }

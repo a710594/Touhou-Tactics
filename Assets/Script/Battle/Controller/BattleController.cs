@@ -54,9 +54,9 @@ namespace Battle
         public DragCameraUI DragCameraUI;
         public BattleResultUI BattleResultUI;
         public SelectBattleCharacterUI SelectBattleCharacterUI;
-        public GameObject DirectionGroup;
         private Transform _root;
         private List<int> _enemyList = new List<int>();
+        private List<CharacterInfo> _candidateList = new List<CharacterInfo>();
         private Dictionary<int, BattleCharacterController> _controllerDic = new Dictionary<int, BattleCharacterController>();
         private Dictionary<Command, List<BattleCharacterInfo>> _commandTargetDic = new Dictionary<Command, List<BattleCharacterInfo>>();
 
@@ -78,7 +78,6 @@ namespace Battle
             _cameraController = Camera.main.GetComponent<CameraDraw>();
             SelectBattleCharacterUI = GameObject.Find("SelectBattleCharacterUI").GetComponent<SelectBattleCharacterUI>();
             CameraRotate = Camera.main.GetComponent<CameraRotate>();
-            DirectionGroup = GameObject.Find("DirectionGroup");
             DragCameraUI = GameObject.Find("DragCameraUI").GetComponent<DragCameraUI>();
             DragCameraUI.Init(info);
             BattleUI.gameObject.SetActive(false);
@@ -175,6 +174,15 @@ namespace Battle
 
             if (Tutorial == null)
             {
+                _candidateList = new List<CharacterInfo>(CharacterManager.Instance.Info.CharacterList);
+                for (int i = 0; i < _candidateList.Count; i++)
+                {
+                    if (_candidateList[i].CurrentHP == 0)
+                    {
+                        _candidateList.RemoveAt(i);
+                        i--;
+                    }
+                }
                 _context.SetState<PrepareState>();
             }
             else
@@ -555,6 +563,11 @@ namespace Battle
         {
             Tutorial.Deregister();
             Tutorial = null;
+        }
+
+        public void SetCandidateList(List<CharacterInfo> list) 
+        {
+            _candidateList = list;
         }
 
         public class BattleControllerState : State

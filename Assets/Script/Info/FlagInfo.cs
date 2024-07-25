@@ -7,10 +7,11 @@ public class FlagInfo
 {
     public enum FlagEnum 
     {
-        BasicOperations, //�򥻾ާ@
-        FirstEnemy, //Floor_1 �Ĥ@���Ǫ�����
-        FloorBoss, //�ӼhBoss������
-        GetItem,
+        BasicOperations, //基本操作
+        FirstEnemy, //Floor_1 第一隻怪的說明
+        FloorBoss, //樓層Boss的說明
+        GetItem, //蒐集道具的教學
+        BeforeSpellTutorial, //符卡戰鬥教學之前的對話
     }
 
     public Dictionary<FlagEnum, bool> FlagDic;

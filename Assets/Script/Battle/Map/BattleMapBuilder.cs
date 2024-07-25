@@ -15,9 +15,14 @@ public class BattleMapBuilder : MonoBehaviour //�سy�԰�������
     private BattleFileReader _reader = new BattleFileReader();
     private BattleInfo _info;
 
-    public BattleInfo Generate() //���H���������a��
+    public BattleInfo Generate() 
     {
-        string path = Path.Combine(_prePath, "MapSeed/" + SeedFile[UnityEngine.Random.Range(0, SeedFile.Length)] + ".txt");
+        return Generate(SeedFile[UnityEngine.Random.Range(0, SeedFile.Length)]);
+    }
+
+    public BattleInfo Generate(string seed) //���H���������a��
+    {
+        string path = Path.Combine(_prePath, "MapSeed/" + seed + ".txt");
         _info = _reader.Read(path);
 
         for (int i = Tilemap.childCount; i > 0; --i)

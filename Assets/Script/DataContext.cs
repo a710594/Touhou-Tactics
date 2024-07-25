@@ -186,6 +186,7 @@ private static readonly string _mapBattlePrePath = Application.streamingAssetsPa
         for (int i = 0; i < RandomFloorList.Count; i++)
         {
             RandomFloorList[i].GetRoomPool();
+            RandomFloorList[i].GetBattleSeedList();
             RandomFloorDic.Add(RandomFloorList[i].Floor, RandomFloorList[i]);
         }
 

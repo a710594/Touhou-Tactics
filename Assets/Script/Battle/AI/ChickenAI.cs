@@ -22,6 +22,7 @@ namespace Battle
                 BattleController.Instance.ChangeSprite(_info.Index, _info.Sprite);
                 _timer.Start(1f, ()=> 
                 {
+                    BattleController.Instance.SelectedCharacter.ActionCount = 0;
                     BattleController.Instance.SetState<BattleController.EndState>();
                 });
             }

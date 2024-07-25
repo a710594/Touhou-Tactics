@@ -25,12 +25,13 @@ public class ConversationUI : MonoBehaviour
     //private bool _isFadeEnd = true; //結束時淡出
     private ConversationModel _data;
     private Timer _timer = new Timer();
-    private Action _onFinishHandler;
+    private Action _pauseCallback;
+    private Action _finishCallback;
     private List<string> _conversationList = new List<string>();
 
     private static ConversationUI _conversationUI;
 
-    public static ConversationUI Open(int id, Action callback = null)
+    public static ConversationUI Open(int id, Action finishCallback = null, Action pauseCallback = null)
     {
         if (_conversationUI == null)
         {
@@ -40,7 +41,7 @@ public class ConversationUI : MonoBehaviour
             _conversationUI = obj.GetComponent<ConversationUI>();
             _conversationUI.RectTransform.offsetMax = Vector3.zero;
             _conversationUI.RectTransform.offsetMin = Vector3.zero;
-            _conversationUI.Init(id, callback);
+            _conversationUI.Init(id, finishCallback, pauseCallback);
         }
         return _conversationUI;
     }
@@ -53,15 +54,22 @@ public class ConversationUI : MonoBehaviour
         }
     }
 
-    private void Init(int id, Action callback = null)
+    public void Continue(Action pauseCallback = null) 
+    {
+        gameObject.SetActive(true);
+        _pauseCallback = pauseCallback;
+        NextConversationID(_data.ID, _data.Page + 1);
+    }
+
+    private void Init(int id, Action finishCallback, Action pauseCallback)
     {
         ConversationModel data = DataContext.Instance.ConversationDic[id][1];
         NormalTypewriter.ClearText();
         SetData(data);
 
         _data = data;
-        //_isFadeEnd = isFadeEnd;
-        _onFinishHandler = callback;
+        _pauseCallback = pauseCallback;
+        _finishCallback = finishCallback;
     }
 
     private void NextConversationID(int id, int page)
@@ -101,7 +109,16 @@ public class ConversationUI : MonoBehaviour
                 CharacterImage[i].transform.SetSiblingIndex(_siblingIndex + 1);
                 if (data.ImageList[i] != "o")
                 {
-                    CharacterImage[i].sprite = Resources.Load<Sprite>("Image/Character/" + data.ImageList[i]);
+                    if (i == 2) 
+                    {
+                        CharacterImage[i].sprite = Resources.Load<Sprite>("Image/" + data.ImageList[i]);
+                        //CharacterImage[i].SetNativeSize();
+                        //CharacterImage[i].transform.position = Vector3.zero;
+                    }
+                    else 
+                    {
+                        CharacterImage[i].sprite = Resources.Load<Sprite>("Image/Character/" + data.ImageList[i]);
+                    }
                     CharacterImage[i].SetNativeSize();
                 }
             }
@@ -137,34 +154,21 @@ public class ConversationUI : MonoBehaviour
 
     private void Finish()
     {
-        //if (_isPlayingBGM)
-        //{
-        //    AudioSystem.Instance.Stop(true);
-        //}
-
         NameLabel.text = string.Empty;
         NormalTypewriter.ClearText();
 
         _isClickable = false;
-        //if (_isFadeEnd)
-        //{
-        //    FadeImage.DOFade(1, 1).OnComplete(() =>
-        //    {
-        //        if (_onFinishHandler != null)
-        //        {
-        //            _onFinishHandler();
-        //        }
-        //        Close();
-        //    });
-        //}
-        //else
-        //{
-            if (_onFinishHandler != null)
-            {
-                _onFinishHandler();
-            }
-            Close();
-        //}
+
+        if (_finishCallback != null)
+        {
+            _finishCallback();
+        }
+        else if (_pauseCallback != null) 
+        {
+            _pauseCallback();
+        }
+
+        Close();
     }
 
     private void NextOnClick()
@@ -176,7 +180,20 @@ public class ConversationUI : MonoBehaviour
 
         if (!NormalTypewriter.IsTyping)
         {
-            NextConversationID(_data.ID, _data.Page + 1);
+            if (_data.Pause)
+            {
+                NormalTypewriter.SetText();
+                gameObject.SetActive(false);
+                if (_pauseCallback != null)
+                {
+                    _pauseCallback();
+                }
+                return;
+            }
+            else
+            {
+                NextConversationID(_data.ID, _data.Page + 1);
+            }
         }
         else
         {

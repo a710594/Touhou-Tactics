@@ -21,31 +21,13 @@ namespace Battle
                 _info = Instance.Info;
                 Camera.main.transform.localPosition = new Vector3(_info.NoAttachList[0].x-10, 10, _info.NoAttachList[0].y-10);
 
-                Instance.DirectionGroup.SetActive(false);
-
                 int needCount = _info.NeedCount;
                 if (CharacterManager.Instance.SurvivalCount() < needCount) 
                 {
                     needCount = CharacterManager.Instance.SurvivalCount();
                 }
 
-                List<CharacterInfo> tempCharacterList = new List<CharacterInfo>();
-                if (Instance.IsTutorial)
-                {
-                    tempCharacterList = Instance.Tutorial.GetCharacterList();
-                }
-                else
-                {
-                    for (int i=0; i<tempCharacterList.Count; i++) 
-                    {
-                        if (tempCharacterList[i].CurrentHP == 0) 
-                        {
-                            tempCharacterList.RemoveAt(i);
-                            i--;
-                        }
-                    }
-                }
-                Instance.SelectBattleCharacterUI.Init(needCount, _info.MustBeEqualToNeedCount, tempCharacterList);
+                Instance.SelectBattleCharacterUI.Init(needCount, _info.MustBeEqualToNeedCount, Instance._candidateList);
 
                 for (int i=0; i< _info.NoAttachList.Count; i++) 
                 {

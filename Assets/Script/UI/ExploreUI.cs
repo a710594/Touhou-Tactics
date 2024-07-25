@@ -13,6 +13,7 @@ public class ExploreUI : MonoBehaviour
     public Text fpsText;
     public Text FloorLabel;
     public Camera BigMapCamera;
+    public CanvasGroup CanvasGroup;
 
     private float deltaTime;
     private float _scale;
@@ -22,6 +23,19 @@ public class ExploreUI : MonoBehaviour
         _scale = scale;
         BigMapCamera.transform.position = new Vector3(x, 5, y);
         BigMap.localScale = new Vector3(scale, scale, 1);
+    }
+
+    public void SetVisible(bool isVisible) 
+    {
+        if (isVisible) 
+        {
+            CanvasGroup.alpha = 1;
+        }
+        else
+        {
+            CanvasGroup.alpha = 0;
+        }
+
     }
 
     private void Awake()

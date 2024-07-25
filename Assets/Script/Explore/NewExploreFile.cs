@@ -20,6 +20,7 @@ public class NewExploreFile
     public class EnemyInfo
     {
         public string Prefab;
+        public bool IsSeed; //代表這個地圖是種子
         public string Map;
         public string Tutorial;
         public Vector2Int Position;
@@ -27,9 +28,10 @@ public class NewExploreFile
 
         public EnemyInfo() { }
 
-        public EnemyInfo(string name, string map, string tutorial, Vector2Int position, int rotation)
+        public EnemyInfo(string name, bool isSeed, string map, string tutorial, Vector2Int position, int rotation)
         {
             Prefab = name;
+            IsSeed = isSeed;
             Map = map;
             Tutorial = tutorial;
             Position = position;

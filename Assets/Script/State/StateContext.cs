@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 public class StateContext
 {
     public State CurrentState;
+    public object Parent; //產生 StateContext 的物件
 
     private Dictionary<Type, State> _stateDic = new Dictionary<Type, State>();
 

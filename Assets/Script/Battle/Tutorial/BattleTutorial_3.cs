@@ -16,26 +16,12 @@ namespace Battle
             _context.AddState(new State_4(_context));
         }
 
-        //public override List<CharacterInfo> GetCharacterList()
-        //{
-        //    List<CharacterInfo> list = new List<CharacterInfo>();
-        //    list.Add(CharacterManager.Instance.Info.CharacterList[0]);
-        //    list.Add(CharacterManager.Instance.Info.CharacterList[2]);
-        //    list.Add(CharacterManager.Instance.Info.CharacterList[3]);
-
-        //    return list;
-        //}
-
         public override void Start() 
         {
-            //Instance._battleUI.gameObject.SetActive(true);
-            //_selectBattleCharacterUI.gameObject.SetActive(false);
-
             int lv = CharacterManager.Instance.Info.Lv;
             List<BattleCharacterInfo> list = new List<BattleCharacterInfo>();
             list.Add(new BattleCharacterInfo(CharacterManager.Instance.Info.CharacterList[3], lv));
-            //list.Add(CharacterManager.Instance.Info.CharacterList[2], lv);
-            //list.Add(CharacterManager.Instance.Info.CharacterList[3], lv);
+
             for (int i=0; i<list.Count; i++) 
             {
                 BattleController.Instance.CharacterList.Add(list[i]);
@@ -59,6 +45,8 @@ namespace Battle
 
         private class State_1 : TutorialState
         {
+            private Timer _timer = new Timer();
+
             public State_1(StateContext context) : base(context)
             {
             }
@@ -66,11 +54,20 @@ namespace Battle
             public override void Begin()
             {
                 BattleUI.Instance.SetArrowVisible(false);
-                TutorialUI.Open("符卡：\n消耗符卡發動強大的效果。使用符卡後所有的我方成員都會進入冷卻時間，需要數回合後才能再次使用符卡。", ()=> 
+                _timer.Start(0.5f, () =>
                 {
-                    Vector3 offset = new Vector3(-200, -50, 0);
-                    TutorialArrowUI.Open("選擇符卡。", BattleUI.Instance.ActionButtonGroup.SupportButton.transform, offset, Vector2Int.right, null);
+                    ConversationUI.Open(5, () =>
+                    {
+                        Vector3 offset = new Vector3(-200, -50, 0);
+                        TutorialArrowUI.Open("選擇符卡。", BattleUI.Instance.ActionButtonGroup.SupportButton.transform, offset, Vector2Int.right, null);
+                    });
                 });
+
+                //TutorialUI.Open("符卡：\n消耗符卡發動強大的效果。使用符卡後所有的我方成員都會進入冷卻時間，需要數回合後才能再次使用符卡。", ()=> 
+                //{
+                //    Vector3 offset = new Vector3(-200, -50, 0);
+                //    TutorialArrowUI.Open("選擇符卡。", BattleUI.Instance.ActionButtonGroup.SupportButton.transform, offset, Vector2Int.right, null);
+                //});
             }
 
             public override bool CanSpell()

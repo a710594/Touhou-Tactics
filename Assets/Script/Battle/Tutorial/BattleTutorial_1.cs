@@ -7,8 +7,10 @@ namespace Battle
 {
     public class BattleTutorial_1 : BattleTutorial
     {
+
         public BattleTutorial_1()
         {
+            _context.Parent = this;
             _context.ClearState();
             _context.AddState(new State_1(_context));
             _context.AddState(new State_2(_context));
@@ -30,16 +32,11 @@ namespace Battle
             _context.AddState(new State_18(_context));
         }
 
-        public override List<CharacterInfo> GetCharacterList()
+        public override void Start()
         {
             List<CharacterInfo> list = new List<CharacterInfo>();
             list.Add(CharacterManager.Instance.Info.CharacterList[3]);
-
-            return list;
-        }
-
-        public override void Start()
-        {
+            BattleController.Instance.SetCandidateList(list);
             BattleController.Instance.SetState<BattleController.PrepareState>();
             _context.SetState<State_1>();
         }
@@ -60,7 +57,8 @@ namespace Battle
             {
                 _timer.Start(0.5f, () =>
                 {
-                    TutorialUI.Open("將角色從下方拖曳至場景的白色區域中。\n白色的區域代表可放置角色的位置。\n將角色配置完後按開始戰鬥。", "Tutorial_1", null);
+                    ((BattleTutorial)_context.Parent).ConversationUI = ConversationUI.Open(3, null);
+                    //TutorialUI.Open("將角色從下方拖曳至場景的白色區域中。\n白色的區域代表可放置角色的位置。\n將角色配置完後按開始戰鬥。", "Tutorial_1", null);
                 });
                 BattleController.Instance.ActionStateBeginHandler += Next;
             }
@@ -117,10 +115,15 @@ namespace Battle
 
             public override void Begin()
             {
-                TutorialUI.Open("地圖上白色的區域代表可移動的範圍。\n請點選箭頭指示的位置。", "Tutorial_2", () =>
+                ((BattleTutorial_1)_context.Parent).ConversationUI.Continue(()=> 
                 {
                     TutorialArrowUI.Open("選擇移動。", new Vector3(4, 1, 3), Vector2Int.down, null);
                 });
+
+                //TutorialUI.Open("地圖上白色的區域代表可移動的範圍。\n請點選箭頭指示的位置。", "Tutorial_2", () =>
+                //{
+                //    TutorialArrowUI.Open("選擇移動。", new Vector3(4, 1, 3), Vector2Int.down, null);
+                //});
             }
 
             public override void End()
@@ -261,10 +264,14 @@ namespace Battle
 
             public override void Begin()
             {
-                TutorialUI.Open("現在地圖上白色的範圍是可以放技能的地方。\n請點選箭頭指示的位置。", "Tutorial_3", () =>
+                ((BattleTutorial_1)_context.Parent).ConversationUI.Continue(() =>
                 {
                     TutorialArrowUI.Open("選擇目標。", new Vector3(4, 2, 4), Vector2Int.down, null);
                 });
+                //TutorialUI.Open("現在地圖上白色的範圍是可以放技能的地方。\n請點選箭頭指示的位置。", "Tutorial_3", () =>
+                //{
+                //    TutorialArrowUI.Open("選擇目標。", new Vector3(4, 2, 4), Vector2Int.down, null);
+                //});
             }
 
             public override void End()
@@ -338,10 +345,15 @@ namespace Battle
 
             public override void Begin()
             {
-                TutorialUI.Open("回合結束後需要選擇角色面對的方向。\n角色面對的方向會影響命中率。\n比方說如果攻擊敵人的正面，命中率會比較低。\n反之從背後偷襲，命中率就會變高。\n盡量面向敵人，避免被偷襲吧。", "Tutorial_4", () =>
+                ((BattleTutorial_1)_context.Parent).ConversationUI.Continue(() =>
                 {
                     TutorialArrowUI.Open("選擇方向。", new Vector3(4, 2, 4), Vector2Int.down, null);
                 });
+
+                //TutorialUI.Open("回合結束後需要選擇角色面對的方向。\n角色面對的方向會影響命中率。\n比方說如果攻擊敵人的正面，命中率會比較低。\n反之從背後偷襲，命中率就會變高。\n盡量面向敵人，避免被偷襲吧。", "Tutorial_4", () =>
+                //{
+                //    TutorialArrowUI.Open("選擇方向。", new Vector3(4, 2, 4), Vector2Int.down, null);
+                //});
             }
 
             public override bool CheckClick(Vector2Int position)
@@ -381,18 +393,16 @@ namespace Battle
 
             public override void Begin()
             {
-                //TutorialUI.Open("以上就是移動與攻擊的基本流程。\n一個角色一回合中可以有兩次行動的機會。除了移動和使用技能外還有其他的選項。", ()=> 
-                //{
-                //    TutorialUI.Open("1.移動：一回合最多可以移動兩次\n2.技能：一回合只能使用一次\n3.支援：與技能類似，大多是強化自己的效果。不消耗行動次數，但一樣一回合只能使用一次\n4.符卡：使用規則和技能相同，但是需要消耗符卡，且使所有隊員的符卡都進入冷卻\n5.道具：使用規則和技能相同，但是需要消耗道具\n6.待機：如果該回合沒有其他想做的事，可以選擇待機結束該回合。", null);
-                //});
-                TutorialUI.Open("試著使用支援吧\n支援可以強化自身，不消耗行動次數，一個回合只能使用一次。", () =>
+                ((BattleTutorial_1)_context.Parent).ConversationUI.Continue(() =>
                 {
                     Vector3 offset = new Vector3(-200, 0, 0);
                     TutorialArrowUI.Open("選擇支援。", BattleUI.Instance.ActionButtonGroup.SupportButton.transform, offset, Vector2Int.right, null);
                 });
-
-                //BattleController.Instance.EndTutorial();
-                //BattleUI.Instance.SetArrowVisible(true);
+                //TutorialUI.Open("試著使用支援吧\n支援可以強化自身，不消耗行動次數，一個回合只能使用一次。", () =>
+                //{
+                //    Vector3 offset = new Vector3(-200, 0, 0);
+                //    TutorialArrowUI.Open("選擇支援。", BattleUI.Instance.ActionButtonGroup.SupportButton.transform, offset, Vector2Int.right, null);
+                //});
             }
 
             public override bool CanSupport()
@@ -514,11 +524,16 @@ namespace Battle
 
             public override void Begin()
             {
-                TutorialUI.Open("妖夢的攻擊力提升了！\n接著攻擊敵人吧！", () =>
+                ((BattleTutorial_1)_context.Parent).ConversationUI.Continue(() =>
                 {
                     Vector3 offset = new Vector3(-200, 0, 0);
                     TutorialArrowUI.Open("選擇技能。", BattleUI.Instance.ActionButtonGroup.SkillButton.transform, offset, Vector2Int.right, null);
                 });
+                //TutorialUI.Open("妖夢的攻擊力提升了！\n接著攻擊敵人吧！", () =>
+                //{
+                //    Vector3 offset = new Vector3(-200, 0, 0);
+                //    TutorialArrowUI.Open("選擇技能。", BattleUI.Instance.ActionButtonGroup.SkillButton.transform, offset, Vector2Int.right, null);
+                //});
             }
 
             public override bool CanSkill()
