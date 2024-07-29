@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class NewExploreFile
 {
+    public bool IsArrive = false; //©è¹F²×ÂI
     public int Floor;
     public Vector2Int Size;
     public Vector2Int Start;

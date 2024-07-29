@@ -365,7 +365,7 @@ namespace Explore
                 }
             }
 
-            if (v2 == File.Start) 
+            /*if (v2 == File.Start) 
             {
                 InputMamager.Instance.Lock();
                 _timer.Start(1f, () => 
@@ -383,10 +383,11 @@ namespace Explore
                     });
                 });
             }
-            else if(v2 == File.Goal) 
+            else */
+            if (v2 == File.Goal) 
             {
                 InputMamager.Instance.Lock();
-                ConfirmUI.Open("要前往下一層並回到營地嗎？", "確定", "取消", () =>
+                ConfirmUI.Open("要前往下一層嗎？", "確定", "取消", () =>
                 {
                     File.Floor++;
                     if (File.Floor > SystemManager.Instance.SystemInfo.MaxFloor)
@@ -481,22 +482,19 @@ namespace Explore
 
         public void Reload() 
         {
-            CreateObject();
-            SetCamera();
-
             if (File.PlayerPosition == File.Goal) 
             {
                 if (File.Floor == _maxFloor)
                 {
-                    ConfirmUI.Open("�P�¹C���I", "�T�{", () =>
+                    ConfirmUI.Open("感謝遊玩！", "確認", () =>
                     {
                         Application.Quit();
                     });
                 }
                 else
                 {
-                    _tileDic[File.Goal].Icon.transform.GetChild(0).gameObject.SetActive(true); //��ܲɤl
-                    ConfirmUI.Open("�A�w�g���ˤF�X�f���u�áI�n�e���U�@�h�æ^����a�ܡH", "�T�w", "����", () =>
+                    File.IsArrive = true;
+                    ConfirmUI.Open("你打倒了出口的守衛！要前往下一層嗎？", "確定", "取消", () =>
                     {
                         File.Floor++;
                         if (File.Floor > SystemManager.Instance.SystemInfo.MaxFloor)
@@ -511,6 +509,8 @@ namespace Explore
                     }, null);
                 }
             }
+            CreateObject();
+            SetCamera();
         }
 
         public bool CheckTreasure(Vector2Int position)
@@ -598,15 +598,15 @@ namespace Explore
                 }
             }
 
-            gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Start"), Vector3.zero, Quaternion.identity);
-            gameObj.transform.position = new Vector3(File.Start.x, 0, File.Start.y);
-            gameObj.transform.eulerAngles = new Vector3(90, 0, 0);
-            gameObj.transform.SetParent(parent);
-            _tileDic[File.Start].Icon = gameObj;
-            if (File.VisitedList.Contains(File.Start))
-            {
-                _tileDic[File.Start].Icon.layer = MapLayer;
-            }
+            //gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Start"), Vector3.zero, Quaternion.identity);
+            //gameObj.transform.position = new Vector3(File.Start.x, 0, File.Start.y);
+            //gameObj.transform.eulerAngles = new Vector3(90, 0, 0);
+            //gameObj.transform.SetParent(parent);
+            //_tileDic[File.Start].Icon = gameObj;
+            //if (File.VisitedList.Contains(File.Start))
+            //{
+            //    _tileDic[File.Start].Icon.layer = MapLayer;
+            //}
 
             gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Goal"), Vector3.zero, Quaternion.identity);
             gameObj.transform.position = new Vector3(File.Goal.x, 0, File.Goal.y);
@@ -617,6 +617,8 @@ namespace Explore
             {
                 _tileDic[File.Goal].Icon.layer = MapLayer;
             }
+            _tileDic[File.Goal].Icon.GetComponent<Goal>().Red.SetActive(!File.IsArrive);
+            _tileDic[File.Goal].Icon.GetComponent<Goal>().Blue.SetActive(File.IsArrive);
 
             _enemyList.Clear();
             ExploreEnemyController controller;

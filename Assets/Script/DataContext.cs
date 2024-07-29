@@ -10,11 +10,11 @@ using UnityEngine;
 
 public class DataContext
 {
-    private static readonly string _dataPrePath = Application.streamingAssetsPath + "./Data/";
-    private static readonly string _savePrePath = Application.streamingAssetsPath + "./Save/";
-    private static readonly string _settingPrePath = Application.streamingAssetsPath + "./Setting/";
-    private static readonly string _mapExplorePrePath = Application.streamingAssetsPath + "./Map/Explore/";
-private static readonly string _mapBattlePrePath = Application.streamingAssetsPath + "./Map/Battle/";
+    private static readonly string _dataPrePath = Application.streamingAssetsPath + "/Data/";
+    private static readonly string _savePrePath = Application.streamingAssetsPath + "/Save/";
+    private static readonly string _settingPrePath = Application.streamingAssetsPath + "/Setting/";
+    private static readonly string _mapExplorePrePath = Application.streamingAssetsPath + "/Map/Explore/";
+private static readonly string _mapBattlePrePath = Application.streamingAssetsPath + "/Map/Battle/";
 
 
     private static DataContext _instance;

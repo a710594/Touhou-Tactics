@@ -6,17 +6,9 @@ using UnityEngine.UI;
 
 public class Typewriter : MonoBehaviour
 {
-    public enum TextType
-    {
-        Text,
-        TextMesh,
-    }
 
-    public TextType Type;
-    [SerializeField]
     public float WaitTime;
     public Text TextLabel;
-    public TextMesh MeshLabel;
 
     public bool IsTyping
     {
@@ -36,6 +28,7 @@ public class Typewriter : MonoBehaviour
     private int _charIndex = -1;
     private string _dialog;
     private string _tempText;
+    private Timer _timer = new Timer();
 
     public void Show(string dialog)
     {
@@ -50,7 +43,8 @@ public class Typewriter : MonoBehaviour
             }
             else
             {
-                StartCoroutine(Timer(WaitTime, NextChar));
+                //StartCoroutine(Timer(WaitTime, NextChar));
+                _timer.Start(WaitTime, NextChar, true);
             }
         }
     }
@@ -58,14 +52,7 @@ public class Typewriter : MonoBehaviour
     public void SetText()
     {
         _charIndex = -1;
-        if (Type == TextType.Text)
-        {
-            TextLabel.text = _dialog;
-        }
-        else
-        {
-            MeshLabel.text = _dialog;
-        }
+        TextLabel.text = _dialog;
     }
 
     public void ClearText()
@@ -79,27 +66,21 @@ public class Typewriter : MonoBehaviour
         {
             _tempText = _dialog.Insert(_charIndex, "<color=#00000000>");
             _tempText = _tempText.Insert(_tempText.Length, "</color>");
-            if (Type == TextType.Text)
-            {
-                TextLabel.text = _tempText;
-            }
-            else
-            {
-                MeshLabel.text = _tempText;
-            }
+            TextLabel.text = _tempText;
 
             _charIndex++;
-            StartCoroutine(Timer(WaitTime, NextChar));
+            //StartCoroutine(Timer(WaitTime, NextChar));
         }
         else
         {
             _charIndex = -1;
+            _timer.StopLoop();
         }
     }
 
     private IEnumerator Timer(float time, Action callback)
     {
-        yield return new WaitForSeconds(time);
+        yield return null;
 
         if (callback != null)
         {

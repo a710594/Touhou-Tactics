@@ -561,8 +561,11 @@ namespace Battle
 
         public void EndTutorial()
         {
-            Tutorial.Deregister();
-            Tutorial = null;
+            if (Tutorial != null)
+            {
+                Tutorial.Deregister();
+                Tutorial = null;
+            }
         }
 
         public void SetCandidateList(List<CharacterInfo> list) 

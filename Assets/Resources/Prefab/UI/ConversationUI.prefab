@@ -113,10 +113,10 @@ RectTransform:
   m_Father: {fileID: 9191848034832575251}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 360}
-  m_SizeDelta: {x: 600, y: 720}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 150}
+  m_SizeDelta: {x: 1200, y: 615}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1418981002848531091
 CanvasRenderer:
@@ -844,10 +844,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4209cd6d691e203439f640db3b2a34cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 0
-  WaitTime: 0.1
+  WaitTime: 0.05
   TextLabel: {fileID: 9015066602917883355}
-  MeshLabel: {fileID: 0}
 --- !u!114 &880021977777591366
 MonoBehaviour:
   m_ObjectHideFlags: 0
