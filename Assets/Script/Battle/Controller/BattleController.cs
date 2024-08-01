@@ -309,6 +309,30 @@ namespace Battle
                 {
                     commandPositionList.Add(from);
                 }
+                else if(command.AreaTarget == TargetEnum.UsMinHP)
+                {
+                    List<BattleCharacterInfo> tempList = new List<BattleCharacterInfo>();
+                    for(int i=0; i<CharacterList.Count; i++)
+                    {
+                        if(SelectedCharacter.Faction == CharacterList[i].Faction)
+                        {
+                            tempList.Add(CharacterList[i]);  
+                        }  
+                    }
+
+                    if(tempList.Count>0)
+                    {
+                        BattleCharacterInfo minHPCharacter = tempList[0];
+                        for(int i=1; i<tempList.Count; i++)
+                        {
+                            if(tempList[i].CurrentHP < minHPCharacter.CurrentHP)
+                            {
+                                minHPCharacter = tempList[i];
+                            }
+                        }
+                        commandPositionList.Add(Utility.ConvertToVector2Int(minHPCharacter.Position)); 
+                    }
+                }
                 else
                 {
                     for(int i=0; i<CharacterList.Count; i++)
