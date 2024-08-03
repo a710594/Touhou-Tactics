@@ -24,6 +24,7 @@ namespace Battle
                 _character = Instance.SelectedCharacter;
                 _currentLogList.Clear();
 
+                int index = 0;
                 foreach(KeyValuePair<Command, List<BattleCharacterInfo>> pair in Instance._commandTargetDic) 
                 {
                     if (pair.Key.Effect.Type == EffectModel.TypeEnum.Summon)
@@ -43,7 +44,6 @@ namespace Battle
                     {
                         Skill skill = (Skill)pair.Key;
                         _character.HasUseSkill = true;
-                        _character.ActionCount--;
                         if (skill.CD > 0)
                         {
                             skill.CurrentCD = skill.CD + 1;
@@ -62,7 +62,6 @@ namespace Battle
                     {
                         Spell spell = (Spell)pair.Key;
                         _character.HasUseSpell = true;
-                        _character.ActionCount--;
                         if (spell.CD > 0)
                         {
                             for (int i = 0; i < _characterList.Count; i++)
@@ -82,16 +81,20 @@ namespace Battle
                     {
                         Consumables consumables = (Consumables)pair.Key;
                         _character.HasUseItem = true;
-                        _character.ActionCount--;
                         ItemManager.Instance.MinusItem(consumables.ID, 1);
                     }
                     else if(pair.Key is Food) 
                     {
                         Food food = (Food)pair.Key;
                         _character.HasUseItem = true;
-                        _character.ActionCount--;
                         ItemManager.Instance.MinusItem(food.ID, 1);
                     }
+
+                    if(!(pair.Key is Support) && index == 0) 
+                    {
+                        _character.ActionCount--;
+                    }
+                    index++;
                 }
 
                 RerangeLog();
@@ -107,7 +110,7 @@ namespace Battle
             {
                 HitType hitType;
 
-                if (command.AreaTarget == TargetEnum.Us || command.AreaTarget == TargetEnum.Self || Instance.Tutorial != null)
+                if (command.AreaTarget == TargetEnum.Us || command.AreaTarget == TargetEnum.Self || command.AreaTarget == TargetEnum.UsMinHP || Instance.Tutorial != null)
                 {
                     hitType = HitType.Hit;
                 }

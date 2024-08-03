@@ -105,7 +105,7 @@ public class DragCameraUI : MonoBehaviour
                     v3 = new Vector3(-v1.y * CameraDragSpeed, 0, v1.x * CameraDragSpeed);
                 }
                 x = Mathf.Clamp(CameraRoot.position.x + v3.x, _minX, _maxX);
-                z = Mathf.Clamp(CameraRoot.position.z + v3.z, _minY, _minY);
+                z = Mathf.Clamp(CameraRoot.position.z + v3.z, _minY, _maxY);
 
             }
 

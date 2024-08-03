@@ -78,6 +78,11 @@ public class Typewriter : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        _timer.Stop();
+    }
+
     private IEnumerator Timer(float time, Action callback)
     {
         yield return null;
