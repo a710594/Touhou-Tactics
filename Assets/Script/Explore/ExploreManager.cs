@@ -205,7 +205,7 @@ namespace Explore
             //PlaceStartAndGoal
             Generator2D.Room startRoom = roomList[0];
             File.Start = startRoom.bounds.position + new Vector2Int(UnityEngine.Random.Range(0, startRoom.bounds.size.x),UnityEngine.Random.Range(0, startRoom.bounds.size.y));
-            File.WalkableList.Remove(File.Start);
+            startRoom.WalkableList.Remove(File.Start);
 
             List<Generator2D.Room> tempList = new List<Generator2D.Room>(roomList);
             tempList.Remove(startRoom);
@@ -220,6 +220,7 @@ namespace Explore
 
             File.Goal = goalRoom.bounds.position + new Vector2Int(UnityEngine.Random.Range(0, goalRoom.bounds.size.x),UnityEngine.Random.Range(0, goalRoom.bounds.size.y));
             File.WalkableList.Remove(File.Goal);
+            goalRoom.WalkableList.Remove(File.Goal);
 
             //Set Treasure
             int treasureCount = 10;

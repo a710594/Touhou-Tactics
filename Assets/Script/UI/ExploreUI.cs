@@ -66,7 +66,6 @@ public class ExploreUI : MonoBehaviour
             {
                 float x = (file.Size.x / 2 - Camera.main.transform.position.x) / file.Size.x * 1080 * _scale;
                 float y = (file.Size.y / 2 - Camera.main.transform.position.z) / file.Size.y * 1080 * _scale;
-                Debug.Log(x + " " + y);
                 BigMap.anchoredPosition = new Vector2(x, y);
                 BigMapCamera.Render();
                 FloorLabel.text = file.Floor + "F";
