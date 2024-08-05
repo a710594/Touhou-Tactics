@@ -32,7 +32,9 @@ public class SceneController
     }
 
     public Action BeforeSceneLoadedHandler;
-    public Action AfterSceneLoadedHandler;
+    public Action<string> AfterSceneLoadedHandler;
+
+    private Action<string> _tempHandler;
 
     private bool _isLock = false;
     private bool _isInit = false;
@@ -51,7 +53,7 @@ public class SceneController
         }
     }
 
-    public void ChangeScene(string scene, Action callback = null)
+    public void ChangeScene(string scene, Action<string> callback)
     {
         if (!_isLock)
         {
@@ -66,7 +68,12 @@ public class SceneController
 
             LoadingUI.Open();
             SceneManager.LoadSceneAsync(scene);
-            AfterSceneLoadedHandler += callback;
+
+            if (callback != null)
+            {
+                _tempHandler = callback;
+                AfterSceneLoadedHandler += _tempHandler;
+            }
         }
     }
 
@@ -81,8 +88,14 @@ public class SceneController
 
         if (AfterSceneLoadedHandler != null)
         {
-            AfterSceneLoadedHandler();
-            AfterSceneLoadedHandler = null;
+            AfterSceneLoadedHandler(scene.name);
+            AfterSceneLoadedHandler -= _tempHandler;
+        }
+
+        if (scene.name == "Camp" && !FlagManager.Instance.Info.FlagDic[FlagInfo.FlagEnum.Camp])
+        {
+            Event_6 event_6 = new Event_6();
+            event_6.Start();
         }
     }
 }

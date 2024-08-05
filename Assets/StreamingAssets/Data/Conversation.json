@@ -28,8 +28,9 @@
 {"ID":7,"Page":1,"Pause":1,"Name":"[教學]","Dialog":"靈夢的防禦力強大，支援能提升範圍內同伴的防禦力，擅長守護隊友。","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
 {"ID":7,"Page":2,"Pause":0,"Name":"[教學]","Dialog":"旁邊的灰色區塊代表受到支援影響的區域，站在該區域的友方也能得到防禦力上升的效果。","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
 {"ID":8,"Page":1,"Pause":0,"Name":"魂魄妖夢","Dialog":"這裡是？","Image_1":"魂魄妖夢","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
-{"ID":8,"Page":2,"Pause":0,"Name":"博麗靈夢","Dialog":"我也不清楚。總之是個適合休息的地方。休息一下後繼續探索吧。","Image_1":"-","Motion_1":0,"Image_2":"博麗靈夢","Motion_2":0,"Image_3":"x"},
-{"ID":8,"Page":3,"Pause":0,"Name":"東風谷早苗","Dialog":"靈夢，你在這裡啊？","Image_1":"東風谷早苗","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
-{"ID":8,"Page":4,"Pause":0,"Name":"博麗靈夢","Dialog":"早苗，妳也在調查異變嗎？來的正好。待回一起走吧。","Image_1":"-","Motion_1":0,"Image_2":"博麗靈夢","Motion_2":0,"Image_3":"x"},
-{"ID":8,"Page":5,"Pause":0,"Name":"[教學]","Dialog":"結束一個區域的探索後，會先來到休息處，全部的角色的狀態都會回復。\n想繼續探索時按右上的「探索」就可以了","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
-{"ID":8,"Page":6,"Pause":0,"Name":"[系統]","Dialog":"早苗加入了隊伍","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"}]
+{"ID":8,"Page":2,"Pause":0,"Name":"博麗靈夢","Dialog":"我也不清楚。不過看起來是個適合休息的地方。","Image_1":"-","Motion_1":0,"Image_2":"博麗靈夢","Motion_2":0,"Image_3":"x"},
+{"ID":8,"Page":3,"Pause":0,"Name":"霧雨魔理沙","Dialog":"靈夢！你在這裡啊？我還以為你已經回去睡了呢！","Image_1":"霧雨魔理沙","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
+{"ID":8,"Page":4,"Pause":0,"Name":"博麗靈夢","Dialog":"你在胡說些什麼啊魔理沙？我沒有偷懶到那種地步吧？","Image_1":"-","Motion_1":0,"Image_2":"博麗靈夢","Motion_2":0,"Image_3":"x"},
+{"ID":8,"Page":5,"Pause":0,"Name":"博麗靈夢","Dialog":"總之先休息一下，等一下一起出發吧。","Image_1":"-","Motion_1":0,"Image_2":"博麗靈夢","Motion_2":0,"Image_3":"x"},
+{"ID":8,"Page":6,"Pause":0,"Name":"[教學]","Dialog":"結束一個區域的探索後，會先來到休息處，全部的角色的狀態都會回復。\n想繼續探索時按右上的「出發」就可以了","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
+{"ID":8,"Page":7,"Pause":0,"Name":"[系統]","Dialog":"霧雨魔理沙加入了隊伍","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"}]

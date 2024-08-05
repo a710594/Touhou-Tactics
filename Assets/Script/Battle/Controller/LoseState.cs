@@ -18,7 +18,7 @@ namespace Battle
                 Instance.BattleResultUI.gameObject.SetActive(true);
                 Instance.BattleResultUI.SetLose(() =>
                 {
-                    SceneController.Instance.ChangeScene("Camp", () =>
+                    SceneController.Instance.ChangeScene("Camp", (sceneName) =>
                     {
                         CharacterManager.Instance.RecoverAllHP();
                         InputMamager.Instance.Unlock();

@@ -12,6 +12,7 @@ public class FlagInfo
         FloorBoss, //樓層Boss的說明
         GetItem, //蒐集道具的教學
         BeforeSpellTutorial, //符卡戰鬥教學之前的對話
+        Camp, //第一次到達營地時的對話
     }
 
     public Dictionary<FlagEnum, bool> FlagDic;

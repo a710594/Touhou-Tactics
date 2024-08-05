@@ -21,7 +21,7 @@ public class LogoUI : MonoBehaviour
     {
         if (SystemManager.Instance.SystemInfo.CurrentScene == "Explore")
         {
-            SceneController.Instance.ChangeScene("Explore", () =>
+            SceneController.Instance.ChangeScene("Explore", (sceneName) =>
             {
                 Explore.ExploreManager.Instance.Init();
             });
@@ -36,7 +36,7 @@ public class LogoUI : MonoBehaviour
     {
         if (DataContext.Instance.IsSaveEmpty())
         {
-            SceneController.Instance.ChangeScene("Explore", () =>
+            SceneController.Instance.ChangeScene("Explore", (sceneName) =>
             {
                 Explore.ExploreManager.Instance.Init();
             });
@@ -47,7 +47,7 @@ public class LogoUI : MonoBehaviour
             {
                 FileSystem.Instance.Delete();
                 FileSystem.Instance.Init();
-                SceneController.Instance.ChangeScene("Explore", () =>
+                SceneController.Instance.ChangeScene("Explore", (sceneName) =>
                 {
                     Explore.ExploreManager.Instance.Init();
                 });

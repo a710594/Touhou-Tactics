@@ -344,7 +344,7 @@ namespace Explore
                     File.EnemyInfoList.Remove(_enemyList[i].Info);
                     _timer.Start(1f, ()=> 
                     {
-                        SceneController.Instance.ChangeScene("Battle", () =>
+                        SceneController.Instance.ChangeScene("Battle", (sceneName) =>
                         {
                             InputMamager.Instance.Unlock();
                             BattleMapBuilder battleMapBuilder = GameObject.Find("BattleMapBuilder").GetComponent<BattleMapBuilder>();
@@ -398,7 +398,7 @@ namespace Explore
 
                     _timer.Start(1f, () =>
                     {
-                        SceneController.Instance.ChangeScene("Camp", () =>
+                        SceneController.Instance.ChangeScene("Camp", (sceneName) =>
                         {
                             CharacterManager.Instance.RecoverAllHP();
                             InputMamager.Instance.Unlock();
@@ -503,7 +503,7 @@ namespace Explore
                             SystemManager.Instance.SystemInfo.MaxFloor = File.Floor;
                         }
 
-                        SceneController.Instance.ChangeScene("Camp", () =>
+                        SceneController.Instance.ChangeScene("Camp", (sceneName) =>
                         {
                             CharacterManager.Instance.RecoverAllHP();
                         });

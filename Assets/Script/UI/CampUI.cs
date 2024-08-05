@@ -44,7 +44,7 @@ public class CampUI : MonoBehaviour
 
     private void FloorOnClick(ScrollItem scrollItem) 
     {
-        SceneController.Instance.ChangeScene("Explore", () =>
+        SceneController.Instance.ChangeScene("Explore", (sceneName) =>
         {
             Explore.ExploreManager.Instance.Init((int)scrollItem.Data);
         });
