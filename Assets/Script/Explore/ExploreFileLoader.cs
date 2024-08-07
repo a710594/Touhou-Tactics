@@ -8,6 +8,8 @@ namespace Explore
     {
         public string FileName;
         public Transform Tilemap;
+        public Transform Start;
+        public Transform Goal;
         public Transform Enemy;
         public Transform Trigger;
         public Transform Treasure;
@@ -47,6 +49,13 @@ namespace Explore
                 {
                     obj.tag = "Wall";
                 }
+            }
+
+            Start.transform.position = new Vector3(file.Start.x, 0, file.Start.y);
+
+            if (Goal != null)
+            {
+                Goal.transform.position = new Vector3(file.Goal.x, 0, file.Goal.y);
             }
 
             for(int i=0; i<file.EnemyInfoList.Count; i++)

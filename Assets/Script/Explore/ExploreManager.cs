@@ -609,17 +609,20 @@ namespace Explore
             //    _tileDic[File.Start].Icon.layer = MapLayer;
             //}
 
-            gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Goal"), Vector3.zero, Quaternion.identity);
-            gameObj.transform.position = new Vector3(File.Goal.x, 0, File.Goal.y);
-            gameObj.transform.eulerAngles = new Vector3(90, 0, 0);
-            gameObj.transform.SetParent(parent);
-            _tileDic[File.Goal].Icon = gameObj;
-            if (File.VisitedList.Contains(File.Goal))
+            if (File.Goal.x != int.MinValue && File.Goal.y != int.MinValue)
             {
-                _tileDic[File.Goal].Icon.layer = MapLayer;
+                gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Goal"), Vector3.zero, Quaternion.identity);
+                gameObj.transform.position = new Vector3(File.Goal.x, 0, File.Goal.y);
+                gameObj.transform.eulerAngles = new Vector3(90, 0, 0);
+                gameObj.transform.SetParent(parent);
+                _tileDic[File.Goal].Icon = gameObj;
+                if (File.VisitedList.Contains(File.Goal))
+                {
+                    _tileDic[File.Goal].Icon.layer = MapLayer;
+                }
+                _tileDic[File.Goal].Icon.GetComponent<Goal>().Red.SetActive(!File.IsArrive);
+                _tileDic[File.Goal].Icon.GetComponent<Goal>().Blue.SetActive(File.IsArrive);
             }
-            _tileDic[File.Goal].Icon.GetComponent<Goal>().Red.SetActive(!File.IsArrive);
-            _tileDic[File.Goal].Icon.GetComponent<Goal>().Blue.SetActive(File.IsArrive);
 
             _enemyList.Clear();
             ExploreEnemyController controller;

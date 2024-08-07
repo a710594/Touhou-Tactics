@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Event_3 : MyEvent
+/*public class Event_3 : MyEvent
 {
     public override void Start()
     {
@@ -16,4 +16,4 @@ public class Event_3 : MyEvent
             FlagManager.Instance.Info.FlagDic[FlagInfo.FlagEnum.FloorBoss] = true;
         }
     }
-}
+}*/

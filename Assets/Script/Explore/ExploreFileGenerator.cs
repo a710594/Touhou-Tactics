@@ -48,7 +48,14 @@ namespace Explore
             }
             file.Floor = Floor;
             file.Start = Utility.ConvertToVector2Int(Start.position);
-            file.Goal = Utility.ConvertToVector2Int(Goal.position);
+            if (Goal != null)
+            {
+                file.Goal = Utility.ConvertToVector2Int(Goal.position);
+            }
+            else
+            {
+                file.Goal = new Vector2Int(int.MinValue, int.MinValue);
+            }
             file.PlayerPosition = file.Start;
             file.Size = new Vector2Int(maxX - minX, maxY - minY);
 
