@@ -34,4 +34,10 @@
 {"ID":8,"Page":5,"Pause":0,"Name":"博麗靈夢","Dialog":"總之先休息一下，等一下一起出發吧。","Image_1":"-","Motion_1":0,"Image_2":"博麗靈夢","Motion_2":0,"Image_3":"x"},
 {"ID":8,"Page":6,"Pause":0,"Name":"[教學]","Dialog":"結束一個區域的探索後，會先來到休息處，全部的角色的狀態都會回復。 想繼續探索時按右上的「出發」就可以了","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
 {"ID":8,"Page":7,"Pause":0,"Name":"[系統]","Dialog":"霧雨魔理沙加入了隊伍","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
-{"ID":9,"Page":1,"Pause":0,"Name":"[教學]","Dialog":"按空白鍵拾取物品","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"}]
+{"ID":9,"Page":1,"Pause":0,"Name":"[教學]","Dialog":"按空白鍵拾取物品","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
+{"ID":10,"Page":1,"Pause":0,"Name":"[教學]","Dialog":"霧雨魔理沙擅長使用遠程魔法攻擊","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
+{"ID":10,"Page":2,"Pause":1,"Name":"[教學]","Dialog":"遠程攻擊有許多不同的類型","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
+{"ID":10,"Page":3,"Pause":2,"Name":"[教學]","Dialog":"魔彈是直線型，會受到障礙物的阻擋","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
+{"ID":10,"Page":4,"Pause":3,"Name":"[教學]","Dialog":"雷射是貫通型，不受障礙物的影響，會擊中直線內的所有目標","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
+{"ID":10,"Page":5,"Pause":4,"Name":"[教學]","Dialog":"隕石術無視地形，無視敵我擊中範圍內的目標","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
+{"ID":10,"Page":6,"Pause":5,"Name":"[教學]","Dialog":"大部分的攻擊都能作用在敵軍與我軍上，因此使用範圍攻擊時需要特別注意","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"}]
