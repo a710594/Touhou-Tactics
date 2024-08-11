@@ -14,9 +14,9 @@ namespace Battle
 
             public override void Begin()
             {
-                if(Instance.ActionStateBeginHandler != null)
+                if(Instance.CommandStateBeginHandler != null)
                 {
-                    Instance.ActionStateBeginHandler();
+                    Instance.CommandStateBeginHandler();
                 }
 
                 _info = Instance.Info;

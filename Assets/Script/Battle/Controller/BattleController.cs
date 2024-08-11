@@ -20,19 +20,27 @@ namespace Battle
             }
         }
 
-        public bool IsTutorial
+        public bool IsTutorialActive
         {
             get
             {
-                return Tutorial != null;
+                if (Tutorial == null) 
+                {
+                    return false;
+                }
+                else
+                {
+                    return Tutorial.IsActive;
+                }
             }
         }
 
         public Action PrepareStateBeginHandler;
-        public Action ActionStateBeginHandler;
+        public Action CommandStateBeginHandler;
         public Action MoveStateEndHandler;
         public Action DirectionStateBeginHandler;
         public Action CharacterStateBeginHandler;
+        public Action<State> ChangeStateHandler;
 
         public BattleInfo Info;
         public BattleTutorial Tutorial = null;
@@ -95,6 +103,7 @@ namespace Battle
             _context.AddState(new WinState(_context));
             _context.AddState(new LoseState(_context));
             _context.AddState(new DirectionState(_context));
+            _context.ChangeStateHandler = OnStateChange;
 
             CharacterList.Clear();
             //List<Vector3Int> positionList = new List<Vector3Int>();
@@ -595,6 +604,14 @@ namespace Battle
         public void SetCandidateList(List<CharacterInfo> list) 
         {
             _candidateList = list;
+        }
+
+        private void OnStateChange(State state) 
+        {
+            if (ChangeStateHandler != null) 
+            {
+                ChangeStateHandler(state);
+            }
         }
 
         public class BattleControllerState : State

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class SystemUI : MonoBehaviour
 {
+    public Button CampButton;
     public Button SaveButton;
     public Button ExitButton;
 
@@ -21,6 +22,17 @@ public class SystemUI : MonoBehaviour
     public void Close()
     {
         Destroy(gameObject);
+    }
+
+    private void CampOnClick() 
+    {
+        ConfirmUI.Open("要返回營地嗎？", "確定", "取消", () =>
+        {
+            SceneController.Instance.ChangeScene("Camp", (sceneName)=> 
+            {
+                InputMamager.Instance.Unlock();
+            });
+        }, null);
     }
 
     private void SaveOnClick()
@@ -43,6 +55,7 @@ public class SystemUI : MonoBehaviour
 
     private void Awake()
     {
+        CampButton.onClick.AddListener(CampOnClick);
         SaveButton.onClick.AddListener(SaveOnClick);
         ExitButton.onClick.AddListener(ExitOnClick);
     }

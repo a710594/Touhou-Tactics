@@ -118,7 +118,7 @@ public class DragCameraUI : MonoBehaviour
             if (Physics.Raycast(ray, out hit, 100))
             {
                 Vector2Int v2 = Utility.ConvertToVector2Int(hit.point);
-                if (BattleController.Instance.IsTutorial && !BattleController.Instance.Tutorial.CheckClick(v2))
+                if (BattleController.Instance.IsTutorialActive && !BattleController.Instance.Tutorial.CheckClick(v2))
                 {
                     return;
                 }
@@ -126,7 +126,7 @@ public class DragCameraUI : MonoBehaviour
             }
             else //?N??????S???????a??
             {
-                if (BattleController.Instance.IsTutorial)
+                if (BattleController.Instance.IsTutorialActive)
                 {
                     return;
                 }

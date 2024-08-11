@@ -92,10 +92,21 @@ public class SceneController
             AfterSceneLoadedHandler -= _tempHandler;
         }
 
-        if (scene.name == "Camp" && !FlagManager.Instance.Info.FlagDic[FlagInfo.FlagEnum.Camp])
+        if (scene.name == "Camp")
         {
-            Event_6 event_6 = new Event_6();
-            event_6.Start();
+            if (!FlagManager.Instance.Info.FlagDic[FlagInfo.FlagEnum.Camp])
+            {
+                Event_6 event_6 = new Event_6();
+                event_6.Start();
+            }
         }
+        //else if(scene.name == "Explore") 
+        //{
+        //    if (!FlagManager.Instance.Info.FlagDic[FlagInfo.FlagEnum.BackCamp])
+        //    {
+        //        Event_8 event_8 = new Event_8();
+        //        event_8.Start();
+        //    }
+        //}
     }
 }

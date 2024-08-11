@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 public class StateContext
 {
+    public Action<State> ChangeStateHandler;
+
     public State CurrentState;
     public object Parent; //產生 StateContext 的物件
 
@@ -32,6 +34,12 @@ public class StateContext
         if (_stateDic.ContainsKey(typeof(T)))
         {
             CurrentState = _stateDic[typeof(T)];
+
+            if (ChangeStateHandler != null) 
+            {
+                ChangeStateHandler(CurrentState);
+            }
+            
             CurrentState.Begin();
         }
         else

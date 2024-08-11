@@ -9,6 +9,8 @@ namespace Explore
 {
     public partial class ExploreManager
     {
+        public Action ReloadHandler;
+
         private readonly int _maxFloor = 5;
         private readonly string _fileName = "ExploreFile";
 
@@ -510,6 +512,12 @@ namespace Explore
                     }, null);
                 }
             }
+
+            if (ReloadHandler != null) 
+            {
+                ReloadHandler();
+            }
+
             CreateObject();
             SetCamera();
         }

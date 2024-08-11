@@ -60,18 +60,18 @@ namespace Battle
                     ((BattleTutorial)_context.Parent).ConversationUI = ConversationUI.Open(3, null);
                     //TutorialUI.Open("將角色從下方拖曳至場景的白色區域中。\n白色的區域代表可放置角色的位置。\n將角色配置完後按開始戰鬥。", "Tutorial_1", null);
                 });
-                BattleController.Instance.ActionStateBeginHandler += Next;
+                BattleController.Instance.CommandStateBeginHandler += Next;
             }
 
             public override void Next()
             {
-                BattleController.Instance.ActionStateBeginHandler -= Next;
+                BattleController.Instance.CommandStateBeginHandler -= Next;
                 _context.SetState<State_2>();
             }
 
             public override void Deregister()
             {
-                BattleController.Instance.ActionStateBeginHandler -= Next;
+                BattleController.Instance.CommandStateBeginHandler -= Next;
             }
         }
 

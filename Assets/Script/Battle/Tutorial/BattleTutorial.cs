@@ -6,7 +6,7 @@ namespace Battle
 {
     public class BattleTutorial
     {
-        protected bool _enable;
+        public bool IsActive = true;
         protected StateContext _context = new StateContext();
         public ConversationUI ConversationUI;
 
@@ -68,6 +68,11 @@ namespace Battle
         public virtual bool CanReset()
         {
             return ((TutorialState)_context.CurrentState).CanReset();
+        }
+
+        public virtual void CheckState(State state)
+        {
+
         }
 
         protected class TutorialState : State

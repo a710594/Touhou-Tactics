@@ -26,7 +26,7 @@ namespace Battle
             BattleController.Instance.SetCandidateList(list);
             BattleController.Instance.SetState<BattleController.PrepareState>();
 
-            BattleController.Instance.ActionStateBeginHandler += ()=> 
+            BattleController.Instance.CommandStateBeginHandler += ()=> 
             {
                 _context.SetState<State_1>();
             };
@@ -40,7 +40,7 @@ namespace Battle
 
             public override void Begin()
             {
-                BattleController.Instance.ActionStateBeginHandler = null;
+                BattleController.Instance.CommandStateBeginHandler = null;
                 BattleUI.Instance.SetArrowVisible(false);
                 ((BattleTutorial)_context.Parent).ConversationUI = ConversationUI.Open(7, null, () => 
                 {

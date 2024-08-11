@@ -136,6 +136,8 @@ public class CookUI : MonoBehaviour
             _materialList.Clear();
             SetMaterialLabel();
             BagScrollView.SetData(new List<object>(ItemManager.Instance.BagInfo.GetFoodMaterial()));
+            ResultNameLabel.text = "";
+            ResultCommentLabel.text = "";
             CookButton.gameObject.SetActive(false);
         }
     }

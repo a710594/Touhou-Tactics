@@ -13,6 +13,8 @@ public class FlagInfo
         GetItem, //蒐集道具的教學
         BeforeSpellTutorial, //符卡戰鬥教學之前的對話
         Camp, //第一次到達營地時的對話
+        BackCamp, //返回營地的教學
+        BackCampBlock, //玩家必需返回營地
     }
 
     public Dictionary<FlagEnum, bool> FlagDic;
