@@ -30,6 +30,7 @@ public class SystemUI : MonoBehaviour
         {
             SceneController.Instance.ChangeScene("Camp", (sceneName)=> 
             {
+                CharacterManager.Instance.RecoverAllHP();
                 InputMamager.Instance.Unlock();
             });
         }, null);

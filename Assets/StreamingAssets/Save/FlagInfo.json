@@ -1,1 +1,1 @@
-{"FlagDic":{"BasicOperations":true,"FirstEnemy":true,"FloorBoss":true,"GetItem":true,"BeforeSpellTutorial":true,"Camp":true,"BackCamp":true,"BackCampBlock":false}}
+{"FlagDic":{"BasicOperations":true,"FirstEnemy":true,"FloorBoss":true,"GetItem":false,"BeforeSpellTutorial":true,"Camp":false,"BackCamp":false,"BackCampBlock":false}}
