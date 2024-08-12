@@ -49,4 +49,6 @@
 {"ID":11,"Page":6,"Pause":0,"Name":"博麗靈夢","Dialog":"你以為我是怎麼度過那些沒有香油錢的日子的？神社邊的草我都能煮來吃","Image_1":"-","Motion_1":0,"Image_2":"博麗靈夢","Motion_2":0,"Image_3":"x"},
 {"ID":11,"Page":7,"Pause":0,"Name":"霧雨魔理沙","Dialog":"也太可憐...不如我分你一些我在魔法森林裡撿到的蘑菇...","Image_1":"霧雨魔理沙","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
 {"ID":11,"Page":8,"Pause":0,"Name":"博麗靈夢","Dialog":"別鬧了，趕快回營地啦","Image_1":"-","Motion_1":0,"Image_2":"博麗靈夢","Motion_2":0,"Image_3":"x"},
-{"ID":11,"Page":9,"Pause":0,"Name":"[教學]","Dialog":"按Esc，選擇回到營地\n回到營地後可以回復角色全部的狀態。累積足夠的資源再一口氣深入探索有時是突破困境的好方法。","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"}]
+{"ID":11,"Page":9,"Pause":0,"Name":"[教學]","Dialog":"按Esc，選擇回到營地\n回到營地後可以回復角色全部的狀態。累積足夠的資源再一口氣深入探索有時是突破困境的好方法。","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
+{"ID":12,"Page":1,"Pause":0,"Name":"[教學]","Dialog":"有一部分的素材能被做成料理。料理可以在探索或戰鬥中回復角色的 HP","Image_1":"-","Motion_1":1,"Image_2":"-","Motion_2":0,"Image_3":"x"},
+{"ID":12,"Page":2,"Pause":0,"Name":"[教學]","Dialog":"不同的素材組合能做出擁有不同效果的料理","Image_1":"-","Motion_1":2,"Image_2":"-","Motion_2":0,"Image_3":"x"}]

@@ -4,19 +4,9 @@ using UnityEngine;
 
 namespace Battle
 {
-    public class BattleTutorial
+    public class BattleTutorial : Tutorial
     {
-        public bool IsActive = true;
-        protected StateContext _context = new StateContext();
         public ConversationUI ConversationUI;
-
-        public virtual void Start() 
-        {
-        }
-
-        public virtual void Deregister() 
-        {
-        }
 
         public virtual bool CheckClick(Vector2Int position)
         {
