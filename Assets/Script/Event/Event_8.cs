@@ -14,7 +14,7 @@ public class Event_8 : MyEvent
             {
                 InputMamager.Instance.IsLock = false;
                 //FlagManager.Instance.Info.FlagDic[FlagInfo.FlagEnum.BackCamp] = true;
-                            FlowController.Instance.Info.CurrentStep++;
+                FlowController.Instance.Info.CurrentStep++;
                 SceneController.Instance.AfterSceneLoadedHandler += AfterSceneChange;
             });
         }

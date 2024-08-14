@@ -7,15 +7,14 @@ public class FlowInfo
 {
     public enum StepEnum
     {
-        None = -1,
         BasicOperations = 0, //基本操作
         FirstBattle,
         SecondBattle,
         ThirdBattle,
         Camp, //第一次到達營地時的對話
         GetItem, //蒐集道具的教學
-        FourthBattle,
         BackCamp, //提前返回營地的教學
+        End,
     }
 
     public StepEnum CurrentStep;
