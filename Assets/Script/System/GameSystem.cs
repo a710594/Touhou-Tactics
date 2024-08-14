@@ -14,6 +14,7 @@ public class GameSystem : MonoBehaviour
         CharacterManager.Instance.Init();
         InputMamager.Instance.Init();
         FlagManager.Instance.Init();
+        FlowController.Instance.Load();
     }
 
     // Update is called once per frame

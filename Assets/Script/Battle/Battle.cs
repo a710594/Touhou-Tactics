@@ -12,7 +12,7 @@ namespace Battle
         Us,
         Them, 
         None,
-        UsMinHP
+        UsMinHP,
     }
 
 public enum AreaTypeEnum

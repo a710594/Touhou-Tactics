@@ -23,10 +23,12 @@ namespace Battle
             BattleController.Instance.SetState<BattleController.PrepareState>();
             BattleController.Instance.ChangeStateHandler += CheckState;
 
-            //BattleController.Instance.CommandStateBeginHandler += () =>
-            //{
-            //    _context.SetState<State_1>();
-            //};
+            Explore.ExploreManager.Instance.ReloadHandler += () => 
+            {
+                Event_8 event_8 = new Event_8();
+                event_8.Start();
+                Explore.ExploreManager.Instance.ReloadHandler = null;
+            };
         }
 
         public override void CheckState(State state)
@@ -54,13 +56,6 @@ namespace Battle
                     ((BattleTutorial)_context.Parent).ConversationUI = ConversationUI.Open(10, null, () =>
                     {
                         BattleController.Instance.EndTutorial();
-
-                        Explore.ExploreManager.Instance.ReloadHandler += () => 
-                        {
-                            Event_8 event_8 = new Event_8();
-                            event_8.Start();
-                            Explore.ExploreManager.Instance.ReloadHandler = null;
-                        };
                     });
                 //}
             }

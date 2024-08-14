@@ -94,7 +94,8 @@ public class SceneController
 
         if (scene.name == "Camp")
         {
-            if (!FlagManager.Instance.Info.FlagDic[FlagInfo.FlagEnum.Camp])
+            //if (!FlagManager.Instance.Info.FlagDic[FlagInfo.FlagEnum.Camp])
+            if(FlowController.Instance.Info.CurrentStep == FlowInfo.StepEnum.Camp)
             {
                 Event_6 event_6 = new Event_6();
                 event_6.Start();

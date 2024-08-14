@@ -46,35 +46,6 @@ public class Generator2D {
             }
         }
 
-        /*public Dictionary<Vector2Int, Treasure> GetTreasures()
-        {
-            Dictionary<Vector2Int, Treasure> treasures = new Dictionary<Vector2Int, Treasure>();
-            if (Data.TreasurePool.Count > 0)
-            {
-                List<Vector2Int> positionList = new List<Vector2Int>();
-                int random;
-                for (int i = 0; i < bounds.size.x; i++)
-                {
-                    for (int j = 0; j < bounds.size.y; j++)
-                    {
-                        positionList.Add(new Vector2Int(i, j));
-                    }
-                }
-
-                int treasureCount = Random.Range(Data.MinTreasureCount, Data.MaxTreasureCount + 1);
-                Vector2Int treasurePosition;
-                TreasureModel treasureData;
-                for (int i = 0; i < treasureCount; i++)
-                {
-                    random = Random.Range(0, positionList.Count);
-                    treasurePosition = bounds.min + positionList[random];
-                    positionList.RemoveAt(random);
-                    treasureData = DataContext.Instance.TreasureDic[Data.TreasurePool[Random.Range(0, Data.TreasurePool.Count)]];
-                    treasures.Add(treasurePosition, new Treasure(treasurePosition, treasureData));
-                }
-            }
-            return treasures;
-        }*/
     }
 
     Random random;

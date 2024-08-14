@@ -12,17 +12,17 @@ public class Event_9 : MyEvent
 
     public override void Start()
     {
-        if (!FlagManager.Instance.Info.FlagDic[FlagInfo.FlagEnum.BackCampBlock])
+        if(FlowController.Instance.Info.LockDic[FlowInfo.LockEnum.BackCamp])
+        //if (!FlagManager.Instance.Info.FlagDic[FlagInfo.FlagEnum.BackCampBlock])
         {
             InputMamager.Instance.IsLock = true;
-            ConfirmUI.Open("½Ð¥ý«ö Esc ªð¦^Àç¦a", "½T©w", ()=>
+            ConfirmUI.Open("æŒ‰ Esc é¸æ“‡è¿”å›žç‡Ÿåœ°", "ç¢ºå®š", ()=>
             {
                 Vector3 moveTo = new Vector3(2, 1, 19);
                 Explore.ExploreManager.Instance.Player.MoveTo = moveTo;
                 Explore.ExploreManager.Instance.Player.transform.DOMove(moveTo, 1).OnComplete(()=> 
                 {
                     InputMamager.Instance.IsLock = false;
-
                 });
             });
         }
