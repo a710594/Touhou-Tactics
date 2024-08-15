@@ -59,15 +59,9 @@ namespace Battle
                     ConversationUI.Open(5, () =>
                     {
                         Vector3 offset = new Vector3(-200, -50, 0);
-                        TutorialArrowUI.Open("選擇符卡。", BattleUI.Instance.ActionButtonGroup.SupportButton.transform, offset, Vector2Int.right, null);
+                        TutorialArrowUI.Open("選擇符卡。", BattleUI.Instance.ActionButtonGroup.SupportButton.transform, offset, Vector2Int.right);
                     });
                 });
-
-                //TutorialUI.Open("符卡：\n消耗符卡發動強大的效果。使用符卡後所有的我方成員都會進入冷卻時間，需要數回合後才能再次使用符卡。", ()=> 
-                //{
-                //    Vector3 offset = new Vector3(-200, -50, 0);
-                //    TutorialArrowUI.Open("選擇符卡。", BattleUI.Instance.ActionButtonGroup.SupportButton.transform, offset, Vector2Int.right, null);
-                //});
             }
 
             public override bool CanSpell()
@@ -93,7 +87,7 @@ namespace Battle
             public override void Begin()
             {
                 Vector3 offset = new Vector3(-200, 160, 0);
-                TutorialArrowUI.Open("選擇未來永劫斬。", BattleUI.Instance.ActionButtonGroup.ScrollView.Background.transform, offset, Vector2Int.right, null);
+                TutorialArrowUI.Open("選擇未來永劫斬。", BattleUI.Instance.ActionButtonGroup.ScrollView.Background.transform, offset, Vector2Int.right);
             }
 
             public override bool CheckScrollItem(object obj)
@@ -125,7 +119,7 @@ namespace Battle
 
             public override void Begin()
             {
-                TutorialArrowUI.Open("選擇目標。", new Vector3(4, 2, 4), Vector2Int.down, null);
+                TutorialArrowUI.Open("選擇目標。", new Vector3(4, 2, 4), Vector2Int.down);
             }
 
             public override bool CheckClick(Vector2Int position)
@@ -156,7 +150,7 @@ namespace Battle
 
             public override void Begin()
             {
-                TutorialArrowUI.Open("再次點選同樣的位置確認。", new Vector3(4, 2, 4), Vector2Int.down, null);
+                TutorialArrowUI.Open("再次點選同樣的位置確認。", new Vector3(4, 2, 4), Vector2Int.down);
             }
 
             public override bool CheckClick(Vector2Int position)

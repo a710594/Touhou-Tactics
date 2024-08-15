@@ -25,7 +25,7 @@ public class CampTutorial_1 : CampTutorial
         {
             CampUI campUI = GameObject.Find("CampUI").GetComponent<CampUI>();
             Vector3 offset = Vector3.zero;
-            TutorialArrowUI.Open("選擇製作料理。", campUI.CookButton.transform, offset, Vector2Int.right, null);
+            TutorialArrowUI.Open("選擇製作料理。", campUI.CookButton.transform, offset, Vector2Int.right);
         }
 
         public override bool CanCook()
@@ -51,7 +51,7 @@ public class CampTutorial_1 : CampTutorial
         {
             ConversationUI.Open(12, ()=> 
             {
-                //EndTutorial  
+                //EndTutorial();  
             });
         }
     }

@@ -95,6 +95,7 @@ namespace Explore
                 for (int i=0; i<File.TreasureList.Count; i++) 
                 {
                     _treasureDic.Add(File.TreasureList[i].Position, File.TreasureList[i]);
+                    File.WalkableList.Remove(File.TreasureList[i].Position);
                 }
             }
         }

@@ -14,7 +14,7 @@ public class TutorialArrowUI : MonoBehaviour
     private Transform _anchor;
     private static TutorialArrowUI _tutorialArrowUI;
 
-    public static void Open(string commentText, Transform anchor, Vector3 offset, Vector2Int direction, Action confirmCallback)
+    public static void Open(string commentText, Transform anchor, Vector3 offset, Vector2Int direction)
     {
         GameObject obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/UI/TutorialArrowUI"), Vector3.zero, Quaternion.identity);
         obj.transform.SetParent(GameObject.Find("Canvas").transform);
@@ -38,7 +38,7 @@ public class TutorialArrowUI : MonoBehaviour
         }
     }
 
-    public static void Open(string commentText, Vector3 position, Vector2Int direction, Action confirmCallback)
+    public static void Open(string commentText, Vector3 position, Vector2Int direction)
     {
         GameObject obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/UI/TutorialArrowUI"), Vector3.zero, Quaternion.identity);
         obj.transform.SetParent(GameObject.Find("Canvas").transform);

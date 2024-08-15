@@ -86,7 +86,7 @@ namespace Battle
             {
                 BattleUI.Instance.SetArrowVisible(false);
                 Vector3 offset = new Vector3(-200, 0, 0);
-                TutorialArrowUI.Open("選擇移動。", BattleUI.Instance.ActionButtonGroup.MoveButton.transform, offset, Vector2Int.right, null);
+                TutorialArrowUI.Open("選擇移動。", BattleUI.Instance.ActionButtonGroup.MoveButton.transform, offset, Vector2Int.right);
             }
 
             public override void End()
@@ -117,13 +117,8 @@ namespace Battle
             {
                 ((BattleTutorial_1)_context.Parent).ConversationUI.Continue(()=> 
                 {
-                    TutorialArrowUI.Open("選擇移動。", new Vector3(4, 1, 3), Vector2Int.down, null);
+                    TutorialArrowUI.Open("選擇移動。", new Vector3(4, 1, 3), Vector2Int.down);
                 });
-
-                //TutorialUI.Open("地圖上白色的區域代表可移動的範圍。\n請點選箭頭指示的位置。", "Tutorial_2", () =>
-                //{
-                //    TutorialArrowUI.Open("選擇移動。", new Vector3(4, 1, 3), Vector2Int.down, null);
-                //});
             }
 
             public override void End()
@@ -159,7 +154,7 @@ namespace Battle
 
             public override void Begin()
             {
-                TutorialArrowUI.Open("再次點選同樣的位置代表確定位置。", new Vector3(4, 1, 3), Vector2Int.down, null);
+                TutorialArrowUI.Open("再次點選同樣的位置代表確定位置。", new Vector3(4, 1, 3), Vector2Int.down);
             }
 
             public override bool CheckClick(Vector2Int position)
@@ -198,7 +193,7 @@ namespace Battle
             public override void Begin()
             {
                 Vector3 offset = new Vector3(-200, 0, 0);
-                TutorialArrowUI.Open("選擇技能。", BattleUI.Instance.ActionButtonGroup.SkillButton.transform, offset, Vector2Int.right, null);
+                TutorialArrowUI.Open("選擇技能。", BattleUI.Instance.ActionButtonGroup.SkillButton.transform, offset, Vector2Int.right);
             }
 
             public override void End()
@@ -228,7 +223,7 @@ namespace Battle
             public override void Begin()
             {
                 Vector3 offset = new Vector3(-200, 170, 0);
-                TutorialArrowUI.Open("選擇攻擊。", BattleUI.Instance.ActionButtonGroup.ScrollView.Background.transform, offset, Vector2Int.right, null);
+                TutorialArrowUI.Open("選擇攻擊。", BattleUI.Instance.ActionButtonGroup.ScrollView.Background.transform, offset, Vector2Int.right);
             }
 
             public override void End()
@@ -266,7 +261,7 @@ namespace Battle
             {
                 ((BattleTutorial_1)_context.Parent).ConversationUI.Continue(() =>
                 {
-                    TutorialArrowUI.Open("選擇目標。", new Vector3(4, 2, 4), Vector2Int.down, null);
+                    TutorialArrowUI.Open("選擇目標。", new Vector3(4, 2, 4), Vector2Int.down);
                 });
                 //TutorialUI.Open("現在地圖上白色的範圍是可以放技能的地方。\n請點選箭頭指示的位置。", "Tutorial_3", () =>
                 //{
@@ -307,7 +302,7 @@ namespace Battle
 
             public override void Begin()
             {
-                TutorialArrowUI.Open("再次點選同樣的位置確認。", new Vector3(4, 2, 4), Vector2Int.down, null);
+                TutorialArrowUI.Open("再次點選同樣的位置確認。", new Vector3(4, 2, 4), Vector2Int.down);
             }
 
             public override bool CheckClick(Vector2Int position)
@@ -347,7 +342,7 @@ namespace Battle
             {
                 ((BattleTutorial_1)_context.Parent).ConversationUI.Continue(() =>
                 {
-                    TutorialArrowUI.Open("選擇方向。", new Vector3(4, 2, 4), Vector2Int.down, null);
+                    TutorialArrowUI.Open("選擇方向。", new Vector3(4, 2, 4), Vector2Int.down);
                 });
 
                 //TutorialUI.Open("回合結束後需要選擇角色面對的方向。\n角色面對的方向會影響命中率。\n比方說如果攻擊敵人的正面，命中率會比較低。\n反之從背後偷襲，命中率就會變高。\n盡量面向敵人，避免被偷襲吧。", "Tutorial_4", () =>
@@ -396,7 +391,7 @@ namespace Battle
                 ((BattleTutorial_1)_context.Parent).ConversationUI.Continue(() =>
                 {
                     Vector3 offset = new Vector3(-200, 0, 0);
-                    TutorialArrowUI.Open("選擇支援。", BattleUI.Instance.ActionButtonGroup.SupportButton.transform, offset, Vector2Int.right, null);
+                    TutorialArrowUI.Open("選擇支援。", BattleUI.Instance.ActionButtonGroup.SupportButton.transform, offset, Vector2Int.right);
                 });
                 //TutorialUI.Open("試著使用支援吧\n支援可以強化自身，不消耗行動次數，一個回合只能使用一次。", () =>
                 //{
@@ -427,7 +422,7 @@ namespace Battle
             public override void Begin()
             {
                 Vector3 offset = new Vector3(-200, 160, 0);
-                TutorialArrowUI.Open("選擇猛力一擊。", BattleUI.Instance.ActionButtonGroup.ScrollView.Background.transform, offset, Vector2Int.right, null);
+                TutorialArrowUI.Open("選擇猛力一擊。", BattleUI.Instance.ActionButtonGroup.ScrollView.Background.transform, offset, Vector2Int.right);
             }
 
             public override bool CheckScrollItem(object obj)
@@ -459,7 +454,7 @@ namespace Battle
             public override void Begin()
             {
                 Vector3 v = BattleController.Instance.SelectedCharacter.Position;
-                TutorialArrowUI.Open("選擇目標。", new Vector3(v.x, v.y + 1, v.z), Vector2Int.down, null);
+                TutorialArrowUI.Open("選擇目標。", new Vector3(v.x, v.y + 1, v.z), Vector2Int.down);
             }
 
             public override bool CheckClick(Vector2Int position)
@@ -492,7 +487,7 @@ namespace Battle
             public override void Begin()
             {
                 Vector3 v = BattleController.Instance.SelectedCharacter.Position;
-                TutorialArrowUI.Open("再次點選同樣的位置確認。", new Vector3(v.x, v.y + 1, v.z), Vector2Int.down, null);
+                TutorialArrowUI.Open("再次點選同樣的位置確認。", new Vector3(v.x, v.y + 1, v.z), Vector2Int.down);
             }
 
             public override bool CheckClick(Vector2Int position)
@@ -527,7 +522,7 @@ namespace Battle
                 ((BattleTutorial_1)_context.Parent).ConversationUI.Continue(() =>
                 {
                     Vector3 offset = new Vector3(-200, 0, 0);
-                    TutorialArrowUI.Open("選擇技能。", BattleUI.Instance.ActionButtonGroup.SkillButton.transform, offset, Vector2Int.right, null);
+                    TutorialArrowUI.Open("選擇技能。", BattleUI.Instance.ActionButtonGroup.SkillButton.transform, offset, Vector2Int.right);
                 });
                 //TutorialUI.Open("妖夢的攻擊力提升了！\n接著攻擊敵人吧！", () =>
                 //{
@@ -557,7 +552,7 @@ namespace Battle
             public override void Begin()
             {
                 Vector3 offset = new Vector3(-200, 170, 0);
-                TutorialArrowUI.Open("選擇攻擊。", BattleUI.Instance.ActionButtonGroup.ScrollView.Background.transform, offset, Vector2Int.right, null);
+                TutorialArrowUI.Open("選擇攻擊。", BattleUI.Instance.ActionButtonGroup.ScrollView.Background.transform, offset, Vector2Int.right);
             }
 
             public override void End()
@@ -592,7 +587,7 @@ namespace Battle
 
             public override void Begin()
             {
-                TutorialArrowUI.Open("選擇目標。", new Vector3(4, 2, 4), Vector2Int.down, null);
+                TutorialArrowUI.Open("選擇目標。", new Vector3(4, 2, 4), Vector2Int.down);
             }
 
             public override bool CheckClick(Vector2Int position)
@@ -623,7 +618,7 @@ namespace Battle
 
             public override void Begin()
             {
-                TutorialArrowUI.Open("再次點選同樣的位置確認。", new Vector3(4, 2, 4), Vector2Int.down, null);
+                TutorialArrowUI.Open("再次點選同樣的位置確認。", new Vector3(4, 2, 4), Vector2Int.down);
             }
 
             public override bool CheckClick(Vector2Int position)

@@ -66,6 +66,11 @@ public class SceneController
                 BeforeSceneLoadedHandler = null;
             }
 
+            if(CurrentScene == "Explore") 
+            {
+                Explore.ExploreManager.Instance.Save();
+            }
+
             LoadingUI.Open();
             SceneManager.LoadSceneAsync(scene);
 
@@ -100,10 +105,10 @@ public class SceneController
                 Event_6 event_6 = new Event_6();
                 event_6.Start();
             }
-            else if (FlowController.Instance.Info.CurrentStep == FlowInfo.StepEnum.BackCamp)
+            else if (FlowController.Instance.Info.CurrentStep == FlowInfo.StepEnum.Cook)
             {
-                Event_9 event_9 = new Event_9();
-                event_9.Start();
+                Event_10 event_10 = new Event_10();
+                event_10.Start();
             }
         }
         //else if(scene.name == "Explore") 

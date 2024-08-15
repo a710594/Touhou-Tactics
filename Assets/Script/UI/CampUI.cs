@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,10 @@ using UnityEngine.UI;
 
 public class CampUI : MonoBehaviour
 {
+    public Action ShopHandler;
+    public Action CookHandler;
+    public Action ExploreHandler;
+
     public Button ShopButton;
     public Button CookButton;
     public Button ExploreButton;
@@ -17,11 +22,21 @@ public class CampUI : MonoBehaviour
     private void ShopOnClick() 
     {
         ShopUI.Open();
+
+        if (ShopHandler != null) 
+        {
+            ShopHandler();
+        }
     }
 
     private void CookOnClick() 
     {
         CookUI.Open();
+
+        if(CookHandler != null) 
+        {
+            CookHandler();
+        }
     }
 
     private void ExploreOnClick()
@@ -35,6 +50,11 @@ public class CampUI : MonoBehaviour
                 floorList.Add(i);
             }
             FloorScrollView.SetData(floorList);
+
+            if (ExploreHandler != null) 
+            {
+                ExploreHandler();
+            }
         }
         else
         {

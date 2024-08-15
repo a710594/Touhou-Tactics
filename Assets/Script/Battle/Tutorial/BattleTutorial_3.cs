@@ -45,7 +45,7 @@ namespace Battle
                 ((BattleTutorial)_context.Parent).ConversationUI = ConversationUI.Open(7, null, () => 
                 {
                     Vector3 offset = new Vector3(-200, 0, 0);
-                    TutorialArrowUI.Open("選擇支援。", BattleUI.Instance.ActionButtonGroup.SupportButton.transform, offset, Vector2Int.right, null);
+                    TutorialArrowUI.Open("選擇支援。", BattleUI.Instance.ActionButtonGroup.SupportButton.transform, offset, Vector2Int.right);
                 });
             }
 
@@ -72,7 +72,7 @@ namespace Battle
             public override void Begin()
             {
                 Vector3 offset = new Vector3(-200, 160, 0);
-                TutorialArrowUI.Open("選擇金剛結界。", BattleUI.Instance.ActionButtonGroup.ScrollView.Background.transform, offset, Vector2Int.right, null);
+                TutorialArrowUI.Open("選擇金剛結界。", BattleUI.Instance.ActionButtonGroup.ScrollView.Background.transform, offset, Vector2Int.right);
             }
 
             public override bool CheckScrollItem(object obj)
@@ -105,7 +105,7 @@ namespace Battle
             public override void Begin()
             {
                 Vector3 v = BattleController.Instance.SelectedCharacter.Position;
-                TutorialArrowUI.Open("選擇目標。", new Vector3(v.x, v.y + 1, v.z), Vector2Int.down, null);
+                TutorialArrowUI.Open("選擇目標。", new Vector3(v.x, v.y + 1, v.z), Vector2Int.down);
             }
 
             public override bool CheckClick(Vector2Int position)
@@ -139,7 +139,7 @@ namespace Battle
             public override void Begin()
             {
                 Vector3 v = BattleController.Instance.SelectedCharacter.Position;
-                TutorialArrowUI.Open("再次點選同樣的位置確認。", new Vector3(v.x, v.y + 1, v.z), Vector2Int.down, null);
+                TutorialArrowUI.Open("再次點選同樣的位置確認。", new Vector3(v.x, v.y + 1, v.z), Vector2Int.down);
             }
 
             public override bool CheckClick(Vector2Int position)
