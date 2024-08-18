@@ -32,9 +32,10 @@ public class BattleUI : MonoBehaviour
     public Image Arrow;
 
     private Vector3 _arrowOffset = new Vector3(0, 1.5f, 0);
-    private Vector3 _directionPosition = new Vector3();    private Dictionary<int, LittleHpBarWithStatus> _littleHpBarDic = new Dictionary<int, LittleHpBarWithStatus>();
+    private Vector3 _directionPosition = new Vector3();    
+    private Dictionary<BattleCharacterInfo, LittleHpBarWithStatus> _littleHpBarDic = new Dictionary<BattleCharacterInfo, LittleHpBarWithStatus>();
     private Transform _arrowTransform = null;
-    private Dictionary<int, FloatingNumberPool> _floatingNumberPoolDic  = new Dictionary<int, FloatingNumberPool>();
+    private Dictionary<BattleCharacterInfo, FloatingNumberPool> _floatingNumberPoolDic  = new Dictionary<BattleCharacterInfo, FloatingNumberPool>();
 
     public void SetVisible(bool isVisible) 
     {
@@ -95,7 +96,7 @@ public class BattleUI : MonoBehaviour
 
     public void SetPredictionLittleHpBar(BattleCharacterInfo info, int predictionHp)
     {
-        LittleHpBarWithStatus hpBar = _littleHpBarDic[info.Index];
+        LittleHpBarWithStatus hpBar = _littleHpBarDic[info];
         hpBar.SetPrediction(info.CurrentHP, predictionHp, info.MaxHP);
     }
 
@@ -106,7 +107,7 @@ public class BattleUI : MonoBehaviour
 
     public void StopPredictionLittleHpBar(BattleCharacterInfo info)
     {
-        LittleHpBarWithStatus hpBar = _littleHpBarDic[info.Index];
+        LittleHpBarWithStatus hpBar = _littleHpBarDic[info];
         hpBar.StopPrediction();
     }
 
@@ -120,34 +121,34 @@ public class BattleUI : MonoBehaviour
         CharacterInfoUI_2.HideHitRate();
     }
 
-    public void SetLittleHpBarAnchor(int id, BattleCharacterController characterController) 
+    public void SetLittleHpBarAnchor(BattleCharacterInfo info) 
     {
         LittleHpBarWithStatus hpBar = Instantiate(LittleHpBarWithStatus);
         hpBar.transform.SetParent(HPGroup);
-        hpBar.SetAnchor(characterController.HpAnchor);
-        _littleHpBarDic.Add(id, hpBar);
+        hpBar.SetAnchor(info.Controller.HpAnchor);
+        _littleHpBarDic.Add(info, hpBar);
     }
 
-    public void SetLittleHpBarValue(int id, BattleCharacterInfo characterInfo)
+    public void SetLittleHpBarValue(BattleCharacterInfo info)
     {
-        LittleHpBarWithStatus hpBar = _littleHpBarDic[id];
-        if (characterInfo.CurrentHP > 0)
+        LittleHpBarWithStatus hpBar = _littleHpBarDic[info];
+        if (info.CurrentHP > 0)
         {
             hpBar.gameObject.SetActive(true);
-            hpBar.SetData(characterInfo);
+            hpBar.SetData(info);
         }
-        else 
+        else
         {
             hpBar.gameObject.SetActive(false);
         }
     }
 
-    public void SetFloatingNumberPoolAnchor(int id, BattleCharacterController characterController)
+    public void SetFloatingNumberPoolAnchor(BattleCharacterInfo info)
     {
         FloatingNumberPool floatingNumberPool = Instantiate(FloatingNumberPool);
         floatingNumberPool.transform.SetParent(transform);
-        floatingNumberPool.SetAnchor(characterController.HpAnchor);
-        _floatingNumberPoolDic.Add(id, floatingNumberPool);
+        floatingNumberPool.SetAnchor(info.Controller.HpAnchor);
+        _floatingNumberPoolDic.Add(info, floatingNumberPool);
     }
 
     //public void PlayFloatingNumberPool(int id, FloatingNumberData.TypeEnum type, string text)
@@ -156,9 +157,9 @@ public class BattleUI : MonoBehaviour
     //    floatingNumberPool.Play(text, type);
     //}
 
-    public void PlayFloatingNumberPool(int id, List<Log> logList)
+    public void PlayFloatingNumberPool(BattleCharacterInfo info, List<Log> logList)
     {
-        FloatingNumberPool floatingNumberPool = _floatingNumberPoolDic[id];
+        FloatingNumberPool floatingNumberPool = _floatingNumberPoolDic[info];
         floatingNumberPool.Play(new Queue<Log>(logList));
     }
 

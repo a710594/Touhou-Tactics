@@ -70,8 +70,8 @@ private static readonly string _mapBattlePrePath = Application.streamingAssetsPa
     public Dictionary<int, SupportModel> SupportDic = new Dictionary<int, SupportModel>();
     public Dictionary<int, PassiveModel> PassiveDic = new Dictionary<int, PassiveModel>();
     public Dictionary<int, EquipModel> EquipDic = new Dictionary<int, EquipModel>();
+    public Dictionary<int, EnemyGroupModel> EnemyGroupDic = new Dictionary<int, EnemyGroupModel>();
     public Dictionary<int, ItemModel> ItemDic = new Dictionary<int, ItemModel>();
-    public Dictionary<int, Dictionary<int, EnemyGroupModel>> EnemyGroupDic = new Dictionary<int, Dictionary<int, EnemyGroupModel>>();
     public Dictionary<int, FixedFloorModel> FixedFloorDic = new Dictionary<int, FixedFloorModel>();
     public Dictionary<int, RandomFloorModel> RandomFloorDic = new Dictionary<int, RandomFloorModel>();
     public Dictionary<int, RoomModel> RoomDic = new Dictionary<int, RoomModel>();
@@ -163,15 +163,11 @@ private static readonly string _mapBattlePrePath = Application.streamingAssetsPa
         }
 
         EnemyGroupList = Load<List<EnemyGroupModel>>("EnemyGroup", PrePathEnum.Data);
-        EnemyGroupDic.Clear();
         for (int i = 0; i < EnemyGroupList.Count; i++)
         {
             EnemyGroupList[i].GetEnemyList();
-            if (!EnemyGroupDic.ContainsKey(EnemyGroupList[i].Floor))
-            {
-                EnemyGroupDic.Add(EnemyGroupList[i].Floor, new Dictionary<int, EnemyGroupModel>());
-            }
-            EnemyGroupDic[EnemyGroupList[i].Floor].Add(EnemyGroupList[i].ID, EnemyGroupList[i]);
+            EnemyGroupList[i].GetScenePool();
+            EnemyGroupDic.Add(EquipList[i].ID, EnemyGroupList[i]);
         }
 
         FixedFloorList = Load<List<FixedFloorModel>>("FixedFloor", PrePathEnum.Data);
@@ -186,7 +182,7 @@ private static readonly string _mapBattlePrePath = Application.streamingAssetsPa
         for (int i = 0; i < RandomFloorList.Count; i++)
         {
             RandomFloorList[i].GetRoomPool();
-            RandomFloorList[i].GetBattleSeedList();
+            RandomFloorList[i].GetEnemyGroupPool();
             RandomFloorDic.Add(RandomFloorList[i].Floor, RandomFloorList[i]);
         }
 

@@ -35,11 +35,13 @@ namespace Battle
         public int UP;
         public int DOWN;
         public int WT;
-        public string Controller;
         public string Sprite;
+
         public FactionEnum Faction;
         public JobModel Job = null;
         public EnemyModel Enemy = null;
+        public BattleCharacterController Controller;
+        public LittleHpBarWithStatus HpBar;
         public Equip Weapon = new Equip(EquipModel.CategoryEnum.Weapon);
         public Equip Armor = new Equip(EquipModel.CategoryEnum.Armor);
         public Equip[] Amulets = new Equip[2] { new Equip(EquipModel.CategoryEnum.Amulet), new Equip(EquipModel.CategoryEnum.Amulet) };
@@ -50,7 +52,6 @@ namespace Battle
         public List<Spell> SpellList = new List<Spell>();
 
         //當前屬性
-        public int Index; //戰鬥的時候用
         public bool IsAuto = false;
         public bool HasUseSkill = false;
         public bool HasUseSupport = false;
@@ -91,7 +92,6 @@ namespace Battle
             {
                 PassiveList.Add(PassiveFactory.GetPassive(job.Passive));
             }
-            Controller = job.Controller;
             Sprite = job.Controller;
             Faction = FactionEnum.Player;
 
@@ -164,7 +164,6 @@ namespace Battle
             UP = enemy.UP;
             DOWN = enemy.DOWN;
             WT = enemy.WT;
-            Controller = enemy.Controller;
             Sprite = enemy.SpriteList[0];
             Faction = FactionEnum.Enemy;
 
@@ -197,7 +196,6 @@ namespace Battle
             DOWN = info.DEX;
             WT = info.WT;
             PassiveList = info.PassiveList;
-            Controller = info.Controller;
             Sprite = info.Controller;
             Faction = FactionEnum.Player;
 

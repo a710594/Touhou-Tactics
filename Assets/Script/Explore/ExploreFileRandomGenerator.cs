@@ -8,7 +8,7 @@ public class ExploreFileRandomGenerator : MonoBehaviour
     public int Floor;
 
     private Generator2D _generator2D = new Generator2D();
-    private NewExploreFile _file;
+    private ExploreFile _file;
     private List<Vector2Int> _tilePositionList;
 
     public void BuildFile()

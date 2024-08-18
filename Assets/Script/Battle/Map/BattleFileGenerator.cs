@@ -51,14 +51,14 @@ public class BattleFileGenerator : MonoBehaviour
             tileList.Add(new string[3] { Mathf.RoundToInt(child.position.x).ToString(), Mathf.RoundToInt(child.position.z).ToString(), component.ID });
         }
 
-        List<int[]> noAttachList = new List<int[]>(); //�T�ذ�,���|�����[����,��m���a���⪺�ϰ�
+        List<int[]> noAttachList = new List<int[]>(); //禁建區,不會有附加物件,放置玩家角色的區域
         for (int i=0; i<NoAttach.Length; i++) 
         {
             noAttachList.Add(new int[2] { Mathf.RoundToInt(NoAttach[i].position.x), Mathf.RoundToInt(NoAttach[i].position.z) });
         }
 
         BattleMapEnemy battleMapEnemy;
-        List<int[]> enemyList = new List<int[]>(); //�ĤH����m�MID
+        List<int[]> enemyList = new List<int[]>(); //敵人的位置和ID
         foreach (Transform child in EnemyGroup) 
         {
             battleMapEnemy = child.GetComponent<BattleMapEnemy>();

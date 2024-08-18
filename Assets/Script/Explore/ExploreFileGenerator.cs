@@ -23,11 +23,11 @@ namespace Explore
             int minY = int.MinValue;
             int maxY = int.MinValue;
             Vector2Int pos;
-            NewExploreFile file = new NewExploreFile();
+            ExploreFile file = new ExploreFile();
             foreach (Transform child in Tilemap)
             {
                 pos = Utility.ConvertToVector2Int(child.position);
-                file.TileList.Add(new NewExploreFile.TileInfo(pos, child.name, child.tag));
+                file.TileList.Add(new ExploreFile.TileInfo(pos, child.name, child.tag));
 
                 if (minX == int.MinValue || pos.x < minX)
                 {
@@ -63,12 +63,12 @@ namespace Explore
             foreach (Transform child in Enemy)
             {
                 enemyObj = child.gameObject.GetComponent<EnemyExploreFileObject>();
-                file.EnemyInfoList.Add(new NewExploreFile.EnemyInfo(enemyObj.Prefab, false, enemyObj.Map, enemyObj.Tutorial, Utility.ConvertToVector2Int(enemyObj.transform.position), (int)enemyObj.transform.eulerAngles.y));
+                file.EnemyInfoList.Add(new ExploreFile.EnemyInfo(enemyObj.Prefab, false, enemyObj.Map, enemyObj.Tutorial, Utility.ConvertToVector2Int(enemyObj.transform.position), (int)enemyObj.transform.eulerAngles.y));
             }
 
             foreach (Transform child in Trigger)
             {
-                file.TriggerList.Add(new NewExploreFile.TriggerInfo(Utility.ConvertToVector2Int(child.position), child.name));
+                file.TriggerList.Add(new ExploreFile.TriggerInfo(Utility.ConvertToVector2Int(child.position), child.name));
             }
 
             TreasureExploreFileObject treasureObj;

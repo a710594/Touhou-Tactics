@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Explore
+/*namespace Explore
 {
     public class ExploreEnemyController : MonoBehaviour
     {
         public GameObject Arrow;
         public Vector3 MoveTo;
-        public NewExploreFile.EnemyInfo Info;
+        public ExploreFile.EnemyInfo Info;
 
-        public virtual void Init(NewExploreFile.EnemyInfo info)
+        public virtual void Init(ExploreFile.EnemyInfo info)
         {
             Info = info;
             transform.position = new Vector3(info.Position.x, 1, info.Position.y);
@@ -40,4 +40,4 @@ namespace Explore
             return true;
         }
     }
-}
+}*/

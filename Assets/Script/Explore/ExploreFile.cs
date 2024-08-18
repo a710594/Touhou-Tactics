@@ -2,51 +2,76 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/*namespace Explore
+public class ExploreFile
 {
-    public class ExploreFile
+    public bool IsArrive = false; //©è¹F²×ÂI
+    public int Floor;
+    public Vector2Int Size;
+    public Vector2Int Start;
+    public Vector2Int Goal;
+    public Vector2Int PlayerPosition;
+    public int PlayerRotation;
+    public List<Vector2Int> VisitedList = new List<Vector2Int>();
+    public List<Vector2Int> WalkableList = new List<Vector2Int>();
+    public List<EnemyExplorer> EnemyInfoList = new List<EnemyExplorer>();
+    public List<TileInfo> TileList = new List<TileInfo>();
+    public List<Treasure> TreasureList = new List<Treasure>();
+    public List<TriggerInfo> TriggerList = new List<TriggerInfo>();
+
+    /*public class EnemyInfo
     {
-        public int Floor;
-        public Vector2Int Size;
-        public Vector2Int Start;
-        public Vector2Int Goal;
-        public Vector2Int PlayerPosition;
-        public int PlayerRotation;
-        public List<Vector2Int> GroundList = new List<Vector2Int>(); //ï¿½Ð¶ï¿½ï¿½Î¨ï¿½ï¿½Yï¿½ï¿½ï¿½iï¿½æ¨«ï¿½ï¿½ï¿½aï¿½ï¿½
-        public List<Vector2Int> VisitedList = new List<Vector2Int>();
-        public List<ExploreEnemyInfo> EnemyInfoList = new List<ExploreEnemyInfo>();
-        //json ï¿½ï¿½ï¿½ï¿½H Vector2Int ï¿½@ï¿½ï¿½ dictionary ï¿½ï¿½ key
-        //ï¿½Ò¥Hï¿½nï¿½â¥¦ï¿½ï¿½ keys ï¿½M values ï¿½ï¿½ï¿½}ï¿½ï¿½ï¿½xï¿½s
-        public List<Vector2Int> TileKeys = new List<Vector2Int>();
-        public List<string> TileValues = new List<string>();
-        public List<Vector2Int> TreasureKeys = new List<Vector2Int>();
-        public List<Treasure> TreasureValues = new List<Treasure>();
-        public List<Vector2Int> TriggerKeys = new List<Vector2Int>();
-        public List<string> TriggerValues = new List<string>();
+        public string Explorer; //±´¯Á¦a¹Ï¤Wªº¼Ò«¬
+        public string Map = null;
+        public string MapSeed = null;
+        public string Tutorial;
+        public Vector2Int Position;
+        public int Rotation;
 
-        public ExploreFile() { }
+        public EnemyInfo() { }
 
-        public ExploreFile(ExploreInfo info)
+        public EnemyInfo(string explorer, string map, string tutorial, Vector2Int position, int rotation)
         {
-            Floor = info.Floor;
-            Size = info.Size;
-            Start = info.Start;
-            Goal = info.Goal;
-            PlayerPosition = info.PlayerPosition;
-            PlayerRotation = info.PlayerRotation;
-            GroundList = info.GroundList;
-            VisitedList = info.VisitedList;
-            EnemyInfoList = info.EnemyInfoList;
-            TileKeys = new List<Vector2Int>(info.TileDic.Keys);
-            List<TileObject> tileObjList = new List<TileObject>(info.TileDic.Values); 
-            for(int i=0; i<tileObjList.Count; i++)
-            {
-                TileValues.Add(tileObjList[i].Name);
-            }
-            TreasureKeys = new List<Vector2Int>(info.TreasureDic.Keys);
-            TreasureValues = new List<Treasure>(info.TreasureDic.Values);
-            TriggerKeys = new List<Vector2Int>(info.TriggerDic.Keys);
-            TriggerValues = new List<string>(info.TriggerDic.Values);
+            Explorer = explorer;
+            Map = map;
+            Tutorial = tutorial;
+            Position = position;
+            Rotation = rotation;
+        }
+
+        public EnemyInfo(string explorer, bool isSeed, string map, string tutorial, Vector2Int position, int rotation)
+        {
+            Explorer = explorer;
+            IsSeed = isSeed;
+            Map = map;
+            Tutorial = tutorial;
+            Position = position;
+            Rotation = rotation;
+        }
+    }*/
+
+    public class TileInfo
+    {
+        public Vector2Int Position;
+        public string Prefab;
+        public string Tag;
+
+        public TileInfo(Vector2Int position, string prefab, string tag)
+        {
+            Position = position;
+            Prefab = prefab;
+            Tag = tag;
         }
     }
-}*/
+
+    public class TriggerInfo
+    {
+        public Vector2Int Position;
+        public string Name;
+
+        public TriggerInfo(Vector2Int position, string name)
+        {
+            Position = position;
+            Name = name;
+        }
+    }
+}

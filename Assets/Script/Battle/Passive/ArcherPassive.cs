@@ -2,74 +2,77 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ArcherPassive : Passive
+namespace Battle
 {
-    public ArcherPassive(PassiveModel data)
+    public class ArcherPassive : Passive
     {
-        Data = data;
-    }
-
-    //�֦������̳Q�ʪ�����M��,�����V���g�{�V��
-    public static List<Vector2Int> GetRange(int range, Vector2Int start, BattleInfo info)
-    {
-        int heightDiff;
-        int newRange;
-        Vector2Int position;
-        Vector2Int newPosition;
-        List<Vector2Int> list = new List<Vector2Int>();
-
-        //BFS
-        Queue<Vector2Int> queue = new Queue<Vector2Int>();
-        queue.Enqueue(start);
-        while (queue.Count != 0)
+        public ArcherPassive(PassiveModel data)
         {
-            position = queue.Dequeue();
-            list.Add(position);
-
-            newPosition = position + Vector2Int.up;
-            if (!list.Contains(newPosition) && newPosition.y <= info.MaxY)
-            {
-                heightDiff = info.TileAttachInfoDic[start].Height - info.TileAttachInfoDic[newPosition].Height;
-                newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
-                if (Utility.ManhattanDistance(newPosition, start) <= newRange)
-                {
-                    queue.Enqueue(newPosition);
-                }
-            }
-
-            newPosition = position + Vector2Int.down;
-            if (!list.Contains(newPosition) && newPosition.y >= info.MinY)
-            {
-                heightDiff = info.TileAttachInfoDic[start].Height - info.TileAttachInfoDic[newPosition].Height;
-                newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
-                if (Utility.ManhattanDistance(newPosition, start) <= newRange)
-                {
-                    queue.Enqueue(newPosition);
-                }
-            }
-
-            newPosition = position + Vector2Int.left;
-            if (!list.Contains(newPosition) && newPosition.x >= info.MinX)
-            {
-                heightDiff = info.TileAttachInfoDic[start].Height - info.TileAttachInfoDic[newPosition].Height;
-                newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
-                if (Utility.ManhattanDistance(newPosition, start) <= newRange)
-                {
-                    queue.Enqueue(newPosition);
-                }
-            }
-
-            newPosition = position + Vector2Int.right;
-            if (!list.Contains(newPosition) && newPosition.x <= info.MaxX)
-            {
-                heightDiff = info.TileAttachInfoDic[start].Height - info.TileAttachInfoDic[newPosition].Height;
-                newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
-                if (Utility.ManhattanDistance(newPosition, start) <= newRange)
-                {
-                    queue.Enqueue(newPosition);
-                }
-            }
+            Data = data;
         }
-        return list;
+
+        //�֦������̳Q�ʪ�����M��,�����V���g�{�V��
+        public static List<Vector2Int> GetRange(int range, Vector2Int start, BattleInfo info)
+        {
+            int heightDiff;
+            int newRange;
+            Vector2Int position;
+            Vector2Int newPosition;
+            List<Vector2Int> list = new List<Vector2Int>();
+
+            //BFS
+            Queue<Vector2Int> queue = new Queue<Vector2Int>();
+            queue.Enqueue(start);
+            while (queue.Count != 0)
+            {
+                position = queue.Dequeue();
+                list.Add(position);
+
+                newPosition = position + Vector2Int.up;
+                if (!list.Contains(newPosition) && newPosition.y <= info.MaxY)
+                {
+                    heightDiff = info.TileAttachInfoDic[start].Height - info.TileAttachInfoDic[newPosition].Height;
+                    newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
+                    if (Utility.ManhattanDistance(newPosition, start) <= newRange)
+                    {
+                        queue.Enqueue(newPosition);
+                    }
+                }
+
+                newPosition = position + Vector2Int.down;
+                if (!list.Contains(newPosition) && newPosition.y >= info.MinY)
+                {
+                    heightDiff = info.TileAttachInfoDic[start].Height - info.TileAttachInfoDic[newPosition].Height;
+                    newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
+                    if (Utility.ManhattanDistance(newPosition, start) <= newRange)
+                    {
+                        queue.Enqueue(newPosition);
+                    }
+                }
+
+                newPosition = position + Vector2Int.left;
+                if (!list.Contains(newPosition) && newPosition.x >= info.MinX)
+                {
+                    heightDiff = info.TileAttachInfoDic[start].Height - info.TileAttachInfoDic[newPosition].Height;
+                    newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
+                    if (Utility.ManhattanDistance(newPosition, start) <= newRange)
+                    {
+                        queue.Enqueue(newPosition);
+                    }
+                }
+
+                newPosition = position + Vector2Int.right;
+                if (!list.Contains(newPosition) && newPosition.x <= info.MaxX)
+                {
+                    heightDiff = info.TileAttachInfoDic[start].Height - info.TileAttachInfoDic[newPosition].Height;
+                    newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
+                    if (Utility.ManhattanDistance(newPosition, start) <= newRange)
+                    {
+                        queue.Enqueue(newPosition);
+                    }
+                }
+            }
+            return list;
+        }
     }
 }

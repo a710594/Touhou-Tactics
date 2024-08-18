@@ -63,9 +63,8 @@ namespace Battle
         public BattleResultUI BattleResultUI;
         public SelectBattleCharacterUI SelectBattleCharacterUI;
         private Transform _root;
-        private List<int> _enemyList = new List<int>();
         private List<CharacterInfo> _candidateList = new List<CharacterInfo>();
-        private Dictionary<int, BattleCharacterController> _controllerDic = new Dictionary<int, BattleCharacterController>();
+        //private Dictionary<int, BattleCharacterController> _controllerDic = new Dictionary<int, BattleCharacterController>();
         private Dictionary<Command, List<BattleCharacterInfo>> _commandTargetDic = new Dictionary<Command, List<BattleCharacterInfo>>();
 
         public List<Log> LogList = new List<Log>();
@@ -106,79 +105,13 @@ namespace Battle
             _context.ChangeStateHandler = OnStateChange;
 
             CharacterList.Clear();
-            //List<Vector3Int> positionList = new List<Vector3Int>();
-            EnemyModel enemyData;
-            if (info.EnemyDic.Count == 0)  //random
+            for (int i = 0; i < info.EnemyList.Count; i++)
             {
-                EnemyGroupModel enemyGroup = DataContext.Instance.EnemyGroupDic[floor].ElementAt(UnityEngine.Random.Range(0, DataContext.Instance.EnemyGroupDic[floor].Count)).Value;
-                info.Exp = enemyGroup.Exp;
-                _enemyList = enemyGroup.EnemyList;
-
-                for (int i = 0; i < _enemyList.Count; i++)
-                {
-                    enemyData = DataContext.Instance.EnemyDic[_enemyList[i]];
-                    CharacterList.Add(new BattleCharacterInfo(lv, enemyData));
-                    _maxIndex++;
-                    CharacterList[i].Index = _maxIndex;
-                    Type t = Type.GetType("Battle." + enemyData.AI);
-                    CharacterList[i].AI = (BattleAI)Activator.CreateInstance(t);
-                    CharacterList[i].AI.Init(CharacterList[i]);
-                    CharacterList[i].Position = RandomCharacterPosition(BattleCharacterInfo.FactionEnum.Enemy);
-                }
-            }
-            else //fixed
-            {
-                _enemyList.Clear();
-                BattleCharacterInfo battleCharacterInfo;
-                foreach(KeyValuePair<Vector3Int, int> pair in info.EnemyDic) 
-                {
-                    _enemyList.Add(pair.Value);
-                    //positionList.Add(pair.Key);
-                    enemyData = DataContext.Instance.EnemyDic[pair.Value];
-                    battleCharacterInfo = new BattleCharacterInfo(lv, enemyData);
-                    Type t = Type.GetType("Battle." + enemyData.AI);
-                    battleCharacterInfo.AI = (BattleAI)Activator.CreateInstance(t);
-                    battleCharacterInfo.AI.Init(battleCharacterInfo);
-                    battleCharacterInfo.Position = pair.Key;
-                    _maxIndex++;
-                    battleCharacterInfo.Index = _maxIndex;
-                    CharacterList.Add(battleCharacterInfo);
-
-                }
-            }
-
-            //for (int i = 0; i < _enemyList.Count; i++)
-            //{
-            //    enemyData = DataContext.Instance.EnemyDic[_enemyList[i]];
-            //    CharacterList.Add(new BattleCharacterInfo(lv, enemyData));
-            //    _maxIndex++;
-            //    CharacterList[i].Index = _maxIndex;
-            //    Type t = Type.GetType("Battle." + enemyData.AI);
-            //    CharacterList[i].AI = (BattleAI)Activator.CreateInstance(t);
-            //    CharacterList[i].AI.Init(CharacterList[i]);
-            //    if (positionList.Count == 0)
-            //    {
-            //        CharacterList[i].Position = RandomCharacterPosition(BattleCharacterInfo.FactionEnum.Enemy);
-            //    }
-            //    else
-            //    {
-            //        CharacterList[i].Position = positionList[i];
-            //    }
-            //}
-
-            GameObject obj;
-            _controllerDic.Clear();
-            for (int i = 0; i < CharacterList.Count; i++)
-            {
-                obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/" + CharacterList[i].Controller), Vector3.zero, Quaternion.identity);
-                obj.transform.position = CharacterList[i].Position;
-                obj.transform.SetParent(_root);
-                _controllerDic.Add(CharacterList[i].Index, obj.GetComponent<BattleCharacterController>());
-                _controllerDic[CharacterList[i].Index].Init(CharacterList[i].Sprite);
-                _controllerDic[CharacterList[i].Index].MoveEndHandler += OnMoveEnd;
-                BattleUI.SetLittleHpBarAnchor(CharacterList[i].Index, _controllerDic[CharacterList[i].Index]);
-                BattleUI.SetLittleHpBarValue(CharacterList[i].Index, CharacterList[i]);
-                BattleUI.SetFloatingNumberPoolAnchor(CharacterList[i].Index, _controllerDic[CharacterList[i].Index]);
+                CharacterList.Add(info.EnemyList[i]);
+                BattleUI.SetLittleHpBarAnchor(info.EnemyList[i]);
+                BattleUI.SetLittleHpBarValue(info.EnemyList[i]);
+                BattleUI.SetFloatingNumberPoolAnchor(info.EnemyList[i]);
+                info.EnemyList[i].Controller.MoveEndHandler += OnMoveEnd;
             }
 
             if (Tutorial == null)
@@ -445,7 +378,7 @@ namespace Battle
             SelectedCharacter.ActionCount = 2;
             SelectedCharacter.Position = SelectedCharacter.LastPosition;
             SelectedCharacter.HasMove = false;
-            _controllerDic[SelectedCharacter.Index].transform.position = SelectedCharacter.LastPosition;
+            SelectedCharacter.Controller.transform.position = SelectedCharacter.LastPosition;
             SelectedCharacter.LastPosition = BattleCharacterInfo.DefaultLastPosition;
         }
 
@@ -461,37 +394,35 @@ namespace Battle
             info.AI = (BattleAI)Activator.CreateInstance(t);
             info.AI.Init(info);
             info.Position = position;
-
             GameObject obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/" + info.Controller), Vector3.zero, Quaternion.identity);
             obj.transform.position = info.Position;
-            _controllerDic.Add(info.Index, obj.GetComponent<BattleCharacterController>());
-            _controllerDic[info.Index].Init(info.Sprite);
-            _controllerDic[info.Index].MoveEndHandler += OnMoveEnd;
-            BattleUI.SetLittleHpBarAnchor(info.Index, _controllerDic[info.Index]);
-            BattleUI.SetLittleHpBarValue(info.Index, info);
-            BattleUI.SetFloatingNumberPoolAnchor(info.Index, _controllerDic[info.Index]);
+            info.Controller = obj.GetComponent<BattleCharacterController>();
+            info.Controller.Init(info.Sprite);
+            info.Controller.MoveEndHandler += OnMoveEnd;
+            BattleUI.SetLittleHpBarAnchor(info);
+            BattleUI.SetLittleHpBarValue(info);
+            BattleUI.SetFloatingNumberPoolAnchor(info);
         }
 
         public void CreateCharacter(BattleCharacterInfo info, Vector2Int position) 
         {
             info.Position = new Vector3(position.x, Info.TileAttachInfoDic[position].Height, position.y);
-            BattleCharacterController character = ((GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/" + info.Controller), Vector3.zero, Quaternion.identity)).GetComponent<BattleCharacterController>();
-            character.transform.position = new Vector3(position.x, Info.TileAttachInfoDic[position].Height, position.y);
-            character.transform.SetParent(Instance._root);
-            character.Init(info.Controller);
-            character.SetAngle();
-            character.MoveEndHandler += OnMoveEnd;
+            BattleCharacterController controller = ((GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/" + info.Controller), Vector3.zero, Quaternion.identity)).GetComponent<BattleCharacterController>();
+            controller.transform.position = new Vector3(position.x, Info.TileAttachInfoDic[position].Height, position.y);
+            controller.transform.SetParent(Instance._root);
+            controller.Init(info.Sprite);
+            controller.SetAngle();
+            controller.MoveEndHandler += OnMoveEnd;
             _maxIndex++;
-            info.Index = _maxIndex;
-            _controllerDic.Add(info.Index, character);
-            BattleUI.SetLittleHpBarAnchor(info.Index, _controllerDic[info.Index]);
-            BattleUI.SetLittleHpBarValue(info.Index, info);
-            BattleUI.SetFloatingNumberPoolAnchor(info.Index, _controllerDic[info.Index]);
+            info.Controller = controller;
+            BattleUI.SetLittleHpBarAnchor(info);
+            BattleUI.SetLittleHpBarValue(info);
+            BattleUI.SetFloatingNumberPoolAnchor(info);
         }
 
-        public void ChangeSprite(int index, string sprite) 
+        public void ChangeSprite(BattleCharacterInfo info, string sprite) 
         {
-            _controllerDic[index].Init(sprite);
+            info.Controller.Init(sprite);
             BattleUI.CharacterListGroup.ChangeSprite(index, sprite);
         }
 

@@ -7,55 +7,52 @@ public class RandomFloorModel
     public int Floor;
     public int Width;
     public int Height;
+
     public int RoomCount;
     public int Room_1;
-    public int Probability_1;
+    public int RoomProbability_1;
     public int Room_2;
-    public int Probability_2;
-    public string SeedFile_1;
-    public string SeedFile_2;
-    public string SeedFile_3;
-    public string SeedFile_4;
-    public string SeedFile_5;
-
-    public string EnemyName;
-    public int EnemyCount;
+    public int RoomProbability_2;
     public List<int> RoomPool = new List<int>();
-    public List<string> BattleSeedList = new List<string>();
+
+    public int EnemyCount;
+    public int EnemyGroup_1;
+    public int EnemyGroupProbability_1;
+    public int EnemyGroup_2;
+    public int EnemyGroupProbability_2;
+    public int EnemyGroup_3;
+    public int EnemyGroupProbability_3;
+    public int BossEnemyGroup;
+    public List<int> EnemyGroupPool = new List<int>();
+
     public void GetRoomPool() 
     {
-        for (int j = 0; j < Probability_1; j++)
+        for (int j = 0; j < RoomProbability_1; j++)
         {
             RoomPool.Add(Room_1);
         }
 
-        for (int j = 0; j < Probability_2; j++)
+        for (int j = 0; j < RoomProbability_2; j++)
         {
             RoomPool.Add(Room_2);
         }
     }
 
-    public void GetBattleSeedList() 
+    public void GetEnemyGroupPool() 
     {
-        if (SeedFile_1 != "x") 
+        for (int j = 0; j < EnemyGroupProbability_1; j++)
         {
-            BattleSeedList.Add(SeedFile_1);
+            EnemyGroupPool.Add(EnemyGroup_1);
         }
-        if (SeedFile_2 != "x")
+
+        for (int j = 0; j < EnemyGroupProbability_2; j++)
         {
-            BattleSeedList.Add(SeedFile_2);
+            EnemyGroupPool.Add(EnemyGroup_2);
         }
-        if (SeedFile_3 != "x")
+
+        for (int j = 0; j < EnemyGroupProbability_3; j++)
         {
-            BattleSeedList.Add(SeedFile_3);
-        }
-        if (SeedFile_4 != "x")
-        {
-            BattleSeedList.Add(SeedFile_4);
-        }
-        if (SeedFile_5 != "x")
-        {
-            BattleSeedList.Add(SeedFile_5);
+            EnemyGroupPool.Add(EnemyGroup_3);
         }
     }
 }

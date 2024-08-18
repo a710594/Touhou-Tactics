@@ -91,9 +91,14 @@ public static class Utility
     //    return new Vector2(vector3.x, vector3.z);
     //}
 
-    public static Vector2Int ConvertToVector2Int(Vector3 vector3)
+    public static Vector2Int ConvertToVector2Int(Vector3 v3)
     {
-        return new Vector2Int(Mathf.RoundToInt(vector3.x), Mathf.RoundToInt(vector3.z));
+        return new Vector2Int(Mathf.RoundToInt(v3.x), Mathf.RoundToInt(v3.z));
+    }
+
+    public static Vector3Int ConvertToVector3Int(Vector2Int v2, Dictionary<Vector2Int, TileAttachInfo> tileAttachInfoDic)
+    {
+        return new Vector3Int(v2.x, tileAttachInfoDic[v2].Height, v2.y);
     }
 
     public static List<Vector2Int> DrawLine2D(Vector2Int a, Vector2Int b)
@@ -548,5 +553,29 @@ public static class Utility
         }
 
         result = DrawParabola(from, to, parabolaHeight, false);
+    }
+
+    public static bool GetRandomPosition(int minX, int maxX, int minY, int maxY, List<Vector2Int> invalidList, out Vector2Int result)
+    {
+        int count = 0;
+        Vector2Int v2;
+        while (true)
+        {
+            v2 = new Vector2Int(Mathf.RoundToInt(Utility.RandomGaussian(minX, maxX)), Mathf.RoundToInt(Utility.RandomGaussian(minY, maxY)));
+            if(!invalidList.Contains(v2))
+            {
+                result = v2;
+                return true;
+            }
+            else
+            {
+                count++;
+                if (count > 100) 
+                {
+                    result = new Vector2Int();
+                    return false;
+                }
+            }
+        }
     }
 }

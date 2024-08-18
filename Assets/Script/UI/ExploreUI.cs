@@ -45,7 +45,7 @@ public class ExploreUI : MonoBehaviour
 
     void Update()
     {
-        NewExploreFile file = ExploreManager.Instance.File;
+        ExploreFile file = ExploreManager.Instance.File;
         if (!InputMamager.Instance.IsLock)
         {
             if (Input.GetKeyDown(KeyCode.Space))

@@ -42,20 +42,20 @@ namespace Battle
 
             public override void End()
             {
-                BattleCharacterInfo battleCharacter;
+                BattleCharacterInfo info;
                 foreach (KeyValuePair<CharacterInfo, BattleCharacterController> pair in _tempDic)
                 {
-                    battleCharacter = new BattleCharacterInfo(pair.Key, CharacterManager.Instance.Info.Lv);
+                    info = new BattleCharacterInfo(pair.Key, CharacterManager.Instance.Info.Lv);
                     Instance._maxIndex++;
-                    battleCharacter.Index = Instance._maxIndex;
-                    battleCharacter.Position = pair.Value.transform.position;
-                    _characterList.Add(battleCharacter);
-                    Instance._controllerDic.Add(battleCharacter.Index, pair.Value.GetComponent<BattleCharacterController>());
-                    //Instance._controllerDic[battleCharacter.Index].SetSprite(battleCharacter.Sprite);
-                    Instance._controllerDic[battleCharacter.Index].MoveEndHandler += Instance.OnMoveEnd;
-                    Instance.BattleUI.SetLittleHpBarAnchor(battleCharacter.Index, Instance._controllerDic[battleCharacter.Index]);
-                    Instance.BattleUI.SetLittleHpBarValue(battleCharacter.Index, battleCharacter);
-                    Instance.BattleUI.SetFloatingNumberPoolAnchor(battleCharacter.Index, Instance._controllerDic[battleCharacter.Index]);
+                    info.Index = Instance._maxIndex;
+                    info.Position = pair.Value.transform.position;
+                    info.Controller = pair.Value.GetComponent<BattleCharacterController>();
+                    _characterList.Add(info);
+
+                    info.Controller.MoveEndHandler += Instance.OnMoveEnd;
+                    Instance.BattleUI.SetLittleHpBarAnchor(info);
+                    Instance.BattleUI.SetLittleHpBarValue(info);
+                    Instance.BattleUI.SetFloatingNumberPoolAnchor(info);
                 }
                 Instance.BattleUI.gameObject.SetActive(true);
                 Instance.SelectBattleCharacterUI.gameObject.SetActive(false);

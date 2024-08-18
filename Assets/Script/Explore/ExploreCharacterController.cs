@@ -8,21 +8,20 @@ namespace Explore
 {
     public class ExploreCharacterController : MonoBehaviour
     {
-        public Action MoveHandler;
-        public Action RotateHandler;
+        //public Action MoveHandler;
+        //public Action RotateHandler;
 
-        public Vector3 MoveTo;
-        public Vector3 RotateTo;
+        //public Vector3 MoveTo;
+        //public Vector3 RotateTo;
 
-        private Vector3 position;
+        //private Vector3 position;
         private bool _isMoving = false;
 
         private void Up()
         {
             if (!_isMoving) 
             {
-                position = transform.position + transform.forward;
-                Move(position);
+                Move(transform.position + transform.forward);
             }
         }
 
@@ -30,8 +29,7 @@ namespace Explore
         {
             if (!_isMoving) 
             {
-                position = transform.position - transform.forward;
-                Move(position);
+                Move(transform.position - transform.forward);
             }
         }
 
@@ -39,8 +37,7 @@ namespace Explore
         {
             if (!_isMoving)
             {
-                position = transform.position - transform.right;
-                Move(position);
+                Move(transform.position - transform.right);
             }
         }
 
@@ -48,8 +45,7 @@ namespace Explore
         {
             if (!_isMoving)
             {
-                position = transform.position + transform.right;
-                Move(position);
+                Move(transform.position + transform.right);
             }
         }
 
@@ -65,7 +61,7 @@ namespace Explore
                     ExploreManager.Instance.CheckVidsit(transform);
                     _isMoving = false;
                 });
-                MoveTo = position;
+                //MoveTo = position;
                 if (MoveHandler != null)
                 {
                     MoveHandler();

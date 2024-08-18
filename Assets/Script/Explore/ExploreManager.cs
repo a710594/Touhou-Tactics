@@ -35,8 +35,8 @@ namespace Explore
 
         private Timer _timer = new Timer();
         //public ExploreInfo Info;
-        public NewExploreFile File;
-        private List<ExploreEnemyController> _enemyList = new List<ExploreEnemyController>();
+        public ExploreFile File;
+        private List<EnemyExplorerController> _enemyList = new List<EnemyExplorerController>();
 
         private Generator2D _generator2D = new Generator2D();
         private List<Vector2Int> _tilePositionList;
@@ -79,7 +79,7 @@ namespace Explore
         }
         private void LoadFile(string name, DataContext.PrePathEnum pathEnum)
         {
-            File = DataContext.Instance.Load<NewExploreFile>(name, pathEnum);
+            File = DataContext.Instance.Load<ExploreFile>(name, pathEnum);
             if (File != null)
             {
                 _tilePositionList = new List<Vector2Int>();
@@ -102,7 +102,7 @@ namespace Explore
 
         public void CreateNewFile(int floor, Vector2Int size, int roomCount, Vector2Int roomMaxSize, RandomFloorModel data)
         {
-            File = new NewExploreFile();
+            File = new ExploreFile();
             File.Floor = floor;
             _tilePositionList = new List<Vector2Int>();
             _generator2D.Generate(size, roomCount, roomMaxSize, out List<Generator2D.Room> roomList, out List<List<Vector2Int>> pathList);
@@ -112,7 +112,7 @@ namespace Explore
                 foreach (var pos in roomList[i].bounds.allPositionsWithin) 
                 {
                     File.WalkableList.Add(pos);
-                    File.TileList.Add(new NewExploreFile.TileInfo(pos, "Ground", ""));
+                    File.TileList.Add(new ExploreFile.TileInfo(pos, "Ground", ""));
                     _tilePositionList.Add(pos);
                 }
             }
@@ -124,7 +124,7 @@ namespace Explore
                     if(!_tilePositionList.Contains(pathList[i][j]))
                     {
                         File.WalkableList.Add(pathList[i][j]);
-                        File.TileList.Add(new NewExploreFile.TileInfo(pathList[i][j], "Ground", ""));
+                        File.TileList.Add(new ExploreFile.TileInfo(pathList[i][j], "Ground", ""));
                         _tilePositionList.Add(pathList[i][j]);     
                     }
                 }   
@@ -258,31 +258,49 @@ namespace Explore
             File.PlayerRotation = 0;
 
             //Set Enemy
-            int enemyCount = 10;
-            NewExploreFile.EnemyInfo enemyInfo;
-            string seed;
-            for (int i = 0; i < enemyCount; i++)
+            int groupId;
+            EnemyGroupModel groupData;
+            EnemyExplorerRandom explorer;
+            for (int i = 0; i < data.EnemyCount; i++)
             {
                 room = roomList[UnityEngine.Random.Range(0, roomList.Count)];
                 if (room.GetRandomPosition(out position))
                 {
-                    room.WalkableList.Remove(position);
-                    seed = data.BattleSeedList[UnityEngine.Random.Range(0, data.BattleSeedList.Count)];
-                    enemyInfo = new NewExploreFile.EnemyInfo("NormalAI", true, seed, null, position, 0);
-                    File.EnemyInfoList.Add(enemyInfo);
+                    groupId = data.EnemyGroupPool[UnityEngine.Random.Range(0, data.EnemyGroupPool.Count)];
+                    groupData = DataContext.Instance.EnemyGroupDic[groupId];
+                    explorer = new EnemyExplorerRandom();
+                    explorer.AiType = EnemyExplorer.AiEnum.Default;
+                    explorer.Prefab = "DefaultAI";
+                    explorer.Position = position;
+                    explorer.RotationY = 0;
+                    explorer.MapSeed = groupData.MapPool[UnityEngine.Random.Range(0, groupData.MapPool.Count)];
+                    explorer.Lv = groupData.Lv;
+                    explorer.Exp = groupData.Exp;
+                    explorer.EnemyList = groupData.EnemyList;
+                    File.EnemyInfoList.Add(explorer);
                     File.WalkableList.Remove(position);
+                    room.WalkableList.Remove(position);
                 }
             }
-            seed = data.BattleSeedList[UnityEngine.Random.Range(0, data.BattleSeedList.Count)];
-            enemyInfo = new NewExploreFile.EnemyInfo("FloorBOSS", true, seed, null, File.Goal, 0);
-            File.EnemyInfoList.Add(enemyInfo);
+            groupId = data.BossEnemyGroup;
+            groupData = DataContext.Instance.EnemyGroupDic[groupId];
+            explorer = new EnemyExplorerRandom();
+            explorer.AiType = EnemyExplorer.AiEnum.NotMove;
+            explorer.Prefab = "NotMoveAI";
+            explorer.Position = File.Goal;
+            explorer.RotationY = 0;
+            explorer.MapSeed = groupData.MapPool[UnityEngine.Random.Range(0, groupData.MapPool.Count)];
+            explorer.Lv = groupData.Lv;
+            explorer.Exp = groupData.Exp;
+            explorer.EnemyList = groupData.EnemyList;
+            File.EnemyInfoList.Add(explorer);
         }
 
         private bool CheckWall(Vector2Int position)
         {
             if(!_tilePositionList.Contains(position))
             {
-                File.TileList.Add(new NewExploreFile.TileInfo(position, "Wall", "Wall"));
+                File.TileList.Add(new ExploreFile.TileInfo(position, "Wall", "Wall"));
                 _tilePositionList.Add(position);  
                 return true;
             }
@@ -337,7 +355,7 @@ namespace Explore
             }
         }
 
-        public void CheckCollision(Vector2Int v2) 
+        /*public void CheckCollision(Vector2Int v2) 
         {
             for (int i = 0; i < _enemyList.Count; i++)
             {
@@ -369,25 +387,6 @@ namespace Explore
                 }
             }
 
-            /*if (v2 == File.Start) 
-            {
-                InputMamager.Instance.Lock();
-                _timer.Start(1f, () => 
-                {
-                    ConfirmUI.Open("要回到營地嗎？", "確定", "取消", () =>
-                    {
-                        SceneController.Instance.ChangeScene("Camp", () =>
-                        {
-                            CharacterManager.Instance.RecoverAllHP();
-                            InputMamager.Instance.Unlock();
-                        });
-                    }, ()=> 
-                    {
-                        InputMamager.Instance.Unlock();
-                    });
-                });
-            }
-            else */
             if (v2 == File.Goal) 
             {
                 InputMamager.Instance.Lock();
@@ -415,6 +414,41 @@ namespace Explore
             else 
             {
                 CheckEvent();
+            }
+        }*/
+
+        public void CheckEnemy(Vector2Int position) 
+        {
+            for (int i = 0; i < _enemyList.Count; i++)
+            {
+                if (Utility.ConvertToVector2Int(_enemyList[i].transform.position) == position)
+                {
+                    InputMamager.Instance.Lock();
+                    File.EnemyInfoList.Remove(_enemyList[i].EnemyExplorer);
+                    _timer.Start(1f, () =>
+                    {
+                        SceneController.Instance.ChangeScene("Battle", (sceneName) =>
+                        {
+                            InputMamager.Instance.Unlock();
+                            BattleMapBuilder battleMapBuilder = GameObject.Find("BattleMapBuilder").GetComponent<BattleMapBuilder>();
+                            BattleInfo battleInfo;
+                            if (_enemyList[i].EnemyExplorer is EnemyExplorerFixed)
+                            {
+                                EnemyExplorerFixed fixedEnemyExplorer = (EnemyExplorerFixed)_enemyList[i].EnemyExplorer;
+                                battleInfo = battleMapBuilder.Get(fixedEnemyExplorer.Map);
+                            }
+                            else
+                            {
+                                EnemyExplorerRandom enemyExplorerRandom = (EnemyExplorerRandom)_enemyList[i].EnemyExplorer;
+                                battleInfo = battleMapBuilder.Generate(enemyExplorerRandom.MapSeed, enemyExplorerRandom.EnemyList, enemyExplorerRandom.Lv, enemyExplorerRandom.Exp);
+                            }
+                            PathManager.Instance.LoadData(battleInfo.TileAttachInfoDic);
+                            BattleController.Instance.Init(File.Floor, File.Floor, _enemyList[i].Info.Tutorial, battleInfo, battleMapBuilder.transform);
+                        });
+                    });
+
+                    return;
+                }
             }
         }
 
@@ -556,7 +590,7 @@ namespace Explore
 
         public void CreateObject() 
         {
-            NewExploreFile.TileInfo tile;
+            ExploreFile.TileInfo tile;
             GameObject gameObj;
             TileObject tileObject;
             Transform parent = GameObject.Find("Generator2D").transform;
@@ -634,13 +668,13 @@ namespace Explore
             }
 
             _enemyList.Clear();
-            ExploreEnemyController controller;
+            EnemyExplorerController controller;
             for (int i = 0; i < File.EnemyInfoList.Count; i++)
             {
                 gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + File.EnemyInfoList[i].Prefab), Vector3.zero, Quaternion.identity);
                 gameObj.transform.position = new Vector3(File.EnemyInfoList[i].Position.x, 1, File.EnemyInfoList[i].Position.y);
                 gameObj.transform.SetParent(parent);
-                controller = gameObj.GetComponent<ExploreEnemyController>();
+                controller = gameObj.GetComponent<EnemyExplorerController>();
                 controller.Init(File.EnemyInfoList[i]);
                 _enemyList.Add(controller);
             }

@@ -10,6 +10,7 @@ public class BattleFile
     public int MaxY;
     public int PlayerCount;
     public bool MustBeEqualToNeedCount;
+    public int Lv;
     public int Exp;
     public List<string[]> TileList = new List<string[]>();
     public List<int[]> NoAttachList = new List<int[]>(); //�T�ذ�,���|�����[����,��m���a���⪺�ϰ�

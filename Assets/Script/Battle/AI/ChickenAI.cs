@@ -19,7 +19,7 @@ namespace Battle
             {
                 _count++;
                 _info.Sprite = _info.Enemy.SpriteList[1];
-                BattleController.Instance.ChangeSprite(_info.Index, _info.Sprite);
+                BattleController.Instance.ChangeSprite(_info, _info.Sprite);
                 _timer.Start(1f, ()=> 
                 {
                     BattleController.Instance.SelectedCharacter.ActionCount = 0;

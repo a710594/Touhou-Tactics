@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Explore
+/*namespace Explore
 {
     public class TraceAI : ExploreEnemyController
     {
@@ -99,4 +99,4 @@ namespace Explore
             ExploreManager.Instance.File.WalkableList.Remove(Utility.ConvertToVector2Int(MoveTo));
         }
     }
-}
+}*/

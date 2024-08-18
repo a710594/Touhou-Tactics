@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Explore
+/*namespace Explore
 {
     public class NotMoveAI : ExploreEnemyController
     {
@@ -10,4 +10,4 @@ namespace Explore
         {
         }
     }
-}
+}*/

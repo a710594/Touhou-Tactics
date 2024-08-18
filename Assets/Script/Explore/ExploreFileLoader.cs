@@ -38,7 +38,7 @@ namespace Explore
 
             GameObject obj;
             GameObject child;
-            NewExploreFile file = DataContext.Instance.Load<NewExploreFile>(FileName, DataContext.PrePathEnum.MapExplore);
+            ExploreFile file = DataContext.Instance.Load<ExploreFile>(FileName, DataContext.PrePathEnum.MapExplore);
             for(int i=0; i<file.TileList.Count; i++)
             {
                 obj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + file.TileList[i].Prefab), Vector3.zero, Quaternion.identity);
@@ -63,8 +63,8 @@ namespace Explore
                 obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/EnemyExploreFileObject"), Vector3.zero, Quaternion.identity);
                 EnemyExploreFileObject exploreEnemyInfoObject = obj.GetComponent<EnemyExploreFileObject>();
                 exploreEnemyInfoObject.Prefab = file.EnemyInfoList[i].Prefab;
-                exploreEnemyInfoObject.Map = file.EnemyInfoList[i].Map;
-                exploreEnemyInfoObject.Tutorial = file.EnemyInfoList[i].Tutorial;
+                exploreEnemyInfoObject.Map = ((EnemyExplorerFixed)file.EnemyInfoList[i]).Map;
+                exploreEnemyInfoObject.Tutorial = ((EnemyExplorerFixed)file.EnemyInfoList[i]).Tutorial;
                 obj.transform.SetParent(Enemy);
                 obj.transform.position = new Vector3(file.EnemyInfoList[i].Position.x, 1, file.EnemyInfoList[i].Position.y);
             }

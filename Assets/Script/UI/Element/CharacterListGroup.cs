@@ -10,9 +10,9 @@ public class CharacterListGroup : MonoBehaviour
 
     public Image Image;
 
-    private List<BattleCharacterInfo> _characterList = new List<BattleCharacterInfo>();
     private List<Image> _imageList = new List<Image>();
-    private Dictionary<int, Sprite> _spriteDic = new Dictionary<int, Sprite>();
+    private List<BattleCharacterInfo> _characterList = new List<BattleCharacterInfo>();
+    private Dictionary<BattleCharacterInfo, Sprite> _spriteDic = new Dictionary<BattleCharacterInfo, Sprite>();
 
     public void Init(List<BattleCharacterInfo> characterList)
     {
@@ -29,7 +29,7 @@ public class CharacterListGroup : MonoBehaviour
             }
             _imageList.Add(image);
             sprite = Resources.Load<Sprite>("Image/" + _characterList[i].Sprite + "_F");
-            _spriteDic.Add(_characterList[i].Index, sprite);
+            _spriteDic.Add(_characterList[i], sprite);
         }
     }
 
@@ -42,13 +42,13 @@ public class CharacterListGroup : MonoBehaviour
         image.gameObject.SetActive(false);
         _imageList.Add(image);
         sprite = Resources.Load<Sprite>("Image/" + character.Sprite + "_F");
-        _spriteDic.Add(character.Index, sprite);
+        _spriteDic.Add(character, sprite);
         
     }
 
-    public void ChangeSprite(int index, string sprite) 
+    public void ChangeSprite(BattleCharacterInfo info, string sprite) 
     {
-        _spriteDic[index] = Resources.Load<Sprite>("Image/" + sprite + "_F");
+        _spriteDic[info] = Resources.Load<Sprite>("Image/" + sprite + "_F");
         Refresh();
     }
 
@@ -59,7 +59,7 @@ public class CharacterListGroup : MonoBehaviour
             if (i < _max)
             {
                 _imageList[i].gameObject.SetActive(true);
-                _imageList[i].sprite = _spriteDic[_characterList[i].Index];
+                _imageList[i].sprite = _spriteDic[_characterList[i]];
             }
             else
             {

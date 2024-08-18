@@ -14,7 +14,6 @@ public class Event_9 : MyEvent
             ConfirmUI.Open("按 Esc 選擇返回營地", "確定", ()=>
             {
                 Vector3 moveTo = new Vector3(2, 1, 19);
-                Explore.ExploreManager.Instance.Player.MoveTo = moveTo;
                 Explore.ExploreManager.Instance.Player.transform.DOMove(moveTo, 1).OnComplete(()=> 
                 {
                     InputMamager.Instance.IsLock = false;

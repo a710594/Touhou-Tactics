@@ -7,42 +7,44 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class BattleFileReader
+namespace Battle
 {
-    public BattleInfo Read(string path) 
+    public class BattleFileReader
     {
-        string jsonString = File.ReadAllText(path);
-        BattleFile file = JsonConvert.DeserializeObject<BattleFile>(jsonString);
-        BattleInfo battleInfo = new BattleInfo();
-
-        battleInfo.MinX = file.MinX;
-        battleInfo.MaxX = file.MaxX;
-        battleInfo.MinY = file.MinY;
-        battleInfo.MaxY = file.MaxY;
-        battleInfo.NeedCount = file.PlayerCount;
-        battleInfo.MustBeEqualToNeedCount = file.MustBeEqualToNeedCount;
-        battleInfo.Exp = file.Exp;
-
-        int x;
-        int y;
-        for(int i=0; i<file.TileList.Count; i++)
+        public BattleInfo Read(string path)
         {
-            x = int.Parse(file.TileList[i][0]);
-            y = int.Parse(file.TileList[i][1]);
-            battleInfo.TileAttachInfoDic.Add(new Vector2Int(x, y), new TileAttachInfo(file.TileList[i][2])); ;
-        }
+            string jsonString = File.ReadAllText(path);
+            BattleFile file = JsonConvert.DeserializeObject<BattleFile>(jsonString);
+            BattleInfo battleInfo = new BattleInfo();
 
-        for (int i=0; i<file.NoAttachList.Count; i++) 
-        {
-            battleInfo.NoAttachList.Add(new Vector2Int(file.NoAttachList[i][0], file.NoAttachList[i][1]));
-        }
+            battleInfo.MinX = file.MinX;
+            battleInfo.MaxX = file.MaxX;
+            battleInfo.MinY = file.MinY;
+            battleInfo.MaxY = file.MaxY;
+            battleInfo.NeedCount = file.PlayerCount;
+            battleInfo.MustBeEqualToNeedCount = file.MustBeEqualToNeedCount;
+            battleInfo.Exp = file.Exp;
 
-        for (int i=0; i<file.EnemyList.Count; i++) 
-        {
-            battleInfo.EnemyDic.Add(new Vector3Int(file.EnemyList[i][0], file.EnemyList[i][1], file.EnemyList[i][2]), file.EnemyList[i][3]);
-        }
+            int x;
+            int y;
+            for (int i = 0; i < file.TileList.Count; i++)
+            {
+                x = int.Parse(file.TileList[i][0]);
+                y = int.Parse(file.TileList[i][1]);
+                battleInfo.TileAttachInfoDic.Add(new Vector2Int(x, y), new TileAttachInfo(file.TileList[i][2])); ;
+            }
 
-        return battleInfo;
+            for (int i = 0; i < file.NoAttachList.Count; i++)
+            {
+                battleInfo.NoAttachList.Add(new Vector2Int(file.NoAttachList[i][0], file.NoAttachList[i][1]));
+            }
+
+            for (int i = 0; i < file.EnemyList.Count; i++)
+            {
+                battleInfo.EnemyDic.Add(new Vector3Int(file.EnemyList[i][0], file.EnemyList[i][1], file.EnemyList[i][2]), file.EnemyList[i][3]);
+            }
+
+            return battleInfo;
+        }
     }
 }
-
