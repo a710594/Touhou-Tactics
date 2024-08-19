@@ -17,9 +17,9 @@ namespace Battle
                 int itemId;
                 EnemyModel enemy;
                 List<int> itemList = new List<int>();
-                for (int i=0; i<Instance._enemyList.Count; i++) 
+                for (int i=0; i<Instance.Info.EnemyList.Count; i++) 
                 {
-                    enemy = DataContext.Instance.EnemyDic[Instance._enemyList[i]];
+                    enemy = Instance.Info.EnemyList[i].Enemy;
                     if (enemy.DropList.Count > 0)
                     {
                         itemId = enemy.DropList[Random.Range(0, enemy.DropList.Count)];

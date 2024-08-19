@@ -51,21 +51,18 @@ namespace Explore
 
         private void Move(Vector3 position)
         {
-            ExploreManager.Instance.CheckCollision(Utility.ConvertToVector2Int(position));
+            ExploreManager.Instance.CheckEnemyCollision(Utility.ConvertToVector2Int(position));
 
             if (ExploreManager.Instance.File.WalkableList.Contains(Utility.ConvertToVector2Int(position)))
             {
                 _isMoving = true;
                 transform.DOMove(position, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
                 {
-                    ExploreManager.Instance.CheckVidsit(transform);
+                    ExploreManager.Instance.File.PlayerRotation = (int)transform.eulerAngles.z;
+                    ExploreManager.Instance.File.PlayerRotation = Mathf.RoundToInt(Camera.main.transform.eulerAngles.y);
+                    ExploreManager.Instance.WaitForAllMoveComplete();
                     _isMoving = false;
                 });
-                //MoveTo = position;
-                if (MoveHandler != null)
-                {
-                    MoveHandler();
-                }
             }
         }
 
@@ -73,19 +70,7 @@ namespace Explore
         {
             if (!_isMoving)
             {
-                _isMoving = true;
-                RotateTo = transform.localEulerAngles + Vector3.down * 90;
-                InputMamager.Instance.Lock();
-                transform.DORotate(RotateTo, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
-                {
-                    _isMoving = false;
-                    ExploreManager.Instance.CheckVidsit(transform);
-                    InputMamager.Instance.Unlock();
-                });
-                if (RotateHandler != null)
-                {
-                    RotateHandler();
-                }
+                Rotate(transform.localEulerAngles + Vector3.down * 90);
             }
         }
 
@@ -93,36 +78,28 @@ namespace Explore
         {
             if (!_isMoving)
             {
-                _isMoving = true;
-                RotateTo = transform.localEulerAngles + Vector3.up * 90;
-                InputMamager.Instance.Lock();
-                transform.DORotate(RotateTo, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
-                {
-                    _isMoving = false;
-                    ExploreManager.Instance.CheckVidsit(transform);
-                    InputMamager.Instance.Unlock();
-                });
-                if (RotateHandler != null)
-                {
-                    RotateHandler();
-                }
+                Rotate(transform.localEulerAngles + Vector3.up * 90);
             }
+        }
+
+        private void Rotate(Vector3 rotation) 
+        {
+            _isMoving = true;
+            InputMamager.Instance.Lock();
+            transform.DORotate(rotation, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
+            {
+                _isMoving = false;
+                ExploreManager.Instance.CheckVidsit(transform);
+                InputMamager.Instance.Unlock();
+            });
         }
 
         private void Awake()
         {
-            //InputMamager.Instance.UpHandler += Up;
-            //InputMamager.Instance.DownHandler += Down;
-            //InputMamager.Instance.LeftHandler += TurnLeft;
-            //InputMamager.Instance.RightHandler += TurnRight;
         }
 
         private void OnDestroy()
         {
-            //InputMamager.Instance.UpHandler -= Up;
-            //InputMamager.Instance.DownHandler -= Down;
-            //InputMamager.Instance.LeftHandler -= TurnLeft;
-            //InputMamager.Instance.RightHandler -= TurnRight;
         }
 
         private void Update()

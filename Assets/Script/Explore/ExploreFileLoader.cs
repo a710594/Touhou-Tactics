@@ -61,7 +61,7 @@ namespace Explore
             for(int i=0; i<file.EnemyInfoList.Count; i++)
             {
                 obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/EnemyExploreFileObject"), Vector3.zero, Quaternion.identity);
-                EnemyExploreFileObject exploreEnemyInfoObject = obj.GetComponent<EnemyExploreFileObject>();
+                ExploreFileEnemy exploreEnemyInfoObject = obj.GetComponent<ExploreFileEnemy>();
                 exploreEnemyInfoObject.Prefab = file.EnemyInfoList[i].Prefab;
                 exploreEnemyInfoObject.Map = ((EnemyExplorerFixed)file.EnemyInfoList[i]).Map;
                 exploreEnemyInfoObject.Tutorial = ((EnemyExplorerFixed)file.EnemyInfoList[i]).Tutorial;

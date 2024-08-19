@@ -21,7 +21,7 @@ namespace Battle
                 BattleInfo info = Instance.Info;
                 _character = Instance.SelectedCharacter;
                 _characterList = Instance.CharacterList;
-                Instance._controllerDic[_character.Index].transform.position = _character.Position;
+                _character.Controller.transform.position = _character.Position;
                 Instance.BattleUI.SetActionVisible(false);
                 _stepList = Instance.GetStepList(_character);
                 Instance.ClearQuad();
@@ -43,12 +43,12 @@ namespace Battle
                     if (position == _originalPosition) //�T�w����
                     {
                         Instance._canClick = false;
-                        Instance._controllerDic[_character.Index].transform.position = _character.Position;
+                        _character.Controller.transform.position = _character.Position;
                         Instance.BattleUI.SetSkillVisible(false);
                         Instance.Info.TileComponentDic[_originalPosition].Select.gameObject.SetActive(false);
                         Instance.ClearQuad();
                         List<Vector2Int> path = Instance.GetPath(Utility.ConvertToVector2Int(_character.Position), position, _character.Faction);
-                        Instance._controllerDic[_character.Index].Move(path);
+                        _character.Controller.Move(path);
                         _character.LastPosition = _character.Position;
                         _character.Position = new Vector3(position.x, Instance.Info.TileAttachInfoDic[position].Height, position.y);
                         _character.HasMove = true;
@@ -69,7 +69,7 @@ namespace Battle
                     {
                         Instance.Info.TileComponentDic[_originalPosition].Select.gameObject.SetActive(false);
                     }
-                    Instance._controllerDic[_character.Index].transform.position = _character.Position;
+                    _character.Controller.transform.position = _character.Position;
                     _context.SetState<CommandState>();
                 }
             }

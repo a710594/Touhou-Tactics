@@ -23,10 +23,10 @@ namespace Battle
                     if (_character.ActionCount == 0)
                     {
                         List<Log> logList = _character.CheckStatus();
-                        Instance.BattleUI.SetLittleHpBarValue(_character.Index, _character);
+                        Instance.BattleUI.SetLittleHpBarValue(_character);
                         if(logList.Count > 0)
                         {
-                            Instance.BattleUI.PlayFloatingNumberPool(_character.Index, logList);
+                            Instance.BattleUI.PlayFloatingNumberPool(_character, logList);
                         }
                         for (int i = 0; i < _character.SkillList.Count; i++)
                         {

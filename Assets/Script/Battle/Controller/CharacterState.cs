@@ -34,15 +34,12 @@ namespace Battle
                     characterList[i].CurrentWT -= wt;
                 }
 
-                Vector3 position = new Vector3();
-                BattleCharacterController controller = Instance._controllerDic[info.Index];
-                position = controller.transform.position;
                 Instance.BattleUI.SetActionVisible(false);
-                _cameraMove.Move(position, ()=> 
+                _cameraMove.Move(info.Position, ()=> 
                 {
                     _context.SetState<CommandState>();
                 });
-                Instance.BattleUI.SetArrowTransform(controller.transform);
+                Instance.BattleUI.SetArrowTransform(info.Controller.transform);
                 Instance.BattleUI.CharacterListGroupRefresh();
             }
         }

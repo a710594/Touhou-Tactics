@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BattleMapEnemy : MonoBehaviour
+public class BattleFileEnemy : MonoBehaviour
 {
     public int ID;
     public SpriteRenderer Sprite;

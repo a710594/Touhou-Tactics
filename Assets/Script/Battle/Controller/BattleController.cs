@@ -423,7 +423,7 @@ namespace Battle
         public void ChangeSprite(BattleCharacterInfo info, string sprite) 
         {
             info.Controller.Init(sprite);
-            BattleUI.CharacterListGroup.ChangeSprite(index, sprite);
+            BattleUI.CharacterListGroup.ChangeSprite(info, sprite);
         }
 
         public void SortCharacterList(bool isStart)

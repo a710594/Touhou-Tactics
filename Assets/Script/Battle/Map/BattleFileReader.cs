@@ -1,10 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Battle
@@ -39,9 +35,19 @@ namespace Battle
                 battleInfo.NoAttachList.Add(new Vector2Int(file.NoAttachList[i][0], file.NoAttachList[i][1]));
             }
 
+            Vector3 enemyPosition;
+            EnemyModel enemyData;
+            BattleCharacterInfo battleCharacterInfo;
             for (int i = 0; i < file.EnemyList.Count; i++)
             {
-                battleInfo.EnemyDic.Add(new Vector3Int(file.EnemyList[i][0], file.EnemyList[i][1], file.EnemyList[i][2]), file.EnemyList[i][3]);
+                enemyData = DataContext.Instance.EnemyDic[file.EnemyList[i][3]];
+                battleCharacterInfo = new BattleCharacterInfo(battleInfo.Lv, enemyData);
+                Type t = Type.GetType("Battle." + enemyData.AI);
+                battleCharacterInfo.AI = (BattleAI)Activator.CreateInstance(t);
+                battleCharacterInfo.AI.Init(battleCharacterInfo);
+                enemyPosition = new Vector3(file.EnemyList[i][0], file.EnemyList[i][1], file.EnemyList[i][2]);
+                battleCharacterInfo.Position = enemyPosition;
+                battleInfo.EnemyList.Add(battleCharacterInfo);
             }
 
             return battleInfo;

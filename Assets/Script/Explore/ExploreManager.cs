@@ -417,11 +417,11 @@ namespace Explore
             }
         }*/
 
-        public void CheckEnemy(Vector2Int position) 
+        public void CheckEnemyCollision(Vector2Int playerPosition) 
         {
             for (int i = 0; i < _enemyList.Count; i++)
             {
-                if (Utility.ConvertToVector2Int(_enemyList[i].transform.position) == position)
+                if (Utility.ConvertToVector2Int(_enemyList[i].transform.position) == playerPosition)
                 {
                     InputMamager.Instance.Lock();
                     File.EnemyInfoList.Remove(_enemyList[i].EnemyExplorer);
@@ -432,10 +432,12 @@ namespace Explore
                             InputMamager.Instance.Unlock();
                             BattleMapBuilder battleMapBuilder = GameObject.Find("BattleMapBuilder").GetComponent<BattleMapBuilder>();
                             BattleInfo battleInfo;
+                            string tutorial = null;
                             if (_enemyList[i].EnemyExplorer is EnemyExplorerFixed)
                             {
-                                EnemyExplorerFixed fixedEnemyExplorer = (EnemyExplorerFixed)_enemyList[i].EnemyExplorer;
-                                battleInfo = battleMapBuilder.Get(fixedEnemyExplorer.Map);
+                                EnemyExplorerFixed enemyExplorerFixed = (EnemyExplorerFixed)_enemyList[i].EnemyExplorer;
+                                battleInfo = battleMapBuilder.Get(enemyExplorerFixed.Map);
+                                tutorial = enemyExplorerFixed.Tutorial;
                             }
                             else
                             {
@@ -443,7 +445,7 @@ namespace Explore
                                 battleInfo = battleMapBuilder.Generate(enemyExplorerRandom.MapSeed, enemyExplorerRandom.EnemyList, enemyExplorerRandom.Lv, enemyExplorerRandom.Exp);
                             }
                             PathManager.Instance.LoadData(battleInfo.TileAttachInfoDic);
-                            BattleController.Instance.Init(File.Floor, File.Floor, _enemyList[i].Info.Tutorial, battleInfo, battleMapBuilder.transform);
+                            BattleController.Instance.Init(File.Floor, File.Floor, tutorial, battleInfo, battleMapBuilder.transform);
                         });
                     });
 
@@ -452,9 +454,36 @@ namespace Explore
             }
         }
 
-        private void CheckEvent() 
+        private void CheckGoal(Vector2Int v2) 
         {
-            Vector2Int v2 = Utility.ConvertToVector2Int(Player.MoveTo);
+            if (v2 == File.Goal)
+            {
+                InputMamager.Instance.Lock();
+                ConfirmUI.Open("要前往下一層嗎？", "確定", "取消", () =>
+                {
+                    File.Floor++;
+                    if (File.Floor > SystemManager.Instance.SystemInfo.MaxFloor)
+                    {
+                        SystemManager.Instance.SystemInfo.MaxFloor = File.Floor;
+                    }
+
+                    _timer.Start(1f, () =>
+                    {
+                        SceneController.Instance.ChangeScene("Camp", (sceneName) =>
+                        {
+                            CharacterManager.Instance.RecoverAllHP();
+                            InputMamager.Instance.Unlock();
+                        });
+                    });
+                }, () =>
+                {
+                    InputMamager.Instance.Unlock();
+                });
+            }
+        }
+
+        private void CheckEvent(Vector2Int v2) 
+        {
             for(int i=0; i<File.TriggerList.Count; i++)
             {
                 if (v2 == File.TriggerList[i].Position)
@@ -481,7 +510,7 @@ namespace Explore
 
             for (int i=0; i<_enemyList.Count; i++) 
             {
-                if (File.VisitedList.Contains(Utility.ConvertToVector2Int(_enemyList[i].MoveTo))) 
+                if (File.VisitedList.Contains(Utility.ConvertToVector2Int(_enemyList[i].transform.position))) 
                 {
                     _enemyList[i].Arrow.layer = MapLayer;
                 }
@@ -642,16 +671,6 @@ namespace Explore
                 }
             }
 
-            //gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Start"), Vector3.zero, Quaternion.identity);
-            //gameObj.transform.position = new Vector3(File.Start.x, 0, File.Start.y);
-            //gameObj.transform.eulerAngles = new Vector3(90, 0, 0);
-            //gameObj.transform.SetParent(parent);
-            //_tileDic[File.Start].Icon = gameObj;
-            //if (File.VisitedList.Contains(File.Start))
-            //{
-            //    _tileDic[File.Start].Icon.layer = MapLayer;
-            //}
-
             if (File.Goal.x != int.MinValue && File.Goal.y != int.MinValue)
             {
                 gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Goal"), Vector3.zero, Quaternion.identity);
@@ -685,11 +704,6 @@ namespace Explore
             Camera.main.transform.position = new Vector3(File.PlayerPosition.x, 1, File.PlayerPosition.y);
             Camera.main.transform.eulerAngles = new Vector3(0, File.PlayerRotation, 0);
             Player = Camera.main.GetComponent<ExploreCharacterController>();
-            Player.MoveTo = new Vector3(File.PlayerPosition.x, 1, File.PlayerPosition.y);
-            Player.MoveHandler += OnPlayerMove;
-            Player.RotateHandler += OnPlayerRotate;
-            CheckVidsit(Player.transform);
-            CheckEvent();
 
             float x = 1;
             float y = 1;
@@ -725,17 +739,27 @@ namespace Explore
             }
         }*/
 
-        private void OnPlayerMove() 
+        private int _enemyMoveCount;
+        public void EnemyMove() 
         {
-            Vector2Int v2 = Utility.ConvertToVector2Int(Player.MoveTo);
-            File.PlayerPosition = v2;
-            File.PlayerRotation = (int)Player.transform.eulerAngles.z;
-            File.PlayerRotation = Mathf.RoundToInt(Camera.main.transform.eulerAngles.y);
-            for (int i=0; i<_enemyList.Count; i++) 
+            _enemyMoveCount = 0;
+            for (int i = 0; i < _enemyList.Count; i++)
             {
                 _enemyList[i].Move();
             }
-            CheckCollision(v2);
+        }
+
+        public void WaitForAllMoveComplete() 
+        {
+            _enemyMoveCount++;
+            if (_enemyMoveCount == _enemyList.Count + 1) 
+            {
+                CheckVidsit(Player.transform);
+                Vector2Int v2 = Utility.ConvertToVector2Int(Player.transform.position);
+                CheckEnemyCollision(v2);
+                CheckGoal(v2);
+                CheckEvent(v2);
+            }
         }
 
         private void OnPlayerRotate()

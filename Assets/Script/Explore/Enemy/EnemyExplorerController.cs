@@ -31,9 +31,12 @@ namespace Explore
             if(AI.GetMove(transform, out Vector3 position, out Vector3 rotation)) 
             {
                 ExploreManager.Instance.File.WalkableList.Add(Utility.ConvertToVector2Int(transform.position));
-                transform.DOMove(position, 0.5f).SetEase(Ease.Linear);
+                ExploreManager.Instance.File.WalkableList.Remove(Utility.ConvertToVector2Int(position));
+                transform.DOMove(position, 0.5f).SetEase(Ease.Linear).OnComplete(()=> 
+                {
+                    ExploreManager.Instance.WaitForAllMoveComplete();
+                });
                 transform.DORotate(rotation, 0.5f).SetEase(Ease.Linear);
-                ExploreManager.Instance.File.WalkableList.Remove(Utility.ConvertToVector2Int(transform.position));
             }
         }
 

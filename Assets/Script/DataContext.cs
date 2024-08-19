@@ -167,7 +167,7 @@ private static readonly string _mapBattlePrePath = Application.streamingAssetsPa
         {
             EnemyGroupList[i].GetEnemyList();
             EnemyGroupList[i].GetScenePool();
-            EnemyGroupDic.Add(EquipList[i].ID, EnemyGroupList[i]);
+            EnemyGroupDic.Add(EnemyGroupList[i].ID, EnemyGroupList[i]);
         }
 
         FixedFloorList = Load<List<FixedFloorModel>>("FixedFloor", PrePathEnum.Data);

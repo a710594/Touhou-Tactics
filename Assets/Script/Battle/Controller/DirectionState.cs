@@ -55,7 +55,7 @@ namespace Battle
             {
                 if (!_lock)
                 {
-                    BattleCharacterController _controller = Instance._controllerDic[_character.Index];
+                    BattleCharacterController _controller = _character.Controller;
                     _lock = true;
                     _controller.SetDirection(direction);
                     _controller.SetSprite();

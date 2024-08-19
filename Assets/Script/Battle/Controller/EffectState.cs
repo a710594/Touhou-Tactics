@@ -152,8 +152,8 @@ namespace Battle
 
             private void SetUI(BattleCharacterInfo target, List<Log> logList)
             {
-                Instance.BattleUI.SetLittleHpBarValue(target.Index, target);
-                Instance.BattleUI.PlayFloatingNumberPool(target.Index, logList);
+                Instance.BattleUI.SetLittleHpBarValue(target);
+                Instance.BattleUI.PlayFloatingNumberPool(target, logList);
                 if (logList.Count > _maxFloatingCount)
                 {
                     _maxFloatingCount = logList.Count;
@@ -178,7 +178,7 @@ namespace Battle
                             {
                                 if (Instance.DyingList.Contains(target))
                                 {
-                                    Instance._controllerDic[target.Index].gameObject.SetActive(false);
+                                    target.Controller.gameObject.SetActive(false);
                                     Instance.DyingList.Remove(target);
                                     Instance.DeadList.Add(target);
                                 }
@@ -186,20 +186,20 @@ namespace Battle
                                 {
                                     _characterList.Remove(target);
                                     Instance.DyingList.Add(target);
-                                    Instance._controllerDic[target.Index].SetGray(true);
+                                    target.Controller.SetGray(true);
                                 }
                             }
                             else
                             {
                                 _characterList.Remove(target);
-                                Instance._controllerDic[target.Index].gameObject.SetActive(false);
+                                target.Controller.gameObject.SetActive(false);
                             }
                         }
                         else if (Instance.DyingList.Contains(target)) 
                         {
                             _characterList.Add(target);
                             Instance.DyingList.Remove(target);
-                            Instance._controllerDic[target.Index].SetGray(false);
+                            target.Controller.SetGray(false);
                         }
                     }
                  }

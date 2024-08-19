@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(BattleFileLoader))]
-public class BattleFileLoaderEditor : Editor
+namespace Battle
 {
-    public override void OnInspectorGUI()
+    [CustomEditor(typeof(BattleFileLoader))]
+    public class BattleFileLoaderEditor : Editor
     {
-        DrawDefaultInspector();
-
-        BattleFileLoader loader = (BattleFileLoader)target;
-        if (GUILayout.Button("載入檔案"))
+        public override void OnInspectorGUI()
         {
-            loader.Load();
+            DrawDefaultInspector();
+
+            BattleFileLoader loader = (BattleFileLoader)target;
+            if (GUILayout.Button("載入檔案"))
+            {
+                loader.Load();
+            }
         }
     }
 }

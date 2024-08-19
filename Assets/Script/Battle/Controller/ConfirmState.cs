@@ -69,9 +69,9 @@ namespace Battle
                         }
                     }
                 }
-                
 
-                BattleCharacterController _controller = Instance._controllerDic[_character.Index];
+
+                BattleCharacterController _controller = _character.Controller;
                 _controller.SetDirection(selectedPosition - Utility.ConvertToVector2Int(_controller.transform.position));
                 _controller.SetSprite();
 

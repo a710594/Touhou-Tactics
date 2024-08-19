@@ -52,6 +52,7 @@ namespace Battle
         public List<Spell> SpellList = new List<Spell>();
 
         //當前屬性
+        public int Index;
         public bool IsAuto = false;
         public bool HasUseSkill = false;
         public bool HasUseSupport = false;

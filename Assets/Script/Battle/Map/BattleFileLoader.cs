@@ -4,60 +4,63 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class BattleFileLoader : MonoBehaviour
+namespace Battle
 {
-    public string FileName;
-    public BattleFileGenerator Generator;
-    public Transform Tilemap;
-    public Transform EnemyGroup;
-
-    public void Load() 
+    public class BattleFileLoader : MonoBehaviour
     {
-        string path = Application.streamingAssetsPath + "/Map/Battle/" + FileName + ".txt";
+        public string FileName;
+        public BattleFileGenerator Generator;
+        public Transform Tilemap;
+        public Transform EnemyGroup;
 
-        DataContext.Instance.Init();
-        BattleFileReader reader = new BattleFileReader();
-        BattleInfo info = reader.Read(path);
-
-        for (int i = Tilemap.childCount; i > 0; --i)
+        public void Load()
         {
-            DestroyImmediate(Tilemap.GetChild(0).gameObject);
-        }
+            string path = Application.streamingAssetsPath + "/Map/Battle/" + FileName + ".txt";
 
-        for (int i = EnemyGroup.childCount; i > 0; --i)
-        {
-            DestroyImmediate(EnemyGroup.GetChild(0).gameObject);
-        }
+            DataContext.Instance.Init();
+            BattleFileReader reader = new BattleFileReader();
+            BattleInfo info = reader.Read(path);
 
-        GameObject obj;
-        int count = 0;
-        Transform[] noAttach = new Transform[info.NoAttachList.Count];
-        foreach (KeyValuePair<Vector2Int, TileAttachInfo> pair in info.TileAttachInfoDic)
-        {
-            obj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + pair.Value.TileID), Vector3.zero, Quaternion.identity);
-            obj.transform.SetParent(Tilemap);
-            obj.transform.position = new Vector3(pair.Key.x, 0, pair.Key.y);
-            if (info.NoAttachList.Contains(pair.Key))
+            for (int i = Tilemap.childCount; i > 0; --i)
             {
-                noAttach[count] = obj.transform;
-                count++;
+                DestroyImmediate(Tilemap.GetChild(0).gameObject);
             }
 
-            Generator.FileName = FileName;
-            Generator.NeedCount = info.NeedCount;
-            Generator.MustBeEqualToNeedCount = info.MustBeEqualToNeedCount;
-            Generator.Exp = info.Exp;
-            Generator.NoAttach = noAttach;
-        }
+            for (int i = EnemyGroup.childCount; i > 0; --i)
+            {
+                DestroyImmediate(EnemyGroup.GetChild(0).gameObject);
+            }
 
-        BattleMapEnemy battleMapEnemy;
-        foreach (KeyValuePair<Vector3Int, int> pair in info.EnemyDic)
-        {
-            obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Other/BattleMapEnemy"), Vector3.zero, Quaternion.identity);
-            battleMapEnemy = obj.GetComponent<BattleMapEnemy>();
-            battleMapEnemy.Init(pair.Value);
-            battleMapEnemy.transform.SetParent(EnemyGroup);
-            battleMapEnemy.transform.position = pair.Key;
+            GameObject obj;
+            int count = 0;
+            Transform[] noAttach = new Transform[info.NoAttachList.Count];
+            foreach (KeyValuePair<Vector2Int, TileAttachInfo> pair in info.TileAttachInfoDic)
+            {
+                obj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + pair.Value.TileID), Vector3.zero, Quaternion.identity);
+                obj.transform.SetParent(Tilemap);
+                obj.transform.position = new Vector3(pair.Key.x, 0, pair.Key.y);
+                if (info.NoAttachList.Contains(pair.Key))
+                {
+                    noAttach[count] = obj.transform;
+                    count++;
+                }
+
+                Generator.FileName = FileName;
+                Generator.NeedCount = info.NeedCount;
+                Generator.MustBeEqualToNeedCount = info.MustBeEqualToNeedCount;
+                Generator.Exp = info.Exp;
+                Generator.NoAttach = noAttach;
+            }
+
+            BattleFileEnemy battleMapEnemy;
+            for(int i=0; i<info.EnemyList.Count; i++)
+            {
+                obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Other/BattleMapEnemy"), Vector3.zero, Quaternion.identity);
+                battleMapEnemy = obj.GetComponent<BattleFileEnemy>();
+                battleMapEnemy.Init(info.EnemyList[i].Enemy.ID);
+                battleMapEnemy.transform.SetParent(EnemyGroup);
+                battleMapEnemy.transform.position = info.EnemyList[i].Position;
+            }
         }
     }
 }
