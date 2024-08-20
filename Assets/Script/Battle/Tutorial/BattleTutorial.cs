@@ -67,6 +67,8 @@ namespace Battle
 
         protected class TutorialState : State
         {
+            protected bool _clickable = true;
+
             public TutorialState(StateContext context) : base(context)
             {
             }

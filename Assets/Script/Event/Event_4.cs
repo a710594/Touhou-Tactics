@@ -10,11 +10,11 @@ public class Event_4 : MyEvent
         //if (!FlagManager.Instance.Info.FlagDic[FlagInfo.FlagEnum.FloorBoss])
         {
             InputMamager.Instance.IsLock = true;
-            ConversationUI.Open(6, ()=> 
+            ConversationUI.Open(6, true, ()=> 
             {
                 InputMamager.Instance.IsLock = false;
                 FlowController.Instance.Info.CurrentStep++;
-            });
+            }, null);
         }
     }
 }

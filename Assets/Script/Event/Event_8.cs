@@ -10,13 +10,13 @@ public class Event_8 : MyEvent
         //if (!FlagManager.Instance.Info.FlagDic[FlagInfo.FlagEnum.BackCamp])
         {
             InputMamager.Instance.IsLock = true;
-            ConversationUI.Open(11, () =>
+            ConversationUI.Open(11, true, () =>
             {
                 InputMamager.Instance.IsLock = false;
                 //FlagManager.Instance.Info.FlagDic[FlagInfo.FlagEnum.BackCamp] = true;
                 //FlowController.Instance.Info.CurrentStep++;
                 SceneController.Instance.AfterSceneLoadedHandler += AfterSceneChange;
-            });
+            }, null);
         }
     }
 

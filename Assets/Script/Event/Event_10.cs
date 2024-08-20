@@ -24,13 +24,13 @@ public class Event_10 : MyEvent
         _campUI.CookHandler = null;
         TutorialArrowUI.Close();
         InputMamager.Instance.IsLock = true;
-        ConversationUI.Open(12, () =>
+        ConversationUI.Open(12, true, () =>
         {
             InputMamager.Instance.IsLock = false;
             FlowController.Instance.Info.CurrentStep++;
             FlowController.Instance.Info.LockDic[FlowInfo.LockEnum.Cook] = false;
             _campUI.ShopButton.enabled = true;
             _campUI.ExploreButton.enabled = true;
-        });
+        }, null);
     }
 }

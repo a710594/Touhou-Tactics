@@ -12,13 +12,13 @@ public class Event_1 : MyEvent
             InputMamager.Instance.IsLock = true;
             ExploreUI exploreUI = GameObject.Find("ExploreUI").GetComponent<ExploreUI>();
             exploreUI.SetVisible(false);
-            ConversationUI.Open(1, ()=> 
+            ConversationUI.Open(1, true, ()=> 
             {
                 InputMamager.Instance.IsLock = false;
                 //FlagManager.Instance.Info.FlagDic[FlagInfo.FlagEnum.BasicOperations] = true;
                 FlowController.Instance.Info.CurrentStep++;
                 exploreUI.SetVisible(true);
-            });
+            }, null);
         }
     }
 }

@@ -49,10 +49,10 @@ public class CampTutorial_1 : CampTutorial
 
         public override void Begin()
         {
-            ConversationUI.Open(12, ()=> 
+            ConversationUI.Open(12, false, ()=> 
             {
                 //EndTutorial();  
-            });
+            }, null);
         }
     }
 }

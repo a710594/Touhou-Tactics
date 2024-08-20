@@ -66,11 +66,6 @@ public class SceneController
                 BeforeSceneLoadedHandler = null;
             }
 
-            if(CurrentScene == "Explore") 
-            {
-                Explore.ExploreManager.Instance.Save();
-            }
-
             LoadingUI.Open();
             SceneManager.LoadSceneAsync(scene);
 

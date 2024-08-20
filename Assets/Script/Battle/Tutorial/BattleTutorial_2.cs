@@ -56,11 +56,11 @@ namespace Battle
                 BattleUI.Instance.SetArrowVisible(false);
                 _timer.Start(0.5f, () =>
                 {
-                    ConversationUI.Open(5, () =>
+                    ConversationUI.Open(5, false, () =>
                     {
                         Vector3 offset = new Vector3(-200, -50, 0);
                         TutorialArrowUI.Open("選擇符卡。", BattleUI.Instance.ActionButtonGroup.SupportButton.transform, offset, Vector2Int.right);
-                    });
+                    }, null);
                 });
             }
 

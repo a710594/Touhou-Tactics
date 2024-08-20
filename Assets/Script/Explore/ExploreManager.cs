@@ -699,9 +699,9 @@ namespace Explore
 
         public void SetCamera()
         {
-            Camera.main.transform.position = new Vector3(File.PlayerPosition.x, 1, File.PlayerPosition.y);
-            Camera.main.transform.eulerAngles = new Vector3(0, File.PlayerRotation, 0);
             Player = Camera.main.GetComponent<ExploreCharacterController>();
+            Player.transform.position = new Vector3(File.PlayerPosition.x, 1, File.PlayerPosition.y);
+            Player.transform.eulerAngles = new Vector3(0, File.PlayerRotation, 0);
 
             float x = 1;
             float y = 1;

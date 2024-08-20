@@ -10,12 +10,12 @@ public class Event_6 : MyEvent
         //if (!FlagManager.Instance.Info.FlagDic[FlagInfo.FlagEnum.Camp])
         {
             InputMamager.Instance.IsLock = true;
-            ConversationUI.Open(8, () =>
+            ConversationUI.Open(8, true, () =>
             {
                 InputMamager.Instance.IsLock = false;
                 //FlagManager.Instance.Info.FlagDic[FlagInfo.FlagEnum.Camp] = true;
                 FlowController.Instance.Info.CurrentStep++;
-            });
+            }, null);
         }
     }
 }

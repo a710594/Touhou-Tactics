@@ -42,7 +42,7 @@ namespace Battle
             {
                 BattleController.Instance.CommandStateBeginHandler = null;
                 BattleUI.Instance.SetArrowVisible(false);
-                ((BattleTutorial)_context.Parent).ConversationUI = ConversationUI.Open(7, null, () => 
+                ((BattleTutorial)_context.Parent).ConversationUI = ConversationUI.Open(7, false, null, () => 
                 {
                     Vector3 offset = new Vector3(-200, 0, 0);
                     TutorialArrowUI.Open("¿ï¾Ü¤ä´©¡C", BattleUI.Instance.ActionButtonGroup.SupportButton.transform, offset, Vector2Int.right);

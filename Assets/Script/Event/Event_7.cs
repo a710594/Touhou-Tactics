@@ -11,12 +11,12 @@ public class Event_7 : MyEvent
         //if (!FlagManager.Instance.Info.FlagDic[FlagInfo.FlagEnum.GetItem])
         {
             InputMamager.Instance.IsLock = true;
-            ConversationUI.Open(9, () =>
+            ConversationUI.Open(9, true, () =>
             {
                 InputMamager.Instance.IsLock = false;
                 //FlagManager.Instance.Info.FlagDic[FlagInfo.FlagEnum.GetItem] = true;
                 FlowController.Instance.Info.CurrentStep++;
-            });
+            }, null);
         }
     }
 }

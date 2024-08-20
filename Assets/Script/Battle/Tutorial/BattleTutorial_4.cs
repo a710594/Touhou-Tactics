@@ -53,7 +53,7 @@ namespace Battle
                 //{
                     //BattleController.Instance.CommandStateBeginHandler = null;
                     //BattleUI.Instance.SetArrowVisible(false);
-                    ((BattleTutorial)_context.Parent).ConversationUI = ConversationUI.Open(10, null, () =>
+                    ((BattleTutorial)_context.Parent).ConversationUI = ConversationUI.Open(10, false, null, () =>
                     {
                         BattleController.Instance.EndTutorial();
                     });

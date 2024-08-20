@@ -57,7 +57,7 @@ namespace Battle
             {
                 _timer.Start(0.5f, () =>
                 {
-                    ((BattleTutorial)_context.Parent).ConversationUI = ConversationUI.Open(3, null);
+                    ((BattleTutorial)_context.Parent).ConversationUI = ConversationUI.Open(3, false, null, null);
                     //TutorialUI.Open("將角色從下方拖曳至場景的白色區域中。\n白色的區域代表可放置角色的位置。\n將角色配置完後按開始戰鬥。", "Tutorial_1", null);
                 });
                 BattleController.Instance.CommandStateBeginHandler += Next;
@@ -154,13 +154,15 @@ namespace Battle
 
             public override void Begin()
             {
+                _clickable = true;
                 TutorialArrowUI.Open("再次點選同樣的位置代表確定位置。", new Vector3(4, 1, 3), Vector2Int.down);
             }
 
             public override bool CheckClick(Vector2Int position)
             {
-                if (position == new Vector2Int(4, 3))
+                if (_clickable && position == new Vector2Int(4, 3))
                 {
+                    _clickable = false;
                     TutorialArrowUI.Close();
                     BattleController.Instance.MoveStateEndHandler += Next;
                     return true;
@@ -302,13 +304,15 @@ namespace Battle
 
             public override void Begin()
             {
+                _clickable = true;
                 TutorialArrowUI.Open("再次點選同樣的位置確認。", new Vector3(4, 2, 4), Vector2Int.down);
             }
 
             public override bool CheckClick(Vector2Int position)
             {
-                if (position == new Vector2Int(4, 4))
+                if (_clickable && position == new Vector2Int(4, 4))
                 {
+                    _clickable = false;
                     TutorialArrowUI.Close();
                     BattleController.Instance.DirectionStateBeginHandler += Next;
                     return true;
@@ -340,21 +344,18 @@ namespace Battle
 
             public override void Begin()
             {
+                _clickable = true;
                 ((BattleTutorial_1)_context.Parent).ConversationUI.Continue(() =>
                 {
                     TutorialArrowUI.Open("選擇方向。", new Vector3(4, 2, 4), Vector2Int.down);
                 });
-
-                //TutorialUI.Open("回合結束後需要選擇角色面對的方向。\n角色面對的方向會影響命中率。\n比方說如果攻擊敵人的正面，命中率會比較低。\n反之從背後偷襲，命中率就會變高。\n盡量面向敵人，避免被偷襲吧。", "Tutorial_4", () =>
-                //{
-                //    TutorialArrowUI.Open("選擇方向。", new Vector3(4, 2, 4), Vector2Int.down, null);
-                //});
             }
 
             public override bool CheckClick(Vector2Int position)
             {
-                if (position == new Vector2Int(0, 1))
+                if (_clickable && position == new Vector2Int(0, 1))
                 {
+                    _clickable = false;
                     BattleController.Instance.CharacterStateBeginHandler += Next;
                     TutorialArrowUI.Close();
                     return true;
@@ -393,11 +394,6 @@ namespace Battle
                     Vector3 offset = new Vector3(-200, 0, 0);
                     TutorialArrowUI.Open("選擇支援。", BattleUI.Instance.ActionButtonGroup.SupportButton.transform, offset, Vector2Int.right);
                 });
-                //TutorialUI.Open("試著使用支援吧\n支援可以強化自身，不消耗行動次數，一個回合只能使用一次。", () =>
-                //{
-                //    Vector3 offset = new Vector3(-200, 0, 0);
-                //    TutorialArrowUI.Open("選擇支援。", BattleUI.Instance.ActionButtonGroup.SupportButton.transform, offset, Vector2Int.right, null);
-                //});
             }
 
             public override bool CanSupport()
@@ -524,11 +520,6 @@ namespace Battle
                     Vector3 offset = new Vector3(-200, 0, 0);
                     TutorialArrowUI.Open("選擇技能。", BattleUI.Instance.ActionButtonGroup.SkillButton.transform, offset, Vector2Int.right);
                 });
-                //TutorialUI.Open("妖夢的攻擊力提升了！\n接著攻擊敵人吧！", () =>
-                //{
-                //    Vector3 offset = new Vector3(-200, 0, 0);
-                //    TutorialArrowUI.Open("選擇技能。", BattleUI.Instance.ActionButtonGroup.SkillButton.transform, offset, Vector2Int.right, null);
-                //});
             }
 
             public override bool CanSkill()

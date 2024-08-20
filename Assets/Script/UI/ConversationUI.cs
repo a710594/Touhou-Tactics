@@ -31,7 +31,7 @@ public class ConversationUI : MonoBehaviour
 
     private static ConversationUI _conversationUI;
 
-    public static ConversationUI Open(int id, Action finishCallback = null, Action pauseCallback = null)
+    public static ConversationUI Open(int id, bool canSkip, Action finishCallback, Action pauseCallback)
     {
         if (_conversationUI == null)
         {
@@ -41,7 +41,7 @@ public class ConversationUI : MonoBehaviour
             _conversationUI = obj.GetComponent<ConversationUI>();
             _conversationUI.RectTransform.offsetMax = Vector3.zero;
             _conversationUI.RectTransform.offsetMin = Vector3.zero;
-            _conversationUI.Init(id, finishCallback, pauseCallback);
+            _conversationUI.Init(id, canSkip, finishCallback, pauseCallback);
         }
         return _conversationUI;
     }
@@ -61,10 +61,11 @@ public class ConversationUI : MonoBehaviour
         NextConversationID(_data.ID, _data.Page + 1);
     }
 
-    private void Init(int id, Action finishCallback, Action pauseCallback)
+    private void Init(int id, bool canSkip, Action finishCallback, Action pauseCallback)
     {
         ConversationModel data = DataContext.Instance.ConversationDic[id][1];
         NormalTypewriter.ClearText();
+        SkipButton.gameObject.SetActive(canSkip);
         SetData(data);
 
         _data = data;
