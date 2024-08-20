@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ExploreFile
 {
-    public bool IsArrive = false; //©è¹F²×ÂI
+    public bool IsArrive = false; //ï¿½ï¿½Fï¿½ï¿½ï¿½I
     public int Floor;
     public Vector2Int Size;
     public Vector2Int Start;
@@ -13,41 +13,10 @@ public class ExploreFile
     public int PlayerRotation;
     public List<Vector2Int> VisitedList = new List<Vector2Int>();
     public List<Vector2Int> WalkableList = new List<Vector2Int>();
-    public List<EnemyExplorer> EnemyInfoList = new List<EnemyExplorer>();
+    public List<ExploreFileEnemy> EnemyInfoList = new List<ExploreFileEnemy>();
     public List<TileInfo> TileList = new List<TileInfo>();
     public List<Treasure> TreasureList = new List<Treasure>();
     public List<TriggerInfo> TriggerList = new List<TriggerInfo>();
-
-    /*public class EnemyInfo
-    {
-        public string Explorer; //±´¯Á¦a¹Ï¤Wªº¼Ò«¬
-        public string Map = null;
-        public string MapSeed = null;
-        public string Tutorial;
-        public Vector2Int Position;
-        public int Rotation;
-
-        public EnemyInfo() { }
-
-        public EnemyInfo(string explorer, string map, string tutorial, Vector2Int position, int rotation)
-        {
-            Explorer = explorer;
-            Map = map;
-            Tutorial = tutorial;
-            Position = position;
-            Rotation = rotation;
-        }
-
-        public EnemyInfo(string explorer, bool isSeed, string map, string tutorial, Vector2Int position, int rotation)
-        {
-            Explorer = explorer;
-            IsSeed = isSeed;
-            Map = map;
-            Tutorial = tutorial;
-            Position = position;
-            Rotation = rotation;
-        }
-    }*/
 
     public class TileInfo
     {

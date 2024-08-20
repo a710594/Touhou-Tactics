@@ -13288,9 +13288,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 499230982}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22c9a62d7e32afb4cb2827d4a2be8f46, type: 3}
+  m_Script: {fileID: 11500000, guid: 47a9a8f0b32564e48bd4768e26951c3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AiType: 0
   Prefab: NotMoveAI
   Map: Tutorial_1
   Tutorial: BattleTutorial_1
@@ -43860,12 +43861,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1589009961}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22c9a62d7e32afb4cb2827d4a2be8f46, type: 3}
+  m_Script: {fileID: 11500000, guid: 47a9a8f0b32564e48bd4768e26951c3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AiType: 0
   Prefab: NotMoveAI
   Map: Tutorial_1
-  Tutorial: BattleTutorial_2
+  Tutorial: BattleTutorial_1
 --- !u!1 &1589264569
 GameObject:
   m_ObjectHideFlags: 0
@@ -48984,12 +48986,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1750397648}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22c9a62d7e32afb4cb2827d4a2be8f46, type: 3}
+  m_Script: {fileID: 11500000, guid: 47a9a8f0b32564e48bd4768e26951c3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AiType: 0
   Prefab: NotMoveAI
-  Map: Tutorial_2
-  Tutorial: BattleTutorial_3
+  Map: Tutorial_1
+  Tutorial: BattleTutorial_1
 --- !u!1 &1751581628
 GameObject:
   m_ObjectHideFlags: 0
@@ -54818,6 +54821,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FileName: Floor_1
   Tilemap: {fileID: 1621708670}
+  Start: {fileID: 0}
+  Goal: {fileID: 0}
   Enemy: {fileID: 1451080758}
   Trigger: {fileID: 1593225327}
   Treasure: {fileID: 1350023969}

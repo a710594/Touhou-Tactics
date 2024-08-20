@@ -56,6 +56,7 @@ namespace Explore
             if (ExploreManager.Instance.File.WalkableList.Contains(Utility.ConvertToVector2Int(position)))
             {
                 _isMoving = true;
+                ExploreManager.Instance.EnemyMove();
                 transform.DOMove(position, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
                 {
                     ExploreManager.Instance.File.PlayerRotation = (int)transform.eulerAngles.z;

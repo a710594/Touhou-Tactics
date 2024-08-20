@@ -36,7 +36,7 @@ namespace Explore
         private Timer _timer = new Timer();
         //public ExploreInfo Info;
         public ExploreFile File;
-        private List<EnemyExplorerController> _enemyList = new List<EnemyExplorerController>();
+        private List<ExploreEnemyController> _enemyList = new List<ExploreEnemyController>();
 
         private Generator2D _generator2D = new Generator2D();
         private List<Vector2Int> _tilePositionList;
@@ -260,7 +260,7 @@ namespace Explore
             //Set Enemy
             int groupId;
             EnemyGroupModel groupData;
-            EnemyExplorerRandom explorer;
+            ExploreFileEnemy enemy;
             for (int i = 0; i < data.EnemyCount; i++)
             {
                 room = roomList[UnityEngine.Random.Range(0, roomList.Count)];
@@ -268,32 +268,32 @@ namespace Explore
                 {
                     groupId = data.EnemyGroupPool[UnityEngine.Random.Range(0, data.EnemyGroupPool.Count)];
                     groupData = DataContext.Instance.EnemyGroupDic[groupId];
-                    explorer = new EnemyExplorerRandom();
-                    explorer.AiType = EnemyExplorer.AiEnum.Default;
-                    explorer.Prefab = "DefaultAI";
-                    explorer.Position = position;
-                    explorer.RotationY = 0;
-                    explorer.MapSeed = groupData.MapPool[UnityEngine.Random.Range(0, groupData.MapPool.Count)];
-                    explorer.Lv = groupData.Lv;
-                    explorer.Exp = groupData.Exp;
-                    explorer.EnemyList = groupData.EnemyList;
-                    File.EnemyInfoList.Add(explorer);
+                    enemy = new ExploreFileEnemy();
+                    enemy.AI = ExploreFileEnemy.AiEnum.Default;
+                    enemy.Prefab = "DefaultAI";
+                    enemy.Position = position;
+                    enemy.RotationY = 0;
+                    enemy.MapSeed = groupData.MapPool[UnityEngine.Random.Range(0, groupData.MapPool.Count)];
+                    enemy.Lv = groupData.Lv;
+                    enemy.Exp = groupData.Exp;
+                    enemy.EnemyList = groupData.EnemyList;
+                    File.EnemyInfoList.Add(enemy);
                     File.WalkableList.Remove(position);
                     room.WalkableList.Remove(position);
                 }
             }
             groupId = data.BossEnemyGroup;
             groupData = DataContext.Instance.EnemyGroupDic[groupId];
-            explorer = new EnemyExplorerRandom();
-            explorer.AiType = EnemyExplorer.AiEnum.NotMove;
-            explorer.Prefab = "NotMoveAI";
-            explorer.Position = File.Goal;
-            explorer.RotationY = 0;
-            explorer.MapSeed = groupData.MapPool[UnityEngine.Random.Range(0, groupData.MapPool.Count)];
-            explorer.Lv = groupData.Lv;
-            explorer.Exp = groupData.Exp;
-            explorer.EnemyList = groupData.EnemyList;
-            File.EnemyInfoList.Add(explorer);
+            enemy = new ExploreFileEnemy();
+            enemy.AI = ExploreFileEnemy.AiEnum.NotMove;
+            enemy.Prefab = "NotMoveAI";
+            enemy.Position = File.Goal;
+            enemy.RotationY = 0;
+            enemy.MapSeed = groupData.MapPool[UnityEngine.Random.Range(0, groupData.MapPool.Count)];
+            enemy.Lv = groupData.Lv;
+            enemy.Exp = groupData.Exp;
+            enemy.EnemyList = groupData.EnemyList;
+            File.EnemyInfoList.Add(enemy);
         }
 
         private bool CheckWall(Vector2Int position)
@@ -424,7 +424,7 @@ namespace Explore
                 if (Utility.ConvertToVector2Int(_enemyList[i].transform.position) == playerPosition)
                 {
                     InputMamager.Instance.Lock();
-                    File.EnemyInfoList.Remove(_enemyList[i].EnemyExplorer);
+                    File.EnemyInfoList.Remove(_enemyList[i].File);
                     _timer.Start(1f, () =>
                     {
                         SceneController.Instance.ChangeScene("Battle", (sceneName) =>
@@ -433,16 +433,14 @@ namespace Explore
                             BattleMapBuilder battleMapBuilder = GameObject.Find("BattleMapBuilder").GetComponent<BattleMapBuilder>();
                             BattleInfo battleInfo;
                             string tutorial = null;
-                            if (_enemyList[i].EnemyExplorer is EnemyExplorerFixed)
+                            if (_enemyList[i].File.Type == ExploreFileEnemy.TypeEnum.Fixed)
                             {
-                                EnemyExplorerFixed enemyExplorerFixed = (EnemyExplorerFixed)_enemyList[i].EnemyExplorer;
-                                battleInfo = battleMapBuilder.Get(enemyExplorerFixed.Map);
-                                tutorial = enemyExplorerFixed.Tutorial;
+                                battleInfo = battleMapBuilder.Get(_enemyList[i].File.Map);
+                                tutorial = _enemyList[i].File.Tutorial;
                             }
                             else
                             {
-                                EnemyExplorerRandom enemyExplorerRandom = (EnemyExplorerRandom)_enemyList[i].EnemyExplorer;
-                                battleInfo = battleMapBuilder.Generate(enemyExplorerRandom.MapSeed, enemyExplorerRandom.EnemyList, enemyExplorerRandom.Lv, enemyExplorerRandom.Exp);
+                                battleInfo = battleMapBuilder.Generate(_enemyList[i].File.MapSeed, _enemyList[i].File.EnemyList, _enemyList[i].File.Lv, _enemyList[i].File.Exp);
                             }
                             PathManager.Instance.LoadData(battleInfo.TileAttachInfoDic);
                             BattleController.Instance.Init(File.Floor, File.Floor, tutorial, battleInfo, battleMapBuilder.transform);
@@ -687,13 +685,13 @@ namespace Explore
             }
 
             _enemyList.Clear();
-            EnemyExplorerController controller;
+            ExploreEnemyController controller;
             for (int i = 0; i < File.EnemyInfoList.Count; i++)
             {
                 gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + File.EnemyInfoList[i].Prefab), Vector3.zero, Quaternion.identity);
                 gameObj.transform.position = new Vector3(File.EnemyInfoList[i].Position.x, 1, File.EnemyInfoList[i].Position.y);
                 gameObj.transform.SetParent(parent);
-                controller = gameObj.GetComponent<EnemyExplorerController>();
+                controller = gameObj.GetComponent<ExploreEnemyController>();
                 controller.Init(File.EnemyInfoList[i]);
                 _enemyList.Add(controller);
             }

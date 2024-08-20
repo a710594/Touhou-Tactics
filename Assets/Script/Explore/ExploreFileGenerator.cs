@@ -59,19 +59,19 @@ namespace Explore
             file.PlayerPosition = file.Start;
             file.Size = new Vector2Int(maxX - minX, maxY - minY);
 
-            ExploreFileEnemy enemyObj;
-            EnemyExplorerFixed enemyExplorer;
+            ExploreFileEnemy enemy;
+            ExploreFileEnemyObject enemyObj;
             foreach (Transform child in Enemy)
             {
-                enemyObj = child.gameObject.GetComponent<ExploreFileEnemy>();
-                enemyExplorer = new EnemyExplorerFixed();
-                enemyExplorer.AiType = enemyObj.AiType;
-                enemyExplorer.Prefab = enemyObj.Prefab;
-                enemyExplorer.Position = Utility.ConvertToVector2Int(enemyObj.transform.position);
-                enemyExplorer.RotationY = (int)enemyObj.transform.eulerAngles.y;
-                enemyExplorer.Map = enemyObj.Map;
-                enemyExplorer.Tutorial = enemyObj.Tutorial;
-                file.EnemyInfoList.Add(enemyExplorer);
+                enemy = new ExploreFileEnemy();
+                enemyObj = child.gameObject.GetComponent<ExploreFileEnemyObject>();
+                enemy.AI = enemyObj.AiType;
+                enemy.Prefab = enemyObj.Prefab;
+                enemy.Position = Utility.ConvertToVector2Int(enemyObj.transform.position);
+                enemy.RotationY = (int)enemyObj.transform.eulerAngles.y;
+                enemy.Map = enemyObj.Map;
+                enemy.Tutorial = enemyObj.Tutorial;
+                file.EnemyInfoList.Add(enemy);
             }
 
             foreach (Transform child in Trigger)

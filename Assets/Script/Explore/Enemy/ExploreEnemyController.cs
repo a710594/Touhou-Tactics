@@ -5,22 +5,22 @@ using UnityEngine;
 
 namespace Explore
 {
-    public class EnemyExplorerController : MonoBehaviour
+    public class ExploreEnemyController : MonoBehaviour
     {
         public GameObject Arrow;
-        public EnemyExplorer EnemyExplorer;
+        public ExploreFileEnemy File;
         public EnemyExplorerAI AI;
 
-        public void Init(EnemyExplorer enemyExplorer)
+        public void Init(ExploreFileEnemy enemyExplorer)
         {
-            EnemyExplorer = enemyExplorer;
+            File = enemyExplorer;
             transform.position = new Vector3(enemyExplorer.Position.x, 1, enemyExplorer.Position.y);
             transform.eulerAngles = new Vector3(0, enemyExplorer.RotationY, 0);
-            if(enemyExplorer.AiType == EnemyExplorer.AiEnum.NotMove) 
+            if(enemyExplorer.AI == ExploreFileEnemy.AiEnum.NotMove) 
             {
                 AI = new NotMoveAI();
             }
-            else if (enemyExplorer.AiType == EnemyExplorer.AiEnum.Default)
+            else if (enemyExplorer.AI == ExploreFileEnemy.AiEnum.Default)
             {
                 AI = new DefaultAI();
             }
