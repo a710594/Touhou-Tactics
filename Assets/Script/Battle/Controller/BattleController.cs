@@ -407,7 +407,7 @@ namespace Battle
         public void CreateCharacter(BattleCharacterInfo info, Vector2Int position) 
         {
             info.Position = new Vector3(position.x, Info.TileAttachInfoDic[position].Height, position.y);
-            BattleCharacterController controller = ((GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/" + info.Controller), Vector3.zero, Quaternion.identity)).GetComponent<BattleCharacterController>();
+            BattleCharacterController controller = ((GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/" + info.Job.Controller), Vector3.zero, Quaternion.identity)).GetComponent<BattleCharacterController>();
             controller.transform.position = new Vector3(position.x, Info.TileAttachInfoDic[position].Height, position.y);
             controller.transform.SetParent(Instance._root);
             controller.Init(info.Sprite);

@@ -43866,8 +43866,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AiType: 0
   Prefab: NotMoveAI
-  Map: Tutorial_1
-  Tutorial: BattleTutorial_1
+  Map: Tutorial_2
+  Tutorial: BattleTutorial_2
 --- !u!1 &1589264569
 GameObject:
   m_ObjectHideFlags: 0
@@ -48991,8 +48991,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AiType: 0
   Prefab: NotMoveAI
-  Map: Tutorial_1
-  Tutorial: BattleTutorial_1
+  Map: Tutorial_3
+  Tutorial: BattleTutorial_3
 --- !u!1 &1751581628
 GameObject:
   m_ObjectHideFlags: 0

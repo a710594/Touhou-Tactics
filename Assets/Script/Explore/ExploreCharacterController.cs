@@ -60,8 +60,6 @@ namespace Explore
                 ExploreManager.Instance.EnemyMove();
                 transform.DOMove(position, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
                 {
-                    ExploreManager.Instance.File.PlayerRotation = (int)transform.eulerAngles.z;
-                    ExploreManager.Instance.File.PlayerRotation = Mathf.RoundToInt(Camera.main.transform.eulerAngles.y);
                     ExploreManager.Instance.WaitForAllMoveComplete();
                     _isMoving = false;
                 });
@@ -88,11 +86,10 @@ namespace Explore
         {
             _isMoving = true;
             InputMamager.Instance.Lock();
+            ExploreManager.Instance.File.PlayerRotation = (int)rotation.y;
             transform.DORotate(rotation, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
             {
                 _isMoving = false;
-                ExploreManager.Instance.File.PlayerRotation = (int)rotation.y;
-                ExploreManager.Instance.CheckVidsit(transform);
                 InputMamager.Instance.Unlock();
             });
         }

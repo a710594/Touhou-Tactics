@@ -291,7 +291,7 @@ namespace Battle
                 if(Info.TileAttachInfoDic[v2].MoveCost > 0) 
                 {
                     //檢查是否為保留區
-                    if (Info.NoAttachList.Contains(v2)) 
+                    if (Info.PlayerPositionList.Contains(v2)) 
                     {
                         continue;
                     }
@@ -310,7 +310,7 @@ namespace Battle
                     if (!isRepeat)
                     {
                         //檢查是否與其他角色之間有路徑
-                        for (int i = 0; i < Info.NoAttachList.Count; i++)
+                        for (int i = 0; i < Info.PlayerPositionList.Count; i++)
                         {
                             path = GetPath(v2, Utility.ConvertToVector2Int(CharacterList[i].Position), CharacterList[i].Faction);
                             if (path != null)

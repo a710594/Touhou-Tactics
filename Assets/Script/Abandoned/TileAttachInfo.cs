@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileAttachInfo
+/*public class TileAttachInfo
 {
     public string TileID;
     public int Height;
@@ -13,7 +13,7 @@ public class TileAttachInfo
     {
         get
         {
-            if (_attachMoveCost >= 0 /*&& !HasCharacter*/)
+            if (_attachMoveCost >= 0)
             {
                 return _tileMoveCost + _attachMoveCost;
             }
@@ -54,4 +54,4 @@ public class TileAttachInfo
         AttachID = id;
         _attachMoveCost = moveCost;
     }
-}
+}*/

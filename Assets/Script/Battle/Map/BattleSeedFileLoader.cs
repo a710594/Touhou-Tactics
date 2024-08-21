@@ -33,13 +33,13 @@ namespace Battle
 
             GameObject obj;
             int count = 0;
-            Transform[] noAttach = new Transform[info.NoAttachList.Count];
+            Transform[] noAttach = new Transform[info.PlayerPositionList.Count];
             foreach (KeyValuePair<Vector2Int, TileAttachInfo> pair in info.TileAttachInfoDic)
             {
                 obj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + pair.Value.TileID), Vector3.zero, Quaternion.identity);
                 obj.transform.SetParent(Tilemap);
                 obj.transform.position = new Vector3(pair.Key.x, 0, pair.Key.y);
-                if (info.NoAttachList.Contains(pair.Key))
+                if (info.PlayerPositionList.Contains(pair.Key))
                 {
                     noAttach[count] = obj.transform;
                     count++;
@@ -52,11 +52,11 @@ namespace Battle
                 Generator.NoAttach = noAttach;
             }
 
-            BattleFileEnemy battleMapEnemy;
+            BattleFileEnemyObject battleMapEnemy;
             for(int i=0; i<info.EnemyList.Count; i++)
             {
                 obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Other/BattleMapEnemy"), Vector3.zero, Quaternion.identity);
-                battleMapEnemy = obj.GetComponent<BattleFileEnemy>();
+                battleMapEnemy = obj.GetComponent<BattleFileEnemyObject>();
                 battleMapEnemy.Init(info.EnemyList[i].Enemy.ID);
                 battleMapEnemy.transform.SetParent(EnemyGroup);
                 battleMapEnemy.transform.position = info.EnemyList[i].Position;

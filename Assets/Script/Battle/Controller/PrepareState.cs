@@ -19,7 +19,7 @@ namespace Battle
             public override void Begin()
             {
                 _info = Instance.Info;
-                Camera.main.transform.localPosition = new Vector3(_info.NoAttachList[0].x-10, 10, _info.NoAttachList[0].y-10);
+                Camera.main.transform.localPosition = new Vector3(_info.PlayerPositionList[0].x-10, 10, _info.PlayerPositionList[0].y-10);
 
                 int needCount = _info.NeedCount;
                 if (CharacterManager.Instance.SurvivalCount() < needCount) 
@@ -29,9 +29,9 @@ namespace Battle
 
                 Instance.SelectBattleCharacterUI.Init(needCount, _info.MustBeEqualToNeedCount, Instance._candidateList);
 
-                for (int i=0; i< _info.NoAttachList.Count; i++) 
+                for (int i=0; i< _info.PlayerPositionList.Count; i++) 
                 {
-                    _info.TileComponentDic[_info.NoAttachList[i]].Quad.gameObject.SetActive(true);
+                    _info.TileComponentDic[_info.PlayerPositionList[i]].Quad.gameObject.SetActive(true);
                 }
 
                 if(Instance.PrepareStateBeginHandler!=null)
@@ -66,7 +66,7 @@ namespace Battle
 
             public GameObject PlaceCharacter(Vector2Int position, CharacterInfo characterInfo)
             {
-                if (_info.NoAttachList.Contains(position))
+                if (_info.PlayerPositionList.Contains(position))
                 {
                     //????M??L?????|
                     foreach (KeyValuePair<CharacterInfo, BattleCharacterController> pair in _tempDic)

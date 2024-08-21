@@ -212,6 +212,39 @@ namespace Battle
             Amulets = info.Amulets;
         }
 
+        public BattleCharacterInfo(BattleFileEnemy file)
+        {
+            EnemyModel enemy = DataContext.Instance.EnemyDic[file.ID];
+            Enemy = enemy;
+            Name = enemy.Name;
+            Lv = file.Lv;
+
+            float n = (1 + (Lv - 1) * 0.1f);
+            MaxHP = Mathf.RoundToInt(enemy.HP * n);
+            STR = Mathf.RoundToInt(enemy.STR * n);
+            CON = Mathf.RoundToInt(enemy.CON * n);
+            INT = Mathf.RoundToInt(enemy.INT * n);
+            MEN = Mathf.RoundToInt(enemy.MEN * n);
+            DEX = Mathf.RoundToInt(enemy.DEX * n);
+            AGI = Mathf.RoundToInt(enemy.AGI * n);
+            MOV = enemy.MOV;
+            UP = enemy.UP;
+            DOWN = enemy.DOWN;
+            WT = enemy.WT;
+            Sprite = enemy.SpriteList[0];
+            Faction = FactionEnum.Enemy;
+            Position = file.Position;
+
+            for (int i = 0; i < enemy.SkillList.Count; i++)
+            {
+                SkillList.Add(new Skill(DataContext.Instance.SkillDic[enemy.SkillList[i]]));
+            }
+
+            IsAuto = true;
+            CurrentHP = MaxHP;
+            CurrentWT = WT;
+        }
+
         public void SetDamage(int damage)
         {
             CurrentHP -= damage;

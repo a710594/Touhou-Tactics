@@ -57,15 +57,15 @@ public class BattleFileGenerator : MonoBehaviour
             noAttachList.Add(new int[2] { Mathf.RoundToInt(NoAttach[i].position.x), Mathf.RoundToInt(NoAttach[i].position.z) });
         }
 
-        BattleFileEnemy battleMapEnemy;
+        BattleFileEnemyObject battleMapEnemy;
         List<int[]> enemyList = new List<int[]>(); //敵人的位置和ID
         foreach (Transform child in EnemyGroup) 
         {
-            battleMapEnemy = child.GetComponent<BattleFileEnemy>();
+            battleMapEnemy = child.GetComponent<BattleFileEnemyObject>();
             enemyList.Add(new int[4] { Mathf.RoundToInt(child.position.x), Mathf.RoundToInt(child.position.y), Mathf.RoundToInt(child.position.z) , battleMapEnemy.ID});
         }
 
-        string path = Application.streamingAssetsPath + "/Map/Battle/" + FileName + ".txt";
+        //string path = Application.streamingAssetsPath + "/Map/Battle/" + FileName + ".txt";
         BattleFile battleFile = new BattleFile();
         battleFile.PlayerCount = NeedCount;
         battleFile.MustBeEqualToNeedCount = MustBeEqualToNeedCount;
@@ -77,6 +77,7 @@ public class BattleFileGenerator : MonoBehaviour
         battleFile.MaxX = maxX;
         battleFile.MinY = minY;
         battleFile.MaxY = maxY;
-        File.WriteAllText(path, JsonConvert.SerializeObject(battleFile));
+        //File.WriteAllText(path, JsonConvert.SerializeObject(battleFile));
+        DataContext.Instance.Save(battleFile, FileName, DataContext.PrePathEnum.MapBattle);
     }
 }

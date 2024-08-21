@@ -163,6 +163,7 @@ private static readonly string _mapBattlePrePath = Application.streamingAssetsPa
         }
 
         EnemyGroupList = Load<List<EnemyGroupModel>>("EnemyGroup", PrePathEnum.Data);
+        EnemyGroupDic.Clear();
         for (int i = 0; i < EnemyGroupList.Count; i++)
         {
             EnemyGroupList[i].GetEnemyList();

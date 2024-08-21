@@ -14,9 +14,9 @@ namespace Battle
         private BattleFileReader _reader = new BattleFileReader();
 
         public BattleInfo Get(string map) //固定的地圖
-        {
-            string path = Path.Combine(_prePath, "Map/Battle/" + map + ".txt");
-            BattleInfo info = _reader.Read(path);
+        { 
+            BattleFileFixed file = DataContext.Instance.Load<BattleFileFixed>(map, DataContext.PrePathEnum.MapBattle);
+            BattleInfo info = new BattleInfo(file);
 
             CreateObject(info);
 
@@ -96,7 +96,7 @@ namespace Battle
             //Attach
             foreach (KeyValuePair<Vector2Int, TileAttachInfo> pair in info.TileAttachInfoDic)
             {
-                if (!info.NoAttachList.Contains(pair.Key))
+                if (!info.PlayerPositionList.Contains(pair.Key))
                 {
                     tileSetting = DataContext.Instance.TileSettingDic[pair.Value.TileID];
                     attachSetting = GetAttachIDRRandomly(tileSetting.Attachs); ;
@@ -115,7 +115,7 @@ namespace Battle
             int count = 5;
             while (count > 0)
             {
-                NextGeneration(info.MinX, info.MaxX, info.MinY, info.MaxY, info.TileAttachInfoDic, info.NoAttachList);
+                NextGeneration(info.MinX, info.MaxX, info.MinY, info.MaxY, info.TileAttachInfoDic, info.PlayerPositionList);
                 count--;
             }
 
@@ -130,9 +130,9 @@ namespace Battle
                 }
             }
 
-            for (int i = 0; i < info.NoAttachList.Count; i++)
+            for (int i = 0; i < info.PlayerPositionList.Count; i++)
             {
-                invalidList.Add(info.NoAttachList[i]);
+                invalidList.Add(info.PlayerPositionList[i]);
             }
 
             EnemyModel enemyData;

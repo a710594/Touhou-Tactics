@@ -32,7 +32,7 @@ namespace Battle
 
             for (int i = 0; i < file.NoAttachList.Count; i++)
             {
-                battleInfo.NoAttachList.Add(new Vector2Int(file.NoAttachList[i][0], file.NoAttachList[i][1]));
+                battleInfo.PlayerPositionList.Add(new Vector2Int(file.NoAttachList[i][0], file.NoAttachList[i][1]));
             }
 
             Vector3 enemyPosition;

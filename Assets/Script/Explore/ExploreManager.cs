@@ -719,23 +719,11 @@ namespace Explore
 
             ExploreUI exploreUI = GameObject.Find("ExploreUI").GetComponent<ExploreUI>();
             exploreUI.SetCameraPosition(File.Size.x / 2, File.Size.y / 2 - 2, x);
+
+            Vector2Int v2 = Utility.ConvertToVector2Int(Player.transform.position);
+            CheckEvent(v2);
+            CheckVidsit(Player.transform);
         }
-
-        /*private void SetInfo() 
-        {
-            Info.PlayerPosition = Utility.ConvertToVector2Int(Player.MoveTo);
-            Info.PlayerRotation = Mathf.RoundToInt(Player.transform.eulerAngles.y);
-
-            Info.EnemyInfoList.Clear();
-            for (int i = 0; i < _enemyList.Count; i++)
-            {
-                _enemyList[i].Info.Prefab = _enemyList[i].Info.Prefab;
-                _enemyList[i].Info.Map = _enemyList[i].Info.Map;
-                _enemyList[i].Info.Position = Utility.ConvertToVector2Int(_enemyList[i].MoveTo);
-                _enemyList[i].Info.Rotation = Mathf.RoundToInt(_enemyList[i].transform.eulerAngles.y);
-                Info.EnemyInfoList.Add(_enemyList[i].Info);
-            }
-        }*/
 
         private int _enemyMoveCount;
         public void EnemyMove() 
