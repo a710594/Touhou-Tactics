@@ -14,7 +14,8 @@ public class DataContext
     private static readonly string _savePrePath = Application.streamingAssetsPath + "/Save/";
     private static readonly string _settingPrePath = Application.streamingAssetsPath + "/Setting/";
     private static readonly string _mapExplorePrePath = Application.streamingAssetsPath + "/Map/Explore/";
-private static readonly string _mapBattlePrePath = Application.streamingAssetsPath + "/Map/Battle/";
+    private static readonly string _mapBattlePrePath = Application.streamingAssetsPath + "/Map/Battle/";
+    private static readonly string _mapSeedPrePath = Application.streamingAssetsPath + "/MapSeed/";
 
 
     private static DataContext _instance;
@@ -38,6 +39,7 @@ private static readonly string _mapBattlePrePath = Application.streamingAssetsPa
         Setting,
         MapExplore,
         MapBattle,
+        MapSeed,
     }
 
     public List<JobModel> JobList = new List<JobModel>();
@@ -61,6 +63,7 @@ private static readonly string _mapBattlePrePath = Application.streamingAssetsPa
     public List<ConsumablesModel> ConsumablesList = new List<ConsumablesModel>();
     public List<SpellModel> SpellList = new List<SpellModel>();
     public List<ConversationModel> ConversationList = new List<ConversationModel>();
+    public List<TileModel> TileList = new List<TileModel>();
 
     public Dictionary<int, JobModel> JobDic = new Dictionary<int, JobModel>();
     public Dictionary<int, SkillModel> SkillDic = new Dictionary<int, SkillModel>();
@@ -83,9 +86,10 @@ private static readonly string _mapBattlePrePath = Application.streamingAssetsPa
     public Dictionary<int, SpellModel> SpellDic = new Dictionary<int, SpellModel>();
     public Dictionary<int, List<SpellModel>> JobCardDic = new Dictionary<int, List<SpellModel>>();
     public Dictionary<int, Dictionary<int, ConversationModel>> ConversationDic = new Dictionary<int, Dictionary<int, ConversationModel>>();
+    public Dictionary<int, TileModel> TileDic = new Dictionary<int, TileModel>();
 
-    public Dictionary<string, TileSetting> TileSettingDic = new Dictionary<string, TileSetting>();
-    public Dictionary<string, AttachSetting> AttachSettingDic = new Dictionary<string, AttachSetting>();
+    //public Dictionary<string, TileSetting> TileSettingDic = new Dictionary<string, TileSetting>();
+    //public Dictionary<string, AttachSetting> AttachSettingDic = new Dictionary<string, AttachSetting>();
 
     public void Init() 
     {
@@ -270,6 +274,13 @@ private static readonly string _mapBattlePrePath = Application.streamingAssetsPa
             ConversationDic[id].Add(ConversationList[i].Page, ConversationList[i]);
         }
 
+        TileList = Load<List<TileModel>>("Tile", PrePathEnum.Data);
+        TileDic.Clear();
+        for (int i = 0; i < TileDic.Count; i++)
+        {
+            TileDic.Add(TileList[i].ID, TileList[i]);
+        }
+
         DirectoryInfo d;
         FileInfo[] Files;
         string str = ""; 
@@ -279,7 +290,7 @@ private static readonly string _mapBattlePrePath = Application.streamingAssetsPa
 
         d = new DirectoryInfo(Application.streamingAssetsPath + "./Attach/"); //Assuming Test is your Folder
         Files = d.GetFiles("*.json"); //Getting Text files
-        AttachSettingDic.Clear();
+        /*AttachSettingDic.Clear();
         foreach (FileInfo file in Files)
         {
             str = str + ", " + file.Name;
@@ -299,7 +310,7 @@ private static readonly string _mapBattlePrePath = Application.streamingAssetsPa
             tile = JsonConvert.DeserializeObject<TileSetting>(jsonString);
             TileSettingDic.Add(tile.ID, tile);
 
-        }
+        }*/
     }
 
     public T Load<T>(string fileName, PrePathEnum prePathEnum)
@@ -325,6 +336,10 @@ private static readonly string _mapBattlePrePath = Application.streamingAssetsPa
                 prePath = _mapExplorePrePath;
             }
             else if (prePathEnum == PrePathEnum.MapBattle)
+            {
+                prePath = _mapBattlePrePath;
+            }
+            else if (prePathEnum == PrePathEnum.MapSeed)
             {
                 prePath = _mapBattlePrePath;
             }
@@ -372,7 +387,7 @@ private static readonly string _mapBattlePrePath = Application.streamingAssetsPa
             }
             else if (prePathEnum == PrePathEnum.MapBattle)
             {
-                prePath = _mapBattlePrePath;
+                prePath = _mapSeedPrePath;
             }
 
             if (fileName == "")

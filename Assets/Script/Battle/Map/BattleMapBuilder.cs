@@ -30,8 +30,8 @@ namespace Battle
 
         public BattleInfo Generate(string seed, List<int> enemyList, int lv, int exp) //有隨機成分的地圖
         {
-            string path = Path.Combine(_prePath, "MapSeed/" + seed + ".txt");
-            BattleInfo info = _reader.Read(path);
+            /*BattleFileFixed file = DataContext.Instance.Load<BattleFileFixed>(seed, DataContext.PrePathEnum.MapSeed);
+            BattleInfo info = new BattleInfo(file);
 
             Vector2Int position;
             TileSetting tileSetting;
@@ -40,7 +40,7 @@ namespace Battle
             //Dictionary<Vector2Int, TileSetting> visitedDic = new Dictionary<Vector2Int, TileSetting>();
             Queue<Vector2Int> queue = new Queue<Vector2Int>();
 
-            foreach (KeyValuePair<Vector2Int, TileAttachInfo> pair in info.TileAttachInfoDic)
+            foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in info.TileDic)
             {
                 tileSetting = DataContext.Instance.TileSettingDic[pair.Value.TileID];
                 if (tileSetting.Enqueue)
@@ -153,7 +153,9 @@ namespace Battle
 
             CreateObject(info);
 
-            return info;
+            return info;*/
+
+            return null;
         }
 
         private void CreateObject(BattleInfo info)
@@ -163,21 +165,22 @@ namespace Battle
                 DestroyImmediate(Tilemap.GetChild(0).gameObject);
             }
 
-            GameObject tileObj;
+            TileObject tileObj;
             GameObject attachObj;
-            foreach (KeyValuePair<Vector2Int, TileAttachInfo> pair in info.TileAttachInfoDic)
+            foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in info.TileDic)
             {
-                tileObj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + pair.Value.TileID), Vector3.zero, Quaternion.identity);
+                tileObj = ((GameObject)GameObject.Instantiate(Resources.Load("Tile/" + pair.Value.TileData.Name), Vector3.zero, Quaternion.identity)).GetComponent<TileObject>();
                 tileObj.transform.SetParent(Tilemap);
                 tileObj.transform.position = new Vector3(pair.Key.x, 0, pair.Key.y);
-                info.TileComponentDic.Add(pair.Key, tileObj.GetComponent<TileComponent>());
+                //info.TileComponentDic.Add(pair.Key, tileObj.GetComponent<TileComponent>());
+                pair.Value.TileObject = tileObj;
 
-                if (pair.Value.AttachID != null)
+                if (pair.Value.AttachName != null)
                 {
-                    attachObj = (GameObject)GameObject.Instantiate(Resources.Load("Attach/" + pair.Value.AttachID), Vector3.zero, Quaternion.identity);
-                    attachObj.transform.position = tileObj.transform.position + new Vector3(0, pair.Value.Height - 0.5f, 0);
+                    attachObj = (GameObject)GameObject.Instantiate(Resources.Load("Attach/" + pair.Value.AttachName), Vector3.zero, Quaternion.identity);
+                    attachObj.transform.position = tileObj.transform.position + new Vector3(0, pair.Value.TileData.Height - 0.5f, 0);
                     attachObj.transform.parent = tileObj.transform;
-                    info.AttachDic.Add(pair.Key, attachObj);
+                    pair.Value.AttachObject = attachObj;
                 }
             }
 
@@ -192,55 +195,35 @@ namespace Battle
             }
         }
 
-        private TileSetting GetAdjacentTile(TileSetting tile, Vector2Int direction)
+        private TileModel GetAdjacentTile(TileModel tile, Vector2Int direction)
         {
             int random;
-            TileSetting adjacentTile = null;
-            List<string> pool = new List<string>();
+            TileModel adjacentTile;
+            List<int> pool = new List<int>();
 
-            if (direction == Vector2Int.up)
+            if (direction == Vector2Int.left)
             {
-                pool = GetTilePool(tile.Up);
-                random = UnityEngine.Random.Range(0, pool.Count);
-                adjacentTile = DataContext.Instance.TileSettingDic[pool[random]];
-            }
-            else if (direction == Vector2Int.down)
-            {
-                pool = GetTilePool(tile.Down);
-                random = UnityEngine.Random.Range(0, pool.Count);
-                adjacentTile = DataContext.Instance.TileSettingDic[pool[random]];
-            }
-            else if (direction == Vector2Int.left)
-            {
-                pool = GetTilePool(tile.Left);
-                random = UnityEngine.Random.Range(0, pool.Count);
-                adjacentTile = DataContext.Instance.TileSettingDic[pool[random]];
+                pool = DataContext.Instance.TileDic[tile.ID].LeftPool;
             }
             else if (direction == Vector2Int.right)
             {
-                pool = GetTilePool(tile.Right);
-                random = UnityEngine.Random.Range(0, pool.Count);
-                adjacentTile = DataContext.Instance.TileSettingDic[pool[random]];
+                pool = DataContext.Instance.TileDic[tile.ID].RightPool;
             }
+            else if (direction == Vector2Int.up)
+            {
+                pool = DataContext.Instance.TileDic[tile.ID].UpPool;
+            }
+            else if (direction == Vector2Int.down)
+            {
+                pool = DataContext.Instance.TileDic[tile.ID].DownPool;
+            }
+            random = UnityEngine.Random.Range(0, pool.Count);
+            adjacentTile = DataContext.Instance.TileDic[pool[random]];
 
             return adjacentTile;
         }
 
-        private List<string> GetTilePool(List<TileSetting.Contact> contact)
-        {
-            List<string> pool = new List<string>();
-            for (int i = 0; i < contact.Count; i++)
-            {
-                for (int j = 0; j < contact[i].Probability; j++)
-                {
-                    pool.Add(contact[i].ID);
-                }
-            }
-
-            return pool;
-        }
-
-        private AttachSetting GetAttachIDRRandomly(List<TileSetting.Attach> attachs) //�H�����o����,�]�t null
+        /*private AttachSetting GetAttachIDRRandomly(List<TileSetting.Attach> attachs) //�H�����o����,�]�t null
         {
             int random = UnityEngine.Random.Range(0, attachs.Count + 1);
             string id = null;
@@ -260,9 +243,9 @@ namespace Battle
             {
                 return null;
             }
-        }
+        }*/
 
-        private AttachSetting GetAttachID(List<TileSetting.Attach> attachs) //�ھھ��v�Ө��o����,���]�t null
+        /*private AttachSetting GetAttachID(List<TileSetting.Attach> attachs) //�ھھ��v�Ө��o����,���]�t null
         {
             List<string> pool = new List<string>();
             for (int i = 0; i < attachs.Count; i++)
@@ -295,10 +278,10 @@ namespace Battle
             {
                 return null;
             }
-        }
+        }*/
 
         // �p�� Life Game �U�@�N���ѽL
-        private Dictionary<Vector2Int, TileAttachInfo> NextGeneration(int minX, int maxX, int minY, int maxY, Dictionary<Vector2Int, TileAttachInfo> tileInfoDic, List<Vector2Int> noAttachList)
+        /*private Dictionary<Vector2Int, TileAttachInfo> NextGeneration(int minX, int maxX, int minY, int maxY, Dictionary<Vector2Int, TileAttachInfo> tileInfoDic, List<Vector2Int> noAttachList)
         {
             AttachSetting attach;
             foreach (KeyValuePair<Vector2Int, TileAttachInfo> pair in tileInfoDic)
@@ -340,9 +323,9 @@ namespace Battle
             }
 
             return tileInfoDic;
-        }
+        }*/
 
-        private int CountNeighbors(int minX, int maxX, int minY, int maxY, Dictionary<Vector2Int, TileAttachInfo> tileInfoDic, Vector2Int position, string attach)
+        /*private int CountNeighbors(int minX, int maxX, int minY, int maxY, Dictionary<Vector2Int, TileAttachInfo> tileInfoDic, Vector2Int position, string attach)
         {
             int count = 0;
 
@@ -366,6 +349,6 @@ namespace Battle
             }
 
             return count;
-        }
+        }*/
     }
 }

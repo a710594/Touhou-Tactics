@@ -43,7 +43,7 @@ namespace Battle
 
             for (int i=0; i<file.TileList.Count; i++) 
             {
-                TileDic.Add(file.TileList[i].Position, new BattleInfoTile(file.TileList[i]));
+                TileDic.Add(file.TileList[i].Position, new BattleInfoTile(file.TileList[i].ID));
             }
         }
     }

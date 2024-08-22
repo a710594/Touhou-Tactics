@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class BattleInfoTile
 {
-    public int Height;
-    public int MoveCost;
-    public MeshRenderer Quad;
-    public SpriteRenderer Select;
-    public GameObject Buff;
+    public TileModel TileData;
+    public TileObject TileObject;
 
-    public BattleInfoTile(BattleFileTile file) 
+    public string AttachName;
+    public GameObject AttachObject;
+
+    public BattleInfoTile(int id) 
     {
-        Height = file.Height;
-        MoveCost = file.MoveCost;
+         TileData = DataContext.Instance.TileDic[id];
     }
 }

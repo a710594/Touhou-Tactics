@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class BattleFileTile
 {
-    public string Name;
-    public int Height;
-    public int MoveCost;
+    public int ID;
     public Vector2Int Position;
 }
