@@ -48,8 +48,8 @@ namespace Battle
                 {
                     List<BattleCharacterInfo> characterList = Instance.CharacterList;
                     //draw line
-                    Dictionary<Vector2Int, TileAttachInfo> tileDic = Instance.Info.TileAttachInfoDic;
-                    Vector3 p = new Vector3(position.x, tileDic[position].Height, position.y);
+                    Dictionary<Vector2Int, BattleInfoTile> tileDic = Instance.Info.TileDic;
+                    Vector3 p = new Vector3(position.x, tileDic[position].TileData.Height, position.y);
                     if (_command.Track == TrackEnum.Straight)
                     {
                         Utility.CheckLine(_character.Position, p, characterList, tileDic, out bool isBlock, out Vector3 result);

@@ -33,7 +33,7 @@ public class BattleCharacterController : MonoBehaviour
             SetDirection(paths[0] - Utility.ConvertToVector2Int(transform.position));
             SetSprite();
 
-            transform.DOMove(new Vector3(paths[0].x, BattleController.Instance.Info.TileAttachInfoDic[paths[0]].Height, paths[0].y), 0.25f).SetEase(Ease.Linear).OnComplete(() =>
+            transform.DOMove(new Vector3(paths[0].x, BattleController.Instance.Info.TileDic[paths[0]].TileData.Height, paths[0].y), 0.25f).SetEase(Ease.Linear).OnComplete(() =>
             {
                 paths.RemoveAt(0);
                 if (paths.Count > 0)

@@ -64,6 +64,7 @@ public class DataContext
     public List<SpellModel> SpellList = new List<SpellModel>();
     public List<ConversationModel> ConversationList = new List<ConversationModel>();
     public List<TileModel> TileList = new List<TileModel>();
+    public List<AttachModel> AttachList = new List<AttachModel>();
 
     public Dictionary<int, JobModel> JobDic = new Dictionary<int, JobModel>();
     public Dictionary<int, SkillModel> SkillDic = new Dictionary<int, SkillModel>();
@@ -87,6 +88,7 @@ public class DataContext
     public Dictionary<int, List<SpellModel>> JobCardDic = new Dictionary<int, List<SpellModel>>();
     public Dictionary<int, Dictionary<int, ConversationModel>> ConversationDic = new Dictionary<int, Dictionary<int, ConversationModel>>();
     public Dictionary<int, TileModel> TileDic = new Dictionary<int, TileModel>();
+    public Dictionary<int, AttachModel> AttachDic = new Dictionary<int, AttachModel>();
 
     //public Dictionary<string, TileSetting> TileSettingDic = new Dictionary<string, TileSetting>();
     //public Dictionary<string, AttachSetting> AttachSettingDic = new Dictionary<string, AttachSetting>();
@@ -278,10 +280,18 @@ public class DataContext
         TileDic.Clear();
         for (int i = 0; i < TileDic.Count; i++)
         {
+            TileList[i].GetPool();
             TileDic.Add(TileList[i].ID, TileList[i]);
         }
 
-        DirectoryInfo d;
+        AttachList = Load<List<AttachModel>>("Attach", PrePathEnum.Data);
+        AttachDic.Clear();
+        for (int i = 0; i < AttachList.Count; i++)
+        {
+            AttachDic.Add(AttachList[i].ID, AttachList[i]);
+        }
+
+        /*DirectoryInfo d;
         FileInfo[] Files;
         string str = ""; 
         string jsonString;
@@ -290,7 +300,7 @@ public class DataContext
 
         d = new DirectoryInfo(Application.streamingAssetsPath + "./Attach/"); //Assuming Test is your Folder
         Files = d.GetFiles("*.json"); //Getting Text files
-        /*AttachSettingDic.Clear();
+        AttachSettingDic.Clear();
         foreach (FileInfo file in Files)
         {
             str = str + ", " + file.Name;

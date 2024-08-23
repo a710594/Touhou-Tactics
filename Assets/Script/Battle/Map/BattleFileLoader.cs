@@ -15,7 +15,7 @@ namespace Battle
 
         public void Load()
         {
-            string path = Application.streamingAssetsPath + "/Map/Battle/" + FileName + ".txt";
+            /*string path = Application.streamingAssetsPath + "/Map/Battle/" + FileName + ".txt";
 
             DataContext.Instance.Init();
             BattleFileReader reader = new BattleFileReader();
@@ -60,7 +60,7 @@ namespace Battle
                 battleMapEnemy.Init(info.EnemyList[i].Enemy.ID);
                 battleMapEnemy.transform.SetParent(EnemyGroup);
                 battleMapEnemy.transform.position = info.EnemyList[i].Position;
-            }
+            }*/
         }
     }
 }

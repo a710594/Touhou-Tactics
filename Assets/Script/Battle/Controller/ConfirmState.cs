@@ -75,7 +75,7 @@ namespace Battle
                 _controller.SetDirection(selectedPosition - Utility.ConvertToVector2Int(_controller.transform.position));
                 _controller.SetSprite();
 
-                Instance.Info.TileComponentDic[Instance._selectedPosition].Select.gameObject.SetActive(true);
+                Instance.Info.TileDic[Instance._selectedPosition].TileObject.Select.gameObject.SetActive(true);
             }
 
             public override void Click(Vector2Int position)
@@ -102,7 +102,7 @@ namespace Battle
             public override void End()
             {
                 Instance._cameraController.Clear();
-                Instance.Info.TileComponentDic[Instance._selectedPosition].Select.gameObject.SetActive(false);
+                Instance.Info.TileDic[Instance._selectedPosition].TileObject.Select.gameObject.SetActive(false);
             }
         }
     }

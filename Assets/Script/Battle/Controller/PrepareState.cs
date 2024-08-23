@@ -31,7 +31,7 @@ namespace Battle
 
                 for (int i=0; i< _info.PlayerPositionList.Count; i++) 
                 {
-                    _info.TileComponentDic[_info.PlayerPositionList[i]].Quad.gameObject.SetActive(true);
+                    _info.TileDic[_info.PlayerPositionList[i]].TileObject.Quad.gameObject.SetActive(true);
                 }
 
                 if(Instance.PrepareStateBeginHandler!=null)
@@ -80,7 +80,7 @@ namespace Battle
                     if (!_tempDic.ContainsKey(characterInfo))
                     {
                         BattleCharacterController character = ((GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/" + characterInfo.Controller), Vector3.zero, Quaternion.identity)).GetComponent<BattleCharacterController>();
-                        character.transform.position = new Vector3(position.x, _info.TileAttachInfoDic[position].Height, position.y);
+                        character.transform.position = new Vector3(position.x, _info.TileDic[position].TileData.Height, position.y);
                         character.transform.SetParent(Instance._root);
                         character.Init(characterInfo.Controller);
                         character.SetAngle();
@@ -89,7 +89,7 @@ namespace Battle
                     else
                     {
                         _tempDic[characterInfo].gameObject.SetActive(true);
-                        _tempDic[characterInfo].transform.position = new Vector3(position.x, _info.TileAttachInfoDic[position].Height, position.y);
+                        _tempDic[characterInfo].transform.position = new Vector3(position.x, _info.TileDic[position].TileData.Height, position.y);
                     }
                     Instance.DragCameraUI.DontDrag = false;
 

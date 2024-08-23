@@ -29,7 +29,7 @@ namespace Battle
                 {
                     if (pair.Key.Effect.Type == EffectModel.TypeEnum.Summon)
                     {
-                        Vector3 v3 = new Vector3(Instance._selectedPosition.x, Instance.Info.TileAttachInfoDic[Instance._selectedPosition].Height, Instance._selectedPosition.y);
+                        Vector3 v3 = new Vector3(Instance._selectedPosition.x, Instance.Info.TileDic[Instance._selectedPosition].TileData.Height, Instance._selectedPosition.y);
                         UseEffect(pair.Key.Effect, v3);
                     }
                     else

@@ -214,8 +214,8 @@ namespace Battle
         {
             for (int i = 0; i < list.Count; i++)
             {
-                Info.TileComponentDic[list[i]].Quad.gameObject.SetActive(true);
-                Info.TileComponentDic[list[i]].Quad.material.SetColor("_Color", color);
+                Info.TileDic[list[i]].TileObject.Quad.gameObject.SetActive(true);
+                Info.TileDic[list[i]].TileObject.Quad.material.SetColor("_Color", color);
             }
         }
 
@@ -313,10 +313,10 @@ namespace Battle
 
         public void ClearQuad()
         {
-            foreach (KeyValuePair<Vector2Int, TileComponent> pair in Info.TileComponentDic)
+            foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in Info.TileDic)
             {
-                pair.Value.Quad.gameObject.SetActive(false);
-                pair.Value.Buff.gameObject.SetActive(false);
+                pair.Value.TileObject.Quad.gameObject.SetActive(false);
+                pair.Value.TileObject.Buff.gameObject.SetActive(false);
             }
         }
 
@@ -406,9 +406,9 @@ namespace Battle
 
         public void CreateCharacter(BattleCharacterInfo info, Vector2Int position) 
         {
-            info.Position = new Vector3(position.x, Info.TileAttachInfoDic[position].Height, position.y);
+            info.Position = new Vector3(position.x, Info.TileDic[position].TileData.Height, position.y);
             BattleCharacterController controller = ((GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/" + info.Job.Controller), Vector3.zero, Quaternion.identity)).GetComponent<BattleCharacterController>();
-            controller.transform.position = new Vector3(position.x, Info.TileAttachInfoDic[position].Height, position.y);
+            controller.transform.position = new Vector3(position.x, Info.TileDic[position].TileData.Height, position.y);
             controller.transform.SetParent(Instance._root);
             controller.Init(info.Sprite);
             controller.SetAngle();
@@ -481,9 +481,9 @@ namespace Battle
                     for (int j = 0; j < character.StatusList[i].AreaList.Count; j++)
                     {
                         position = Utility.ConvertToVector2Int(character.Position) + character.StatusList[i].AreaList[j];
-                        if (Info.TileComponentDic.ContainsKey(position))
+                        if (Info.TileDic.ContainsKey(position))
                         {
-                            Info.TileComponentDic[position].Buff.SetActive(true);
+                            Info.TileDic[position].TileObject.Buff.SetActive(true);
                         }
                     }
                 }

@@ -56,19 +56,19 @@ public static class Utility
                     list.Add(position);
                 }
 
-                if (!list.Contains(position + Vector2Int.up) && info.TileAttachInfoDic.ContainsKey(position + Vector2Int.up) && ManhattanDistance(position + Vector2Int.up, start) <= range)
+                if (!list.Contains(position + Vector2Int.up) && info.TileDic.ContainsKey(position + Vector2Int.up) && ManhattanDistance(position + Vector2Int.up, start) <= range)
                 {
                     queue.Enqueue(position + Vector2Int.up);
                 }
-                if (!list.Contains(position + Vector2Int.down) &&  info.TileAttachInfoDic.ContainsKey(position + Vector2Int.down)  && ManhattanDistance(position + Vector2Int.down, start) <= range)
+                if (!list.Contains(position + Vector2Int.down) &&  info.TileDic.ContainsKey(position + Vector2Int.down)  && ManhattanDistance(position + Vector2Int.down, start) <= range)
                 {
                     queue.Enqueue(position + Vector2Int.down);
                 }
-                if (!list.Contains(position + Vector2Int.left) &&  info.TileAttachInfoDic.ContainsKey(position + Vector2Int.left) && ManhattanDistance(position + Vector2Int.left, start) <= range)
+                if (!list.Contains(position + Vector2Int.left) &&  info.TileDic.ContainsKey(position + Vector2Int.left) && ManhattanDistance(position + Vector2Int.left, start) <= range)
                 {
                     queue.Enqueue(position + Vector2Int.left);
                 }
-                if (!list.Contains(position + Vector2Int.right) &&  info.TileAttachInfoDic.ContainsKey(position + Vector2Int.right) && ManhattanDistance(position + Vector2Int.right, start) <= range)
+                if (!list.Contains(position + Vector2Int.right) &&  info.TileDic.ContainsKey(position + Vector2Int.right) && ManhattanDistance(position + Vector2Int.right, start) <= range)
                 {
                     queue.Enqueue(position + Vector2Int.right);
                 }
@@ -456,7 +456,7 @@ public static class Utility
         }
     }
 
-    public static void CheckLine(Vector3 from, Vector3 to, List<BattleCharacterInfo> characterList, Dictionary<Vector2Int, TileAttachInfo> tileDic, out bool isBlock, out Vector3 result)
+    public static void CheckLine(Vector3 from, Vector3 to, List<BattleCharacterInfo> characterList, Dictionary<Vector2Int, BattleInfoTile> tileDic, out bool isBlock, out Vector3 result)
     {
         isBlock = false;
         int height;
@@ -467,10 +467,10 @@ public static class Utility
             position = ConvertToVector2Int(list[i]);
             if (tileDic.ContainsKey(position))
             {
-                height = tileDic[position].Height;
-                if (tileDic[position].AttachID != null)
+                height = tileDic[position].TileData.Height;
+                if (tileDic[position].AttachData != null)
                 {
-                    height += DataContext.Instance.AttachSettingDic[tileDic[position].AttachID].Height;
+                    height += tileDic[position].AttachData.Height;
                 }
 
                 for (int j = 0; j < characterList.Count; j++)
@@ -494,7 +494,7 @@ public static class Utility
     }
 
     //和 CheckLine 相似,但是無視 attach 和 character
-    public static void CheckThrough(Vector3 from, Vector3 to, Dictionary<Vector2Int, TileAttachInfo> tileDic, out bool isBlock, out Vector3 result)
+    public static void CheckThrough(Vector3 from, Vector3 to, Dictionary<Vector2Int, BattleInfoTile> tileDic, out bool isBlock, out Vector3 result)
     {
         isBlock = false;
         int height;
@@ -505,7 +505,7 @@ public static class Utility
             position = ConvertToVector2Int(list[i]);
             if (tileDic.ContainsKey(position))
             {
-                height = tileDic[position].Height;
+                height = tileDic[position].TileData.Height;
 
                 if (height > list[i].y)
                 {
@@ -519,7 +519,7 @@ public static class Utility
         result = to;
     }
 
-    public static void CheckParabola(Vector3 from, Vector3 to, int parabolaHeight, List<BattleCharacterInfo> characterList, Dictionary<Vector2Int, TileAttachInfo> tileDic, out bool isBlock, out List<Vector3> result)
+    public static void CheckParabola(Vector3 from, Vector3 to, int parabolaHeight, List<BattleCharacterInfo> characterList, Dictionary<Vector2Int, BattleInfoTile> tileDic, out bool isBlock, out List<Vector3> result)
     {
         isBlock = false;
         int height;
@@ -530,10 +530,10 @@ public static class Utility
             position = ConvertToVector2Int(list[i]);
             if (tileDic.ContainsKey(position))
             {
-                height = tileDic[position].Height;
-                if (tileDic[position].AttachID != null)
+                height = tileDic[position].TileData.Height;
+                if (tileDic[position].AttachData != null)
                 {
-                    height += DataContext.Instance.AttachSettingDic[tileDic[position].AttachID].Height;
+                    height += tileDic[position].AttachData.Height;
                 }
                 for (int j = 0; j < characterList.Count; j++)
                 {

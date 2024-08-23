@@ -31,7 +31,7 @@ namespace Battle
                 newPosition = position + Vector2Int.up;
                 if (!list.Contains(newPosition) && newPosition.y <= info.MaxY)
                 {
-                    heightDiff = info.TileAttachInfoDic[start].Height - info.TileAttachInfoDic[newPosition].Height;
+                    heightDiff = info.TileDic[start].TileData.Height - info.TileDic[newPosition].TileData.Height;
                     newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
                     if (Utility.ManhattanDistance(newPosition, start) <= newRange)
                     {
@@ -42,7 +42,7 @@ namespace Battle
                 newPosition = position + Vector2Int.down;
                 if (!list.Contains(newPosition) && newPosition.y >= info.MinY)
                 {
-                    heightDiff = info.TileAttachInfoDic[start].Height - info.TileAttachInfoDic[newPosition].Height;
+                    heightDiff = info.TileDic[start].TileData.Height - info.TileDic[newPosition].TileData.Height;
                     newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
                     if (Utility.ManhattanDistance(newPosition, start) <= newRange)
                     {
@@ -53,7 +53,7 @@ namespace Battle
                 newPosition = position + Vector2Int.left;
                 if (!list.Contains(newPosition) && newPosition.x >= info.MinX)
                 {
-                    heightDiff = info.TileAttachInfoDic[start].Height - info.TileAttachInfoDic[newPosition].Height;
+                    heightDiff = info.TileDic[start].TileData.Height - info.TileDic[newPosition].TileData.Height;
                     newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
                     if (Utility.ManhattanDistance(newPosition, start) <= newRange)
                     {
@@ -64,7 +64,7 @@ namespace Battle
                 newPosition = position + Vector2Int.right;
                 if (!list.Contains(newPosition) && newPosition.x <= info.MaxX)
                 {
-                    heightDiff = info.TileAttachInfoDic[start].Height - info.TileAttachInfoDic[newPosition].Height;
+                    heightDiff = info.TileDic[start].TileData.Height - info.TileDic[newPosition].TileData.Height;
                     newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
                     if (Utility.ManhattanDistance(newPosition, start) <= newRange)
                     {

@@ -17,9 +17,9 @@ public class PathManager
         }
     }
 
-    public Dictionary<Vector2Int, TileAttachInfo> _tileInfoDic;
+    public Dictionary<Vector2Int, BattleInfoTile> _tileInfoDic;
 
-    public void LoadData(Dictionary<Vector2Int, TileAttachInfo> tileInfoDic)
+    public void LoadData(Dictionary<Vector2Int, BattleInfoTile> tileInfoDic)
     {
         _tileInfoDic = tileInfoDic;
     }

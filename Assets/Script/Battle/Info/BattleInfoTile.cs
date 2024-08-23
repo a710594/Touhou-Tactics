@@ -7,11 +7,21 @@ public class BattleInfoTile
     public TileModel TileData;
     public TileObject TileObject;
 
-    public string AttachName;
+    public AttachModel AttachData;
     public GameObject AttachObject;
 
-    public BattleInfoTile(int id) 
+    public int MoveCost
     {
-         TileData = DataContext.Instance.TileDic[id];
+        get
+        {
+            if (AttachData != null && AttachData.MoveCost >= 0)
+            {
+                return TileData.MoveCost + AttachData.MoveCost;
+            }
+            else
+            {
+                return -1;
+            }
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace Battle
     {
         public BattleInfo Read(string path)
         {
-            string jsonString = File.ReadAllText(path);
+            /*string jsonString = File.ReadAllText(path);
             BattleFile file = JsonConvert.DeserializeObject<BattleFile>(jsonString);
             BattleInfo battleInfo = new BattleInfo();
 
@@ -27,7 +27,7 @@ namespace Battle
             {
                 x = int.Parse(file.TileList[i][0]);
                 y = int.Parse(file.TileList[i][1]);
-                battleInfo.TileAttachInfoDic.Add(new Vector2Int(x, y), new TileAttachInfo(file.TileList[i][2])); ;
+                battleInfo.TileDic.Add(new Vector2Int(x, y), new TileAttachInfo(file.TileList[i][2])); ;
             }
 
             for (int i = 0; i < file.NoAttachList.Count; i++)
@@ -50,7 +50,8 @@ namespace Battle
                 battleInfo.EnemyList.Add(battleCharacterInfo);
             }
 
-            return battleInfo;
+            return battleInfo;*/
+            return null;
         }
     }
 }

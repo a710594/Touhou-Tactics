@@ -40,10 +40,11 @@ namespace Battle
                 EnemyList.Add(new BattleCharacterInfo(file.EnemyList[i]));
             }
 
-
+            BattleInfoTile tile = new BattleInfoTile();
             for (int i=0; i<file.TileList.Count; i++) 
             {
-                TileDic.Add(file.TileList[i].Position, new BattleInfoTile(file.TileList[i].ID));
+                tile.TileData = DataContext.Instance.TileDic[file.TileList[i].ID];
+                TileDic.Add(file.TileList[i].Position, tile);
             }
         }
     }

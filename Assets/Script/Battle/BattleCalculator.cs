@@ -48,7 +48,7 @@ namespace Battle
         public List<Vector2Int> GetTroughAreaList(Vector3 from, Vector3 to)
         {
             List<Vector2Int> list = new List<Vector2Int>();
-            Utility.CheckThrough(from, to, Info.TileAttachInfoDic, out bool isBlock, out Vector3 result);
+            Utility.CheckThrough(from, to, Info.TileDic, out bool isBlock, out Vector3 result);
             List<Vector3> line = Utility.DrawLine3D(from, result);
             for (int i = 0; i < line.Count; i++)
             {
@@ -288,7 +288,7 @@ namespace Battle
             while (true) 
             {
                 v2 = new Vector2Int(Mathf.RoundToInt(Utility.RandomGaussian(Info.MinX, Info.MaxX)), Mathf.RoundToInt(Utility.RandomGaussian(Info.MinY, Info.MaxY)));
-                if(Info.TileAttachInfoDic[v2].MoveCost > 0) 
+                if(Info.TileDic[v2].MoveCost > 0) 
                 {
                     //檢查是否為保留區
                     if (Info.PlayerPositionList.Contains(v2)) 
@@ -315,7 +315,7 @@ namespace Battle
                             path = GetPath(v2, Utility.ConvertToVector2Int(CharacterList[i].Position), CharacterList[i].Faction);
                             if (path != null)
                             {
-                                v3 = new Vector3(v2.x, Info.TileAttachInfoDic[v2].Height, v2.y);
+                                v3 = new Vector3(v2.x, Info.TileDic[v2].TileData.Height, v2.y);
                                 hasPath = true;
                                 break;
                             }

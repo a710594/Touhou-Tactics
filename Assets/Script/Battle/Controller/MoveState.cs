@@ -45,29 +45,29 @@ namespace Battle
                         Instance._canClick = false;
                         _character.Controller.transform.position = _character.Position;
                         Instance.BattleUI.SetSkillVisible(false);
-                        Instance.Info.TileComponentDic[_originalPosition].Select.gameObject.SetActive(false);
+                        Instance.Info.TileDic[_originalPosition].TileObject.Select.gameObject.SetActive(false);
                         Instance.ClearQuad();
                         List<Vector2Int> path = Instance.GetPath(Utility.ConvertToVector2Int(_character.Position), position, _character.Faction);
                         _character.Controller.Move(path);
                         _character.LastPosition = _character.Position;
-                        _character.Position = new Vector3(position.x, Instance.Info.TileAttachInfoDic[position].Height, position.y);
+                        _character.Position = new Vector3(position.x, Instance.Info.TileDic[position].TileData.Height, position.y);
                         _character.HasMove = true;
                     }
                     else
                     {
-                        if (Instance.Info.TileComponentDic.ContainsKey(_originalPosition))
+                        if (Instance.Info.TileDic.ContainsKey(_originalPosition))
                         {
-                            Instance.Info.TileComponentDic[_originalPosition].Select.gameObject.SetActive(false);
+                            Instance.Info.TileDic[_originalPosition].TileObject.Select.gameObject.SetActive(false);
                         }
                         _originalPosition = position;
-                        Instance.Info.TileComponentDic[_originalPosition].Select.gameObject.SetActive(true);
+                        Instance.Info.TileDic[_originalPosition].TileObject.Select.gameObject.SetActive(true);
                     }
                 }
                 else
                 {
-                    if (Instance.Info.TileComponentDic.ContainsKey(_originalPosition))
+                    if (Instance.Info.TileDic.ContainsKey(_originalPosition))
                     {
-                        Instance.Info.TileComponentDic[_originalPosition].Select.gameObject.SetActive(false);
+                        Instance.Info.TileDic[_originalPosition].TileObject.Select.gameObject.SetActive(false);
                     }
                     _character.Controller.transform.position = _character.Position;
                     _context.SetState<CommandState>();

@@ -175,9 +175,9 @@ namespace Battle
                 //info.TileComponentDic.Add(pair.Key, tileObj.GetComponent<TileComponent>());
                 pair.Value.TileObject = tileObj;
 
-                if (pair.Value.AttachName != null)
+                if (pair.Value.AttachData != null)
                 {
-                    attachObj = (GameObject)GameObject.Instantiate(Resources.Load("Attach/" + pair.Value.AttachName), Vector3.zero, Quaternion.identity);
+                    attachObj = (GameObject)GameObject.Instantiate(Resources.Load("Attach/" + pair.Value.AttachData.Name), Vector3.zero, Quaternion.identity);
                     attachObj.transform.position = tileObj.transform.position + new Vector3(0, pair.Value.TileData.Height - 0.5f, 0);
                     attachObj.transform.parent = tileObj.transform;
                     pair.Value.AttachObject = attachObj;

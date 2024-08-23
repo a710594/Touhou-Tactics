@@ -6,10 +6,9 @@ public class TileModel
 {
     public int ID;
     public string Name;
-    public string Comment;
     public int Height;
     public int MoveCost;
-    public bool Enqueue; //¬O§_·|¶i¤J wave function collapse ªº BFS queue ¤¤
+    public bool Enqueue; //ï¿½Oï¿½_ï¿½|ï¿½iï¿½J wave function collapse ï¿½ï¿½ BFS queue ï¿½ï¿½
 
     public int LeftID_1;
     public int LeftProbability_1;

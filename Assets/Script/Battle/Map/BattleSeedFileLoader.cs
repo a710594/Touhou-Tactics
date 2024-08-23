@@ -34,9 +34,9 @@ namespace Battle
             GameObject obj;
             int count = 0;
             Transform[] noAttach = new Transform[info.PlayerPositionList.Count];
-            foreach (KeyValuePair<Vector2Int, TileAttachInfo> pair in info.TileAttachInfoDic)
+            foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in info.TileDic)
             {
-                obj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + pair.Value.TileID), Vector3.zero, Quaternion.identity);
+                obj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + pair.Value.TileData.Name), Vector3.zero, Quaternion.identity);
                 obj.transform.SetParent(Tilemap);
                 obj.transform.position = new Vector3(pair.Key.x, 0, pair.Key.y);
                 if (info.PlayerPositionList.Contains(pair.Key))

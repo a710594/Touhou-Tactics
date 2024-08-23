@@ -52,7 +52,7 @@ namespace Battle
             BattleController.Instance.RemoveByFaction(SelectedSkill.RangeTarget, rangeList);
             Vector2Int targetPosition = rangeList[UnityEngine.Random.Range(0, rangeList.Count)];
             BattleController.Instance.Click(targetPosition);
-            Vector3 v3 = new Vector3(targetPosition.x, BattleController.Instance.Info.TileAttachInfoDic[targetPosition].Height, targetPosition.y);
+            Vector3 v3 = new Vector3(targetPosition.x, BattleController.Instance.Info.TileDic[targetPosition].TileData.Height, targetPosition.y);
             MoveCamera(v3, () =>
             {
                 BattleController.Instance.Click(targetPosition);

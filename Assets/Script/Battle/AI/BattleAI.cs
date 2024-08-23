@@ -84,20 +84,20 @@ namespace Battle
                 for (int j = 0; j < targetList.Count; j++)
                 {
                     targetPosition_v2 = Utility.ConvertToVector2Int(targetList[j].Position);
-                    step_v3 = new Vector3(_stepList[i].x, BattleController.Instance.Info.TileAttachInfoDic[_stepList[i]].Height, _stepList[i].y);
+                    step_v3 = new Vector3(_stepList[i].x, BattleController.Instance.Info.TileDic[_stepList[i]].TileData.Height, _stepList[i].y);
                     if (targetPosition_v2 != _stepList[i] && rangeList.Contains(targetPosition_v2)) //�ؼЦ�m�P�ڤ��P�B�b�g�{��
                     {
                         bool isBlock = false;
                         //檢查射擊是否會被地形阻礙
                         if (SelectedSkill.Track == TrackEnum.Straight)
                         {
-                            Utility.CheckLine(step_v3, targetList[j].Position, BattleController.Instance.CharacterList, BattleController.Instance.Info.TileAttachInfoDic, out isBlock, out Vector3 result);
+                            Utility.CheckLine(step_v3, targetList[j].Position, BattleController.Instance.CharacterList, BattleController.Instance.Info.TileDic, out isBlock, out Vector3 result);
                             //Instance._cameraController.DrawLine(_character.Position, result, isBlock);
                             //Instance._selectedPosition = Utility.ConvertToVector2Int(result);
                         }
                         else if (SelectedSkill.Track == TrackEnum.Parabola)
                         {
-                            Utility.CheckParabola(step_v3, targetList[j].Position, 4, BattleController.Instance.CharacterList, BattleController.Instance.Info.TileAttachInfoDic, out isBlock, out List<Vector3> result); //�n�ɩߪ��u������
+                            Utility.CheckParabola(step_v3, targetList[j].Position, 4, BattleController.Instance.CharacterList, BattleController.Instance.Info.TileDic, out isBlock, out List<Vector3> result); //�n�ɩߪ��u������
                             //Instance._cameraController.DrawParabola(result, isBlock);
                             //Instance._selectedPosition = Utility.ConvertToVector2Int(result.Last());
                         }
