@@ -30,20 +30,18 @@ namespace Battle
 
         public BattleInfo Generate(string seed, List<int> enemyList, int lv, int exp) //有隨機成分的地圖
         {
-            /*BattleFileFixed file = DataContext.Instance.Load<BattleFileFixed>(seed, DataContext.PrePathEnum.MapSeed);
+            BattleFileFixed file = DataContext.Instance.Load<BattleFileFixed>(seed, DataContext.PrePathEnum.MapSeed);
             BattleInfo info = new BattleInfo(file);
 
             Vector2Int position;
-            TileSetting tileSetting;
-            TileSetting adjacentTileSetting;
-            AttachSetting attachSetting;
-            //Dictionary<Vector2Int, TileSetting> visitedDic = new Dictionary<Vector2Int, TileSetting>();
+            TileModel tileData;
+            BattleInfoTile tileInfo;
+            AttachModel attachData;
             Queue<Vector2Int> queue = new Queue<Vector2Int>();
 
             foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in info.TileDic)
             {
-                tileSetting = DataContext.Instance.TileSettingDic[pair.Value.TileID];
-                if (tileSetting.Enqueue)
+                if (pair.Value.TileData.Enqueue)
                 {
                     queue.Enqueue(pair.Key);
                 }
@@ -53,40 +51,46 @@ namespace Battle
             while (queue.Count != 0)
             {
                 position = queue.Dequeue();
-                tileSetting = DataContext.Instance.TileSettingDic[info.TileAttachInfoDic[position].TileID];
-
-                if ((position + Vector2Int.up).y <= info.MaxY && !info.TileAttachInfoDic.ContainsKey(position + Vector2Int.up))
+                if ((position + Vector2Int.up).y <= info.MaxY && !info.TileDic.ContainsKey(position + Vector2Int.up))
                 {
-                    adjacentTileSetting = GetAdjacentTile(tileSetting, Vector2Int.up);
-                    info.TileAttachInfoDic.Add(position + Vector2Int.up, new TileAttachInfo(adjacentTileSetting));
-                    if (adjacentTileSetting.Enqueue)
+                    tileData = GetAdjacentTile(info.TileDic[position].TileData, Vector2Int.up);
+                    tileInfo = new BattleInfoTile();
+                    tileInfo.TileData = tileData;
+                    info.TileDic.Add(position + Vector2Int.up, tileInfo);
+                    if (tileData.Enqueue)
                     {
                         queue.Enqueue(position + Vector2Int.up);
                     }
                 }
-                if ((position + Vector2Int.down).y >= info.MinY && !info.TileAttachInfoDic.ContainsKey(position + Vector2Int.down))
+                if ((position + Vector2Int.down).y >= info.MinY && !info.TileDic.ContainsKey(position + Vector2Int.down))
                 {
-                    adjacentTileSetting = GetAdjacentTile(tileSetting, Vector2Int.down);
-                    info.TileAttachInfoDic.Add(position + Vector2Int.down, new TileAttachInfo(adjacentTileSetting));
-                    if (adjacentTileSetting.Enqueue)
+                    tileData = GetAdjacentTile(info.TileDic[position].TileData, Vector2Int.down);
+                    tileInfo = new BattleInfoTile();
+                    tileInfo.TileData = tileData;
+                    info.TileDic.Add(position + Vector2Int.down, tileInfo);
+                    if (tileData.Enqueue)
                     {
                         queue.Enqueue(position + Vector2Int.down);
                     }
                 }
-                if ((position + Vector2Int.left).x >= info.MinX && !info.TileAttachInfoDic.ContainsKey(position + Vector2Int.left))
+                if ((position + Vector2Int.left).x >= info.MinX && !info.TileDic.ContainsKey(position + Vector2Int.left))
                 {
-                    adjacentTileSetting = GetAdjacentTile(tileSetting, Vector2Int.left);
-                    info.TileAttachInfoDic.Add(position + Vector2Int.left, new TileAttachInfo(adjacentTileSetting));
-                    if (adjacentTileSetting.Enqueue)
+                    tileData = GetAdjacentTile(info.TileDic[position].TileData, Vector2Int.left);
+                    tileInfo = new BattleInfoTile();
+                    tileInfo.TileData = tileData;
+                    info.TileDic.Add(position + Vector2Int.left, tileInfo);
+                    if (tileData.Enqueue)
                     {
                         queue.Enqueue(position + Vector2Int.left);
                     }
                 }
-                if ((position + Vector2Int.right).x <= info.MaxX && !info.TileAttachInfoDic.ContainsKey(position + Vector2Int.right))
+                if ((position + Vector2Int.right).x <= info.MaxX && !info.TileDic.ContainsKey(position + Vector2Int.right))
                 {
-                    adjacentTileSetting = GetAdjacentTile(tileSetting, Vector2Int.right);
-                    info.TileAttachInfoDic.Add(position + Vector2Int.right, new TileAttachInfo(adjacentTileSetting));
-                    if (adjacentTileSetting.Enqueue)
+                    tileData = GetAdjacentTile(info.TileDic[position].TileData, Vector2Int.right);
+                    tileInfo = new BattleInfoTile();
+                    tileInfo.TileData = tileData;
+                    info.TileDic.Add(position + Vector2Int.right, tileInfo);
+                    if (tileData.Enqueue)
                     {
                         queue.Enqueue(position + Vector2Int.right);
                     }
@@ -94,20 +98,12 @@ namespace Battle
             }
 
             //Attach
-            foreach (KeyValuePair<Vector2Int, TileAttachInfo> pair in info.TileAttachInfoDic)
+            foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in info.TileDic)
             {
                 if (!info.PlayerPositionList.Contains(pair.Key))
                 {
-                    tileSetting = DataContext.Instance.TileSettingDic[pair.Value.TileID];
-                    attachSetting = GetAttachIDRRandomly(tileSetting.Attachs); ;
-                    if (attachSetting != null)
-                    {
-                        info.TileAttachInfoDic[pair.Key].SetAttach(attachSetting.ID, attachSetting.MoveCost);
-                    }
-                    else
-                    {
-                        info.TileAttachInfoDic[pair.Key].SetAttach(null, 0);
-                    }
+                    attachData = GetAttachRandomly(pair.Value.TileData);
+                    pair.Value.AttachData = attachData;
                 }
             }
 
@@ -115,14 +111,14 @@ namespace Battle
             int count = 5;
             while (count > 0)
             {
-                NextGeneration(info.MinX, info.MaxX, info.MinY, info.MaxY, info.TileAttachInfoDic, info.PlayerPositionList);
+                NextGeneration(info);
                 count--;
             }
 
             //Create Enemy
             info.Exp = exp;
             List<Vector2Int> invalidList = new List<Vector2Int>();
-            foreach (KeyValuePair<Vector2Int, TileAttachInfo> pair in info.TileAttachInfoDic)
+            foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in info.TileDic)
             {
                 if (pair.Value.MoveCost == 0)
                 {
@@ -146,16 +142,14 @@ namespace Battle
                     Type t = Type.GetType("Battle." + enemyData.AI);
                     battleCharacterInfo.AI = (BattleAI)Activator.CreateInstance(t);
                     battleCharacterInfo.AI.Init(battleCharacterInfo);
-                    battleCharacterInfo.Position = Utility.ConvertToVector3Int(result, info.TileAttachInfoDic);
+                    battleCharacterInfo.Position = Utility.ConvertToVector3Int(result, info.TileDic);
                     info.EnemyList.Add(battleCharacterInfo);
                 }
             }
 
             CreateObject(info);
 
-            return info;*/
-
-            return null;
+            return info;
         }
 
         private void CreateObject(BattleInfo info)
@@ -165,11 +159,13 @@ namespace Battle
                 DestroyImmediate(Tilemap.GetChild(0).gameObject);
             }
 
+            GameObject obj;
             TileObject tileObj;
             GameObject attachObj;
             foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in info.TileDic)
             {
-                tileObj = ((GameObject)GameObject.Instantiate(Resources.Load("Tile/" + pair.Value.TileData.Name), Vector3.zero, Quaternion.identity)).GetComponent<TileObject>();
+                obj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + pair.Value.TileData.Name), Vector3.zero, Quaternion.identity);
+                tileObj = obj.GetComponent<TileObject>();
                 tileObj.transform.SetParent(Tilemap);
                 tileObj.transform.position = new Vector3(pair.Key.x, 0, pair.Key.y);
                 //info.TileComponentDic.Add(pair.Key, tileObj.GetComponent<TileComponent>());
@@ -223,78 +219,32 @@ namespace Battle
             return adjacentTile;
         }
 
-        /*private AttachSetting GetAttachIDRRandomly(List<TileSetting.Attach> attachs) //�H�����o����,�]�t null
+        private AttachModel GetAttachRandomly(TileModel tile)
         {
-            int random = UnityEngine.Random.Range(0, attachs.Count + 1);
-            string id = null;
-            if (random < attachs.Count)
+            int random = UnityEngine.Random.Range(0, tile.AttachPool.Count);
+            int id = tile.AttachPool[random];
+            AttachModel attach = null;
+            if (id != 0)
             {
-                if (attachs[random].ID != "")
-                {
-                    id = attachs[random].ID;
-                }
+                attach = DataContext.Instance.AttachDic[id];
             }
 
-            if (id != null)
-            {
-                return DataContext.Instance.AttachSettingDic[id];
-            }
-            else
-            {
-                return null;
-            }
-        }*/
-
-        /*private AttachSetting GetAttachID(List<TileSetting.Attach> attachs) //�ھھ��v�Ө��o����,���]�t null
-        {
-            List<string> pool = new List<string>();
-            for (int i = 0; i < attachs.Count; i++)
-            {
-                for (int j = 0; j < attachs[i].Probability; j++)
-                {
-                    if (attachs[i].ID != "")
-                    {
-                        pool.Add(attachs[i].ID);
-                    }
-                    else
-                    {
-                        pool.Add(null);
-                    }
-                }
-            }
-
-            int random = UnityEngine.Random.Range(0, pool.Count);
-            string id = null;
-            if (pool.Count > 0)
-            {
-                id = pool[random];
-            }
-
-            if (id != null)
-            {
-                return DataContext.Instance.AttachSettingDic[id];
-            }
-            else
-            {
-                return null;
-            }
-        }*/
+            return attach;
+        }
 
         // �p�� Life Game �U�@�N���ѽL
-        /*private Dictionary<Vector2Int, TileAttachInfo> NextGeneration(int minX, int maxX, int minY, int maxY, Dictionary<Vector2Int, TileAttachInfo> tileInfoDic, List<Vector2Int> noAttachList)
+        private void NextGeneration(BattleInfo info)
         {
-            AttachSetting attach;
-            foreach (KeyValuePair<Vector2Int, TileAttachInfo> pair in tileInfoDic)
+            AttachModel attach;
+            foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in info.TileDic)
             {
-                int neighbors = CountNeighbors(minX, maxX, minY, maxY, tileInfoDic, pair.Key, null);
-                int grassNeighbors = CountNeighbors(minX, maxX, minY, maxY, tileInfoDic, pair.Key, "Grass");
-                int treeNeighbors = CountNeighbors(minX, maxX, minY, maxY, tileInfoDic, pair.Key, "Tree");
+                int neighbors = CountNeighbors(info, pair.Key);
 
-                if (pair.Value.AttachID != null)
+                if (pair.Value.AttachData != null)
                 {
                     if (neighbors < 2)
                     {
-                        pair.Value.SetAttach(null, 0);
+                        pair.Value.AttachData = null;
                     }
                     else if (neighbors >= 2 && neighbors <= 3)
                     {
@@ -302,46 +252,38 @@ namespace Battle
                     }
                     else
                     {
-                        pair.Value.SetAttach(null, 0);
+                        pair.Value.AttachData = null;
                     }
                 }
                 else
                 {
-                    if (neighbors == 3 && !noAttachList.Contains(pair.Key))
+                    if (neighbors == 3 && !info.PlayerPositionList.Contains(pair.Key))
                     {
-                        attach = GetAttachID(DataContext.Instance.TileSettingDic[pair.Value.TileID].Attachs);
-                        if (attach != null)
-                        {
-                            pair.Value.SetAttach(attach.ID, attach.MoveCost);
-                        }
-                        else
-                        {
-                            pair.Value.SetAttach(null, 0);
-                        }
+                        attach = GetAttachRandomly(pair.Value.TileData);
+                        pair.Value.AttachData = attach;
                     }
                 }
             }
+        }
 
-            return tileInfoDic;
-        }*/
-
-        /*private int CountNeighbors(int minX, int maxX, int minY, int maxY, Dictionary<Vector2Int, TileAttachInfo> tileInfoDic, Vector2Int position, string attach)
+        private int CountNeighbors(BattleInfo info, Vector2Int v1)
         {
             int count = 0;
-
+            Vector2Int v2;
             for (int i = -1; i <= 1; i++)
             {
                 for (int j = -1; j <= 1; j++)
                 {
-                    int x = position.x + i;
-                    int y = position.y + j;
+                    int x = v1.x + i;
+                    int y = v1.y + j;
 
-                    if (x <= minX || x >= maxX || y <= minY || y >= maxY || (i == 0 && j == 0))
+                    if (x <= info.MinX || x >= info.MaxX || y <= info.MinY || y >= info.MaxY || (i == 0 && j == 0))
                     {
                         continue;
                     }
 
-                    if ((attach == null && tileInfoDic[new Vector2Int(x, y)].AttachID != null) || (attach != null && tileInfoDic[new Vector2Int(x, y)].AttachID == attach))
+                    v2 = new Vector2Int(x, y);
+                    if (info.TileDic[v2].AttachData != null)
                     {
                         count++;
                     }
@@ -349,6 +291,6 @@ namespace Battle
             }
 
             return count;
-        }*/
+        }
     }
 }

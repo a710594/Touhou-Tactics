@@ -60,6 +60,11 @@ public class SceneController
             _isLock = true;
             _tempType = scene;
 
+            if(CurrentScene == "Explore" && scene == "Camp") 
+            {
+                Explore.ExploreManager.Instance.Save();
+            }
+
             if (BeforeSceneLoadedHandler != null)
             {
                 BeforeSceneLoadedHandler();
@@ -106,13 +111,13 @@ public class SceneController
                 event_10.Start();
             }
         }
-        //else if(scene.name == "Explore") 
-        //{
-        //    if (!FlagManager.Instance.Info.FlagDic[FlagInfo.FlagEnum.BackCamp])
-        //    {
-        //        Event_8 event_8 = new Event_8();
-        //        event_8.Start();
-        //    }
-        //}
+        else if(scene.name == "Explore") 
+        {
+            if (FlowController.Instance.Info.CurrentStep == FlowInfo.StepEnum.UseItem_1)
+            {
+                Event_11 event_11 = new Event_11();
+                event_11.Start();
+            }
+        }
     }
 }

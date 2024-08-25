@@ -1,0 +1,2 @@
+[{"ID":1,"Name":"Grass","MoveCost":1,"Height":0},
+{"ID":2,"Name":"Tree","MoveCost":-1,"Height":1}]

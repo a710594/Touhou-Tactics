@@ -5,6 +5,7 @@ using UnityEngine;
 public class BattleFileEnemyObject : MonoBehaviour
 {
     public int ID;
+    public int Lv;
     public SpriteRenderer Sprite;
 
     public void Init(int id)

@@ -42,13 +42,13 @@ public class TileModel
     public int DownProbability_3;
     public List<int> DownPool = new List<int>();
 
-    public string AttachName_1;
+    public int AttachName_1;
     public int AttachProbability_1;
-    public string AttachName_2;
+    public int AttachName_2;
     public int AttachProbability_2;
-    public string AttachName_3;
+    public int AttachName_3;
     public int AttachProbability_3;
-    public List<string> AttachPool = new List<string>();
+    public List<int> AttachPool = new List<int>();
 
     public void GetPool()
     {

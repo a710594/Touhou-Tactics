@@ -278,7 +278,7 @@ public class DataContext
 
         TileList = Load<List<TileModel>>("Tile", PrePathEnum.Data);
         TileDic.Clear();
-        for (int i = 0; i < TileDic.Count; i++)
+        for (int i = 0; i < TileList.Count; i++)
         {
             TileList[i].GetPool();
             TileDic.Add(TileList[i].ID, TileList[i]);
@@ -396,6 +396,10 @@ public class DataContext
                 prePath = _mapExplorePrePath;
             }
             else if (prePathEnum == PrePathEnum.MapBattle)
+            {
+                prePath = _mapBattlePrePath;
+            }
+            else if (prePathEnum == PrePathEnum.MapSeed)
             {
                 prePath = _mapSeedPrePath;
             }

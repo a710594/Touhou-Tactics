@@ -234,15 +234,18 @@ namespace Battle
             Sprite = enemy.SpriteList[0];
             Faction = FactionEnum.Enemy;
             Position = file.Position;
+            IsAuto = true;
+            CurrentHP = MaxHP;
+            CurrentWT = WT;
 
             for (int i = 0; i < enemy.SkillList.Count; i++)
             {
                 SkillList.Add(new Skill(DataContext.Instance.SkillDic[enemy.SkillList[i]]));
             }
 
-            IsAuto = true;
-            CurrentHP = MaxHP;
-            CurrentWT = WT;
+            Type t = Type.GetType("Battle." + enemy.AI);
+            AI = (BattleAI)Activator.CreateInstance(t);
+            AI.Init(this);
         }
 
         public void SetDamage(int damage)

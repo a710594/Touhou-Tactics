@@ -45,17 +45,21 @@ namespace Explore
 
         public void Init() 
         {
-            LoadFile(_fileName, DataContext.PrePathEnum.Save);
-            if(File == null && SystemManager.Instance.SystemInfo.MaxFloor == 1) //��l�ɮ�
+            if(SystemManager.Instance.SystemInfo.MaxFloor == 0) 
             {
                 LoadFile("Floor_1", DataContext.PrePathEnum.MapExplore);
+                SystemManager.Instance.SystemInfo.MaxFloor = 1;
             }
             else
             {
-                // Generator2D generator2D = GameObject.Find("Generator2D").GetComponent<Generator2D>();
-                //Info = generator2D.Generate(SystemManager.Instance.SystemInfo.MaxFloor);
+                LoadFile(_fileName, DataContext.PrePathEnum.Save);
             }
-            //Info.SetWalkableList();
+
+            //LoadFile(_fileName, DataContext.PrePathEnum.Save);
+            //if(File == null && SystemManager.Instance.SystemInfo.MaxFloor == 1) //��l�ɮ�
+            //{
+            //    LoadFile("Floor_1", DataContext.PrePathEnum.MapExplore);
+            //}
 
             CreateObject();
             SetCamera();
@@ -63,15 +67,27 @@ namespace Explore
 
         public void Init(int floor) 
         {
-            if(DataContext.Instance.FixedFloorDic.ContainsKey(floor))
+            LoadFile(_fileName, DataContext.PrePathEnum.Save);
+            if (File == null)
             {
-                FixedFloorModel data = DataContext.Instance.FixedFloorDic[floor];
-                LoadFile(data.Name, DataContext.PrePathEnum.MapExplore);                
+                if (DataContext.Instance.FixedFloorDic.ContainsKey(floor))
+                {
+                    FixedFloorModel data = DataContext.Instance.FixedFloorDic[floor];
+                    LoadFile(data.Name, DataContext.PrePathEnum.MapExplore);
+                }
+                else
+                {
+                    RandomFloorModel data = DataContext.Instance.RandomFloorDic[floor];
+                    CreateNewFile(floor, new Vector2Int(data.Width, data.Height), data.RoomCount, new Vector2Int(5, 7), data);
+                }
             }
             else
             {
-                RandomFloorModel data = DataContext.Instance.RandomFloorDic[floor];
-                CreateNewFile(floor, new Vector2Int(data.Width, data.Height), data.RoomCount, new Vector2Int(5, 7), data);
+                FixedFloorModel data = DataContext.Instance.FixedFloorDic[floor];
+                ExploreFile originalFile = DataContext.Instance.Load<ExploreFile>(data.Name, DataContext.PrePathEnum.MapExplore);
+                File.PlayerPosition = originalFile.PlayerPosition;
+                File.PlayerRotation = originalFile.PlayerRotation;
+                File.EnemyInfoList = originalFile.EnemyInfoList;
             }
             
             CreateObject();
@@ -82,6 +98,8 @@ namespace Explore
             File = DataContext.Instance.Load<ExploreFile>(name, pathEnum);
             if (File != null)
             {
+                SystemManager.Instance.SystemInfo.CurrentFloor = File.Floor;
+
                 _tilePositionList = new List<Vector2Int>();
                 for (int i = 0; i < File.TileList.Count; i++)
                 {
@@ -355,69 +373,7 @@ namespace Explore
             }
         }
 
-        /*public void CheckCollision(Vector2Int v2) 
-        {
-            for (int i = 0; i < _enemyList.Count; i++)
-            {
-                if (Utility.ConvertToVector2Int(_enemyList[i].MoveTo) == v2)
-                {
-                    InputMamager.Instance.Lock();
-                    File.EnemyInfoList.Remove(_enemyList[i].Info);
-                    _timer.Start(1f, ()=> 
-                    {
-                        SceneController.Instance.ChangeScene("Battle", (sceneName) =>
-                        {
-                            InputMamager.Instance.Unlock();
-                            BattleMapBuilder battleMapBuilder = GameObject.Find("BattleMapBuilder").GetComponent<BattleMapBuilder>();
-                            BattleInfo battleInfo;
-                            if (!_enemyList[i].Info.IsSeed)
-                            {
-                                battleInfo = battleMapBuilder.Get(_enemyList[i].Info.Map);
-                            }
-                            else
-                            {
-                                battleInfo = battleMapBuilder.Generate(_enemyList[i].Info.Map);
-                            }
-                            PathManager.Instance.LoadData(battleInfo.TileAttachInfoDic);
-                            BattleController.Instance.Init(File.Floor, File.Floor, _enemyList[i].Info.Tutorial, battleInfo, battleMapBuilder.transform);
-                        });
-                    });
-
-                    return;
-                }
-            }
-
-            if (v2 == File.Goal) 
-            {
-                InputMamager.Instance.Lock();
-                ConfirmUI.Open("要前往下一層嗎？", "確定", "取消", () =>
-                {
-                    File.Floor++;
-                    if (File.Floor > SystemManager.Instance.SystemInfo.MaxFloor)
-                    {
-                        SystemManager.Instance.SystemInfo.MaxFloor = File.Floor;
-                    }
-
-                    _timer.Start(1f, () =>
-                    {
-                        SceneController.Instance.ChangeScene("Camp", (sceneName) =>
-                        {
-                            CharacterManager.Instance.RecoverAllHP();
-                            InputMamager.Instance.Unlock();
-                        });
-                    });
-                }, ()=> 
-                {
-                    InputMamager.Instance.Unlock();
-                });
-            }
-            else 
-            {
-                CheckEvent();
-            }
-        }*/
-
-        public void CheckEnemyCollision(Vector2Int playerPosition) 
+        public bool CheckEnemyCollision(Vector2Int playerPosition) 
         {
             for (int i = 0; i < _enemyList.Count; i++)
             {
@@ -435,8 +391,15 @@ namespace Explore
                             string tutorial = null;
                             if (_enemyList[i].File.Type == ExploreFileEnemy.TypeEnum.Fixed)
                             {
-                                battleInfo = battleMapBuilder.Get(_enemyList[i].File.Map);
-                                tutorial = _enemyList[i].File.Tutorial;
+                                if (_enemyList[i].File.Map != "")
+                                {
+                                    battleInfo = battleMapBuilder.Get(_enemyList[i].File.Map);
+                                    tutorial = _enemyList[i].File.Tutorial;
+                                }
+                                else
+                                {
+                                    battleInfo = battleMapBuilder.Generate(_enemyList[i].File.MapSeed, _enemyList[i].File.EnemyList, _enemyList[i].File.Lv, _enemyList[i].File.Exp);
+                                }
                             }
                             else
                             {
@@ -447,12 +410,13 @@ namespace Explore
                         });
                     });
 
-                    return;
+                    return true;
                 }
             }
+            return false;
         }
 
-        private void CheckGoal(Vector2Int v2) 
+        private bool CheckGoal(Vector2Int v2) 
         {
             if (v2 == File.Goal)
             {
@@ -477,10 +441,15 @@ namespace Explore
                 {
                     InputMamager.Instance.Unlock();
                 });
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
-        private void CheckEvent(Vector2Int v2) 
+        private bool CheckEvent(Vector2Int v2) 
         {
             for(int i=0; i<File.TriggerList.Count; i++)
             {
@@ -489,9 +458,10 @@ namespace Explore
                     var objectType = Type.GetType(File.TriggerList[i].Name);
                     MyEvent myEvent = (MyEvent)Activator.CreateInstance(objectType);
                     myEvent.Start();
-                    break;
+                    return true;
                 }
             }
+            return false;
         }
 
         public void CheckVidsit(Transform transform) 
@@ -742,9 +712,18 @@ namespace Explore
             {
                 CheckVidsit(Player.transform);
                 Vector2Int v2 = Utility.ConvertToVector2Int(Player.transform.position);
-                CheckEnemyCollision(v2);
-                CheckGoal(v2);
-                CheckEvent(v2);
+                if (CheckEnemyCollision(v2))
+                {
+                    return;
+                }
+                else if (CheckGoal(v2))
+                {
+                    return;
+                }
+                else
+                {
+                    CheckEvent(v2);
+                }
             }
         }
 

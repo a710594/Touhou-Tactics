@@ -15,6 +15,8 @@ public class FlowInfo
         GetItem = 5, //蒐集道具的教學
         BackCamp = 6, //提前返回營地的教學
         Cook = 7,
+        UseItem_1 = 8,
+
         End,
     }
 

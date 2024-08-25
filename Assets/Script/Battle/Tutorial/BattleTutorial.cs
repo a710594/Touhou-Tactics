@@ -65,6 +65,11 @@ namespace Battle
 
         }
 
+        public virtual bool CheckStep() 
+        {
+            return true;
+        }
+
         protected class TutorialState : State
         {
             protected bool _clickable = true;

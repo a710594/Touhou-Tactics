@@ -27,7 +27,6 @@ public class SystemManager
         if (info == null) 
         {
             info = new SystemInfo();
-            info.Init();
         }
         SystemInfo = info;
     }

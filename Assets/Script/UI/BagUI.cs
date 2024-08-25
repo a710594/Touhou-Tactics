@@ -53,8 +53,8 @@ public class BagUI : MonoBehaviour
         _currentState = StateEnum.Normal;
         BagItemGroup.gameObject.SetActive(true);
         BagEquipGroup.gameObject.SetActive(false);
-        BagItemGroup.SetScrollView(ItemModel.CategoryEnum.Consumables);
-        ButtonGroup.SetSelect(ConsumablesButton.gameObject);
+        BagItemGroup.SetScrollView(ItemModel.CategoryEnum.Food);
+        ButtonGroup.SetSelect(FoodButton.gameObject);
     }
 
     public void SetEquipState(EquipModel.CategoryEnum category, CharacterInfo character) 
@@ -74,8 +74,8 @@ public class BagUI : MonoBehaviour
         BagEquipGroup.gameObject.SetActive(false);
         ItemButton.gameObject.SetActive(false);
         EquipButton.gameObject.SetActive(false);
-        BagItemGroup.SetScrollView(ItemModel.CategoryEnum.Consumables);
-        ButtonGroup.SetSelect(ConsumablesButton.gameObject);
+        BagItemGroup.SetScrollView(ItemModel.CategoryEnum.Food);
+        ButtonGroup.SetSelect(FoodButton.gameObject);
     }
 
 

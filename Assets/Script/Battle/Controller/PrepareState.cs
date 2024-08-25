@@ -19,7 +19,7 @@ namespace Battle
             public override void Begin()
             {
                 _info = Instance.Info;
-                Camera.main.transform.localPosition = new Vector3(_info.PlayerPositionList[0].x-10, 10, _info.PlayerPositionList[0].y-10);
+                Camera.main.transform.localPosition = new Vector3(-10, 10, -10);
 
                 int needCount = _info.NeedCount;
                 if (CharacterManager.Instance.SurvivalCount() < needCount) 

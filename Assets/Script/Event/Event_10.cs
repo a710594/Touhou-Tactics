@@ -15,7 +15,6 @@ public class Event_10 : MyEvent
         _campUI.ExploreButton.enabled = false;
         Vector3 offset = new Vector3(-150, 0, 0);
         TutorialArrowUI.Open("選擇製作料理。", _campUI.CookButton.transform, offset, Vector2Int.right);
-        FileSystem.Instance.Save();
 
     }
 

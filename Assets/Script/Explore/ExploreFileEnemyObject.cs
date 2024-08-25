@@ -8,5 +8,6 @@ public class ExploreFileEnemyObject : MonoBehaviour
     public ExploreFileEnemy.AiEnum AiType;
     public string Prefab;
     public string Map;
+    public string Seed;
     public string Tutorial;
 }

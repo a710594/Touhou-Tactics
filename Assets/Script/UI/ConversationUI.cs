@@ -219,4 +219,12 @@ public class ConversationUI : MonoBehaviour
         NextButton.onClick.AddListener(NextOnClick);
         SkipButton.onClick.AddListener(SkipOnClick);
     }
+
+    private void OnDestroy()
+    {
+        for (int i=0; i<CharacterImage.Length; i++) 
+        {
+            CharacterImage[i].transform.DOKill();
+        }
+    }
 }

@@ -13,6 +13,11 @@ namespace Battle
             _context.AddState(new State_1(_context));
         }
 
+        public override bool CheckStep()
+        {
+            return FlowController.Instance.Info.CurrentStep == FlowInfo.StepEnum.GetItem;
+        }
+
         public override void Start()
         {
             List<CharacterInfo> list = new List<CharacterInfo>();

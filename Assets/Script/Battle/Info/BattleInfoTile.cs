@@ -14,9 +14,13 @@ public class BattleInfoTile
     {
         get
         {
-            if (AttachData != null && AttachData.MoveCost >= 0)
+            if (AttachData == null)
             {
-                return TileData.MoveCost + AttachData.MoveCost;
+                return TileData.MoveCost;
+            }
+            else if (AttachData.MoveCost >= 0) 
+            {
+            return AttachData.MoveCost;
             }
             else
             {

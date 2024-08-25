@@ -70,6 +70,7 @@ namespace Explore
                 enemy.Position = Utility.ConvertToVector2Int(enemyObj.transform.position);
                 enemy.RotationY = (int)enemyObj.transform.eulerAngles.y;
                 enemy.Map = enemyObj.Map;
+                enemy.MapSeed = enemyObj.Seed;
                 enemy.Tutorial = enemyObj.Tutorial;
                 file.EnemyInfoList.Add(enemy);
             }

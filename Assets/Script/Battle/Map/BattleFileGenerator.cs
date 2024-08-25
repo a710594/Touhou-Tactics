@@ -9,12 +9,11 @@ public class BattleFileGenerator : MonoBehaviour
 {
     //public bool IsSeed;
     public string FileName;
-    public int NeedCount;
     public bool MustBeEqualToNeedCount;
+    public int NeedCount;
     public int Exp;
     public Transform Tilemap;
     public Transform EnemyGroup;
-    public Transform[] NoAttach;
 
     private bool _isInit = false;
     private string _prePath;
@@ -26,11 +25,13 @@ public class BattleFileGenerator : MonoBehaviour
         int minY = int.MaxValue;
         int maxY = int.MinValue;
         Vector3 position;
-        TileComponent component;
-        List<string[]> tileList = new List<string[]>();
+        TileObject obj;
+        List<BattleFileTile> tileList = new List<BattleFileTile>();
+        BattleFileTile tile;
+        List<Vector2Int> playerPositionList = new List<Vector2Int>(); //禁建區,不會有附加物件,放置玩家角色的區域
         foreach (Transform child in Tilemap)
         {
-            component = child.GetComponent<TileComponent>();
+            obj = child.GetComponent<TileObject>();
             position = child.position;
             if(position.x < minX)
             {
@@ -48,36 +49,42 @@ public class BattleFileGenerator : MonoBehaviour
             {
                 maxY = Mathf.RoundToInt(position.z);
             }
-            tileList.Add(new string[3] { Mathf.RoundToInt(child.position.x).ToString(), Mathf.RoundToInt(child.position.z).ToString(), component.ID });
+            tile = new BattleFileTile();
+            tile.ID = obj.ID;
+            tile.Position = new Vector2Int(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.z));
+            tileList.Add(tile);
+            if(obj.tag == "PlayerPosition") 
+            {
+                playerPositionList.Add(tile.Position);
+            }
         }
 
-        List<int[]> noAttachList = new List<int[]>(); //禁建區,不會有附加物件,放置玩家角色的區域
-        for (int i=0; i<NoAttach.Length; i++) 
-        {
-            noAttachList.Add(new int[2] { Mathf.RoundToInt(NoAttach[i].position.x), Mathf.RoundToInt(NoAttach[i].position.z) });
-        }
-
-        BattleFileEnemyObject battleMapEnemy;
-        List<int[]> enemyList = new List<int[]>(); //敵人的位置和ID
+        BattleFileEnemyObject enemyObj;
+        BattleFileEnemy enemyFile;
+        List<BattleFileEnemy> enemyList = new List<BattleFileEnemy>(); //敵人的位置和ID
         foreach (Transform child in EnemyGroup) 
         {
-            battleMapEnemy = child.GetComponent<BattleFileEnemyObject>();
-            enemyList.Add(new int[4] { Mathf.RoundToInt(child.position.x), Mathf.RoundToInt(child.position.y), Mathf.RoundToInt(child.position.z) , battleMapEnemy.ID});
+            enemyObj = child.GetComponent<BattleFileEnemyObject>();
+            enemyFile = new BattleFileEnemy();
+            enemyFile.ID = enemyObj.ID;
+            enemyFile.Lv = enemyObj.Lv;
+            enemyFile.Position = new Vector3Int(Mathf.RoundToInt(child.position.x), Mathf.RoundToInt(child.position.y), Mathf.RoundToInt(child.position.z));
+            enemyList.Add(enemyFile);
         }
 
         //string path = Application.streamingAssetsPath + "/Map/Battle/" + FileName + ".txt";
-        BattleFile battleFile = new BattleFile();
-        battleFile.PlayerCount = NeedCount;
-        battleFile.MustBeEqualToNeedCount = MustBeEqualToNeedCount;
-        battleFile.Exp = Exp;
-        battleFile.TileList = tileList;
-        battleFile.NoAttachList = noAttachList;
-        battleFile.EnemyList = enemyList;
-        battleFile.MinX = minX;
-        battleFile.MaxX = maxX;
-        battleFile.MinY = minY;
-        battleFile.MaxY = maxY;
+        BattleFileFixed file = new BattleFileFixed();
+        file.MustBeEqualToNeedCount = MustBeEqualToNeedCount;
+        file.NeedCount = NeedCount;
+        file.Exp = Exp;
+        file.TileList = tileList;
+        file.PlayerPositionList = playerPositionList;
+        file.EnemyList = enemyList;
+        file.MinX = minX;
+        file.MaxX = maxX;
+        file.MinY = minY;
+        file.MaxY = maxY;
         //File.WriteAllText(path, JsonConvert.SerializeObject(battleFile));
-        DataContext.Instance.Save(battleFile, FileName, DataContext.PrePathEnum.MapBattle);
+        DataContext.Instance.Save(file, FileName, DataContext.PrePathEnum.MapBattle);
     }
 }

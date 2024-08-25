@@ -114,7 +114,11 @@ namespace Battle
                 info.EnemyList[i].Controller.MoveEndHandler += OnMoveEnd;
             }
 
-            if (Tutorial == null)
+            if(Tutorial!=null && Tutorial.CheckStep()) 
+            {
+                Tutorial.Start();
+            }
+            else
             {
                 _candidateList = new List<CharacterInfo>(CharacterManager.Instance.Info.CharacterList);
                 for (int i = 0; i < _candidateList.Count; i++)
@@ -126,10 +130,6 @@ namespace Battle
                     }
                 }
                 _context.SetState<PrepareState>();
-            }
-            else
-            {
-                Tutorial.Start();
             }
 
             LogList.Clear();

@@ -26,6 +26,7 @@ public class SelectCharacterUI : MonoBehaviour
         selectCharacterUI.RectTransform.offsetMax = Vector3.zero;
         selectCharacterUI.RectTransform.offsetMin = Vector3.zero;
         selectCharacterUI.ScrollView.SetData(new List<object>(CharacterManager.Instance.Info.CharacterList));
+        selectCharacterUI.ScrollView.SetIndex(0);
         selectCharacterUI.LvLabel.text = "∂§•Óµ•Ø≈°G" + CharacterManager.Instance.Info.Lv;
         selectCharacterUI.ExpLabel.text = "∏g≈Á≠»°G" + CharacterManager.Instance.Info.Exp + "/" + CharacterManager.Instance.NeedExp(CharacterManager.Instance.Info.Lv);
         _tipLabel = selectCharacterUI.TipLabel;
