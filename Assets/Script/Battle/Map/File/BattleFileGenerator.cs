@@ -7,16 +7,20 @@ using UnityEngine;
 
 public class BattleFileGenerator : MonoBehaviour
 {
+    public enum TypeEnum 
+    {
+        Map,
+        Seed,
+    }
+
     //public bool IsSeed;
     public string FileName;
+    public TypeEnum Type = TypeEnum.Map;
     public bool MustBeEqualToNeedCount;
     public int NeedCount;
     public int Exp;
     public Transform Tilemap;
     public Transform EnemyGroup;
-
-    private bool _isInit = false;
-    private string _prePath;
 
     public void BuildFile() 
     {
@@ -85,6 +89,13 @@ public class BattleFileGenerator : MonoBehaviour
         file.MinY = minY;
         file.MaxY = maxY;
         //File.WriteAllText(path, JsonConvert.SerializeObject(battleFile));
-        DataContext.Instance.Save(file, FileName, DataContext.PrePathEnum.MapBattle);
+        if (Type == TypeEnum.Map)
+        {
+            DataContext.Instance.Save(file, FileName, DataContext.PrePathEnum.MapBattle);
+        }
+        else
+        {
+            DataContext.Instance.Save(file, FileName, DataContext.PrePathEnum.MapSeed);
+        }
     }
 }

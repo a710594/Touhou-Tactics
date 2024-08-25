@@ -351,7 +351,7 @@ public class DataContext
             }
             else if (prePathEnum == PrePathEnum.MapSeed)
             {
-                prePath = _mapBattlePrePath;
+                prePath = _mapSeedPrePath;
             }
 
             if (fileName == "")

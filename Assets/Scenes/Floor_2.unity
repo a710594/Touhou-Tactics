@@ -15432,7 +15432,7 @@ MonoBehaviour:
   AiType: 0
   Prefab: NotMoveAI
   Map: 
-  Seed: "\u5C71\u5761"
+  Seed: Hill_1
   Tutorial: 
 --- !u!1001 &1081971636
 PrefabInstance:
