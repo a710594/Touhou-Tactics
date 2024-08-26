@@ -53,4 +53,9 @@
 {"ID":12,"Page":1,"Pause":0,"Name":"[教學]","Dialog":"有一部分的素材能被做成料理。料理可以在探索或戰鬥中回復角色的 HP","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
 {"ID":12,"Page":2,"Pause":0,"Name":"[教學]","Dialog":"不同的素材組合能做出擁有不同效果的料理","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
 {"ID":13,"Page":1,"Pause":0,"Name":"[教學]","Dialog":"探索地圖中按 I 可以打開背包確認道具資訊","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
-{"ID":13,"Page":2,"Pause":0,"Name":"[教學]","Dialog":"要使用料理或道具的話，按 C 打開角色列表，再按道具就可以了","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":1,"Image_3":"x"}]
+{"ID":13,"Page":2,"Pause":0,"Name":"[教學]","Dialog":"要使用料理或道具的話，按 C 打開角色列表，再按道具就可以了","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
+{"ID":14,"Page":1,"Pause":0,"Name":"[系統]","Dialog":"因為快要開天窗了，讓我在這邊把現有的角色都加入吧...","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
+{"ID":14,"Page":2,"Pause":0,"Name":"[系統]","Dialog":"八意永琳加入了隊伍","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
+{"ID":14,"Page":3,"Pause":0,"Name":"[系統]","Dialog":"哆來咪加入了隊伍","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
+{"ID":14,"Page":4,"Pause":0,"Name":"[系統]","Dialog":"藤原妹紅加入了隊伍","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
+{"ID":14,"Page":5,"Pause":0,"Name":"[系統]","Dialog":"東方谷早苗加入了隊伍","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"}]

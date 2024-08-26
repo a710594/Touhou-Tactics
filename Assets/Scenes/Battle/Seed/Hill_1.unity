@@ -508,7 +508,7 @@ MonoBehaviour:
   FileName: Hill_1
   Type: 1
   MustBeEqualToNeedCount: 0
-  NeedCount: 1
+  NeedCount: 3
   Exp: 1
   Tilemap: {fileID: 1377411095}
   EnemyGroup: {fileID: 1632593920}

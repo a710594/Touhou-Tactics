@@ -160,5 +160,6 @@ public class BattleCharacterController : MonoBehaviour
 
     private void OnDestroy()
     {
+        _cameraRotate.RotateHandler -= Rotate;
     }
 }

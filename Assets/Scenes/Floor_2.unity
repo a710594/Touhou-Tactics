@@ -13590,6 +13590,7 @@ MonoBehaviour:
   Map: Tutorial_4
   Seed: 
   Tutorial: BattleTutorial_4
+  EnemyGroup: 0
 --- !u!1 &919916586
 GameObject:
   m_ObjectHideFlags: 0
@@ -15434,6 +15435,7 @@ MonoBehaviour:
   Map: 
   Seed: Hill_1
   Tutorial: 
+  EnemyGroup: 2
 --- !u!1001 &1081971636
 PrefabInstance:
   m_ObjectHideFlags: 0

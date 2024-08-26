@@ -72,6 +72,7 @@ namespace Explore
                 enemy.Map = enemyObj.Map;
                 enemy.MapSeed = enemyObj.Seed;
                 enemy.Tutorial = enemyObj.Tutorial;
+                enemy.EnemyGroupId = enemyObj.EnemyGroup;
                 file.EnemyInfoList.Add(enemy);
             }
 

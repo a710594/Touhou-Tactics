@@ -10,4 +10,5 @@ public class ExploreFileEnemyObject : MonoBehaviour
     public string Map;
     public string Seed;
     public string Tutorial;
+    public int EnemyGroup;
 }

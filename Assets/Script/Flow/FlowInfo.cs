@@ -16,7 +16,7 @@ public class FlowInfo
         BackCamp = 6, //提前返回營地的教學
         Cook = 7,
         UseItem_1 = 8,
-
+        AddRemainCharacter,
         End,
     }
 

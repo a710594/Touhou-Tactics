@@ -398,12 +398,12 @@ namespace Explore
                                 }
                                 else
                                 {
-                                    battleInfo = battleMapBuilder.Generate(_enemyList[i].File.MapSeed, _enemyList[i].File.EnemyList, _enemyList[i].File.Lv, _enemyList[i].File.Exp);
+                                    battleInfo = battleMapBuilder.Generate(_enemyList[i].File.MapSeed, _enemyList[i].File.EnemyGroupId, _enemyList[i].File.Exp);
                                 }
                             }
                             else
                             {
-                                battleInfo = battleMapBuilder.Generate(_enemyList[i].File.MapSeed, _enemyList[i].File.EnemyList, _enemyList[i].File.Lv, _enemyList[i].File.Exp);
+                                battleInfo = battleMapBuilder.Generate(_enemyList[i].File.MapSeed, _enemyList[i].File.EnemyList, _enemyList[i].File.Exp);
                             }
                             PathManager.Instance.LoadData(battleInfo.TileDic);
                             BattleController.Instance.Init(File.Floor, File.Floor, tutorial, battleInfo, battleMapBuilder.transform);

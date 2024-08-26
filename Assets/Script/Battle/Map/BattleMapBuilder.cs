@@ -23,12 +23,13 @@ namespace Battle
             return info;
         }
 
-        //public BattleInfo Generate()
-        //{
-        //    return Generate(SeedFile[UnityEngine.Random.Range(0, SeedFile.Length)]);
-        //}
+        public BattleInfo Generate(string seed, int enemyGroupId, int exp) //探索場景固定但是戰鬥隨機
+        {
+            EnemyGroupModel enemyGroupData = DataContext.Instance.EnemyGroupDic[enemyGroupId];
+            return Generate(seed, enemyGroupData.EnemyList, exp);
+        }
 
-        public BattleInfo Generate(string seed, List<int> enemyList, int lv, int exp) //有隨機成分的地圖
+        public BattleInfo Generate(string seed, List<int> enemyList, int exp) //有隨機成分的地圖
         {
             BattleFileFixed file = DataContext.Instance.Load<BattleFileFixed>(seed, DataContext.PrePathEnum.MapSeed);
             BattleInfo info = new BattleInfo(file);
@@ -144,6 +145,7 @@ namespace Battle
                     battleCharacterInfo.AI.Init(battleCharacterInfo);
                     battleCharacterInfo.Position = Utility.ConvertToVector3Int(result, info.TileDic);
                     info.EnemyList.Add(battleCharacterInfo);
+                    invalidList.Add(result);
                 }
             }
 

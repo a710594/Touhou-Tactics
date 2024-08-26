@@ -110,6 +110,11 @@ public class SceneController
                 Event_10 event_10 = new Event_10();
                 event_10.Start();
             }
+            else if (FlowController.Instance.Info.CurrentStep == FlowInfo.StepEnum.AddRemainCharacter)
+            {
+                Event_12 event_12 = new Event_12();
+                event_12.Start();
+            }
         }
         else if(scene.name == "Explore") 
         {

@@ -39,12 +39,12 @@ public class CharacterManager
             Info.Lv = 1;
             Info.Exp = 0;
             Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[1]));
-            Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[2]));
-            Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[3]));
-            Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[4]));
-            Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[5]));
-            Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[6]));
-            Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[7]));
+            //Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[2]));
+            //Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[3]));
+            //Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[4]));
+            //Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[5]));
+            //Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[6]));
+            //Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[7]));
         }
     }
 

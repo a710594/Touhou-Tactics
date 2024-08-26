@@ -105,10 +105,17 @@ namespace Battle
                 }
                 else
                 {
-                    ConfirmUI.Open("還可以再放置" + (_needCount - _selectedCharacterList.Count) + "個角色，確定要開始戰鬥嗎？", "確定", "取消", ()=> 
+                    if (_selectedCharacterList.Count < _needCount)
                     {
-                        BattleController.Instance.SetState<BattleController.CharacterState>();
-                    }, null);
+                        ConfirmUI.Open("還可以再放置" + (_needCount - _selectedCharacterList.Count) + "個角色，確定要開始戰鬥嗎？", "確定", "取消", () =>
+                        {
+                            BattleController.Instance.SetState<BattleController.CharacterState>();
+                        }, null);
+                    }
+                    else
+                    {
+                        ConfirmUI.Open("不能放置超過" + _needCount + "個角色，多出了" + (_selectedCharacterList.Count - _needCount) + "個", "確定", null);
+                    }
                 }
             }
         }
