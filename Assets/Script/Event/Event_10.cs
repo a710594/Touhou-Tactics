@@ -14,6 +14,9 @@ public class Event_10 : MyEvent
         _campUI.CookButton.enabled = true;
         _campUI.ExploreButton.enabled = false;
         Vector3 offset = new Vector3(-150, 0, 0);
+        FlowController.Instance.Info.LockDic[FlowInfo.LockEnum.Cook] = false;
+        CampUI campUI = GameObject.Find("CampUI").GetComponent<CampUI>();
+        campUI.SetCookButton(true);
         TutorialArrowUI.Open("選擇製作料理。", _campUI.CookButton.transform, offset, Vector2Int.right);
 
     }
@@ -27,7 +30,6 @@ public class Event_10 : MyEvent
         {
             InputMamager.Instance.IsLock = false;
             FlowController.Instance.Info.CurrentStep++;
-            FlowController.Instance.Info.LockDic[FlowInfo.LockEnum.Cook] = false;
             _campUI.ShopButton.enabled = true;
             _campUI.ExploreButton.enabled = true;
         }, null);

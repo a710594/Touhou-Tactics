@@ -7,7 +7,6 @@ public class Event_2 : MyEvent
     public override void Start()
     {
         if(FlowController.Instance.Info.CurrentStep == FlowInfo.StepEnum.FirstBattle)
-        //if (!FlagManager.Instance.Info.FlagDic[FlagInfo.FlagEnum.FirstEnemy])
         {
             InputMamager.Instance.IsLock = true;
             ExploreUI exploreUI = GameObject.Find("ExploreUI").GetComponent<ExploreUI>();
@@ -15,7 +14,6 @@ public class Event_2 : MyEvent
             ConversationUI.Open(2, true, () =>
             {
                 InputMamager.Instance.IsLock = false;
-                //FlagManager.Instance.Info.FlagDic[FlagInfo.FlagEnum.FirstEnemy] = true;
                 FlowController.Instance.Info.CurrentStep++;
                 exploreUI.SetVisible(true);
             }, null);

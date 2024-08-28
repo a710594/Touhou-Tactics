@@ -7,14 +7,13 @@ public class Event_6 : MyEvent
     public override void Start()
     {
         if(FlowController.Instance.Info.CurrentStep == FlowInfo.StepEnum.Camp)
-        //if (!FlagManager.Instance.Info.FlagDic[FlagInfo.FlagEnum.Camp])
         {
             InputMamager.Instance.IsLock = true;
             ConversationUI.Open(8, true, () =>
             {
                 InputMamager.Instance.IsLock = false;
-                //FlagManager.Instance.Info.FlagDic[FlagInfo.FlagEnum.Camp] = true;
                 FlowController.Instance.Info.CurrentStep++;
+                CharacterManager.Instance.Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[2]));
             }, null);
         }
     }

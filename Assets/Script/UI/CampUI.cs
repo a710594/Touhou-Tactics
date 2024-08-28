@@ -19,6 +19,12 @@ public class CampUI : MonoBehaviour
     public GameObject FloorGroup;
     public ScrollView FloorScrollView;
 
+    public void SetCookButton(bool enable) 
+    {
+        CookButton.enabled = enable;
+        CookButton.GetComponent<ButtonColorSetting>().SetColor(enable);
+    }
+
     private void ShopOnClick() 
     {
         ShopUI.Open();
@@ -95,5 +101,9 @@ public class CampUI : MonoBehaviour
         CookButton.onClick.AddListener(CookOnClick);
         ExploreButton.onClick.AddListener(ExploreOnClick);
         FloorScrollView.ClickHandler += FloorOnClick;
+
+        ShopButton.enabled = !FlowController.Instance.Info.LockDic[FlowInfo.LockEnum.Shop];
+        ShopButton.GetComponent<ButtonColorSetting>().SetColor(ShopButton.enabled);
+        SetCookButton(!FlowController.Instance.Info.LockDic[FlowInfo.LockEnum.Cook]);
     }
 }

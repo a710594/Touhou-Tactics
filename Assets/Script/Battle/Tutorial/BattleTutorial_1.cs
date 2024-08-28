@@ -34,9 +34,6 @@ namespace Battle
 
         public override void Start()
         {
-            List<CharacterInfo> list = new List<CharacterInfo>();
-            list.Add(CharacterManager.Instance.Info.CharacterList[3]);
-            BattleController.Instance.SetCandidateList(list);
             BattleController.Instance.SetState<BattleController.PrepareState>();
             _context.SetState<State_1>();
         }

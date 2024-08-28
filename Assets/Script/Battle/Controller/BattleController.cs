@@ -114,13 +114,14 @@ namespace Battle
                 info.EnemyList[i].Controller.MoveEndHandler += OnMoveEnd;
             }
 
-            if(Tutorial!=null && Tutorial.CheckStep()) 
+            _candidateList = new List<CharacterInfo>(CharacterManager.Instance.Info.CharacterList);
+
+            if (Tutorial!=null) 
             {
                 Tutorial.Start();
             }
             else
             {
-                _candidateList = new List<CharacterInfo>(CharacterManager.Instance.Info.CharacterList);
                 for (int i = 0; i < _candidateList.Count; i++)
                 {
                     if (_candidateList[i].CurrentHP == 0)
@@ -532,10 +533,10 @@ namespace Battle
             }
         }
 
-        public void SetCandidateList(List<CharacterInfo> list) 
-        {
-            _candidateList = list;
-        }
+        //public void SetCandidateList(List<CharacterInfo> list) 
+        //{
+        //    _candidateList = list;
+        //}
 
         private void OnStateChange(State state) 
         {

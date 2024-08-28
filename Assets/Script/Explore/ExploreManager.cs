@@ -288,7 +288,7 @@ namespace Explore
                     groupData = DataContext.Instance.EnemyGroupDic[groupId];
                     enemy = new ExploreFileEnemy();
                     enemy.AI = ExploreFileEnemy.AiEnum.Default;
-                    enemy.Prefab = "DefaultAI";
+                    enemy.Prefab = groupData.Explorer;
                     enemy.Position = position;
                     enemy.RotationY = 0;
                     enemy.MapSeed = groupData.MapPool[UnityEngine.Random.Range(0, groupData.MapPool.Count)];
@@ -304,7 +304,7 @@ namespace Explore
             groupData = DataContext.Instance.EnemyGroupDic[groupId];
             enemy = new ExploreFileEnemy();
             enemy.AI = ExploreFileEnemy.AiEnum.NotMove;
-            enemy.Prefab = "NotMoveAI";
+            enemy.Prefab = groupData.Explorer;
             enemy.Position = File.Goal;
             enemy.RotationY = 0;
             enemy.MapSeed = groupData.MapPool[UnityEngine.Random.Range(0, groupData.MapPool.Count)];

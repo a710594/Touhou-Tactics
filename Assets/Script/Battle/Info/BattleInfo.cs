@@ -34,6 +34,7 @@ namespace Battle
             NeedCount = file.NeedCount;
             MustBeEqualToNeedCount = file.MustBeEqualToNeedCount;
             PlayerPositionList = file.PlayerPositionList;
+            Exp = file.Exp;
 
             for (int i=0; i<file.EnemyList.Count; i++) 
             {

@@ -20,7 +20,7 @@ namespace Battle
         {
             int lv = CharacterManager.Instance.Info.Lv;
             List<BattleCharacterInfo> list = new List<BattleCharacterInfo>();
-            list.Add(new BattleCharacterInfo(CharacterManager.Instance.Info.CharacterList[3], lv));
+            list.Add(new BattleCharacterInfo(CharacterManager.Instance.Info.CharacterList[0], lv));
 
             for (int i=0; i<list.Count; i++) 
             {

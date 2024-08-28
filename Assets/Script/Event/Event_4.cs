@@ -7,13 +7,13 @@ public class Event_4 : MyEvent
     public override void Start()
     {
         if(FlowController.Instance.Info.CurrentStep == FlowInfo.StepEnum.ThirdBattle)
-        //if (!FlagManager.Instance.Info.FlagDic[FlagInfo.FlagEnum.FloorBoss])
         {
             InputMamager.Instance.IsLock = true;
             ConversationUI.Open(6, true, ()=> 
             {
                 InputMamager.Instance.IsLock = false;
                 FlowController.Instance.Info.CurrentStep++;
+                CharacterManager.Instance.Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[1]));
             }, null);
         }
     }

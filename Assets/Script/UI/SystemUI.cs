@@ -15,6 +15,7 @@ public class SystemUI : MonoBehaviour
         GameObject obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/UI/SystemUI"), Vector3.zero, Quaternion.identity);
         obj.transform.SetParent(GameObject.Find("Canvas").transform);
         obj.transform.localPosition = Vector3.zero;
+        obj.GetComponent<SystemUI>().Init();
 
         return obj.GetComponent<SystemUI>();
     }
@@ -22,6 +23,12 @@ public class SystemUI : MonoBehaviour
     public void Close()
     {
         Destroy(gameObject);
+    }
+
+
+    public void Init() 
+    {
+        CampButton.gameObject.SetActive(SceneController.Instance.CurrentScene == "Explore");
     }
 
     private void CampOnClick() 
