@@ -27,7 +27,7 @@ namespace Explore
             foreach (Transform child in Tilemap)
             {
                 pos = Utility.ConvertToVector2Int(child.position);
-                file.TileList.Add(new ExploreFile.TileInfo(pos, child.name, child.tag));
+                file.TileList.Add(new ExploreFileTile(pos, child.name, child.tag));
 
                 if (minX == int.MinValue || pos.x < minX)
                 {
@@ -70,7 +70,6 @@ namespace Explore
                 enemy.Position = Utility.ConvertToVector2Int(enemyObj.transform.position);
                 enemy.RotationY = (int)enemyObj.transform.eulerAngles.y;
                 enemy.Map = enemyObj.Map;
-                enemy.MapSeed = enemyObj.Seed;
                 enemy.Tutorial = enemyObj.Tutorial;
                 enemy.EnemyGroupId = enemyObj.EnemyGroup;
                 file.EnemyInfoList.Add(enemy);
@@ -78,14 +77,14 @@ namespace Explore
 
             foreach (Transform child in Trigger)
             {
-                file.TriggerList.Add(new ExploreFile.TriggerInfo(Utility.ConvertToVector2Int(child.position), child.name));
+                file.TriggerList.Add(new ExploreFileTrigger(Utility.ConvertToVector2Int(child.position), child.name));
             }
 
-            TreasureExploreFileObject treasureObj;
+            TreasureObject treasureObj;
             foreach (Transform child in Treasure)
             {
-                treasureObj = child.gameObject.GetComponent<TreasureExploreFileObject>();
-                Treasure treasure = new Treasure();
+                treasureObj = child.gameObject.GetComponent<TreasureObject>();
+                ExploreFileTreasure treasure = new ExploreFileTreasure();
                 treasure.Position = Utility.ConvertToVector2Int(treasureObj.transform.position);
                 treasure.Type = treasureObj.Type;
                 treasure.ItemID = treasureObj.ItemID;

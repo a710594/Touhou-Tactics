@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Treasure
+public class ExploreFileTreasure
 {
     public Vector2Int Position;
     public TreasureModel.TypeEnum Type;
@@ -11,9 +11,9 @@ public class Treasure
     public float Height;
     public Vector3Int Rotation;
 
-    public Treasure() { }
+    public ExploreFileTreasure() { }
 
-    public Treasure(Vector2Int position, TreasureModel data) 
+    public ExploreFileTreasure(Vector2Int position, TreasureModel data) 
     {
         int random = Random.Range(0, data.IDList.Count);
         Position = position;

@@ -45,12 +45,12 @@ public class ExploreUI : MonoBehaviour
 
     void Update()
     {
-        ExploreFile file = ExploreManager.Instance.File;
+        ExploreFile file = ExploreManager.Instance.Info;
         if (!InputMamager.Instance.IsLock)
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                Treasure treasure = ExploreManager.Instance.GetTreasure();
+                ExploreFileTreasure treasure = ExploreManager.Instance.GetTreasure();
                 if (treasure != null)
                 {
                     TreasureUI.Open(treasure.ItemID);

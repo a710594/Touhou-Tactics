@@ -2,29 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BattleInfoTile
+
+namespace Battle
 {
-    public TileModel TileData;
-    public TileObject TileObject;
-
-    public AttachModel AttachData;
-    public GameObject AttachObject;
-
-    public int MoveCost
+    public class BattleInfoTile
     {
-        get
+        public TileModel TileData;
+        public TileObject TileObject;
+
+        public AttachModel AttachData;
+        public GameObject AttachObject;
+
+        public int MoveCost
         {
-            if (AttachData == null)
+            get
             {
-                return TileData.MoveCost;
-            }
-            else if (AttachData.MoveCost >= 0) 
-            {
-            return AttachData.MoveCost;
-            }
-            else
-            {
-                return -1;
+                if (AttachData == null)
+                {
+                    return TileData.MoveCost;
+                }
+                else if (AttachData.MoveCost >= 0) 
+                {
+                return AttachData.MoveCost;
+                }
+                else
+                {
+                    return -1;
+                }
             }
         }
     }

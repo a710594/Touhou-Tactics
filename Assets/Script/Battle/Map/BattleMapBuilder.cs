@@ -117,7 +117,6 @@ namespace Battle
             }
 
             //Create Enemy
-            info.Exp = exp;
             List<Vector2Int> invalidList = new List<Vector2Int>();
             foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in info.TileDic)
             {

@@ -28,9 +28,5 @@ public class ExploreFileEnemy
     public string Tutorial;
 
     //random
-    public string MapSeed;
-    public int Lv;
-    public int Exp;
     public int EnemyGroupId;
-    public List<int> EnemyList = new List<int>();
 }

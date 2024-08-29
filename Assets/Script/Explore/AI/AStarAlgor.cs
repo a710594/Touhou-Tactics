@@ -104,7 +104,7 @@ namespace Explore
         public int GetDistance(Vector2Int start, Vector2Int goal)
         {
             int distance = 0;
-            if (!File.WalkableList.Contains(goal))
+            if (!Info.WalkableList.Contains(goal))
             {
                 return -1;
             }
@@ -148,22 +148,22 @@ namespace Explore
         {
             List<Vector2Int> list = new List<Vector2Int>();
 
-            if (File.WalkableList.Contains(current + Vector2Int.left))
+            if (Info.WalkableList.Contains(current + Vector2Int.left))
             {
                 list.Add(current + Vector2Int.left);
             }
 
-            if (File.WalkableList.Contains(current + Vector2Int.right))
+            if (Info.WalkableList.Contains(current + Vector2Int.right))
             {
                 list.Add(current + Vector2Int.right);
             }
 
-            if (File.WalkableList.Contains(current + Vector2Int.up))
+            if (Info.WalkableList.Contains(current + Vector2Int.up))
             {
                 list.Add(current + Vector2Int.up);
             }
 
-            if (File.WalkableList.Contains(current + Vector2Int.down))
+            if (Info.WalkableList.Contains(current + Vector2Int.down))
             {
                 list.Add(current + Vector2Int.down);
             }

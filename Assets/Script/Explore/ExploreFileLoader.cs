@@ -81,7 +81,7 @@ namespace Explore
             for(int i=0; i<file.TreasureList.Count; i++)
             {
                 obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/TreasureExploreFileObject"), Vector3.zero, Quaternion.identity);
-                TreasureExploreFileObject treasureExploreFileObject = obj.GetComponent<TreasureExploreFileObject>();
+                TreasureObject treasureExploreFileObject = obj.GetComponent<TreasureObject>();
                 treasureExploreFileObject.Type = file.TreasureList[i].Type;
                 treasureExploreFileObject.ItemID = file.TreasureList[i].ItemID;
                 obj.transform.SetParent(Treasure);

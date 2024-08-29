@@ -53,10 +53,10 @@ namespace Explore
         {
             ExploreManager.Instance.CheckEnemyCollision(Utility.ConvertToVector2Int(position));
 
-            if (ExploreManager.Instance.File.WalkableList.Contains(Utility.ConvertToVector2Int(position)))
+            if (ExploreManager.Instance.Info.WalkableList.Contains(Utility.ConvertToVector2Int(position)))
             {
                 _isMoving = true;
-                ExploreManager.Instance.File.PlayerPosition = Utility.ConvertToVector2Int(position);
+                ExploreManager.Instance.Info.PlayerPosition = Utility.ConvertToVector2Int(position);
                 ExploreManager.Instance.EnemyMove();
                 transform.DOMove(position, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
                 {
@@ -86,7 +86,7 @@ namespace Explore
         {
             _isMoving = true;
             InputMamager.Instance.Lock();
-            ExploreManager.Instance.File.PlayerRotation = (int)rotation.y;
+            ExploreManager.Instance.Info.PlayerRotation = (int)rotation.y;
             transform.DORotate(rotation, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
             {
                 _isMoving = false;
