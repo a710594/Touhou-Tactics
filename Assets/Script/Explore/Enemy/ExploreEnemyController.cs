@@ -28,11 +28,11 @@ namespace Explore
 
         public void Move()
         {
-            if(AI.GetMove(transform, out Vector3 position, out Vector3 rotation)) 
+            if(AI.GetMove(transform, out Vector3 to, out Vector3 rotation)) 
             {
-                ExploreManager.Instance.Info.WalkableList.Add(Utility.ConvertToVector2Int(transform.position));
-                ExploreManager.Instance.Info.WalkableList.Remove(Utility.ConvertToVector2Int(position));
-                transform.DOMove(position, 0.5f).SetEase(Ease.Linear).OnComplete(()=> 
+                ExploreManager.Instance.Info.TileDic[Utility.ConvertToVector2Int(transform.position)].IsWalkable = true;
+                ExploreManager.Instance.Info.TileDic[Utility.ConvertToVector2Int(to)].IsWalkable = false;
+                transform.DOMove(to, 0.5f).SetEase(Ease.Linear).OnComplete(()=> 
                 {
                     ExploreManager.Instance.WaitForAllMoveComplete();
                 });

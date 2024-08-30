@@ -6,10 +6,10 @@ namespace Explore
 {
     public class ExploreInfoTile
     {
-        public bool IsVisited;
-        public bool IsWalkable;
-        public string Event;
-        public TileObject Object;
-        public TreasureObject Treasure;
+        public bool IsVisited = false;
+        public bool IsWalkable = true;
+        public string Event = null;
+        public TileObject Object = null;
+        public ExploreInfoTreasure Treasure = null;
     }
 }

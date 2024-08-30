@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Battle
 {
-    public class TileObject : MonoBehaviour
+    public class BattleTileObject : MonoBehaviour
     {
         public int ID;
         public MeshRenderer Quad;

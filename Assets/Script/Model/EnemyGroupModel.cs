@@ -38,7 +38,7 @@ public class EnemyGroupModel
             EnemyList.Add(Enemy_5);
     }
 
-    public void GetScenePool()
+    public void GetMapPool()
     {
         for (int j = 0; j < MapProbability_1; j++)
         {
@@ -54,5 +54,10 @@ public class EnemyGroupModel
         {
             MapPool.Add(Map_3);
         }
+    }
+
+    public string GetMap() 
+    {
+        return MapPool[UnityEngine.Random.Range(0, MapPool.Count)];
     }
 }

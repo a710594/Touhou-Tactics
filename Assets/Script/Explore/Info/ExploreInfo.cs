@@ -16,6 +16,8 @@ namespace Explore
         public List<ExploreInfoEnemy> EnemyInfoList = new List<ExploreInfoEnemy>();
         public Dictionary<Vector2Int, ExploreInfoTile> TileDic = new Dictionary<Vector2Int, ExploreInfoTile>();
     
+        public ExploreInfo() { }
+
         public ExploreInfo(ExploreFile file)
         {
             IsArrive = file.IsArrive;

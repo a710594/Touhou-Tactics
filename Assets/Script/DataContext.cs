@@ -173,7 +173,7 @@ public class DataContext
         for (int i = 0; i < EnemyGroupList.Count; i++)
         {
             EnemyGroupList[i].GetEnemyList();
-            EnemyGroupList[i].GetScenePool();
+            EnemyGroupList[i].GetMapPool();
             EnemyGroupDic.Add(EnemyGroupList[i].ID, EnemyGroupList[i]);
         }
 

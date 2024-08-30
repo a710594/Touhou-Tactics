@@ -8,7 +8,7 @@ namespace Battle
     public class BattleInfoTile
     {
         public TileModel TileData;
-        public TileObject TileObject;
+        public BattleTileObject TileObject;
 
         public AttachModel AttachData;
         public GameObject AttachObject;

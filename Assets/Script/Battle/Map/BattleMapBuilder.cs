@@ -161,12 +161,12 @@ namespace Battle
             }
 
             GameObject obj;
-            TileObject tileObj;
+            BattleTileObject tileObj;
             GameObject attachObj;
             foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in info.TileDic)
             {
                 obj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + pair.Value.TileData.Name), Vector3.zero, Quaternion.identity);
-                tileObj = obj.GetComponent<TileObject>();
+                tileObj = obj.GetComponent<BattleTileObject>();
                 tileObj.transform.SetParent(Tilemap);
                 tileObj.transform.position = new Vector3(pair.Key.x, 0, pair.Key.y);
                 //info.TileComponentDic.Add(pair.Key, tileObj.GetComponent<TileComponent>());
