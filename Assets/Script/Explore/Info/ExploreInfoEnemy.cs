@@ -15,6 +15,8 @@ public class ExploreInfoEnemy
     //random
     public int EnemyGroupId;
 
+    public ExploreInfoEnemy(){}
+
     public ExploreInfoEnemy(ExploreFileEnemy file)
     {
         Type = file.Type;

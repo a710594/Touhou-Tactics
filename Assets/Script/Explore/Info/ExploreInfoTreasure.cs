@@ -9,6 +9,8 @@ public class ExploreInfoTreasure
     public string Prefab;
     public TreasureObject Object;
 
+    public ExploreInfoTreasure(){}
+
     public ExploreInfoTreasure(ExploreFileTreasure file)
     {
         Type = file.Type;

@@ -6,10 +6,17 @@ namespace Explore
 {
     public class ExploreInfoTile
     {
+        public enum CellType {
+            None,
+            Room,
+            Hallway
+        }
+
         public bool IsVisited;
         public bool IsWalkable;
         public string Event;
+        public CellType Type;
         public TileObject Object;
-        public TreasureObject Treasure;
+        public ExploreInfoTreasure Treasure;
     }
 }

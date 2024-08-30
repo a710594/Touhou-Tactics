@@ -55,4 +55,9 @@ public class RandomFloorModel
             EnemyGroupPool.Add(EnemyGroup_3);
         }
     }
+
+    public int GetRoomID()
+    {
+        return RoomPool[Random.Range(0, RoomPool.Count)];
+    }
 }
