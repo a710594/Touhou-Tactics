@@ -13294,7 +13294,9 @@ MonoBehaviour:
   AiType: 0
   Prefab: NotMoveAI
   Map: Tutorial_1
+  Seed: 
   Tutorial: BattleTutorial_1
+  EnemyGroup: 0
 --- !u!1 &502957405
 GameObject:
   m_ObjectHideFlags: 0
@@ -43867,7 +43869,9 @@ MonoBehaviour:
   AiType: 0
   Prefab: NotMoveAI
   Map: Tutorial_2
+  Seed: 
   Tutorial: BattleTutorial_2
+  EnemyGroup: 0
 --- !u!1 &1589264569
 GameObject:
   m_ObjectHideFlags: 0
@@ -48992,7 +48996,9 @@ MonoBehaviour:
   AiType: 0
   Prefab: NotMoveAI
   Map: Tutorial_3
+  Seed: 
   Tutorial: BattleTutorial_3
+  EnemyGroup: 0
 --- !u!1 &1751581628
 GameObject:
   m_ObjectHideFlags: 0
@@ -54746,7 +54752,6 @@ GameObject:
   - component: {fileID: 1991001380}
   - component: {fileID: 1991001379}
   - component: {fileID: 1991001381}
-  - component: {fileID: 1991001382}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -54804,25 +54809,6 @@ MonoBehaviour:
   Tilemap: {fileID: 1621708670}
   Start: {fileID: 1483853291}
   Goal: {fileID: 282856675}
-  Enemy: {fileID: 1451080758}
-  Trigger: {fileID: 1593225327}
-  Treasure: {fileID: 1350023969}
---- !u!114 &1991001382
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1991001377}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f82823bd9030ca45ad6b3b73b72ae52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FileName: Floor_1
-  Tilemap: {fileID: 1621708670}
-  Start: {fileID: 0}
-  Goal: {fileID: 0}
   Enemy: {fileID: 1451080758}
   Trigger: {fileID: 1593225327}
   Treasure: {fileID: 1350023969}

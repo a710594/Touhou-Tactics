@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class TreasureObject : MonoBehaviour
 {
+    public string Prefab;
     public TreasureModel.TypeEnum Type;
     public int ItemID;
-    public GameObject Prefab;
+    public GameObject Icon;
 }

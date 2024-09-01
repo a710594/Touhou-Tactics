@@ -1229,8 +1229,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b814248a4d9e36438230940dcd677a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveTo: {x: 0, y: 0, z: 0}
-  RotateTo: {x: 0, y: 0, z: 0}
 --- !u!1 &1595835416
 GameObject:
   m_ObjectHideFlags: 0
@@ -1382,7 +1380,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1987922547}
-  - component: {fileID: 1987922548}
   m_Layer: 0
   m_Name: Generator2D
   m_TagString: Untagged
@@ -1407,25 +1404,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1987922548
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1987922545}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f82823bd9030ca45ad6b3b73b72ae52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FileName: 
-  Tilemap: {fileID: 1987922547}
-  Start: {fileID: 0}
-  Goal: {fileID: 0}
-  Enemy: {fileID: 666423357}
-  Trigger: {fileID: 142843764}
-  Treasure: {fileID: 0}
 --- !u!1001 &1799935640129246480
 PrefabInstance:
   m_ObjectHideFlags: 0

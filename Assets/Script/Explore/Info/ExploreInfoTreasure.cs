@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExploreInfoTreasure
+/*public class ExploreInfoTreasure
 {
     public TreasureModel.TypeEnum Type;
     public int ItemID;
@@ -17,4 +17,4 @@ public class ExploreInfoTreasure
         ItemID = file.ItemID;
         Prefab = file.Prefab;
     }
-}
+}*/

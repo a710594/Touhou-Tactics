@@ -26,6 +26,18 @@ namespace Explore
             }
         }
 
+        public void Init(ExploreFileEnemy.AiEnum ai)
+        {
+            if (ai == ExploreFileEnemy.AiEnum.NotMove)
+            {
+                AI = new NotMoveAI();
+            }
+            else if (ai == ExploreFileEnemy.AiEnum.Default)
+            {
+                AI = new DefaultAI();
+            }
+        }
+
         public void Move()
         {
             if(AI.GetMove(transform, out Vector3 to, out Vector3 rotation)) 

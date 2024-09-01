@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4026717722134451928}
   - component: {fileID: 6892967740122840598}
   - component: {fileID: 6172638718829281565}
+  - component: {fileID: 6528567230189271495}
   m_Layer: 0
   m_Name: Ground
   m_TagString: Untagged
@@ -84,6 +85,23 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &6528567230189271495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1600654761285109684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 941cbf6eb3a11264e9d01777ce458567, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: 
+  Cube: {fileID: 1600654761285109684}
+  Quad: {fileID: 7977864655095238157}
+  Icon: {fileID: 0}
+  Treasure: {fileID: 0}
 --- !u!1 &7977864655095238157
 GameObject:
   m_ObjectHideFlags: 0

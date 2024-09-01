@@ -24,7 +24,7 @@ namespace Explore
             Floor = file.Floor;
             Size = file.Size;
             Start = file.Start;
-            Goal = file.Goal;   
+            Goal = file.Goal;
         }
     }
 }

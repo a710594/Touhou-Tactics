@@ -72,7 +72,7 @@ namespace Explore
                 enemy.Map = enemyObj.Map;
                 enemy.Tutorial = enemyObj.Tutorial;
                 enemy.EnemyGroupId = enemyObj.EnemyGroup;
-                file.EnemyInfoList.Add(enemy);
+                file.EnemyList.Add(enemy);
             }
 
             foreach (Transform child in Trigger)
@@ -85,12 +85,12 @@ namespace Explore
             {
                 treasureObj = child.gameObject.GetComponent<TreasureObject>();
                 ExploreFileTreasure treasure = new ExploreFileTreasure();
+                treasure.Height = treasureObj.transform.position.y;
                 treasure.Position = Utility.ConvertToVector2Int(treasureObj.transform.position);
+                treasure.Rotation = Vector3Int.RoundToInt(treasureObj.transform.localEulerAngles);
                 treasure.Type = treasureObj.Type;
                 treasure.ItemID = treasureObj.ItemID;
-                treasure.Prefab = treasureObj.Prefab.name;
-                treasure.Height = treasureObj.Prefab.transform.position.y;
-                treasure.Rotation = Vector3Int.RoundToInt(treasureObj.Prefab.transform.localEulerAngles);
+                treasure.Prefab = treasureObj.Prefab;
                 file.TreasureList.Add(treasure);
             }
 

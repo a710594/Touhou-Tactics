@@ -4,23 +4,12 @@ using UnityEngine;
 
 public class ExploreFileTreasure
 {
-    public Vector2Int Position;
     public TreasureModel.TypeEnum Type;
     public int ItemID;
     public string Prefab;
-    public float Height;
+    public float Height; //Vector3 不能序列化,高度需要額外存
+    public Vector2Int Position;
     public Vector3Int Rotation;
 
     public ExploreFileTreasure() { }
-
-    public ExploreFileTreasure(Vector2Int position, TreasureModel data) 
-    {
-        int random = Random.Range(0, data.IDList.Count);
-        Position = position;
-        Type = data.Type;
-        ItemID = data.IDList[random];
-        Prefab = data.Prefab;
-        Height = data.Height;
-        Rotation = Utility.GetVector3Int(data.Rotation);
-    }
 }

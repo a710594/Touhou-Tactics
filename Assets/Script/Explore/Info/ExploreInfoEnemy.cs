@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class ExploreInfoEnemy
 {
+    public string Prefab;
     public ExploreFileEnemy.TypeEnum Type;
     public ExploreEnemyController Controller;
 
@@ -23,5 +24,6 @@ public class ExploreInfoEnemy
         Map = file.Map;
         Tutorial = file.Tutorial;
         EnemyGroupId = file.EnemyGroupId;
+        Prefab = file.Prefab;
     }
 }

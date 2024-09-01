@@ -19,32 +19,54 @@ public class ExploreInfoGenerator
         }
     }
 
+    public enum CellType
+    {
+        None,
+        Room,
+        Hallway,
+        Wall,
+    }
+
     public ExploreInfo Info;
-    List<Room> rooms;
+    List<Room> rooms = new List<Room>();
     Delaunay2D delaunay;
     HashSet<Prim.Edge> selectedEdges;
 
-    public void Generate(RandomFloorModel floorData)
+    private Transform _root;
+    private LayerMask _mapLayer = LayerMask.NameToLayer("Map");
+    private Grid2D<CellType> grid;
+    private List<Vector2Int> wallList = new List<Vector2Int>();
+
+    public ExploreInfo Create(RandomFloorModel floorData)
     {
         Info = new ExploreInfo();
         Info.Floor = floorData.Floor;
         Info.Size = new Vector2Int(floorData.Width, floorData.Height);
+        grid = new Grid2D<CellType>(Info.Size, Vector2Int.zero);
+        _root = GameObject.Find("Generator2D").transform;
         PlaceRooms(floorData);
         Triangulate();
         CreateHallways();
         PathfindHallways();
         PlaceWall();
+        PlaceTile();
+        PlaceStartAndGoal();
+        SetTreasure();
+        SetEnemy(floorData);
+
+        return Info;
     }
 
     private void PlaceRooms(RandomFloorModel floorData)
-        {
+    {
         RoomModel roomData;
+        ExploreInfoTile tile;
         for (int i = 0; i < floorData.RoomCount; i++) 
         {
             roomData = DataContext.Instance.RoomDic[floorData.GetRoomID()];
             Vector2Int location = new Vector2Int(
-                Random.Range(0, floorData.Width),
-                Random.Range(0, floorData.Height)
+                Random.Range(0, Info.Size.x),
+                Random.Range(0, Info.Size.y)
             );
 
             Vector2Int roomSize = new Vector2Int(
@@ -70,17 +92,10 @@ public class ExploreInfoGenerator
 
             if (add) {
                 rooms.Add(newRoom);
-                ExploreInfoTile tile;
-                foreach (var pos in newRoom.bounds.allPositionsWithin) {
-                    if(!Info.TileDic.ContainsKey(pos))
-                    {
-                        tile = new ExploreInfoTile();
-                        tile.IsVisited = false;
-                        tile.IsWalkable = true;
-                        tile.Event = null;
-                        tile.Type = ExploreInfoTile.CellType.Room;
-                        Info.TileDic.Add(pos, tile);
-                    }
+                foreach (var pos in newRoom.bounds.allPositionsWithin)
+                {
+                    grid[pos] = CellType.Room;
+                    Info.TileDic.Add(pos, new ExploreInfoTile(true, false, "Ground"));
                 }
             }
         }
@@ -117,7 +132,7 @@ public class ExploreInfoGenerator
     }
 
     void PathfindHallways() {
-        DungeonPathfinder2D aStar = new DungeonPathfinder2D(Info.Size);
+        DungeonPathfinder2D aStar = new DungeonPathfinder2D(new Vector2Int(Info.Size.x, Info.Size.y));
 
         foreach (var edge in selectedEdges) {
             var startRoom = (edge.U as Vertex<Room>).Item;
@@ -133,11 +148,16 @@ public class ExploreInfoGenerator
                 
                 pathCost.cost = Vector2Int.Distance(b.Position, endPos);    //heuristic
 
-                if (Info.TileDic[b.Position].Type == ExploreInfoTile.CellType.Room) {
+                if (grid[b.Position] == CellType.Room)
+                {
                     pathCost.cost += 10;
-                } else if (Info.TileDic[b.Position].Type == ExploreInfoTile.CellType.None) {
+                }
+                else if (grid[b.Position] == CellType.None)
+                {
                     pathCost.cost += 5;
-                } else if (Info.TileDic[b.Position].Type == ExploreInfoTile.CellType.Hallway) {
+                }
+                else if (grid[b.Position] == CellType.Hallway)
+                {
                     pathCost.cost += 1;
                 }
 
@@ -150,8 +170,10 @@ public class ExploreInfoGenerator
                 for (int i = 0; i < path.Count; i++) {
                     var current = path[i];
 
-                    if (Info.TileDic[current].Type == ExploreInfoTile.CellType.None) {
-                        Info.TileDic[current].Type = ExploreInfoTile.CellType.Hallway;
+                    if (grid[current] == CellType.None)
+                    {
+                        grid[current] = CellType.Hallway;
+                        Info.TileDic.Add(current, new ExploreInfoTile(true, false, "Ground"));
                     }
 
                     if (i > 0) {
@@ -168,61 +190,60 @@ public class ExploreInfoGenerator
     {
         int x;
         int y;
-        foreach(KeyValuePair<Vector2Int, ExploreInfoTile> pair in Info.TileDic)
+
+        for (int i=0; i<grid.Size.x; i++) 
         {
-            //左
-            x = pair.Key.x - 1;
-            y = pair.Key.y;
-            CheckWall(new Vector2Int(x, y));
+            for (int j=0; j<grid.Size.y; j++) 
+            {
+                //左
+                x = i - 1;
+                y = j;
+                CheckWall(new Vector2Int(x, y));
 
-            //右
-            x = pair.Key.x + 1;
-            y = pair.Key.y;
-            CheckWall(new Vector2Int(x, y));
+                //右
+                x = i + 1;
+                y = j;
+                CheckWall(new Vector2Int(x, y));
 
-            //下
-            x = pair.Key.x;
-            y = pair.Key.y - 1;
-            CheckWall(new Vector2Int(x, y));
+                //下
+                x = i;
+                y = j - 1;
+                CheckWall(new Vector2Int(x, y));
 
-            //上
-            x = pair.Key.x;
-            y = pair.Key.y + 1;
-            CheckWall(new Vector2Int(x, y));
+                //上
+                x = i;
+                y = j + 1;
+                CheckWall(new Vector2Int(x, y));
 
-            //左下
-            x = pair.Key.x - 1;
-            y = pair.Key.y - 1;
-            CheckWall(new Vector2Int(x, y));
+                //左下
+                x = i - 1;
+                y = j - 1;
+                CheckWall(new Vector2Int(x, y));
 
-            //左上
-            x = pair.Key.x - 1;
-            y = pair.Key.y + 1;
-            CheckWall(new Vector2Int(x, y));
+                //左上
+                x = i - 1;
+                y = j + 1;
+                CheckWall(new Vector2Int(x, y));
 
-            //右下
-            x = pair.Key.x + 1;
-            y = pair.Key.y - 1;
-            CheckWall(new Vector2Int(x, y));
+                //右下
+                x = i + 1;
+                y = j - 1;
+                CheckWall(new Vector2Int(x, y));
 
-            //右上
-            x = pair.Key.x + 1;
-            y = pair.Key.y + 1;
-            CheckWall(new Vector2Int(x, y));
+                //右上
+                x = i + 1;
+                y = j + 1;
+                CheckWall(new Vector2Int(x, y));
+            }
         }
     }
 
     private bool CheckWall(Vector2Int position)
     {
-        ExploreInfoTile tile;
-        if(!Info.TileDic.ContainsKey(position))
+        if (!Info.TileDic.ContainsKey(position))
         {
-            tile = new ExploreInfoTile();
-            tile.IsVisited = false;
-            tile.IsWalkable = true;
-            tile.Event = null;
-            tile.Type = ExploreInfoTile.CellType.None;
-            Info.TileDic.Add(position, tile);
+            wallList.Add(position);
+            Info.TileDic.Add(position, new ExploreInfoTile(false, false, "Wall"));
             return true;
         }
         else
@@ -250,6 +271,30 @@ public class ExploreInfoGenerator
 
         Info.Goal = goalRoom.GetRandomPosition();
         goalRoom.SetNotAvailable(Info.Goal);
+
+        GameObject gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Goal"), Vector3.zero, Quaternion.identity);
+        gameObj.transform.position = new Vector3(Info.Goal.x, 0, Info.Goal.y);
+        gameObj.transform.eulerAngles = new Vector3(90, 0, 0);
+        gameObj.transform.SetParent(_root);
+        Info.TileDic[Info.Goal].Object.Icon = gameObj;
+        if (Info.TileDic[Info.Goal].IsVisited)
+        {
+            Info.TileDic[Info.Goal].Object.Icon.layer = _mapLayer;
+        }
+        Info.TileDic[Info.Goal].Object.Icon.GetComponent<Goal>().Red.SetActive(!Info.IsArrive);
+        Info.TileDic[Info.Goal].Object.Icon.GetComponent<Goal>().Blue.SetActive(Info.IsArrive);
+    }
+
+    private void PlaceTile() 
+    {
+        TileObject obj;
+        foreach (KeyValuePair<Vector2Int, ExploreInfoTile> pair in Info.TileDic) 
+        {
+            obj = ((GameObject)GameObject.Instantiate(Resources.Load("Tile/" + pair.Value.Prefab), Vector3.zero, Quaternion.identity)).GetComponent<TileObject>();
+            obj.transform.SetParent(_root);
+            obj.transform.position = new Vector3(pair.Key.x, 0, pair.Key.y);
+            pair.Value.Object = obj;
+        }
     }
 
     private void SetTreasure()
@@ -257,14 +302,16 @@ public class ExploreInfoGenerator
         int treasureCount = 10;
         Vector2Int v2;
         Room room;
-        ExploreInfoTreasure treasure;
+        TreasureObject treasure;
+        GameObject obj;
         for (int i = 0; i < treasureCount; i++)
         {
             room = rooms[UnityEngine.Random.Range(0, rooms.Count)];
             v2 =room.GetRandomPosition(); 
             if (Info.TileDic[v2].Treasure == null)
             {
-                treasure = new ExploreInfoTreasure();
+                obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + "TreasureBox"), Vector3.zero, Quaternion.identity);
+                treasure = obj.GetComponent<TreasureObject>();
                 treasure.Type = TreasureModel.TypeEnum.Item;
                 treasure.ItemID = 1;
                 treasure.Prefab = "TreasureBox";
@@ -277,16 +324,25 @@ public class ExploreInfoGenerator
     private void SetEnemy(RandomFloorModel data)
     {
         int groupId;
-        Vector2Int v2;
+        Vector2Int position;
         Room room;
         EnemyGroupModel groupData;
         ExploreInfoEnemy enemy;
         for (int i = 0; i < data.EnemyCount; i++)
         {
             room = rooms[UnityEngine.Random.Range(0, rooms.Count)];
-            v2 = room.GetRandomPosition(); 
-            room.SetNotAvailable(v2);
-            //todo
+            position = room.GetRandomPosition();
+            room.SetNotAvailable(position);
+
+            groupId = data.EnemyGroupPool[UnityEngine.Random.Range(0, data.EnemyGroupPool.Count)];
+            groupData = DataContext.Instance.EnemyGroupDic[groupId];
+            enemy = new ExploreInfoEnemy();
+            enemy.Type = ExploreFileEnemy.TypeEnum.Random;
+            enemy.EnemyGroupId = groupId;
+            enemy.Controller = ((GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + groupData.Prefab), Vector3.zero, Quaternion.identity)).GetComponent<ExploreEnemyController>();
+            enemy.Controller.transform.position = new Vector3(position.x, 1, position.y);
+            enemy.Controller.Init(ExploreFileEnemy.AiEnum.Default);
+            Info.EnemyInfoList.Add(enemy);   
         }
     }
 }

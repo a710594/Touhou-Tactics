@@ -6,17 +6,27 @@ namespace Explore
 {
     public class ExploreInfoTile
     {
-        public enum CellType {
-            None,
-            Room,
-            Hallway
+        public bool IsWalkable;
+        public bool IsVisited;
+        public string Event = null;
+        public string Prefab;
+        public TileObject Object;
+        public TreasureObject Treasure;
+
+        public ExploreInfoTile() { }
+
+        public ExploreInfoTile(bool isWalkable, bool isVisited, string prefab) 
+        {
+            IsWalkable = isWalkable;
+            IsVisited = isVisited;
+            Prefab = prefab;
         }
 
-        public bool IsVisited;
-        public bool IsWalkable;
-        public string Event;
-        public CellType Type;
-        public TileObject Object;
-        public ExploreInfoTreasure Treasure;
+        public ExploreInfoTile(ExploreFileTile file) 
+        {
+            IsWalkable = file.IsWalkable;
+            IsVisited = file.IsVisited;
+            Prefab = file.Prefab;
+        }
     }
 }

@@ -6,7 +6,7 @@ public class EnemyGroupModel
     public int ID;
     public int Lv;
     public int Exp;
-    public string Explorer;
+    public string Prefab;
 
     public int Enemy_1;
     public int Enemy_2;

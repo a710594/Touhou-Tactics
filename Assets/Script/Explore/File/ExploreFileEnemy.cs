@@ -19,9 +19,9 @@ public class ExploreFileEnemy
 
     public TypeEnum Type;
     public AiEnum AI;
-    public string Prefab;
     public Vector2Int Position;
     public int RotationY;
+    public string Prefab;
 
     //fixed
     public string Map;

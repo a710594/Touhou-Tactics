@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(BattleFileGenerator))]
-public class MapFileGeneratorEditor : Editor
+namespace Battle
 {
-    public override void OnInspectorGUI()
+    [CustomEditor(typeof(BattleFileGenerator))]
+    public class MapFileGeneratorEditor : Editor
     {
-        DrawDefaultInspector();
-
-        BattleFileGenerator nodeGenerator = (BattleFileGenerator)target;
-        if (GUILayout.Button("建立檔案"))
+        public override void OnInspectorGUI()
         {
-            nodeGenerator.BuildFile();
+            DrawDefaultInspector();
+
+            BattleFileGenerator nodeGenerator = (BattleFileGenerator)target;
+            if (GUILayout.Button("建立檔案"))
+            {
+                nodeGenerator.BuildFile();
+            }
         }
     }
 }
