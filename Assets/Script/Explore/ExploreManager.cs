@@ -122,11 +122,14 @@ namespace Explore
             ExploreInfoEnemy enemy;
             for (int i = 0; i < Info.EnemyList.Count; i++)
             {
+                Info.EnemyList[i].Position = Info.EnemyList[i].Controller.transform.position;
+                Info.EnemyList[i].Rotation = Info.EnemyList[i].Controller.transform.eulerAngles;
                 if (Utility.ConvertToVector2Int(Info.EnemyList[i].Controller.transform.position) == playerPosition)
                 {
                     InputMamager.Instance.Lock();
                     _playerPosition = Info.Player.transform.position;
                     _playerRotation = Info.Player.transform.eulerAngles;
+                    Info.TileDic[playerPosition].IsWalkable = true;
                     enemy = Info.EnemyList[i];
                     Info.EnemyList.RemoveAt(i);
                     _timer.Start(1f, () =>
@@ -255,7 +258,9 @@ namespace Explore
             foreach(KeyValuePair<Vector2Int, ExploreInfoTile> pair in Info.TileDic) 
             {
                 pair.Value.IsVisited = true;
+                pair.Value.Object.Quad.layer = _mapLayer;
             }
+            Info.TileDic[Info.Goal].Object.Icon.layer = _mapLayer;
 
             for (int i = 0; i < Info.EnemyList.Count; i++)
             {
@@ -265,6 +270,10 @@ namespace Explore
 
         public void Reload() 
         {
+            CreateObject();
+            SetCamera();
+            Info.Player.transform.position = _playerPosition;
+            Info.Player.transform.eulerAngles = _playerRotation;
             if (Utility.ConvertToVector2Int(_playerPosition) == Info.Goal) 
             {
                 if (Info.Floor == _maxFloor)
@@ -297,9 +306,6 @@ namespace Explore
             {
                 ReloadHandler();
             }
-
-            CreateObject();
-            SetCamera();
         }
 
         public bool CheckTreasure(Vector2Int position)
@@ -365,6 +371,7 @@ namespace Explore
                     {
                         treasureObj.Icon.layer = _mapLayer;
                     }
+                    pair.Value.Treasure.Object = treasureObj;
                 }
             }
 

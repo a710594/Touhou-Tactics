@@ -15,5 +15,6 @@ public class ExploreInfoTreasure
     {
         ItemID = file.ItemID;
         Prefab = file.Prefab;
+        Height = file.Height;
     }
 }

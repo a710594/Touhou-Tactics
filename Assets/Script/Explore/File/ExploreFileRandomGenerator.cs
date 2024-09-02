@@ -35,6 +35,8 @@ public class ExploreFileRandomGenerator
     private Transform _root;
     private LayerMask _mapLayer = LayerMask.NameToLayer("Map");
     private Grid2D<CellType> grid;
+    private List<Vector2Int> _groundList = new List<Vector2Int>();
+    private List<Vector2Int> _wallList = new List<Vector2Int>();
     private List<Vector2Int> _treasurePositionList = new List<Vector2Int>();
 
     public ExploreFile Create(RandomFloorModel floorData)
@@ -94,6 +96,7 @@ public class ExploreFileRandomGenerator
                 {
                     grid[pos] = CellType.Room;
                     File.TileList.Add(new ExploreFileTile(true, false, "Ground", pos));
+                    _groundList.Add(pos);
                 }
             }
         }
@@ -172,6 +175,7 @@ public class ExploreFileRandomGenerator
                     {
                         grid[current] = CellType.Hallway;
                         File.TileList.Add(new ExploreFileTile(true, false, "Ground", current));
+                        _groundList.Add(current);
                     }
 
                     if (i > 0) {
@@ -189,58 +193,40 @@ public class ExploreFileRandomGenerator
         int x;
         int y;
 
-        for (int i=0; i<grid.Size.x; i++) 
+        for (int i=0; i<_groundList.Count; i++) 
         {
-            for (int j=0; j<grid.Size.y; j++) 
-            {
-                //左
-                x = i - 1;
-                y = j;
-                CheckWall(new Vector2Int(x, y));
+            //左
+            CheckWall(new Vector2Int(_groundList[i].x - 1, _groundList[i].y));
 
-                //右
-                x = i + 1;
-                y = j;
-                CheckWall(new Vector2Int(x, y));
+            //右
+            CheckWall(new Vector2Int(_groundList[i].x + 1, _groundList[i].y));
 
-                //下
-                x = i;
-                y = j - 1;
-                CheckWall(new Vector2Int(x, y));
+            //下
+            CheckWall(new Vector2Int(_groundList[i].x, _groundList[i].y - 1));
 
-                //上
-                x = i;
-                y = j + 1;
-                CheckWall(new Vector2Int(x, y));
+            //上
+            CheckWall(new Vector2Int(_groundList[i].x, _groundList[i].y + 1));
 
-                //左下
-                x = i - 1;
-                y = j - 1;
-                CheckWall(new Vector2Int(x, y));
+            //左下
+            CheckWall(new Vector2Int(_groundList[i].x - 1, _groundList[i].y - 1));
 
-                //左上
-                x = i - 1;
-                y = j + 1;
-                CheckWall(new Vector2Int(x, y));
+            //左上
+            CheckWall(new Vector2Int(_groundList[i].x - 1, _groundList[i].y + 1));
 
-                //右下
-                x = i + 1;
-                y = j - 1;
-                CheckWall(new Vector2Int(x, y));
+            //右下
+            CheckWall(new Vector2Int(_groundList[i].x + 1, _groundList[i].y - 1));
 
-                //右上
-                x = i + 1;
-                y = j + 1;
-                CheckWall(new Vector2Int(x, y));
-            }
+            //右上
+            CheckWall(new Vector2Int(_groundList[i].x + 1, _groundList[i].y + 1));
         }
     }
 
     private bool CheckWall(Vector2Int position)
     {
-        if (position.x<0 || position.x>=grid.Size.x || position.y<0 || position.y>=grid.Size.y || grid[position] == CellType.None)
+        if (!_groundList.Contains(position) && !_wallList.Contains(position))
         {
             File.TileList.Add(new ExploreFileTile(false, false, "Wall", position));
+            _wallList.Add(position);
             return true;
         }
         else
@@ -314,6 +300,7 @@ public class ExploreFileRandomGenerator
             enemy.Position = position;
             enemy.RotationY = 0;
             enemy.EnemyGroupId = groupId;
+            enemy.Prefab = groupData.Prefab;
             File.EnemyList.Add(enemy);   
         }
     }

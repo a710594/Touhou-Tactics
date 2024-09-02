@@ -40,19 +40,28 @@ public class EnemyGroupModel
 
     public void GetMapPool()
     {
-        for (int j = 0; j < MapProbability_1; j++)
+        if (Map_1 != "x")
         {
-            MapPool.Add(Map_1);
+            for (int j = 0; j < MapProbability_1; j++)
+            {
+                MapPool.Add(Map_1);
+            }
         }
 
-        for (int j = 0; j < MapProbability_2; j++)
+        if (Map_2 != "x")
         {
-            MapPool.Add(Map_1);
+            for (int j = 0; j < MapProbability_2; j++)
+            {
+                MapPool.Add(Map_2);
+            }
         }
 
-        for (int j = 0; j < MapProbability_3; j++)
+        if (Map_3 != "x")
         {
-            MapPool.Add(Map_3);
+            for (int j = 0; j < MapProbability_3; j++)
+            {
+                MapPool.Add(Map_3);
+            }
         }
     }
 
