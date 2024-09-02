@@ -27,7 +27,7 @@ namespace Explore
             foreach (Transform child in Tilemap)
             {
                 pos = Utility.ConvertToVector2Int(child.position);
-                file.TileList.Add(new ExploreFileTile(pos, child.name, child.tag));
+                file.TileList.Add(new ExploreFileTile(true, false, child.name, pos));
 
                 if (minX == int.MinValue || pos.x < minX)
                 {
@@ -88,7 +88,6 @@ namespace Explore
                 treasure.Height = treasureObj.transform.position.y;
                 treasure.Position = Utility.ConvertToVector2Int(treasureObj.transform.position);
                 treasure.Rotation = Vector3Int.RoundToInt(treasureObj.transform.localEulerAngles);
-                treasure.Type = treasureObj.Type;
                 treasure.ItemID = treasureObj.ItemID;
                 treasure.Prefab = treasureObj.Prefab;
                 file.TreasureList.Add(treasure);

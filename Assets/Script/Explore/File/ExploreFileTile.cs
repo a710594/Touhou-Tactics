@@ -6,17 +6,17 @@ namespace Explore
 {
     public class ExploreFileTile
     {
-        public bool IsVisited;
         public bool IsWalkable;
+        public bool IsVisited;
         public string Prefab;
         public Vector2Int Position;
 
         public ExploreFileTile() { }
 
-        public ExploreFileTile(Vector2Int position, string prefab, string tag)
+        public ExploreFileTile(bool isWalkable, bool isVisited, string prefab, Vector2Int position)
         {
-            IsWalkable = tag != "Wall";
-            IsVisited = false;
+            IsWalkable = isWalkable; 
+            IsVisited = isVisited;
             Prefab = prefab;
             Position = position;
         }

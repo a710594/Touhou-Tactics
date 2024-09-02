@@ -13,10 +13,10 @@ namespace Explore
         public Vector2Int Start;
         public Vector2Int Goal;
         public ExploreCharacterController Player;
-        public List<ExploreInfoEnemy> EnemyInfoList = new List<ExploreInfoEnemy>();
+        public List<ExploreInfoEnemy> EnemyList = new List<ExploreInfoEnemy>();
         public Dictionary<Vector2Int, ExploreInfoTile> TileDic = new Dictionary<Vector2Int, ExploreInfoTile>();
     
-        public ExploreInfo() { }
+        public ExploreInfo(){}
 
         public ExploreInfo(ExploreFile file)
         {
@@ -24,7 +24,7 @@ namespace Explore
             Floor = file.Floor;
             Size = file.Size;
             Start = file.Start;
-            Goal = file.Goal;
+            Goal = file.Goal;   
         }
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Explore
 {
-    public class ExploreFileLoader
+    /*public class ExploreFileLoader
     {
         private static ExploreFileLoader _instance;
         public static ExploreFileLoader Instance
@@ -21,11 +21,10 @@ namespace Explore
 
         private LayerMask _mapLayer = LayerMask.NameToLayer("Map");
 
-        public ExploreInfo LoadFile(string name, DataContext.PrePathEnum pathEnum)
+        public ExploreFile LoadFile(string name, DataContext.PrePathEnum pathEnum)
         {
             ExploreFile file = DataContext.Instance.Load<ExploreFile>(name, pathEnum);
             SystemManager.Instance.SystemInfo.CurrentFloor = file.Floor;
-            ExploreInfo Info = new ExploreInfo(file);
 
             GameObject gameObj;
             TileObject tileObject;
@@ -106,5 +105,5 @@ namespace Explore
 
             return Info;
         }
-    }
+    }*/
 }

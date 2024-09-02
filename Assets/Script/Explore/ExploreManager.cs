@@ -30,8 +30,8 @@ namespace Explore
         public Action<Vector2Int> VisitedHandler;
 
         public ExploreInfo Info;
-        public LayerMask MapLayer = LayerMask.NameToLayer("Map");
-        public LayerMask TransparentFXLayer = LayerMask.NameToLayer("TransparentFX");
+        private LayerMask _mapLayer = LayerMask.NameToLayer("Map");
+        private LayerMask _transparentFXLayer = LayerMask.NameToLayer("TransparentFX");
 
         private Vector3 _playerPosition;
         private Vector3 _playerRotation;
@@ -40,260 +40,44 @@ namespace Explore
 
         public void Init() 
         {
+            ExploreFile file;
             if(SystemManager.Instance.SystemInfo.MaxFloor == 0) 
             {
-                Info = ExploreFileLoader.Instance.LoadFile("Floor_1", DataContext.PrePathEnum.MapExplore);
+                file = DataContext.Instance.Load<ExploreFile>("Floor_1", DataContext.PrePathEnum.MapExplore);
+                SystemManager.Instance.SystemInfo.CurrentFloor = file.Floor;
                 SystemManager.Instance.SystemInfo.MaxFloor = 1;
             }
             else
             {
-                Info = ExploreFileLoader.Instance.LoadFile(_fileName, DataContext.PrePathEnum.Save);
+                file = DataContext.Instance.Load<ExploreFile>("_fileName", DataContext.PrePathEnum.Save);
+                SystemManager.Instance.SystemInfo.CurrentFloor = file.Floor;
             }
 
-            //LoadFile(_fileName, DataContext.PrePathEnum.Save);
-            //if(File == null && SystemManager.Instance.SystemInfo.MaxFloor == 1) //��l�ɮ�
-            //{
-            //    LoadFile("Floor_1", DataContext.PrePathEnum.MapExplore);
-            //}
-
-            //CreateObject();
+            Info=ExploreInfoGenerator.Instance.Generate(file);
+            CreateObject();
             SetCamera();
         }
 
         public void Init(int floor) 
         {
+            ExploreFile file;
             if (DataContext.Instance.FixedFloorDic.ContainsKey(floor))
             {
                 FixedFloorModel data = DataContext.Instance.FixedFloorDic[floor];
-                Info = ExploreFileLoader.Instance.LoadFile(data.Name, DataContext.PrePathEnum.MapExplore);
+                file = DataContext.Instance.Load<ExploreFile>(data.Name, DataContext.PrePathEnum.MapExplore);
+                SystemManager.Instance.SystemInfo.CurrentFloor = file.Floor;
             }
             else
             {
                 RandomFloorModel data = DataContext.Instance.RandomFloorDic[floor];
-                Info = ExploreInfoGenerator.Instance.Create(data);
+                file = ExploreFileRandomGenerator.Instance.Create(data);
             }
             
-            //CreateObject();
+            Info = ExploreInfoGenerator.Instance.Generate(file);
+            CreateObject();
             SetCamera();
         }
 
-        private void LoadFile(string name, DataContext.PrePathEnum pathEnum)
-        {
-            ExploreFile file = DataContext.Instance.Load<ExploreFile>(name, pathEnum);
-            SystemManager.Instance.SystemInfo.CurrentFloor = file.Floor;
-            Info = new ExploreInfo(file);
-
-
-        }
-
-        /*public void CreateNewFile(int floor, Vector2Int size, int roomCount, Vector2Int roomMaxSize, RandomFloorModel data)
-        {
-            Info = new ExploreInfo();
-            Info.Floor = floor;
-            _generator2D.Generate(size, roomCount, roomMaxSize, out List<Generator2D.Room> roomList, out List<List<Vector2Int>> pathList);
-
-            ExploreInfoTile tile;
-            for(int i=0; i<roomList.Count; i++)
-            {
-                foreach (var pos in roomList[i].bounds.allPositionsWithin) 
-                {
-                    tile = new ExploreInfoTile();
-                    tile.IsWalkable = true;
-                    tile.IsVisited = false;
-                    Info.TileDic.Add(pos, tile);
-                }
-            }
-
-            for(int i=0; i<pathList.Count; i++)
-            {
-                for(int j=0; j<pathList[i].Count; j++)
-                {
-                    if(!Info.TileDic.ContainsKey(pathList[i][j]))
-                    {
-                        tile = new ExploreInfoTile();
-                        tile.IsWalkable = true;
-                        tile.IsVisited = false;
-                        Info.TileDic.Add(pathList[i][j], tile);   
-                    }
-                }   
-            }
-
-            //PlaceWall
-            int x;
-            int y;
-            foreach(KeyValuePair<Vector2Int, ExploreInfoTile> pair in Info.TileDic)
-            {
-                //左
-                x = pair.Key.x - 1;
-                y = pair.Key.y;
-                CheckWall(new Vector2Int(x, y));
-
-                //右
-                x = pair.Key.x + 1;
-                y = pair.Key.y;
-                CheckWall(new Vector2Int(x, y));
-
-                //下
-                x = pair.Key.x;
-                y = pair.Key.y - 1;
-                CheckWall(new Vector2Int(x, y));
-
-                //上
-                x = pair.Key.x;
-                y = pair.Key.y + 1;
-                CheckWall(new Vector2Int(x, y));
-
-                //左下
-                x = pair.Key.x - 1;
-                y = pair.Key.y - 1;
-                CheckWall(new Vector2Int(x, y));
-
-                //左上
-                x = pair.Key.x - 1;
-                y = pair.Key.y + 1;
-                CheckWall(new Vector2Int(x, y));
-
-                //右下
-                x = pair.Key.x + 1;
-                y = pair.Key.y - 1;
-                CheckWall(new Vector2Int(x, y));
-
-                //右上
-                x = pair.Key.x + 1;
-                y = pair.Key.y + 1;
-                CheckWall(new Vector2Int(x, y));
-            }
-
-            //get size
-            int minX = int.MinValue;
-            int maxX = int.MinValue;
-            int minY = int.MinValue;
-            int maxY = int.MinValue;
-            Vector2Int position;
-            foreach (KeyValuePair<Vector2Int, ExploreInfoTile> pair in Info.TileDic)
-            {
-                position = pair.Key;
-                if (minX == int.MinValue || position.x < minX)
-                {
-                    minX = position.x;
-                }
-                if (maxX == int.MinValue || position.x > maxX)
-                {
-                    maxX = position.x;
-                }
-                if (minY == int.MinValue || position.y < minY)
-                {
-                    minY = position.y;
-                }
-                if (maxY == int.MinValue || position.y > maxY)
-                {
-                    maxY = position.y;
-                }
-            }
-            Info.Size = new Vector2Int(maxX - minX, maxY - minY);
-
-            //PlaceStartAndGoal
-            Generator2D.Room startRoom = roomList[0];
-            Info.Start = startRoom.bounds.position + new Vector2Int(UnityEngine.Random.Range(0, startRoom.bounds.size.x),UnityEngine.Random.Range(0, startRoom.bounds.size.y));
-            startRoom.WalkableList.Remove(Info.Start);
-
-            List<Generator2D.Room> tempList = new List<Generator2D.Room>(roomList);
-            tempList.Remove(startRoom);
-            Generator2D.Room goalRoom = null;
-            for (int i = 0; i < tempList.Count; i++)
-            {
-                if (goalRoom == null || Vector3.Distance(tempList[i].bounds.center, startRoom.bounds.center) > Vector3.Distance(goalRoom.bounds.center, startRoom.bounds.center))
-                {
-                    goalRoom = tempList[i];
-                }
-            }
-
-            Info.Goal = goalRoom.bounds.position + new Vector2Int(UnityEngine.Random.Range(0, goalRoom.bounds.size.x),UnityEngine.Random.Range(0, goalRoom.bounds.size.y));
-            goalRoom.WalkableList.Remove(Info.Goal);
-
-            //Set Treasure
-            int treasureCount = 10;
-            Generator2D.Room room;
-            ExploreInfoTreasure treasure;
-            for (int i = 0; i < treasureCount; i++)
-            {
-                room = roomList[UnityEngine.Random.Range(0, roomList.Count)];
-                if (room.GetRandomPosition(out position))
-                {
-                    if(Info.TileDic[position].Treasure == null)
-                    {
-                        room.WalkableList.Remove(position);
-                        Info.TileDic[position].IsWalkable = false;
-                        TreasureModel treasureModel = new TreasureModel();
-                        treasureModel.ID = 1;
-                        treasureModel.Type = TreasureModel.TypeEnum.Item;
-                        treasureModel.Prefab = "TreasureBox";
-                        treasureModel.Height = 0.85f;
-                        treasureModel.IDList = new List<int>() { 21, 22, 23, 24 };
-                        treasureModel.Rotation = "(0, 0, 0)";
-                        treasure = new ExploreInfoTreasure();
-                        treasure.Type = treasureModel.Type;
-                        treasure.Prefab = treasureModel.Prefab;
-                        treasure.ItemID = treasureModel.ID_1;
-                        Info.TileDic[position].Treasure = treasure;
-                    }
-                }
-            }
-
-            //Set Player
-            _playerPosition = new Vector3(Info.Start.x, 0, Info.Start.y);
-            _playerRotation = Vector3.zero;
-
-            //Set Enemy
-            int groupId;
-            ExploreInfoEnemy enemy;
-            for (int i = 0; i < data.EnemyCount; i++)
-            {
-                room = roomList[UnityEngine.Random.Range(0, roomList.Count)];
-                if (room.GetRandomPosition(out position))
-                {
-                    groupId = data.EnemyGroupPool[UnityEngine.Random.Range(0, data.EnemyGroupPool.Count)];
-                    enemy = new ExploreInfoEnemy();
-                    enemy.AI = ExploreFileEnemy.AiEnum.Default;
-                    enemy.Prefab = groupData.Explorer;
-                    enemy.Position = position;
-                    enemy.RotationY = 0;
-                    enemy.Map = groupData.MapPool[UnityEngine.Random.Range(0, groupData.MapPool.Count)];
-                    enemy.Lv = groupData.Lv;
-                    enemy.Exp = groupData.Exp;
-                    enemy.EnemyList = groupData.EnemyList;
-                    Info.EnemyInfoList.Add(enemy);
-                    Info.WalkableList.Remove(position);
-                    room.WalkableList.Remove(position);
-                }
-            }
-            groupId = data.BossEnemyGroup;
-            groupData = DataContext.Instance.EnemyGroupDic[groupId];
-            enemy = new ExploreFileEnemy();
-            enemy.AI = ExploreFileEnemy.AiEnum.NotMove;
-            enemy.Prefab = groupData.Explorer;
-            enemy.Position = Info.Goal;
-            enemy.RotationY = 0;
-            enemy.MapSeed = groupData.MapPool[UnityEngine.Random.Range(0, groupData.MapPool.Count)];
-            enemy.Lv = groupData.Lv;
-            enemy.Exp = groupData.Exp;
-            enemy.EnemyList = groupData.EnemyList;
-            Info.EnemyInfoList.Add(enemy);
-        }*/
-
-        /*private bool CheckWall(Vector2Int position)
-        {
-            if(!_tilePositionList.Contains(position))
-            {
-                Info.TileList.Add(new ExploreFileTile(position, "Wall", "Wall"));
-                _tilePositionList.Add(position);  
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }*/
 
         public void Save()
         {
@@ -336,15 +120,15 @@ namespace Explore
         public bool CheckEnemyCollision(Vector2Int playerPosition) 
         {
             ExploreInfoEnemy enemy;
-            for (int i = 0; i < Info.EnemyInfoList.Count; i++)
+            for (int i = 0; i < Info.EnemyList.Count; i++)
             {
-                if (Utility.ConvertToVector2Int(Info.EnemyInfoList[i].Controller.transform.position) == playerPosition)
+                if (Utility.ConvertToVector2Int(Info.EnemyList[i].Controller.transform.position) == playerPosition)
                 {
                     InputMamager.Instance.Lock();
                     _playerPosition = Info.Player.transform.position;
                     _playerRotation = Info.Player.transform.eulerAngles;
-                    enemy = Info.EnemyInfoList[i];
-                    Info.EnemyInfoList.RemoveAt(i);
+                    enemy = Info.EnemyList[i];
+                    Info.EnemyList.RemoveAt(i);
                     _timer.Start(1f, () =>
                     {
                         SceneController.Instance.ChangeScene("Battle", (sceneName) =>
@@ -439,16 +223,16 @@ namespace Explore
                 }
             }
 
-            for (int i=0; i<Info.EnemyInfoList.Count; i++) 
+            for (int i=0; i<Info.EnemyList.Count; i++) 
             {
-                v2 = Utility.ConvertToVector2Int(Info.EnemyInfoList[i].Controller.transform.position);
+                v2 = Utility.ConvertToVector2Int(Info.EnemyList[i].Controller.transform.position);
                 if (Info.TileDic[v2].IsVisited) 
                 {
-                    Info.EnemyInfoList[i].Controller.Arrow.layer = MapLayer;
+                    Info.EnemyList[i].Controller.Arrow.layer = _mapLayer;
                 }
                 else
                 {
-                    Info.EnemyInfoList[i].Controller.Arrow.layer = TransparentFXLayer;
+                    Info.EnemyList[i].Controller.Arrow.layer = _transparentFXLayer;
                 }
             }
         }
@@ -458,10 +242,10 @@ namespace Explore
             if (Info.TileDic.ContainsKey(v2)) 
             {
                 Info.TileDic[v2].IsVisited = true;
-                Info.TileDic[v2].Object.Quad.layer = MapLayer;
+                Info.TileDic[v2].Object.Quad.layer = _mapLayer;
                 if(Info.TileDic[v2].Object.Icon != null) 
                 {
-                    Info.TileDic[v2].Object.Icon.layer = MapLayer;
+                    Info.TileDic[v2].Object.Icon.layer = _mapLayer;
                 }
             }
         }
@@ -473,9 +257,9 @@ namespace Explore
                 pair.Value.IsVisited = true;
             }
 
-            for (int i = 0; i < Info.EnemyInfoList.Count; i++)
+            for (int i = 0; i < Info.EnemyList.Count; i++)
             {
-                Info.EnemyInfoList[i].Controller.Arrow.layer = MapLayer;
+                Info.EnemyList[i].Controller.Arrow.layer = _mapLayer;
             }
         }
 
@@ -514,7 +298,7 @@ namespace Explore
                 ReloadHandler();
             }
 
-            //CreateObject();
+            CreateObject();
             SetCamera();
         }
 
@@ -523,35 +307,35 @@ namespace Explore
             return Info.TileDic[position].Treasure != null;
         }
 
-        public TreasureObject GetTreasure() 
+        public ExploreInfoTreasure GetTreasure() 
         {
-            TreasureObject treasure = null;
+            ExploreInfoTreasure treasure = null;
             Vector2Int v2 = Utility.ConvertToVector2Int(Camera.main.transform.position + Camera.main.transform.forward);
             if (CheckTreasure(v2)) 
             {
                 treasure = Info.TileDic[v2].Treasure;
 
                 bool bagIsFull = false;
-                if (treasure.Type == TreasureModel.TypeEnum.Equip)
-                {
-                    bagIsFull = ItemManager.Instance.AddEquip(treasure.ItemID);
-                }
+                // if (treasure.Type == TreasureModel.TypeEnum.Equip)
+                // {
+                //     bagIsFull = ItemManager.Instance.AddEquip(treasure.ItemID);
+                // }
                 if (!bagIsFull) 
                 {
                     Info.TileDic[v2].IsWalkable = true;
                     ItemManager.Instance.AddItem(treasure.ItemID, 1);
-                    GameObject.Destroy(Info.TileDic[v2].Treasure.gameObject);
+                    GameObject.Destroy(Info.TileDic[v2].Treasure.Object.gameObject);
                 }
             }
 
             return treasure;
         }
 
-        /*public void CreateObject() 
+        public void CreateObject() 
         {
-            ExploreInfoTile tile;
             GameObject gameObj;
-            TileObject tileObject;
+            TileObject tileObj;
+            TreasureObject treasureObj;
             Transform parent = GameObject.Find("Generator2D").transform;
 
             for (int i = parent.childCount; i > 0; --i)
@@ -561,72 +345,53 @@ namespace Explore
 
             foreach(KeyValuePair<Vector2Int, ExploreInfoTile> pair in Info.TileDic)
             {
-                tile = pair.Value;
-                gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + tile.Prefab), Vector3.zero, Quaternion.identity);
-
-                if (gameObj != null)
+                gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + pair.Value.Prefab), Vector3.zero, Quaternion.identity);
+                tileObj = gameObj.GetComponent<TileObject>();
+                tileObj.transform.position = new Vector3(pair.Key.x, 0, pair.Key.y);
+                tileObj.transform.SetParent(parent);
+                if (pair.Value.IsVisited)
                 {
-                    gameObj.transform.position = new Vector3(tile.Position.x, 0, tile.Position.y);
-                    gameObj.transform.SetParent(parent);
-                    tileObject = new TileObject();
-                    tileObject.Cube = gameObj;
-                    tileObject.Quad = gameObj.transform.GetChild(0).gameObject;
-
-                    if (Info.VisitedList.Contains(tile.Position))
-                    {
-                        tileObject.Quad.layer = MapLayer;
-                    }
-
-                    _tileDic.Add(tile.Position, tileObject);
+                    tileObj.Quad.layer = _mapLayer;
                 }
-            }
+                pair.Value.Object = tileObj;
 
-            ExploreFileTreasure treasure;
-            for(int i=0; i<Info.TreasureList.Count; i++)
-            {
-                treasure = Info.TreasureList[i];
-                gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + treasure.Prefab), Vector3.zero, Quaternion.identity);
-                gameObj.transform.position = new Vector3(treasure.Position.x, treasure.Height, treasure.Position.y);
-                gameObj.transform.eulerAngles = treasure.Rotation;
-                gameObj.transform.SetParent(parent);
-                _tileDic[treasure.Position].Treasure = gameObj;
-                if (gameObj.transform.childCount > 0)
+                if(pair.Value.Treasure!=null)
                 {
-                    _tileDic[treasure.Position].Icon = gameObj.transform.GetChild(0).gameObject;
-                    if (Info.VisitedList.Contains(treasure.Position))
+                    gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + pair.Value.Treasure.Prefab), Vector3.zero, Quaternion.identity);
+                    treasureObj = gameObj.GetComponent<TreasureObject>();
+                    treasureObj.transform.position = new Vector3(pair.Key.x, pair.Value.Treasure.Height, pair.Key.y);
+                    treasureObj.transform.SetParent(parent);
+                    if (pair.Value.IsVisited)
                     {
-                        _tileDic[treasure.Position].Icon.layer = MapLayer;
+                        treasureObj.Icon.layer = _mapLayer;
                     }
                 }
             }
 
-            if (Info.Goal.x != int.MinValue && Info.Goal.y != int.MinValue)
+            gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Goal"), Vector3.zero, Quaternion.identity);
+            gameObj.transform.position = new Vector3(Info.Goal.x, 0, Info.Goal.y);
+            gameObj.transform.eulerAngles = new Vector3(90, 0, 0);
+            gameObj.transform.SetParent(parent);
+            Info.TileDic[Info.Goal].Object.Icon = gameObj;
+            if (Info.TileDic[Info.Goal].IsVisited)
             {
-                gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Goal"), Vector3.zero, Quaternion.identity);
-                gameObj.transform.position = new Vector3(Info.Goal.x, 0, Info.Goal.y);
-                gameObj.transform.eulerAngles = new Vector3(90, 0, 0);
-                gameObj.transform.SetParent(parent);
-                _tileDic[Info.Goal].Icon = gameObj;
-                if (Info.VisitedList.Contains(Info.Goal))
-                {
-                    _tileDic[Info.Goal].Icon.layer = MapLayer;
-                }
-                _tileDic[Info.Goal].Icon.GetComponent<Goal>().Red.SetActive(!Info.IsArrive);
-                _tileDic[Info.Goal].Icon.GetComponent<Goal>().Blue.SetActive(Info.IsArrive);
+                Info.TileDic[Info.Goal].Object.Icon.layer = _mapLayer;
             }
+            Info.TileDic[Info.Goal].Object.Icon.GetComponent<Goal>().Red.SetActive(!Info.IsArrive);
+            Info.TileDic[Info.Goal].Object.Icon.GetComponent<Goal>().Blue.SetActive(Info.IsArrive);
 
-            _enemyList.Clear();
             ExploreEnemyController controller;
-            for (int i = 0; i < Info.EnemyInfoList.Count; i++)
+            for (int i = 0; i < Info.EnemyList.Count; i++)
             {
-                gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + Info.EnemyInfoList[i].Prefab), Vector3.zero, Quaternion.identity);
-                gameObj.transform.position = new Vector3(Info.EnemyInfoList[i].Position.x, 1, Info.EnemyInfoList[i].Position.y);
+                gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + Info.EnemyList[i].Prefab), Vector3.zero, Quaternion.identity);
+                gameObj.transform.position = Info.EnemyList[i].Position;
+                gameObj.transform.eulerAngles = Info.EnemyList[i].Rotation;
                 gameObj.transform.SetParent(parent);
                 controller = gameObj.GetComponent<ExploreEnemyController>();
-                controller.Init(Info.EnemyInfoList[i]);
-                _enemyList.Add(controller);
+                controller.SetAI(Info.EnemyList[i].AI);
+                Info.EnemyList[i].Controller = controller;
             }
-        }*/
+        }
 
         public void SetCamera()
         {
@@ -660,16 +425,16 @@ namespace Explore
         public void EnemyMove() 
         {
             _enemyMoveCount = 0;
-            for (int i = 0; i < Info.EnemyInfoList.Count; i++)
+            for (int i = 0; i < Info.EnemyList.Count; i++)
             {
-                Info.EnemyInfoList[i].Controller.Move();
+                Info.EnemyList[i].Controller.Move();
             }
         }
 
         public void WaitForAllMoveComplete() 
         {
             _enemyMoveCount++;
-            if (_enemyMoveCount == Info.EnemyInfoList.Count + 1) 
+            if (_enemyMoveCount == Info.EnemyList.Count + 1) 
             {
                 CheckVidsit(Info.Player.transform);
                 Vector2Int v2 = Utility.ConvertToVector2Int(Info.Player.transform.position);

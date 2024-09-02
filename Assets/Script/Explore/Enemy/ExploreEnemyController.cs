@@ -11,16 +11,13 @@ namespace Explore
         public ExploreFileEnemy File;
         public EnemyExplorerAI AI;
 
-        public void Init(ExploreFileEnemy enemyExplorer)
+        public void SetAI(ExploreFileEnemy.AiEnum ai)
         {
-            File = enemyExplorer;
-            transform.position = new Vector3(enemyExplorer.Position.x, 1, enemyExplorer.Position.y);
-            transform.eulerAngles = new Vector3(0, enemyExplorer.RotationY, 0);
-            if(enemyExplorer.AI == ExploreFileEnemy.AiEnum.NotMove) 
+            if(ai == ExploreFileEnemy.AiEnum.NotMove) 
             {
                 AI = new NotMoveAI();
             }
-            else if (enemyExplorer.AI == ExploreFileEnemy.AiEnum.Default)
+            else if (ai == ExploreFileEnemy.AiEnum.Default)
             {
                 AI = new DefaultAI();
             }

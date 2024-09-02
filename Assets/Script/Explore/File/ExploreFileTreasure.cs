@@ -4,12 +4,19 @@ using UnityEngine;
 
 public class ExploreFileTreasure
 {
-    public TreasureModel.TypeEnum Type;
     public int ItemID;
     public string Prefab;
-    public float Height; //Vector3 ¤£¯à§Ç¦C¤Æ,°ª«×»İ­nÃB¥~¦s
+    public float Height; //Vector3 ä¸èƒ½åºåˆ—åŒ–,é«˜åº¦éœ€è¦é¡å¤–å­˜
     public Vector2Int Position;
     public Vector3Int Rotation;
 
     public ExploreFileTreasure() { }
+    public ExploreFileTreasure(int itemId, string prefab, float height, Vector2Int position, Vector3Int rotation) 
+    {
+        ItemID = itemId;
+        Prefab = prefab;
+        Height = height;
+        Position = position;
+        Rotation = rotation;
+     }
 }

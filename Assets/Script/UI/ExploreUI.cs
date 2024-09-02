@@ -50,7 +50,7 @@ public class ExploreUI : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                TreasureObject treasure = ExploreManager.Instance.GetTreasure();
+                ExploreInfoTreasure treasure = ExploreManager.Instance.GetTreasure();
                 if (treasure != null)
                 {
                     TreasureUI.Open(treasure.ItemID);

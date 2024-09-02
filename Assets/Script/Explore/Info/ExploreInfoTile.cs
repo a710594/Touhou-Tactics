@@ -11,7 +11,7 @@ namespace Explore
         public string Event = null;
         public string Prefab;
         public TileObject Object;
-        public TreasureObject Treasure;
+        public ExploreInfoTreasure Treasure;
 
         public ExploreInfoTile() { }
 
