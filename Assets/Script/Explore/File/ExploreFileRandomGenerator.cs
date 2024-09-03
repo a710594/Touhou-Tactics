@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Explore;
 using Graphs;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class ExploreFileRandomGenerator
 {
@@ -190,9 +191,6 @@ public class ExploreFileRandomGenerator
 
     void PlaceWall()
     {
-        int x;
-        int y;
-
         for (int i=0; i<_groundList.Count; i++) 
         {
             //左
@@ -253,6 +251,7 @@ public class ExploreFileRandomGenerator
         }
 
         File.Goal = goalRoom.GetRandomPosition();
+        File.PlayerPosition = File.Goal;
         goalRoom.SetNotAvailable(File.Goal);
     }
 

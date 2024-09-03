@@ -60,11 +60,6 @@ public class SceneController
             _isLock = true;
             _tempType = scene;
 
-            if(CurrentScene == "Explore" && scene == "Camp") 
-            {
-                Explore.ExploreManager.Instance.Save();
-            }
-
             if (BeforeSceneLoadedHandler != null)
             {
                 BeforeSceneLoadedHandler();

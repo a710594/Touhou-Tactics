@@ -29,6 +29,7 @@ namespace Explore
 
         public Action<Vector2Int> VisitedHandler;
 
+        public ExploreFile File;
         public ExploreInfo Info;
         private LayerMask _mapLayer = LayerMask.NameToLayer("Map");
         private LayerMask _transparentFXLayer = LayerMask.NameToLayer("TransparentFX");
@@ -40,40 +41,38 @@ namespace Explore
 
         public void Init() 
         {
-            ExploreFile file;
             if(SystemManager.Instance.SystemInfo.MaxFloor == 0) 
             {
-                file = DataContext.Instance.Load<ExploreFile>("Floor_1", DataContext.PrePathEnum.MapExplore);
-                SystemManager.Instance.SystemInfo.CurrentFloor = file.Floor;
+                File = DataContext.Instance.Load<ExploreFile>("Floor_1", DataContext.PrePathEnum.MapExplore);
+                SystemManager.Instance.SystemInfo.CurrentFloor = File.Floor;
                 SystemManager.Instance.SystemInfo.MaxFloor = 1;
             }
             else
             {
-                file = DataContext.Instance.Load<ExploreFile>("_fileName", DataContext.PrePathEnum.Save);
-                SystemManager.Instance.SystemInfo.CurrentFloor = file.Floor;
+                File = DataContext.Instance.Load<ExploreFile>(_fileName, DataContext.PrePathEnum.Save);
+                SystemManager.Instance.SystemInfo.CurrentFloor = File.Floor;
             }
 
-            Info=ExploreInfoGenerator.Instance.Generate(file);
+            Info=ExploreInfoGenerator.Instance.Generate(File);
             CreateObject();
             SetCamera();
         }
 
         public void Init(int floor) 
         {
-            ExploreFile file;
             if (DataContext.Instance.FixedFloorDic.ContainsKey(floor))
             {
                 FixedFloorModel data = DataContext.Instance.FixedFloorDic[floor];
-                file = DataContext.Instance.Load<ExploreFile>(data.Name, DataContext.PrePathEnum.MapExplore);
-                SystemManager.Instance.SystemInfo.CurrentFloor = file.Floor;
+                File = DataContext.Instance.Load<ExploreFile>(data.Name, DataContext.PrePathEnum.MapExplore);
+                SystemManager.Instance.SystemInfo.CurrentFloor = File.Floor;
             }
             else
             {
                 RandomFloorModel data = DataContext.Instance.RandomFloorDic[floor];
-                file = ExploreFileRandomGenerator.Instance.Create(data);
+                File = ExploreFileRandomGenerator.Instance.Create(data);
             }
             
-            Info = ExploreInfoGenerator.Instance.Generate(file);
+            Info = ExploreInfoGenerator.Instance.Generate(File);
             CreateObject();
             SetCamera();
         }
@@ -81,9 +80,11 @@ namespace Explore
 
         public void Save()
         {
+            File.PlayerPosition = Utility.ConvertToVector2Int(Info.Player.transform.position);
+            File.PlayerRotation = (int)Info.Player.transform.eulerAngles.y;
             if (SceneController.Instance.CurrentScene == "Explore")
             {
-                DataContext.Instance.Save(Info, _fileName, DataContext.PrePathEnum.Save);
+                DataContext.Instance.Save(File, _fileName, DataContext.PrePathEnum.Save);
             }
         }
 
