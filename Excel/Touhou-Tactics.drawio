@@ -1,0 +1,267 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36" version="24.7.10" pages="2">
+  <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
+    <mxGraphModel dx="794" dy="458" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="Yj5TDsg7gePqlZfXOrJI-1" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;開始&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="160" y="360" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Yj5TDsg7gePqlZfXOrJI-2" value="第一場戰鬥&lt;div&gt;技能和支援教學&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="160" y="450" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Yj5TDsg7gePqlZfXOrJI-3" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="Yj5TDsg7gePqlZfXOrJI-1" target="Yj5TDsg7gePqlZfXOrJI-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="195" y="460" as="sourcePoint" />
+            <mxPoint x="245" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Yj5TDsg7gePqlZfXOrJI-4" value="靈夢登場,得到符卡x1" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="160" y="540" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Yj5TDsg7gePqlZfXOrJI-5" value="第二場戰鬥&lt;div&gt;符卡教學&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="160" y="630" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Yj5TDsg7gePqlZfXOrJI-6" value="靈夢加入隊伍" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="160" y="730" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Yj5TDsg7gePqlZfXOrJI-7" value="第三場戰鬥&lt;div&gt;靈夢教學&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="160" y="820" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="oCrelnVvvsXX9kLqdQXE-13" style="edgeStyle=elbowEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="Yj5TDsg7gePqlZfXOrJI-8" target="oCrelnVvvsXX9kLqdQXE-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Yj5TDsg7gePqlZfXOrJI-8" value="&lt;div&gt;抵達終點&lt;/div&gt;返回營地&lt;br&gt;魔理沙加入" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="160" y="910" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Yj5TDsg7gePqlZfXOrJI-9" value="第四場戰鬥&lt;div&gt;(二樓第一場戰鬥)&lt;br&gt;&lt;div&gt;魔理沙教學&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="330" y="450" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Yj5TDsg7gePqlZfXOrJI-10" value="教玩家回營地的方法" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="330" y="540" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Yj5TDsg7gePqlZfXOrJI-12" value="烹飪教學" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="330" y="630" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Yj5TDsg7gePqlZfXOrJI-13" value="玩家打通二樓" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="340" y="720" width="100" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Yj5TDsg7gePqlZfXOrJI-14" value="返回營地&lt;br&gt;解鎖剩餘的角色" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="330" y="820" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Yj5TDsg7gePqlZfXOrJI-18" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="Yj5TDsg7gePqlZfXOrJI-2" target="Yj5TDsg7gePqlZfXOrJI-4">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="220" y="550" as="sourcePoint" />
+            <mxPoint x="270" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Yj5TDsg7gePqlZfXOrJI-19" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="Yj5TDsg7gePqlZfXOrJI-4" target="Yj5TDsg7gePqlZfXOrJI-5">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="230" y="600" as="sourcePoint" />
+            <mxPoint x="200" y="630" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Yj5TDsg7gePqlZfXOrJI-21" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="Yj5TDsg7gePqlZfXOrJI-5" target="Yj5TDsg7gePqlZfXOrJI-6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="320" y="530" as="sourcePoint" />
+            <mxPoint x="220" y="690" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Yj5TDsg7gePqlZfXOrJI-22" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="Yj5TDsg7gePqlZfXOrJI-6" target="Yj5TDsg7gePqlZfXOrJI-7">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="70" y="880" as="sourcePoint" />
+            <mxPoint x="120" y="830" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Yj5TDsg7gePqlZfXOrJI-23" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="Yj5TDsg7gePqlZfXOrJI-7" target="Yj5TDsg7gePqlZfXOrJI-8">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="90" y="920" as="sourcePoint" />
+            <mxPoint x="140" y="870" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Yj5TDsg7gePqlZfXOrJI-24" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="Yj5TDsg7gePqlZfXOrJI-9" target="Yj5TDsg7gePqlZfXOrJI-10">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="510" y="680" as="sourcePoint" />
+            <mxPoint x="560" y="630" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Yj5TDsg7gePqlZfXOrJI-25" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="Yj5TDsg7gePqlZfXOrJI-10" target="Yj5TDsg7gePqlZfXOrJI-12">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="490" y="610" as="sourcePoint" />
+            <mxPoint x="540" y="560" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Yj5TDsg7gePqlZfXOrJI-26" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="Yj5TDsg7gePqlZfXOrJI-12" target="Yj5TDsg7gePqlZfXOrJI-13">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="510" y="730" as="sourcePoint" />
+            <mxPoint x="560" y="680" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Yj5TDsg7gePqlZfXOrJI-27" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="Yj5TDsg7gePqlZfXOrJI-13" target="Yj5TDsg7gePqlZfXOrJI-14">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="470" y="750" as="sourcePoint" />
+            <mxPoint x="520" y="700" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="oCrelnVvvsXX9kLqdQXE-1" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="Yj5TDsg7gePqlZfXOrJI-14">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="490" y="900" as="sourcePoint" />
+            <mxPoint x="390" y="910" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="oCrelnVvvsXX9kLqdQXE-2" value="撿取道具教學" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="330" y="360" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="oCrelnVvvsXX9kLqdQXE-3" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="oCrelnVvvsXX9kLqdQXE-2" target="Yj5TDsg7gePqlZfXOrJI-9">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="500" y="410" as="sourcePoint" />
+            <mxPoint x="550" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dX5eCmD3mou-5HCNNCt1-1" value="三樓到四樓是隨機地圖" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;spacingLeft=0;spacing=10;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="330" y="900" width="120" height="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="TdlGK0oX8xcDoYo0lWdH" name="第 2 页">
+    <mxGraphModel dx="794" dy="458" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="7UtT19qO_qpakmTWqqNq-1" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;開始&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="120" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7UtT19qO_qpakmTWqqNq-2" value="第一場戰鬥&lt;div&gt;技能和支援教學&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="130" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7UtT19qO_qpakmTWqqNq-3" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="7UtT19qO_qpakmTWqqNq-1" target="7UtT19qO_qpakmTWqqNq-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="155" y="140" as="sourcePoint" />
+            <mxPoint x="205" y="90" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lPF_GEtvuAyJIc4-yc2c-2" value="靈夢加入" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="230" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="h_dtDtKLDVNJUTLgeAQU-1" value="第二場戰鬥&lt;div&gt;靈夢教學&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="320" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Hyw3-Gp3PoxxymQlQicO-14" style="edgeStyle=elbowEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="g_BwSg8ZLq4BcMOsC_ew-1" target="AfZGjRjmfqc6AjVo7xX--1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="g_BwSg8ZLq4BcMOsC_ew-1" value="&lt;div&gt;抵達終點&lt;/div&gt;返回營地&lt;div&gt;早苗加入&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="410" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AfZGjRjmfqc6AjVo7xX--1" value="從二樓開始是隨機地圖" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="294" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AfZGjRjmfqc6AjVo7xX--3" value="第三場戰鬥&lt;div&gt;(二樓第一場戰鬥)&lt;br&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="294" y="120" width="130" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AfZGjRjmfqc6AjVo7xX--4" value="早苗教學" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="299" y="250" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AfZGjRjmfqc6AjVo7xX--5" value="鄰近道具" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="520" y="120" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AfZGjRjmfqc6AjVo7xX--6" value="撿取道具教學" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="500" y="240" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AfZGjRjmfqc6AjVo7xX--7" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="AfZGjRjmfqc6AjVo7xX--1" target="AfZGjRjmfqc6AjVo7xX--3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="340" y="410" as="sourcePoint" />
+            <mxPoint x="390" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AfZGjRjmfqc6AjVo7xX--8" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="AfZGjRjmfqc6AjVo7xX--1" target="AfZGjRjmfqc6AjVo7xX--5">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="380" y="130" as="sourcePoint" />
+            <mxPoint x="430" y="80" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AfZGjRjmfqc6AjVo7xX--9" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="AfZGjRjmfqc6AjVo7xX--3" target="AfZGjRjmfqc6AjVo7xX--4">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="360" as="sourcePoint" />
+            <mxPoint x="440" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AfZGjRjmfqc6AjVo7xX--10" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="AfZGjRjmfqc6AjVo7xX--5" target="AfZGjRjmfqc6AjVo7xX--6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="560" y="210" as="sourcePoint" />
+            <mxPoint x="490" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AfZGjRjmfqc6AjVo7xX--14" value="符卡教學" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="340" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="UVlSe-qYJ2ab5w0cgSBF-1" value="玩家打通二樓" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="120" width="100" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="KMjwOFIK37q7HUzBgeqS-1" value="返回營地&lt;br&gt;解鎖剩餘的角色" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="380" y="620" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Hyw3-Gp3PoxxymQlQicO-1" value="" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="AfZGjRjmfqc6AjVo7xX--3" target="AfZGjRjmfqc6AjVo7xX--5">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="360" y="220" as="sourcePoint" />
+            <mxPoint x="540" y="220" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Hyw3-Gp3PoxxymQlQicO-4" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" target="AfZGjRjmfqc6AjVo7xX--14">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="470" y="159" as="sourcePoint" />
+            <mxPoint x="483.6400000000001" y="339.99999999999994" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Hyw3-Gp3PoxxymQlQicO-5" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="AfZGjRjmfqc6AjVo7xX--1" target="UVlSe-qYJ2ab5w0cgSBF-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="760" y="140" as="sourcePoint" />
+            <mxPoint x="810" y="90" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZBmMyey7TRPmESbch0L--2" style="edgeStyle=elbowEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="Hyw3-Gp3PoxxymQlQicO-6" target="ZBmMyey7TRPmESbch0L--1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Hyw3-Gp3PoxxymQlQicO-6" value="提早回到營地的教學" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="299" y="340" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Hyw3-Gp3PoxxymQlQicO-7" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="AfZGjRjmfqc6AjVo7xX--4" target="Hyw3-Gp3PoxxymQlQicO-6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="560" y="360" as="sourcePoint" />
+            <mxPoint x="610" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Hyw3-Gp3PoxxymQlQicO-8" value="魔理沙加入" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="640" y="240" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Hyw3-Gp3PoxxymQlQicO-9" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="UVlSe-qYJ2ab5w0cgSBF-1" target="Hyw3-Gp3PoxxymQlQicO-8">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="490" y="260" as="sourcePoint" />
+            <mxPoint x="540" y="210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Hyw3-Gp3PoxxymQlQicO-10" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="7UtT19qO_qpakmTWqqNq-2" target="lPF_GEtvuAyJIc4-yc2c-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="310" y="465" as="sourcePoint" />
+            <mxPoint x="360" y="415" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Hyw3-Gp3PoxxymQlQicO-11" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="lPF_GEtvuAyJIc4-yc2c-2" target="h_dtDtKLDVNJUTLgeAQU-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="280" y="440" as="sourcePoint" />
+            <mxPoint x="330" y="390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Hyw3-Gp3PoxxymQlQicO-12" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="h_dtDtKLDVNJUTLgeAQU-1" target="g_BwSg8ZLq4BcMOsC_ew-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="260" y="465" as="sourcePoint" />
+            <mxPoint x="310" y="415" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZBmMyey7TRPmESbch0L--1" value="烹飪教學" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="299" y="450" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
