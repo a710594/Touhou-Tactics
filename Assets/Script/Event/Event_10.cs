@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Event_10 : MyEvent
+/*public class Event_10 : MyEvent
 {
     private CampUI _campUI;
 
@@ -34,4 +34,4 @@ public class Event_10 : MyEvent
             _campUI.ExploreButton.enabled = true;
         }, null);
     }
-}
+}*/

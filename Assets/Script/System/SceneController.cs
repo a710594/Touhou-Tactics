@@ -92,9 +92,8 @@ public class SceneController
             AfterSceneLoadedHandler -= _tempHandler;
         }
 
-        if (scene.name == "Camp")
+        /*if (scene.name == "Camp")
         {
-            //if (!FlagManager.Instance.Info.FlagDic[FlagInfo.FlagEnum.Camp])
             if(FlowController.Instance.Info.CurrentStep == FlowInfo.StepEnum.Camp)
             {
                 Event_6 event_6 = new Event_6();
@@ -117,6 +116,17 @@ public class SceneController
             {
                 Event_11 event_11 = new Event_11();
                 event_11.Start();
+            }
+        }*/
+
+        if (scene.name == "Camp") 
+        {
+            if(FlowController.Instance.Info.SceneEvent == 1) 
+            {
+                Type objectType = Type.GetType("SceneEvent_" + FlowController.Instance.Info.SceneEvent);
+                MyEvent myEvent = (MyEvent)Activator.CreateInstance(objectType);
+                myEvent.Start();
+                FlowController.Instance.Info.SceneEvent++;
             }
         }
     }

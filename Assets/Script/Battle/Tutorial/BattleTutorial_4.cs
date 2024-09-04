@@ -20,8 +20,8 @@ namespace Battle
 
             Explore.ExploreManager.Instance.ReloadHandler += () => 
             {
-                Event_8 event_8 = new Event_8();
-                event_8.Start();
+                //Event_8 event_8 = new Event_8();
+                //event_8.Start();
                 Explore.ExploreManager.Instance.ReloadHandler = null;
             };
         }

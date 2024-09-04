@@ -35,11 +35,11 @@ public class SystemUI : MonoBehaviour
     {
         ConfirmUI.Open("要返回營地嗎？", "確定", "取消", () =>
         {
-            if (FlowController.Instance.Info.CurrentStep == FlowInfo.StepEnum.BackCamp)
-            {
-                FlowController.Instance.Info.CurrentStep++;
-                FlowController.Instance.Info.LockDic[FlowInfo.LockEnum.BackCamp] = false;
-            }
+            //if (FlowController.Instance.Info.CurrentStep == FlowInfo.StepEnum.BackCamp)
+            //{
+            //    FlowController.Instance.Info.CurrentStep++;
+            //    FlowController.Instance.Info.LockDic[FlowInfo.LockEnum.BackCamp] = false;
+            //}
 
             SceneController.Instance.ChangeScene("Camp", (sceneName)=> 
             {

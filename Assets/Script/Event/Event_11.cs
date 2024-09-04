@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Event_11 : MyEvent
-{
+/*{
     public override void Start()
     {
         if (FlowController.Instance.Info.CurrentStep == FlowInfo.StepEnum.UseItem_1)
@@ -16,4 +15,4 @@ public class Event_11 : MyEvent
             }, null);
         }
     }
-}
+}*/

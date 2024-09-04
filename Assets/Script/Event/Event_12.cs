@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Event_12 : MyEvent
+/*public class Event_12 : MyEvent
 {
     public override void Start()
     {
@@ -16,4 +16,4 @@ public class Event_12 : MyEvent
             }, null);
         }
     }
-}
+}*/

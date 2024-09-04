@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TriggerEvent_2 : MonoBehaviour
+public class TriggerEvent_2 : MyEvent
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        InputMamager.Instance.IsLock = true;
+        ExploreUI exploreUI = GameObject.Find("ExploreUI").GetComponent<ExploreUI>();
+        exploreUI.SetVisible(false);
+        ConversationUI.Open(2, true, () =>
+        {
+            InputMamager.Instance.IsLock = false; ;
+            exploreUI.SetVisible(true);
+        }, null);
     }
 }

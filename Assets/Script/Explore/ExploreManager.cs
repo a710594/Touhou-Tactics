@@ -34,6 +34,7 @@ namespace Explore
         private LayerMask _mapLayer = LayerMask.NameToLayer("Map");
         private LayerMask _transparentFXLayer = LayerMask.NameToLayer("TransparentFX");
 
+        private bool _hasCollision = false;
         private Vector3 _playerPosition;
         private Vector3 _playerRotation;
         private Timer _timer = new Timer();
@@ -54,8 +55,8 @@ namespace Explore
             }
 
             Info=ExploreInfoGenerator.Instance.Generate(File);
-            CreateObject();
-            SetCamera();
+            CreateObject(new Vector3(Info.Start.x, 1, Info.Start.y), Vector3.zero);
+            //SetCamera();
         }
 
         public void Init(int floor) 
@@ -73,8 +74,8 @@ namespace Explore
             }
             
             Info = ExploreInfoGenerator.Instance.Generate(File);
-            CreateObject();
-            SetCamera();
+            CreateObject(new Vector3(Info.Start.x, 1, Info.Start.y), Vector3.zero);
+            //SetCamera();
         }
 
 
@@ -127,6 +128,7 @@ namespace Explore
                 Info.EnemyList[i].Rotation = Info.EnemyList[i].Controller.transform.eulerAngles;
                 if (Utility.ConvertToVector2Int(Info.EnemyList[i].Controller.transform.position) == playerPosition)
                 {
+                    _hasCollision = true;
                     InputMamager.Instance.Lock();
                     _playerPosition = Info.Player.transform.position;
                     _playerRotation = Info.Player.transform.eulerAngles;
@@ -207,7 +209,7 @@ namespace Explore
         {
             if(Info.TileDic[v2].Event != null) 
             {
-                var objectType = Type.GetType(Info.TileDic[v2].Event);
+                Type objectType = Type.GetType("TriggerEvent_" + Info.TileDic[v2].Event);
                 MyEvent myEvent = (MyEvent)Activator.CreateInstance(objectType);
                 myEvent.Start();
                 return true;
@@ -271,10 +273,7 @@ namespace Explore
 
         public void Reload() 
         {
-            CreateObject();
-            SetCamera();
-            Info.Player.transform.position = _playerPosition;
-            Info.Player.transform.eulerAngles = _playerRotation;
+            CreateObject(_playerPosition, _playerRotation);
             if (Utility.ConvertToVector2Int(_playerPosition) == Info.Goal) 
             {
                 if (Info.Floor == _maxFloor)
@@ -338,7 +337,7 @@ namespace Explore
             return treasure;
         }
 
-        public void CreateObject() 
+        public void CreateObject(Vector3 playerPosition, Vector3 playerRotation) 
         {
             GameObject gameObj;
             TileObject tileObj;
@@ -399,9 +398,34 @@ namespace Explore
                 controller.SetAI(Info.EnemyList[i].AI);
                 Info.EnemyList[i].Controller = controller;
             }
+
+            Info.Player = Camera.main.GetComponent<ExploreCharacterController>();
+            Info.Player.transform.position = playerPosition;
+            Info.Player.transform.eulerAngles = playerRotation;
+
+            float x = 1;
+            float y = 1;
+            if (Info.Size.x > 60)
+            {
+                x = Info.Size.x / 60f;
+            }
+            if (Info.Size.y > 60)
+            {
+                y = Info.Size.y / 60f;
+            }
+            Camera bigMapCamera = GameObject.Find("BigMapCamera").GetComponent<Camera>();
+            bigMapCamera.orthographicSize = (bigMapCamera.orthographicSize * x) + 2;
+            bigMapCamera.gameObject.SetActive(false);
+
+            ExploreUI exploreUI = GameObject.Find("ExploreUI").GetComponent<ExploreUI>();
+            exploreUI.SetCameraPosition(Info.Size.x / 2, Info.Size.y / 2 - 2, x);
+
+            Vector2Int v2 = Utility.ConvertToVector2Int(Info.Player.transform.position);
+            CheckEvent(v2);
+            CheckVidsit(Info.Player.transform);
         }
 
-        public void SetCamera()
+        /*public void SetCamera()
         {
             Info.Player = Camera.main.GetComponent<ExploreCharacterController>();
             Info.Player.transform.position = new Vector3(Info.Start.x, 1, Info.Start.y);
@@ -427,7 +451,7 @@ namespace Explore
             Vector2Int v2 = Utility.ConvertToVector2Int(Info.Player.transform.position);
             CheckEvent(v2);
             CheckVidsit(Info.Player.transform);
-        }
+        }*/
 
         private int _enemyMoveCount;
         public void EnemyMove() 
@@ -446,17 +470,24 @@ namespace Explore
             {
                 CheckVidsit(Info.Player.transform);
                 Vector2Int v2 = Utility.ConvertToVector2Int(Info.Player.transform.position);
-                if (CheckEnemyCollision(v2))
+                if (!_hasCollision)
                 {
-                    return;
-                }
-                else if (CheckGoal(v2))
-                {
-                    return;
+                    if (CheckEnemyCollision(v2))
+                    {
+                        return;
+                    }
+                    else if (CheckGoal(v2))
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        CheckEvent(v2);
+                    }
                 }
                 else
                 {
-                    CheckEvent(v2);
+                    _hasCollision = false;
                 }
             }
         }
