@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,13 @@ namespace Explore
         public bool IsVisited;
         public string Prefab;
         public Vector2Int Position;
+
+        [NonSerialized]
+        public string Event = null;
+        [NonSerialized]
+        public TileObject Object;
+        [NonSerialized]
+        public ExploreFileTreasure Treasure;
 
         public ExploreFileTile() { }
 

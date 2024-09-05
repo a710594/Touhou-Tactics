@@ -33,4 +33,10 @@ public class TreasureModel
         if (ID_4 != -1)
             IDList.Add(ID_4);
     }
+
+    public int GetItem()
+    {
+
+        return IDList[Random.Range(0, IDList.Count)];
+    }
 }

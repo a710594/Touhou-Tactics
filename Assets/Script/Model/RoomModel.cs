@@ -37,4 +37,10 @@ public class RoomModel
             TreasurePool.Add(TreasureID_3);
         }
     }
+
+    public int GetTreasure()
+    {
+
+        return TreasurePool[Random.Range(0, TreasurePool.Count)];
+    }
 }

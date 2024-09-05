@@ -12,7 +12,7 @@ namespace Explore
         public Vector2Int Start;
         public Vector2Int Goal;
         public Vector2Int PlayerPosition;
-        public int PlayerRotation;
+        public int PlayerRotationY;
         public List<ExploreFileEnemy> EnemyList = new List<ExploreFileEnemy>();
         public List<ExploreFileTile> TileList = new List<ExploreFileTile>();
         public List<ExploreFileTreasure> TreasureList = new List<ExploreFileTreasure>();

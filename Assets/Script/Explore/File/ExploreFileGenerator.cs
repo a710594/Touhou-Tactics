@@ -24,10 +24,12 @@ namespace Explore
             int maxY = int.MinValue;
             Vector2Int pos;
             ExploreFile file = new ExploreFile();
+            ExploreFileTile tile;
             foreach (Transform child in Tilemap)
             {
                 pos = Utility.ConvertToVector2Int(child.position);
-                file.TileList.Add(new ExploreFileTile(true, false, child.name, pos));
+                tile = new ExploreFileTile(child.tag != "Wall", false, child.name, pos);
+                file.TileList.Add(tile);
 
                 if (minX == int.MinValue || pos.x < minX)
                 {
@@ -87,13 +89,15 @@ namespace Explore
                 ExploreFileTreasure treasure = new ExploreFileTreasure();
                 treasure.Height = treasureObj.transform.position.y;
                 treasure.Position = Utility.ConvertToVector2Int(treasureObj.transform.position);
-                treasure.Rotation = Vector3Int.RoundToInt(treasureObj.transform.localEulerAngles);
+                treasure.RotationY = Mathf.RoundToInt(treasureObj.transform.localEulerAngles.y);
                 treasure.ItemID = treasureObj.ItemID;
                 treasure.Prefab = treasureObj.Prefab;
                 file.TreasureList.Add(treasure);
             }
 
-            //ExploreFile file = new ExploreFile(_info);
+            file.PlayerPosition = file.Start;
+            file.PlayerRotationY = 0;
+
             DataContext.Instance.Save(file, FileName, DataContext.PrePathEnum.MapExplore);
         }
     }

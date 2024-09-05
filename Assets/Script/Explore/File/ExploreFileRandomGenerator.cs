@@ -29,7 +29,7 @@ public class ExploreFileRandomGenerator
     }
 
     public ExploreFile File;
-    List<Room> rooms = new List<Room>();
+    List<Room> roomList = new List<Room>();
     Delaunay2D delaunay;
     HashSet<Prim.Edge> selectedEdges;
 
@@ -79,7 +79,7 @@ public class ExploreFileRandomGenerator
             Room newRoom = new Room(location, roomSize);
             Room buffer = new Room(location + new Vector2Int(-1, -1), roomSize + new Vector2Int(2, 2));
 
-            foreach (var room in rooms) {
+            foreach (var room in roomList) {
                 if (Room.Intersect(room, buffer)) {
                     add = false;
                     break;
@@ -92,7 +92,7 @@ public class ExploreFileRandomGenerator
             }
 
             if (add) {
-                rooms.Add(newRoom);
+                roomList.Add(newRoom);
                 foreach (var pos in newRoom.bounds.allPositionsWithin)
                 {
                     grid[pos] = CellType.Room;
@@ -106,7 +106,7 @@ public class ExploreFileRandomGenerator
     void Triangulate() {
         List<Vertex> vertices = new List<Vertex>();
 
-        foreach (var room in rooms) {
+        foreach (var room in roomList) {
             vertices.Add(new Vertex<Room>((Vector2)room.bounds.position + ((Vector2)room.bounds.size) / 2, room));
         }
 
@@ -235,11 +235,11 @@ public class ExploreFileRandomGenerator
 
     private void PlaceStartAndGoal()
     {
-        Room startRoom = rooms[0];
+        Room startRoom = roomList[0];
         File.Start = startRoom.GetRandomPosition();
         startRoom.SetNotAvailable(File.Start);
 
-        List<Room> tempList = new List<Room>(rooms);
+        List<Room> tempList = new List<Room>(roomList);
         tempList.Remove(startRoom);
         Room goalRoom = null;
         for (int i = 0; i < tempList.Count; i++)
@@ -260,19 +260,23 @@ public class ExploreFileRandomGenerator
         int treasureCount = 10;
         Vector2Int v2;
         Room room;
-        TreasureObject treasure;
+        RoomModel roomData = DataContext.Instance.RoomDic[1];
+        TreasureModel treasureData;
+        TreasureObject treasureObj;
+        ExploreFileTreasure treasureFile;
         GameObject obj;
         for (int i = 0; i < treasureCount; i++)
         {
-            room = rooms[UnityEngine.Random.Range(0, rooms.Count)];
+            room = roomList[UnityEngine.Random.Range(0, roomList.Count)];
             v2 =room.GetRandomPosition(); 
             if (!_treasurePositionList.Contains(v2))
             {
-                obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + "TreasureBox"), Vector3.zero, Quaternion.identity);
-                treasure = obj.GetComponent<TreasureObject>();
-                treasure.ItemID = 1;
-                treasure.Prefab = "TreasureBox";
-                File.TreasureList.Add(new ExploreFileTreasure(1, "TreasureBox", 1, v2, Vector3Int.zero));
+                treasureData = DataContext.Instance.TreasureDic[roomData.GetTreasure()];
+                obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + treasureData.Prefab), Vector3.zero, Quaternion.identity);
+                treasureObj = obj.GetComponent<TreasureObject>();
+                treasureFile = new ExploreFileTreasure(treasureData.GetItem(), treasureData.Prefab, treasureData.Height, v2, 0);
+                treasureFile.Object = treasureObj;
+                File.TreasureList.Add(treasureFile);
                 room.SetNotAvailable(v2);
             }     
         }
@@ -287,7 +291,7 @@ public class ExploreFileRandomGenerator
         ExploreFileEnemy enemy;
         for (int i = 0; i < data.EnemyCount; i++)
         {
-            room = rooms[UnityEngine.Random.Range(0, rooms.Count)];
+            room = roomList[UnityEngine.Random.Range(0, roomList.Count)];
             position = room.GetRandomPosition();
             room.SetNotAvailable(position);
 

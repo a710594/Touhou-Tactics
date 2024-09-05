@@ -129,5 +129,15 @@ public class SceneController
                 FlowController.Instance.Info.SceneEvent++;
             }
         }
+        else if(scene.name == "Explore")
+        {
+            if(FlowController.Instance.Info.SceneEvent == 2) 
+            {
+                Type objectType = Type.GetType("SceneEvent_" + FlowController.Instance.Info.SceneEvent);
+                MyEvent myEvent = (MyEvent)Activator.CreateInstance(objectType);
+                myEvent.Start();
+                FlowController.Instance.Info.SceneEvent++;
+            }
+        }
     }
 }

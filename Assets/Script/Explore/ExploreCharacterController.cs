@@ -52,9 +52,9 @@ namespace Explore
         private void Move(Vector3 position)
         {
             Vector2Int v2 = Utility.ConvertToVector2Int(position);
-            ExploreManager.Instance.CheckEnemyCollision(v2);
+            ExploreManager.Instance.CheckEnemyCollision();
 
-            if (ExploreManager.Instance.Info.TileDic[v2].IsWalkable) 
+            if (ExploreManager.Instance.TileDic[v2].IsWalkable) 
             {
                 _isMoving = true;
                 ExploreManager.Instance.EnemyMove();

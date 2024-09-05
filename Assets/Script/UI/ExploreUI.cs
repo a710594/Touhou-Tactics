@@ -45,12 +45,12 @@ public class ExploreUI : MonoBehaviour
 
     void Update()
     {
-        ExploreInfo info = ExploreManager.Instance.Info;
+        ExploreFile file = ExploreManager.Instance.File;
         if (!InputMamager.Instance.IsLock)
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                ExploreInfoTreasure treasure = ExploreManager.Instance.GetTreasure();
+                ExploreFileTreasure treasure = ExploreManager.Instance.GetTreasure();
                 if (treasure != null)
                 {
                     TreasureUI.Open(treasure.ItemID);
@@ -64,11 +64,11 @@ public class ExploreUI : MonoBehaviour
             BigMapBG.SetActive(!BigMapBG.activeSelf);
             if (BigMapBG.activeSelf)
             {
-                float x = (info.Size.x / 2 - Camera.main.transform.position.x) / info.Size.x * 1080 * _scale;
-                float y = (info.Size.y / 2 - Camera.main.transform.position.z) / info.Size.y * 1080 * _scale;
+                float x = (file.Size.x / 2 - Camera.main.transform.position.x) / file.Size.x * 1080 * _scale;
+                float y = (file.Size.y / 2 - Camera.main.transform.position.z) / file.Size.y * 1080 * _scale;
                 BigMap.anchoredPosition = new Vector2(x, y);
                 BigMapCamera.Render();
-                FloorLabel.text = info.Floor + "F";
+                FloorLabel.text = file.Floor + "F";
                 InputMamager.Instance.Lock();
             }
             else
@@ -77,7 +77,7 @@ public class ExploreUI : MonoBehaviour
             }
         }
 
-        if (info != null && !InputMamager.Instance.IsLock)
+        if (file != null && !InputMamager.Instance.IsLock)
         {
             Vector2Int v2 = Utility.ConvertToVector2Int(Camera.main.transform.position + Camera.main.transform.forward);
             SpaceLabel.SetActive(ExploreManager.Instance.CheckTreasure(v2));

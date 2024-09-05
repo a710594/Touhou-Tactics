@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Explore
 {
-    public class ExploreInfo
+    /*public class ExploreInfo
     {
         public bool IsArrive = false;
         public int Floor;
@@ -26,5 +26,5 @@ namespace Explore
             Start = file.Start;
             Goal = file.Goal;   
         }
-    }
+    }*/
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Explore;
 using UnityEngine;
 
-public class ExploreInfoEnemy
+/*public class ExploreInfoEnemy
 {
     public string Prefab;
     public Vector3 Position;
@@ -32,4 +32,4 @@ public class ExploreInfoEnemy
         Position = new Vector3(file.Position.x, 1, file.Position.y);
         Rotation = new Vector3(0, file.RotationY, 0);
     }
-}
+}*/

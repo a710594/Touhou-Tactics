@@ -39,10 +39,11 @@ namespace Explore
         {
             if(AI.GetMove(transform, out Vector3 to, out Vector3 rotation)) 
             {
-                ExploreManager.Instance.Info.TileDic[Utility.ConvertToVector2Int(transform.position)].IsWalkable = true;
-                ExploreManager.Instance.Info.TileDic[Utility.ConvertToVector2Int(to)].IsWalkable = false;
+                ExploreManager.Instance.TileDic[Utility.ConvertToVector2Int(transform.position)].IsWalkable = true;
+                ExploreManager.Instance.TileDic[Utility.ConvertToVector2Int(to)].IsWalkable = false;
                 transform.DOMove(to, 0.5f).SetEase(Ease.Linear).OnComplete(()=> 
                 {
+
                     ExploreManager.Instance.WaitForAllMoveComplete();
                 });
                 transform.DORotate(rotation, 0.5f).SetEase(Ease.Linear);
@@ -51,20 +52,6 @@ namespace Explore
 
         public void Rotate()
         {
-        }
-
-        public bool CanSee(Vector2Int p1, Vector2Int p2)
-        {
-            List<Vector2Int> list = Utility.DrawLine2D(p1, p2);
-            for (int i = 0; i < list.Count; i++)
-            {
-                if (ExploreManager.Instance.IsBlocked(new Vector3(list[i].x, 0, list[i].y)))
-                {
-                    return false;
-                }
-            }
-
-            return true;
         }
     }
 }
