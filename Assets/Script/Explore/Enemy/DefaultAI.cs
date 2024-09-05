@@ -8,25 +8,25 @@ namespace Explore
     {
         public override bool GetMove(Transform transform, out Vector3 position, out Vector3 rotation)
         {
-            if (ExploreManager.Instance.Info.TileDic[Utility.ConvertToVector2Int(transform.position + transform.forward)].IsWalkable)
+            if (ExploreManager.Instance.TileDic[Utility.ConvertToVector2Int(transform.position + transform.forward)].IsWalkable)
             {
                 position = transform.position + transform.forward;
                 rotation = transform.localEulerAngles;
                 return true;
             }
-            else if (ExploreManager.Instance.Info.TileDic[Utility.ConvertToVector2Int(transform.position + transform.right)].IsWalkable)
+            else if (ExploreManager.Instance.TileDic[Utility.ConvertToVector2Int(transform.position + transform.right)].IsWalkable)
             {
                 position = transform.position + transform.right;
                 rotation = transform.localEulerAngles + Vector3.up * 90;
                 return true;
             }
-            else if (ExploreManager.Instance.Info.TileDic[Utility.ConvertToVector2Int(transform.position - transform.right)].IsWalkable)
+            else if (ExploreManager.Instance.TileDic[Utility.ConvertToVector2Int(transform.position - transform.right)].IsWalkable)
             {
                 position = transform.position - transform.right;
                 rotation = transform.localEulerAngles - Vector3.up * 90;
                 return true;
             }
-            else if (ExploreManager.Instance.Info.TileDic[Utility.ConvertToVector2Int(transform.position - transform.forward)].IsWalkable)
+            else if (ExploreManager.Instance.TileDic[Utility.ConvertToVector2Int(transform.position - transform.forward)].IsWalkable)
             {
                 position = transform.position - transform.forward;
                 rotation = transform.localEulerAngles + Vector3.up * 180;

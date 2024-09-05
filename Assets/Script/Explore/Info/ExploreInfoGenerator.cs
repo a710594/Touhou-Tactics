@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Explore;
 using UnityEngine;
 
-public class ExploreInfoGenerator
+/*public class ExploreInfoGenerator
 {
     private static ExploreInfoGenerator _instance;
     public static ExploreInfoGenerator Instance
@@ -56,4 +56,4 @@ public class ExploreInfoGenerator
 
         return info;
     }
-}
+}*/

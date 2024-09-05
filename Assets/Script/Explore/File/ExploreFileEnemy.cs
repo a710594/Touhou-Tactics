@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Explore;
 using UnityEngine;
 
 public class ExploreFileEnemy
@@ -29,4 +31,7 @@ public class ExploreFileEnemy
 
     //random
     public int EnemyGroupId;
+
+    [NonSerialized]
+    public ExploreEnemyController Controller;
 }

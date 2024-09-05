@@ -22,6 +22,9 @@ public class FlowInfo
 
     //public StepEnum CurrentStep;
 
+    public bool HasGetItem = false;
+    public bool HasSanaeTutorial = false;
+    public bool CardEvent = false;
     public int TriggerEvent = 1;
     public int SceneEvent = 1;
 
