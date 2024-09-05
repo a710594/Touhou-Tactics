@@ -280,14 +280,15 @@ namespace Explore
 
         public bool CheckTreasure(Vector2Int position)
         {
-            if(!FlowController.Instance.Info.HasGetItem)
+            bool result = TileDic[position].Treasure != null;
+            if (!FlowController.Instance.Info.HasGetItem && result)
             {
                 GetItemEvent getItemEvent = new GetItemEvent();
                 getItemEvent.Start();
                 FlowController.Instance.Info.HasGetItem = true;
             }
 
-            return TileDic[position].Treasure != null;
+            return result;
         }
 
         public ExploreFileTreasure GetTreasure() 
@@ -333,6 +334,7 @@ namespace Explore
                 GameObject.DestroyImmediate(parent.GetChild(0).gameObject);
             }
 
+            TileDic.Clear();
             for(int i=0; i<File.TileList.Count; i++)
             {
                 gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + File.TileList[i].Prefab), Vector3.zero, Quaternion.identity);
@@ -355,11 +357,16 @@ namespace Explore
                 treasureObj.transform.position = new Vector3(File.TreasureList[i].Position.x, File.TreasureList[i].Height, File.TreasureList[i].Position.y);
                 treasureObj.transform.SetParent(parent);
                 TileDic[File.TreasureList[i].Position].Treasure = File.TreasureList[i];
-                if (TileDic[File.TreasureList[i].Position].IsVisited)
+                if (TileDic[File.TreasureList[i].Position].IsVisited && treasureObj.Icon != null)
                 {
                     treasureObj.Icon.layer = _mapLayer;
                 }
 
+            }
+
+            for (int i=0; i<File.TriggerList.Count; i++) 
+            {
+                TileDic[File.TriggerList[i].Position].Event = File.TriggerList[i].Name;
             }
 
             gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Goal"), Vector3.zero, Quaternion.identity);
@@ -382,7 +389,7 @@ namespace Explore
                 gameObj.transform.eulerAngles = new Vector3(0, File.EnemyList[i].RotationY, 0);
                 gameObj.transform.SetParent(parent);
                 controller = gameObj.GetComponent<ExploreEnemyController>();
-                controller.SetAI(File.EnemyList[i].AI);
+                controller.SetAI(File.EnemyList[i]);
                 File.EnemyList[i].Controller = controller;
             }
 
@@ -455,8 +462,6 @@ namespace Explore
             _enemyMoveCount++;
             if (_enemyMoveCount == File.EnemyList.Count + 1) 
             {
-                File.PlayerPosition = Utility.ConvertToVector2Int(Player.transform.position);
-                File.PlayerRotationY = Mathf.RoundToInt(Player.transform.eulerAngles.y);
                 CheckVidsit(Player.transform);
                 Vector2Int v2 = Utility.ConvertToVector2Int(Player.transform.position);
                 if (!_hasCollision)

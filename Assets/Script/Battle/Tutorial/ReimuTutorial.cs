@@ -6,9 +6,10 @@ using UnityEngine;
 namespace Battle
 {
 
-    public class BattleTutorial_3 : BattleTutorial
+    //靈夢教學
+    public class ReimuTutorial : BattleTutorial
     {
-        public BattleTutorial_3() 
+        public ReimuTutorial() 
         {
             _context.Parent = this;
             _context.AddState(new State_1(_context));
@@ -38,7 +39,7 @@ namespace Battle
             {
                 BattleController.Instance.CommandStateBeginHandler = null;
                 BattleUI.Instance.SetArrowVisible(false);
-                ((BattleTutorial)_context.Parent).ConversationUI = ConversationUI.Open(7, false, null, () => 
+                ((BattleTutorial)_context.Parent).ConversationUI = ConversationUI.Open(6, false, null, () => 
                 {
                     Vector3 offset = new Vector3(-200, 0, 0);
                     TutorialArrowUI.Open("選擇支援。", BattleUI.Instance.ActionButtonGroup.SupportButton.transform, offset, Vector2Int.right);

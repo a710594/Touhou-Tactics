@@ -11,13 +11,16 @@ namespace Explore
         public ExploreFileEnemy File;
         public EnemyExplorerAI AI;
 
-        public void SetAI(ExploreFileEnemy.AiEnum ai)
+        private ExploreFileEnemy _enemy;
+
+        public void SetAI(ExploreFileEnemy enemy)
         {
-            if(ai == ExploreFileEnemy.AiEnum.NotMove) 
+            _enemy = enemy;
+            if(enemy.AI == ExploreFileEnemy.AiEnum.NotMove) 
             {
                 AI = new NotMoveAI();
             }
-            else if (ai == ExploreFileEnemy.AiEnum.Default)
+            else if (enemy.AI == ExploreFileEnemy.AiEnum.Default)
             {
                 AI = new DefaultAI();
             }
@@ -43,7 +46,8 @@ namespace Explore
                 ExploreManager.Instance.TileDic[Utility.ConvertToVector2Int(to)].IsWalkable = false;
                 transform.DOMove(to, 0.5f).SetEase(Ease.Linear).OnComplete(()=> 
                 {
-
+                    _enemy.Position = Utility.ConvertToVector2Int(transform.position);
+                    _enemy.RotationY = Mathf.RoundToInt(transform.eulerAngles.y);
                     ExploreManager.Instance.WaitForAllMoveComplete();
                 });
                 transform.DORotate(rotation, 0.5f).SetEase(Ease.Linear);

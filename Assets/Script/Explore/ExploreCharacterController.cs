@@ -52,6 +52,7 @@ namespace Explore
         private void Move(Vector3 position)
         {
             Vector2Int v2 = Utility.ConvertToVector2Int(position);
+            ExploreManager.Instance.File.PlayerPosition = v2;
             ExploreManager.Instance.CheckEnemyCollision();
 
             if (ExploreManager.Instance.TileDic[v2].IsWalkable) 
@@ -86,6 +87,7 @@ namespace Explore
         {
             _isMoving = true;
             InputMamager.Instance.Lock();
+            ExploreManager.Instance.File.PlayerRotationY = Mathf.RoundToInt(rotation.y);
             transform.DORotate(rotation, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
             {
                 _isMoving = false;

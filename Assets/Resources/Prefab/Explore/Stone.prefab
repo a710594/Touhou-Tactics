@@ -112,9 +112,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5e9222b7f98654f8f6b1b90be1a300, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Prefab: Stone
-  Type: 1
   ItemID: 0
+  Prefab: Stone
   Icon: {fileID: 3901910594583406559}
 --- !u!1 &3901910594583406559
 GameObject:
@@ -129,7 +128,7 @@ GameObject:
   - component: {fileID: 7075686724300773540}
   - component: {fileID: 3641780112926590647}
   m_Layer: 1
-  m_Name: Quad
+  m_Name: Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

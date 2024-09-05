@@ -42851,9 +42851,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AiType: 0
   Prefab: NotMoveAI
-  Map: Tutorial_2
+  Map: Tutorial_3
   Seed: 
-  Tutorial: BattleTutorial_2
+  Tutorial: ReimuTutorial
   EnemyGroup: 0
 --- !u!1 &1589264569
 GameObject:
@@ -44062,15 +44062,15 @@ Transform:
   - {fileID: 1064308178}
   - {fileID: 786154300}
   - {fileID: 119974594}
+  - {fileID: 281073497}
   - {fileID: 1514769646}
   - {fileID: 260158452}
   - {fileID: 1947434145}
   - {fileID: 1131672527}
-  - {fileID: 281073497}
+  - {fileID: 34849849}
   - {fileID: 216981754}
   - {fileID: 500514881}
   - {fileID: 1666582217}
-  - {fileID: 34849849}
   m_Father: {fileID: 1991001380}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

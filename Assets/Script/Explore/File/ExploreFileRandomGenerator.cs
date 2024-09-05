@@ -62,7 +62,7 @@ public class ExploreFileRandomGenerator
     private void PlaceRooms(RandomFloorModel floorData)
     {
         RoomModel roomData;
-        for (int i = 0; i < floorData.RoomCount; i++) 
+        for (int i = 0; i < floorData.RoomCount * 2; i++) 
         {
             roomData = DataContext.Instance.RoomDic[floorData.GetRoomID()];
             Vector2Int location = new Vector2Int(
@@ -237,6 +237,7 @@ public class ExploreFileRandomGenerator
     {
         Room startRoom = roomList[0];
         File.Start = startRoom.GetRandomPosition();
+        File.PlayerPosition = File.Start;
         startRoom.SetNotAvailable(File.Start);
 
         List<Room> tempList = new List<Room>(roomList);
@@ -251,7 +252,6 @@ public class ExploreFileRandomGenerator
         }
 
         File.Goal = goalRoom.GetRandomPosition();
-        File.PlayerPosition = File.Goal;
         goalRoom.SetNotAvailable(File.Goal);
     }
 
