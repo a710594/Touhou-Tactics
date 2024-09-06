@@ -19,7 +19,7 @@ public class LogoUI : MonoBehaviour
 
     private void ContinueOnClick() 
     {
-        if (SystemManager.Instance.SystemInfo.CurrentScene == "Explore")
+        if (SystemManager.Instance.Info.CurrentScene == "Explore")
         {
             SceneController.Instance.ChangeScene("Explore", (sceneName) =>
             {

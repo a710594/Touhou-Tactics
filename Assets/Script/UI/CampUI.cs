@@ -51,7 +51,7 @@ public class CampUI : MonoBehaviour
         {
             FloorGroup.SetActive(true);
             List<object> floorList = new List<object>();
-            for (int i = 1; i <= SystemManager.Instance.SystemInfo.MaxFloor; i++)
+            for (int i = 1; i <= SystemManager.Instance.Info.MaxFloor; i++)
             {
                 floorList.Add(i);
             }

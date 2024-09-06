@@ -2,15 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SceneEvent_1 : MyEvent
+public class F2Event : MyEvent
 {
     public override void Start()
     {
         InputMamager.Instance.IsLock = true;
-        ConversationUI.Open(7, true, () =>
+        ExploreUI exploreUI = GameObject.Find("ExploreUI").GetComponent<ExploreUI>();
+        exploreUI.SetVisible(false);
+        ConversationUI.Open(8, true, () =>
         {
-            CharacterManager.Instance.Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[7]));
             InputMamager.Instance.IsLock = false;
+            exploreUI.SetVisible(true);
         }, null);
     }
 }

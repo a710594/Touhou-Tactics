@@ -22,12 +22,6 @@ public class FlowInfo
 
     //public StepEnum CurrentStep;
 
-    public bool HasGetItem = false;
-    public bool HasSanaeTutorial = false;
-    public bool CardEvent = false;
-    public int TriggerEvent = 1;
-    public int SceneEvent = 1;
-
     public enum LockEnum
     {
         BackCamp,
@@ -35,6 +29,23 @@ public class FlowInfo
         Shop,
     }
 
+    public enum EventConditionEnum
+    {
+        F1,
+        F2,
+        SanaeJoin,
+        MarisaJoin,
+        Cook,
+    }
+
+    public bool HasGetItem = false;
+    public bool HasSanaeTutorial = false;
+    public bool HasGetCard = false;
+    public bool HasUseCard = false;
+    public int TriggerEvent = 1;
+    //public int SceneEvent = 1;
+
+    public List<EventConditionEnum> EventConditionList = new List<EventConditionEnum>();
     public Dictionary<LockEnum, bool> LockDic;
 
     public void Init() 

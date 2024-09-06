@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace Battle
 {
-    public class BattleTutorial_4 : BattleTutorial
+    public class SanaeTutorial : BattleTutorial
     {
-        public BattleTutorial_4()
+        public SanaeTutorial()
         {
             IsActive = false;
             _context.Parent = this;
@@ -21,7 +21,7 @@ namespace Battle
 
         public override void CheckState(State state)
         {
-            if(state is BattleController.CommandState && BattleController.Instance.SelectedCharacter.JobId == 2) 
+            if(state is BattleController.CommandState && BattleController.Instance.SelectedCharacter.JobId == 7) 
             {
                 IsActive = true;
                 BattleController.Instance.ChangeStateHandler -= CheckState;
@@ -37,14 +37,11 @@ namespace Battle
 
             public override void Begin()
             {
-                if (BattleController.Instance.SelectedCharacter.JobId == 7)
+                BattleUI.Instance.SetArrowVisible(false);
+                ((BattleTutorial)_context.Parent).ConversationUI = ConversationUI.Open(10, false, null, () =>
                 {
-                    BattleUI.Instance.SetArrowVisible(false);
-                    ((BattleTutorial)_context.Parent).ConversationUI = ConversationUI.Open(10, false, null, () =>
-                    {
-                        BattleController.Instance.EndTutorial();
-                    });
-                }
+                    BattleController.Instance.EndTutorial();
+                });
             }
 
             public override bool CanMove()

@@ -19,7 +19,7 @@ public class SystemManager
         }
     }
 
-    public SystemInfo SystemInfo;
+    public SystemInfo Info;
 
     public void Init() 
     {
@@ -28,13 +28,13 @@ public class SystemManager
         {
             info = new SystemInfo();
         }
-        SystemInfo = info;
+        Info = info;
     }
 
     public void Save()
     {
-        SystemInfo.CurrentScene = SceneController.Instance.CurrentScene;
-        DataContext.Instance.Save(SystemInfo, _fileName, DataContext.PrePathEnum.Save);
+        Info.CurrentScene = SceneController.Instance.CurrentScene;
+        DataContext.Instance.Save(Info, _fileName, DataContext.PrePathEnum.Save);
     }
 
     public void Delete()

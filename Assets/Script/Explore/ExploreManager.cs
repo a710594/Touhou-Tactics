@@ -42,16 +42,16 @@ namespace Explore
 
         public void Init() 
         {
-            if(SystemManager.Instance.SystemInfo.MaxFloor == 0) 
+            if(SystemManager.Instance.Info.MaxFloor == 0) 
             {
                 File = DataContext.Instance.Load<ExploreFile>("Floor_1", DataContext.PrePathEnum.MapExplore);
-                SystemManager.Instance.SystemInfo.CurrentFloor = File.Floor;
-                SystemManager.Instance.SystemInfo.MaxFloor = 1;
+                SystemManager.Instance.Info.CurrentFloor = File.Floor;
+                SystemManager.Instance.Info.MaxFloor = 1;
             }
             else
             {
                 File = DataContext.Instance.Load<ExploreFile>(_fileName, DataContext.PrePathEnum.Save);
-                SystemManager.Instance.SystemInfo.CurrentFloor = File.Floor;
+                SystemManager.Instance.Info.CurrentFloor = File.Floor;
             }
 
             CreateObject();
@@ -63,7 +63,7 @@ namespace Explore
             {
                 FixedFloorModel data = DataContext.Instance.FixedFloorDic[floor];
                 File = DataContext.Instance.Load<ExploreFile>(data.Name, DataContext.PrePathEnum.MapExplore);
-                SystemManager.Instance.SystemInfo.CurrentFloor = File.Floor;
+                SystemManager.Instance.Info.CurrentFloor = File.Floor;
             }
             else
             {
@@ -128,7 +128,11 @@ namespace Explore
                             
                                 if(File.Floor>1 && !FlowController.Instance.Info.HasSanaeTutorial)
                                 {
-                                    tutorial = "BattleTutorial_4";
+                                    tutorial = "SanaeTutorial";
+                                }
+                                else if (ItemManager.Instance.GetAmount(ItemManager.CardID) > 0 && !FlowController.Instance.Info.HasUseCard) 
+                                {
+                                    tutorial = "UseCardTutorial";
                                 }
                             }
                             PathManager.Instance.LoadData(battleInfo.TileDic);
@@ -150,9 +154,9 @@ namespace Explore
                 ConfirmUI.Open("要前往下一層嗎？", "確定", "取消", () =>
                 {
                     File.Floor++;
-                    if (File.Floor > SystemManager.Instance.SystemInfo.MaxFloor)
+                    if (File.Floor > SystemManager.Instance.Info.MaxFloor)
                     {
-                        SystemManager.Instance.SystemInfo.MaxFloor = File.Floor;
+                        SystemManager.Instance.Info.MaxFloor = File.Floor;
                     }
 
                     _timer.Start(1f, () =>
@@ -259,9 +263,9 @@ namespace Explore
                     ConfirmUI.Open("你打倒了出口的守衛！要前往下一層嗎？", "確定", "取消", () =>
                     {
                         File.Floor++;
-                        if (File.Floor > SystemManager.Instance.SystemInfo.MaxFloor)
+                        if (File.Floor > SystemManager.Instance.Info.MaxFloor)
                         {
-                            SystemManager.Instance.SystemInfo.MaxFloor = File.Floor;
+                            SystemManager.Instance.Info.MaxFloor = File.Floor;
                         }
 
                         SceneController.Instance.ChangeScene("Camp", (sceneName) =>
@@ -310,11 +314,11 @@ namespace Explore
                     ItemManager.Instance.AddItem(treasure.ItemID, 1);
                     GameObject.Destroy(TileDic[v2].Treasure.Object.gameObject);
                 
-                    if(!FlowController.Instance.Info.CardEvent)
+                    if(!FlowController.Instance.Info.HasGetCard)
                     {
                         CardEvent cardEvent = new CardEvent();
                         cardEvent.Start();
-                        FlowController.Instance.Info.CardEvent = true;
+                        FlowController.Instance.Info.HasGetCard = true;
                     }
                 }
             }

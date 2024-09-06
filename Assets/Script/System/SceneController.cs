@@ -23,11 +23,11 @@ public class SceneController
     {
         get 
         { 
-            return SystemManager.Instance.SystemInfo.CurrentScene;
+            return SystemManager.Instance.Info.CurrentScene;
         }
         set 
         {
-            SystemManager.Instance.SystemInfo.CurrentScene = value;
+            SystemManager.Instance.Info.CurrentScene = value;
         }
     }
 
@@ -121,22 +121,32 @@ public class SceneController
 
         if (scene.name == "Camp") 
         {
-            if(FlowController.Instance.Info.SceneEvent == 1) 
+            if(FlowController.Instance.Info.EventConditionList.Contains(FlowInfo.EventConditionEnum.SanaeJoin)) 
             {
-                Type objectType = Type.GetType("SceneEvent_" + FlowController.Instance.Info.SceneEvent);
-                MyEvent myEvent = (MyEvent)Activator.CreateInstance(objectType);
-                myEvent.Start();
-                FlowController.Instance.Info.SceneEvent++;
+                SanaeJoinEvent sanaeJoinEvent = new SanaeJoinEvent();
+                sanaeJoinEvent.Start();
+                FlowController.Instance.Info.EventConditionList.Add(FlowInfo.EventConditionEnum.SanaeJoin);
+            }
+            else if(SystemManager.Instance.Info.MaxFloor == 3 && FlowController.Instance.Info.EventConditionList.Contains(FlowInfo.EventConditionEnum.MarisaJoin))
+            {
+                MarisaJoinEvent marisaJoinEvent = new MarisaJoinEvent();
+                marisaJoinEvent.Start();
+                FlowController.Instance.Info.EventConditionList.Add(FlowInfo.EventConditionEnum.MarisaJoin);
+            }
+            else if(FlowController.Instance.Info.EventConditionList.Contains(FlowInfo.EventConditionEnum.Cook))
+            {
+                CookEvent cookEvent = new CookEvent();
+                cookEvent.Start();
+                FlowController.Instance.Info.EventConditionList.Add(FlowInfo.EventConditionEnum.Cook);
             }
         }
         else if(scene.name == "Explore")
         {
-            if(FlowController.Instance.Info.SceneEvent == 2) 
+            if(FlowController.Instance.Info.EventConditionList.Contains(FlowInfo.EventConditionEnum.F2)) 
             {
-                Type objectType = Type.GetType("SceneEvent_" + FlowController.Instance.Info.SceneEvent);
-                MyEvent myEvent = (MyEvent)Activator.CreateInstance(objectType);
-                myEvent.Start();
-                FlowController.Instance.Info.SceneEvent++;
+                SanaeJoinEvent f2Event = new SanaeJoinEvent();
+                f2Event.Start();
+                FlowController.Instance.Info.EventConditionList.Add(FlowInfo.EventConditionEnum.F2);
             }
         }
     }
