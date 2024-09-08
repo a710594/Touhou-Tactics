@@ -118,20 +118,22 @@ namespace Explore
                                 else
                                 {
                                     EnemyGroupModel enemyGroup = DataContext.Instance.EnemyGroupDic[enemy.EnemyGroupId];
-                                    battleInfo = battleMapBuilder.Generate(enemyGroup.GetMap(), enemyGroup.EnemyList, enemyGroup.Exp);
+                                    battleInfo = battleMapBuilder.Generate(enemyGroup);
                                 }
                             }
                             else
                             {
                                 EnemyGroupModel enemyGroup = DataContext.Instance.EnemyGroupDic[enemy.EnemyGroupId];
-                                battleInfo = battleMapBuilder.Generate(enemyGroup.GetMap(), enemyGroup.EnemyList, enemyGroup.Exp);
+                                battleInfo = battleMapBuilder.Generate(enemyGroup);
                             
                                 if(File.Floor>1 && !FlowController.Instance.Info.HasSanaeTutorial)
                                 {
+                                    FlowController.Instance.Info.HasSanaeTutorial = true;
                                     tutorial = "SanaeTutorial";
                                 }
                                 else if (ItemManager.Instance.GetAmount(ItemManager.CardID) > 0 && !FlowController.Instance.Info.HasUseCard) 
                                 {
+                                    FlowController.Instance.Info.HasUseCard = true;
                                     tutorial = "UseCardTutorial";
                                 }
                             }
@@ -181,9 +183,10 @@ namespace Explore
 
         private bool CheckEvent(Vector2Int v2) 
         {
-            if(TileDic[v2].Event != null) 
+            if(TileDic[v2].Event != null && !FlowController.Instance.Info.EventConditionList.Contains(TileDic[v2].Event)) 
             {
-                Type objectType = Type.GetType("TriggerEvent_" + TileDic[v2].Event);
+                FlowController.Instance.Info.EventConditionList.Add(TileDic[v2].Event);
+                Type objectType = Type.GetType(TileDic[v2].Event);
                 MyEvent myEvent = (MyEvent)Activator.CreateInstance(objectType);
                 myEvent.Start();
                 return true;
@@ -313,8 +316,10 @@ namespace Explore
                     TileDic[v2].IsWalkable = true;
                     ItemManager.Instance.AddItem(treasure.ItemID, 1);
                     GameObject.Destroy(TileDic[v2].Treasure.Object.gameObject);
-                
-                    if(!FlowController.Instance.Info.HasGetCard)
+                    File.TreasureList.Remove(treasure);
+                    TileDic[v2].Treasure = null;
+
+                    if(!FlowController.Instance.Info.HasGetCard && treasure.ItemID == ItemManager.CardID)
                     {
                         CardEvent cardEvent = new CardEvent();
                         cardEvent.Start();
@@ -361,6 +366,7 @@ namespace Explore
                 treasureObj.transform.position = new Vector3(File.TreasureList[i].Position.x, File.TreasureList[i].Height, File.TreasureList[i].Position.y);
                 treasureObj.transform.SetParent(parent);
                 TileDic[File.TreasureList[i].Position].Treasure = File.TreasureList[i];
+                TileDic[File.TreasureList[i].Position].IsWalkable = false;
                 if (TileDic[File.TreasureList[i].Position].IsVisited && treasureObj.Icon != null)
                 {
                     treasureObj.Icon.layer = _mapLayer;
@@ -394,6 +400,7 @@ namespace Explore
                 gameObj.transform.SetParent(parent);
                 controller = gameObj.GetComponent<ExploreEnemyController>();
                 controller.SetAI(File.EnemyList[i]);
+                TileDic[File.EnemyList[i].Position].IsWalkable = false;
                 File.EnemyList[i].Controller = controller;
             }
 

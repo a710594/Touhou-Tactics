@@ -77,9 +77,11 @@ namespace Explore
                 file.EnemyList.Add(enemy);
             }
 
+            TriggerObject triggerObject;
             foreach (Transform child in Trigger)
             {
-                file.TriggerList.Add(new ExploreFileTrigger(Utility.ConvertToVector2Int(child.position), child.name));
+                triggerObject = child.GetComponent<TriggerObject>();
+                file.TriggerList.Add(new ExploreFileTrigger(Utility.ConvertToVector2Int(child.position), triggerObject.Name));
             }
 
             TreasureObject treasureObj;

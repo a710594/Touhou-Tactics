@@ -42,6 +42,11 @@ public class ExploreFileRandomGenerator
 
     public ExploreFile Create(RandomFloorModel floorData)
     {
+        roomList.Clear();
+        _groundList.Clear();
+        _wallList.Clear();
+        _treasurePositionList.Clear();
+
         File = new ExploreFile();
         File.Floor = floorData.Floor;
         File.Size = new Vector2Int(floorData.Width, floorData.Height);
@@ -306,5 +311,16 @@ public class ExploreFileRandomGenerator
             enemy.Prefab = groupData.Prefab;
             File.EnemyList.Add(enemy);   
         }
+
+        groupId = data.EnemyGroupPool[UnityEngine.Random.Range(0, data.EnemyGroupPool.Count)];
+        groupData = DataContext.Instance.EnemyGroupDic[groupId];
+        enemy = new ExploreFileEnemy();
+        enemy.Type = ExploreFileEnemy.TypeEnum.Random;
+        enemy.AI = ExploreFileEnemy.AiEnum.NotMove;
+        enemy.Position = File.Goal;
+        enemy.RotationY = 0;
+        enemy.EnemyGroupId = groupId;
+        enemy.Prefab = groupData.Prefab;
+        File.EnemyList.Add(enemy);
     }
 }

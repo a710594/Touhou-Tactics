@@ -16,7 +16,7 @@ public class BattleCharacterController : MonoBehaviour
     private Sprite _front;
     private Sprite _back;
     private CameraRotate _cameraRotate;
-    private Vector2 _direction = Vector2Int.left;
+    public Vector2 Direction = Vector2Int.left;
 
     public void Init(string sprite) 
     {
@@ -60,12 +60,12 @@ public class BattleCharacterController : MonoBehaviour
 
     public void SetDirection(Vector2Int direction)
     {
-        _direction = direction;
+        Direction = direction;
     }
 
     public void SetSprite()
     {
-        Vector2Int localDirection = Vector2Int.RoundToInt(Quaternion.AngleAxis(_cameraRotate.Angle, Vector3.forward) * _direction);
+        Vector2Int localDirection = Vector2Int.RoundToInt(Quaternion.AngleAxis(_cameraRotate.Angle, Vector3.forward) * Direction);
         if (_cameraRotate.CurrentState == CameraRotate.StateEnum.Slope)
         {
             if (localDirection == Vector2Int.right)

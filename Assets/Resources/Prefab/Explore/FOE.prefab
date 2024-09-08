@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6785578051300582832}
   - component: {fileID: 3161785802698809935}
   m_Layer: 0
-  m_Name: NotMoveAI
+  m_Name: FOE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

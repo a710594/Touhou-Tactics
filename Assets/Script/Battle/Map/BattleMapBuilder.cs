@@ -23,16 +23,13 @@ namespace Battle
             return info;
         }
 
-        public BattleInfo Generate(string seed, int enemyGroupId, int exp) //探索場景固定但是戰鬥隨機
+        public BattleInfo Generate(EnemyGroupModel data) //有隨機成分的地圖
         {
-            EnemyGroupModel enemyGroupData = DataContext.Instance.EnemyGroupDic[enemyGroupId];
-            return Generate(seed, enemyGroupData.EnemyList, exp);
-        }
-
-        public BattleInfo Generate(string seed, List<int> enemyList, int exp) //有隨機成分的地圖
-        {
-            BattleFileFixed file = DataContext.Instance.Load<BattleFileFixed>(seed, DataContext.PrePathEnum.MapSeed);
+            BattleFileFixed file = DataContext.Instance.Load<BattleFileFixed>(data.GetMap(), DataContext.PrePathEnum.MapSeed);
             BattleInfo info = new BattleInfo(file);
+            info.Lv = data.Lv;
+            info.Exp = data.Exp;
+            info.NeedCount = data.NeedCount;
 
             Vector2Int position;
             TileModel tileData;
@@ -133,11 +130,11 @@ namespace Battle
 
             EnemyModel enemyData;
             BattleCharacterInfo battleCharacterInfo;
-            for (int i = 0; i < enemyList.Count; i++)
+            for (int i = 0; i < data.EnemyList.Count; i++)
             {
                 if (Utility.GetRandomPosition(info.MinX, info.MaxX, info.MinY, info.MaxY, invalidList, out Vector2Int result))
                 {
-                    enemyData = DataContext.Instance.EnemyDic[enemyList[i]];
+                    enemyData = DataContext.Instance.EnemyDic[data.EnemyList[i]];
                     battleCharacterInfo = new BattleCharacterInfo(info.Lv, enemyData);
                     Type t = Type.GetType("Battle." + enemyData.AI);
                     battleCharacterInfo.AI = (BattleAI)Activator.CreateInstance(t);

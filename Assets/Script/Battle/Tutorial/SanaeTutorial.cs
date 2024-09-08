@@ -40,6 +40,7 @@ namespace Battle
                 BattleUI.Instance.SetArrowVisible(false);
                 ((BattleTutorial)_context.Parent).ConversationUI = ConversationUI.Open(10, false, null, () =>
                 {
+                    BattleUI.Instance.SetArrowVisible(true);
                     BattleController.Instance.EndTutorial();
                 });
             }

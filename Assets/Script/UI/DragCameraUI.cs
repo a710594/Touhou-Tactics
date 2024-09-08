@@ -139,11 +139,11 @@ public class DragCameraUI : MonoBehaviour
     {
         if(_cameraRotate.CurrentState == CameraRotate.StateEnum.Slope)
         {
-          Label.text = "A�G�V������ D�G�V�k���� W�G�V�W����";  
+          Label.text = "A：向左旋轉 D：向右旋轉 W：向上旋轉";  
         }
         else
         {
-            Label.text = "S�G�V�U����";
+            Label.text = "S：向下旋轉";
         }
 
     }

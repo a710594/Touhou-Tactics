@@ -1113,6 +1113,7 @@ MonoBehaviour:
   NewGameButton: {fileID: 1963406795}
   LogoGroup: {fileID: 1639863287}
   ButtonGroup: {fileID: 184095199}
+  StartLabel: {fileID: 1587112585}
 --- !u!1 &1587112585
 GameObject:
   m_ObjectHideFlags: 0

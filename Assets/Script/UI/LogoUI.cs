@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class LogoUI : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class LogoUI : MonoBehaviour
     public Button NewGameButton;
     public GameObject LogoGroup;
     public GameObject ButtonGroup;
+    public GameObject StartLabel;
 
     private void StartOnClick() 
     {
@@ -56,6 +58,11 @@ public class LogoUI : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        StartLabel.transform.DOKill();
+    }
+
     private void Awake()
     {
         FileSystem.Instance.Init();
@@ -67,5 +74,6 @@ public class LogoUI : MonoBehaviour
         StartButton.onClick.AddListener(StartOnClick);
         ContinueButton.onClick.AddListener(ContinueOnClick);
         NewGameButton.onClick.AddListener(NewGameOnClick);
+        StartLabel.transform.DOScale(Vector3.one * 1.2f, 1).SetLoops(-1, LoopType.Yoyo);
     }
 }

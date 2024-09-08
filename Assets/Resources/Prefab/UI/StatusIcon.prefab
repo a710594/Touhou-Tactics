@@ -93,6 +93,7 @@ MonoBehaviour:
   Icon: {fileID: 27172439950313195}
   Label: {fileID: 141405185167485685}
   LabelBG: {fileID: 8407935953799931791}
+  Image: {fileID: 27172439950313195}
 --- !u!1 &4843199963774170546
 GameObject:
   m_ObjectHideFlags: 0

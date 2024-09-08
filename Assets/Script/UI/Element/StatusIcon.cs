@@ -9,14 +9,16 @@ public class StatusIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public Image Icon;
     public Text Label;
     public GameObject LabelBG;
+    public Image Image;
 
-    public void SetData(Status status) 
+    public void SetData(Status status, bool raycastTarget) 
     {
         if (status.Icon != "x")
         {
             Icon.sprite = Resources.Load<Sprite>("Image/" + status.Icon);
         }
         Label.text = status.Name + "\n" + status.Comment;
+        Image.raycastTarget = raycastTarget;
     }
 
     public void OnPointerEnter(PointerEventData eventData)

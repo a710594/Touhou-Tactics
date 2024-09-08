@@ -54,9 +54,9 @@ public class CharacterListGroup : MonoBehaviour
 
     public void Refresh() 
     {
-        for (int i=0; i<_characterList.Count; i++) 
+        for (int i=0; i<_imageList.Count; i++) 
         {
-            if (i < _max)
+            if (i < _characterList.Count)
             {
                 _imageList[i].gameObject.SetActive(true);
                 _imageList[i].sprite = _spriteDic[_characterList[i]];
@@ -67,18 +67,16 @@ public class CharacterListGroup : MonoBehaviour
             }
         }
 
-        //int index = 0;
-        //foreach(KeyValuePair<BattleCharacterInfo, Image> pair in _imageDic) 
+        //for (int i=0; i<_characterList.Count; i++) 
         //{
-        //    if (index != -1 && index < _max && index < _characterList.Count) 
+        //    if (i < _max)
         //    {
-        //        pair.Value.gameObject.SetActive(true);
-        //        pair.Value.sprite = _spriteDic[_characterList[index].Index];
-        //        index++;
+        //        _imageList[i].gameObject.SetActive(true);
+        //        _imageList[i].sprite = _spriteDic[_characterList[i]];
         //    }
         //    else
         //    {
-        //        pair.Value.gameObject.SetActive(false);
+        //        _imageList[i].gameObject.SetActive(false);
         //    }
         //}
     }

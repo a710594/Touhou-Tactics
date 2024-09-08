@@ -2,10 +2,10 @@ using System.Collections.Generic;
 
 public class EnemyGroupModel
 {
-    public int Floor;
     public int ID;
     public int Lv;
     public int Exp;
+    public int NeedCount;
     public string Prefab;
 
     public int Enemy_1;

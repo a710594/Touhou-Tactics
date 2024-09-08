@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MySkybox
+  m_Shader: {fileID: 4800000, guid: eb3c6fb598ded4c71b8968e1c40a3b4d, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 0
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _HorizonLineContribution: 0.177
+    - _HorizonLineExponent: 4
+    - _SkyGradientExponent: 10
+    - _SunDiscContribution: 1
+    - _SunDiscExponent: 125000
+    - _SunDiscMultiplier: 25
+    - _SunHaloContribution: 0.5
+    - _SunHaloExponent: 125
+    - _Title: 0
+    - __dirty: 0
+    m_Colors:
+    - _HorizonLineColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SkyGradientBottom: {r: 0.44182396, g: 0.764151, b: 0.38495907, a: 1}
+    - _SkyGradientTop: {r: 0.65471697, g: 0.91692436, b: 1, a: 1}
+    - _SunDiscColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SunHaloColor: {r: 0.8980392, g: 0.83331764, b: 0.6666667, a: 1}
+  m_BuildTextureStacks: []

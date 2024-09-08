@@ -216,7 +216,7 @@ public class ConversationUI : MonoBehaviour
             CharacterImage[i].gameObject.SetActive(false);
         }
 
-        NextButton.onClick.AddListener(NextOnClick);
+        //NextButton.onClick.AddListener(NextOnClick);
         SkipButton.onClick.AddListener(SkipOnClick);
     }
 
@@ -225,6 +225,14 @@ public class ConversationUI : MonoBehaviour
         for (int i=0; i<CharacterImage.Length; i++) 
         {
             CharacterImage[i].transform.DOKill();
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.anyKeyDown) 
+        {
+            NextOnClick();
         }
     }
 }

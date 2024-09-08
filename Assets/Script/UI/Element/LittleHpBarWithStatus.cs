@@ -16,7 +16,7 @@ public class LittleHpBarWithStatus : MonoBehaviour
     public void SetData(BattleCharacterInfo info) 
     {
         HpBar.SetValue(info.CurrentHP, info.MaxHP);
-        StatusIconGroup.SetData(info);
+        StatusIconGroup.SetData(info, false);
     }
 
     public void SetPrediction(int origin, int prediction, int max) 

@@ -38,7 +38,8 @@ public class SceneController
 
     private bool _isLock = false;
     private bool _isInit = false;
-    private string _tempType;
+    private string _tempScene;
+    private string _lastScene;
     private LoadingUI LoadingUI;
     //private SceneMemo _sceneMemo;
 
@@ -58,7 +59,8 @@ public class SceneController
         if (!_isLock)
         {
             _isLock = true;
-            _tempType = scene;
+            _tempScene = scene;
+            _lastScene = CurrentScene;
 
             if (BeforeSceneLoadedHandler != null)
             {
@@ -80,9 +82,9 @@ public class SceneController
     private void SceneLoaded(Scene scene, LoadSceneMode mode)
     {
         _isLock = false;
-        if (_tempType != null)
+        if (_tempScene != null)
         {
-            CurrentScene = _tempType;
+            CurrentScene = _tempScene;
         }
         LoadingUI.Close();
 
@@ -92,61 +94,34 @@ public class SceneController
             AfterSceneLoadedHandler -= _tempHandler;
         }
 
-        /*if (scene.name == "Camp")
-        {
-            if(FlowController.Instance.Info.CurrentStep == FlowInfo.StepEnum.Camp)
-            {
-                Event_6 event_6 = new Event_6();
-                event_6.Start();
-            }
-            else if (FlowController.Instance.Info.CurrentStep == FlowInfo.StepEnum.Cook)
-            {
-                Event_10 event_10 = new Event_10();
-                event_10.Start();
-            }
-            else if (FlowController.Instance.Info.CurrentStep == FlowInfo.StepEnum.AddRemainCharacter)
-            {
-                Event_12 event_12 = new Event_12();
-                event_12.Start();
-            }
-        }
-        else if(scene.name == "Explore") 
-        {
-            if (FlowController.Instance.Info.CurrentStep == FlowInfo.StepEnum.UseItem_1)
-            {
-                Event_11 event_11 = new Event_11();
-                event_11.Start();
-            }
-        }*/
-
         if (scene.name == "Camp") 
         {
-            if(FlowController.Instance.Info.EventConditionList.Contains(FlowInfo.EventConditionEnum.SanaeJoin)) 
+            if(!FlowController.Instance.Info.EventConditionList.Contains("SanaeJoin")) 
             {
                 SanaeJoinEvent sanaeJoinEvent = new SanaeJoinEvent();
                 sanaeJoinEvent.Start();
-                FlowController.Instance.Info.EventConditionList.Add(FlowInfo.EventConditionEnum.SanaeJoin);
+                FlowController.Instance.Info.EventConditionList.Add("SanaeJoin");
             }
-            else if(SystemManager.Instance.Info.MaxFloor == 3 && FlowController.Instance.Info.EventConditionList.Contains(FlowInfo.EventConditionEnum.MarisaJoin))
+            else if(SystemManager.Instance.Info.MaxFloor == 3 && !FlowController.Instance.Info.EventConditionList.Contains("MarisaJoin"))
             {
                 MarisaJoinEvent marisaJoinEvent = new MarisaJoinEvent();
                 marisaJoinEvent.Start();
-                FlowController.Instance.Info.EventConditionList.Add(FlowInfo.EventConditionEnum.MarisaJoin);
+                FlowController.Instance.Info.EventConditionList.Add("MarisaJoin");
             }
-            else if(FlowController.Instance.Info.EventConditionList.Contains(FlowInfo.EventConditionEnum.Cook))
+            else if(!FlowController.Instance.Info.EventConditionList.Contains("Cook") && _lastScene == "Explore")
             {
                 CookEvent cookEvent = new CookEvent();
                 cookEvent.Start();
-                FlowController.Instance.Info.EventConditionList.Add(FlowInfo.EventConditionEnum.Cook);
+                FlowController.Instance.Info.EventConditionList.Add("Cook");
             }
         }
         else if(scene.name == "Explore")
         {
-            if(FlowController.Instance.Info.EventConditionList.Contains(FlowInfo.EventConditionEnum.F2)) 
+            if(!FlowController.Instance.Info.EventConditionList.Contains("F2")) 
             {
-                SanaeJoinEvent f2Event = new SanaeJoinEvent();
+                F2Event f2Event = new F2Event();
                 f2Event.Start();
-                FlowController.Instance.Info.EventConditionList.Add(FlowInfo.EventConditionEnum.F2);
+                FlowController.Instance.Info.EventConditionList.Add("F2");
             }
         }
     }

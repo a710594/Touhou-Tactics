@@ -87,7 +87,7 @@ public class CharacterManager
     {
         if (lv == 1)
         {
-            return 3;
+            return 2;
         }
         else
         {

@@ -15,6 +15,7 @@ namespace Battle
         public Button ConfirmButton;
         public TipLabel TipLabel;
         public CharacterInfoUI CharacterInfoUI;
+        public Text NeedCountLabel;
 
         private int _needCount;
         private bool _mustBeEqualToNeedCount;
@@ -30,6 +31,15 @@ namespace Battle
             _needCount = needCount;
             _mustBeEqualToNeedCount = mustBeEqualToNeedCount;
             _tempCharacterList = list;
+
+            if (mustBeEqualToNeedCount) 
+            {
+                NeedCountLabel.text = "可放置的角色數量(最少/最多):" + needCount.ToString() + " / " + needCount.ToString();
+            }
+            else 
+            {
+                NeedCountLabel.text = "可放置的角色數量(最少/最多):" + "1 / " + needCount.ToString();
+            }
 
             Image dragCharacterBG;
             DragCharacterImage dragCharacterImage;
@@ -105,7 +115,11 @@ namespace Battle
                 }
                 else
                 {
-                    if (_selectedCharacterList.Count < _needCount)
+                    if(_selectedCharacterList.Count == 0) 
+                    {
+                        ConfirmUI.Open("至少要放置 1 個角色", "確定", null);
+                    }
+                    else if (_selectedCharacterList.Count < _needCount)
                     {
                         ConfirmUI.Open("還可以再放置" + (_needCount - _selectedCharacterList.Count) + "個角色，確定要開始戰鬥嗎？", "確定", "取消", () =>
                         {

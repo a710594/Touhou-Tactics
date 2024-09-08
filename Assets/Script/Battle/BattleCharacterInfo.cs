@@ -67,7 +67,6 @@ namespace Battle
         public Vector3 LastPosition = new Vector3();
         public Command SelectedCommand = null; //可能是技能,輔助,或道具(消耗品,料理,符卡)
         public BattleAI AI = null;
-        public Vector2Int Direction = Vector2Int.left;
         public List<Status> StatusList = new List<Status>();
 
         public BattleCharacterInfo(int lv, JobModel job)

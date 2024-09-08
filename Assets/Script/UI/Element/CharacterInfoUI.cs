@@ -40,7 +40,7 @@ public class CharacterInfoUI : MonoBehaviour
             PpBar.gameObject.SetActive(false);
         }
 
-        StatusIconGroup.SetData(character);
+        StatusIconGroup.SetData(character, true);
     }
 
     public void SetData(CharacterInfo character)

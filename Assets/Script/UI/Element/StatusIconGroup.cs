@@ -10,7 +10,7 @@ public class StatusIconGroup : MonoBehaviour
 
     private List<StatusIcon> _statusIconList = new List<StatusIcon>();
 
-    public void SetData(BattleCharacterInfo character) 
+    public void SetData(BattleCharacterInfo character, bool raycastTarget) 
     {
         StatusIcon icon;
 
@@ -27,7 +27,7 @@ public class StatusIconGroup : MonoBehaviour
                 _statusIconList.Add(icon);
             }
             _statusIconList[i].gameObject.SetActive(true);
-            _statusIconList[i].SetData(character.StatusList[i]);
+            _statusIconList[i].SetData(character.StatusList[i], raycastTarget);
         }
     }
 }
