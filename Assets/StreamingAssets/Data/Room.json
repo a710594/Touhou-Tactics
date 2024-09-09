@@ -1,2 +1,2 @@
-[{"ID":1,"Name":"普通房間","MinWidth":5,"MaxWidth":7,"MinHeight":5,"MaxHeight":7,"TreasureID_1":1,"Probability_1":4,"TreasureID_2":2,"Probability_2":4,"TreasureID_3":4,"Probability_3":1,"MinTreasureCount":0,"MaxTreasureCount":3},
+[{"ID":1,"Name":"普通房間","MinWidth":3,"MaxWidth":7,"MinHeight":3,"MaxHeight":7,"TreasureID_1":1,"Probability_1":4,"TreasureID_2":2,"Probability_2":4,"TreasureID_3":4,"Probability_3":1,"MinTreasureCount":0,"MaxTreasureCount":2},
 {"ID":2,"Name":"寶藏房間","MinWidth":5,"MaxWidth":5,"MinHeight":5,"MaxHeight":5,"TreasureID_1":3,"Probability_1":1,"TreasureID_2":-1,"Probability_2":-1,"TreasureID_3":-1,"Probability_3":-1,"MinTreasureCount":1,"MaxTreasureCount":1}]
