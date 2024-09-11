@@ -22,6 +22,8 @@ public class CharacterDetailUI : MonoBehaviour
     public Text WTLabel;
     public Text PassiveCommentLabel;
 
+    public Image Image;
+
     public ButtonPlus WeaponButton;
     public ButtonPlus ArmorButton;
     public ButtonPlus[] AmuletButtons;
@@ -58,6 +60,9 @@ public class CharacterDetailUI : MonoBehaviour
         _battleCharacterInfo = character;
         NameLabel.text = character.Name;
         LvLabel.text = "Lv. " + character.Lv;
+        Sprite sprite = Resources.Load<Sprite>("Image/Character/" + character.Job.Name + "(µô¤Á¥h­I");
+        Image.sprite = sprite;
+        Image.transform.GetChild(0).gameObject.SetActive(sprite == null);
         ExpLabel.text = "¸gÅç­È¡G" + CharacterManager.Instance.Info.Exp + "/" + CharacterManager.Instance.NeedExp(CharacterManager.Instance.Info.Lv);
         if (character.PassiveList.Count>0)
         {
@@ -117,7 +122,10 @@ public class CharacterDetailUI : MonoBehaviour
         NameLabel.text = character.Name;
         LvLabel.text = "¶¤¥îµ¥¯Å¡G" + CharacterManager.Instance.Info.Lv;
         ExpLabel.text = "¸gÅç­È¡G" + CharacterManager.Instance.Info.Exp + "/" + CharacterManager.Instance.NeedExp(CharacterManager.Instance.Info.Lv);
-        if (character.PassiveList.Count > 0)
+        Sprite sprite = Resources.Load<Sprite>("Image/Character/" + character.Name + "(µô¤Á¥h­I");
+        Image.sprite = sprite;
+        Image.transform.GetChild(0).gameObject.SetActive(sprite == null);
+        if (character.PassiveList[0] != null)
         {
             PassiveLabel.text = character.PassiveList[0].Data.Name;
         }

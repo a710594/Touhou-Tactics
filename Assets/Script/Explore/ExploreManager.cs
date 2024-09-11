@@ -418,12 +418,12 @@ namespace Explore
             {
                 y = File.Size.y / 60f;
             }
-            Camera bigMapCamera = GameObject.Find("BigMapCamera").GetComponent<Camera>();
-            bigMapCamera.orthographicSize = (bigMapCamera.orthographicSize * x) + 2;
-            bigMapCamera.gameObject.SetActive(false);
+            //Camera bigMapCamera = GameObject.Find("BigMapCamera").GetComponent<Camera>();
+            //bigMapCamera.orthographicSize = (bigMapCamera.orthographicSize * x) + 2;
+            //bigMapCamera.gameObject.SetActive(false);
 
             ExploreUI exploreUI = GameObject.Find("ExploreUI").GetComponent<ExploreUI>();
-            exploreUI.SetCameraPosition(File.Size.x / 2, File.Size.y / 2 - 2, x);
+            exploreUI.SetCameraPosition(File.Size.x / 2, File.Size.y / 2, x);
 
             Vector2Int v2 = Utility.ConvertToVector2Int(Player.transform.position);
             CheckEvent(v2);

@@ -3652,6 +3652,7 @@ MonoBehaviour:
   MOVLabel: {fileID: 6189277276333451907}
   WTLabel: {fileID: 843605789028324586}
   PassiveCommentLabel: {fileID: 1516502309204069434}
+  Image: {fileID: 6685715796158671530}
   WeaponButton: {fileID: 6400973348704355159}
   ArmorButton: {fileID: 3493945179258894833}
   AmuletButtons:
@@ -3979,6 +3980,7 @@ MonoBehaviour:
   SpacingX: 0
   SpacingY: 10
   SubSpacing: 0
+  ScrollRect: {fileID: 0}
   Background: {fileID: 7113087061453600838}
   Content: {fileID: 1820013958653698079}
   MainGrid: {fileID: 109629522906876786}
@@ -4619,6 +4621,7 @@ MonoBehaviour:
   SpacingX: 0
   SpacingY: 10
   SubSpacing: 0
+  ScrollRect: {fileID: 0}
   Background: {fileID: 8303737556986106029}
   Content: {fileID: 8303737556897928765}
   MainGrid: {fileID: 8303737556953533619}
