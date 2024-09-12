@@ -79,7 +79,7 @@ namespace Battle
 
                     if (!_tempDic.ContainsKey(characterInfo))
                     {
-                        BattleCharacterController character = ((GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/" + characterInfo.Controller), Vector3.zero, Quaternion.identity)).GetComponent<BattleCharacterController>();
+                        BattleCharacterController character = ((GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/Player/" + characterInfo.Controller), Vector3.zero, Quaternion.identity)).GetComponent<BattleCharacterController>();
                         character.transform.position = new Vector3(position.x, _info.TileDic[position].TileData.Height, position.y);
                         character.transform.SetParent(Instance._root);
                         character.Init(characterInfo.Controller);

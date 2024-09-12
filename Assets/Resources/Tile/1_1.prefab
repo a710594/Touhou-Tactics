@@ -364,7 +364,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5bad31d2f9589346b726b863e0e3b94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 0
+  ID: 1
   Quad: {fileID: 217656592815474322}
   Select: {fileID: 7357084133828253256}
   Buff: {fileID: 288075864108587864}

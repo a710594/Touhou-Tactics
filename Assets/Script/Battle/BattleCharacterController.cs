@@ -12,6 +12,7 @@ public class BattleCharacterController : MonoBehaviour
 
     public Transform HpAnchor;
     public SpriteRenderer SpriteRenderer;
+    public SpriteFlash SpriteFlash;
 
     private Sprite _front;
     private Sprite _back;
@@ -114,12 +115,9 @@ public class BattleCharacterController : MonoBehaviour
         }
     }
 
-    public void SetGray(bool isGray)
+    public void SetFlash(bool enable)
     {
-        MaterialPropertyBlock mpb = new MaterialPropertyBlock();
-        SpriteRenderer.GetPropertyBlock(mpb);
-        mpb.SetInteger("IsGray", isGray ? 1 : 0);
-        SpriteRenderer.SetPropertyBlock(mpb);
+        SpriteFlash.SetFlash(enable);
     }
 
     public void Rotate(int angle) 

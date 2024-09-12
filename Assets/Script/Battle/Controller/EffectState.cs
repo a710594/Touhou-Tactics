@@ -186,7 +186,7 @@ namespace Battle
                                 {
                                     _characterList.Remove(target);
                                     Instance.DyingList.Add(target);
-                                    target.Controller.SetGray(true);
+                                    target.Controller.SetFlash(true);
                                 }
                             }
                             else
@@ -199,7 +199,7 @@ namespace Battle
                         {
                             _characterList.Add(target);
                             Instance.DyingList.Remove(target);
-                            target.Controller.SetGray(false);
+                            target.Controller.SetFlash(false);
                         }
                     }
                  }

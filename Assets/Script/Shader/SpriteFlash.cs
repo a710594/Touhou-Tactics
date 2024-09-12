@@ -7,13 +7,11 @@ public class SpriteFlash : MonoBehaviour
     public Color FlashColor;
     public SpriteRenderer SpriteRenderer;
 
-    public void SetFlash(float amount)
+    private bool _enable = false;
+
+    public void SetFlash(bool enable)
     {
-        MaterialPropertyBlock mpb = new MaterialPropertyBlock();
-        SpriteRenderer.GetPropertyBlock(mpb);
-        mpb.SetFloat("_FlashAmount", amount);
-        mpb.SetColor("_FlashColor", FlashColor);
-        SpriteRenderer.SetPropertyBlock(mpb);
+        _enable = enable;
     }
 
     // Start is called before the first frame update
@@ -26,7 +24,14 @@ public class SpriteFlash : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        amount = Mathf.PingPong(Time.time * 1, 1.0f);
-        SetFlash(amount);
+        if (_enable)
+        {
+            amount = Mathf.PingPong(Time.time * 1, 1.0f);
+            MaterialPropertyBlock mpb = new MaterialPropertyBlock();
+            SpriteRenderer.GetPropertyBlock(mpb);
+            mpb.SetFloat("_FlashAmount", amount);
+            mpb.SetColor("_FlashColor", FlashColor);
+            SpriteRenderer.SetPropertyBlock(mpb);
+        }
     }
 }

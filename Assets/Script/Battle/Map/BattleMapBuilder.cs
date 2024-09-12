@@ -181,7 +181,7 @@ namespace Battle
             GameObject enemyObj;
             for(int i=0; i<info.EnemyList.Count; i++)
             {
-                enemyObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/" + info.EnemyList[i].Enemy.Controller), Vector3.zero, Quaternion.identity);
+                enemyObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/Enemy/" + info.EnemyList[i].Enemy.Controller), Vector3.zero, Quaternion.identity);
                 enemyObj.transform.position = info.EnemyList[i].Position;
                 enemyObj.transform.SetParent(transform);
                 info.EnemyList[i].Controller = enemyObj.GetComponent<BattleCharacterController>();

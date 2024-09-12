@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6983238878598100722}
   - component: {fileID: 6983238878598100725}
   - component: {fileID: 5721228704198608624}
+  - component: {fileID: 1216820990118559378}
   m_Layer: 0
   m_Name: Doremy
   m_TagString: Untagged
@@ -54,7 +55,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 414dc2eed1e2a814c9f0350571d5379a, type: 2}
+  - {fileID: 2100000, guid: ca9cafc83dd83f641bda0f742eb1ee88, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -99,8 +100,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HpAnchor: {fileID: 1321380757927652589}
-  Front: {fileID: 21300000, guid: 6b305697525dfd74d96afbe470278adf, type: 3}
-  Back: {fileID: 21300000, guid: bb7534b2231f9064baf2e9f86268338e, type: 3}
+  SpriteRenderer: {fileID: 6983238878598100725}
+  SpriteFlash: {fileID: 1216820990118559378}
+  Direction: {x: -1, y: 0}
+--- !u!114 &1216820990118559378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6983238878598100723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2836bb74154cbb54ea9181bb2442e15c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FlashColor: {r: 1, g: 0, b: 0, a: 1}
   SpriteRenderer: {fileID: 6983238878598100725}
 --- !u!1 &7744877185908799808
 GameObject:
