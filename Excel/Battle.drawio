@@ -1,9 +1,27 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36" version="24.7.10">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36" version="24.7.15">
   <diagram name="第 1 页" id="NnEBHz77sXLtNsl1vE97">
-    <mxGraphModel>
+    <mxGraphModel dx="794" dy="458" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="nqqZbWjeaDuwistt2tw7-2" value="BattleFile" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="130" width="320" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="nqqZbWjeaDuwistt2tw7-5" value="&lt;div&gt;&amp;nbsp; &amp;nbsp; int MinX&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; int MaxX&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; int MinY&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; int MaxY&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; int PlayerCount&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; bool MustBeEqualToNeedCount&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; int Lv&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; int Exp&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; List&amp;lt;string[]&amp;gt; TileList&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; List&amp;lt;int[]&amp;gt; NoAttachList&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; List&amp;lt;int[]&amp;gt; EnemyList&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Helvetica;fontSize=12;fontColor=default;fontStyle=0;" vertex="1" parent="nqqZbWjeaDuwistt2tw7-2">
+          <mxGeometry x="10" y="30" width="210" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="nqqZbWjeaDuwistt2tw7-6" value="BattleInfo" style="swimlane;whiteSpace=wrap;html=1;strokeColor=default;align=center;verticalAlign=middle;fillColor=default;" vertex="1" parent="1">
+          <mxGeometry x="557" y="130" width="270" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="nqqZbWjeaDuwistt2tw7-7" value="&lt;div&gt;int MinX&lt;/div&gt;&lt;div&gt;int MaxX&lt;/div&gt;&lt;div&gt;int MinY&lt;/div&gt;&lt;div&gt;int MaxY&lt;/div&gt;&lt;div&gt;int NeedCount&lt;/div&gt;&lt;div&gt;bool MustBeEqualToNeedCount&lt;/div&gt;&lt;div&gt;int Lv&lt;/div&gt;&lt;div&gt;int Exp&lt;/div&gt;&lt;div&gt;List&amp;lt;Vector2Int&amp;gt; PlayerPositionList&lt;/div&gt;&lt;div&gt;List&amp;lt;BattleCharacterInfo&amp;gt; EnemyList&lt;/div&gt;&lt;div&gt;Dictionary&amp;lt;Vector2Int, BattleInfoTile&amp;gt; TileDic&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Helvetica;fontSize=12;fontColor=default;fontStyle=0;" vertex="1" parent="nqqZbWjeaDuwistt2tw7-6">
+          <mxGeometry x="10" y="30" width="260" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="nqqZbWjeaDuwistt2tw7-8" value="&lt;span style=&quot;font-weight: 400; text-align: left; text-wrap: nowrap;&quot;&gt;BattleInfoTile&lt;/span&gt;" style="swimlane;whiteSpace=wrap;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=12;fontColor=default;fontStyle=1;fillColor=default;" vertex="1" parent="1">
+          <mxGeometry x="557" y="360" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="nqqZbWjeaDuwistt2tw7-13" value="&lt;div&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;TileModel TileData&lt;/span&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;BattleTileObject TileObject&lt;/div&gt;&lt;div&gt;AttachModel AttachData&lt;/div&gt;&lt;div&gt;GameObject AttachObject&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Helvetica;fontSize=12;fontColor=default;fontStyle=0;" vertex="1" parent="nqqZbWjeaDuwistt2tw7-8">
+          <mxGeometry x="10" y="65" width="160" height="70" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
