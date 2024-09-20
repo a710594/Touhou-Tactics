@@ -1,5 +1,5 @@
-[{"Floor":1,"Name":"Floor_1","Width":30,"Height":30,"RoomCount":30,"Room_1":1,"Probability_1":4,"Room_2":2,"Probability_2":2,"Room_3":3,"Probability_3":2,"Room_4":4,"Probability_4":1,"Room_5":-1,"Probability_5":-1,"EnemyName":"x","EnemyCount":-1},
-{"Floor":2,"Name":"x","Width":40,"Height":40,"RoomCount":40,"Room_1":1,"Probability_1":4,"Room_2":2,"Probability_2":2,"Room_3":3,"Probability_3":2,"Room_4":4,"Probability_4":1,"Room_5":-1,"Probability_5":-1,"EnemyName":"NormalAI","EnemyCount":5},
-{"Floor":3,"Name":"x","Width":50,"Height":50,"RoomCount":50,"Room_1":1,"Probability_1":4,"Room_2":2,"Probability_2":2,"Room_3":3,"Probability_3":2,"Room_4":4,"Probability_4":1,"Room_5":-1,"Probability_5":-1,"EnemyName":"TraceAI","EnemyCount":6},
-{"Floor":4,"Name":"x","Width":60,"Height":60,"RoomCount":60,"Room_1":1,"Probability_1":4,"Room_2":2,"Probability_2":2,"Room_3":3,"Probability_3":2,"Room_4":4,"Probability_4":1,"Room_5":-1,"Probability_5":-1,"EnemyName":"TraceAI","EnemyCount":7},
-{"Floor":5,"Name":"Floor_5","Width":-1,"Height":-1,"RoomCount":-1,"Room_1":-1,"Probability_1":-1,"Room_2":-1,"Probability_2":-1,"Room_3":-1,"Probability_3":-1,"Room_4":-1,"Probability_4":-1,"Room_5":-1,"Probability_5":-1,"EnemyName":"x","EnemyCount":-1}]
+[{"Floor":1,"Name":"Floor_1","Width":30,"Height":30,"RoomCount":30,"Room_1":1,"Probability_1":9,"Room_2":2,"Probability_2":1,"EnemyName":"x","EnemyCount":-1},
+{"Floor":2,"Name":"x","Width":80,"Height":80,"RoomCount":80,"Room_1":1,"Probability_1":9,"Room_2":2,"Probability_2":1,"EnemyName":"NormalAI","EnemyCount":5},
+{"Floor":3,"Name":"x","Width":100,"Height":100,"RoomCount":100,"Room_1":1,"Probability_1":9,"Room_2":2,"Probability_2":1,"EnemyName":"TraceAI","EnemyCount":6},
+{"Floor":4,"Name":"x","Width":120,"Height":120,"RoomCount":120,"Room_1":1,"Probability_1":9,"Room_2":2,"Probability_2":1,"EnemyName":"TraceAI","EnemyCount":7},
+{"Floor":5,"Name":"Floor_5","Width":-1,"Height":-1,"RoomCount":-1,"Room_1":-1,"Probability_1":-1,"Room_2":-1,"Probability_2":-1,"EnemyName":"x","EnemyCount":-1}]

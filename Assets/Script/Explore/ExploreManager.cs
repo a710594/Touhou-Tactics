@@ -10,7 +10,7 @@ namespace Explore
     {
         public Action ReloadHandler;
 
-        private readonly int _maxFloor = 5;
+        private readonly int _maxFloor = 4;
         private readonly string _fileName = "ExploreFile";
 
         private static ExploreManager _instance;
