@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 4182923110406515383}
   - component: {fileID: 1549286218456554162}
   - component: {fileID: -1254750540612938883}
+  - component: {fileID: -5667696130524375153}
   m_Layer: 0
   m_Name: Youmu
   m_TagString: Untagged
@@ -148,3 +149,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FlashColor: {r: 1, g: 0, b: 0, a: 1}
   SpriteRenderer: {fileID: 4182923110406515383}
+--- !u!65 &-5667696130524375153
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4182923110406515377}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}

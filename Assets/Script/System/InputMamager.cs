@@ -26,7 +26,7 @@ public class InputMamager
     public bool IsLock = false;
 
     private BagUI _bagUI;
-    private SelectCharacterUI _selectCharacterUI;
+    private CharacterUI _selectCharacterUI;
     private SystemUI _systemUI;
 
     public void Init() 
@@ -69,7 +69,7 @@ public class InputMamager
                 {
                     if (_selectCharacterUI == null)
                     {
-                        _selectCharacterUI = SelectCharacterUI.Open();
+                        _selectCharacterUI = CharacterUI.Open();
                         _selectCharacterUI.CloseHandler += Unlock;
                         Lock();
                     }

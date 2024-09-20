@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5268101871429733704}
   - component: {fileID: 5268101871429733709}
   m_Layer: 5
-  m_Name: ScrollView
+  m_Name: Vertical_ScrollView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -93,16 +93,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 1
-  CellSizeX: 100
+  CellSizeX: 400
   CellSizeY: 100
-  SpacingX: 10
+  SpacingX: 0
   SpacingY: 10
+  SubSpacing: 0
+  ScrollRect: {fileID: 5268101871429733704}
   Background: {fileID: 5268101871429733705}
   Content: {fileID: 5268101872079686617}
   MainGrid: {fileID: 5268101872003109207}
   MainGridRect: {fileID: 5268101872003109204}
-  SubGrid: {fileID: 0}
-  ScrollItem: {fileID: 0}
+  SubGrid: {fileID: 6512655964204905964, guid: ffe3a7101027d8846961999574adb368, type: 3}
+  ScrollItem: {fileID: 4290480296013984269, guid: 180eaff8a25a71943af9008bbe7b5abb, type: 3}
 --- !u!1 &5268101871546434443
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,8 +314,8 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 100, y: 100}
-  m_Spacing: {x: 0, y: 0}
+  m_CellSize: {x: 400, y: 100}
+  m_Spacing: {x: 0, y: 10}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!1 &5268101872079686614

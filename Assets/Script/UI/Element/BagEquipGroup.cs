@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class BagEquipGroup : MonoBehaviour
@@ -96,9 +97,9 @@ public class BagEquipGroup : MonoBehaviour
         }
     }
 
-    private void ScrollItemOnClick(ScrollItem scrollItem)
+    private void ScrollItemOnClick(PointerEventData eventData, object data)
     {
-        object obj = scrollItem.Data;
+        object obj = data;
         Equip equip = null;
         if (obj is Equip)
         {
@@ -106,8 +107,8 @@ public class BagEquipGroup : MonoBehaviour
         }
         else if(obj is BagScrollItem.Data) 
         {
-            BagScrollItem.Data data = (BagScrollItem.Data)obj;
-            equip = data.Equip;
+            BagScrollItem.Data bagData = (BagScrollItem.Data)obj;
+            equip = bagData.Equip;
         }
         SetDetail(equip);
         ScrollHandler(obj);

@@ -2,16 +2,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class ScrollGrid : MonoBehaviour
 {
-    public Action<ScrollItem> ClickHandler;
-    public Action<ScrollItem> DownHandler;
-    public Action<ScrollItem> PressHandler;
-    public Action<ScrollItem> UpHandler;
-    public Action<ScrollItem> EnterHandler;
-    public Action<ScrollItem> ExitHandler;
+    public Action<PointerEventData, ButtonPlus> ClickHandler;
+    public Action<ButtonPlus> DownHandler;
+    public Action<ButtonPlus> PressHandler;
+    public Action<ButtonPlus> UpHandler;
+    public Action<ButtonPlus> EnterHandler;
+    public Action<ButtonPlus> ExitHandler;
+    public Action<ButtonPlus> DragBegingHandler;
+    public Action<PointerEventData, ButtonPlus> DragHandler;
+    public Action<ButtonPlus> DragEndHandler;
 
     public Image Background;
     public GridLayoutGroup Grid;
@@ -49,6 +53,9 @@ public class ScrollGrid : MonoBehaviour
             item.UpHandler = OnUp;
             item.EnterHandler = OnEnter;
             item.ExitHandler = OnExit;
+            item.DragBegingHandler = OnBeginDrag;
+            item.DragHandler = OnDrag;
+            item.DragEndHandler = OnEndDrag;
             _scrollItemList.Add(item);
         }
     }
@@ -92,51 +99,75 @@ public class ScrollGrid : MonoBehaviour
         }
     }
 
-    private void OnClick(ScrollItem scrollItem)
+    private void OnClick(PointerEventData eventData, ButtonPlus buttonPlus)
     {
         if (ClickHandler != null)
         {
-            ClickHandler(scrollItem);
+            ClickHandler(eventData, buttonPlus);
         }
     }
 
-    private void OnDown(ScrollItem scrollItem)
+    private void OnDown(ButtonPlus buttonPlus)
     {
         if (DownHandler != null)
         {
-            DownHandler(scrollItem);
+            DownHandler(buttonPlus);
         }
     }
 
-    private void OnPress(ScrollItem scrollItem)
+    private void OnPress(ButtonPlus buttonPlus)
     {
         if (PressHandler != null)
         {
-            PressHandler(scrollItem);
+            PressHandler(buttonPlus);
         }
     }
 
-    private void OnUp(ScrollItem scrollItem)
+    private void OnUp(ButtonPlus buttonPlus)
     {
         if (UpHandler != null)
         {
-            UpHandler(scrollItem);
+            UpHandler(buttonPlus);
         }
     }
 
-    private void OnEnter(ScrollItem scrollItem)
+    private void OnEnter(ButtonPlus buttonPlus)
     {
         if (EnterHandler != null)
         {
-            EnterHandler(scrollItem);
+            EnterHandler(buttonPlus);
         }
     }
 
-    private void OnExit(ScrollItem scrollItem)
+    private void OnExit(ButtonPlus buttonPlus)
     {
         if (ExitHandler != null)
         {
-            ExitHandler(scrollItem);
+            ExitHandler(buttonPlus);
+        }
+    }
+
+    private void OnBeginDrag(ButtonPlus buttonPlus)
+    {
+        if (DragBegingHandler != null)
+        {
+            DragBegingHandler(buttonPlus);
+        }
+    }
+
+    private void OnDrag(PointerEventData eventData, ButtonPlus buttonPlus)
+    {
+        if (DragHandler != null)
+        {
+            DragHandler(eventData, buttonPlus);
+        }
+    }
+
+    private void OnEndDrag(ButtonPlus buttonPlus)
+    {
+        if (DragEndHandler != null)
+        {
+            DragEndHandler(buttonPlus);
         }
     }
 }

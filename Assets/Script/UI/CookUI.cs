@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class CookUI : MonoBehaviour
@@ -98,9 +99,9 @@ public class CookUI : MonoBehaviour
         }
     }
 
-    private void ScrollItemOnClick(ScrollItem scrollItem)
+    private void ScrollItemOnClick(PointerEventData eventData, object data)
     {
-        Item item = (Item)scrollItem.Data;
+        Item item = (Item)data;
         if (_materialList.Count < 5) 
         {
             _materialList.Add(item.Data);
@@ -113,11 +114,11 @@ public class CookUI : MonoBehaviour
         }
     }
 
-    private void MaterialOnClick(ButtonPlus button) 
+    private void MaterialOnClick(PointerEventData eventData, object data) 
     {
-        if (button.Data != null) 
+        if (data != null) 
         {
-            _materialList.Remove((ItemModel)button.Data);
+            _materialList.Remove((ItemModel)data);
             SetMaterialLabel();
             SetResult();
         }

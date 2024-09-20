@@ -5,14 +5,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ButtonPlus : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler, IPointerEnterHandler, IPointerClickHandler
+public class ButtonPlus : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler, IPointerEnterHandler, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    public Action<ButtonPlus> ClickHandler;
+    public Action<PointerEventData, ButtonPlus> ClickHandler;
     public Action<ButtonPlus> PressHandler;
     public Action<ButtonPlus> DownHandler;
     public Action<ButtonPlus> UpHandler;
     public Action<ButtonPlus> EnterHandler;
     public Action<ButtonPlus> ExitHandler;
+    public Action<ButtonPlus> DragBegingHandler;
+    public Action<PointerEventData, ButtonPlus> DragHandler;
+    public Action<ButtonPlus> DragEndHandler;
 
     public float DownThreshold = 0.2f; //開始 Down 事件
     public float PressDuration = 0.1f; //Down 之後執行 Press 的週期
@@ -26,7 +29,7 @@ public class ButtonPlus : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     private float _startDownTime;
     private float _startPressTime;
 
-    public void SetData(object data)
+    public virtual void SetData(object data)
     {
         Data = data;
     }
@@ -34,33 +37,6 @@ public class ButtonPlus : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     public void SetColor(Color color)
     {
         Image.color = color;
-    }
-
-    private void Update()
-    {
-        if (_isPointerDown)
-        {
-            if (!_longPressTriggered)
-            {
-                if (Time.time - _startDownTime >= DownThreshold)
-                {
-                    _longPressTriggered = true;
-                    _startPressTime = Time.time;
-                    if (DownHandler != null)
-                    {
-                        DownHandler(this);
-                    }
-                }
-            }
-            else if(Time.time -_startPressTime > PressDuration)
-            {
-                _startPressTime = Time.time;
-                if (PressHandler != null)
-                {
-                    PressHandler(this);
-                }
-            }
-        }
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -98,27 +74,65 @@ public class ButtonPlus : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         }
     }
 
-    public void OnClick()
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        if (DragBegingHandler != null)
+        {
+            DragBegingHandler(this);
+        }
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (DragHandler != null) 
+        {
+            DragHandler(eventData, this);
+        }
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        if (DragEndHandler != null) 
+        {
+            DragEndHandler(this);
+        }
+    }
+
+    public virtual void OnPointerClick(PointerEventData eventData)
     {
         if (!_longPressTriggered || DownThreshold == 0)
         {
             if (ClickHandler != null)
             {
-                ClickHandler(this);
+                ClickHandler(eventData, this);
             }
         }
     }
 
-    protected void Awake()
+    private void Update()
     {
-        //if (Button != null)
-        //{
-        //    Button.onClick.AddListener(OnClick);
-        //}
-    }
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        OnClick();
+        if (_isPointerDown)
+        {
+            if (!_longPressTriggered)
+            {
+                if (Time.time - _startDownTime >= DownThreshold)
+                {
+                    _longPressTriggered = true;
+                    _startPressTime = Time.time;
+                    if (DownHandler != null)
+                    {
+                        DownHandler(this);
+                    }
+                }
+            }
+            else if (Time.time - _startPressTime > PressDuration)
+            {
+                _startPressTime = Time.time;
+                if (PressHandler != null)
+                {
+                    PressHandler(this);
+                }
+            }
+        }
     }
 }

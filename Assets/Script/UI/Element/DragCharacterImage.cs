@@ -49,10 +49,10 @@ public class DragCharacterImage : MonoBehaviour, IDragHandler, IEndDragHandler, 
         if (Physics.Raycast(ray, out hit, 100))
         {
             position = Utility.ConvertToVector2Int(hit.point);
-            GameObject obj = BattleController.Instance.PlaceCharacter(position, _character);
-            if (obj != null)
+            BattleCharacterController controller = BattleController.Instance.PlaceCharacter(position, _character);
+            if (controller != null)
             {
-                _anchor = obj.transform;
+                _anchor = controller.transform;
                 Image.color = Color.clear;
 
                 if (DragEndHandler != null)

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class ShopItemGroup : MonoBehaviour
@@ -60,15 +61,15 @@ public class ShopItemGroup : MonoBehaviour
         }
     }
 
-    private void ScrollItemOnClick(ScrollItem scrollItem)
+    private void ScrollItemOnClick(PointerEventData eventData, object data)
     {
-        object obj = scrollItem.Data;
+        object obj = data;
         if (obj is ShopModel) //buy
         {
-            ShopModel data = (ShopModel)obj;
-            SetComment(DataContext.Instance.ItemDic[data.ID].Comment);
-            SetMaterial(data);
-            ShopDataHandler(data);
+            ShopModel shopData = (ShopModel)obj;
+            SetComment(DataContext.Instance.ItemDic[shopData.ID].Comment);
+            SetMaterial(shopData);
+            ShopDataHandler(shopData);
         }
         else //sell
         {

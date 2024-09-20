@@ -9,7 +9,6 @@ public class ActionScrollItem : ScrollItem
     private Color _canUseColor = new Color32(255, 236, 191, 255);
     private Color _notUseColor = new Color32(200, 180, 140, 255);
 
-    public Text Label;
 
     public override void SetData(object obj)
     {

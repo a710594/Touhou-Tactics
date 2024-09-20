@@ -23,8 +23,6 @@ public class CharacterInfoUI : MonoBehaviour
 
     public void SetData(BattleCharacterInfo character) 
     {
-        StatusIcon icon;
-
         _character = character;
         LvLabel.text = "Lv. " + character.Lv;
         NameLabel.text = character.Name;

@@ -9,15 +9,17 @@ using UnityEngine.UIElements;
 public class BattleCharacterController : MonoBehaviour
 {
     public Action MoveEndHandler;
+    public Action<CharacterInfo> RightClickHandler;
 
     public Transform HpAnchor;
     public SpriteRenderer SpriteRenderer;
     public SpriteFlash SpriteFlash;
+    public Vector2 Direction = Vector2Int.left;
 
     private Sprite _front;
     private Sprite _back;
     private CameraRotate _cameraRotate;
-    public Vector2 Direction = Vector2Int.left;
+    private CharacterInfo _info;
 
     public void Init(string sprite) 
     {
@@ -25,6 +27,11 @@ public class BattleCharacterController : MonoBehaviour
         _back = Resources.Load<Sprite>("Image/" + sprite + "_B");
         SpriteRenderer.sprite = _front;
         SpriteRenderer.flipX = false;
+    }
+
+    public void SetCharacterInfo(CharacterInfo info) 
+    {
+        _info = info;
     }
 
     public void Move(List<Vector2Int> paths)
@@ -148,6 +155,13 @@ public class BattleCharacterController : MonoBehaviour
         SetSprite();
     }
 
+    private void OnMouseOver()
+    {
+        if (Input.GetMouseButtonDown(1) && RightClickHandler != null) 
+        {
+            RightClickHandler(_info);
+        }
+    }
     private void Awake()
     {
         transform.eulerAngles = new Vector3(30, 45, 0);

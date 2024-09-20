@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Battle;
+using UnityEngine.EventSystems;
 
 public class CharacterDetailUI : MonoBehaviour
 {
@@ -177,7 +178,7 @@ public class CharacterDetailUI : MonoBehaviour
         }
     }
 
-    private void WeaponOnClick(ButtonPlus button)
+    private void WeaponOnClick(PointerEventData eventData, ButtonPlus buttonPlus)
     {
         if (_characterInfo != null)
         {
@@ -187,7 +188,7 @@ public class CharacterDetailUI : MonoBehaviour
         }
     }
 
-    private void ArmornOnClick(ButtonPlus button)
+    private void ArmornOnClick(PointerEventData eventData, ButtonPlus buttonPlus)
     {
         if (_characterInfo != null)
         {
@@ -197,7 +198,7 @@ public class CharacterDetailUI : MonoBehaviour
         }
     }
 
-    private void AmuletOnClick_1(ButtonPlus button)
+    private void AmuletOnClick_1(PointerEventData eventData, ButtonPlus buttonPlus)
     {
         if (_characterInfo != null)
         {
@@ -207,7 +208,7 @@ public class CharacterDetailUI : MonoBehaviour
         }
     }
 
-    private void AmuletOnClick_2(ButtonPlus button)
+    private void AmuletOnClick_2(PointerEventData eventData, ButtonPlus buttonPlus)
     {
         if (_characterInfo != null)
         {
@@ -293,28 +294,28 @@ public class CharacterDetailUI : MonoBehaviour
         EquipDetail.gameObject.SetActive(false);
     }
 
-    private void ShowSkillInfo(ScrollItem scrollItem) 
+    private void ShowSkillInfo(ButtonPlus buttonPlus) 
     {
-        Skill skill = (Skill)scrollItem.Data;
+        Skill skill = (Skill)buttonPlus.Data;
         SkillInfoGroup.SetData(skill);
         SkillInfoGroup.transform.localPosition = Vector3.zero;
         SkillInfoGroup.gameObject.SetActive(true);
     }
 
-    private void HideSkillInfo(ScrollItem scrollItem)
+    private void HideSkillInfo(ButtonPlus buttonPlus)
     {
         SkillInfoGroup.gameObject.SetActive(false);
     }
 
-    private void ShowSupportInfo(ScrollItem scrollItem)
+    private void ShowSupportInfo(ButtonPlus buttonPlus)
     {
-        Support support = (Support)scrollItem.Data;
+        Support support = (Support)buttonPlus.Data;
         SkillInfoGroup.SetData(support);
         SkillInfoGroup.transform.localPosition = new Vector3(0, -540, 0);
         SkillInfoGroup.gameObject.SetActive(true);
     }
 
-    private void HideSupportInfo(ScrollItem scrollItem)
+    private void HideSupportInfo(ButtonPlus buttonPlus)
     {
         SkillInfoGroup.gameObject.SetActive(false);
     }

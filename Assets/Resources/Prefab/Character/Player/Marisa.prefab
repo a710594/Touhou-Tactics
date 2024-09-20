@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6295611815365243967}
   - component: {fileID: 8706039053467206714}
   - component: {fileID: -4618960490211507445}
+  - component: {fileID: -2657892828541996093}
   m_Layer: 0
   m_Name: Marisa
   m_TagString: Untagged
@@ -117,6 +118,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FlashColor: {r: 1, g: 0, b: 0, a: 1}
   SpriteRenderer: {fileID: 6295611815365243967}
+--- !u!65 &-2657892828541996093
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6295611815365243961}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6686903792128981898
 GameObject:
   m_ObjectHideFlags: 0

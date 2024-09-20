@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class TextScrollItem : ScrollItem
 {
-    public Text Label;
 
     public override void SetData(object obj)
     {

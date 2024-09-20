@@ -61,7 +61,7 @@ namespace Battle
         public BattleUI BattleUI;
         public DragCameraUI DragCameraUI;
         public BattleResultUI BattleResultUI;
-        public SelectBattleCharacterUI SelectBattleCharacterUI;
+        public SelectCharacterUI SelectBattleCharacterUI;
         private Transform _root;
         private List<CharacterInfo> _candidateList = new List<CharacterInfo>();
         //private Dictionary<int, BattleCharacterController> _controllerDic = new Dictionary<int, BattleCharacterController>();
@@ -83,7 +83,7 @@ namespace Battle
             BattleUI = GameObject.Find("BattleUI").GetComponent<BattleUI>();
             BattleResultUI = GameObject.Find("BattleResultUI").GetComponent<BattleResultUI>();
             _cameraController = Camera.main.GetComponent<CameraDraw>();
-            SelectBattleCharacterUI = GameObject.Find("SelectBattleCharacterUI").GetComponent<SelectBattleCharacterUI>();
+            SelectBattleCharacterUI = GameObject.Find("SelectBattleCharacterUI").GetComponent<SelectCharacterUI>();
             CameraRotate = Camera.main.GetComponent<CameraRotate>();
             DragCameraUI = GameObject.Find("DragCameraUI").GetComponent<DragCameraUI>();
             DragCameraUI.Init(info);
@@ -146,7 +146,7 @@ namespace Battle
             ((BattleControllerState)_context.CurrentState).Click(position);
         }
 
-        public GameObject PlaceCharacter(Vector2Int position, CharacterInfo characterInfo)
+        public BattleCharacterController PlaceCharacter(Vector2Int position, CharacterInfo characterInfo)
         {
             if(_context.CurrentState is PrepareState) 
             {

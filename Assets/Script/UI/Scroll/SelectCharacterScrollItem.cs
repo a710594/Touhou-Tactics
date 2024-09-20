@@ -2,65 +2,98 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SelectCharacterScrollItem : ScrollItem
+namespace Battle
 {
-    public Action<string> UseItemHandler;
 
-    public Image Image;
-    public Text NameLabel;
-    public ValueBar HpBar;
-    public Button DetailButton;
-    public Button UseItemButton;
-
-    private CharacterInfo _characterInfo;
-
-    public override void SetData(object obj)
+    public class SelectCharacterScrollItem : ScrollItem
     {
-        base.SetData(obj);
-        _characterInfo = (CharacterInfo)obj;
-        Image.sprite = Resources.Load<Sprite>("Image/" + _characterInfo.Controller + "_F");
-        NameLabel.text = _characterInfo.Name;
-        HpBar.SetValue(_characterInfo.CurrentHP, _characterInfo.MaxHP);
-    }
+        private bool _drag = false;
+        private Transform _anchor; //有用嗎?
 
-    private void DetailOnClick() 
-    {
-        CharacterDetailUI characterDetailUI = CharacterDetailUI.Open(true);
-        characterDetailUI.SetData((CharacterInfo)Data);
-    }
-
-    private void UseItemOnClick() 
-    {
-        BagUI bagUI = BagUI.Open();
-        bagUI.SetUseState();
-        bagUI.UseHandler += UseItem;
-    }
-
-    private void UseItem(object obj) 
-    {
-        int add = 0;
-        if(obj is Consumables) 
+        public override void SetData(object data)
         {
-            Consumables consumables = (Consumables)obj;
-            add = consumables.Effect.Value;
+            base.SetData(data);
+
+            Sprite sprite = Resources.Load<Sprite>("Image/" + ((CharacterInfo)Data).Controller + "_F");
+            Image.sprite = sprite;
+            Image.transform.localPosition = Vector3.zero;
         }
-        else if(obj is Food) 
+
+        /*public override void OnBeginDrag(PointerEventData eventData)
         {
-            Food food = (Food)obj;
-            add = food.HP;
+            base.OnBeginDrag(eventData);
+
+            _drag = true;
+            Image.color = Color.white;
         }
-        _characterInfo.SetRecover(add);
-        HpBar.SetValueTween(_characterInfo.CurrentHP, _characterInfo.MaxHP, null);
-        SelectCharacterUI.SetTip(_characterInfo.Name + " 回復了 " + add + " HP");
-    }
 
-    protected override void Awake()
-    {
-        base.Awake();
+        public override void OnDrag(PointerEventData eventData)
+        {
+            base.OnDrag(eventData);
 
-        DetailButton.onClick.AddListener(DetailOnClick);
-        UseItemButton.onClick.AddListener(UseItemOnClick);
+            Image.rectTransform.anchoredPosition += eventData.delta;
+        }
+
+        public override void OnEndDrag(PointerEventData eventData)
+        {
+            //base.OnEndDrag(eventData);
+
+            _drag = false;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            Vector2Int position = new Vector2Int();
+            if (Physics.Raycast(ray, out hit, 100))
+            {
+                position = Utility.ConvertToVector2Int(hit.point);
+                GameObject obj = BattleController.Instance.PlaceCharacter(position, (CharacterInfo)Data);
+                if (obj != null)
+                {
+                    _anchor = obj.transform;
+                    Image.color = Color.clear;
+
+                    if (DragEndHandler != null)
+                    {
+                        DragEndHandler(this);
+                    }
+                }
+                else
+                {
+                    BattleController.Instance.SetCharacterSpriteVisible((CharacterInfo)Data, true);
+                    transform.localPosition = Vector3.zero;
+                    Image.color = Color.white;
+                }
+            }
+            else
+            {
+                BattleController.Instance.SetCharacterSpriteVisible((CharacterInfo)Data, true);
+                transform.localPosition = Vector3.zero;
+                Image.color = Color.white;
+            }
+        }
+
+        public override void OnPointerClick(PointerEventData eventData)
+        {
+            base.OnPointerClick(eventData);
+
+            if (eventData.button == PointerEventData.InputButton.Right)
+            {
+                _drag = false;
+                _anchor = null;
+                BattleController.Instance.RemoveCharacterSprite((CharacterInfo)Data);
+                transform.localPosition = Vector3.zero;
+                Image.color = Color.white;
+            }
+        }*/
+
+        void Update()
+        {
+            if (_anchor != null && !_drag)
+            {
+                this.transform.position = Camera.main.WorldToScreenPoint(_anchor.position);
+            }
+        }
     }
 }

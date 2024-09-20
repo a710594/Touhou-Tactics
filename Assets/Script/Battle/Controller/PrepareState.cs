@@ -64,7 +64,7 @@ namespace Battle
                 Instance.CharacterListGroupInit();
             }
 
-            public GameObject PlaceCharacter(Vector2Int position, CharacterInfo characterInfo)
+            public BattleCharacterController PlaceCharacter(Vector2Int position, CharacterInfo characterInfo)
             {
                 if (_info.PlayerPositionList.Contains(position))
                 {
@@ -93,7 +93,7 @@ namespace Battle
                     }
                     Instance.DragCameraUI.DontDrag = false;
 
-                    return _tempDic[characterInfo].gameObject;
+                    return _tempDic[characterInfo];
                 }
                 else
                 {

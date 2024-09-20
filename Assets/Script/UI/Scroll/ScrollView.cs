@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class ScrollView : MonoBehaviour
@@ -13,12 +14,16 @@ public class ScrollView : MonoBehaviour
         Vertical,
     }
 
-    public Action<ScrollItem> ClickHandler;
-    public Action<ScrollItem> DownHandler;
-    public Action<ScrollItem> PressHandler;
-    public Action<ScrollItem> UpHandler;
-    public Action<ScrollItem> EnterHandler;
-    public Action<ScrollItem> ExitHandler;
+    public Action<PointerEventData, ButtonPlus> ClickHandler;
+    public Action<ButtonPlus> DownHandler;
+    public Action<ButtonPlus> PressHandler;
+    public Action<ButtonPlus> UpHandler;
+    public Action<ButtonPlus> EnterHandler;
+    public Action<ButtonPlus> ExitHandler;
+    public Action<ButtonPlus> DragBegingHandler;
+    public Action<PointerEventData, ButtonPlus> DragHandler;
+    public Action<ButtonPlus> DragEndHandler;
+
 
     public TypeEnum Type;
     public float CellSizeX;
@@ -79,6 +84,9 @@ public class ScrollView : MonoBehaviour
             grid.UpHandler = OnUp;
             grid.EnterHandler = OnEnter;
             grid.ExitHandler = OnExit;
+            grid.DragBegingHandler = OnBeginDrag;
+            grid.DragHandler = OnDrag;
+            grid.DragEndHandler = OnEndDrag;
             grid.Init(ScrollItem, Type, length, CellSizeX, CellSizeY, SpacingX, SpacingY, _scrollItemAmount);
             _gridList.Add(grid);
         }
@@ -94,7 +102,7 @@ public class ScrollView : MonoBehaviour
         if (Type == TypeEnum.Horizontal)
         {
            Content.sizeDelta = new Vector2(count * CellSizeX + count * SpacingX, Content.sizeDelta.y);
-           MainGridRect.anchoredPosition = new Vector2((Content.sizeDelta.x - MainGridRect.sizeDelta.x) / 2, 0);
+           MainGridRect.anchoredPosition = new Vector2(-(Content.sizeDelta.x - MainGridRect.sizeDelta.x) / 2, 0);
         }
         else if (Type == TypeEnum.Vertical)
         {
@@ -124,14 +132,14 @@ public class ScrollView : MonoBehaviour
             _currentIndex = index;
             if (Type == TypeEnum.Horizontal)
             {
-                Content.anchoredPosition = new Vector2(_originContentAnchoredPosition.x + _currentIndex * (CellSizeX + SpacingX), _originContentAnchoredPosition.y);
-                MainGridRect.anchoredPosition =new Vector2(_originGridAnchoredPosition.x - _currentIndex * (CellSizeX + SpacingX), _originGridAnchoredPosition.y);
+                Content.anchoredPosition = new Vector2(_originContentAnchoredPosition.x - _currentIndex * (CellSizeX + SpacingX), _originContentAnchoredPosition.y);
+                MainGridRect.anchoredPosition =new Vector2(_originGridAnchoredPosition.x + _currentIndex * (CellSizeX + SpacingX), _originGridAnchoredPosition.y);
                 Refresh(_currentIndex);
             }
             else if (Type == TypeEnum.Vertical)
             {
                 Content.anchoredPosition = new Vector2(_originContentAnchoredPosition.x, _originContentAnchoredPosition.y + _currentIndex * (CellSizeY + SpacingY));
-                MainGridRect.anchoredPosition =new Vector2(_originGridAnchoredPosition.x, _originGridAnchoredPosition.y - _currentIndex * (CellSizeX + SpacingX));
+                MainGridRect.anchoredPosition =new Vector2(_originGridAnchoredPosition.x, _originGridAnchoredPosition.y - _currentIndex * (CellSizeY + SpacingY));
                 Refresh(_currentIndex);
             }
         }
@@ -140,8 +148,8 @@ public class ScrollView : MonoBehaviour
             _currentIndex = _dataList.Count - _subGridAmount + 1;
             if (Type == TypeEnum.Horizontal)
             {
-                Content.anchoredPosition = new Vector2(_originContentAnchoredPosition.x + (_currentIndex + 1) * (CellSizeX + SpacingX), _originContentAnchoredPosition.y);
-                MainGridRect.anchoredPosition = new Vector2(_originGridAnchoredPosition.x - _currentIndex * (CellSizeX + SpacingX), _originGridAnchoredPosition.y);
+                Content.anchoredPosition = new Vector2(_originContentAnchoredPosition.x - (_currentIndex + 1) * (CellSizeX + SpacingX), _originContentAnchoredPosition.y);
+                MainGridRect.anchoredPosition = new Vector2(_originGridAnchoredPosition.x + _currentIndex * (CellSizeX + SpacingX), _originGridAnchoredPosition.y);
                 Refresh(_currentIndex);
             }
             else if (Type == TypeEnum.Vertical)
@@ -169,56 +177,80 @@ public class ScrollView : MonoBehaviour
         }
     }
 
-    private void OnClick(ScrollItem scrollItem)
+    private void OnClick(PointerEventData eventData, ButtonPlus buttonPlus)
     {
-        for (int i = 0; i < _gridList.Count; i++)
-        {
-            _gridList[i].SetSelect(scrollItem);
-        }
+        //for (int i = 0; i < _gridList.Count; i++)
+        //{
+        //    _gridList[i].SetSelect((ScrollItem)buttonPlus);
+        //}
 
         if (ClickHandler != null) 
         {
-            ClickHandler(scrollItem);
+            ClickHandler(eventData, buttonPlus);
         }
     }
 
-    private void OnDown(ScrollItem scrollItem)
+    private void OnDown(ButtonPlus buttonPlus)
     {
         if (DownHandler != null)
         {
-            DownHandler(scrollItem);
+            DownHandler(buttonPlus);
         }
     }
 
-    private void OnPress(ScrollItem scrollItem)
+    private void OnPress(ButtonPlus buttonPlus)
     {
         if (PressHandler != null)
         {
-            PressHandler(scrollItem);
+            PressHandler(buttonPlus);
         }
     }
 
-    private void OnUp(ScrollItem scrollItem)
+    private void OnUp(ButtonPlus buttonPlus)
     {
         if (UpHandler != null)
         {
-            UpHandler(scrollItem);
+            UpHandler(buttonPlus);
         }
     }
 
-    private void OnEnter(ScrollItem scrollItem)
+    private void OnEnter(ButtonPlus buttonPlus)
     {
         if (EnterHandler != null)
         {
-            EnterHandler(scrollItem);
+            EnterHandler(buttonPlus);
         }
     }
 
-    private void OnExit(ScrollItem scrollItem)
+    private void OnExit(ButtonPlus buttonPlus)
     {
         if (ExitHandler != null)
         {
-            ExitHandler(scrollItem);
+            ExitHandler(buttonPlus);
+        }
+    }
+
+    private void OnBeginDrag(ButtonPlus buttonPlus)
+    {
+        if (DragBegingHandler != null)
+        {
+            DragBegingHandler(buttonPlus);
+        }
+    }
+
+    private void OnDrag(PointerEventData eventData, ButtonPlus buttonPlus)
+    {
+        if (DragHandler != null)
+        {
+            DragHandler(eventData, buttonPlus);
+        }
+    }
+
+    private void OnEndDrag(ButtonPlus buttonPlus)
+    {
+        if (DragEndHandler != null)
+        {
+            DragEndHandler(buttonPlus);
         }
     }
 
@@ -244,15 +276,15 @@ public class ScrollView : MonoBehaviour
 
         if (Type == TypeEnum.Horizontal)
         {
-            if(Mathf.RoundToInt(Content.anchoredPosition.x - _originContentAnchoredPosition.x) > (CellSizeX + SpacingX) * (_currentIndex + 1))
+            if(Mathf.RoundToInt(-(Content.anchoredPosition.x - _originContentAnchoredPosition.x)) > (CellSizeX + SpacingX) * (_currentIndex + 1))
             {
-                MainGridRect.anchoredPosition = new Vector2(MainGridRect.anchoredPosition.x - CellSizeX - SpacingX, MainGridRect.anchoredPosition.y);
+                MainGridRect.anchoredPosition = new Vector2(MainGridRect.anchoredPosition.x + CellSizeX + SpacingX, MainGridRect.anchoredPosition.y);
                 _currentIndex++;
                 Refresh(_currentIndex);
             }
-            else if(Mathf.RoundToInt(Content.anchoredPosition.x - _originContentAnchoredPosition.x) < (CellSizeX + SpacingX) * _currentIndex)
+            else if(Mathf.RoundToInt(-(Content.anchoredPosition.x - _originContentAnchoredPosition.x)) < (CellSizeX + SpacingX) * _currentIndex)
             {                   
-                MainGridRect.anchoredPosition = new Vector2(MainGridRect.anchoredPosition.x + CellSizeX + SpacingX, MainGridRect.anchoredPosition.y);
+                MainGridRect.anchoredPosition = new Vector2(MainGridRect.anchoredPosition.x - CellSizeX - SpacingX, MainGridRect.anchoredPosition.y);
                 _currentIndex--;
                 Refresh(_currentIndex);
             }

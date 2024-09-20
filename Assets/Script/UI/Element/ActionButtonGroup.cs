@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class ActionButtonGroup : MonoBehaviour
@@ -127,9 +128,9 @@ public class ActionButtonGroup : MonoBehaviour
         ResetButton.gameObject.SetActive(false);
     }
 
-    private void ScrollItemOnClick(ScrollItem scrollItem)
+    private void ScrollItemOnClick(PointerEventData eventData, object data)
     {
-        Command command = (Command)scrollItem.Data;
+        Command command = (Command)data;
         if (BattleController.Instance.IsTutorialActive && !BattleController.Instance.Tutorial.CheckScrollItem(command))
         {
             return;
@@ -181,11 +182,11 @@ public class ActionButtonGroup : MonoBehaviour
         }
     }
 
-    private void ShowInfo(ScrollItem scrollItem)
+    private void ShowInfo(ButtonPlus buttonPlus)
     {
         if(!BattleController.Instance.IsTutorialActive)
         {
-            Command command = (Command)scrollItem.Data;
+            Command command = (Command)buttonPlus.Data;
             if (command is Skill)
             {
                 Skill skill = (Skill)command;
@@ -219,7 +220,7 @@ public class ActionButtonGroup : MonoBehaviour
         }
     }
 
-    private void HideSkillInfo(ScrollItem scrollItem)
+    private void HideSkillInfo(ButtonPlus buttonPlus)
     {
         SkillInfoGroup.gameObject.SetActive(false);
     }

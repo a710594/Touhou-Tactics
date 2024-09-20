@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class ShopEquipGroup : MonoBehaviour
@@ -124,18 +125,18 @@ public class ShopEquipGroup : MonoBehaviour
         }
     }
 
-    private void ScrollItemOnClick(ScrollItem scrollItem)
+    private void ScrollItemOnClick(PointerEventData eventData, ButtonPlus buttonPlus)
     {
-        if (scrollItem.Data is ShopModel)
+        if (buttonPlus.Data is ShopModel)
         {
-            ShopModel shopData = (ShopModel)scrollItem.Data;
+            ShopModel shopData = (ShopModel)buttonPlus.Data;
             SetDetailByData(DataContext.Instance.ItemDic[shopData.ID], DataContext.Instance.EquipDic[shopData.ID]);
             SetMaterial(shopData);
             ShopDataHandler(shopData);
         }
         else
         {
-            Equip equip = (Equip)scrollItem.Data;
+            Equip equip = (Equip)buttonPlus.Data;
             SetDetailByEquip(equip);
             MaterialLabel.text = "";
             EquipHandler(equip);

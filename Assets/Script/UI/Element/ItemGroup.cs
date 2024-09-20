@@ -2,6 +2,7 @@ using Battle;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class ItemGroup : MonoBehaviour
 {
@@ -15,9 +16,9 @@ public class ItemGroup : MonoBehaviour
         PPGroup.SetData(character.CurrentPP);
     }
 
-    private void ItemScrollItemOnClick(ScrollItem scrollItem)
+    private void ItemScrollItemOnClick(PointerEventData eventData, object data)
     {
-        BattleController.Instance.SetSelectedCommand((Command)scrollItem.Data);
+        BattleController.Instance.SetSelectedCommand((Command)data);
         BattleController.Instance.SetState<BattleController.TargetState>();
     }
 

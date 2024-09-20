@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class LogScrollView : MonoBehaviour
 {
-    public ScrollView ScrollView;
+    public ScrollView VerticalScrollView;
+    public ScrollView HorizontalScrollView;
 
     private List<string> _list = new List<string>();
 
@@ -16,8 +17,8 @@ public class LogScrollView : MonoBehaviour
             _list.Add(i.ToString());
         }
 
-        ScrollView.SetData(new List<object>(_list));
-        ScrollView.SetIndex(0);
+        VerticalScrollView.SetData(new List<object>(_list));
+        HorizontalScrollView.SetData(new List<object>(_list));
 
     }  
 
@@ -25,8 +26,10 @@ public class LogScrollView : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            ScrollView.SetData(new List<object>(_list));
-            ScrollView.SetIndex(13);
+            //VerticalScrollView.SetData(new List<object>(_list));
+            VerticalScrollView.SetIndex(8);
+            //HorizontalScrollView.SetData(new List<object>(_list));
+            HorizontalScrollView.SetIndex(8);
 
         }
     }

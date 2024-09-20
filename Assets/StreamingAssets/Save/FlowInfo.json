@@ -1,1 +1,1 @@
-{"HasGetItem":true,"HasSanaeTutorial":true,"HasGetCard":true,"HasUseCard":true,"TriggerEvent":1,"EventConditionList":["TriggerEvent_1","F2","TriggerEvent_2","TriggerEvent_3","SanaeJoin","MarisaJoin"],"LockDic":{"BackCamp":true,"Cook":true,"Shop":true}}
+{"HasGetItem":true,"HasSanaeTutorial":true,"HasGetCard":true,"HasUseCard":true,"TriggerEvent":1,"EventConditionList":["TriggerEvent_1","TriggerEvent_2","TriggerEvent_3","SanaeJoin","F2","MarisaJoin","Cook"],"LockDic":{"BackCamp":true,"Cook":false,"Shop":true}}

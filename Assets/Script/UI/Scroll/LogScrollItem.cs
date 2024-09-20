@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class LogScrollItem : ScrollItem
 {
-    public Text Label;
-
     public override void SetData(object obj)
     {
         base.SetData(obj);

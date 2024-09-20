@@ -115,7 +115,7 @@ public class SceneController
                 FlowController.Instance.Info.EventConditionList.Add("Cook");
             }
         }
-        else if(scene.name == "Explore")
+        else if(scene.name == "Explore" && _lastScene == "Camp")
         {
             if(!FlowController.Instance.Info.EventConditionList.Contains("F2")) 
             {

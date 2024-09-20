@@ -13145,7 +13145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AiType: 0
-  Prefab: NotMoveAI
+  Prefab: FOE
   Map: Tutorial_1
   Seed: 
   Tutorial: BattleTutorial_1
@@ -42878,7 +42878,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AiType: 0
-  Prefab: NotMoveAI
+  Prefab: FOE
   Map: Tutorial_3
   Seed: 
   Tutorial: ReimuTutorial
@@ -47909,7 +47909,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AiType: 0
-  Prefab: NotMoveAI
+  Prefab: FOE
   Map: Tutorial_3
   Seed: 
   Tutorial: BattleTutorial_3

@@ -2,7 +2,6 @@ using Battle;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
 
 namespace Explore
@@ -287,15 +286,19 @@ namespace Explore
 
         public bool CheckTreasure(Vector2Int position)
         {
-            bool result = TileDic[position].Treasure != null;
-            if (!FlowController.Instance.Info.HasGetItem && result)
+            if (TileDic.ContainsKey(position))
             {
-                GetItemEvent getItemEvent = new GetItemEvent();
-                getItemEvent.Start();
-                FlowController.Instance.Info.HasGetItem = true;
+                bool result = TileDic[position].Treasure != null;
+                if (!FlowController.Instance.Info.HasGetItem && result)
+                {
+                    GetItemEvent getItemEvent = new GetItemEvent();
+                    getItemEvent.Start();
+                    FlowController.Instance.Info.HasGetItem = true;
+                }
+                return result;
             }
 
-            return result;
+            return false;
         }
 
         public ExploreFileTreasure GetTreasure() 

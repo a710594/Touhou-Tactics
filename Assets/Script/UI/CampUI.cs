@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class CampUI : MonoBehaviour
@@ -55,6 +56,7 @@ public class CampUI : MonoBehaviour
             {
                 floorList.Add(i);
             }
+            floorList.Remove(1);
             FloorScrollView.SetData(floorList);
 
             if (ExploreHandler != null) 
@@ -68,11 +70,11 @@ public class CampUI : MonoBehaviour
         }
     }
 
-    private void FloorOnClick(ScrollItem scrollItem) 
+    private void FloorOnClick(PointerEventData eventData, ButtonPlus buttonPlus) 
     {
         SceneController.Instance.ChangeScene("Explore", (sceneName) =>
         {
-            Explore.ExploreManager.Instance.Init((int)scrollItem.Data);
+            Explore.ExploreManager.Instance.Init((int)buttonPlus.Data);
         });
     }
 

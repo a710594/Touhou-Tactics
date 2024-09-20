@@ -11,8 +11,6 @@ public class CookEvent : MyEvent
         InputMamager.Instance.IsLock = true;
         ConversationUI.Open(11, true, () =>
         {
-            CharacterManager.Instance.Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[7]));
-
             _campUI = GameObject.Find("CampUI").GetComponent<CampUI>();
             _campUI.CookHandler = CookTutorial;
             _campUI.ShopButton.enabled = false;

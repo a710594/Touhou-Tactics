@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8155425494643806803}
   - component: {fileID: 6818860728454685270}
   - component: {fileID: -2334162122304789657}
+  - component: {fileID: -563804574259870685}
   m_Layer: 0
   m_Name: Sanae
   m_TagString: Untagged
@@ -117,6 +118,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FlashColor: {r: 1, g: 0, b: 0, a: 1}
   SpriteRenderer: {fileID: 8155425494643806803}
+--- !u!65 &-563804574259870685
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8155425494643806805}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8845001781432753638
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class BagItemGroup : MonoBehaviour
@@ -32,9 +33,9 @@ public class BagItemGroup : MonoBehaviour
         CommentLabel.text = text;
     }
 
-    private void ScrollItemOnClick(ScrollItem scrollItem)
+    private void ScrollItemOnClick(PointerEventData eventData, object data)
     {
-        object obj = scrollItem.Data;
+        object obj = data;
         if (obj is Item)
         {
             Item item = (Item)obj;
