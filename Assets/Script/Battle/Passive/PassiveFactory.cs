@@ -33,6 +33,10 @@ namespace Battle
             {
                 passive = new PhoenixPassive(DataContext.Instance.PassiveDic[id]);
             }
+            else if (id == 7)
+            {
+                passive = new MiraclePassive(DataContext.Instance.PassiveDic[id]);
+            }
 
             return passive;
         }

@@ -14,6 +14,10 @@ public class RecoverEffect : Effect
         if (hitType != HitType.Miss)
         {
             int recover = Mathf.RoundToInt((float)Value * (float)user.MEN / 100f);
+            if (Passive.Contains<MiraclePassive>(user.PassiveList))
+            {
+                recover = MiraclePassive.GetValue(recover);
+            }
             target.SetRecover(recover);
             logList.Add(new Log(user, target, this, hitType, recover.ToString()));
         }
