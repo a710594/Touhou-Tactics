@@ -41,11 +41,11 @@ public class Dijkstra
         {
             dis[i] = -1;
         }
-        dis[0] = 0;
-        dis[1] = 1;
-        dis[2] = 12;
+        //dis[0] = 0;
+        //dis[1] = 1;
+        //dis[2] = 12;
 
-        for (int i = 1; i < 6; i++)
+        for (int i = 0; i < 6; i++)
         {
             nonVisitedList.Add(i);
         }
@@ -53,6 +53,12 @@ public class Dijkstra
 
     public void GetShortest(int start) 
     {
+        nonVisitedList.Remove(start);
+        for (int i=0; i<adj.GetLength(1); i++) 
+        {
+            dis[i] = adj[start, i];
+        }
+
         int index;
         int minIndex;
         int minDis;
@@ -68,6 +74,10 @@ public class Dijkstra
                     minIndex = index;
                     minDis = dis[index];
                 }
+            }
+            if(minIndex == -1)
+            {
+                break;
             }
             nonVisitedList.Remove(minIndex);
             for (int i = 0; i < adj.GetLength(1); i++)
