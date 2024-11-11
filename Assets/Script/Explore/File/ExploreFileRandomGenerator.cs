@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Explore;
 using Graphs;
 using UnityEngine;
 using UnityEngine.Rendering;
+using static Generator2D;
 
 public class ExploreFileRandomGenerator
 {
@@ -33,7 +35,7 @@ public class ExploreFileRandomGenerator
     Delaunay2D delaunay;
     HashSet<Prim.Edge> selectedEdges;
 
-    private Transform _root;
+    private System.Random _random;
     private LayerMask _mapLayer = LayerMask.NameToLayer("Map");
     private Grid2D<CellType> grid;
     private List<Vector2Int> _groundList = new List<Vector2Int>();
@@ -51,33 +53,41 @@ public class ExploreFileRandomGenerator
         File.Floor = floorData.Floor;
         File.Size = new Vector2Int(floorData.Width, floorData.Height);
         grid = new Grid2D<CellType>(File.Size, Vector2Int.zero);
-        _root = GameObject.Find("Generator2D").transform;
         PlaceRooms(floorData);
         Triangulate();
         CreateHallways();
         PathfindHallways();
         PlaceWall();
         PlaceStartAndGoal();
-        SetTreasure();
-        SetEnemy(floorData);
+        //SetTreasure();
+        //SetEnemy(floorData);
 
         return File;
     }
 
     private void PlaceRooms(RandomFloorModel floorData)
     {
+        _random = new System.Random(0);
         RoomModel roomData;
+        Vector2Int v2;
+        TreasureModel treasureData;
+        ExploreFileTreasure treasureFile;
+        int treasureCount;
         for (int i = 0; i < floorData.RoomCount * 2; i++) 
         {
             roomData = DataContext.Instance.RoomDic[floorData.GetRoomID()];
             Vector2Int location = new Vector2Int(
-                Random.Range(0, File.Size.x),
-                Random.Range(0, File.Size.y)
+                //Random.Range(0, File.Size.x),
+                //Random.Range(0, File.Size.y)
+                _random.Next(0, File.Size.x),
+                _random.Next(0, File.Size.y)
             );
 
             Vector2Int roomSize = new Vector2Int(
-                Random.Range(roomData.MinWidth, roomData.MaxWidth + 1),
-                Random.Range(roomData.MinHeight, roomData.MaxHeight + 1)
+                //Random.Range(roomData.MinWidth, roomData.MaxWidth + 1),
+                //Random.Range(roomData.MinHeight, roomData.MaxHeight + 1)
+                _random.Next(roomData.MinWidth, roomData.MaxWidth + 1),
+                _random.Next(roomData.MinHeight, roomData.MaxHeight + 1)
             );
 
             bool add = true;
@@ -104,6 +114,21 @@ public class ExploreFileRandomGenerator
                     File.TileList.Add(new ExploreFileTile(true, false, "Ground", pos));
                     _groundList.Add(pos);
                 }
+
+                //treasureCount = Random.Range(roomData.MinTreasureCount, roomData.MaxTreasureCount);
+                treasureCount = _random.Next(roomData.MinTreasureCount, roomData.MaxTreasureCount);
+                for (int j = 0; j < treasureCount; j++)
+                {
+
+                    v2 = newRoom.GetRandomPosition();
+                    if (!_treasurePositionList.Contains(v2))
+                    {
+                        treasureData = DataContext.Instance.TreasureDic[roomData.GetTreasure()];
+                        treasureFile = new ExploreFileTreasure(treasureData.GetItem(), treasureData.Prefab, treasureData.Height, v2, 0);
+                        File.TreasureList.Add(treasureFile);
+                        newRoom.SetNotAvailable(v2);
+                    }
+                }
             }
         }
     }
@@ -125,14 +150,20 @@ public class ExploreFileRandomGenerator
             edges.Add(new Prim.Edge(edge.U, edge.V));
         }
 
-        List<Prim.Edge> mst = Prim.MinimumSpanningTree(edges, edges[0].U);
+        List<Prim.Edge> mst = Prim.MaximumSpanningTree(edges, edges[0].U);
 
         selectedEdges = new HashSet<Prim.Edge>(mst);
+        foreach (var edge in selectedEdges)
+        {
+            Debug.Log(((Vertex<Room>)edge.U).Item.bounds.position + " " + ((Vertex<Room>)edge.V).Item.bounds.position);
+        }
         var remainingEdges = new HashSet<Prim.Edge>(edges);
         remainingEdges.ExceptWith(selectedEdges);
 
         foreach (var edge in remainingEdges) {
-            if (Random.Range(0f, 1f) < 0.125) {
+            //if (Random.Range(0f, 1f) < 0.125) {
+            if (_random.NextDouble() < 0.125)
+            {
                 selectedEdges.Add(edge);
             }
         }
