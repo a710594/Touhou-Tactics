@@ -52,6 +52,14 @@ public class test : MonoBehaviour
             DataContext.Instance.RoomDic.Add(DataContext.Instance.RoomList[i].ID, DataContext.Instance.RoomList[i]);
         }
 
+        DataContext.Instance.TreasureList = DataContext.Instance.Load<List<TreasureModel>>("Treasure", PrePathEnum.Data);
+        DataContext.Instance.TreasureDic.Clear();
+        for (int i = 0; i < DataContext.Instance.TreasureList.Count; i++)
+        {
+            DataContext.Instance.TreasureList[i].GetList();
+            DataContext.Instance.TreasureDic.Add(DataContext.Instance.TreasureList[i].ID, DataContext.Instance.TreasureList[i]);
+        }
+
         Explore.ExploreFile File = ExploreFileRandomGenerator.Instance.Create(floorData);
         Debug.Log(File);
     }
