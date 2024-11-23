@@ -73,7 +73,7 @@ namespace Battle
         {
             Info = info;
 
-            if (tutorial!=null)
+            if (tutorial!=null && tutorial!="")
             {
                 var objectType = Type.GetType("Battle." + tutorial);
                 Tutorial = (BattleTutorial)Activator.CreateInstance(objectType);
@@ -395,10 +395,11 @@ namespace Battle
             info.AI = (BattleAI)Activator.CreateInstance(t);
             info.AI.Init(info);
             info.Position = position;
-            GameObject obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/" + info.Controller), Vector3.zero, Quaternion.identity);
+            GameObject obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/Enemy/" + info.Enemy.Controller), Vector3.zero, Quaternion.identity);
             obj.transform.position = info.Position;
             info.Controller = obj.GetComponent<BattleCharacterController>();
             info.Controller.Init(info.Sprite);
+            info.Controller.SetAngle();
             info.Controller.MoveEndHandler += OnMoveEnd;
             BattleUI.SetLittleHpBarAnchor(info);
             BattleUI.SetLittleHpBarValue(info);

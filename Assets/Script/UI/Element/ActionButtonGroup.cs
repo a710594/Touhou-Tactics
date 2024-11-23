@@ -128,9 +128,9 @@ public class ActionButtonGroup : MonoBehaviour
         ResetButton.gameObject.SetActive(false);
     }
 
-    private void ScrollItemOnClick(PointerEventData eventData, object data)
+    private void ScrollItemOnClick(PointerEventData eventData, ButtonPlus buttonPlus)
     {
-        Command command = (Command)data;
+        Command command = (Command)buttonPlus.Data;
         if (BattleController.Instance.IsTutorialActive && !BattleController.Instance.Tutorial.CheckScrollItem(command))
         {
             return;

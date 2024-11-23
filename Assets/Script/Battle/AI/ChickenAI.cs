@@ -8,11 +8,6 @@ namespace Battle
     {
         private int _count = 0;
 
-        public override void Init(BattleCharacterInfo info)
-        {
-            _info = info;
-        }
-
         public override void Start()
         {
             if (_count == 0) 
