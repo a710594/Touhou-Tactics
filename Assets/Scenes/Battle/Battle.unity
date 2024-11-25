@@ -12450,6 +12450,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 3927552428508926666, guid: 9340b128c48d55c40be841323053e5c5, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3927552428508926666, guid: 9340b128c48d55c40be841323053e5c5, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3927552428780558464, guid: 9340b128c48d55c40be841323053e5c5, type: 3}
       propertyPath: ScrollItem
       value: 

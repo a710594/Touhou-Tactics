@@ -15,7 +15,7 @@ namespace Battle
 
         public BattleInfo Get(string map) //固定的地圖
         { 
-            BattleFileFixed file = DataContext.Instance.Load<BattleFileFixed>(map, DataContext.PrePathEnum.MapBattle);
+            BattleFile file = DataContext.Instance.Load<BattleFile>(map, DataContext.PrePathEnum.MapBattle);
             BattleInfo info = new BattleInfo(file);
 
             CreateObject(info);
@@ -25,7 +25,7 @@ namespace Battle
 
         public BattleInfo Generate(EnemyGroupModel data) //有隨機成分的地圖
         {
-            BattleFileFixed file = DataContext.Instance.Load<BattleFileFixed>(data.GetMap(), DataContext.PrePathEnum.MapSeed);
+            BattleFile file = DataContext.Instance.Load<BattleFile>(data.GetMap(), DataContext.PrePathEnum.MapSeed);
             BattleInfo info = new BattleInfo(file);
             info.Lv = data.Lv;
             info.Exp = data.Exp;

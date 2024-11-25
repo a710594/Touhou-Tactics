@@ -44,12 +44,21 @@ public class ExploreFileRandomGenerator
     private List<Vector2Int> _wallList = new List<Vector2Int>();
     private List<Vector2Int> _treasurePositionList = new List<Vector2Int>();
 
-    public ExploreFile Create(RandomFloorModel floorData)
+    public ExploreFile Create(RandomFloorModel floorData, int seed = 0)
     {
         roomList.Clear();
         _groundList.Clear();
         _wallList.Clear();
         _treasurePositionList.Clear();
+
+        if (seed == 0)
+        {
+            _random = new System.Random(Guid.NewGuid().GetHashCode());
+        }
+        else
+        {
+            _random = new System.Random(seed);
+        }
 
         File = new ExploreFile();
         File.Floor = floorData.Floor;
@@ -69,7 +78,6 @@ public class ExploreFileRandomGenerator
 
     private void PlaceRooms(RandomFloorModel floorData)
     {
-        _random = new System.Random(0);
         RoomModel roomData;
         Vector2Int v2;
         TreasureModel treasureData;

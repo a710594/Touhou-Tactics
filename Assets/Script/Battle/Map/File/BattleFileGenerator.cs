@@ -79,7 +79,7 @@ namespace Battle
             }
 
             //string path = Application.streamingAssetsPath + "/Map/Battle/" + FileName + ".txt";
-            BattleFileFixed file = new BattleFileFixed();
+            BattleFile file = new BattleFile();
             file.MustBeEqualToNeedCount = MustBeEqualToNeedCount;
             file.NeedCount = NeedCount;
             file.Exp = Exp;

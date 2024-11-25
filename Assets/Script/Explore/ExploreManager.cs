@@ -433,34 +433,6 @@ namespace Explore
             CheckVidsit(Player.transform);
         }
 
-        /*public void SetCamera()
-        {
-            Info.Player = Camera.main.GetComponent<ExploreCharacterController>();
-            Info.Player.transform.position = new Vector3(Info.Start.x, 1, Info.Start.y);
-            Info.Player.transform.eulerAngles = new Vector3(0, 0, 0);
-
-            float x = 1;
-            float y = 1;
-            if(Info.Size.x > 60) 
-            {
-                x = Info.Size.x / 60f;
-            }
-            if (Info.Size.y > 60)
-            {
-                y = Info.Size.y / 60f;
-            }
-            Camera bigMapCamera = GameObject.Find("BigMapCamera").GetComponent<Camera>();
-            bigMapCamera.orthographicSize = (bigMapCamera.orthographicSize * x) + 2;
-            bigMapCamera.gameObject.SetActive(false);
-
-            ExploreUI exploreUI = GameObject.Find("ExploreUI").GetComponent<ExploreUI>();
-            exploreUI.SetCameraPosition(Info.Size.x / 2, Info.Size.y / 2 - 2, x);
-
-            Vector2Int v2 = Utility.ConvertToVector2Int(Info.Player.transform.position);
-            CheckEvent(v2);
-            CheckVidsit(Info.Player.transform);
-        }*/
-
         private int _enemyMoveCount;
         public void EnemyMove() 
         {

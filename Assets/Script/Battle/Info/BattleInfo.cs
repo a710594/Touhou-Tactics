@@ -25,7 +25,7 @@ namespace Battle
 
         public BattleInfo() { }
 
-        public BattleInfo(BattleFileFixed file) 
+        public BattleInfo(BattleFile file) 
         {
             MinX = file.MinX;
             MaxX = file.MaxX;
