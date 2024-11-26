@@ -4,8 +4,17 @@ using UnityEngine;
 
 public class Room 
 {
+    public Vector2Int? Door = null;
     public RectInt bounds;
     public List<Room> AdjList = new List<Room>();
+
+    public bool Isolated 
+    {
+        get
+        {
+            return AdjList.Count == 1;
+        }
+    }
 
     private List<Vector2Int> _availableList = new List<Vector2Int>();
 

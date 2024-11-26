@@ -8,6 +8,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using static Generator2D;
+using static UnityEditor.PlayerSettings;
 
 public class ExploreFileRandomGenerator
 {
@@ -118,12 +119,23 @@ public class ExploreFileRandomGenerator
 
             if (add) {
                 roomList.Add(newRoom);
-                foreach (var pos in newRoom.bounds.allPositionsWithin)
+                Vector2Int pos;
+                for (int j=newRoom.bounds.xMin + 1; j<newRoom.bounds.xMax; j++) 
                 {
-                    grid[pos] = CellType.Room;
-                    File.TileList.Add(new ExploreFileTile(true, false, "Ground", pos));
-                    _groundList.Add(pos);
+                    for (int k=newRoom.bounds.yMin + 1; k<newRoom.bounds.yMax; k++) 
+                    {
+                        pos = new Vector2Int(j, k);
+                        grid[pos] = CellType.Room;
+                        File.TileList.Add(new ExploreFileTile(true, false, "Ground", pos));
+                        _groundList.Add(pos);
+                    }
                 }
+                //foreach (var pos in newRoom.bounds.allPositionsWithin)
+                //{
+                //    grid[pos] = CellType.Room;
+                //    File.TileList.Add(new ExploreFileTile(true, false, "Ground", pos));
+                //    _groundList.Add(pos);
+                //}
             }
         }
     }
@@ -175,56 +187,41 @@ public class ExploreFileRandomGenerator
 
         List<Room> roomList = new List<Room>(nodeDic.Values);
 
+        selectedEdges = new HashSet<Prim.Edge>(mst);
+        HashSet<Prim.Edge> remainingEdges = new HashSet<Prim.Edge>(edges);
+        remainingEdges.ExceptWith(selectedEdges);
+        List<Prim.Edge> remainList = new List<Prim.Edge>(remainingEdges);
+
         //尋找孤立的點
         List<Room> isolated = new List<Room>();
-        for (int i=0; i<roomList.Count; i++) 
+        for (int i = 0; i < roomList.Count; i++)
         {
-            if (roomList[i].AdjList.Count == 1) 
+            if (roomList[i].AdjList.Count == 1)
             {
                 isolated.Add(roomList[i]);
             }
         }
 
         //去除孤立點的邊
-        for (int i=0; i< mst.Count; i++) 
-        {
-            for (int j=0; j<isolated.Count; j++) 
-            {
-                //if (isolated[j].Position == ((Vertex<Room>)mst[i].U).Item.bounds.position || isolated[j].Position == ((Vertex<Room>)mst[i].V).Item.bounds.position) 
-                if (isolated[j] == ((Vertex<Room>)mst[i].U).Item || isolated[j] == ((Vertex<Room>)mst[i].V).Item)
-                {
-                    mst.RemoveAt(i);
-                    i--;
-                    break;
-                }
-            }
-        }
-
-        for (int i = 0; i < edges.Count; i++)
+        for (int i = 0; i < remainList.Count; i++)
         {
             for (int j = 0; j < isolated.Count; j++)
             {
-                //if (isolated[j].Position == ((Vertex<Room>)edges[i].U).Item.bounds.position || isolated[j].Position == ((Vertex<Room>)edges[i].V).Item.bounds.position)
-                if (isolated[j] == ((Vertex<Room>)edges[i].U).Item || isolated[j] == ((Vertex<Room>)edges[i].V).Item)
+                if (isolated[j] == ((Vertex<Room>)remainList[i].U).Item || isolated[j] == ((Vertex<Room>)remainList[i].V).Item)
                 {
-                    edges.RemoveAt(i);
+                    remainList.RemoveAt(i);
                     i--;
                     break;
                 }
             }
         }
 
-        selectedEdges = new HashSet<Prim.Edge>(mst);
-        var remainingEdges = new HashSet<Prim.Edge>(edges);
-        remainingEdges.ExceptWith(selectedEdges);
-
-        foreach (var edge in remainingEdges)
+        for (int i = 0; i < remainList.Count; i++)
         {
             if (UnityEngine.Random.Range(0f, 1f) < 0.125)
             //if (_random.NextDouble() < 0.125)
             {
-                selectedEdges.Add(edge);
-                Debug.Log(((Vertex<Room>)edge.U).Item.bounds.position + " " + ((Vertex<Room>)edge.V).Item.bounds.position);
+                selectedEdges.Add(remainList[i]);
             }
         }
 
@@ -307,10 +304,49 @@ public class ExploreFileRandomGenerator
             var startRoom = (edge.U as Vertex<Room>).Item;
             var endRoom = (edge.V as Vertex<Room>).Item;
 
-            var startPosf = startRoom.bounds.center;
-            var endPosf = endRoom.bounds.center;
-            var startPos = new Vector2Int((int)startPosf.x, (int)startPosf.y);
-            var endPos = new Vector2Int((int)endPosf.x, (int)endPosf.y);
+            //var startPosf = startRoom.bounds.center;
+            //var endPosf = endRoom.bounds.center;
+            //var startPos = new Vector2Int((int)startPosf.x, (int)startPosf.y);
+            //var endPos = new Vector2Int((int)endPosf.x, (int)endPosf.y);
+
+            Vector2Int startPos = Vector2Int.RoundToInt(startRoom.bounds.center);
+            Vector2Int endPos = Vector2Int.RoundToInt(endRoom.bounds.center);
+
+            if(MathF.Abs(startPos.x - endPos.x) > MathF.Abs(startPos.y - endPos.y))
+            {
+                if(startPos.x > endPos.x)
+                {
+                    startPos.x = startRoom.bounds.xMin;
+                    endPos.x = endRoom.bounds.xMax;
+                }
+                else
+                {
+                    startPos.x = startRoom.bounds.xMax;
+                    endPos.x = endRoom.bounds.xMin;
+                }
+            }
+            else
+            {
+                if (startPos.y > endPos.y)
+                {
+                    startPos.y = startRoom.bounds.yMin;
+                    endPos.y = endRoom.bounds.yMax;
+                }
+                else
+                {
+                    startPos.y = startRoom.bounds.yMax;
+                    endPos.y = endRoom.bounds.yMin;
+                }
+            }
+
+            if (startRoom.Isolated) 
+            {
+                startRoom.Door = startPos;
+            }
+            if (endRoom.Isolated) 
+            {
+                endRoom.Door = endPos;
+            }
 
             var path = aStar.FindPath(startPos, endPos, (DungeonPathfinder2D.Node a, DungeonPathfinder2D.Node b) => {
                 var pathCost = new DungeonPathfinder2D.PathCost();
@@ -342,7 +378,7 @@ public class ExploreFileRandomGenerator
                     if (grid[current] == CellType.None)
                     {
                         grid[current] = CellType.Hallway;
-                        File.TileList.Add(new ExploreFileTile(true, false, "Ground", current));
+                        File.TileList.Add(new ExploreFileTile(true, false, "Path_Cube", current));
                         _groundList.Add(current);
                     }
 

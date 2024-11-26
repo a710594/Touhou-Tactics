@@ -77,8 +77,14 @@ public class ExploreMapBuilder : MonoBehaviour
             info.TileDic[file.TriggerList[i].Position].Event = file.TriggerList[i].Name;
         }
 
-        gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Goal"), Vector3.zero, Quaternion.identity);
-        gameObj.transform.position = new Vector3(file.Goal.x, 0, file.Goal.y);
+        gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Start_Cube"), Vector3.zero, Quaternion.identity);
+        gameObj.transform.position = new Vector3(file.Start.x, 1, file.Start.y);
+        gameObj.transform.eulerAngles = new Vector3(90, 0, 0);
+        gameObj.transform.SetParent(parent);
+
+        //gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/GoalParticle"), Vector3.zero, Quaternion.identity);
+        gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Goal_Cube"), Vector3.zero, Quaternion.identity);
+        gameObj.transform.position = new Vector3(file.Goal.x, 1, file.Goal.y);
         gameObj.transform.eulerAngles = new Vector3(90, 0, 0);
         gameObj.transform.SetParent(parent);
         info.TileDic[file.Goal].Object.Icon = gameObj;
@@ -86,8 +92,8 @@ public class ExploreMapBuilder : MonoBehaviour
         {
             info.TileDic[file.Goal].Object.Icon.layer = _mapLayer;
         }
-        info.TileDic[file.Goal].Object.Icon.GetComponent<Goal>().Red.SetActive(!file.IsArrive);
-        info.TileDic[file.Goal].Object.Icon.GetComponent<Goal>().Blue.SetActive(file.IsArrive);
+        //info.TileDic[file.Goal].Object.Icon.GetComponent<Goal>().Red.SetActive(!file.IsArrive);
+        //info.TileDic[file.Goal].Object.Icon.GetComponent<Goal>().Blue.SetActive(file.IsArrive);
 
         ExploreEnemyController controller;
         for (int i = 0; i < file.EnemyList.Count; i++)
@@ -113,8 +119,8 @@ public class ExploreMapBuilder : MonoBehaviour
             y = file.Size.y / 60f;
         }
 
-        ExploreUI exploreUI = GameObject.Find("ExploreUI").GetComponent<ExploreUI>();
-        exploreUI.SetCameraPosition(file.Size.x / 2, file.Size.y / 2, x);
+        //ExploreUI exploreUI = GameObject.Find("ExploreUI").GetComponent<ExploreUI>();
+        //exploreUI.SetCameraPosition(file.Size.x / 2, file.Size.y / 2, x);
 
         return info;
     }

@@ -9638,7 +9638,7 @@ GameObject:
   - component: {fileID: 5109358732564115827}
   - component: {fileID: 8785236077416886021}
   m_Layer: 1
-  m_Name: Goal
+  m_Name: GoalParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
