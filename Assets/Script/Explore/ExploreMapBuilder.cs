@@ -10,37 +10,28 @@ public class ExploreMapBuilder : MonoBehaviour
 
     private LayerMask _mapLayer;
 
-    public ExploreInfo GetFixed(int floor) 
+    public void GetFixed(ExploreFile file, out Dictionary<Vector2Int, ExploreFileTile> tileDic, out List<ExploreEnemyController> enemyList)
     {
-        FixedFloorModel data = DataContext.Instance.FixedFloorDic[floor];
-        ExploreFile file = DataContext.Instance.Load<ExploreFile>(data.Name, DataContext.PrePathEnum.MapExplore);
-        ExploreInfo info = CreateObject(file);
-
-        return info;
+        CreateObject(file, out tileDic, out enemyList);
     }
 
-    public ExploreInfo GetRandom(int floor, int seed) 
+    public void GetRandom(ExploreFile file, out Dictionary<Vector2Int, ExploreFileTile> tileDic, out List<ExploreEnemyController> enemyList) 
     {
-        RandomFloorModel data = DataContext.Instance.RandomFloorDic[floor];
-        ExploreFile file = ExploreFileRandomGenerator.Instance.Create(data, seed);
-        ExploreInfo info = CreateObject(file);
-
-        return info;
+        CreateObject(file, out tileDic, out  enemyList);
     }
 
-    public ExploreInfo CreateObject(ExploreFile file)
+    private void CreateObject(ExploreFile file, out Dictionary<Vector2Int, ExploreFileTile> tileDic, out List<ExploreEnemyController> enemyList)
     {
         GameObject gameObj;
         TileObject tileObj;
         TreasureObject treasureObj;
         Transform parent = GameObject.Find("Generator2D").transform;
+        tileDic = new Dictionary<Vector2Int, ExploreFileTile>();
 
         for (int i = parent.childCount; i > 0; --i)
         {
             GameObject.DestroyImmediate(parent.GetChild(0).gameObject);
         }
-
-        ExploreInfo info = new ExploreInfo(file);
 
         for (int i = 0; i < file.TileList.Count; i++)
         {
@@ -53,7 +44,7 @@ public class ExploreMapBuilder : MonoBehaviour
                 tileObj.Quad.layer = _mapLayer;
             }
             file.TileList[i].Object = tileObj;
-            info.TileDic.Add(file.TileList[i].Position, file.TileList[i]);
+            tileDic.Add(file.TileList[i].Position, file.TileList[i]);
         }
 
         for (int i = 0; i < file.TreasureList.Count; i++)
@@ -63,9 +54,9 @@ public class ExploreMapBuilder : MonoBehaviour
             file.TreasureList[i].Object = treasureObj;
             treasureObj.transform.position = new Vector3(file.TreasureList[i].Position.x, file.TreasureList[i].Height, file.TreasureList[i].Position.y);
             treasureObj.transform.SetParent(parent);
-            info.TileDic[file.TreasureList[i].Position].Treasure = file.TreasureList[i];
-            info.TileDic[file.TreasureList[i].Position].IsWalkable = false;
-            if (info.TileDic[file.TreasureList[i].Position].IsVisited && treasureObj.Icon != null)
+            tileDic[file.TreasureList[i].Position].Treasure = file.TreasureList[i];
+            tileDic[file.TreasureList[i].Position].IsWalkable = false;
+            if (tileDic[file.TreasureList[i].Position].IsVisited && treasureObj.Icon != null)
             {
                 treasureObj.Icon.layer = _mapLayer;
             }
@@ -74,7 +65,14 @@ public class ExploreMapBuilder : MonoBehaviour
 
         for (int i = 0; i < file.TriggerList.Count; i++)
         {
-            info.TileDic[file.TriggerList[i].Position].Event = file.TriggerList[i].Name;
+            tileDic[file.TriggerList[i].Position].Event = file.TriggerList[i].Name;
+        }
+
+        for (int i=0; i<file.DoorList.Count; i++) 
+        {
+            gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Door_Cube"), Vector3.zero, Quaternion.identity);
+            gameObj.transform.position = new Vector3(file.DoorList[i].x, 1, file.DoorList[i].y);
+            gameObj.transform.SetParent(parent);
         }
 
         gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Start_Cube"), Vector3.zero, Quaternion.identity);
@@ -87,25 +85,26 @@ public class ExploreMapBuilder : MonoBehaviour
         gameObj.transform.position = new Vector3(file.Goal.x, 1, file.Goal.y);
         gameObj.transform.eulerAngles = new Vector3(90, 0, 0);
         gameObj.transform.SetParent(parent);
-        info.TileDic[file.Goal].Object.Icon = gameObj;
-        if (info.TileDic[file.Goal].IsVisited)
+        tileDic[file.Goal].Object.Icon = gameObj;
+        if (tileDic[file.Goal].IsVisited)
         {
-            info.TileDic[file.Goal].Object.Icon.layer = _mapLayer;
+            tileDic[file.Goal].Object.Icon.layer = _mapLayer;
         }
         //info.TileDic[file.Goal].Object.Icon.GetComponent<Goal>().Red.SetActive(!file.IsArrive);
         //info.TileDic[file.Goal].Object.Icon.GetComponent<Goal>().Blue.SetActive(file.IsArrive);
 
-        ExploreEnemyController controller;
+        ExploreEnemyController enemy;
+        enemyList = new List<ExploreEnemyController>();
         for (int i = 0; i < file.EnemyList.Count; i++)
         {
             gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + file.EnemyList[i].Prefab), Vector3.zero, Quaternion.identity);
             gameObj.transform.position = new Vector3(file.EnemyList[i].Position.x, 1, file.EnemyList[i].Position.y);
             gameObj.transform.eulerAngles = new Vector3(0, file.EnemyList[i].RotationY, 0);
             gameObj.transform.SetParent(parent);
-            controller = gameObj.GetComponent<ExploreEnemyController>();
-            controller.SetAI(file.EnemyList[i]);
-            info.TileDic[file.EnemyList[i].Position].IsWalkable = false;
-            file.EnemyList[i].Controller = controller;
+            enemy = gameObj.GetComponent<ExploreEnemyController>();
+            enemy.SetAI(file.EnemyList[i]);
+            enemyList.Add(enemy);
+            tileDic[file.EnemyList[i].Position].IsWalkable = false;
         }
 
         float x = 1;
@@ -121,8 +120,6 @@ public class ExploreMapBuilder : MonoBehaviour
 
         //ExploreUI exploreUI = GameObject.Find("ExploreUI").GetComponent<ExploreUI>();
         //exploreUI.SetCameraPosition(file.Size.x / 2, file.Size.y / 2, x);
-
-        return info;
     }
 
     private void Awake()

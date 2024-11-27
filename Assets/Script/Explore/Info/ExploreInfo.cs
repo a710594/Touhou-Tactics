@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Explore
 {
-    public class ExploreInfo
+    /*public class ExploreInfo
     {
         public bool IsArrive = false;
         public int Floor;
@@ -27,5 +27,5 @@ namespace Explore
             PlayerPosition = file.PlayerPosition;
             PlayerRotationY = file.PlayerRotationY;
         }
-    }
+    }*/
 }

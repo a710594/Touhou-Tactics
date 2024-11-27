@@ -13,6 +13,8 @@ namespace Explore
         public Vector2Int Position;
 
         [NonSerialized]
+        public bool Door = false;
+        [NonSerialized]
         public string Event = null;
         [NonSerialized]
         public TileObject Object;

@@ -40,10 +40,13 @@ public class ExploreFileRandomGenerator
 
     private System.Random _random;
     private LayerMask _mapLayer = LayerMask.NameToLayer("Map");
+    private Room _startRoom;
+    private Room _endRoom;
     private Grid2D<CellType> grid;
     private List<Vector2Int> _groundList = new List<Vector2Int>();
     private List<Vector2Int> _wallList = new List<Vector2Int>();
     private List<Vector2Int> _treasurePositionList = new List<Vector2Int>();
+    private List<Vector2Int> _doorList = new List<Vector2Int>();
 
     public ExploreFile Create(RandomFloorModel floorData, int seed = 0)
     {
@@ -51,6 +54,7 @@ public class ExploreFileRandomGenerator
         _groundList.Clear();
         _wallList.Clear();
         _treasurePositionList.Clear();
+        _doorList.Clear();
 
         if (seed == 0)
         {
@@ -225,14 +229,14 @@ public class ExploreFileRandomGenerator
             }
         }
 
-        Room n1 = DFS(roomList, roomList[0]);
-        Room n2 = DFS(roomList, n1);
+        _startRoom = DFS(roomList, roomList[0]);
+        _endRoom = DFS(roomList, _startRoom);
 
-        roomList.Remove(n1);
-        roomList.Remove(n2);
+        roomList.Remove(_startRoom);
+        roomList.Remove(_endRoom);
 
-        isolated.Remove(n1);
-        isolated.Remove(n2);
+        isolated.Remove(_startRoom);
+        isolated.Remove(_endRoom);
 
         Vector2Int pos;
         TreasureModel treasureData;
@@ -301,57 +305,57 @@ public class ExploreFileRandomGenerator
         DungeonPathfinder2D aStar = new DungeonPathfinder2D(new Vector2Int(File.Size.x, File.Size.y));
 
         foreach (var edge in selectedEdges) {
-            var startRoom = (edge.U as Vertex<Room>).Item;
-            var endRoom = (edge.V as Vertex<Room>).Item;
+            var room_1 = (edge.U as Vertex<Room>).Item;
+            var room_2 = (edge.V as Vertex<Room>).Item;
 
             //var startPosf = startRoom.bounds.center;
             //var endPosf = endRoom.bounds.center;
             //var startPos = new Vector2Int((int)startPosf.x, (int)startPosf.y);
             //var endPos = new Vector2Int((int)endPosf.x, (int)endPosf.y);
 
-            Vector2Int startPos = Vector2Int.RoundToInt(startRoom.bounds.center);
-            Vector2Int endPos = Vector2Int.RoundToInt(endRoom.bounds.center);
+            Vector2Int pos_1 = Vector2Int.RoundToInt(room_1.bounds.center);
+            Vector2Int pos_2 = Vector2Int.RoundToInt(room_2.bounds.center);
 
-            if(MathF.Abs(startPos.x - endPos.x) > MathF.Abs(startPos.y - endPos.y))
+            if(MathF.Abs(pos_1.x - pos_2.x) > MathF.Abs(pos_1.y - pos_2.y))
             {
-                if(startPos.x > endPos.x)
+                if(pos_1.x > pos_2.x)
                 {
-                    startPos.x = startRoom.bounds.xMin;
-                    endPos.x = endRoom.bounds.xMax;
+                    pos_1.x = room_1.bounds.xMin;
+                    pos_2.x = room_2.bounds.xMax;
                 }
                 else
                 {
-                    startPos.x = startRoom.bounds.xMax;
-                    endPos.x = endRoom.bounds.xMin;
+                    pos_1.x = room_1.bounds.xMax;
+                    pos_2.x = room_2.bounds.xMin;
                 }
             }
             else
             {
-                if (startPos.y > endPos.y)
+                if (pos_1.y > pos_2.y)
                 {
-                    startPos.y = startRoom.bounds.yMin;
-                    endPos.y = endRoom.bounds.yMax;
+                    pos_1.y = room_1.bounds.yMin;
+                    pos_2.y = room_2.bounds.yMax;
                 }
                 else
                 {
-                    startPos.y = startRoom.bounds.yMax;
-                    endPos.y = endRoom.bounds.yMin;
+                    pos_1.y = room_1.bounds.yMax;
+                    pos_2.y = room_2.bounds.yMin;
                 }
             }
 
-            if (startRoom.Isolated) 
+            if (room_1.Isolated && room_1 != _startRoom && room_1 != _endRoom) 
             {
-                startRoom.Door = startPos;
+                _doorList.Add(pos_1);
             }
-            if (endRoom.Isolated) 
+            if (room_2.Isolated && room_2 != _startRoom && room_2 != _endRoom) 
             {
-                endRoom.Door = endPos;
+                _doorList.Add(pos_2);
             }
 
-            var path = aStar.FindPath(startPos, endPos, (DungeonPathfinder2D.Node a, DungeonPathfinder2D.Node b) => {
+            var path = aStar.FindPath(pos_1, pos_2, (DungeonPathfinder2D.Node a, DungeonPathfinder2D.Node b) => {
                 var pathCost = new DungeonPathfinder2D.PathCost();
                 
-                pathCost.cost = Vector2Int.Distance(b.Position, endPos);    //heuristic
+                pathCost.cost = Vector2Int.Distance(b.Position, pos_2);    //heuristic
 
                 if (grid[b.Position] == CellType.Room)
                 {
@@ -390,6 +394,7 @@ public class ExploreFileRandomGenerator
                 }
             }
         }
+        File.DoorList = _doorList;
     }
 
     void PlaceWall()
@@ -438,23 +443,11 @@ public class ExploreFileRandomGenerator
 
     private void PlaceStartAndGoal()
     {
-        Room startRoom = roomList[0];
-        File.Start = startRoom.GetRandomPosition();
+        File.Start = _startRoom.GetRandomPosition();
         File.PlayerPosition = File.Start;
-        startRoom.SetNotAvailable(File.Start);
+        _startRoom.SetNotAvailable(File.Start);
 
-        List<Room> tempList = new List<Room>(roomList);
-        tempList.Remove(startRoom);
-        Room goalRoom = null;
-        for (int i = 0; i < tempList.Count; i++)
-        {
-            if (goalRoom == null || Vector3.Distance(tempList[i].bounds.center, startRoom.bounds.center) > Vector3.Distance(goalRoom.bounds.center, startRoom.bounds.center))
-            {
-                goalRoom = tempList[i];
-            }
-        }
-
-        File.Goal = goalRoom.GetRandomPosition();
-        goalRoom.SetNotAvailable(File.Goal);
+        File.Goal = _endRoom.GetRandomPosition();
+        _endRoom.SetNotAvailable(File.Goal);
     }
 }

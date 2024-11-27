@@ -17,5 +17,6 @@ namespace Explore
         public List<ExploreFileTile> TileList = new List<ExploreFileTile>();
         public List<ExploreFileTreasure> TreasureList = new List<ExploreFileTreasure>();
         public List<ExploreFileTrigger> TriggerList = new List<ExploreFileTrigger>();
+        public List<Vector2Int> DoorList = new List<Vector2Int>();
     }
 }
