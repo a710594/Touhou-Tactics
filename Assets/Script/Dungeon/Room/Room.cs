@@ -18,6 +18,7 @@ public class Room
     }
 
     private List<Vector2Int> _availableList = new List<Vector2Int>();
+    private List<Vector2Int> _boundList = new List<Vector2Int>();
 
     public Room(Vector2Int location, Vector2Int size) 
     {
@@ -29,6 +30,7 @@ public class Room
             {
                 pos = new Vector2Int(i, j);
                 _availableList.Add(pos);
+                _boundList.Add(pos);
             }
         }
     }
@@ -61,5 +63,15 @@ public class Room
     public void SetNotAvailable(Vector2Int v2)
     {
         _availableList.Remove(v2);
+    }
+
+    public bool IsAvailable(Vector2Int v2) 
+    {
+        return _availableList.Contains(v2);
+    }
+
+    public bool InBound(Vector2Int v2)
+    {
+        return _boundList.Contains(v2);
     }
 }

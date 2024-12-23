@@ -5,6 +5,7 @@ using UnityEngine;
 public class BagInfo
 {
     public int Money;
+    public int Key;
     public Dictionary<int, Item> ItemDic = new Dictionary<int, Item>();
     public Dictionary<int, Consumables> ConsumablesDic = new Dictionary<int, Consumables>();
     public List<Food> FoodList = new List<Food>();
@@ -13,6 +14,7 @@ public class BagInfo
     public BagInfo()
     {
         Money = 100;
+        Key = 0;
     }
 
     public List<Item> GetFoodMaterial() 

@@ -26,18 +26,18 @@ public class BagEquipGroup : MonoBehaviour
 
     public void SetScrollView()
     {
-        ScrollView.SetData(new List<object>(ItemManager.Instance.BagInfo.EquipList));
+        ScrollView.SetData(new List<object>(ItemManager.Instance.Info.EquipList));
     }
 
     public void SetScrollView(EquipModel.CategoryEnum category, CharacterInfo character) 
     {
         BagScrollItem.Data data;
         List<BagScrollItem.Data> list = new List<BagScrollItem.Data>();
-        for (int i=0; i<ItemManager.Instance.BagInfo.EquipList.Count; i++) 
+        for (int i=0; i<ItemManager.Instance.Info.EquipList.Count; i++) 
         {
-            if(ItemManager.Instance.BagInfo.EquipList[i].Category == category) 
+            if(ItemManager.Instance.Info.EquipList[i].Category == category) 
             {
-                data = new BagScrollItem.Data(ItemManager.Instance.BagInfo.EquipList[i], character.Weight);
+                data = new BagScrollItem.Data(ItemManager.Instance.Info.EquipList[i], character.Weight);
                 list.Add(data);
             }
         }
@@ -97,21 +97,21 @@ public class BagEquipGroup : MonoBehaviour
         }
     }
 
-    private void ScrollItemOnClick(PointerEventData eventData, object data)
+    private void ScrollItemOnClick(PointerEventData eventData, ButtonPlus button)
     {
-        object obj = data;
+        object data = button.Data;
         Equip equip = null;
-        if (obj is Equip)
+        if (data is Equip)
         {
-            equip = (Equip)obj;
+            equip = (Equip)data;
         }
-        else if(obj is BagScrollItem.Data) 
+        else if(data is BagScrollItem.Data) 
         {
-            BagScrollItem.Data bagData = (BagScrollItem.Data)obj;
+            BagScrollItem.Data bagData = (BagScrollItem.Data)data;
             equip = bagData.Equip;
         }
         SetDetail(equip);
-        ScrollHandler(obj);
+        ScrollHandler(data);
     }
 
     private void Awake()

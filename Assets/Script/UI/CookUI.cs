@@ -20,7 +20,7 @@ public class CookUI : MonoBehaviour
     public void Open()
     {
         gameObject.SetActive(true);
-        BagScrollView.SetData(new List<object>(ItemManager.Instance.BagInfo.GetFoodMaterial()));
+        BagScrollView.SetData(new List<object>(ItemManager.Instance.Info.GetFoodMaterial()));
         _materialList.Clear();
         SetMaterialLabel();
         ResultNameLabel.text = "";
@@ -136,7 +136,7 @@ public class CookUI : MonoBehaviour
             _food = null;
             _materialList.Clear();
             SetMaterialLabel();
-            BagScrollView.SetData(new List<object>(ItemManager.Instance.BagInfo.GetFoodMaterial()));
+            BagScrollView.SetData(new List<object>(ItemManager.Instance.Info.GetFoodMaterial()));
             ResultNameLabel.text = "";
             ResultCommentLabel.text = "";
             CookButton.gameObject.SetActive(false);

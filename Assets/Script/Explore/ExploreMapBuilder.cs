@@ -10,17 +10,17 @@ public class ExploreMapBuilder : MonoBehaviour
 
     private LayerMask _mapLayer;
 
-    public void GetFixed(ExploreFile file, out Dictionary<Vector2Int, ExploreFileTile> tileDic, out List<ExploreEnemyController> enemyList)
+    public void GetFixed(ExploreFile file, out Dictionary<Vector2Int, ExploreFileTile> tileDic)
     {
-        CreateObject(file, out tileDic, out enemyList);
+        CreateObject(file, out tileDic);
     }
 
-    public void GetRandom(ExploreFile file, out Dictionary<Vector2Int, ExploreFileTile> tileDic, out List<ExploreEnemyController> enemyList) 
+    public void GetRandom(ExploreFile file, out Dictionary<Vector2Int, ExploreFileTile> tileDic) 
     {
-        CreateObject(file, out tileDic, out  enemyList);
+        CreateObject(file, out tileDic);
     }
 
-    private void CreateObject(ExploreFile file, out Dictionary<Vector2Int, ExploreFileTile> tileDic, out List<ExploreEnemyController> enemyList)
+    private void CreateObject(ExploreFile file, out Dictionary<Vector2Int, ExploreFileTile> tileDic)
     {
         GameObject gameObj;
         TileObject tileObj;
@@ -35,6 +35,10 @@ public class ExploreMapBuilder : MonoBehaviour
 
         for (int i = 0; i < file.TileList.Count; i++)
         {
+            if (file.TileList[i].Prefab == "Wall")
+            {
+                file.TileList[i].Prefab = "Wall_Unlit";
+            }
             gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + file.TileList[i].Prefab), Vector3.zero, Quaternion.identity);
             tileObj = gameObj.GetComponent<TileObject>();
             tileObj.transform.position = new Vector3(file.TileList[i].Position.x, 0, file.TileList[i].Position.y);
@@ -71,8 +75,11 @@ public class ExploreMapBuilder : MonoBehaviour
         for (int i=0; i<file.DoorList.Count; i++) 
         {
             gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Door_Cube"), Vector3.zero, Quaternion.identity);
-            gameObj.transform.position = new Vector3(file.DoorList[i].x, 1, file.DoorList[i].y);
-            gameObj.transform.SetParent(parent);
+            for (int j=0; j<file.DoorList[i].PositionList.Count;j++) 
+            {
+                gameObj.transform.position = new Vector3(file.DoorList[i].PositionList[j].x, 1, file.DoorList[i].PositionList[j].y);
+                gameObj.transform.SetParent(parent);
+            }
         }
 
         gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Start_Cube"), Vector3.zero, Quaternion.identity);
@@ -80,7 +87,6 @@ public class ExploreMapBuilder : MonoBehaviour
         gameObj.transform.eulerAngles = new Vector3(90, 0, 0);
         gameObj.transform.SetParent(parent);
 
-        //gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/GoalParticle"), Vector3.zero, Quaternion.identity);
         gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Goal_Cube"), Vector3.zero, Quaternion.identity);
         gameObj.transform.position = new Vector3(file.Goal.x, 1, file.Goal.y);
         gameObj.transform.eulerAngles = new Vector3(90, 0, 0);
@@ -90,10 +96,8 @@ public class ExploreMapBuilder : MonoBehaviour
         {
             tileDic[file.Goal].Object.Icon.layer = _mapLayer;
         }
-        //info.TileDic[file.Goal].Object.Icon.GetComponent<Goal>().Red.SetActive(!file.IsArrive);
-        //info.TileDic[file.Goal].Object.Icon.GetComponent<Goal>().Blue.SetActive(file.IsArrive);
 
-        ExploreEnemyController enemy;
+        /*ExploreEnemyController enemy;
         enemyList = new List<ExploreEnemyController>();
         for (int i = 0; i < file.EnemyList.Count; i++)
         {
@@ -105,7 +109,7 @@ public class ExploreMapBuilder : MonoBehaviour
             enemy.SetAI(file.EnemyList[i]);
             enemyList.Add(enemy);
             tileDic[file.EnemyList[i].Position].IsWalkable = false;
-        }
+        }*/
 
         float x = 1;
         float y = 1;

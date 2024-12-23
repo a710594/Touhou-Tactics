@@ -26,7 +26,7 @@ public class CharacterDetailUI : MonoBehaviour
     public Image Image;
 
     public ButtonPlus WeaponButton;
-    public ButtonPlus ArmorButton;
+    public ButtonPlus[] ArmorButtons;
     public ButtonPlus[] AmuletButtons;
     public ButtonPlus PassiveCommentButton;
 
@@ -49,7 +49,8 @@ public class CharacterDetailUI : MonoBehaviour
         characterDetailUI.RectTransform.offsetMax = Vector3.zero;
         characterDetailUI.RectTransform.offsetMin = Vector3.zero;
         characterDetailUI.WeaponButton.Button.interactable = canSelectEquip;
-        characterDetailUI.ArmorButton.Button.interactable = canSelectEquip;
+        characterDetailUI.ArmorButtons[0].Button.interactable = canSelectEquip;
+        characterDetailUI.ArmorButtons[1].Button.interactable = canSelectEquip;
         characterDetailUI.AmuletButtons[0].Button.interactable = canSelectEquip;
         characterDetailUI.AmuletButtons[1].Button.interactable = canSelectEquip;
 
@@ -86,12 +87,32 @@ public class CharacterDetailUI : MonoBehaviour
 
         WeaponButton.Label.text = character.Weapon.Name;
         WeaponButton.SetData(character.Weapon);
-        ArmorButton.Label.text = character.Armor.Name;
-        ArmorButton.SetData(character.Armor);
+        for (int i = 0; i < AmuletButtons.Length; i++)
+        {
+            if (i < character.Armor.Count) 
+            {
+                ArmorButtons[i].Label.text = character.Armor[i].Name;
+                ArmorButtons[i].SetData(character.Armor[i]);
+                ArmorButtons[i].gameObject.SetActive(true);
+            }
+            else
+            {
+                ArmorButtons[i].gameObject.SetActive(false);
+            }
+        }
+
         for (int i=0; i<AmuletButtons.Length; i++) 
         {
-            AmuletButtons[i].Label.text = character.Amulets[i].Name;
-            AmuletButtons[i].SetData(character.Amulets[i]);
+            if (i < character.Amulets.Count)
+            {
+                AmuletButtons[i].Label.text = character.Amulets[i].Name;
+                AmuletButtons[i].SetData(character.Amulets[i]);
+                AmuletButtons[i].gameObject.SetActive(true);
+            }
+            else
+            {
+                AmuletButtons[i].gameObject.SetActive(false);
+            }
         }
 
         if (character.SkillList.Count > 0)
@@ -147,12 +168,32 @@ public class CharacterDetailUI : MonoBehaviour
 
         WeaponButton.Label.text = character.Weapon.Name;
         WeaponButton.SetData(character.Weapon);
-        ArmorButton.Label.text = character.Armor.Name;
-        ArmorButton.SetData(character.Armor);
         for (int i = 0; i < AmuletButtons.Length; i++)
         {
-            AmuletButtons[i].Label.text = character.Amulets[i].Name;
-            AmuletButtons[i].SetData(character.Amulets[i]);
+            if (i < character.Armor.Count)
+            {
+                ArmorButtons[i].Label.text = character.Armor[i].Name;
+                ArmorButtons[i].SetData(character.Armor[i]);
+                ArmorButtons[i].gameObject.SetActive(true);
+            }
+            else
+            {
+                ArmorButtons[i].gameObject.SetActive(false);
+            }
+        }
+
+        for (int i = 0; i < AmuletButtons.Length; i++)
+        {
+            if (i < character.Amulets.Count)
+            {
+                AmuletButtons[i].Label.text = character.Amulets[i].Name;
+                AmuletButtons[i].SetData(character.Amulets[i]);
+                AmuletButtons[i].gameObject.SetActive(true);
+            }
+            else
+            {
+                AmuletButtons[i].gameObject.SetActive(false);
+            }
         }
 
         if (character.SkillList.Count > 0)

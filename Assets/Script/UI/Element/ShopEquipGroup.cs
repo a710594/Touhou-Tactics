@@ -33,7 +33,7 @@ public class ShopEquipGroup : MonoBehaviour
 
     public void SetScrollViewSell()
     {
-        ScrollView.SetData(new List<object>(ItemManager.Instance.BagInfo.EquipList));
+        ScrollView.SetData(new List<object>(ItemManager.Instance.Info.EquipList));
     }
 
     public void CancelScrollViewSelect()

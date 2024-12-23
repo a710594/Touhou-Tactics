@@ -13,13 +13,13 @@ namespace Explore
         public Vector2Int Position;
 
         [NonSerialized]
-        public bool Door = false;
-        [NonSerialized]
         public string Event = null;
         [NonSerialized]
         public TileObject Object;
         [NonSerialized]
         public ExploreFileTreasure Treasure;
+        [NonSerialized]
+        public GameObject Door;
 
         public ExploreFileTile() { }
 

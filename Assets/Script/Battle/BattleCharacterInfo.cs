@@ -42,9 +42,9 @@ namespace Battle
         public EnemyModel Enemy = null;
         public BattleCharacterController Controller;
         public LittleHpBarWithStatus HpBar;
-        public Equip Weapon = new Equip(EquipModel.CategoryEnum.Weapon);
-        public Equip Armor = new Equip(EquipModel.CategoryEnum.Armor);
-        public Equip[] Amulets = new Equip[2] { new Equip(EquipModel.CategoryEnum.Amulet), new Equip(EquipModel.CategoryEnum.Amulet) };
+        public Equip Weapon;
+        public List<Equip> Armor = new List<Equip>();
+        public List<Equip> Amulets = new List<Equip>();
 
         public List<Skill> SkillList = new List<Skill>();
         public List<Support> SupportList = new List<Support>();
@@ -143,6 +143,16 @@ namespace Battle
             if (job.Spell_1 != -1) 
             {
                 SpellList.Add(new Spell(DataContext.Instance.SpellList[job.Spell_1]));
+            }
+
+            Weapon = new Equip(EquipModel.CategoryEnum.Weapon);
+            for (int i=0; i<job.Armor; i++) 
+            {
+                Armor.Add(new Equip(EquipModel.CategoryEnum.Armor));
+            }
+            for (int i=0; i<job.Amulets; i++) 
+            {
+                Amulets.Add(new Equip(EquipModel.CategoryEnum.Amulet));
             }
         }
 

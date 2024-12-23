@@ -37,7 +37,6 @@ namespace Explore
 
         private bool _hasCollision = false;
         private Timer _timer = new Timer();
-        private Generator2D _generator2D = new Generator2D();
 
         public void Init() 
         {
@@ -305,7 +304,7 @@ namespace Explore
         {
             ExploreFileTreasure treasure = null;
             Vector2Int v2 = Utility.ConvertToVector2Int(Camera.main.transform.position + Camera.main.transform.forward);
-            if (CheckTreasure(v2)) 
+             if (CheckTreasure(v2)) 
             {
                treasure = TileDic[v2].Treasure;
 
@@ -314,10 +313,19 @@ namespace Explore
                 // {
                 //     bagIsFull = ItemManager.Instance.AddEquip(treasure.ItemID);
                 // }
+
                 if (!bagIsFull) 
                 {
                     TileDic[v2].IsWalkable = true;
-                    ItemManager.Instance.AddItem(treasure.ItemID, 1);
+                    if (treasure.ItemID == ItemManager.KeyID)
+                    {
+                        ItemManager.Instance.Info.Key++;
+                    }
+                    else
+                    {
+                         ItemManager.Instance.AddItem(treasure.ItemID, 1);
+                    }
+                    
                     GameObject.Destroy(TileDic[v2].Treasure.Object.gameObject);
                     File.TreasureList.Remove(treasure);
                     TileDic[v2].Treasure = null;
@@ -332,6 +340,35 @@ namespace Explore
             }
 
             return treasure;
+        }
+
+        public ExploreFIleDoor CheckDoor(Vector2Int position)
+        {
+            for (int i=0; i<File.DoorList.Count; i++) 
+            {
+                if (File.DoorList[i].PositionList.Contains(position)) 
+                {
+                    return File.DoorList[i];
+                }
+            }
+            return null;
+        }
+
+        public void OpenDoor() 
+        {
+            Vector2Int v2 = Utility.ConvertToVector2Int(Camera.main.transform.position + Camera.main.transform.forward);
+            ExploreFIleDoor door = CheckDoor(v2);
+            if (door != null && ItemManager.Instance.Info.Key > 0) 
+            {
+                for (int i=0; i<door.PositionList.Count; i++) 
+                {
+                    TileDic[door.PositionList[i]].IsWalkable = true;
+                    GameObject.Destroy(TileDic[door.PositionList[i]].Door);
+                    TileDic[door.PositionList[i]].Door = null;
+                }
+                ItemManager.Instance.Info.Key--;
+                File.DoorList.Remove(door);
+            }
         }
 
         public void CreateObject() 
@@ -370,14 +407,26 @@ namespace Explore
                 Debug.Log(name);
             }
 
-            for(int i=0; i<File.TreasureList.Count; i++)
+            for (int i = 0; i < File.DoorList.Count; i++)
             {
+                for (int j=0; j<File.DoorList[i].PositionList.Count; j++) 
+                {
+                    gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Door_Cube"), Vector3.zero, Quaternion.identity);
+                    gameObj.transform.position = new Vector3(File.DoorList[i].PositionList[j].x, 1, File.DoorList[i].PositionList[j].y);
+                    gameObj.transform.SetParent(parent);
+                    TileDic[File.DoorList[i].PositionList[j]].Door = gameObj;
+                    TileDic[File.DoorList[i].PositionList[j]].IsWalkable = false;
+                }
+            }
+
+            for (int i=0; i<File.TreasureList.Count; i++)
+            {
+                TileDic[File.TreasureList[i].Position].Treasure = File.TreasureList[i];
                 gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + File.TreasureList[i].Prefab), Vector3.zero, Quaternion.identity);
                 treasureObj = gameObj.GetComponent<TreasureObject>();
-                File.TreasureList[i].Object = treasureObj;
                 treasureObj.transform.position = new Vector3(File.TreasureList[i].Position.x, File.TreasureList[i].Height, File.TreasureList[i].Position.y);
                 treasureObj.transform.SetParent(parent);
-                TileDic[File.TreasureList[i].Position].Treasure = File.TreasureList[i];
+                TileDic[File.TreasureList[i].Position].Treasure.Object = treasureObj;
                 TileDic[File.TreasureList[i].Position].IsWalkable = false;
                 if (TileDic[File.TreasureList[i].Position].IsVisited && treasureObj.Icon != null)
                 {
@@ -391,7 +440,7 @@ namespace Explore
                 TileDic[File.TriggerList[i].Position].Event = File.TriggerList[i].Name;
             }
 
-            gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Goal"), Vector3.zero, Quaternion.identity);
+            gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/GoalParticle"), Vector3.zero, Quaternion.identity);
             gameObj.transform.position = new Vector3(File.Goal.x, 0, File.Goal.y);
             gameObj.transform.eulerAngles = new Vector3(90, 0, 0);
             gameObj.transform.SetParent(parent);

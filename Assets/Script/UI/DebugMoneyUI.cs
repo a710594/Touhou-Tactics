@@ -14,7 +14,7 @@ public class DebugMoneyUI : MonoBehaviour
         try
         {
             int money = int.Parse(MoneyField.text);
-            ItemManager.Instance.BagInfo.Money += money;
+            ItemManager.Instance.Info.Money += money;
             Debug.Log("Add Money " + money);
         }
         catch (Exception ex)

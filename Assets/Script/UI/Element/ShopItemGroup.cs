@@ -23,19 +23,19 @@ public class ShopItemGroup : MonoBehaviour
     {
         if(category == ItemModel.CategoryEnum.Consumables) 
         {
-            ScrollView.SetData(new List<object>(ItemManager.Instance.BagInfo.ConsumablesDic.Values));
+            ScrollView.SetData(new List<object>(ItemManager.Instance.Info.ConsumablesDic.Values));
         }
         else if (category == ItemModel.CategoryEnum.Equip)
         {
-            ScrollView.SetData(new List<object>(ItemManager.Instance.BagInfo.EquipList));
+            ScrollView.SetData(new List<object>(ItemManager.Instance.Info.EquipList));
         }
         else if (category == ItemModel.CategoryEnum.Food)
         {
-            ScrollView.SetData(new List<object>(ItemManager.Instance.BagInfo.FoodList));
+            ScrollView.SetData(new List<object>(ItemManager.Instance.Info.FoodList));
         }
         else if (category == ItemModel.CategoryEnum.Item)
         {
-            ScrollView.SetData(new List<object>(ItemManager.Instance.BagInfo.ItemDic.Values));
+            ScrollView.SetData(new List<object>(ItemManager.Instance.Info.ItemDic.Values));
         }
     }
 

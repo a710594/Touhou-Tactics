@@ -31,4 +31,7 @@ public class ExploreFileEnemy
 
     //random
     public int EnemyGroupId;
+
+    [NonSerialized]
+    public ExploreEnemyController Controller;
 }

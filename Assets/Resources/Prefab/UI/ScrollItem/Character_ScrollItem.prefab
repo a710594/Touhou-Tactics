@@ -182,7 +182,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -262,7 +262,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -470,7 +470,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0.9254902, b: 0.7490196, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -498,10 +498,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be9f6e919a218d0489f3a2bbb03b7e29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DownThreshold: 0.2
+  PressDuration: 0.1
+  Button: {fileID: 0}
+  Label: {fileID: 0}
+  Image: {fileID: 595666343886558602}
   Background: {fileID: 4781484788602459384}
   SelectedImage: {fileID: 0}
-  Button: {fileID: 0}
-  Image: {fileID: 595666343886558602}
   NameLabel: {fileID: 7348298672333886594}
   HpBar: {fileID: 4423573087678072012}
   DetailButton: {fileID: 9050999887577439826}
@@ -757,6 +760,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3794414260463045496, guid: 238210771fa59494190c46d81149744e, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3794414261195998657, guid: 238210771fa59494190c46d81149744e, type: 3}
       propertyPath: m_Color.b
       value: 0
@@ -768,6 +775,10 @@ PrefabInstance:
     - target: {fileID: 3794414261195998657, guid: 238210771fa59494190c46d81149744e, type: 3}
       propertyPath: m_Color.r
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3794414261195998657, guid: 238210771fa59494190c46d81149744e, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3794414261558654004, guid: 238210771fa59494190c46d81149744e, type: 3}
       propertyPath: m_SizeDelta.y

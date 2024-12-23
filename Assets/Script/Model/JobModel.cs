@@ -33,4 +33,6 @@ public class JobModel
     public int Support_5;
     public int Spell_1;
     public int Weight; //負重,和可穿戴的裝備有關
+    public int Armor; //可穿戴的防具數量
+    public int Amulets; //可穿戴的護符數量
 }

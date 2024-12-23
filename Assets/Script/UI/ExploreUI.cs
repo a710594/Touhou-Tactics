@@ -12,6 +12,7 @@ public class ExploreUI : MonoBehaviour
     public TreasureUI TreasureUI;
     public Text fpsText;
     public Text FloorLabel;
+    public Text KeyLabel;
     public Camera BigMapCamera;
     public CanvasGroup CanvasGroup;
 
@@ -41,6 +42,7 @@ public class ExploreUI : MonoBehaviour
     private void Awake()
     {
         SpaceLabel.SetActive(false);
+        KeyLabel.gameObject.SetActive(false);
     }
 
     void Update()
@@ -48,6 +50,18 @@ public class ExploreUI : MonoBehaviour
         ExploreFile file = ExploreManager.Instance.File;
         if (!InputMamager.Instance.IsLock)
         {
+            Vector2Int v2 = Utility.ConvertToVector2Int(Camera.main.transform.position + Camera.main.transform.forward);
+            SpaceLabel.SetActive(ExploreManager.Instance.CheckTreasure(v2));
+            KeyLabel.gameObject.SetActive(ExploreManager.Instance.CheckDoor(v2) != null);
+            if (ItemManager.Instance.Info.Key > 0) 
+            {
+                KeyLabel.text = "按空白鍵使用鑰匙開門";
+            }
+            else
+            {
+                KeyLabel.text = "需要鑰匙開門";
+            }
+
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 ExploreFileTreasure treasure = ExploreManager.Instance.GetTreasure();
@@ -56,6 +70,8 @@ public class ExploreUI : MonoBehaviour
                     TreasureUI.Open(treasure.ItemID);
                     InputMamager.Instance.Lock();
                 }
+
+                ExploreManager.Instance.OpenDoor();
             }
         }
 
@@ -76,12 +92,6 @@ public class ExploreUI : MonoBehaviour
             {
                 InputMamager.Instance.Unlock();
             }
-        }
-
-        if (file != null && !InputMamager.Instance.IsLock)
-        {
-            Vector2Int v2 = Utility.ConvertToVector2Int(Camera.main.transform.position + Camera.main.transform.forward);
-            SpaceLabel.SetActive(ExploreManager.Instance.CheckTreasure(v2));
         }
 
         deltaTime += (Time.deltaTime - deltaTime) * 0.1f;

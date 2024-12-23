@@ -16,15 +16,15 @@ public class BagItemGroup : MonoBehaviour
     {
         if (category == ItemModel.CategoryEnum.Consumables)
         {
-            ScrollView.SetData(new List<object>(ItemManager.Instance.BagInfo.ConsumablesDic.Values));
+            ScrollView.SetData(new List<object>(ItemManager.Instance.Info.ConsumablesDic.Values));
         }
         else if(category == ItemModel.CategoryEnum.Food) 
         {
-            ScrollView.SetData(new List<object>(ItemManager.Instance.BagInfo.FoodList));
+            ScrollView.SetData(new List<object>(ItemManager.Instance.Info.FoodList));
         }
         else if (category == ItemModel.CategoryEnum.Item)
         {
-            ScrollView.SetData(new List<object>(ItemManager.Instance.BagInfo.ItemDic.Values));
+            ScrollView.SetData(new List<object>(ItemManager.Instance.Info.ItemDic.Values));
         }
     }
 
@@ -33,26 +33,26 @@ public class BagItemGroup : MonoBehaviour
         CommentLabel.text = text;
     }
 
-    private void ScrollItemOnClick(PointerEventData eventData, object data)
+    private void ScrollItemOnClick(PointerEventData eventData, ButtonPlus button)
     {
-        object obj = data;
-        if (obj is Item)
+        object data = button.Data;
+        if (data is Item)
         {
-            Item item = (Item)obj;
+            Item item = (Item)data;
             SetComment(item.Data.Comment);
         }
-        else if(obj is Consumables) 
+        else if(data is Consumables) 
         {
-            Consumables consumables = (Consumables)obj;
+            Consumables consumables = (Consumables)data;
             SetComment(consumables.Comment);
         }
-        else if(obj is Food) 
+        else if(data is Food) 
         {
-            Food food = (Food)obj;
+            Food food = (Food)data;
             SetComment(food.Comment);
         }
 
-        ScrollHandler(obj);
+        ScrollHandler(data);
     }
 
     private void Awake()

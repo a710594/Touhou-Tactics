@@ -6,8 +6,8 @@ public class TreasureModel
 {
     public enum TypeEnum 
     {
-        Item = 1,
-        Equip,
+        Normal = 1,
+        Special,
     }
 
     public int ID;
@@ -34,9 +34,8 @@ public class TreasureModel
             IDList.Add(ID_4);
     }
 
-    public int GetItem()
+    public int GetID()
     {
-
         return IDList[Random.Range(0, IDList.Count)];
     }
 }

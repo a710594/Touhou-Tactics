@@ -38,7 +38,7 @@ public partial class ShopUI : MonoBehaviour
         ShopEquipGroup.gameObject.SetActive(false);
         ShopItemGroup.SetScrollViewBuy(ItemModel.CategoryEnum.Consumables);
         ShopItemGroup.CancelScrollViewSelect();
-        MoneyLabel.text = ItemManager.Instance.BagInfo.Money + "$";
+        MoneyLabel.text = ItemManager.Instance.Info.Money + "$";
         ModeGroup.SetSelect(BuyModeButton.gameObject);
         CategoryGroup.SetSelect(ConsumablesButton.gameObject);
     }
@@ -69,7 +69,7 @@ public partial class ShopUI : MonoBehaviour
         {
             TipLabel.SetLabel("�|����ܪ��~");
         }
-        else if(_selectedShopData.Price > ItemManager.Instance.BagInfo.Money)
+        else if(_selectedShopData.Price > ItemManager.Instance.Info.Money)
         {
             TipLabel.SetLabel("�l�B����");
         }
@@ -80,8 +80,8 @@ public partial class ShopUI : MonoBehaviour
                 ItemManager.Instance.AddItem(_selectedShopData.ID, 1);
                 ItemModel item = DataContext.Instance.ItemDic[_selectedShopData.ID];
                 ShopItemGroup.SetScrollViewBuy(item.Category);
-                ItemManager.Instance.BagInfo.Money -= _selectedShopData.Price;
-                MoneyLabel.text = ItemManager.Instance.BagInfo.Money + "$";
+                ItemManager.Instance.Info.Money -= _selectedShopData.Price;
+                MoneyLabel.text = ItemManager.Instance.Info.Money + "$";
             }
             else 
             {
@@ -100,8 +100,8 @@ public partial class ShopUI : MonoBehaviour
                     {
                         ItemManager.Instance.MinusItem(_selectedShopData.MaterialIDList[i], _selectedShopData.MaterialAmountList[i]);
                     }
-                    ItemManager.Instance.BagInfo.Money -= _selectedShopData.Price;
-                    MoneyLabel.text = ItemManager.Instance.BagInfo.Money + "$";
+                    ItemManager.Instance.Info.Money -= _selectedShopData.Price;
+                    MoneyLabel.text = ItemManager.Instance.Info.Money + "$";
 
                     ItemModel itemData = DataContext.Instance.ItemDic[_selectedShopData.ID];
                     if (itemData.Category == ItemModel.CategoryEnum.Equip)
@@ -132,8 +132,8 @@ public partial class ShopUI : MonoBehaviour
             if(_selectedSell is Consumables) 
             {
                 Consumables consumables = (Consumables)_selectedSell;
-                ItemManager.Instance.BagInfo.Money += consumables.Price;
-                MoneyLabel.text = ItemManager.Instance.BagInfo.Money + "$";
+                ItemManager.Instance.Info.Money += consumables.Price;
+                MoneyLabel.text = ItemManager.Instance.Info.Money + "$";
                 ItemManager.Instance.MinusItem(consumables.ID, 1);
                 ShopItemGroup.SetScrollViewSell(consumables.Category);
                 if (consumables.Amount == 0)
@@ -145,8 +145,8 @@ public partial class ShopUI : MonoBehaviour
             else if (_selectedSell is Item)
             {
                 Item item = (Item)_selectedSell;
-                ItemManager.Instance.BagInfo.Money += item.Data.Price;
-                MoneyLabel.text = ItemManager.Instance.BagInfo.Money + "$";
+                ItemManager.Instance.Info.Money += item.Data.Price;
+                MoneyLabel.text = ItemManager.Instance.Info.Money + "$";
                 ItemManager.Instance.MinusItem(item.ID, 1);
                 ShopItemGroup.SetScrollViewSell(item.Data.Category);
                 if (item.Amount == 0)
@@ -158,8 +158,8 @@ public partial class ShopUI : MonoBehaviour
             else if(_selectedSell is Food) 
             {
                 Food food = (Food)_selectedSell;
-                ItemManager.Instance.BagInfo.Money += food.Price;
-                MoneyLabel.text = ItemManager.Instance.BagInfo.Money + "$";
+                ItemManager.Instance.Info.Money += food.Price;
+                MoneyLabel.text = ItemManager.Instance.Info.Money + "$";
                 ItemManager.Instance.MinusFood(food);
                 ShopItemGroup.SetScrollViewSell(ItemModel.CategoryEnum.Food);
                 ShopItemGroup.CancelScrollViewSelect();
@@ -168,8 +168,8 @@ public partial class ShopUI : MonoBehaviour
             else if(_selectedSell is Equip) 
             {
                 Equip equip = (Equip)_selectedSell;
-                ItemManager.Instance.BagInfo.Money += equip.Price;
-                MoneyLabel.text = ItemManager.Instance.BagInfo.Money + "$";
+                ItemManager.Instance.Info.Money += equip.Price;
+                MoneyLabel.text = ItemManager.Instance.Info.Money + "$";
                 ItemManager.Instance.MinusEquip(equip);
                 ShopEquipGroup.SetScrollViewSell();
                 ShopEquipGroup.CancelScrollViewSelect();

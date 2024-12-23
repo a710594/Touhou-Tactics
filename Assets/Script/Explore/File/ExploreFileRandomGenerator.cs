@@ -46,7 +46,7 @@ public class ExploreFileRandomGenerator
     private List<Vector2Int> _groundList = new List<Vector2Int>();
     private List<Vector2Int> _wallList = new List<Vector2Int>();
     private List<Vector2Int> _treasurePositionList = new List<Vector2Int>();
-    private List<Vector2Int> _doorList = new List<Vector2Int>();
+    private List<ExploreFIleDoor> _doorList = new List<ExploreFIleDoor>();
 
     public ExploreFile Create(RandomFloorModel floorData, int seed = 0)
     {
@@ -84,10 +84,6 @@ public class ExploreFileRandomGenerator
     private void PlaceRooms(RandomFloorModel floorData)
     {
         RoomModel roomData;
-        Vector2Int v2;
-        TreasureModel treasureData;
-        ExploreFileTreasure treasureFile;
-        int treasureCount;
         for (int i = 0; i < floorData.RoomCount * 2; i++) 
         {
             roomData = DataContext.Instance.RoomDic[floorData.GetRoomID()];
@@ -190,33 +186,21 @@ public class ExploreFileRandomGenerator
         }
 
         List<Room> roomList = new List<Room>(nodeDic.Values);
+        List<Room> isolatedList = new List<Room>(); //孤立的房間
+        List<Room> otherList = new List<Room>(); //其他的房間
 
         selectedEdges = new HashSet<Prim.Edge>(mst);
         HashSet<Prim.Edge> remainingEdges = new HashSet<Prim.Edge>(edges);
         remainingEdges.ExceptWith(selectedEdges);
         List<Prim.Edge> remainList = new List<Prim.Edge>(remainingEdges);
 
-        //尋找孤立的點
-        List<Room> isolated = new List<Room>();
-        for (int i = 0; i < roomList.Count; i++)
-        {
-            if (roomList[i].AdjList.Count == 1)
-            {
-                isolated.Add(roomList[i]);
-            }
-        }
-
         //去除孤立點的邊
         for (int i = 0; i < remainList.Count; i++)
         {
-            for (int j = 0; j < isolated.Count; j++)
+            if (((Vertex<Room>)remainList[i].U).Item.Isolated || ((Vertex<Room>)remainList[i].V).Item.Isolated)
             {
-                if (isolated[j] == ((Vertex<Room>)remainList[i].U).Item || isolated[j] == ((Vertex<Room>)remainList[i].V).Item)
-                {
-                    remainList.RemoveAt(i);
-                    i--;
-                    break;
-                }
+                remainList.RemoveAt(i);
+                i--;
             }
         }
 
@@ -226,44 +210,63 @@ public class ExploreFileRandomGenerator
             //if (_random.NextDouble() < 0.125)
             {
                 selectedEdges.Add(remainList[i]);
+                uRoom = ((Vertex<Room>)remainList[i].U).Item;
+                vRoom = ((Vertex<Room>)remainList[i].V).Item;
+                uRoom.AdjList.Add(vRoom);
+                vRoom.AdjList.Add(uRoom);
             }
         }
 
         _startRoom = DFS(roomList, roomList[0]);
         _endRoom = DFS(roomList, _startRoom);
 
-        roomList.Remove(_startRoom);
-        roomList.Remove(_endRoom);
-
-        isolated.Remove(_startRoom);
-        isolated.Remove(_endRoom);
+        for (int i = 0; i < roomList.Count; i++) 
+        {
+            if(roomList[i] != _startRoom && roomList[i] != _endRoom)
+            if (roomList[i].Isolated) 
+            {
+                isolatedList.Add(roomList[i]);
+            }
+            else
+            {
+                otherList.Add(roomList[i]);
+            }
+        }
 
         Vector2Int pos;
         TreasureModel treasureData;
         ExploreFileTreasure treasureFile;
+        List<TreasureModel> treasureList = new List<TreasureModel>();
 
-        treasureData = DataContext.Instance.TreasureDic[1];
-        for (int i = 0; i < roomList.Count; i++)
+        Room room;
+        for (int i=0; i<isolatedList.Count; i++) 
         {
-            pos = roomList[i].GetRandomPosition();
-            if (!_treasurePositionList.Contains(pos))
-            {
-                treasureFile = new ExploreFileTreasure(treasureData.GetItem(), treasureData.Prefab, treasureData.Height, pos, 0);
-                File.TreasureList.Add(treasureFile);
-                roomList[i].SetNotAvailable(pos);
-            }
+            treasureList = DataContext.Instance.TreasureDic[TreasureModel.TypeEnum.Special];
+            treasureData = treasureList[UnityEngine.Random.Range(0, treasureList.Count)];
+
+            pos = isolatedList[i].GetRandomPosition();
+            treasureFile = new ExploreFileTreasure(treasureData.GetID(), treasureData.Prefab, treasureData.Height, pos, 0);
+            File.TreasureList.Add(treasureFile);
+            isolatedList[i].SetNotAvailable(pos);
+            
+
+            //create key
+            room = otherList[UnityEngine.Random.Range(0, otherList.Count)];
+            pos = room.GetRandomPosition();
+            treasureFile = new ExploreFileTreasure(ItemManager.KeyID, "Key", 1, pos, 0);
+            File.TreasureList.Add(treasureFile);
+            room.SetNotAvailable(pos);
         }
 
-        treasureData = DataContext.Instance.TreasureDic[2];
-        for (int i=0; i< isolated.Count; i++) 
+        for (int i = 0; i < otherList.Count; i++)
         {
-            pos = isolated[i].GetRandomPosition();
-            if (!_treasurePositionList.Contains(pos))
-            {
-                treasureFile = new ExploreFileTreasure(treasureData.GetItem(), treasureData.Prefab, treasureData.Height, pos, 0);
-                File.TreasureList.Add(treasureFile);
-                isolated[i].SetNotAvailable(pos);
-            }
+            treasureList = DataContext.Instance.TreasureDic[TreasureModel.TypeEnum.Normal];
+            treasureData = treasureList[UnityEngine.Random.Range(0, treasureList.Count)];
+
+            pos = otherList[i].GetRandomPosition();
+            treasureFile = new ExploreFileTreasure(treasureData.GetID(), treasureData.Prefab, treasureData.Height, pos, 0);
+            File.TreasureList.Add(treasureFile);
+            otherList[i].SetNotAvailable(pos);
         }
     }
 
@@ -308,48 +311,17 @@ public class ExploreFileRandomGenerator
             var room_1 = (edge.U as Vertex<Room>).Item;
             var room_2 = (edge.V as Vertex<Room>).Item;
 
-            //var startPosf = startRoom.bounds.center;
-            //var endPosf = endRoom.bounds.center;
-            //var startPos = new Vector2Int((int)startPosf.x, (int)startPosf.y);
-            //var endPos = new Vector2Int((int)endPosf.x, (int)endPosf.y);
-
             Vector2Int pos_1 = Vector2Int.RoundToInt(room_1.bounds.center);
             Vector2Int pos_2 = Vector2Int.RoundToInt(room_2.bounds.center);
 
-            if(MathF.Abs(pos_1.x - pos_2.x) > MathF.Abs(pos_1.y - pos_2.y))
-            {
-                if(pos_1.x > pos_2.x)
-                {
-                    pos_1.x = room_1.bounds.xMin;
-                    pos_2.x = room_2.bounds.xMax;
-                }
-                else
-                {
-                    pos_1.x = room_1.bounds.xMax;
-                    pos_2.x = room_2.bounds.xMin;
-                }
-            }
-            else
-            {
-                if (pos_1.y > pos_2.y)
-                {
-                    pos_1.y = room_1.bounds.yMin;
-                    pos_2.y = room_2.bounds.yMax;
-                }
-                else
-                {
-                    pos_1.y = room_1.bounds.yMax;
-                    pos_2.y = room_2.bounds.yMin;
-                }
-            }
-
+            Room isolatedRoom = null;
             if (room_1.Isolated && room_1 != _startRoom && room_1 != _endRoom) 
             {
-                _doorList.Add(pos_1);
+                isolatedRoom = room_1;
             }
-            if (room_2.Isolated && room_2 != _startRoom && room_2 != _endRoom) 
+            else if (room_2.Isolated && room_2 != _startRoom && room_2 != _endRoom) 
             {
-                _doorList.Add(pos_2);
+                isolatedRoom = room_2;
             }
 
             var path = aStar.FindPath(pos_1, pos_2, (DungeonPathfinder2D.Node a, DungeonPathfinder2D.Node b) => {
@@ -376,14 +348,27 @@ public class ExploreFileRandomGenerator
             });
 
             if (path != null) {
+                ExploreFIleDoor door = new ExploreFIleDoor();
                 for (int i = 0; i < path.Count; i++) {
                     var current = path[i];
 
                     if (grid[current] == CellType.None)
                     {
                         grid[current] = CellType.Hallway;
-                        File.TileList.Add(new ExploreFileTile(true, false, "Path_Cube", current));
+                        File.TileList.Add(new ExploreFileTile(true, false, "Ground", current));
                         _groundList.Add(current);
+
+                        //find door
+                        if (isolatedRoom != null)
+                        {
+                            if (isolatedRoom.InBound(current + Vector2Int.up) ||
+                               isolatedRoom.InBound(current + Vector2Int.down) ||
+                               isolatedRoom.InBound(current + Vector2Int.left) ||
+                               isolatedRoom.InBound(current + Vector2Int.right))
+                            {
+                                door.PositionList.Add(current);
+                            }
+                        }
                     }
 
                     if (i > 0) {
@@ -392,6 +377,7 @@ public class ExploreFileRandomGenerator
                         var delta = current - prev;
                     }
                 }
+                _doorList.Add(door);
             }
         }
         File.DoorList = _doorList;

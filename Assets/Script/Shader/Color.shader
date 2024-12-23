@@ -38,6 +38,7 @@
         v2f o;
         o.pos    = UnityObjectToClipPos(v.vertex);
         o.normal = normalize(mul(v.normal, unity_WorldToObject).xyz);
+        //o.posWorld = mul(unity_ObjectToWorld, v.vertex);
         o.uv     = v.uv;
         return o;
       }
@@ -53,6 +54,10 @@
         // Dot
         half NdotL = saturate(dot(normal, lightDir));
 
+        // Fog
+        float density = length(_WorldSpaceCameraPos - i.uv) * unity_FogParams.z;
+        float fogCoord = exp2(-density * density);
+
         // Color Map
         fixed4 mainTex = tex2D(_MainTex, i.uv);
         fixed3 diffuse = _LightColor0.rgb * mainTex.rgb * NdotL;
@@ -60,6 +65,7 @@
         // Color
         fixed3 ambient = _Ambient * mainTex.rgb;
         fixed4 color = fixed4(ambient + diffuse, 1.0);
+        color.rgb = lerp(unity_FogColor.rgb, color.rgb, fogCoord);
 
         return color;
       }

@@ -6,6 +6,7 @@ using Battle;
 public class ItemManager
 {
     public static readonly int CardID = 13;
+    public static readonly int KeyID = 27;
     private readonly string _fileName = "BagInfo";
     private readonly int _maxEquipCount = 10;
 
@@ -22,7 +23,7 @@ public class ItemManager
         }
     }
 
-    public BagInfo BagInfo;
+    public BagInfo Info;
 
     public void Init()
     {
@@ -34,7 +35,7 @@ public class ItemManager
         BagInfo baginfo = DataContext.Instance.Load<BagInfo>(_fileName, DataContext.PrePathEnum.Save);
         if (baginfo != null)
         {
-            BagInfo = baginfo;
+            Info = baginfo;
 
             foreach(KeyValuePair<int, Consumables> pair in baginfo.ConsumablesDic)
             {
@@ -53,13 +54,13 @@ public class ItemManager
         }
         else
         {
-            BagInfo = new BagInfo();
+            Info = new BagInfo();
         }
     }
 
     public void Save()
     {
-        DataContext.Instance.Save(BagInfo, _fileName, DataContext.PrePathEnum.Save);
+        DataContext.Instance.Save(Info, _fileName, DataContext.PrePathEnum.Save);
     }
 
     public void Delete()
@@ -73,27 +74,31 @@ public class ItemManager
 
         if (data.Category == ItemModel.CategoryEnum.Item)
         {
-            if (!BagInfo.ItemDic.ContainsKey(id))
+            if (!Info.ItemDic.ContainsKey(id))
             {
                 Item item = new Item(id, amount);
-                BagInfo.ItemDic.Add(id, item);
+                Info.ItemDic.Add(id, item);
             }
             else
             {
-                BagInfo.ItemDic[id].Amount += amount;
+                Info.ItemDic[id].Amount += amount;
             }
         }
         else if (data.Category == ItemModel.CategoryEnum.Consumables)
         {
-            if (!BagInfo.ConsumablesDic.ContainsKey(id))
+            if (!Info.ConsumablesDic.ContainsKey(id))
             {
                 Consumables consumables = new Consumables(id, amount);
-                BagInfo.ConsumablesDic.Add(id, consumables);
+                Info.ConsumablesDic.Add(id, consumables);
             }
             else
             {
-                BagInfo.ConsumablesDic[id].Amount += amount;
+                Info.ConsumablesDic[id].Amount += amount;
             }
+        }
+        else if(data.Category == ItemModel.CategoryEnum.Equip) 
+        {
+            AddEquip(id);
         }
     }
 
@@ -102,13 +107,13 @@ public class ItemManager
         ItemModel data = DataContext.Instance.ItemDic[id];
         if (data.Category == ItemModel.CategoryEnum.Item)
         {
-            Item item = BagInfo.ItemDic[id];
+            Item item = Info.ItemDic[id];
             if (amount <= item.Amount)
             {
                 item.Amount -= amount;
                 if (item.Amount == 0)
                 {
-                    BagInfo.ItemDic.Remove(item.Data.ID);
+                    Info.ItemDic.Remove(item.Data.ID);
                 }
                 return true;
             }
@@ -119,13 +124,13 @@ public class ItemManager
         }
         else if (data.Category == ItemModel.CategoryEnum.Consumables)
         {
-            Consumables consumables = BagInfo.ConsumablesDic[id];
+            Consumables consumables = Info.ConsumablesDic[id];
             if (amount <= consumables.Amount)
             {
                 consumables.Amount -= amount;
                 if (consumables.Amount == 0)
                 {
-                    BagInfo.ConsumablesDic.Remove(consumables.ID);
+                    Info.ConsumablesDic.Remove(consumables.ID);
                 }
                 return true;
             }
@@ -142,10 +147,10 @@ public class ItemManager
 
     public bool AddEquip(int id) 
     {
-        if (BagInfo.EquipList.Count < _maxEquipCount)
+        if (Info.EquipList.Count < _maxEquipCount)
         {
             Equip equip = new Equip(id);
-            BagInfo.EquipList.Add(equip);
+            Info.EquipList.Add(equip);
 
             return false;
         }
@@ -157,36 +162,36 @@ public class ItemManager
 
     public void AddEquip(Equip equip) 
     {
-        BagInfo.EquipList.Add(equip);
+        Info.EquipList.Add(equip);
     }
 
     public void MinusEquip(Equip equip)
     {
-        BagInfo.EquipList.Remove(equip);
+        Info.EquipList.Remove(equip);
     }
 
     public void AddFood(Food food) 
     {
-        BagInfo.FoodList.Add(food);
+        Info.FoodList.Add(food);
     }
 
     public void MinusFood(Food food)
     {
-        BagInfo.FoodList.Remove(food);
+        Info.FoodList.Remove(food);
     }
 
     public List<object> GetBattleItemList(BattleCharacterInfo character)
     {
         List<object> resultList = new List<object>();
 
-        foreach (KeyValuePair<int, Consumables> pair in BagInfo.ConsumablesDic) 
+        foreach (KeyValuePair<int, Consumables> pair in Info.ConsumablesDic) 
         {
             resultList.Add(pair.Value);
         }
 
-        for(int i=0; i<BagInfo.FoodList.Count; i++)
+        for(int i=0; i<Info.FoodList.Count; i++)
         {
-            resultList.Add(BagInfo.FoodList[i]);
+            resultList.Add(Info.FoodList[i]);
         }
 
         return resultList;
@@ -197,7 +202,7 @@ public class ItemManager
         ItemModel data = DataContext.Instance.ItemDic[id];
         if (data.Category == ItemModel.CategoryEnum.Item)
         {
-            if (BagInfo.ItemDic.TryGetValue(id, out Item item))
+            if (Info.ItemDic.TryGetValue(id, out Item item))
             {
                 return item.Amount;
             }
@@ -208,7 +213,7 @@ public class ItemManager
         }
         else if (data.Category == ItemModel.CategoryEnum.Consumables)
         {
-            if (BagInfo.ConsumablesDic.TryGetValue(id, out Consumables consumables))
+            if (Info.ConsumablesDic.TryGetValue(id, out Consumables consumables))
             {
                 return consumables.Amount;
             }

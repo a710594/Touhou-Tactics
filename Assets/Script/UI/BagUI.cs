@@ -16,6 +16,8 @@ public class BagUI : MonoBehaviour
     public Action<object> UseHandler;
     public Action CloseHandler;
 
+    public Text MoneyLabel;
+    public Text KeyLabel;
     public Button ConsumablesButton;
     public Button FoodButton;
     public Button ItemButton;
@@ -55,6 +57,8 @@ public class BagUI : MonoBehaviour
         BagEquipGroup.gameObject.SetActive(false);
         BagItemGroup.SetScrollView(ItemModel.CategoryEnum.Food);
         ButtonGroup.SetSelect(FoodButton.gameObject);
+        MoneyLabel.text = "Money: " + ItemManager.Instance.Info.Money;
+        KeyLabel.text = "Key: " + ItemManager.Instance.Info.Key;
     }
 
     public void SetEquipState(EquipModel.CategoryEnum category, CharacterInfo character) 

@@ -21,8 +21,8 @@ public class CharacterInfo
     public int WT;
     public string Controller;
     public Equip Weapon = new Equip(EquipModel.CategoryEnum.Weapon);
-    public Equip Armor = new Equip(EquipModel.CategoryEnum.Armor);
-    public Equip[] Amulets = new Equip[3] { new Equip(EquipModel.CategoryEnum.Amulet), new Equip(EquipModel.CategoryEnum.Amulet), new Equip(EquipModel.CategoryEnum.Amulet) };
+    public List<Equip> Armor = new List<Equip>();
+    public List<Equip> Amulets = new List<Equip>();
     public int Weight;
 
     [NonSerialized]
@@ -59,6 +59,16 @@ public class CharacterInfo
         WT = job.WT;
         Controller = job.Controller;
         Weight = job.Weight;
+
+        Weapon = new Equip(EquipModel.CategoryEnum.Weapon);
+        for (int i = 0; i < job.Armor; i++)
+        {
+            Armor.Add(new Equip(EquipModel.CategoryEnum.Armor));
+        }
+        for (int i = 0; i < job.Amulets; i++)
+        {
+            Amulets.Add(new Equip(EquipModel.CategoryEnum.Amulet));
+        }
 
         Init();
     }
