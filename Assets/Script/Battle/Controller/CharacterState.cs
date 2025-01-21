@@ -9,7 +9,7 @@ namespace Battle
     {
         public class CharacterState : BattleControllerState
         {
-            private BattleCharacterInfo info;
+            private BattleCharacterController _controller;
             private CameraMove _cameraMove;
 
             public CharacterState(StateContext context) : base(context)
@@ -19,27 +19,27 @@ namespace Battle
 
             public override void Begin()
             {
-                info = Instance.CharacterList[0];
-                Instance.SelectedCharacter = info;
+                _controller = Instance.CharacterList[0];
+                Instance.SelectedCharacter = _controller;
                 
                 if(Instance.CharacterStateBeginHandler != null)
                 {
                     Instance.CharacterStateBeginHandler();
                 }
 
-                int wt = info.CurrentWT;
-                List<BattleCharacterInfo> characterList = Instance.CharacterList;
+                int wt = _controller.Info.CurrentWT;
+                List<BattleCharacterController> characterList = Instance.CharacterList;
                 for (int i = 0; i < characterList.Count; i++)
                 {
-                    characterList[i].CurrentWT -= wt;
+                    characterList[i].Info.CurrentWT -= wt;
                 }
 
                 Instance.BattleUI.SetActionVisible(false);
-                _cameraMove.Move(info.Position, ()=> 
+                _cameraMove.Move(_controller.transform.position, ()=> 
                 {
                     _context.SetState<CommandState>();
                 });
-                Instance.BattleUI.SetArrowTransform(info.Controller.transform);
+                Instance.BattleUI.SetArrowTransform(_controller.transform);
                 Instance.BattleUI.CharacterListGroupRefresh();
             }
         }

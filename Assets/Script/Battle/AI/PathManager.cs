@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PathManager
+/*public class PathManager
 {
     private static PathManager _instance;
     public static PathManager Instance
@@ -68,3 +68,4 @@ public class PathManager
     //    }
     //}
 }
+*/

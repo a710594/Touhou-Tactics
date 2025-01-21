@@ -60,7 +60,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -136,7 +136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -268,9 +268,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 334534eb2eeb6b24f8814344c534130c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DownThreshold: 0.2
+  PressDuration: 0.1
+  Button: {fileID: 0}
+  Label: {fileID: 0}
+  Image: {fileID: 0}
   Background: {fileID: 6213691629192865047}
   SelectedImage: {fileID: 3637280055300885400}
-  Button: {fileID: 4179395175751857934}
   NameLabel: {fileID: 8347776513698267007}
   AmountLabel: {fileID: 6448842827584849480}
   ColorSetting: {fileID: 6079212725711596701}
@@ -393,7 +397,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

@@ -24,12 +24,12 @@ public class DragCameraUI : MonoBehaviour
     private CameraRotate _cameraRotate;
     private float _distance = 20;
 
-    public void Init(BattleInfo info)
+    public void Init(int minX, int maxX, int minY, int maxY)
     {
-        _minX = info.MinX;
-        _maxX = info.MaxX;
-        _minY = info.MinY;
-        _maxY = info.MaxY;
+        _minX = minX;
+        _maxX = maxX;
+        _minY = minY;
+        _maxY = maxY;
     }
 
     private void BackgroundDown(ButtonPlus button)

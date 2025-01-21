@@ -96,17 +96,19 @@ public class ScrollView : MonoBehaviour
     public void SetData(List<object> list) 
     {
         _dataList = list;
-        Refresh(0);
+        _currentIndex = 0;
+        Refresh(_currentIndex);
+        Content.anchoredPosition = _originContentAnchoredPosition;
 
         int count = list.Count / _scrollItemAmount;
         if (Type == TypeEnum.Horizontal)
         {
-           Content.sizeDelta = new Vector2(count * CellSizeX + count * SpacingX, Content.sizeDelta.y);
-           MainGridRect.anchoredPosition = new Vector2(-(Content.sizeDelta.x - MainGridRect.sizeDelta.x) / 2, 0);
+            Content.sizeDelta = new Vector2(count * CellSizeX + count * SpacingX, Content.sizeDelta.y);
+            MainGridRect.anchoredPosition = new Vector2(-(Content.sizeDelta.x - MainGridRect.sizeDelta.x) / 2, 0);
         }
         else if (Type == TypeEnum.Vertical)
         {
-           Content.sizeDelta = new Vector2(Content.sizeDelta.x, count * CellSizeY + count * SpacingY);
+            Content.sizeDelta = new Vector2(Content.sizeDelta.x, count * CellSizeY + count * SpacingY);
             MainGridRect.anchoredPosition = new Vector2(0, (Content.sizeDelta.y - MainGridRect.sizeDelta.y) / 2);
         }
         _originGridAnchoredPosition = MainGridRect.anchoredPosition;
@@ -165,8 +167,11 @@ public class ScrollView : MonoBehaviour
     private IEnumerator WaitOneFrame()
     {
         _isLock = true;
+        Debug.Log("Before:" + Content.anchoredPosition);
         yield return new WaitForEndOfFrame();
         _isLock = false;
+        //_originContentAnchoredPosition = Content.anchoredPosition;
+        Debug.Log("After:" + Content.anchoredPosition);
     }
 
     private void Refresh(int index) 

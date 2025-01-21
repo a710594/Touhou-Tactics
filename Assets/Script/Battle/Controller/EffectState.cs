@@ -25,11 +25,11 @@ namespace Battle
                 _currentLogList.Clear();
 
                 int index = 0;
-                foreach(KeyValuePair<Command, List<BattleCharacterInfo>> pair in Instance._commandTargetDic) 
+                foreach(KeyValuePair<Command, List<BattleCharacterController>> pair in Instance._commandTargetDic) 
                 {
                     if (pair.Key.Effect.Type == EffectModel.TypeEnum.Summon)
                     {
-                        Vector3 v3 = new Vector3(Instance._selectedPosition.x, Instance.Info.TileDic[Instance._selectedPosition].TileData.Height, Instance._selectedPosition.y);
+                        Vector3 v3 = new Vector3(Instance._selectedPosition.x, Instance.TileDic[Instance._selectedPosition].TileData.Height, Instance._selectedPosition.y);
                         UseEffect(pair.Key.Effect, v3);
                     }
                     else
@@ -43,7 +43,7 @@ namespace Battle
                     if (pair.Key is Skill)
                     {
                         Skill skill = (Skill)pair.Key;
-                        _character.HasUseSkill = true;
+                        _character.Info.HasUseSkill = true;
                         if (skill.CD > 0)
                         {
                             skill.CurrentCD = skill.CD + 1;
@@ -52,7 +52,7 @@ namespace Battle
                     else if(pair.Key is Support) 
                     {
                         Support support = (Support)pair.Key;
-                        _character.HasUseSupport = true;
+                        _character.Info.HasUseSupport = true;
                         if (support.CD > 0)
                         {
                             support.CurrentCD = support.CD + 1;
@@ -61,16 +61,16 @@ namespace Battle
                     else if(pair.Key is Spell) 
                     {
                         Spell spell = (Spell)pair.Key;
-                        _character.HasUseSpell = true;
+                        _character.Info.HasUseSpell = true;
                         if (spell.CD > 0)
                         {
                             for (int i = 0; i < _characterList.Count; i++)
                             {
-                                if (_characterList[i].Faction == BattleCharacterInfo.FactionEnum.Player)
+                                if (_characterList[i].Info.Faction == BattleCharacterControllerData.FactionEnum.Player)
                                 {
-                                    for (int j = 0; j < _characterList[i].SpellList.Count; j++)
+                                    for (int j = 0; j < _characterList[i].Info.SpellList.Count; j++)
                                     {
-                                        _characterList[i].SpellList[j].CurrentCD = spell.CD + 1;
+                                        _characterList[i].Info.SpellList[j].CurrentCD = spell.CD + 1;
                                     }
                                 }
                             }
@@ -80,19 +80,19 @@ namespace Battle
                     else if(pair.Key is Consumables) 
                     {
                         Consumables consumables = (Consumables)pair.Key;
-                        _character.HasUseItem = true;
+                        _character.Info.HasUseItem = true;
                         ItemManager.Instance.MinusItem(consumables.ID, 1);
                     }
                     else if(pair.Key is Food) 
                     {
                         Food food = (Food)pair.Key;
-                        _character.HasUseItem = true;
+                        _character.Info.HasUseItem = true;
                         ItemManager.Instance.MinusItem(food.ID, 1);
                     }
 
                     if(!(pair.Key is Support) && index == 0) 
                     {
-                        _character.ActionCount--;
+                        _character.Info.ActionCount--;
                     }
                     index++;
                 }
@@ -106,7 +106,7 @@ namespace Battle
                 effect.Use(_character, position);
             }
 
-            private void UseEffect(Command command, BattleCharacterInfo target) 
+            private void UseEffect(Command command, BattleCharacterController target) 
             {
                 HitType hitType;
 
@@ -133,7 +133,7 @@ namespace Battle
 
             private void RerangeLog()
             {
-                Dictionary<BattleCharacterInfo, List<Log>> rerangeDic = new Dictionary<BattleCharacterInfo, List<Log>>();
+                Dictionary<BattleCharacterController, List<Log>> rerangeDic = new Dictionary<BattleCharacterController, List<Log>>();
                 for (int i=0; i< _currentLogList.Count; i++) 
                 {
                     if (!rerangeDic.ContainsKey(_currentLogList[i].Target)) 
@@ -144,13 +144,13 @@ namespace Battle
                 }
 
                 _maxFloatingCount = 0;
-                foreach(KeyValuePair<BattleCharacterInfo, List<Log>> pair in rerangeDic) 
+                foreach(KeyValuePair<BattleCharacterController, List<Log>> pair in rerangeDic) 
                 {
                     SetUI(pair.Key, pair.Value);
                 }
             }
 
-            private void SetUI(BattleCharacterInfo target, List<Log> logList)
+            private void SetUI(BattleCharacterController target, List<Log> logList)
             {
                 Instance.BattleUI.SetLittleHpBarValue(target);
                 Instance.BattleUI.PlayFloatingNumberPool(target, logList);
@@ -166,19 +166,19 @@ namespace Battle
 
             private void CheckResult()
             {
-                BattleCharacterInfo target;
-                foreach(KeyValuePair<Command, List<BattleCharacterInfo>> pair in Instance._commandTargetDic)
+                BattleCharacterController target;
+                foreach(KeyValuePair<Command, List<BattleCharacterController>> pair in Instance._commandTargetDic)
                  {
                     for(int i=0; i<pair.Value.Count; i++)
                     {
                         target = pair.Value[i];
-                        if (target.CurrentHP <= 0)
+                        if (target.Info.CurrentHP <= 0)
                         {
-                            if (target.Faction == BattleCharacterInfo.FactionEnum.Player)
+                            if (target.Info.Faction == BattleCharacterControllerData.FactionEnum.Player)
                             {
                                 if (Instance.DyingList.Contains(target))
                                 {
-                                    target.Controller.gameObject.SetActive(false);
+                                    target.gameObject.SetActive(false);
                                     Instance.DyingList.Remove(target);
                                     Instance.DeadList.Add(target);
                                 }
@@ -186,20 +186,20 @@ namespace Battle
                                 {
                                     _characterList.Remove(target);
                                     Instance.DyingList.Add(target);
-                                    target.Controller.SetFlash(true);
+                                    target.SetFlash(true);
                                 }
                             }
                             else
                             {
                                 _characterList.Remove(target);
-                                target.Controller.gameObject.SetActive(false);
+                                target.gameObject.SetActive(false);
                             }
                         }
                         else if (Instance.DyingList.Contains(target)) 
                         {
                             _characterList.Add(target);
                             Instance.DyingList.Remove(target);
-                            target.Controller.SetFlash(false);
+                            target.SetFlash(false);
                         }
                     }
                  }
@@ -208,7 +208,7 @@ namespace Battle
                 int enemyCount = 0;
                 for (int i = 0; i < _characterList.Count; i++)
                 {
-                    if (_characterList[i].Faction == BattleCharacterInfo.FactionEnum.Player)
+                    if (_characterList[i].Info.Faction == BattleCharacterControllerData.FactionEnum.Player)
                     {
                         playerCount++;
                     }
@@ -228,7 +228,7 @@ namespace Battle
                 }
                 else
                 {
-                    if (_character.ActionCount > 0)
+                    if (_character.Info.ActionCount > 0)
                     {
                         _context.SetState<CommandState>();
                     }

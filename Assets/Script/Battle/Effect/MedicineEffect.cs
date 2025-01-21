@@ -17,12 +17,12 @@ public class MedicineEffect : Effect
         Type = EffectModel.TypeEnum.Medicine;
     }
 
-    public override void Use(HitType hitType, BattleCharacterInfo user, BattleCharacterInfo target, List<Log> logList)
+    public override void Use(HitType hitType, BattleCharacterController user, BattleCharacterController target, List<Log> logList)
     {
         if (hitType != HitType.Miss)
         {
             int recover = Value;
-            target.SetRecover(recover);
+            target.Info.SetRecover(recover);
             logList.Add(new Log(user, target, this, hitType, recover.ToString()));
         }
         else

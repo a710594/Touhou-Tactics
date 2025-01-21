@@ -253,7 +253,6 @@ GameObject:
   - component: {fileID: 37822348}
   - component: {fileID: 37822352}
   - component: {fileID: 37822351}
-  - component: {fileID: 37822350}
   - component: {fileID: 37822349}
   - component: {fileID: 37822353}
   m_Layer: 0
@@ -294,22 +293,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &37822350
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 37822347}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8a84d4244b7fd64992eb1da1abf343d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ID: 1_1
-  Quad: {fileID: 2044258540}
-  Select: {fileID: 1004942732}
-  Buff: {fileID: 976935666}
 --- !u!23 &37822351
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -369,7 +352,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 37822347}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 785649d81da25c84aa3d4b851420484c, type: 3}
+  m_Script: {fileID: 11500000, guid: e5bad31d2f9589346b726b863e0e3b94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ID: 1
@@ -1522,7 +1505,6 @@ GameObject:
   - component: {fileID: 411605168}
   - component: {fileID: 411605167}
   - component: {fileID: 411605169}
-  - component: {fileID: 411605170}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -1568,29 +1550,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 411605166}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a33b84171c09a3649bc9f84d0acdada0, type: 3}
+  m_Script: {fileID: 11500000, guid: 8fb8fcf177daa5e4a998faa22b8253e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   FileName: Tutorial_1
-  MustBeEqualToNeedCount: 1
-  NeedCount: 1
+  PlayerCount: 1
   Exp: 1
-  Tilemap: {fileID: 1377411095}
-  EnemyGroup: {fileID: 1632593920}
---- !u!114 &411605170
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 411605166}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 131db34bb1175d04ea7cf4d83e0bf3cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FileName: Tutorial_1
-  Generator: {fileID: 411605169}
   Tilemap: {fileID: 1377411095}
   EnemyGroup: {fileID: 1632593920}
 --- !u!1 &412234053
@@ -2031,7 +1996,6 @@ GameObject:
   - component: {fileID: 510879280}
   - component: {fileID: 510879284}
   - component: {fileID: 510879283}
-  - component: {fileID: 510879282}
   - component: {fileID: 510879281}
   - component: {fileID: 510879285}
   m_Layer: 0
@@ -2072,22 +2036,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &510879282
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 510879279}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8a84d4244b7fd64992eb1da1abf343d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ID: 1_1
-  Quad: {fileID: 2003829585}
-  Select: {fileID: 412234055}
-  Buff: {fileID: 1447165605}
 --- !u!23 &510879283
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2147,7 +2095,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 510879279}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 785649d81da25c84aa3d4b851420484c, type: 3}
+  m_Script: {fileID: 11500000, guid: e5bad31d2f9589346b726b863e0e3b94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ID: 1
@@ -6617,7 +6565,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1690765057}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 785649d81da25c84aa3d4b851420484c, type: 3}
+  m_Script: {fileID: 11500000, guid: e5bad31d2f9589346b726b863e0e3b94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ID: 1
@@ -7669,7 +7617,6 @@ GameObject:
   - component: {fileID: 2019337088}
   - component: {fileID: 2019337092}
   - component: {fileID: 2019337091}
-  - component: {fileID: 2019337090}
   - component: {fileID: 2019337089}
   - component: {fileID: 2019337093}
   m_Layer: 0
@@ -7710,22 +7657,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2019337090
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2019337087}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8a84d4244b7fd64992eb1da1abf343d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ID: 1_1
-  Quad: {fileID: 1844189320}
-  Select: {fileID: 1059060346}
-  Buff: {fileID: 546685603}
 --- !u!23 &2019337091
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -7785,7 +7716,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2019337087}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 785649d81da25c84aa3d4b851420484c, type: 3}
+  m_Script: {fileID: 11500000, guid: e5bad31d2f9589346b726b863e0e3b94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ID: 1

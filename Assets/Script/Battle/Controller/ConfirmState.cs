@@ -22,22 +22,22 @@ namespace Battle
                 Dictionary<Command, List<Vector2Int>> commandPositionDic = new Dictionary<Command, List<Vector2Int>>();
                 Instance._commandTargetDic.Clear();
 
-                Command command = _character.SelectedCommand;
+                Command command = _character.Info.SelectedCommand;
                 while(command != null)
                 {
-                    commandPositionList = Instance.SetCommandPosition(Utility.ConvertToVector2Int(_character.Position), selectedPosition, command);
+                    commandPositionList = Instance.SetCommandPosition(Utility.ConvertToVector2Int(_character.transform.position), selectedPosition, command);
                     commandPositionDic.Add(command, commandPositionList);
                     command = command.SubCommand;
                 }
 
                 //one character in main commandPositionList
                 int predictionHp;
-                BattleCharacterInfo target = null;
+                BattleCharacterController target = null;
                 command = commandPositionDic.First().Key;
                 commandPositionList = commandPositionDic.First().Value;
                 for (int i = 0; i < _allCharacterList.Count; i++)
                 {
-                    if (commandPositionList.Contains(Utility.ConvertToVector2Int(_allCharacterList[i].Position)))
+                    if (commandPositionList.Contains(Utility.ConvertToVector2Int(_allCharacterList[i].transform.position)))
                     {
                         target = _allCharacterList[i];
                         break;
@@ -46,9 +46,9 @@ namespace Battle
 
                 if(target!=null)
                 {
-                    predictionHp = Instance.GetPredictionHp(_character, target, target.CurrentHP, command.Effect);
-                    Instance.BattleUI.SetCharacterInfoUI_2(target);
-                    Instance.BattleUI.SetPredictionInfo_2(target, predictionHp);
+                    predictionHp = Instance.GetPredictionHp(_character, target, target.Info.CurrentHP, command.Effect);
+                    Instance.BattleUI.SetCharacterInfoUI_2(target.Info);
+                    Instance.BattleUI.SetPredictionInfo_2(target.Info, predictionHp);
                     float hitRate = Instance.GetHitRate(command.Hit, _character, target);
                     Instance.BattleUI.SetHitRate(Mathf.RoundToInt(hitRate * 100));
                 }
@@ -56,14 +56,14 @@ namespace Battle
                 Instance.ClearQuad();
                 foreach(KeyValuePair<Command, List<Vector2Int>> pair in commandPositionDic)
                 {
-                    Instance._commandTargetDic.Add(pair.Key, new List<BattleCharacterInfo>());
+                    Instance._commandTargetDic.Add(pair.Key, new List<BattleCharacterController>());
                     Instance.SetQuad(pair.Value, Instance._yellow); 
                     //all character in main commandPositionList
                     for (int i = 0; i < _allCharacterList.Count; i++)
                     {
-                        if (pair.Value.Contains(Utility.ConvertToVector2Int(_allCharacterList[i].Position)))
+                        if (pair.Value.Contains(Utility.ConvertToVector2Int(_allCharacterList[i].transform.position)))
                         {
-                            predictionHp = Instance.GetPredictionHp(_character, _allCharacterList[i], _allCharacterList[i].CurrentHP, pair.Key.Effect);
+                            predictionHp = Instance.GetPredictionHp(_character, _allCharacterList[i], _allCharacterList[i].Info.CurrentHP, pair.Key.Effect);
                             Instance.BattleUI.SetPredictionLittleHpBar(_allCharacterList[i], predictionHp);
                             Instance._commandTargetDic[pair.Key].Add(_allCharacterList[i]);
                         }
@@ -71,11 +71,10 @@ namespace Battle
                 }
 
 
-                BattleCharacterController _controller = _character.Controller;
-                _controller.SetDirection(selectedPosition - Utility.ConvertToVector2Int(_controller.transform.position));
-                _controller.SetSprite();
+                _character.SetDirection(selectedPosition - Utility.ConvertToVector2Int(_character.transform.position));
+                _character.SetSprite();
 
-                Instance.Info.TileDic[Instance._selectedPosition].TileObject.Select.gameObject.SetActive(true);
+                Instance.TileDic[Instance._selectedPosition].TileObject.Select.gameObject.SetActive(true);
             }
 
             public override void Click(Vector2Int position)
@@ -102,7 +101,7 @@ namespace Battle
             public override void End()
             {
                 Instance._cameraController.Clear();
-                Instance.Info.TileDic[Instance._selectedPosition].TileObject.Select.gameObject.SetActive(false);
+                Instance.TileDic[Instance._selectedPosition].TileObject.Select.gameObject.SetActive(false);
             }
         }
     }

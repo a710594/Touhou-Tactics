@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace Battle
+/*namespace Battle
 {
     [CustomEditor(typeof(BattleFileGenerator))]
     public class MapFileGeneratorEditor : Editor
@@ -19,4 +19,4 @@ namespace Battle
             }
         }
     }
-}
+}*/

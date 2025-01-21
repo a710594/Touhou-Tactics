@@ -14,6 +14,7 @@ public class BagUI : MonoBehaviour
     }
 
     public Action<object> UseHandler;
+    public Action<int, object> SetEquipHandler;
     public Action CloseHandler;
 
     public Text MoneyLabel;
@@ -31,7 +32,7 @@ public class BagUI : MonoBehaviour
     public ButtonGroup ButtonGroup;
     public TipLabel TipLabel;
 
-    private bool _canUse;
+    private int _equipIndex;
     private StateEnum _currentState;
     private object _selectedObj = null;
     private static BagUI _bagUI;
@@ -61,9 +62,10 @@ public class BagUI : MonoBehaviour
         KeyLabel.text = "Key: " + ItemManager.Instance.Info.Key;
     }
 
-    public void SetEquipState(EquipModel.CategoryEnum category, CharacterInfo character) 
+    public void SetEquipState(EquipModel.CategoryEnum category, CharacterInfo character, int index) 
     {
         _currentState = StateEnum.Equip;
+        _equipIndex = index;
         BagItemGroup.gameObject.SetActive(false);
         BagEquipGroup.gameObject.SetActive(true);
         BagEquipGroup.SetScrollView(category, character);
@@ -120,7 +122,7 @@ public class BagUI : MonoBehaviour
 
     private void ScrollOnClick(object obj) 
     {
-        if (_currentState == StateEnum.Equip)
+        /*if (_currentState == StateEnum.Equip)
         {
             UseButton.gameObject.SetActive(true);
             if (obj is BagScrollItem.Data)
@@ -136,42 +138,44 @@ public class BagUI : MonoBehaviour
             _selectedObj = obj;
             _canUse = true;
             UseButton.gameObject.SetActive(true);
+        }*/
+
+        if(_currentState == StateEnum.Equip || _currentState== StateEnum.Use) 
+        {
+            _selectedObj = obj;
+            UseButton.gameObject.SetActive(true);
         }
     }
 
     private void UseOnClick() 
     {
-        if (_canUse)
+        if (_selectedObj is Equip)
         {
-            if (_selectedObj is Equip)
+            ItemManager.Instance.MinusEquip((Equip)_selectedObj);
+            if (SetEquipHandler != null)
             {
-                ItemManager.Instance.MinusEquip((Equip)_selectedObj);
+                SetEquipHandler(_equipIndex, _selectedObj);
             }
-            else if (_selectedObj is Food)
-            {
-                ItemManager.Instance.MinusFood((Food)_selectedObj);
-            }
-            else if (_selectedObj is Item)
-            {
-                Item item = (Item)_selectedObj;
-                ItemManager.Instance.MinusItem(item.ID, 1);
-            }
-            else if (_selectedObj is Consumables)
-            {
-                Consumables consumables = (Consumables)_selectedObj;
-                ItemManager.Instance.MinusItem(consumables.ID, 1);
-            }
-
+        }
+        else if (_selectedObj is Food)
+        {
+            ItemManager.Instance.MinusFood((Food)_selectedObj);
             if (UseHandler != null)
             {
                 UseHandler(_selectedObj);
             }
-            Destroy(gameObject);
         }
-        else
+        else if (_selectedObj is Consumables)
         {
-            TipLabel.SetLabel("該角色無法使用這麼重的裝備");
+            Consumables consumables = (Consumables)_selectedObj;
+            ItemManager.Instance.MinusItem(consumables.ID, 1);
+            if (UseHandler != null)
+            {
+                UseHandler(_selectedObj);
+            }
         }
+
+        Destroy(gameObject);
     }
 
     public void Close() 

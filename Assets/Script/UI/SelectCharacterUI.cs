@@ -16,28 +16,21 @@ namespace Battle
         public CharacterInfoUI CharacterInfoUI;
         public Text NeedCountLabel;
 
-        private int _needCount;
+        private int _minCount;
+        private int _maxCount;
         private bool _mustBeEqualToNeedCount;
         
         private Timer _timer = new Timer();
         private List<CharacterInfo> _tempCharacterList = new List<CharacterInfo>();
         private List<CharacterInfo> _selectedCharacterList = new List<CharacterInfo>();
 
-        public void Init(int needCount, bool mustBeEqualToNeedCount, List<CharacterInfo> list)
+        public void Init(int minCount, int maxCount, List<CharacterInfo> list)
         {
-            _needCount = needCount;
-            _mustBeEqualToNeedCount = mustBeEqualToNeedCount;
+            _minCount = minCount;
+            _maxCount = maxCount;
             _tempCharacterList = list;
 
-            if (mustBeEqualToNeedCount) 
-            {
-                NeedCountLabel.text = "可放置的角色數量(最少/最多):" + needCount.ToString() + " / " + needCount.ToString();
-            }
-            else 
-            {
-                NeedCountLabel.text = "可放置的角色數量(最少/最多):" + "1 / " + needCount.ToString();
-            }
-
+            NeedCountLabel.text = "可放置的角色數量(最少/最多):" + _minCount + " / " + _maxCount;
             ScrollView.SetData(new List<object>(_tempCharacterList));
             ScrollView.DragBegingHandler = OnDragBegin;
             ScrollView.DragHandler = OnDrag;
@@ -71,7 +64,6 @@ namespace Battle
                 BattleCharacterController controller = BattleController.Instance.PlaceCharacter(position, character);
                 if (controller != null)
                 {
-                    controller.SetCharacterInfo(character);
                     controller.RightClickHandler = OnRightClick;
                     _tempCharacterList.Remove(character);
                     if (!_selectedCharacterList.Contains(character))
@@ -103,9 +95,10 @@ namespace Battle
             }
         }*/
 
-        private void OnRightClick(CharacterInfo info) 
+        private void OnRightClick(int jobId) 
         {
-            BattleController.Instance.RemoveCharacterSprite(info);
+            BattleController.Instance.RemoveCharacterSprite(jobId);
+            CharacterInfo info = CharacterManager.Instance.GetCharacterInfoById(jobId);
             _tempCharacterList.Add(info);
             _selectedCharacterList.Remove(info);
             ScrollView.SetData(new List<object>(_tempCharacterList));
@@ -124,34 +117,24 @@ namespace Battle
 
         private void ConfirmOnClick()
         {
-            if (_selectedCharacterList.Count == _needCount)
+            if (_selectedCharacterList.Count == _maxCount)
             {
                 BattleController.Instance.SetState<BattleController.CharacterState>();
             }
-            else
+            else if(_selectedCharacterList.Count < _minCount)
             {
-                if(_mustBeEqualToNeedCount)
+                ConfirmUI.Open("至少要放置" +_minCount + "個角色", "確定", null);
+            }
+            else if(_selectedCharacterList.Count < _maxCount) 
+            {
+                ConfirmUI.Open("還可以再放置" + (_maxCount - _selectedCharacterList.Count) + "個角色，確定要開始戰鬥嗎？", "確定", "取消", () =>
                 {
-                    ConfirmUI.Open("必需放置" + _needCount + "個角色才能開始戰鬥", "確定", null);
-                }
-                else
-                {
-                    if(_selectedCharacterList.Count == 0) 
-                    {
-                        ConfirmUI.Open("至少要放置 1 個角色", "確定", null);
-                    }
-                    else if (_selectedCharacterList.Count < _needCount)
-                    {
-                        ConfirmUI.Open("還可以再放置" + (_needCount - _selectedCharacterList.Count) + "個角色，確定要開始戰鬥嗎？", "確定", "取消", () =>
-                        {
-                            BattleController.Instance.SetState<BattleController.CharacterState>();
-                        }, null);
-                    }
-                    else
-                    {
-                        ConfirmUI.Open("不能放置超過" + _needCount + "個角色，多出了" + (_selectedCharacterList.Count - _needCount) + "個", "確定", null);
-                    }
-                }
+                    BattleController.Instance.SetState<BattleController.CharacterState>();
+                }, null);
+            }
+            else if(_selectedCharacterList.Count > _maxCount) 
+            {
+                ConfirmUI.Open("不能放置超過" + _maxCount + "個角色，多出了" + (_selectedCharacterList.Count - _maxCount) + "個", "確定", null);
             }
         }
 

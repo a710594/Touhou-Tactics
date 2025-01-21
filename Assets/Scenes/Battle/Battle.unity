@@ -7864,7 +7864,7 @@ GameObject:
   - component: {fileID: 1421777625}
   - component: {fileID: 1421777627}
   m_Layer: 0
-  m_Name: BattleMapBuilder
+  m_Name: BattleController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

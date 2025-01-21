@@ -9,15 +9,15 @@ public class PurifyEffect : Effect
     {
     }
 
-    public override void Use(HitType hitType, BattleCharacterInfo user, BattleCharacterInfo target, List<Log> logList)
+    public override void Use(HitType hitType, BattleCharacterController user, BattleCharacterController target, List<Log> logList)
     {
         if (hitType != HitType.Miss)
         {
-            for (int i=0; i<target.StatusList.Count; i++) 
+            for (int i=0; i<target.Info.StatusList.Count; i++) 
             {
-                if(target.StatusList[i] is Poison || target.StatusList[i] is Sleep) //�H���ٷ|����h���������`���A
+                if(target.Info.StatusList[i] is Poison || target.Info.StatusList[i] is Sleep) //�H���ٷ|����h���������`���A
                 {
-                    target.StatusList.RemoveAt(i);
+                    target.Info.StatusList.RemoveAt(i);
                     i--;
                 }
             }

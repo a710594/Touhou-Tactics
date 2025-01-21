@@ -9,10 +9,10 @@ public class RecoverAllEffect : Effect
     {
     }
 
-    public override void Use(HitType hitType, BattleCharacterInfo user, BattleCharacterInfo target, List<Log> logList)
+    public override void Use(HitType hitType, BattleCharacterController user, BattleCharacterController target, List<Log> logList)
     {
-        int recover = user.MaxHP - user.CurrentHP;
-        target.SetRecover(recover);
+        int recover = user.Info.MaxHP - user.Info.CurrentHP;
+        target.Info.SetRecover(recover);
         logList.Add(new Log(user, target, this, hitType, recover.ToString()));
 
         if (SubEffect != null && hitType != HitType.Miss)

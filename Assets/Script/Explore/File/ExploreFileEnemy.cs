@@ -34,4 +34,15 @@ public class ExploreFileEnemy
 
     [NonSerialized]
     public ExploreEnemyController Controller;
+
+    public ExploreFileEnemy() { }
+
+    public ExploreFileEnemy(EnemyGroupModel data, Vector2Int pos) 
+    {
+        Type = TypeEnum.Random;
+        AI = AiEnum.Default;
+        Prefab = data.Prefab;
+        Position = pos;
+        EnemyGroupId = data.ID;
+    }
 }

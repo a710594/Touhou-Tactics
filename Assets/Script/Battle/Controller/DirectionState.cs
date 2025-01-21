@@ -24,7 +24,7 @@ namespace Battle
                 Instance.BattleUI.SetActionVisible(false);
                 Instance.BattleUI.SetCharacterInfoUI_1(null);
                 Instance.BattleUI.SetDirectionGroupVisible(true);
-                Instance.BattleUI.SetDirectionGroupPosition(_character.Position);
+                Instance.BattleUI.SetDirectionGroupPosition(_character.transform.position);
 
                 if(Instance.DirectionStateBeginHandler!=null)
                 {
@@ -55,10 +55,9 @@ namespace Battle
             {
                 if (!_lock)
                 {
-                    BattleCharacterController _controller = _character.Controller;
                     _lock = true;
-                    _controller.SetDirection(direction);
-                    _controller.SetSprite();
+                    _character.SetDirection(direction);
+                    _character.SetSprite();
                     _timer.Start(0.5f, () =>
                     {
                         _lock = false;

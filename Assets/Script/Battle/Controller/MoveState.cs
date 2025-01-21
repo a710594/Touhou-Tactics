@@ -18,10 +18,8 @@ namespace Battle
             public override void Begin()
             {
                 _originalPosition = new Vector2Int(int.MaxValue, int.MaxValue);
-                BattleInfo info = Instance.Info;
                 _character = Instance.SelectedCharacter;
                 _characterList = Instance.CharacterList;
-                _character.Controller.transform.position = _character.Position;
                 Instance.BattleUI.SetActionVisible(false);
                 _stepList = Instance.GetStepList(_character);
                 Instance.ClearQuad();
@@ -43,33 +41,30 @@ namespace Battle
                     if (position == _originalPosition) //�T�w����
                     {
                         Instance._canClick = false;
-                        _character.Controller.transform.position = _character.Position;
                         Instance.BattleUI.SetSkillVisible(false);
-                        Instance.Info.TileDic[_originalPosition].TileObject.Select.gameObject.SetActive(false);
+                        Instance.TileDic[_originalPosition].TileObject.Select.gameObject.SetActive(false);
                         Instance.ClearQuad();
-                        List<Vector2Int> path = Instance.GetPath(Utility.ConvertToVector2Int(_character.Position), position, _character.Faction);
-                        _character.Controller.Move(path);
-                        _character.LastPosition = _character.Position;
-                        _character.Position = new Vector3(position.x, Instance.Info.TileDic[position].TileData.Height, position.y);
-                        _character.HasMove = true;
+                        List<Vector2Int> path = Instance.GetPath(Utility.ConvertToVector2Int(_character.transform.position), position, _character.Info.Faction);
+                        _character.Move(path);
+                        _character.LastPosition = _character.transform.position;
+                        _character.Info.HasMove = true;
                     }
                     else
                     {
-                        if (Instance.Info.TileDic.ContainsKey(_originalPosition))
+                        if (Instance.TileDic.ContainsKey(_originalPosition))
                         {
-                            Instance.Info.TileDic[_originalPosition].TileObject.Select.gameObject.SetActive(false);
+                            Instance.TileDic[_originalPosition].TileObject.Select.gameObject.SetActive(false);
                         }
                         _originalPosition = position;
-                        Instance.Info.TileDic[_originalPosition].TileObject.Select.gameObject.SetActive(true);
+                        Instance.TileDic[_originalPosition].TileObject.Select.gameObject.SetActive(true);
                     }
                 }
                 else
                 {
-                    if (Instance.Info.TileDic.ContainsKey(_originalPosition))
+                    if (Instance.TileDic.ContainsKey(_originalPosition))
                     {
-                        Instance.Info.TileDic[_originalPosition].TileObject.Select.gameObject.SetActive(false);
+                        Instance.TileDic[_originalPosition].TileObject.Select.gameObject.SetActive(false);
                     }
-                    _character.Controller.transform.position = _character.Position;
                     _context.SetState<CommandState>();
                 }
             }

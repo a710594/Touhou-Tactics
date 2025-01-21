@@ -14,29 +14,20 @@ public class CharacterInfoUI : MonoBehaviour
     public StatusIconGroup StatusIconGroup;
     public Button Button;
 
-    private BattleCharacterInfo _character;
+    private BattleCharacterControllerData _character;
 
     public void SetVisible(bool isVisible) 
     {
         gameObject.SetActive(isVisible);
     }
 
-    public void SetData(BattleCharacterInfo character) 
+    public void SetData(BattleCharacterControllerData character) 
     {
         _character = character;
         LvLabel.text = "Lv. " + character.Lv;
         NameLabel.text = character.Name;
         HitRateLabel.gameObject.SetActive(false);
         HpBar.SetValue(character.CurrentHP, character.MaxHP);
-        if (character.Faction == BattleCharacterInfo.FactionEnum.Player)
-        {
-            PpBar.gameObject.SetActive(true);
-            PpBar.SetValue(character.CurrentPP, BattleCharacterInfo.MaxPP);
-        }
-        else
-        {
-            PpBar.gameObject.SetActive(false);
-        }
 
         StatusIconGroup.SetData(character, true);
     }
@@ -76,13 +67,13 @@ public class CharacterInfoUI : MonoBehaviour
         if (_character != null)
         {
             CharacterDetailUI characterDetailUI = CharacterDetailUI.Open(false);
-            characterDetailUI.SetData(_character);
+            characterDetailUI.SetData((BattlePlayerInfo)_character);
         }
     }
 
     private void Awake()
     {
-        PpBar.SetValue(0, BattleCharacterInfo.MaxPP);
+        //PpBar.SetValue(0, BattleCharacterInfo.MaxPP);
         Button.onClick.AddListener(ButtonOnClick);
     }
 }

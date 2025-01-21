@@ -13,7 +13,7 @@ public class LittleHpBarWithStatus : MonoBehaviour
         HpBar.SetAnchor(anchor);
     }
 
-    public void SetData(BattleCharacterInfo info) 
+    public void SetData(BattleCharacterControllerData info) 
     {
         HpBar.SetValue(info.CurrentHP, info.MaxHP);
         StatusIconGroup.SetData(info, false);

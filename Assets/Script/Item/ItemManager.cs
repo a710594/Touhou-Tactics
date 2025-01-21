@@ -180,7 +180,7 @@ public class ItemManager
         Info.FoodList.Remove(food);
     }
 
-    public List<object> GetBattleItemList(BattleCharacterInfo character)
+    public List<object> GetBattleItemList()
     {
         List<object> resultList = new List<object>();
 

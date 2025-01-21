@@ -7,7 +7,7 @@ namespace Battle
 {
     public partial class BattleController
     {
-        public List<Vector2Int> GetPath(Vector2Int start, Vector2Int goal, BattleCharacterInfo.FactionEnum faction)
+        public List<Vector2Int> GetPath(Vector2Int start, Vector2Int goal, BattleCharacterControllerData.FactionEnum faction)
         {
             if (start == goal)
             {
@@ -102,10 +102,10 @@ namespace Battle
             return null;
         }
 
-        public int GetDistance(Vector2Int start, Vector2Int goal, BattleCharacterInfo.FactionEnum faction)
+        public int GetDistance(Vector2Int start, Vector2Int goal, BattleCharacterControllerData.FactionEnum faction)
         {
             int distance = 0;
-            if (Info.TileDic[goal].MoveCost == -1)
+            if (TileDic[goal].MoveCost == -1)
             {
                 return -1;
             }
@@ -132,15 +132,15 @@ namespace Battle
             }
         }
 
-        public List<Vector2Int> GetStepList(BattleCharacterInfo character)
+        public List<Vector2Int> GetStepList(BattleCharacterController character)
         {
             int distance;
-            Vector2Int start = Utility.ConvertToVector2Int(character.Position);
-            List<Vector2Int> stepList = Utility.GetRange(character.MOV, start, Info);
+            Vector2Int start = Utility.ConvertToVector2Int(character.transform.position);
+            List<Vector2Int> stepList = GetRange(character.Info.MOV, start);
             for (int i = 0; i < stepList.Count; i++)
             {
-                distance = GetDistance(start, stepList[i], character.Faction);
-                if (distance > character.MOV || distance == -1)
+                distance = GetDistance(start, stepList[i], character.Info.Faction);
+                if (distance > character.Info.MOV || distance == -1)
                 {
                     stepList.RemoveAt(i);
                     i--;
@@ -151,7 +151,7 @@ namespace Battle
             {
                 if (CharacterList[i] != character)
                 {
-                    stepList.Remove(Utility.ConvertToVector2Int(CharacterList[i].Position));
+                    stepList.Remove(Utility.ConvertToVector2Int(CharacterList[i].transform.position));
                 }
             }
 
@@ -159,7 +159,7 @@ namespace Battle
             {
                 if (DyingList[i] != character)
                 {
-                    stepList.Remove(Utility.ConvertToVector2Int(DyingList[i].Position));
+                    stepList.Remove(Utility.ConvertToVector2Int(DyingList[i].transform.position));
                 }
             }
 
@@ -185,26 +185,26 @@ namespace Battle
             return path;
         }
 
-        private List<Vector2Int> GetNeighborPos(Vector2Int current, Vector2Int goal, BattleCharacterInfo.FactionEnum faction)
+        private List<Vector2Int> GetNeighborPos(Vector2Int current, Vector2Int goal, BattleCharacterControllerData.FactionEnum faction)
         {
             List<Vector2Int> list = new List<Vector2Int>();
 
-            if (Info.TileDic.ContainsKey(current + Vector2Int.left) && MoveCost(current, current + Vector2Int.left, goal, faction) > 0)
+            if (TileDic.ContainsKey(current + Vector2Int.left) && MoveCost(current, current + Vector2Int.left, goal, faction) > 0)
             {
                 list.Add(current + Vector2Int.left);
             }
 
-            if (Info.TileDic.ContainsKey(current + Vector2Int.right) && MoveCost(current, current + Vector2Int.right, goal, faction) > 0)
+            if (TileDic.ContainsKey(current + Vector2Int.right) && MoveCost(current, current + Vector2Int.right, goal, faction) > 0)
             {
                 list.Add(current + Vector2Int.right);
             }
 
-            if (Info.TileDic.ContainsKey(current + Vector2Int.up) && MoveCost(current, current + Vector2Int.up, goal, faction) > 0)
+            if (TileDic.ContainsKey(current + Vector2Int.up) && MoveCost(current, current + Vector2Int.up, goal, faction) > 0)
             {
                 list.Add(current + Vector2Int.up);
             }
 
-            if (Info.TileDic.ContainsKey(current + Vector2Int.down) && MoveCost(current, current + Vector2Int.down, goal, faction) > 0)
+            if (TileDic.ContainsKey(current + Vector2Int.down) && MoveCost(current, current + Vector2Int.down, goal, faction) > 0)
             {
                 list.Add(current + Vector2Int.down);
             }
@@ -213,7 +213,7 @@ namespace Battle
         }
 
         //from:目前座標 to:下一個座標 goal:路徑的最終目標 //faction:自己的陣營
-        private int MoveCost(Vector2Int from, Vector2Int to, Vector2Int goal, BattleCharacterInfo.FactionEnum faction)
+        private int MoveCost(Vector2Int from, Vector2Int to, Vector2Int goal, BattleCharacterControllerData.FactionEnum faction)
         {
             int cost = 0;
             try
@@ -221,16 +221,16 @@ namespace Battle
                 for (int i = 0; i < CharacterList.Count; i++)
                 {
                     //如果有角色不為目標且與自己陣營不同,就視為障礙物
-                    if (Utility.ConvertToVector2Int(CharacterList[i].Position) == to && Utility.ConvertToVector2Int(CharacterList[i].Position) != goal)
+                    if (Utility.ConvertToVector2Int(CharacterList[i].transform.position) == to && Utility.ConvertToVector2Int(CharacterList[i].transform.position) != goal)
                     {
-                        if (faction != BattleCharacterInfo.FactionEnum.None && CharacterList[i].Faction != faction)
+                        if (faction != BattleCharacterControllerData.FactionEnum.None && CharacterList[i].Info.Faction != faction)
                         {
                             return -1;
                         }
                     }
                 }
-                int height = Info.TileDic[from].TileData.Height - Info.TileDic[to].TileData.Height;
-                cost = Info.TileDic[to].MoveCost + Mathf.Abs(height);
+                int height = TileDic[from].TileData.Height - TileDic[to].TileData.Height;
+                cost = TileDic[to].MoveCost + Mathf.Abs(height);
             }
             catch (Exception ex)
             {

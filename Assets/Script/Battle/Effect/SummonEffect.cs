@@ -10,9 +10,9 @@ namespace Battle
         {
         }
 
-        public override void Use(BattleCharacterInfo user, Vector3 position)
+        public override void Use(BattleCharacterController user, Vector3 position)
         {
-            BattleController.Instance.CreateCharacter(Value, user.Lv, position);
+            BattleController.Instance.CreateEnemy(Value, user.Info.Lv, position);
         }
     }
 }

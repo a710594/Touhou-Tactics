@@ -19,66 +19,6 @@ public static class Utility
         }
     }
 
-    /*
-     取得一個範圍內的座標,例如如果range=2,就會像這樣
-      x
-     xxx
-    xxxxx
-     xxx
-      x
-    */
-    public static List<Vector2Int> GetRange(int range, Vector2Int start, BattleInfo info)
-    {
-        Vector2Int position;
-        List<Vector2Int> list = new List<Vector2Int>();
-
-        //range == -1 代表射程無限
-        if (range == -1)
-        {
-            for (int i = info.MinX; i <= info.MaxX; i++)
-            {
-                for (int j = info.MinY; j <= info.MaxY; j++)
-                {
-                    list.Add(new Vector2Int(i, j));
-                }
-            }
-        }
-        else
-        {
-            //BFS
-            Queue<Vector2Int> queue = new Queue<Vector2Int>();
-            queue.Enqueue(start);
-            while (queue.Count != 0)
-            {
-                position = queue.Dequeue();
-                if (!list.Contains(position))
-                {
-                    list.Add(position);
-                }
-
-                if (!list.Contains(position + Vector2Int.up) && info.TileDic.ContainsKey(position + Vector2Int.up) && ManhattanDistance(position + Vector2Int.up, start) <= range)
-                {
-                    queue.Enqueue(position + Vector2Int.up);
-                }
-                if (!list.Contains(position + Vector2Int.down) &&  info.TileDic.ContainsKey(position + Vector2Int.down)  && ManhattanDistance(position + Vector2Int.down, start) <= range)
-                {
-                    queue.Enqueue(position + Vector2Int.down);
-                }
-                if (!list.Contains(position + Vector2Int.left) &&  info.TileDic.ContainsKey(position + Vector2Int.left) && ManhattanDistance(position + Vector2Int.left, start) <= range)
-                {
-                    queue.Enqueue(position + Vector2Int.left);
-                }
-                if (!list.Contains(position + Vector2Int.right) &&  info.TileDic.ContainsKey(position + Vector2Int.right) && ManhattanDistance(position + Vector2Int.right, start) <= range)
-                {
-                    queue.Enqueue(position + Vector2Int.right);
-                }
-            }
-        }
-
-        return list;
-    }
-
-
     public static string Reverse(string s)
     {
         char[] charArray = s.ToCharArray();
@@ -456,7 +396,7 @@ public static class Utility
         }
     }
 
-    public static void CheckLine(Vector3 from, Vector3 to, List<BattleCharacterInfo> characterList, Dictionary<Vector2Int, BattleInfoTile> tileDic, out bool isBlock, out Vector3 result)
+    public static void CheckLine(Vector3 from, Vector3 to, List<BattleCharacterController> characterList, Dictionary<Vector2Int, BattleInfoTile> tileDic, out bool isBlock, out Vector3 result)
     {
         isBlock = false;
         int height;
@@ -475,7 +415,7 @@ public static class Utility
 
                 for (int j = 0; j < characterList.Count; j++)
                 {
-                    if (ConvertToVector2Int(from) != ConvertToVector2Int(characterList[j].Position) && ConvertToVector2Int(to) != ConvertToVector2Int(characterList[j].Position) && position == ConvertToVector2Int(characterList[j].Position))
+                    if (ConvertToVector2Int(from) != ConvertToVector2Int(characterList[j].transform.position) && ConvertToVector2Int(to) != ConvertToVector2Int(characterList[j].transform.position) && position == ConvertToVector2Int(characterList[j].transform.position))
                     {
                         height++;
                     }
@@ -519,7 +459,7 @@ public static class Utility
         result = to;
     }
 
-    public static void CheckParabola(Vector3 from, Vector3 to, int parabolaHeight, List<BattleCharacterInfo> characterList, Dictionary<Vector2Int, BattleInfoTile> tileDic, out bool isBlock, out List<Vector3> result)
+    public static void CheckParabola(Vector3 from, Vector3 to, int parabolaHeight, List<BattleCharacterController> characterList, Dictionary<Vector2Int, BattleInfoTile> tileDic, out bool isBlock, out List<Vector3> result)
     {
         isBlock = false;
         int height;
@@ -537,7 +477,7 @@ public static class Utility
                 }
                 for (int j = 0; j < characterList.Count; j++)
                 {
-                    if (ConvertToVector2Int(from) != ConvertToVector2Int(characterList[j].Position) && ConvertToVector2Int(to) != ConvertToVector2Int(characterList[j].Position) && position == ConvertToVector2Int(characterList[j].Position))
+                    if (ConvertToVector2Int(from) != ConvertToVector2Int(characterList[j].transform.position) && ConvertToVector2Int(to) != ConvertToVector2Int(characterList[j].transform.position) && position == ConvertToVector2Int(characterList[j].transform.position))
                     {
                         height++;
                     }

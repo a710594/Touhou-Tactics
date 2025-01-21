@@ -9,16 +9,16 @@ public class RecoverEffect : Effect
     {
     }
 
-    public override void Use(HitType hitType, BattleCharacterInfo user, BattleCharacterInfo target, List<Log> logList)
+    public override void Use(HitType hitType, BattleCharacterController user, BattleCharacterController target, List<Log> logList)
     {
         if (hitType != HitType.Miss)
         {
-            int recover = Mathf.RoundToInt((float)Value * (float)user.MEN / 100f);
-            if (Passive.Contains<MiraclePassive>(user.PassiveList))
+            int recover = Mathf.RoundToInt((float)Value * (float)user.Info.MEN / 100f);
+            if (Passive.Contains<MiraclePassive>(user.Info.PassiveList))
             {
                 recover = MiraclePassive.GetValue(recover);
             }
-            target.SetRecover(recover);
+            target.Info.SetRecover(recover);
             logList.Add(new Log(user, target, this, hitType, recover.ToString()));
         }
         else

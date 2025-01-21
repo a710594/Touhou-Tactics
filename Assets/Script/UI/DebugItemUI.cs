@@ -15,18 +15,25 @@ public class DebugItemUI : MonoBehaviour
         try
         {
             int id = int.Parse(IDField.text);
+            int amount = int.Parse(AmountField.text);
             ItemModel data = DataContext.Instance.ItemDic[id];
             if (data.Category == ItemModel.CategoryEnum.Equip)
             {
-                ItemManager.Instance.AddEquip(id);
+                for (int i = 0; i < amount; i++)
+                {
+                    ItemManager.Instance.AddEquip(id);
+                }
             }
             else if(data.Category == ItemModel.CategoryEnum.Food) 
             {
-                ItemManager.Instance.AddFood(new Food(id));
+                for (int i = 0; i < amount; i++)
+                {
+                    ItemManager.Instance.AddFood(new Food(id));
+                }
             }
             else
             {
-                ItemManager.Instance.AddItem(id, int.Parse(AmountField.text));
+                ItemManager.Instance.AddItem(id, amount);
             }
             Debug.Log(DataContext.Instance.ItemDic[id].Name + " " + AmountField.text);
         }

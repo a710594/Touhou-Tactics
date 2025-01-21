@@ -99,9 +99,9 @@ public class CookUI : MonoBehaviour
         }
     }
 
-    private void ScrollItemOnClick(PointerEventData eventData, object data)
+    private void ScrollItemOnClick(PointerEventData eventData, ButtonPlus button)
     {
-        Item item = (Item)data;
+        Item item = (Item)button.Data;
         if (_materialList.Count < 5) 
         {
             _materialList.Add(item.Data);

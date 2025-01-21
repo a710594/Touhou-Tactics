@@ -13,7 +13,6 @@ public class EquipModel
 
     public CategoryEnum Category;
     public int ID;
-    public int Weight;
     public int ATK;
     public int DEF;
     public int MTK;

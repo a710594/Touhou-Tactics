@@ -106,15 +106,15 @@ public class CharacterManager
         }
     }
 
-    public void Refresh(List<BattleCharacterInfo> list) 
+    public void Refresh(List<BattleCharacterController> list) 
     {
         for (int i = 0; i < Info.CharacterList.Count; i++)
         {
             for (int j = 0; j < list.Count; j++)
             {
-                if(Info.CharacterList[i].JobId == list[j].JobId) 
+                if(list[j].Info is BattlePlayerInfo && Info.CharacterList[i].JobId == ((BattlePlayerInfo)list[j].Info).Job.ID) 
                 {
-                    Info.CharacterList[i].Refresh(list[j]);
+                    Info.CharacterList[i].Refresh((BattlePlayerInfo)list[j].Info);
                 }
             }
         }
@@ -139,5 +139,18 @@ public class CharacterManager
             }
         }
         return count;
+    }
+
+    public CharacterInfo GetCharacterInfoById(int jobId) 
+    {
+        for (int i = 0; i < Info.CharacterList.Count; i++)
+        {
+            if (Info.CharacterList[i].JobId == jobId)
+            {
+                return Info.CharacterList[i];
+            }
+        }
+
+        return null;
     }
 }

@@ -9,7 +9,7 @@ public class RatioDamageEffect : Effect
     {
     }
 
-    public override void Use(HitType hitType, BattleCharacterInfo user, BattleCharacterInfo target, List<Log> logList)
+    public override void Use(HitType hitType, BattleCharacterController user, BattleCharacterController target, List<Log> logList)
     {
         // if(user!=target)
         // {
@@ -22,8 +22,8 @@ public class RatioDamageEffect : Effect
 
         if (hitType == HitType.Hit)
         {
-            int damage = Mathf.RoundToInt((float)Value * (float)target.MaxHP / 100f);
-            target.SetDamage(damage);
+            int damage = Mathf.RoundToInt((float)Value * (float)target.Info.MaxHP / 100f);
+            target.Info.SetDamage(damage);
             logList.Add(new Log(user, target, this, hitType, damage.ToString()));
         }
         else

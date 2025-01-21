@@ -8,17 +8,17 @@ namespace Battle
     {
         public override void Start()
         {
-            Vector2Int start = Utility.ConvertToVector2Int(_info.Position);
-            SelectedSkill = _info.SkillList[0];
-            _stepList = BattleController.Instance.GetStepList(_info);
-            List<BattleCharacterInfo> targetList = GetTargetList(BattleCharacterInfo.FactionEnum.Enemy); //尋找夥伴
-            Dictionary<BattleCharacterInfo, List<Vector2Int>> canHitDic = GetCanHitDic(targetList);
+            Vector2Int start = Utility.ConvertToVector2Int(_controller.transform.position);
+            SelectedSkill = _controller.Info.SkillList[0];
+            _stepList = BattleController.Instance.GetStepList(_controller);
+            List<BattleCharacterController> targetList = GetTargetList(BattleCharacterControllerData.FactionEnum.Enemy); //尋找夥伴
+            Dictionary<BattleCharacterController, List<Vector2Int>> canHitDic = GetCanHitDic(targetList);
             Vector2Int moveTo;
             if (canHitDic.Count > 0) //有伙伴
             {
                 _target = null;
-                List<BattleCharacterInfo> list = new List<BattleCharacterInfo>(canHitDic.Keys);
-                list.Remove(_info); //不能治癒自己
+                List<BattleCharacterController> list = new List<BattleCharacterController>(canHitDic.Keys);
+                list.Remove(_controller); //不能治癒自己
                 _target = GetCurekTarget(list);
             }
 
@@ -29,13 +29,13 @@ namespace Battle
             }
             else //否則就尋找可攻擊的敵人
             {
-                SelectedSkill = _info.SkillList[1];
-                targetList = GetTargetList(BattleCharacterInfo.FactionEnum.Player);
+                SelectedSkill = _controller.Info.SkillList[1];
+                targetList = GetTargetList(BattleCharacterControllerData.FactionEnum.Player);
                 canHitDic = GetCanHitDic(targetList);
                 if (canHitDic.Count > 0) //有可以攻擊的目標
                 {
                     _useSkill = true;
-                    _target = GetAttackTarget(new List<BattleCharacterInfo>(canHitDic.Keys));
+                    _target = GetAttackTarget(new List<BattleCharacterController>(canHitDic.Keys));
                     moveTo = GetMoveTo(MoveToEnum.Near, start, canHitDic[_target]); //選擇距離目標近的位置
                 }
                 else //盡量靠近想攻擊的目標
@@ -45,8 +45,8 @@ namespace Battle
                     Vector2Int targetPosition;
                     for (int i = 0; i < targetList.Count; i++)
                     {
-                        targetPosition = Utility.ConvertToVector2Int(targetList[i].Position);
-                        distance = BattleController.Instance.GetDistance(start, targetPosition, _info.Faction);
+                        targetPosition = Utility.ConvertToVector2Int(targetList[i].transform.position);
+                        distance = BattleController.Instance.GetDistance(start, targetPosition, _controller.Info.Faction);
                         if (distance == -1)
                         {
                             targetList.RemoveAt(i);
@@ -54,7 +54,7 @@ namespace Battle
                         }
                     }
                     _target = GetAttackTarget(targetList);
-                    moveTo = GetMoveTo(MoveToEnum.Near, _stepList, Utility.ConvertToVector2Int(_target.Position));
+                    moveTo = GetMoveTo(MoveToEnum.Near, _stepList, Utility.ConvertToVector2Int(_target.transform.position));
                 }
             }
 

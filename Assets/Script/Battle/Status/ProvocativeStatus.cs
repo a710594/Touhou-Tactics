@@ -7,7 +7,7 @@ namespace Battle
 
     public class ProvocativeStatus : Status
     {
-        public BattleCharacterInfo Target; //攻擊目標
+        public BattleCharacterController Target; //攻擊目標
 
         public ProvocativeStatus(StatusModel data) : base(data)
         {

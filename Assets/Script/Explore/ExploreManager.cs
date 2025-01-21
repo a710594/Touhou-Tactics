@@ -103,27 +103,14 @@ namespace Explore
                         SceneController.Instance.ChangeScene("Battle", (sceneName) =>
                         {
                             InputMamager.Instance.Unlock();
-                            BattleMapBuilder battleMapBuilder = GameObject.Find("BattleMapBuilder").GetComponent<BattleMapBuilder>();
-                            BattleInfo battleInfo;
                             string tutorial = null;
                             if (enemy.Type == ExploreFileEnemy.TypeEnum.Fixed)
                             {
-                                if (enemy.Map != "")
-                                {
-                                    battleInfo = battleMapBuilder.Get(enemy.Map);
-                                    tutorial = enemy.Tutorial;
-                                }
-                                else
-                                {
-                                    EnemyGroupModel enemyGroup = DataContext.Instance.EnemyGroupDic[enemy.EnemyGroupId];
-                                    battleInfo = battleMapBuilder.Generate(enemyGroup);
-                                }
+                                BattleController.Instance.Init(enemy.Tutorial, enemy.Map);
                             }
                             else
                             {
                                 EnemyGroupModel enemyGroup = DataContext.Instance.EnemyGroupDic[enemy.EnemyGroupId];
-                                battleInfo = battleMapBuilder.Generate(enemyGroup);
-                            
                                 if(File.Floor>1 && !FlowController.Instance.Info.HasSanaeTutorial)
                                 {
                                     FlowController.Instance.Info.HasSanaeTutorial = true;
@@ -134,9 +121,8 @@ namespace Explore
                                     FlowController.Instance.Info.HasUseCard = true;
                                     tutorial = "UseCardTutorial";
                                 }
+                                BattleController.Instance.Init(tutorial, enemyGroup);
                             }
-                            PathManager.Instance.LoadData(battleInfo.TileDic);
-                            BattleController.Instance.Init(File.Floor, File.Floor, tutorial, battleInfo, battleMapBuilder.transform);
                         });
                     });
 
@@ -404,7 +390,7 @@ namespace Explore
             }
             catch(Exception ex) 
             {
-                Debug.Log(name);
+                Debug.Log(ex);
             }
 
             for (int i = 0; i < File.DoorList.Count; i++)

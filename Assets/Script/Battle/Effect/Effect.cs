@@ -40,9 +40,9 @@ namespace Battle
             }
         }
 
-        public virtual void Use(BattleCharacterInfo user, Vector3 position) { }
+        public virtual void Use(BattleCharacterController user, Vector3 position) { }
 
-        public virtual void Use(HitType hitType, BattleCharacterInfo user, BattleCharacterInfo target, List<Log> logList)
+        public virtual void Use(HitType hitType, BattleCharacterController user, BattleCharacterController target, List<Log> logList)
         {
         }
     }

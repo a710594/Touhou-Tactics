@@ -20,18 +20,17 @@ namespace Battle
 
             public override void Begin()
             {
-                _info = Instance.Info;
                 _character = Instance.SelectedCharacter;
                 _characterList = Instance.CharacterList;
-                _command = _character.SelectedCommand;
+                _command = _character.Info.SelectedCommand;
 
-                if (Passive.Contains<ArcherPassive>(_character.PassiveList))
+                if (Passive.Contains<ArcherPassive>(_character.Info.PassiveList))
                 {
-                    _rangeList = ArcherPassive.GetRange(_character.SelectedCommand.Range, Utility.ConvertToVector2Int(_character.Position), _info);
+                    _rangeList = ArcherPassive.GetRange(_character.Info.SelectedCommand.Range, Utility.ConvertToVector2Int(_character.transform.position));
                 }
                 else
                 {
-                    _rangeList = Utility.GetRange(_character.SelectedCommand.Range, Utility.ConvertToVector2Int(_character.Position), _info);
+                    _rangeList = Instance.GetRange(_character.Info.SelectedCommand.Range, Utility.ConvertToVector2Int(_character.transform.position));
                 }
 
                 Instance.RemoveByFaction(_command.RangeTarget, _rangeList);
@@ -46,19 +45,17 @@ namespace Battle
             {
                 if (_rangeList.Contains(position))          
                 {
-                    List<BattleCharacterInfo> characterList = Instance.CharacterList;
                     //draw line
-                    Dictionary<Vector2Int, BattleInfoTile> tileDic = Instance.Info.TileDic;
-                    Vector3 p = new Vector3(position.x, tileDic[position].TileData.Height, position.y);
+                    Vector3 p = new Vector3(position.x, Instance.TileDic[position].TileData.Height, position.y);
                     if (_command.Track == TrackEnum.Straight)
                     {
-                        Utility.CheckLine(_character.Position, p, characterList, tileDic, out bool isBlock, out Vector3 result);
-                        Instance._cameraController.DrawLine(_character.Position, result, isBlock);
+                        Utility.CheckLine(_character.transform.position, p, Instance.CharacterList, Instance.TileDic, out bool isBlock, out Vector3 result);
+                        Instance._cameraController.DrawLine(_character.transform.position, result, isBlock);
                         Instance._selectedPosition = Utility.ConvertToVector2Int(result);
                     }
                     else if (_command.Track == TrackEnum.Parabola)
                     {
-                        Utility.CheckParabola(_character.Position, p, 4, characterList, tileDic, out bool isBlock, out List<Vector3> result); //?n?????u??????
+                        Utility.CheckParabola(_character.transform.position, p, 4, Instance.CharacterList, Instance.TileDic, out bool isBlock, out List<Vector3> result); //?n?????u??????
                         Instance._cameraController.DrawParabola(result, isBlock);
                         Instance._selectedPosition = Utility.ConvertToVector2Int(result.Last());
                     }

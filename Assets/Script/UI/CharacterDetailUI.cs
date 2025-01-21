@@ -38,7 +38,7 @@ public class CharacterDetailUI : MonoBehaviour
     public Button CloseButton;
 
     private CharacterInfo _characterInfo = null;
-    private BattleCharacterInfo _battleCharacterInfo = null;
+    private BattleCharacterControllerData _battleCharacterInfo = null;
 
     public static CharacterDetailUI Open(bool canSelectEquip) 
     {
@@ -57,7 +57,7 @@ public class CharacterDetailUI : MonoBehaviour
         return characterDetailUI;
     }
 
-    public void SetData(BattleCharacterInfo character) 
+    public void SetData(BattlePlayerInfo character) 
     {
         _battleCharacterInfo = character;
         NameLabel.text = character.Name;
@@ -103,10 +103,10 @@ public class CharacterDetailUI : MonoBehaviour
 
         for (int i=0; i<AmuletButtons.Length; i++) 
         {
-            if (i < character.Amulets.Count)
+            if (i < character.Decoration.Count)
             {
-                AmuletButtons[i].Label.text = character.Amulets[i].Name;
-                AmuletButtons[i].SetData(character.Amulets[i]);
+                AmuletButtons[i].Label.text = character.Decoration[i].Name;
+                AmuletButtons[i].SetData(character.Decoration[i]);
                 AmuletButtons[i].gameObject.SetActive(true);
             }
             else
@@ -184,10 +184,10 @@ public class CharacterDetailUI : MonoBehaviour
 
         for (int i = 0; i < AmuletButtons.Length; i++)
         {
-            if (i < character.Amulets.Count)
+            if (i < character.Decoration.Count)
             {
-                AmuletButtons[i].Label.text = character.Amulets[i].Name;
-                AmuletButtons[i].SetData(character.Amulets[i]);
+                AmuletButtons[i].Label.text = character.Decoration[i].Name;
+                AmuletButtons[i].SetData(character.Decoration[i]);
                 AmuletButtons[i].gameObject.SetActive(true);
             }
             else
@@ -224,18 +224,28 @@ public class CharacterDetailUI : MonoBehaviour
         if (_characterInfo != null)
         {
             BagUI bagUI = BagUI.Open();
-            bagUI.SetEquipState(EquipModel.CategoryEnum.Weapon, _characterInfo);
-            bagUI.UseHandler += SetWeapon;
+            bagUI.SetEquipState(EquipModel.CategoryEnum.Weapon, _characterInfo, 0);
+            bagUI.SetEquipHandler += SetWeapon;
         }
     }
 
-    private void ArmornOnClick(PointerEventData eventData, ButtonPlus buttonPlus)
+    private void ArmornOnClick_1(PointerEventData eventData, ButtonPlus buttonPlus)
     {
         if (_characterInfo != null)
         {
             BagUI bagUI = BagUI.Open();
-            bagUI.SetEquipState(EquipModel.CategoryEnum.Armor, _characterInfo);
-            bagUI.UseHandler += SetArmor;
+            bagUI.SetEquipState(EquipModel.CategoryEnum.Armor, _characterInfo, 0);
+            bagUI.SetEquipHandler += SetArmor;
+        }
+    }
+
+    private void ArmornOnClick_2(PointerEventData eventData, ButtonPlus buttonPlus)
+    {
+        if (_characterInfo != null)
+        {
+            BagUI bagUI = BagUI.Open();
+            bagUI.SetEquipState(EquipModel.CategoryEnum.Armor, _characterInfo, 1);
+            bagUI.SetEquipHandler += SetArmor;
         }
     }
 
@@ -244,8 +254,8 @@ public class CharacterDetailUI : MonoBehaviour
         if (_characterInfo != null)
         {
             BagUI bagUI = BagUI.Open();
-            bagUI.SetEquipState(EquipModel.CategoryEnum.Amulet, _characterInfo);
-            bagUI.UseHandler += SetAmulet_1;
+            bagUI.SetEquipState(EquipModel.CategoryEnum.Amulet, _characterInfo, 0);
+            bagUI.SetEquipHandler += SetAmulet;
         }
     }
 
@@ -254,12 +264,12 @@ public class CharacterDetailUI : MonoBehaviour
         if (_characterInfo != null)
         {
             BagUI bagUI = BagUI.Open();
-            bagUI.SetEquipState(EquipModel.CategoryEnum.Amulet, _characterInfo);
-            bagUI.UseHandler += SetAmulet_2;
+            bagUI.SetEquipState(EquipModel.CategoryEnum.Amulet, _characterInfo, 1);
+            bagUI.SetEquipHandler += SetAmulet;
         }
     }
 
-    private void SetWeapon(object obj) 
+    private void SetWeapon(int index, object obj) 
     {
         if (_characterInfo != null)
         {
@@ -275,50 +285,34 @@ public class CharacterDetailUI : MonoBehaviour
         }
     }
 
-    private void SetArmor(object obj)
+    private void SetArmor(int index, object obj)
     {
         if (_characterInfo != null)
         {
             //如果角色身上有裝備,就把裝備放回背包
-            if (_characterInfo.Armor != null && _characterInfo.Armor.ID != 0)
+            if (_characterInfo.Armor != null && _characterInfo.Armor[index].ID != 0)
             {
-                ItemManager.Instance.AddEquip(_characterInfo.Armor);
+                ItemManager.Instance.AddEquip(_characterInfo.Armor[index]);
             }
 
             Equip equip = (Equip)obj;
-            _characterInfo.Armor = equip;
+            _characterInfo.Armor[index] = equip;
             SetData(_characterInfo);
         }
     }
 
-    private void SetAmulet_1(object obj)
+    private void SetAmulet(int index, object obj)
     {
         if (_characterInfo != null)
         {
             //如果角色身上有裝備,就把裝備放回背包
-            if (_characterInfo.Amulets[0] != null && _characterInfo.Amulets[0].ID != 0)
+            if (_characterInfo.Decoration[index] != null && _characterInfo.Decoration[index].ID != 0)
             {
-                ItemManager.Instance.AddEquip(_characterInfo.Amulets[0]);
+                ItemManager.Instance.AddEquip(_characterInfo.Decoration[index]);
             }
 
             Equip equip = (Equip)obj;
-            _characterInfo.Amulets[0] = equip;
-            SetData(_characterInfo);
-        }
-    }
-
-    private void SetAmulet_2(object obj)
-    {
-        if (_characterInfo != null)
-        {
-            //如果角色身上有裝備,就把裝備放回背包
-            if (_characterInfo.Amulets[1] != null && _characterInfo.Amulets[1].ID != 0)
-            {
-                ItemManager.Instance.AddEquip(_characterInfo.Amulets[1]);
-            }
-
-            Equip equip = (Equip)obj;
-            _characterInfo.Amulets[1] = equip;
+            _characterInfo.Decoration[index] = equip;
             SetData(_characterInfo);
         }
     }
@@ -392,9 +386,12 @@ public class CharacterDetailUI : MonoBehaviour
         WeaponButton.ClickHandler += WeaponOnClick;
         WeaponButton.EnterHandler += ShowEquipDetail;
         WeaponButton.ExitHandler += HideEquipDetail;
-        ArmorButton.ClickHandler += ArmornOnClick;
-        ArmorButton.EnterHandler += ShowEquipDetail;
-        ArmorButton.ExitHandler += HideEquipDetail;
+        ArmorButtons[0].ClickHandler += ArmornOnClick_1;
+        ArmorButtons[0].EnterHandler += ShowEquipDetail;
+        ArmorButtons[0].ExitHandler += HideEquipDetail;
+        ArmorButtons[1].ClickHandler += ArmornOnClick_2;
+        ArmorButtons[1].EnterHandler += ShowEquipDetail;
+        ArmorButtons[1].ExitHandler += HideEquipDetail;
         AmuletButtons[0].ClickHandler += AmuletOnClick_1;
         AmuletButtons[0].EnterHandler += ShowEquipDetail;
         AmuletButtons[0].ExitHandler += HideEquipDetail;

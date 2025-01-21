@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Battle
 {
-    public class BattleFileGenerator : MonoBehaviour
+    /*public class BattleFileGenerator : MonoBehaviour
     {
         public enum TypeEnum 
         {
@@ -100,5 +100,5 @@ namespace Battle
                 DataContext.Instance.Save(file, FileName, DataContext.PrePathEnum.MapSeed);
             }
         }
-    }
+    }*/
 }

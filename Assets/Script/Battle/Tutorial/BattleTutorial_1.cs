@@ -54,7 +54,7 @@ namespace Battle
             {
                 _timer.Start(0.5f, () =>
                 {
-                    ((BattleTutorial)_context.Parent).ConversationUI = ConversationUI.Open(3, false, null, null);
+                    ((BattleTutorial_1)_context.Parent)._conversationUI = ConversationUI.Open(3, false, null, null);
                     //TutorialUI.Open("將角色從下方拖曳至場景的白色區域中。\n白色的區域代表可放置角色的位置。\n將角色配置完後按開始戰鬥。", "Tutorial_1", null);
                 });
                 BattleController.Instance.CommandStateBeginHandler += Next;
@@ -112,7 +112,7 @@ namespace Battle
 
             public override void Begin()
             {
-                ((BattleTutorial_1)_context.Parent).ConversationUI.Continue(()=> 
+                ((BattleTutorial_1)_context.Parent)._conversationUI.Continue(()=> 
                 {
                     TutorialArrowUI.Open("選擇移動。", new Vector3(4, 1, 3), Vector2Int.down);
                 });
@@ -258,7 +258,7 @@ namespace Battle
 
             public override void Begin()
             {
-                ((BattleTutorial_1)_context.Parent).ConversationUI.Continue(() =>
+                ((BattleTutorial_1)_context.Parent)._conversationUI.Continue(() =>
                 {
                     TutorialArrowUI.Open("選擇目標。", new Vector3(4, 2, 4), Vector2Int.down);
                 });
@@ -342,7 +342,7 @@ namespace Battle
             public override void Begin()
             {
                 _clickable = true;
-                ((BattleTutorial_1)_context.Parent).ConversationUI.Continue(() =>
+                ((BattleTutorial_1)_context.Parent)._conversationUI.Continue(() =>
                 {
                     TutorialArrowUI.Open("選擇方向。", new Vector3(4, 2, 4), Vector2Int.down);
                 });
@@ -365,7 +365,7 @@ namespace Battle
 
             public override void Next()
             {
-                if (BattleController.Instance.SelectedCharacter.Faction == BattleCharacterInfo.FactionEnum.Player)
+                if (BattleController.Instance.SelectedCharacter.Info.Faction == BattleCharacterControllerData.FactionEnum.Player)
                 {
                     BattleController.Instance.CharacterStateBeginHandler -= Next;
                     _context.SetState<State_10>();
@@ -386,7 +386,7 @@ namespace Battle
 
             public override void Begin()
             {
-                ((BattleTutorial_1)_context.Parent).ConversationUI.Continue(() =>
+                ((BattleTutorial_1)_context.Parent)._conversationUI.Continue(() =>
                 {
                     Vector3 offset = new Vector3(-200, 0, 0);
                     TutorialArrowUI.Open("選擇支援。", BattleUI.Instance.ActionButtonGroup.SupportButton.transform, offset, Vector2Int.right);
@@ -446,13 +446,13 @@ namespace Battle
 
             public override void Begin()
             {
-                Vector3 v = BattleController.Instance.SelectedCharacter.Position;
+                Vector3 v = BattleController.Instance.SelectedCharacter.transform.position;
                 TutorialArrowUI.Open("選擇目標。", new Vector3(v.x, v.y + 1, v.z), Vector2Int.down);
             }
 
             public override bool CheckClick(Vector2Int position)
             {
-                Vector3 v = BattleController.Instance.SelectedCharacter.Position;
+                Vector3 v = BattleController.Instance.SelectedCharacter.transform.position;
                 if (position == new Vector2Int((int)v.x, (int)v.z))
                 {
                     Next();
@@ -479,13 +479,13 @@ namespace Battle
 
             public override void Begin()
             {
-                Vector3 v = BattleController.Instance.SelectedCharacter.Position;
+                Vector3 v = BattleController.Instance.SelectedCharacter.transform.position;
                 TutorialArrowUI.Open("再次點選同樣的位置確認。", new Vector3(v.x, v.y + 1, v.z), Vector2Int.down);
             }
 
             public override bool CheckClick(Vector2Int position)
             {
-                Vector3 v = BattleController.Instance.SelectedCharacter.Position;
+                Vector3 v = BattleController.Instance.SelectedCharacter.transform.position;
                 if (position == new Vector2Int((int)v.x, (int)v.z))
                 {
                     TutorialArrowUI.Close();
@@ -512,7 +512,7 @@ namespace Battle
 
             public override void Begin()
             {
-                ((BattleTutorial_1)_context.Parent).ConversationUI.Continue(() =>
+                ((BattleTutorial_1)_context.Parent)._conversationUI.Continue(() =>
                 {
                     Vector3 offset = new Vector3(-200, 0, 0);
                     TutorialArrowUI.Open("選擇技能。", BattleUI.Instance.ActionButtonGroup.SkillButton.transform, offset, Vector2Int.right);

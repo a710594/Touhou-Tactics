@@ -10,11 +10,11 @@ public class SleepEffect : Effect
     }
 
 
-    public override void Use(HitType hitType, BattleCharacterInfo user, BattleCharacterInfo target, List<Log> logList)
+    public override void Use(HitType hitType, BattleCharacterController user, BattleCharacterController target, List<Log> logList)
     {
         if (hitType != HitType.Miss)
         {
-            target.AddStatus(Status);
+            target.Info.AddStatus(Status);
             logList.Add(new Log(user, target, this, hitType, Status.Name));
         }
         else

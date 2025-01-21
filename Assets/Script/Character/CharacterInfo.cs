@@ -22,7 +22,7 @@ public class CharacterInfo
     public string Controller;
     public Equip Weapon = new Equip(EquipModel.CategoryEnum.Weapon);
     public List<Equip> Armor = new List<Equip>();
-    public List<Equip> Amulets = new List<Equip>();
+    public List<Equip> Decoration = new List<Equip>();
     public int Weight;
 
     [NonSerialized]
@@ -67,7 +67,7 @@ public class CharacterInfo
         }
         for (int i = 0; i < job.Amulets; i++)
         {
-            Amulets.Add(new Equip(EquipModel.CategoryEnum.Amulet));
+            Decoration.Add(new Equip(EquipModel.CategoryEnum.Amulet));
         }
 
         Init();
@@ -143,7 +143,7 @@ public class CharacterInfo
         AGI = Mathf.RoundToInt(job.AGI * n);
     }
 
-    public void Refresh(BattleCharacterInfo info) 
+    public void Refresh(BattlePlayerInfo info) 
     {
         CurrentHP = info.CurrentHP;
         for (int i=0; i<SkillList.Count; i++) 

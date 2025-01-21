@@ -9,17 +9,17 @@ public class BagScrollItem : ScrollItem
     public Text AmountLabel;
     public ButtonColorSetting ColorSetting;
 
-    public new class Data
-    {
-        public Equip Equip;
-        public int Weight;
+    //public new class Data
+    //{
+    //    public Equip Equip;
+    //    public int Weight;
 
-        public Data(Equip equip, int weight) 
-        {
-            Equip = equip;
-            Weight = weight;
-        }
-    }
+    //    public Data(Equip equip, int weight) 
+    //    {
+    //        Equip = equip;
+    //        Weight = weight;
+    //    }
+    //}
 
     public override void SetData(object obj)
     {
@@ -48,15 +48,6 @@ public class BagScrollItem : ScrollItem
             Equip equip = (Equip)obj;
             NameLabel.text = equip.Name;
             AmountLabel.text = "";
-        }
-        else if(obj is Data) 
-        {
-            Data data = (Data)obj;
-            Equip equip = data.Equip;
-            int weight = data.Weight;
-            NameLabel.text = equip.Name;
-            AmountLabel.text = "";
-            ColorSetting.SetColor(weight >= equip.Weight);
         }
     }
 }

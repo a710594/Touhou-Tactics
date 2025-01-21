@@ -10,7 +10,6 @@ public class Equip
     public int ID;
     public string Name;
     public string Comment;
-    public int Weight;
     public int ATK;
     public int DEF;
     public int MTK;
@@ -41,7 +40,6 @@ public class Equip
         DEX = 0;
         AGI = 0;
         MOV = 0;
-        Weight = -1;
         Price = 0;
     }
 
@@ -59,7 +57,6 @@ public class Equip
         DEX = equip.DEX;
         AGI = equip.AGI;
         MOV = equip.MOV;
-        Weight = equip.Weight;
         Price = item.Price;
     }
 
@@ -80,7 +77,6 @@ public class Equip
         DEX = equip.DEX;
         AGI = equip.AGI;
         MOV = equip.MOV;
-        Weight = equip.Weight;
         Price = item.Price;
     }
 }

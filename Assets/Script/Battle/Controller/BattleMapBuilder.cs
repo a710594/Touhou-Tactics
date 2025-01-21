@@ -5,15 +5,15 @@ using UnityEngine;
 
 namespace Battle
 {
-    public class BattleMapBuilder : MonoBehaviour //建造戰鬥場景的類別
+    public partial class BattleController //建造戰鬥場景的類別
     {
-        public Transform Tilemap;
-        public string[] SeedFile;
+        //public Transform Tilemap;
+        //public string[] SeedFile;
 
-        private string _prePath = Application.streamingAssetsPath;
-        private BattleFileReader _reader = new BattleFileReader();
+        //private string _prePath = Application.streamingAssetsPath;
+        //private BattleFileReader _reader = new BattleFileReader();
 
-        public BattleInfo Get(string map) //固定的地圖
+        /*public BattleInfo Get(string map) //固定的地圖
         { 
             BattleFile file = DataContext.Instance.Load<BattleFile>(map, DataContext.PrePathEnum.MapBattle);
             BattleInfo info = new BattleInfo(file);
@@ -129,7 +129,6 @@ namespace Battle
             }
 
             EnemyModel enemyData;
-            BattleCharacterInfo battleCharacterInfo;
             for (int i = 0; i < data.EnemyList.Count; i++)
             {
                 if (Utility.GetRandomPosition(info.MinX, info.MaxX, info.MinY, info.MaxY, invalidList, out Vector2Int result))
@@ -148,25 +147,24 @@ namespace Battle
             CreateObject(info);
 
             return info;
-        }
+        }*/
 
-        private void CreateObject(BattleInfo info)
+        private void CreateObject()
         {
-            for (int i = Tilemap.childCount; i > 0; --i)
+            for (int i = _root.childCount; i > 0; --i)
             {
-                DestroyImmediate(Tilemap.GetChild(0).gameObject);
+                GameObject.DestroyImmediate(_root.GetChild(0).gameObject);
             }
 
             GameObject obj;
             BattleTileObject tileObj;
             GameObject attachObj;
-            foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in info.TileDic)
+            foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in TileDic)
             {
                 obj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + pair.Value.TileData.Name), Vector3.zero, Quaternion.identity);
                 tileObj = obj.GetComponent<BattleTileObject>();
-                tileObj.transform.SetParent(Tilemap);
+                tileObj.transform.SetParent(_root);
                 tileObj.transform.position = new Vector3(pair.Key.x, 0, pair.Key.y);
-                //info.TileComponentDic.Add(pair.Key, tileObj.GetComponent<TileComponent>());
                 pair.Value.TileObject = tileObj;
 
                 if (pair.Value.AttachData != null)
@@ -176,16 +174,6 @@ namespace Battle
                     attachObj.transform.parent = tileObj.transform;
                     pair.Value.AttachObject = attachObj;
                 }
-            }
-
-            GameObject enemyObj;
-            for(int i=0; i<info.EnemyList.Count; i++)
-            {
-                enemyObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/Enemy/" + info.EnemyList[i].Enemy.Controller), Vector3.zero, Quaternion.identity);
-                enemyObj.transform.position = info.EnemyList[i].Position;
-                enemyObj.transform.SetParent(transform);
-                info.EnemyList[i].Controller = enemyObj.GetComponent<BattleCharacterController>();
-                info.EnemyList[i].Controller.Init(info.EnemyList[i].Sprite);
             }
         }
 
@@ -231,12 +219,12 @@ namespace Battle
         }
 
         // �p�� Life Game �U�@�N���ѽL
-        private void NextGeneration(BattleInfo info)
+        private void NextGeneration(BattleFileRandom file)
         {
             AttachModel attach;
-            foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in info.TileDic)
+            foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in TileDic)
             {
-                int neighbors = CountNeighbors(info, pair.Key);
+                int neighbors = CountNeighbors(file, pair.Key);
 
                 if (pair.Value.AttachData != null)
                 {
@@ -255,7 +243,7 @@ namespace Battle
                 }
                 else
                 {
-                    if (neighbors == 3 && !info.PlayerPositionList.Contains(pair.Key))
+                    if (neighbors == 3 && !file.PlayerPositionList.Contains(pair.Key))
                     {
                         attach = GetAttachRandomly(pair.Value.TileData);
                         pair.Value.AttachData = attach;
@@ -264,7 +252,7 @@ namespace Battle
             }
         }
 
-        private int CountNeighbors(BattleInfo info, Vector2Int v1)
+        private int CountNeighbors(BattleFileRandom file, Vector2Int v1)
         {
             int count = 0;
             Vector2Int v2;
@@ -275,13 +263,13 @@ namespace Battle
                     int x = v1.x + i;
                     int y = v1.y + j;
 
-                    if (x <= info.MinX || x >= info.MaxX || y <= info.MinY || y >= info.MaxY || (i == 0 && j == 0))
+                    if (x <= file.MinX || x >= file.MaxX || y <= file.MinY || y >= file.MaxY || (i == 0 && j == 0))
                     {
                         continue;
                     }
 
                     v2 = new Vector2Int(x, y);
-                    if (info.TileDic[v2].AttachData != null)
+                    if (TileDic[v2].AttachData != null)
                     {
                         count++;
                     }

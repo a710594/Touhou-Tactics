@@ -6,7 +6,10 @@ namespace Battle
 {
     public class BattleTutorial : Tutorial
     {
-        public ConversationUI ConversationUI;
+        public bool IsActive = true;
+        public int PlayerCount;
+
+        protected ConversationUI _conversationUI;
 
         public virtual bool CheckClick(Vector2Int position)
         {

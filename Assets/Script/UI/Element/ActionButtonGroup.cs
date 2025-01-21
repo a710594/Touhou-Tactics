@@ -21,7 +21,7 @@ public class ActionButtonGroup : MonoBehaviour
     public TipLabel TipLabel;
     public SkillInfoGroup SkillInfoGroup;
 
-    public void SetButton(BattleCharacterInfo character) 
+    public void SetButton(BattleCharacterControllerData character) 
     {
         SkillButton.interactable = !character.HasUseSkill;
         SupportButton.interactable = !character.HasUseSupport;
@@ -53,7 +53,7 @@ public class ActionButtonGroup : MonoBehaviour
             return;
         }
 
-        BattleCharacterInfo character = BattleController.Instance.SelectedCharacter;
+        BattleCharacterControllerData character = BattleController.Instance.SelectedCharacter.Info;
         if (!character.IsAuto)
         {
             ScrollView.transform.parent.gameObject.SetActive(true);
@@ -68,7 +68,7 @@ public class ActionButtonGroup : MonoBehaviour
             return;
         }
 
-        BattleCharacterInfo character = BattleController.Instance.SelectedCharacter;
+        BattleCharacterControllerData character = BattleController.Instance.SelectedCharacter.Info;
         if (!character.IsAuto)
         {
             ScrollView.transform.parent.gameObject.SetActive(true);
@@ -83,7 +83,7 @@ public class ActionButtonGroup : MonoBehaviour
             return;
         }
 
-        BattleCharacterInfo character = BattleController.Instance.SelectedCharacter;
+        BattleCharacterControllerData character = BattleController.Instance.SelectedCharacter.Info;
         if (!character.IsAuto)
         {
             ScrollView.transform.parent.gameObject.SetActive(true);
@@ -98,11 +98,11 @@ public class ActionButtonGroup : MonoBehaviour
             return;
         }
 
-        BattleCharacterInfo character = BattleController.Instance.SelectedCharacter;
+        BattleCharacterControllerData character = BattleController.Instance.SelectedCharacter.Info;
         if (!character.IsAuto)
         {
             ScrollView.transform.parent.gameObject.SetActive(true);
-            ScrollView.SetData(new List<object>(ItemManager.Instance.GetBattleItemList(character)));
+            ScrollView.SetData(new List<object>(ItemManager.Instance.GetBattleItemList()));
         }
     }
 
@@ -113,7 +113,7 @@ public class ActionButtonGroup : MonoBehaviour
             return;
         }
 
-        BattleController.Instance.SelectedCharacter.ActionCount = 0;
+        BattleController.Instance.SelectedCharacter.Info.ActionCount = 0;
         BattleController.Instance.SetState<BattleController.EndState>();
     }
 

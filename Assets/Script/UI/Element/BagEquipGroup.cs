@@ -31,32 +31,16 @@ public class BagEquipGroup : MonoBehaviour
 
     public void SetScrollView(EquipModel.CategoryEnum category, CharacterInfo character) 
     {
-        BagScrollItem.Data data;
-        List<BagScrollItem.Data> list = new List<BagScrollItem.Data>();
+        List<Equip> list = new List<Equip>();
         for (int i=0; i<ItemManager.Instance.Info.EquipList.Count; i++) 
         {
             if(ItemManager.Instance.Info.EquipList[i].Category == category) 
             {
-                data = new BagScrollItem.Data(ItemManager.Instance.Info.EquipList[i], character.Weight);
-                list.Add(data);
+                list.Add(ItemManager.Instance.Info.EquipList[i]);
             }
         }
 
-        if (character.Weight == 1)
-        {
-            list.Sort((x, y) =>
-            {
-                return x.Equip.Weight.CompareTo(y.Equip.Weight);
-            });
-        }
-        else
-        {
-            list.Sort((x, y) =>
-            {
-                return y.Equip.Weight.CompareTo(x.Equip.Weight);
-            });
-        }
-        list.Insert(0, new BagScrollItem.Data(new Equip(category), character.Weight));
+        list.Insert(0, new Equip(category));
 
         ScrollView.SetData(new List<object>(list));
     }
@@ -105,11 +89,7 @@ public class BagEquipGroup : MonoBehaviour
         {
             equip = (Equip)data;
         }
-        else if(data is BagScrollItem.Data) 
-        {
-            BagScrollItem.Data bagData = (BagScrollItem.Data)data;
-            equip = bagData.Equip;
-        }
+
         SetDetail(equip);
         ScrollHandler(data);
     }

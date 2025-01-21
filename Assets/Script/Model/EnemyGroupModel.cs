@@ -5,7 +5,8 @@ public class EnemyGroupModel
     public int ID;
     public int Lv;
     public int Exp;
-    public int NeedCount;
+    public int MinPlayerCount;
+    public int MaxPlayerCount;
     public string Prefab;
 
     public int Enemy_1;

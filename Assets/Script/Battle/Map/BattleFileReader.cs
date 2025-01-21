@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace Battle
 {
-    public class BattleFileReader
+    /*public class BattleFileReader
     {
         public BattleInfo Read(string path)
         {
-            /*string jsonString = File.ReadAllText(path);
+            string jsonString = File.ReadAllText(path);
             BattleFile file = JsonConvert.DeserializeObject<BattleFile>(jsonString);
             BattleInfo battleInfo = new BattleInfo();
 
@@ -50,8 +50,8 @@ namespace Battle
                 battleInfo.EnemyList.Add(battleCharacterInfo);
             }
 
-            return battleInfo;*/
+            return battleInfo;
             return null;
         }
-    }
+    }*/
 }

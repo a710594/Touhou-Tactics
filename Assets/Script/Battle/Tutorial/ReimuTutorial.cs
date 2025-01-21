@@ -39,7 +39,7 @@ namespace Battle
             {
                 BattleController.Instance.CommandStateBeginHandler = null;
                 BattleUI.Instance.SetArrowVisible(false);
-                ((BattleTutorial)_context.Parent).ConversationUI = ConversationUI.Open(6, false, null, () => 
+                ((ReimuTutorial)_context.Parent)._conversationUI = ConversationUI.Open(6, false, null, () => 
                 {
                     Vector3 offset = new Vector3(-200, 0, 0);
                     TutorialArrowUI.Open("選擇支援。", BattleUI.Instance.ActionButtonGroup.SupportButton.transform, offset, Vector2Int.right);
@@ -101,13 +101,13 @@ namespace Battle
 
             public override void Begin()
             {
-                Vector3 v = BattleController.Instance.SelectedCharacter.Position;
+                Vector3 v = BattleController.Instance.SelectedCharacter.transform.position;
                 TutorialArrowUI.Open("選擇目標。", new Vector3(v.x, v.y + 1, v.z), Vector2Int.down);
             }
 
             public override bool CheckClick(Vector2Int position)
             {
-                Vector3 v = BattleController.Instance.SelectedCharacter.Position;
+                Vector3 v = BattleController.Instance.SelectedCharacter.transform.position;
                 if (position == new Vector2Int((int)v.x, (int)v.z))
                 {
                     Next();
@@ -135,13 +135,13 @@ namespace Battle
 
             public override void Begin()
             {
-                Vector3 v = BattleController.Instance.SelectedCharacter.Position;
+                Vector3 v = BattleController.Instance.SelectedCharacter.transform.position;
                 TutorialArrowUI.Open("再次點選同樣的位置確認。", new Vector3(v.x, v.y + 1, v.z), Vector2Int.down);
             }
 
             public override bool CheckClick(Vector2Int position)
             {
-                Vector3 v = BattleController.Instance.SelectedCharacter.Position;
+                Vector3 v = BattleController.Instance.SelectedCharacter.transform.position;
                 if (position == new Vector2Int((int)v.x, (int)v.z))
                 {
                     TutorialArrowUI.Close();
@@ -168,7 +168,7 @@ namespace Battle
 
             public override void Begin()
             {
-                ((BattleTutorial)_context.Parent).ConversationUI.Continue(() =>
+                ((ReimuTutorial)_context.Parent)._conversationUI.Continue(() =>
                 {
                     BattleController.Instance.EndTutorial();
                     BattleUI.Instance.SetArrowVisible(true);

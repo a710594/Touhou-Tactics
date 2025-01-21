@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Battle
+/*namespace Battle
 {
     public class BattleInfo
     {
@@ -20,8 +20,6 @@ namespace Battle
         public List<Vector2Int> PlayerPositionList = new List<Vector2Int>();
         public List<BattleCharacterInfo> EnemyList = new List<BattleCharacterInfo>();
         public Dictionary<Vector2Int, BattleInfoTile> TileDic = new Dictionary<Vector2Int, BattleInfoTile>();
-        //public Dictionary<Vector2Int, TileComponent> TileComponentDic = new Dictionary<Vector2Int, TileComponent>();
-        //public Dictionary<Vector2Int, GameObject> AttachDic = new Dictionary<Vector2Int, GameObject>();
 
         public BattleInfo() { }
 
@@ -50,4 +48,4 @@ namespace Battle
             }
         }
     }
-}
+}*/

@@ -11,14 +11,12 @@ public class CharacterListGroup : MonoBehaviour
     public Image Image;
 
     private List<Image> _imageList = new List<Image>();
-    private List<BattleCharacterInfo> _characterList = new List<BattleCharacterInfo>();
-    private Dictionary<BattleCharacterInfo, Sprite> _spriteDic = new Dictionary<BattleCharacterInfo, Sprite>();
+    private List<BattleCharacterController> _characterList = new List<BattleCharacterController>();
 
-    public void Init(List<BattleCharacterInfo> characterList)
+    public void Init(List<BattleCharacterController> characterList)
     {
         _characterList = characterList;
         Image image;
-        Sprite sprite;
         for (int i=0; i<_characterList.Count; i++) 
         {
             image = Instantiate(Image);
@@ -28,12 +26,10 @@ public class CharacterListGroup : MonoBehaviour
                 image.gameObject.SetActive(false);
             }
             _imageList.Add(image);
-            sprite = Resources.Load<Sprite>("Image/" + _characterList[i].Sprite + "_F");
-            _spriteDic.Add(_characterList[i], sprite);
         }
     }
 
-    public void Add(BattleCharacterInfo character)
+    public void Add(BattleCharacterController controller)
     {
         Image image;
         Sprite sprite;
@@ -41,15 +37,8 @@ public class CharacterListGroup : MonoBehaviour
         image.transform.SetParent(transform);
         image.gameObject.SetActive(false);
         _imageList.Add(image);
-        sprite = Resources.Load<Sprite>("Image/" + character.Sprite + "_F");
-        _spriteDic.Add(character, sprite);
+        sprite = Resources.Load<Sprite>("Image/" + controller.SpriteFront);
         
-    }
-
-    public void ChangeSprite(BattleCharacterInfo info, string sprite) 
-    {
-        _spriteDic[info] = Resources.Load<Sprite>("Image/" + sprite + "_F");
-        Refresh();
     }
 
     public void Refresh() 
@@ -59,7 +48,7 @@ public class CharacterListGroup : MonoBehaviour
             if (i < _characterList.Count)
             {
                 _imageList[i].gameObject.SetActive(true);
-                _imageList[i].sprite = _spriteDic[_characterList[i]];
+                _imageList[i].sprite = _characterList[i].SpriteFront;
             }
             else
             {

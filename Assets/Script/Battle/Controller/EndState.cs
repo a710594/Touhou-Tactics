@@ -19,37 +19,34 @@ namespace Battle
 
                 if (_characterList.Contains(_character))
                 {
-                    if (_character.ActionCount == 0)
+                    if (_character.Info.ActionCount == 0)
                     {
-                        List<Log> logList = _character.CheckStatus();
+                        List<Log> logList = _character.Info.CheckStatus();
                         Instance.BattleUI.SetLittleHpBarValue(_character);
                         if(logList.Count > 0)
                         {
                             Instance.BattleUI.PlayFloatingNumberPool(_character, logList);
                         }
-                        for (int i = 0; i < _character.SkillList.Count; i++)
+                        for (int i = 0; i < _character.Info.SkillList.Count; i++)
                         {
-                            _character.SkillList[i].CheckCD();
+                            _character.Info.SkillList[i].CheckCD();
                         }
-                        for (int i = 0; i < _character.SupportList.Count; i++)
+                        for (int i = 0; i < _character.Info.SupportList.Count; i++)
                         {
-                            _character.SupportList[i].CheckCD();
+                            _character.Info.SupportList[i].CheckCD();
                         }
-                        if (_character.CurrentPP < BattleCharacterInfo.MaxPP)
-                        {
-                            _character.CurrentPP++;
-                        }
-                        _character.CurrentWT = _character.WT;
-                        _character.ActionCount = 2;
-                        _character.HasUseSkill = false;
-                        _character.HasUseSupport = false;
-                        _character.HasMove = false;
-                        _character.LastPosition = BattleCharacterInfo.DefaultLastPosition;
+
+                        _character.Info.CurrentWT = _character.Info.WT;
+                        _character.Info.ActionCount = 2;
+                        _character.Info.HasUseSkill = false;
+                        _character.Info.HasUseSupport = false;
+                        _character.Info.HasMove = false;
+                        _character.LastPosition = BattleCharacterControllerData.DefaultLastPosition;
                         _characterList.RemoveAt(0);
                         _characterList.Add(_character);
                         Instance.SortCharacterList(false);
 
-                        if (_character.Faction == BattleCharacterInfo.FactionEnum.Player)
+                        if (_character.Info.Faction == BattleCharacterControllerData.FactionEnum.Player)
                         {
                             _context.SetState<DirectionState>();
                         }

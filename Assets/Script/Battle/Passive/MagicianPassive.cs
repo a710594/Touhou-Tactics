@@ -13,7 +13,7 @@ namespace Battle
             Data = data;
         }
 
-        public static float GetValue(BattleCharacterInfo character)
+        public static float GetValue(BattleCharacterControllerData character)
         {
             return (1 + ((character.CurrentHP / (float)character.MaxHP) * 0.2f));
         }

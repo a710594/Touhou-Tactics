@@ -74,9 +74,9 @@ public class ExploreMapBuilder : MonoBehaviour
 
         for (int i=0; i<file.DoorList.Count; i++) 
         {
-            gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Door_Cube"), Vector3.zero, Quaternion.identity);
             for (int j=0; j<file.DoorList[i].PositionList.Count;j++) 
             {
+                gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Door_Cube"), Vector3.zero, Quaternion.identity);
                 gameObj.transform.position = new Vector3(file.DoorList[i].PositionList[j].x, 1, file.DoorList[i].PositionList[j].y);
                 gameObj.transform.SetParent(parent);
             }

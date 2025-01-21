@@ -26,7 +26,7 @@ public class CameraRotate : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        _root = GameObject.Find("BattleMapBuilder").transform;
+        _root = GameObject.Find("BattleController").transform;
     }
 
     // Update is called once per frame

@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Battle
 {
-    public class BattleCharacterInfo
+    /*public class BattleCharacterInfo
     {
         public static readonly int MaxPP = 10;
         public static readonly Vector3 DefaultLastPosition = new(int.MaxValue, int.MaxValue, int.MaxValue);
@@ -44,7 +44,7 @@ namespace Battle
         public LittleHpBarWithStatus HpBar;
         public Equip Weapon;
         public List<Equip> Armor = new List<Equip>();
-        public List<Equip> Amulets = new List<Equip>();
+        public List<Equip> Decoration = new List<Equip>();
 
         public List<Skill> SkillList = new List<Skill>();
         public List<Support> SupportList = new List<Support>();
@@ -152,39 +152,54 @@ namespace Battle
             }
             for (int i=0; i<job.Amulets; i++) 
             {
-                Amulets.Add(new Equip(EquipModel.CategoryEnum.Amulet));
+                Decoration.Add(new Equip(EquipModel.CategoryEnum.Amulet));
             }
         }
 
-        public BattleCharacterInfo(int lv, EnemyModel enemy)
+        public BattleCharacterInfo(int lv, EnemyModel data, Vector3 position)
         {
-            Enemy = enemy;
-            Name = enemy.Name;
+            Enemy = data;
+            Name = data.Name;
             Lv = lv;
 
             float n = (1 + (lv - 1) * 0.1f);
-            MaxHP = Mathf.RoundToInt(enemy.HP * n);
-            STR = Mathf.RoundToInt(enemy.STR * n);
-            CON = Mathf.RoundToInt(enemy.CON * n);
-            INT = Mathf.RoundToInt(enemy.INT * n);
-            MEN = Mathf.RoundToInt(enemy.MEN * n);
-            DEX = Mathf.RoundToInt(enemy.DEX * n);
-            AGI = Mathf.RoundToInt(enemy.AGI * n);
-            MOV = enemy.MOV;
-            UP = enemy.UP;
-            DOWN = enemy.DOWN;
-            WT = enemy.WT;
-            Sprite = enemy.SpriteList[0];
+            MaxHP = Mathf.RoundToInt(data.HP * n);
+            STR = Mathf.RoundToInt(data.STR * n);
+            CON = Mathf.RoundToInt(data.CON * n);
+            INT = Mathf.RoundToInt(data.INT * n);
+            MEN = Mathf.RoundToInt(data.MEN * n);
+            DEX = Mathf.RoundToInt(data.DEX * n);
+            AGI = Mathf.RoundToInt(data.AGI * n);
+            MOV = data.MOV;
+            UP = data.UP;
+            DOWN = data.DOWN;
+            WT = data.WT;
+            Sprite = data.SpriteList[0];
             Faction = FactionEnum.Enemy;
-
-            for (int i = 0; i < enemy.SkillList.Count; i++)
-            {
-                SkillList.Add(new Skill(DataContext.Instance.SkillDic[enemy.SkillList[i]]));
-            }
-
             IsAuto = true;
             CurrentHP = MaxHP;
             CurrentWT = WT;
+
+            Type t = Type.GetType("Battle." + data.AI);
+            AI = (BattleAI)Activator.CreateInstance(t);
+            AI.Init(this);
+            Position = position;
+
+            for (int i = 0; i < data.SkillList.Count; i++)
+            {
+                SkillList.Add(new Skill(DataContext.Instance.SkillDic[data.SkillList[i]]));
+            }
+
+            Weapon = new Equip(EquipModel.CategoryEnum.Weapon);
+            //之後要加上數量
+            //for (int i = 0; i < job.Armor; i++)
+            //{
+                Armor.Add(new Equip(EquipModel.CategoryEnum.Armor));
+            //}
+            //for (int i = 0; i < job.Amulets; i++)
+            //{
+                Decoration.Add(new Equip(EquipModel.CategoryEnum.Amulet));
+            //}
         }
 
         public BattleCharacterInfo(CharacterInfo info, int lv)
@@ -218,44 +233,44 @@ namespace Battle
 
             Weapon = info.Weapon;
             Armor = info.Armor;
-            Amulets = info.Amulets;
+            Decoration = info.Decoration;
         }
 
-        public BattleCharacterInfo(BattleFileEnemy file)
-        {
-            EnemyModel enemy = DataContext.Instance.EnemyDic[file.ID];
-            Enemy = enemy;
-            Name = enemy.Name;
-            Lv = file.Lv;
+        //public BattleCharacterInfo(BattleFileEnemy file)
+        //{
+        //    EnemyModel enemy = DataContext.Instance.EnemyDic[file.ID];
+        //    Enemy = enemy;
+        //    Name = enemy.Name;
+        //    Lv = file.Lv;
 
-            float n = (1 + (Lv - 1) * 0.1f);
-            MaxHP = Mathf.RoundToInt(enemy.HP * n);
-            STR = Mathf.RoundToInt(enemy.STR * n);
-            CON = Mathf.RoundToInt(enemy.CON * n);
-            INT = Mathf.RoundToInt(enemy.INT * n);
-            MEN = Mathf.RoundToInt(enemy.MEN * n);
-            DEX = Mathf.RoundToInt(enemy.DEX * n);
-            AGI = Mathf.RoundToInt(enemy.AGI * n);
-            MOV = enemy.MOV;
-            UP = enemy.UP;
-            DOWN = enemy.DOWN;
-            WT = enemy.WT;
-            Sprite = enemy.SpriteList[0];
-            Faction = FactionEnum.Enemy;
-            Position = file.Position;
-            IsAuto = true;
-            CurrentHP = MaxHP;
-            CurrentWT = WT;
+        //    float n = (1 + (Lv - 1) * 0.1f);
+        //    MaxHP = Mathf.RoundToInt(enemy.HP * n);
+        //    STR = Mathf.RoundToInt(enemy.STR * n);
+        //    CON = Mathf.RoundToInt(enemy.CON * n);
+        //    INT = Mathf.RoundToInt(enemy.INT * n);
+        //    MEN = Mathf.RoundToInt(enemy.MEN * n);
+        //    DEX = Mathf.RoundToInt(enemy.DEX * n);
+        //    AGI = Mathf.RoundToInt(enemy.AGI * n);
+        //    MOV = enemy.MOV;
+        //    UP = enemy.UP;
+        //    DOWN = enemy.DOWN;
+        //    WT = enemy.WT;
+        //    Sprite = enemy.SpriteList[0];
+        //    Faction = FactionEnum.Enemy;
+        //    Position = file.Position;
+        //    IsAuto = true;
+        //    CurrentHP = MaxHP;
+        //    CurrentWT = WT;
 
-            for (int i = 0; i < enemy.SkillList.Count; i++)
-            {
-                SkillList.Add(new Skill(DataContext.Instance.SkillDic[enemy.SkillList[i]]));
-            }
+        //    for (int i = 0; i < enemy.SkillList.Count; i++)
+        //    {
+        //        SkillList.Add(new Skill(DataContext.Instance.SkillDic[enemy.SkillList[i]]));
+        //    }
 
-            Type t = Type.GetType("Battle." + enemy.AI);
-            AI = (BattleAI)Activator.CreateInstance(t);
-            AI.Init(this);
-        }
+        //    Type t = Type.GetType("Battle." + enemy.AI);
+        //    AI = (BattleAI)Activator.CreateInstance(t);
+        //    AI.Init(this);
+        //}
 
         public void SetDamage(int damage)
         {
@@ -328,5 +343,5 @@ namespace Battle
         {
             Sprite = sprite;
         }
-    }
+    }*/
 }

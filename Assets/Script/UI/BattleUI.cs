@@ -33,16 +33,16 @@ public class BattleUI : MonoBehaviour
 
     private Vector3 _arrowOffset = new Vector3(0, 1.5f, 0);
     private Vector3 _directionPosition = new Vector3();    
-    private Dictionary<BattleCharacterInfo, LittleHpBarWithStatus> _littleHpBarDic = new Dictionary<BattleCharacterInfo, LittleHpBarWithStatus>();
+    private Dictionary<BattleCharacterController, LittleHpBarWithStatus> _littleHpBarDic = new Dictionary<BattleCharacterController, LittleHpBarWithStatus>();
     private Transform _arrowTransform = null;
-    private Dictionary<BattleCharacterInfo, FloatingNumberPool> _floatingNumberPoolDic  = new Dictionary<BattleCharacterInfo, FloatingNumberPool>();
+    private Dictionary<BattleCharacterController, FloatingNumberPool> _floatingNumberPoolDic  = new Dictionary<BattleCharacterController, FloatingNumberPool>();
 
     public void SetVisible(bool isVisible) 
     {
         gameObject.SetActive(isVisible);
     }
 
-    public void SetCharacterInfoUI_1(BattleCharacterInfo info) 
+    public void SetCharacterInfoUI_1(BattleCharacterControllerData info) 
     {
         if (info != null)
         {
@@ -55,7 +55,7 @@ public class BattleUI : MonoBehaviour
         }
     }
 
-    public void SetCharacterInfoUI_2(BattleCharacterInfo info)
+    public void SetCharacterInfoUI_2(BattleCharacterControllerData info)
     {
         if (info != null)
         {
@@ -84,20 +84,20 @@ public class BattleUI : MonoBehaviour
         ActionButtonGroup.SetScrollView(list);
     }
 
-    public void SetPredictionInfo_1(BattleCharacterInfo info, int predictionHp)
+    public void SetPredictionInfo_1(BattleCharacterControllerData info, int predictionHp)
     {
         CharacterInfoUI_1.SetHpPrediction(info.CurrentHP, predictionHp, info.MaxHP);
     }
 
-    public void SetPredictionInfo_2(BattleCharacterInfo info, int predictionHp)
+    public void SetPredictionInfo_2(BattleCharacterControllerData info, int predictionHp)
     {
         CharacterInfoUI_2.SetHpPrediction(info.CurrentHP, predictionHp, info.MaxHP);
     }
 
-    public void SetPredictionLittleHpBar(BattleCharacterInfo info, int predictionHp)
+    public void SetPredictionLittleHpBar(BattleCharacterController controller, int predictionHp)
     {
-        LittleHpBarWithStatus hpBar = _littleHpBarDic[info];
-        hpBar.SetPrediction(info.CurrentHP, predictionHp, info.MaxHP);
+        LittleHpBarWithStatus hpBar = _littleHpBarDic[controller];
+        hpBar.SetPrediction(controller.Info.CurrentHP, predictionHp, controller.Info.MaxHP);
     }
 
     public void StopPredictionInfo()
@@ -105,9 +105,9 @@ public class BattleUI : MonoBehaviour
         CharacterInfoUI_2.StopHpPrediction();
     }
 
-    public void StopPredictionLittleHpBar(BattleCharacterInfo info)
+    public void StopPredictionLittleHpBar(BattleCharacterController controller)
     {
-        LittleHpBarWithStatus hpBar = _littleHpBarDic[info];
+        LittleHpBarWithStatus hpBar = _littleHpBarDic[controller];
         hpBar.StopPrediction();
     }
 
@@ -121,21 +121,21 @@ public class BattleUI : MonoBehaviour
         CharacterInfoUI_2.HideHitRate();
     }
 
-    public void SetLittleHpBarAnchor(BattleCharacterInfo info) 
+    public void SetLittleHpBarAnchor(BattleCharacterController controller) 
     {
         LittleHpBarWithStatus hpBar = Instantiate(LittleHpBarWithStatus);
         hpBar.transform.SetParent(HPGroup);
-        hpBar.SetAnchor(info.Controller.HpAnchor);
-        _littleHpBarDic.Add(info, hpBar);
+        hpBar.SetAnchor(controller.HpAnchor);
+        _littleHpBarDic.Add(controller, hpBar);
     }
 
-    public void SetLittleHpBarValue(BattleCharacterInfo info)
+    public void SetLittleHpBarValue(BattleCharacterController controller)
     {
-        LittleHpBarWithStatus hpBar = _littleHpBarDic[info];
-        if (info.CurrentHP > 0)
+        LittleHpBarWithStatus hpBar = _littleHpBarDic[controller];
+        if (controller.Info.CurrentHP > 0)
         {
             hpBar.gameObject.SetActive(true);
-            hpBar.SetData(info);
+            hpBar.SetData(controller.Info);
         }
         else
         {
@@ -143,27 +143,21 @@ public class BattleUI : MonoBehaviour
         }
     }
 
-    public void SetFloatingNumberPoolAnchor(BattleCharacterInfo info)
+    public void SetFloatingNumberPoolAnchor(BattleCharacterController controller)
     {
         FloatingNumberPool floatingNumberPool = Instantiate(FloatingNumberPool);
         floatingNumberPool.transform.SetParent(transform);
-        floatingNumberPool.SetAnchor(info.Controller.HpAnchor);
-        _floatingNumberPoolDic.Add(info, floatingNumberPool);
+        floatingNumberPool.SetAnchor(controller.HpAnchor);
+        _floatingNumberPoolDic.Add(controller, floatingNumberPool);
     }
 
-    //public void PlayFloatingNumberPool(int id, FloatingNumberData.TypeEnum type, string text)
-    //{
-    //    FloatingNumberPool floatingNumberPool = _floatingNumberPoolDic[id];
-    //    floatingNumberPool.Play(text, type);
-    //}
-
-    public void PlayFloatingNumberPool(BattleCharacterInfo info, List<Log> logList)
+    public void PlayFloatingNumberPool(BattleCharacterController info, List<Log> logList)
     {
         FloatingNumberPool floatingNumberPool = _floatingNumberPoolDic[info];
         floatingNumberPool.Play(new Queue<Log>(logList));
     }
 
-    public void CharacterListGroupInit(List<BattleCharacterInfo> characterList)
+    public void CharacterListGroupInit(List<BattleCharacterController> characterList)
     {
         CharacterListGroup.Init(characterList);
     }

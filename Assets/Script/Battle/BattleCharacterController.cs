@@ -8,30 +8,43 @@ using UnityEngine.UIElements;
 
 public class BattleCharacterController : MonoBehaviour
 {
+
     public Action MoveEndHandler;
-    public Action<CharacterInfo> RightClickHandler;
+    public Action<int> RightClickHandler;
 
     public Transform HpAnchor;
     public SpriteRenderer SpriteRenderer;
     public SpriteFlash SpriteFlash;
     public Vector2 Direction = Vector2Int.left;
+    public Vector3 LastPosition = new Vector3();
+    public BattleAI AI = null;
+    public BattleCharacterControllerData Info;
+    public Sprite SpriteFront;
+    public Sprite SpriteBack;
 
-    private Sprite _front;
-    private Sprite _back;
     private CameraRotate _cameraRotate;
-    private CharacterInfo _info;
 
-    public void Init(string sprite) 
+    public void Init(int lv, EnemyModel enemy)
     {
-        _front = Resources.Load<Sprite>("Image/" + sprite + "_F");
-        _back = Resources.Load<Sprite>("Image/" + sprite + "_B");
-        SpriteRenderer.sprite = _front;
+        Info = new BattleEnemyInfo(lv, enemy);
+
+        SpriteFront = Resources.Load<Sprite>("Image/" + enemy.Sprite_1 + "_F");
+        SpriteBack = Resources.Load<Sprite>("Image/" + enemy.Sprite_1 + "_B");
+        SpriteRenderer.sprite = SpriteFront;
         SpriteRenderer.flipX = false;
+
+        Type t = Type.GetType("Battle." + enemy.AI);
+        AI = (BattleAI)Activator.CreateInstance(t);
+        AI.Init(this);
     }
 
-    public void SetCharacterInfo(CharacterInfo info) 
+    public void Init(int lv, JobModel job) 
     {
-        _info = info;
+        Info = new BattlePlayerInfo(lv, job);
+        SpriteFront = Resources.Load<Sprite>("Image/" + job.Controller + "_F");
+        SpriteBack = Resources.Load<Sprite>("Image/" + job.Controller + "_B");
+        SpriteRenderer.sprite = SpriteFront;
+        SpriteRenderer.flipX = false;
     }
 
     public void Move(List<Vector2Int> paths)
@@ -41,7 +54,7 @@ public class BattleCharacterController : MonoBehaviour
             SetDirection(paths[0] - Utility.ConvertToVector2Int(transform.position));
             SetSprite();
 
-            transform.DOMove(new Vector3(paths[0].x, BattleController.Instance.Info.TileDic[paths[0]].TileData.Height, paths[0].y), 0.25f).SetEase(Ease.Linear).OnComplete(() =>
+            transform.DOMove(new Vector3(paths[0].x, BattleController.Instance.TileDic[paths[0]].TileData.Height, paths[0].y), 0.25f).SetEase(Ease.Linear).OnComplete(() =>
             {
                 paths.RemoveAt(0);
                 if (paths.Count > 0)
@@ -78,22 +91,22 @@ public class BattleCharacterController : MonoBehaviour
         {
             if (localDirection == Vector2Int.right)
             {
-                SpriteRenderer.sprite = _back;
+                SpriteRenderer.sprite = SpriteBack;
                 SpriteRenderer.flipX = false;
             }
             else if (localDirection == Vector2Int.left)
             {
-                SpriteRenderer.sprite = _front;
+                SpriteRenderer.sprite = SpriteFront;
                 SpriteRenderer.flipX = false;
             }
             else if (localDirection == Vector2Int.up)
             {
-                SpriteRenderer.sprite = _back;
+                SpriteRenderer.sprite = SpriteBack;
                 SpriteRenderer.flipX = true;
             }
             else if (localDirection == Vector2Int.down)
             {
-                SpriteRenderer.sprite = _front;
+                SpriteRenderer.sprite = SpriteFront;
                 SpriteRenderer.flipX = true;
             }
         }
@@ -101,25 +114,33 @@ public class BattleCharacterController : MonoBehaviour
         {
             if (localDirection == Vector2Int.right)
             {
-                SpriteRenderer.sprite = _front;
+                SpriteRenderer.sprite = SpriteFront;
                 SpriteRenderer.flipX = true;
             }
             else if (localDirection == Vector2Int.left)
             {
-                SpriteRenderer.sprite = _front;
+                SpriteRenderer.sprite = SpriteFront;
                 SpriteRenderer.flipX = false;
             }
             else if (localDirection == Vector2Int.up)
             {
-                SpriteRenderer.sprite = _back;
+                SpriteRenderer.sprite = SpriteBack;
                 SpriteRenderer.flipX = true;
             }
             else if (localDirection == Vector2Int.down)
             {
-                SpriteRenderer.sprite = _front;
+                SpriteRenderer.sprite = SpriteFront;
                 SpriteRenderer.flipX = true;
             }
         }
+    }
+
+    public void ChangeSprite(string sprite)
+    {
+        SpriteFront = Resources.Load<Sprite>("Image/" + sprite + "_F");
+        SpriteBack = Resources.Load<Sprite>("Image/" + sprite + "_B");
+        SpriteRenderer.sprite = SpriteFront;
+        SpriteRenderer.flipX = false;
     }
 
     public void SetFlash(bool enable)
@@ -159,7 +180,7 @@ public class BattleCharacterController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1) && RightClickHandler != null) 
         {
-            RightClickHandler(_info);
+            RightClickHandler(((BattlePlayerInfo)Info).Job.ID);
         }
     }
     private void Awake()

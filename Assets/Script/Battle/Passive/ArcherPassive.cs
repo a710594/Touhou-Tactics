@@ -12,7 +12,7 @@ namespace Battle
         }
 
         //�֦������̳Q�ʪ�����M��,�����V���g�{�V��
-        public static List<Vector2Int> GetRange(int range, Vector2Int start, BattleInfo info)
+        public static List<Vector2Int> GetRange(int range, Vector2Int start)
         {
             int heightDiff;
             int newRange;
@@ -29,9 +29,9 @@ namespace Battle
                 list.Add(position);
 
                 newPosition = position + Vector2Int.up;
-                if (!list.Contains(newPosition) && newPosition.y <= info.MaxY)
+                if (!list.Contains(newPosition) && newPosition.y <= BattleController.Instance.MaxY)
                 {
-                    heightDiff = info.TileDic[start].TileData.Height - info.TileDic[newPosition].TileData.Height;
+                    heightDiff = BattleController.Instance.TileDic[start].TileData.Height - BattleController.Instance.TileDic[newPosition].TileData.Height;
                     newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
                     if (Utility.ManhattanDistance(newPosition, start) <= newRange)
                     {
@@ -40,9 +40,9 @@ namespace Battle
                 }
 
                 newPosition = position + Vector2Int.down;
-                if (!list.Contains(newPosition) && newPosition.y >= info.MinY)
+                if (!list.Contains(newPosition) && newPosition.y >= BattleController.Instance.MinY)
                 {
-                    heightDiff = info.TileDic[start].TileData.Height - info.TileDic[newPosition].TileData.Height;
+                    heightDiff = BattleController.Instance.TileDic[start].TileData.Height - BattleController.Instance.TileDic[newPosition].TileData.Height;
                     newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
                     if (Utility.ManhattanDistance(newPosition, start) <= newRange)
                     {
@@ -51,9 +51,9 @@ namespace Battle
                 }
 
                 newPosition = position + Vector2Int.left;
-                if (!list.Contains(newPosition) && newPosition.x >= info.MinX)
+                if (!list.Contains(newPosition) && newPosition.x >= BattleController.Instance.MinX)
                 {
-                    heightDiff = info.TileDic[start].TileData.Height - info.TileDic[newPosition].TileData.Height;
+                    heightDiff = BattleController.Instance.TileDic[start].TileData.Height - BattleController.Instance.TileDic[newPosition].TileData.Height;
                     newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
                     if (Utility.ManhattanDistance(newPosition, start) <= newRange)
                     {
@@ -62,9 +62,9 @@ namespace Battle
                 }
 
                 newPosition = position + Vector2Int.right;
-                if (!list.Contains(newPosition) && newPosition.x <= info.MaxX)
+                if (!list.Contains(newPosition) && newPosition.x <= BattleController.Instance.MaxX)
                 {
-                    heightDiff = info.TileDic[start].TileData.Height - info.TileDic[newPosition].TileData.Height;
+                    heightDiff = BattleController.Instance.TileDic[start].TileData.Height - BattleController.Instance.TileDic[newPosition].TileData.Height;
                     newRange = Mathf.Clamp(range + heightDiff, 0, int.MaxValue);
                     if (Utility.ManhattanDistance(newPosition, start) <= newRange)
                     {

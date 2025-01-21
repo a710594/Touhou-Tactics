@@ -42,12 +42,22 @@ namespace Battle
         public Action CharacterStateBeginHandler;
         public Action<State> ChangeStateHandler;
 
-        public BattleInfo Info;
         public BattleTutorial Tutorial = null;
-        public BattleCharacterInfo SelectedCharacter;
-        public List<BattleCharacterInfo> CharacterList = new List<BattleCharacterInfo>(); //�s��������
-        public List<BattleCharacterInfo> DyingList = new List<BattleCharacterInfo>(); //�x�����ڤ訤��
-        public List<BattleCharacterInfo> DeadList = new List<BattleCharacterInfo>(); //���`���ڤ訤��
+        public BattleCharacterController SelectedCharacter;
+        public List<BattleCharacterController> CharacterList = new List<BattleCharacterController>(); //�s��������
+        public List<BattleCharacterController> DyingList = new List<BattleCharacterController>(); //�x�����ڤ訤��
+        public List<BattleCharacterController> DeadList = new List<BattleCharacterController>(); //���`���ڤ訤��
+
+        public int MinX;
+        public int MaxX;
+        public int MinY;
+        public int MaxY;
+        public int Exp;
+        public int MinPlayerCount;
+        public int MaxPlayerCount;
+        public List<Vector2Int> PlayerPositionList = new List<Vector2Int>();
+        public List<EnemyModel> EnemyDataList = new List<EnemyModel>();
+        public Dictionary<Vector2Int, BattleInfoTile> TileDic = new Dictionary<Vector2Int, BattleInfoTile>();
 
         private readonly Color _white = new Color(1, 1, 1, 0.5f);
         private readonly Color _yellow = new Color(1, 1, 0, 0.5f);
@@ -65,30 +75,224 @@ namespace Battle
         private Transform _root;
         private List<CharacterInfo> _candidateList = new List<CharacterInfo>();
         //private Dictionary<int, BattleCharacterController> _controllerDic = new Dictionary<int, BattleCharacterController>();
-        private Dictionary<Command, List<BattleCharacterInfo>> _commandTargetDic = new Dictionary<Command, List<BattleCharacterInfo>>();
+        private Dictionary<Command, List<BattleCharacterController>> _commandTargetDic = new Dictionary<Command, List<BattleCharacterController>>();
 
         public List<Log> LogList = new List<Log>();
 
-        public void Init(int floor, int lv, string tutorial, BattleInfo info, Transform root)
+        public void Init(string tutorial, string map) 
         {
-            Info = info;
+            GetGameObject();
+            BattleFileFixed file = DataContext.Instance.Load<BattleFileFixed>(map, DataContext.PrePathEnum.MapBattle);
+            PlayerPositionList = file.PlayerPositionList;
+            Exp = file.Exp;
+            MinPlayerCount = file.PlayerCount;
+            MaxPlayerCount = file.PlayerCount;
+            EnemyDataList.Clear();
 
+            for (int i=0; i<file.EnemyList.Count; i++) 
+            {
+                EnemyDataList.Add(DataContext.Instance.EnemyDic[file.EnemyList[i].ID]);
+                CreateEnemy(file.EnemyList[i].ID, file.EnemyList[i].Lv, file.EnemyList[i].Position);
+            }
+
+            BattleInfoTile tile;
+            TileDic.Clear();
+            for (int i = 0; i < file.TileList.Count; i++)
+            {
+                tile = new BattleInfoTile();
+                tile.TileData = DataContext.Instance.TileDic[file.TileList[i].ID];
+                TileDic.Add(file.TileList[i].Position, tile);
+            }
+
+            CreateObject();
+            Init(tutorial);
+        }
+
+        public void Init(string tutorial, EnemyGroupModel enemyGroup) 
+        {
+            GetGameObject();
+            BattleFileRandom file = DataContext.Instance.Load<BattleFileRandom>(enemyGroup.GetMap(), DataContext.PrePathEnum.MapSeed);
+            Exp = enemyGroup.Exp;
+            MinPlayerCount = enemyGroup.MinPlayerCount;
+            MaxPlayerCount = enemyGroup.MaxPlayerCount;
+            if (CharacterManager.Instance.SurvivalCount() < MaxPlayerCount)
+            {
+                MaxPlayerCount = CharacterManager.Instance.SurvivalCount();
+            }
+
+            Vector2Int position;
+            TileModel tileData;
+            BattleInfoTile tileInfo;
+            AttachModel attachData;
+            Queue<Vector2Int> queue = new Queue<Vector2Int>();
+
+            BattleInfoTile tile;
+            TileDic.Clear();
+            for (int i = 0; i < file.TileList.Count; i++)
+            {
+                tile = new BattleInfoTile();
+                tile.TileData = DataContext.Instance.TileDic[file.TileList[i].ID];
+                TileDic.Add(file.TileList[i].Position, tile);
+                if (tile.TileData.Enqueue)
+                {
+                    queue.Enqueue(file.TileList[i].Position);
+                }
+            }
+
+            //BFS
+            while (queue.Count != 0)
+            {
+                position = queue.Dequeue();
+                if ((position + Vector2Int.up).y <= file.MaxY && !TileDic.ContainsKey(position + Vector2Int.up))
+                {
+                    tileData = GetAdjacentTile(TileDic[position].TileData, Vector2Int.up);
+                    tileInfo = new BattleInfoTile();
+                    tileInfo.TileData = tileData;
+                    TileDic.Add(position + Vector2Int.up, tileInfo);
+                    if (tileData.Enqueue)
+                    {
+                        queue.Enqueue(position + Vector2Int.up);
+                    }
+                }
+                if ((position + Vector2Int.down).y >= file.MinY && !TileDic.ContainsKey(position + Vector2Int.down))
+                {
+                    tileData = GetAdjacentTile(TileDic[position].TileData, Vector2Int.down);
+                    tileInfo = new BattleInfoTile();
+                    tileInfo.TileData = tileData;
+                    TileDic.Add(position + Vector2Int.down, tileInfo);
+                    if (tileData.Enqueue)
+                    {
+                        queue.Enqueue(position + Vector2Int.down);
+                    }
+                }
+                if ((position + Vector2Int.left).x >= file.MinX && !TileDic.ContainsKey(position + Vector2Int.left))
+                {
+                    tileData = GetAdjacentTile(TileDic[position].TileData, Vector2Int.left);
+                    tileInfo = new BattleInfoTile();
+                    tileInfo.TileData = tileData;
+                    TileDic.Add(position + Vector2Int.left, tileInfo);
+                    if (tileData.Enqueue)
+                    {
+                        queue.Enqueue(position + Vector2Int.left);
+                    }
+                }
+                if ((position + Vector2Int.right).x <= file.MaxX && !TileDic.ContainsKey(position + Vector2Int.right))
+                {
+                    tileData = GetAdjacentTile(TileDic[position].TileData, Vector2Int.right);
+                    tileInfo = new BattleInfoTile();
+                    tileInfo.TileData = tileData;
+                    TileDic.Add(position + Vector2Int.right, tileInfo);
+                    if (tileData.Enqueue)
+                    {
+                        queue.Enqueue(position + Vector2Int.right);
+                    }
+                }
+            }
+
+            //Attach
+            foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in TileDic)
+            {
+                if (!file.PlayerPositionList.Contains(pair.Key))
+                {
+                    attachData = GetAttachRandomly(pair.Value.TileData);
+                    pair.Value.AttachData = attachData;
+                }
+            }
+
+            //Life Game
+            int count = 5;
+            while (count > 0)
+            {
+                NextGeneration(file);
+                count--;
+            }
+
+            //Create Enemy
+            List<Vector2Int> invalidList = new List<Vector2Int>();
+            foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in TileDic)
+            {
+                if (pair.Value.MoveCost == 0)
+                {
+                    invalidList.Add(pair.Key);
+                }
+            }
+
+            for (int i = 0; i < PlayerPositionList.Count; i++)
+            {
+                invalidList.Add(PlayerPositionList[i]);
+            }
+
+
+            for (int i = 0; i < enemyGroup.EnemyList.Count; i++)
+            {
+                if (Utility.GetRandomPosition(file.MinX, file.MaxX, file.MinY, file.MaxY, invalidList, out Vector2Int result))
+                {
+                    EnemyDataList.Add(DataContext.Instance.EnemyDic[enemyGroup.EnemyList[i]]);
+                    CreateEnemy(enemyGroup.EnemyList[i], enemyGroup.Lv, new Vector3(result.x, 0, result.y));
+                    invalidList.Add(result);
+                }
+            }
+
+            CreateObject();
+            Init(tutorial);
+        }
+
+        private void GetGameObject() 
+        {
+            BattleUI = GameObject.Find("BattleUI").GetComponent<BattleUI>();
+            BattleResultUI = GameObject.Find("BattleResultUI").GetComponent<BattleResultUI>();
+            SelectBattleCharacterUI = GameObject.Find("SelectBattleCharacterUI").GetComponent<SelectCharacterUI>();
+            DragCameraUI = GameObject.Find("DragCameraUI").GetComponent<DragCameraUI>();
+            DragCameraUI.Init(MinX, MaxX, MinY, MaxY);
+            BattleUI.gameObject.SetActive(false);
+            BattleResultUI.gameObject.SetActive(false);
+            CameraRotate = Camera.main.GetComponent<CameraRotate>();
+            _root = GameObject.Find("BattleController").transform;
+            _cameraController = Camera.main.GetComponent<CameraDraw>();
+        }
+
+        private void Init(string tutorial)
+        {
             if (tutorial!=null && tutorial!="")
             {
                 var objectType = Type.GetType("Battle." + tutorial);
                 Tutorial = (BattleTutorial)Activator.CreateInstance(objectType);
             }
 
-            _root = root;
-            BattleUI = GameObject.Find("BattleUI").GetComponent<BattleUI>();
-            BattleResultUI = GameObject.Find("BattleResultUI").GetComponent<BattleResultUI>();
-            _cameraController = Camera.main.GetComponent<CameraDraw>();
-            SelectBattleCharacterUI = GameObject.Find("SelectBattleCharacterUI").GetComponent<SelectCharacterUI>();
-            CameraRotate = Camera.main.GetComponent<CameraRotate>();
-            DragCameraUI = GameObject.Find("DragCameraUI").GetComponent<DragCameraUI>();
-            DragCameraUI.Init(info);
-            BattleUI.gameObject.SetActive(false);
-            BattleResultUI.gameObject.SetActive(false);
+            MinX = int.MaxValue;
+            MaxX = int.MinValue;
+            MinY = int.MaxValue;
+            MaxY = int.MinValue;
+            foreach(KeyValuePair<Vector2Int, BattleInfoTile> pair in TileDic) 
+            {
+                if(pair.Key.x < MinX) 
+                {
+                    MinX = pair.Key.x;
+                }
+                if(pair.Key.x > MaxX) 
+                {
+                    MaxX = pair.Key.x;
+                }
+                if(pair.Key.y < MinY) 
+                {
+                    MinY = pair.Key.y;
+                }
+                if(pair.Key.y > MaxY) 
+                {
+                    MaxY = pair.Key.y;
+                }
+            }
+
+            //BattleUI = GameObject.Find("BattleUI").GetComponent<BattleUI>();
+            //BattleResultUI = GameObject.Find("BattleResultUI").GetComponent<BattleResultUI>();
+            //SelectBattleCharacterUI = GameObject.Find("SelectBattleCharacterUI").GetComponent<SelectCharacterUI>();
+            //DragCameraUI = GameObject.Find("DragCameraUI").GetComponent<DragCameraUI>();
+            //DragCameraUI.Init(MinX, MaxX, MinY, MaxY);
+            //BattleUI.gameObject.SetActive(false);
+            //BattleResultUI.gameObject.SetActive(false);
+            //CameraRotate = Camera.main.GetComponent<CameraRotate>();
+            //_root = GameObject.Find("BattleController").transform;
+            //_cameraController = Camera.main.GetComponent<CameraDraw>();
 
             _context.ClearState();
             _context.AddState(new PrepareState(_context));
@@ -103,16 +307,6 @@ namespace Battle
             _context.AddState(new LoseState(_context));
             _context.AddState(new DirectionState(_context));
             _context.ChangeStateHandler = OnStateChange;
-
-            CharacterList.Clear();
-            for (int i = 0; i < info.EnemyList.Count; i++)
-            {
-                CharacterList.Add(info.EnemyList[i]);
-                BattleUI.SetLittleHpBarAnchor(info.EnemyList[i]);
-                BattleUI.SetLittleHpBarValue(info.EnemyList[i]);
-                BattleUI.SetFloatingNumberPoolAnchor(info.EnemyList[i]);
-                info.EnemyList[i].Controller.MoveEndHandler += OnMoveEnd;
-            }
 
             _candidateList = new List<CharacterInfo>(CharacterManager.Instance.Info.CharacterList);
 
@@ -166,11 +360,11 @@ namespace Battle
             }
         }
 
-        public void RemoveCharacterSprite(CharacterInfo characterInfo)
+        public void RemoveCharacterSprite(int jobId)
         {
             if (_context.CurrentState is PrepareState)
             {
-                ((PrepareState)_context.CurrentState).RemoveCharacterSprite(characterInfo);
+                ((PrepareState)_context.CurrentState).RemoveCharacterSprite(jobId);
             }
         }
 
@@ -208,15 +402,15 @@ namespace Battle
 
         public void SetSelectedCommand(Command command) 
         {
-            SelectedCharacter.SelectedCommand = command;
+            SelectedCharacter.Info.SelectedCommand = command;
         }
 
         public void SetQuad(List<Vector2Int> list, Color color)
         {
             for (int i = 0; i < list.Count; i++)
             {
-                Info.TileDic[list[i]].TileObject.Quad.gameObject.SetActive(true);
-                Info.TileDic[list[i]].TileObject.Quad.material.SetColor("_Color", color);
+                TileDic[list[i]].TileObject.Quad.gameObject.SetActive(true);
+                TileDic[list[i]].TileObject.Quad.material.SetColor("_Color", color);
             }
         }
 
@@ -254,10 +448,10 @@ namespace Battle
                 }
                 else if(command.AreaTarget == TargetEnum.UsMinHP)
                 {
-                    List<BattleCharacterInfo> tempList = new List<BattleCharacterInfo>();
+                    List<BattleCharacterController> tempList = new List<BattleCharacterController>();
                     for(int i=0; i<CharacterList.Count; i++)
                     {
-                        if(SelectedCharacter.Faction == CharacterList[i].Faction)
+                        if(SelectedCharacter.Info.Faction == CharacterList[i].Info.Faction)
                         {
                             tempList.Add(CharacterList[i]);  
                         }  
@@ -265,32 +459,32 @@ namespace Battle
 
                     if(tempList.Count>0)
                     {
-                        BattleCharacterInfo minHPCharacter = tempList[0];
+                        BattleCharacterController minHPCharacter = tempList[0];
                         for(int i=1; i<tempList.Count; i++)
                         {
-                            if(tempList[i].CurrentHP < minHPCharacter.CurrentHP)
+                            if(tempList[i].Info.CurrentHP < minHPCharacter.Info.CurrentHP)
                             {
                                 minHPCharacter = tempList[i];
                             }
                         }
-                        commandPositionList.Add(Utility.ConvertToVector2Int(minHPCharacter.Position)); 
+                        commandPositionList.Add(Utility.ConvertToVector2Int(minHPCharacter.transform.position)); 
                     }
                 }
                 else
                 {
                     for(int i=0; i<CharacterList.Count; i++)
                     {
-                        if(command.AreaTarget == TargetEnum.Us && SelectedCharacter.Faction == CharacterList[i].Faction)
+                        if(command.AreaTarget == TargetEnum.Us && SelectedCharacter.Info.Faction == CharacterList[i].Info.Faction)
                         {
-                            commandPositionList.Add(Utility.ConvertToVector2Int(CharacterList[i].Position));  
+                            commandPositionList.Add(Utility.ConvertToVector2Int(CharacterList[i].transform.position));  
                         }   
-                        else if(command.AreaTarget == TargetEnum.Them && SelectedCharacter.Faction != CharacterList[i].Faction)
+                        else if(command.AreaTarget == TargetEnum.Them && SelectedCharacter.Info.Faction != CharacterList[i].Info.Faction)
                         {
-                            commandPositionList.Add(Utility.ConvertToVector2Int(CharacterList[i].Position)); 
+                            commandPositionList.Add(Utility.ConvertToVector2Int(CharacterList[i].transform.position)); 
                         }
                         else if(command.AreaTarget == TargetEnum.All)
                         {
-                            commandPositionList.Add(Utility.ConvertToVector2Int(CharacterList[i].Position));  
+                            commandPositionList.Add(Utility.ConvertToVector2Int(CharacterList[i].transform.position));  
                         }
                     }
                 }
@@ -314,7 +508,7 @@ namespace Battle
 
         public void ClearQuad()
         {
-            foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in Info.TileDic)
+            foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in TileDic)
             {
                 pair.Value.TileObject.Quad.gameObject.SetActive(false);
                 pair.Value.TileObject.Buff.gameObject.SetActive(false);
@@ -329,7 +523,7 @@ namespace Battle
         public void OnMoveEnd()
         {
             _canClick = true;
-            SelectedCharacter.ActionCount--;
+            SelectedCharacter.Info.ActionCount--;
 
             if (SelectedCharacter.AI != null)
             {
@@ -337,7 +531,7 @@ namespace Battle
             }
             else
             {
-                if (SelectedCharacter.ActionCount > 0)
+                if (SelectedCharacter.Info.ActionCount > 0)
                 {
                     _context.SetState<CommandState>();
                 }
@@ -363,9 +557,9 @@ namespace Battle
             Instance.BattleUI.SetCharacterInfoUI_2(null);
             for (int i = 0; i < CharacterList.Count; i++)
             {
-                if (CharacterList[i] != Instance.SelectedCharacter && position == new Vector2(CharacterList[i].Position.x, CharacterList[i].Position.z))
+                if (CharacterList[i] != Instance.SelectedCharacter && position == new Vector2(CharacterList[i].transform.position.x, CharacterList[i].transform.position.z))
                 {
-                    BattleUI.SetCharacterInfoUI_2(CharacterList[i]);
+                    BattleUI.SetCharacterInfoUI_2(CharacterList[i].Info);
                     ShowTileBuff(CharacterList[i]);
                     ShowRange(CharacterList[i]);
                     return true;
@@ -376,81 +570,64 @@ namespace Battle
 
         public void ResetAction()
         {
-            SelectedCharacter.ActionCount = 2;
-            SelectedCharacter.Position = SelectedCharacter.LastPosition;
-            SelectedCharacter.HasMove = false;
-            SelectedCharacter.Controller.transform.position = SelectedCharacter.LastPosition;
-            SelectedCharacter.LastPosition = BattleCharacterInfo.DefaultLastPosition;
+            SelectedCharacter.Info.HasMove = false;
+            SelectedCharacter.Info.ActionCount = 2;
+            SelectedCharacter.transform.position = SelectedCharacter.LastPosition;
+            SelectedCharacter.LastPosition = BattleCharacterControllerData.DefaultLastPosition;
         }
 
-        public void CreateCharacter(int id, int lv, Vector3 position) 
+        public void CreateEnemy(int id, int lv, Vector3 position) 
         {
             EnemyModel enemyData = DataContext.Instance.EnemyDic[id];
-            BattleCharacterInfo info = new BattleCharacterInfo(lv, enemyData);
-            CharacterList.Add(info);
-            _maxIndex++;
-            info.Index = _maxIndex;
-            BattleUI.CharacterListGroup.Add(info);
-            Type t = Type.GetType("Battle." + enemyData.AI);
-            info.AI = (BattleAI)Activator.CreateInstance(t);
-            info.AI.Init(info);
-            info.Position = position;
-            GameObject obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/Enemy/" + info.Enemy.Controller), Vector3.zero, Quaternion.identity);
-            obj.transform.position = info.Position;
-            info.Controller = obj.GetComponent<BattleCharacterController>();
-            info.Controller.Init(info.Sprite);
-            info.Controller.SetAngle();
-            info.Controller.MoveEndHandler += OnMoveEnd;
-            BattleUI.SetLittleHpBarAnchor(info);
-            BattleUI.SetLittleHpBarValue(info);
-            BattleUI.SetFloatingNumberPoolAnchor(info);
+            CreateEnemy(enemyData, lv, position);
         }
 
-        public void CreateCharacter(BattleCharacterInfo info, Vector2Int position) 
+        public void CreateEnemy(EnemyModel enemyData, int lv, Vector3 position)
         {
-            info.Position = new Vector3(position.x, Info.TileDic[position].TileData.Height, position.y);
-            BattleCharacterController controller = ((GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/" + info.Job.Controller), Vector3.zero, Quaternion.identity)).GetComponent<BattleCharacterController>();
-            controller.transform.position = new Vector3(position.x, Info.TileDic[position].TileData.Height, position.y);
-            controller.transform.SetParent(Instance._root);
-            controller.Init(info.Sprite);
+            GameObject obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/Enemy/" + enemyData.Controller), Vector3.zero, Quaternion.identity);
+            obj.transform.position = position;
+            BattleCharacterController controller = obj.GetComponent<BattleCharacterController>();
+            controller.Init(lv, enemyData);
             controller.SetAngle();
             controller.MoveEndHandler += OnMoveEnd;
+            CharacterList.Add(controller);
             _maxIndex++;
-            info.Controller = controller;
-            BattleUI.SetLittleHpBarAnchor(info);
-            BattleUI.SetLittleHpBarValue(info);
-            BattleUI.SetFloatingNumberPoolAnchor(info);
+            controller.Info.Index = _maxIndex;
+            BattleUI.CharacterListGroup.Add(controller);
+            BattleUI.SetLittleHpBarAnchor(controller);
+            BattleUI.SetLittleHpBarValue(controller);
+            BattleUI.SetFloatingNumberPoolAnchor(controller);
         }
 
-        public void ChangeSprite(BattleCharacterInfo info, string sprite) 
+        public void ChangeSprite(BattleCharacterController controller, string sprite) 
         {
-            info.Controller.Init(sprite);
-            BattleUI.CharacterListGroup.ChangeSprite(info, sprite);
+            controller.ChangeSprite(sprite);
+            BattleUI.CharacterListGroup.Refresh();
         }
 
         public void SortCharacterList(bool isStart)
         {
             CharacterList.Sort((x, y) =>
             {
-                if (isStart && !Passive.Contains<TankPassive>(x.PassiveList) && Passive.Contains<TankPassive>(y.PassiveList))
+                if (isStart && !Passive.Contains<TankPassive>(x.Info.PassiveList) && Passive.Contains<TankPassive>(y.Info.PassiveList))
                 {
                     return 1;
                 }
-                else if (isStart && Passive.Contains<TankPassive>(x.PassiveList) && !Passive.Contains<TankPassive>(y.PassiveList))
+                else if (isStart && Passive.Contains<TankPassive>(x.Info.PassiveList) && !Passive.Contains<TankPassive>(y.Info.PassiveList))
                 {
                     return -1;
                 }
                 else 
                 {
-                    if (x.CurrentWT > y.CurrentWT)
+                    if (x.Info.CurrentWT > y.Info.CurrentWT)
                     {
                         return 1;
                     }
                     else
                     {
-                        if (x.CurrentWT == y.CurrentWT)
+                        if (x.Info.CurrentWT == y.Info.CurrentWT)
                         {
-                            if (x.Index > y.Index)
+                            if (x.Info.Index > y.Info.Index)
                             {
                                 return 1;
                             }
@@ -473,36 +650,36 @@ namespace Battle
             BattleUI.CharacterListGroupInit(CharacterList);
         }
 
-        private void ShowTileBuff(BattleCharacterInfo character) 
+        private void ShowTileBuff(BattleCharacterController controller) 
         {
             Vector2Int position;
-            for (int i = 0; i < character.StatusList.Count; i++)
+            for (int i = 0; i < controller.Info.StatusList.Count; i++)
             {
-                if (character.StatusList[i].AreaList.Count > 1)
+                if (controller.Info.StatusList[i].AreaList.Count > 1)
                 {
-                    for (int j = 0; j < character.StatusList[i].AreaList.Count; j++)
+                    for (int j = 0; j < controller.Info.StatusList[i].AreaList.Count; j++)
                     {
-                        position = Utility.ConvertToVector2Int(character.Position) + character.StatusList[i].AreaList[j];
-                        if (Info.TileDic.ContainsKey(position))
+                        position = Utility.ConvertToVector2Int(controller.transform.position) + controller.Info.StatusList[i].AreaList[j];
+                        if (TileDic.ContainsKey(position))
                         {
-                            Info.TileDic[position].TileObject.Buff.SetActive(true);
+                            TileDic[position].TileObject.Buff.SetActive(true);
                         }
                     }
                 }
             }
         }
 
-        public void ShowRange(BattleCharacterInfo character) 
+        public void ShowRange(BattleCharacterController controller) 
         {
-            List<Vector2Int> stepList = GetStepList(character);
+            List<Vector2Int> stepList = GetStepList(controller);
             Instance.SetQuad(stepList, _white);
-            if (character.AI != null)
+            if (controller.AI != null)
             {
                 List<Vector2Int> tempList = new List<Vector2Int>();
                 List<Vector2Int> rangeList = new List<Vector2Int>();
                 for (int i = 0; i < stepList.Count; i++) //�ڥi�H���ʪ��d��
                 {
-                    tempList = Utility.GetRange(character.AI.SelectedSkill.Range, stepList[i], Info);
+                    tempList = GetRange(controller.AI.SelectedSkill.Range, stepList[i]);
                     for (int j=0; j<tempList.Count; j++) 
                     {
                         if(!stepList.Contains(tempList[j]) && !rangeList.Contains(tempList[j])) 
@@ -549,10 +726,9 @@ namespace Battle
 
         public class BattleControllerState : State
         {
-            protected BattleInfo _info;
-            protected BattleCharacterInfo _character;
-            protected List<BattleCharacterInfo> _characterList;
-            protected List<BattleCharacterInfo> _allCharacterList; //Include dying character
+            protected BattleCharacterController _character;
+            protected List<BattleCharacterController> _characterList;
+            protected List<BattleCharacterController> _allCharacterList; //Include dying character
 
             public BattleControllerState(StateContext context) : base(context)
             {
@@ -564,9 +740,9 @@ namespace Battle
             {
             }
 
-            public List<BattleCharacterInfo> GetAllCharacterList() 
+            public List<BattleCharacterController> GetAllCharacterList() 
             {
-                List<BattleCharacterInfo> list = new List<BattleCharacterInfo>(Instance.CharacterList);
+                List<BattleCharacterController> list = new List<BattleCharacterController>(Instance.CharacterList);
                 list.AddRange(Instance.DyingList);
                 return list;
             }

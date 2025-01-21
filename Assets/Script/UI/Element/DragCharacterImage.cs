@@ -109,7 +109,7 @@ public class DragCharacterImage : MonoBehaviour, IDragHandler, IEndDragHandler, 
             }
             _drag = false;
             _anchor = null;
-            BattleController.Instance.RemoveCharacterSprite(_character);
+            BattleController.Instance.RemoveCharacterSprite(_character.JobId);
             transform.localPosition = Vector3.zero;
             Image.color = Color.white;
         }

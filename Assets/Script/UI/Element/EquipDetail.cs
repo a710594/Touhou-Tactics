@@ -7,7 +7,6 @@ public class EquipDetail : MonoBehaviour
 {
     public Text NameLabel;
     public Text CommentLabel;
-    public Text WeightLabel;
     public Text ATKLabel;
     public Text DEFLabel;
     public Text MTKLabel;
@@ -20,18 +19,6 @@ public class EquipDetail : MonoBehaviour
         {
             NameLabel.text = equip.Name;
             CommentLabel.text = equip.Comment;
-            if (equip.Weight == 1)
-            {
-                WeightLabel.text = "輕";
-            }
-            else if (equip.Weight == 2)
-            {
-                WeightLabel.text = "重";
-            }
-            else
-            {
-                WeightLabel.text = "";
-            }
             ATKLabel.text = "物理攻擊：" + equip.ATK;
             DEFLabel.text = "物理防禦：" + equip.DEF;
             MTKLabel.text = "魔法攻擊：" + equip.MTK;

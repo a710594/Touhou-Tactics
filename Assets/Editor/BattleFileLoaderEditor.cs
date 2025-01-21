@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace Battle
+/*namespace Battle
 {
     [CustomEditor(typeof(BattleFileLoader))]
     public class BattleFileLoaderEditor : Editor
@@ -19,4 +19,4 @@ namespace Battle
             }
         }
     }
-}
+}*/
