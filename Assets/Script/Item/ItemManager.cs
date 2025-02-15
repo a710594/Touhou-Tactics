@@ -5,7 +5,6 @@ using Battle;
 
 public class ItemManager
 {
-    public static readonly int CardID = 13;
     public static readonly int KeyID = 27;
     private readonly string _fileName = "BagInfo";
     private readonly int _maxEquipCount = 10;

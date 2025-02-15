@@ -21,7 +21,7 @@ namespace Battle
 
         public override void CheckState(State state)
         {
-            if(state is BattleController.CommandState && ((BattlePlayerInfo)BattleController.Instance.SelectedCharacter.Info).Job.ID == 7) 
+            if(state is BattleController.CommandState && BattleController.Instance.SelectedCharacter.Info is BattlePlayerInfo && ((BattlePlayerInfo)BattleController.Instance.SelectedCharacter.Info).Job.ID == 7) 
             {
                 IsActive = true;
                 BattleController.Instance.ChangeStateHandler -= CheckState;

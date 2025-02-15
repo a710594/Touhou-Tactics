@@ -10,7 +10,7 @@ public class StatusIconGroup : MonoBehaviour
 
     private List<StatusIcon> _statusIconList = new List<StatusIcon>();
 
-    public void SetData(BattleCharacterControllerData character, bool raycastTarget) 
+    public void SetData(BattleCharacterInfo character, bool raycastTarget) 
     {
         StatusIcon icon;
 

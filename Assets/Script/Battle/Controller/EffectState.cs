@@ -62,20 +62,13 @@ namespace Battle
                     {
                         Spell spell = (Spell)pair.Key;
                         _character.Info.HasUseSpell = true;
-                        if (spell.CD > 0)
+                        for (int i = 0; i < _characterList.Count; i++)
                         {
-                            for (int i = 0; i < _characterList.Count; i++)
+                            if (_characterList[i].Info.Faction == BattleCharacterInfo.FactionEnum.Player)
                             {
-                                if (_characterList[i].Info.Faction == BattleCharacterControllerData.FactionEnum.Player)
-                                {
-                                    for (int j = 0; j < _characterList[i].Info.SpellList.Count; j++)
-                                    {
-                                        _characterList[i].Info.SpellList[j].CurrentCD = spell.CD + 1;
-                                    }
-                                }
+                                _characterList[i].Info.CanUseSpell = false;
                             }
                         }
-                        ItemManager.Instance.MinusItem(ItemManager.CardID, 1);
                     }
                     else if(pair.Key is Consumables) 
                     {
@@ -174,7 +167,7 @@ namespace Battle
                         target = pair.Value[i];
                         if (target.Info.CurrentHP <= 0)
                         {
-                            if (target.Info.Faction == BattleCharacterControllerData.FactionEnum.Player)
+                            if (target.Info.Faction == BattleCharacterInfo.FactionEnum.Player)
                             {
                                 if (Instance.DyingList.Contains(target))
                                 {
@@ -208,7 +201,7 @@ namespace Battle
                 int enemyCount = 0;
                 for (int i = 0; i < _characterList.Count; i++)
                 {
-                    if (_characterList[i].Info.Faction == BattleCharacterControllerData.FactionEnum.Player)
+                    if (_characterList[i].Info.Faction == BattleCharacterInfo.FactionEnum.Player)
                     {
                         playerCount++;
                     }

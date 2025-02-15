@@ -14,14 +14,14 @@ public class CharacterInfoUI : MonoBehaviour
     public StatusIconGroup StatusIconGroup;
     public Button Button;
 
-    private BattleCharacterControllerData _character;
+    private BattleCharacterInfo _character;
 
     public void SetVisible(bool isVisible) 
     {
         gameObject.SetActive(isVisible);
     }
 
-    public void SetData(BattleCharacterControllerData character) 
+    public void SetData(BattleCharacterInfo character) 
     {
         _character = character;
         LvLabel.text = "Lv. " + character.Lv;

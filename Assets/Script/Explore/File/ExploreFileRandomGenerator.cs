@@ -80,8 +80,7 @@ public class ExploreFileRandomGenerator
         PathfindHallways();
         PlaceWall();
         PlaceStartAndGoal();
-        
-        //SetEnemy(floorData);
+        SetEnemy(floorData);
 
         return File;
     }
@@ -266,9 +265,10 @@ public class ExploreFileRandomGenerator
         EnemyGroupModel enemyGroup;
         for(int i=0; i<data.EnemyCount; i++) 
         {
+            enemyGroup = DataContext.Instance.EnemyGroupDic[data.GetEnemyGroupID()];
             room = _otherList[UnityEngine.Random.Range(0, _otherList.Count)];
-            pos = _otherList[i].GetRandomPosition();
-            File.EnemyList.Add(new ExploreFileEnemy());
+            pos = room.GetRandomPosition();
+            File.EnemyList.Add(new ExploreFileEnemy(enemyGroup, pos));
         }
     }
 

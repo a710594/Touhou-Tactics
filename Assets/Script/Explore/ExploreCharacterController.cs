@@ -92,6 +92,7 @@ namespace Explore
             {
                 _isMoving = false;
                 InputMamager.Instance.Unlock();
+                ExploreManager.Instance.CheckVidsit(transform);
             });
         }
 

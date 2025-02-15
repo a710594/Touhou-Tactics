@@ -87,6 +87,9 @@ namespace Battle
             Exp = file.Exp;
             MinPlayerCount = file.PlayerCount;
             MaxPlayerCount = file.PlayerCount;
+            CharacterList.Clear();
+            DyingList.Clear();
+            DeadList.Clear();
             EnemyDataList.Clear();
 
             for (int i=0; i<file.EnemyList.Count; i++) 
@@ -112,6 +115,7 @@ namespace Battle
         {
             GetGameObject();
             BattleFileRandom file = DataContext.Instance.Load<BattleFileRandom>(enemyGroup.GetMap(), DataContext.PrePathEnum.MapSeed);
+            PlayerPositionList = file.PlayerPositionList;
             Exp = enemyGroup.Exp;
             MinPlayerCount = enemyGroup.MinPlayerCount;
             MaxPlayerCount = enemyGroup.MaxPlayerCount;
@@ -222,13 +226,14 @@ namespace Battle
                 invalidList.Add(PlayerPositionList[i]);
             }
 
-
+            int height;
             for (int i = 0; i < enemyGroup.EnemyList.Count; i++)
             {
                 if (Utility.GetRandomPosition(file.MinX, file.MaxX, file.MinY, file.MaxY, invalidList, out Vector2Int result))
                 {
                     EnemyDataList.Add(DataContext.Instance.EnemyDic[enemyGroup.EnemyList[i]]);
-                    CreateEnemy(enemyGroup.EnemyList[i], enemyGroup.Lv, new Vector3(result.x, 0, result.y));
+                    height = TileDic[result].TileData.Height;
+                    CreateEnemy(enemyGroup.EnemyList[i], enemyGroup.Lv, new Vector3(result.x, height, result.y));
                     invalidList.Add(result);
                 }
             }
@@ -243,7 +248,6 @@ namespace Battle
             BattleResultUI = GameObject.Find("BattleResultUI").GetComponent<BattleResultUI>();
             SelectBattleCharacterUI = GameObject.Find("SelectBattleCharacterUI").GetComponent<SelectCharacterUI>();
             DragCameraUI = GameObject.Find("DragCameraUI").GetComponent<DragCameraUI>();
-            DragCameraUI.Init(MinX, MaxX, MinY, MaxY);
             BattleUI.gameObject.SetActive(false);
             BattleResultUI.gameObject.SetActive(false);
             CameraRotate = Camera.main.GetComponent<CameraRotate>();
@@ -282,17 +286,7 @@ namespace Battle
                     MaxY = pair.Key.y;
                 }
             }
-
-            //BattleUI = GameObject.Find("BattleUI").GetComponent<BattleUI>();
-            //BattleResultUI = GameObject.Find("BattleResultUI").GetComponent<BattleResultUI>();
-            //SelectBattleCharacterUI = GameObject.Find("SelectBattleCharacterUI").GetComponent<SelectCharacterUI>();
-            //DragCameraUI = GameObject.Find("DragCameraUI").GetComponent<DragCameraUI>();
-            //DragCameraUI.Init(MinX, MaxX, MinY, MaxY);
-            //BattleUI.gameObject.SetActive(false);
-            //BattleResultUI.gameObject.SetActive(false);
-            //CameraRotate = Camera.main.GetComponent<CameraRotate>();
-            //_root = GameObject.Find("BattleController").transform;
-            //_cameraController = Camera.main.GetComponent<CameraDraw>();
+            DragCameraUI.Init(MinX, MaxX, MinY, MaxY);
 
             _context.ClearState();
             _context.AddState(new PrepareState(_context));
@@ -573,7 +567,7 @@ namespace Battle
             SelectedCharacter.Info.HasMove = false;
             SelectedCharacter.Info.ActionCount = 2;
             SelectedCharacter.transform.position = SelectedCharacter.LastPosition;
-            SelectedCharacter.LastPosition = BattleCharacterControllerData.DefaultLastPosition;
+            SelectedCharacter.LastPosition = BattleCharacterInfo.DefaultLastPosition;
         }
 
         public void CreateEnemy(int id, int lv, Vector3 position) 

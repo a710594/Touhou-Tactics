@@ -14,6 +14,7 @@ public class ActionScrollItem : ScrollItem
     {
         base.SetData(obj);
 
+        BattleCharacterInfo character = BattleController.Instance.SelectedCharacter.Info;
         Command command = (Command)obj;
         if(obj is Skill) 
         {
@@ -55,7 +56,7 @@ public class ActionScrollItem : ScrollItem
         {
             Spell spell = (Spell)obj;
             Label.text = spell.Name;
-            if (spell.CurrentCD == 0 && ItemManager.Instance.GetAmount(ItemManager.CardID) > 0)
+            if (character.CanUseSpell)
             {
                 Background.color = _canUseColor;
             }

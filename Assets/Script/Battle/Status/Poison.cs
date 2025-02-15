@@ -10,7 +10,7 @@ namespace Battle
         {
         }
 
-        public int GetDamage(BattleCharacterControllerData target)
+        public int GetDamage(BattleCharacterInfo target)
         {
             return Mathf.RoundToInt(target.MaxHP * Value / 100f);
         }

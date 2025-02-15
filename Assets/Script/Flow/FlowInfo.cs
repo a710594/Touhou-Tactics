@@ -24,7 +24,6 @@ public class FlowInfo
 
     public bool HasGetItem = false;
     public bool HasSanaeTutorial = false;
-    public bool HasGetCard = false;
     public bool HasUseCard = false;
     public int TriggerEvent = 1;
     //public int SceneEvent = 1;

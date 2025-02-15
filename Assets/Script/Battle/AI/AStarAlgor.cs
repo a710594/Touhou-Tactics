@@ -7,7 +7,7 @@ namespace Battle
 {
     public partial class BattleController
     {
-        public List<Vector2Int> GetPath(Vector2Int start, Vector2Int goal, BattleCharacterControllerData.FactionEnum faction)
+        public List<Vector2Int> GetPath(Vector2Int start, Vector2Int goal, BattleCharacterInfo.FactionEnum faction)
         {
             if (start == goal)
             {
@@ -102,7 +102,7 @@ namespace Battle
             return null;
         }
 
-        public int GetDistance(Vector2Int start, Vector2Int goal, BattleCharacterControllerData.FactionEnum faction)
+        public int GetDistance(Vector2Int start, Vector2Int goal, BattleCharacterInfo.FactionEnum faction)
         {
             int distance = 0;
             if (TileDic[goal].MoveCost == -1)
@@ -185,7 +185,7 @@ namespace Battle
             return path;
         }
 
-        private List<Vector2Int> GetNeighborPos(Vector2Int current, Vector2Int goal, BattleCharacterControllerData.FactionEnum faction)
+        private List<Vector2Int> GetNeighborPos(Vector2Int current, Vector2Int goal, BattleCharacterInfo.FactionEnum faction)
         {
             List<Vector2Int> list = new List<Vector2Int>();
 
@@ -213,7 +213,7 @@ namespace Battle
         }
 
         //from:目前座標 to:下一個座標 goal:路徑的最終目標 //faction:自己的陣營
-        private int MoveCost(Vector2Int from, Vector2Int to, Vector2Int goal, BattleCharacterControllerData.FactionEnum faction)
+        private int MoveCost(Vector2Int from, Vector2Int to, Vector2Int goal, BattleCharacterInfo.FactionEnum faction)
         {
             int cost = 0;
             try
@@ -223,7 +223,7 @@ namespace Battle
                     //如果有角色不為目標且與自己陣營不同,就視為障礙物
                     if (Utility.ConvertToVector2Int(CharacterList[i].transform.position) == to && Utility.ConvertToVector2Int(CharacterList[i].transform.position) != goal)
                     {
-                        if (faction != BattleCharacterControllerData.FactionEnum.None && CharacterList[i].Info.Faction != faction)
+                        if (faction != BattleCharacterInfo.FactionEnum.None && CharacterList[i].Info.Faction != faction)
                         {
                             return -1;
                         }

@@ -6,9 +6,6 @@ using Battle;
 
 public class Spell : Command
 {
-    public int CD;
-    public int CurrentCD;
-
     public Spell() { }
 
     public Spell(SpellModel data)
@@ -24,21 +21,11 @@ public class Spell : Command
         Track = data.Track;
         ArrayList = Utility.GetAreaList(data.Array);
 
-        CD = data.CD;
-        CurrentCD = 0;
         Effect = EffectFactory.GetEffect(data.EffectID);
 
         if(data.SubSpellID != -1)
         {
             SubCommand = new Spell(DataContext.Instance.SpellDic[data.SubSpellID]);
-        }
-    }
-
-    public void CheckCD() 
-    {
-        if (CurrentCD > 0) 
-        {
-            CurrentCD--;
         }
     }
 }

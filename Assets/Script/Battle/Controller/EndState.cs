@@ -36,17 +36,23 @@ namespace Battle
                             _character.Info.SupportList[i].CheckCD();
                         }
 
+                        if (!_character.Info.CanUseSpell && !_character.Info.HasUseSpell)
+                        {
+                            _character.Info.CanUseSpell = true;
+                        }
+
                         _character.Info.CurrentWT = _character.Info.WT;
                         _character.Info.ActionCount = 2;
                         _character.Info.HasUseSkill = false;
                         _character.Info.HasUseSupport = false;
+                        _character.Info.HasUseSpell = false;
                         _character.Info.HasMove = false;
-                        _character.LastPosition = BattleCharacterControllerData.DefaultLastPosition;
+                        _character.LastPosition = BattleCharacterInfo.DefaultLastPosition;
                         _characterList.RemoveAt(0);
                         _characterList.Add(_character);
                         Instance.SortCharacterList(false);
 
-                        if (_character.Info.Faction == BattleCharacterControllerData.FactionEnum.Player)
+                        if (_character.Info.Faction == BattleCharacterInfo.FactionEnum.Player)
                         {
                             _context.SetState<DirectionState>();
                         }

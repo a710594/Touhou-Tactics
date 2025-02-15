@@ -137,20 +137,6 @@ public class SkillInfoGroup : MonoBehaviour
     {
         NameLabel.text = spell.Name;
         CommentLabel.text = spell.Comment;
-        CDLabel.text = "冷卻：" + spell.CD + "回合";
-
-        /*if (spell.Effect.Target == EffectModel.TargetEnum.All)
-        {
-            TargetLabel.text = "�ؼСG�����ħ�";
-        }
-        else if (spell.Effect.Target == EffectModel.TargetEnum.Them)
-        {
-            TargetLabel.text = "�ؼСG�Ĥ�";
-        }
-        else if (spell.Effect.Target == EffectModel.TargetEnum.Us)
-        {
-            TargetLabel.text = "�ؼСG�ڤ�";
-        }*/
 
         if (spell.Track == TrackEnum.None)
         {

@@ -116,7 +116,7 @@ namespace Explore
                                     FlowController.Instance.Info.HasSanaeTutorial = true;
                                     tutorial = "SanaeTutorial";
                                 }
-                                else if (ItemManager.Instance.GetAmount(ItemManager.CardID) > 0 && !FlowController.Instance.Info.HasUseCard) 
+                                else if (!FlowController.Instance.Info.HasUseCard) 
                                 {
                                     FlowController.Instance.Info.HasUseCard = true;
                                     tutorial = "UseCardTutorial";
@@ -180,12 +180,50 @@ namespace Explore
 
         public void CheckVidsit(Transform transform) 
         {
+            //for (int i = 0; i <= 2; i++)
+            //{
+            //    for (int j=-2; j<=2; j++) 
+            //    {
+            //        v2 = Utility.ConvertToVector2Int(transform.position + transform.forward * i + transform.right * j);
+            //        CheckVidsit(v2);
+            //    }
+            //}
+
+            bool leftBlock = false;
+            bool rightBlock = false;
             Vector2Int v2;
-            for (int i = 0; i <= 2; i++)
+
+            v2 = Utility.ConvertToVector2Int(transform.position);
+            CheckVidsit(v2);
+
+            v2 = Utility.ConvertToVector2Int(transform.position - transform.right);
+            if (TileDic.ContainsKey(v2) && !TileDic[v2].IsWalkable)
             {
-                for (int j=-2; j<=2; j++) 
+                leftBlock = true;
+                CheckVidsit(v2);
+            }
+
+            v2 = Utility.ConvertToVector2Int(transform.position + transform.right);
+            if (TileDic.ContainsKey(v2) && !TileDic[v2].IsWalkable)
+            {
+                rightBlock = true;
+                CheckVidsit(v2);
+            }
+
+            v2 = Utility.ConvertToVector2Int(transform.position + transform.forward);
+            if (TileDic.ContainsKey(v2) && !TileDic[v2].IsWalkable)
+            {
+                CheckVidsit(v2);
+
+                if (leftBlock) 
                 {
-                    v2 = Utility.ConvertToVector2Int(transform.position + transform.forward * i + transform.right * j);
+                    v2 = Utility.ConvertToVector2Int(transform.position + transform.forward - transform.right);
+                    CheckVidsit(v2);
+                }
+
+                if (rightBlock) 
+                {
+                    v2 = Utility.ConvertToVector2Int(transform.position + transform.forward + transform.right);
                     CheckVidsit(v2);
                 }
             }
@@ -316,12 +354,12 @@ namespace Explore
                     File.TreasureList.Remove(treasure);
                     TileDic[v2].Treasure = null;
 
-                    if(!FlowController.Instance.Info.HasGetCard && treasure.ItemID == ItemManager.CardID)
-                    {
-                        CardEvent cardEvent = new CardEvent();
-                        cardEvent.Start();
-                        FlowController.Instance.Info.HasGetCard = true;
-                    }
+                    //if(!FlowController.Instance.Info.HasGetCard)
+                    //{
+                    //    CardEvent cardEvent = new CardEvent();
+                    //    cardEvent.Start();
+                    //    FlowController.Instance.Info.HasGetCard = true;
+                    //}
                 }
             }
 
@@ -518,6 +556,7 @@ namespace Explore
         public void WaitForAllMoveComplete() 
         {
             _enemyMoveCount++;
+            Debug.Log(_enemyMoveCount);
             if (_enemyMoveCount == File.EnemyList.Count + 1) 
             {
                 CheckVidsit(Player.transform);

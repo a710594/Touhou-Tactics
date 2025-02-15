@@ -47,7 +47,7 @@ namespace Battle
             }
         }
 
-        protected List<BattleCharacterController> GetTargetList(BattleCharacterControllerData.FactionEnum faction) 
+        protected List<BattleCharacterController> GetTargetList(BattleCharacterInfo.FactionEnum faction) 
         {
             List<BattleCharacterController> targetList = new List<BattleCharacterController>();
 
@@ -59,7 +59,7 @@ namespace Battle
                 }
             }
 
-            if (faction == BattleCharacterControllerData.FactionEnum.Player)
+            if (faction == BattleCharacterInfo.FactionEnum.Player)
             {
                 for (int i = 0; i < BattleController.Instance.DyingList.Count; i++)
                 {

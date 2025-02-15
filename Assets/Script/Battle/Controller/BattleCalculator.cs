@@ -359,7 +359,7 @@ namespace Battle
             }
         }
 
-        public Vector3 RandomCharacterPosition(BattleCharacterControllerData.FactionEnum faction) 
+        public Vector3 RandomCharacterPosition(BattleCharacterInfo.FactionEnum faction) 
         {
             bool isRepeat = false;
             bool hasPath = false;

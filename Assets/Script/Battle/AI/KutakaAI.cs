@@ -27,7 +27,7 @@ namespace Battle
             SelectedSkill = _controller.Info.SkillList[0];
             BattleController.Instance.SetSelectedCommand(SelectedSkill);
             BattleController.Instance.SetState<BattleController.TargetState>();
-            List<BattleCharacterController> targetList = GetTargetList(BattleCharacterControllerData.FactionEnum.Player);
+            List<BattleCharacterController> targetList = GetTargetList(BattleCharacterInfo.FactionEnum.Player);
             _target = GetAttackTarget(targetList);
             BattleController.Instance.Click(Utility.ConvertToVector2Int(_target.transform.position));
             MoveCamera(_target.transform.position, () =>

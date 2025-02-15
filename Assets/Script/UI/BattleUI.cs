@@ -42,7 +42,7 @@ public class BattleUI : MonoBehaviour
         gameObject.SetActive(isVisible);
     }
 
-    public void SetCharacterInfoUI_1(BattleCharacterControllerData info) 
+    public void SetCharacterInfoUI_1(BattleCharacterInfo info) 
     {
         if (info != null)
         {
@@ -55,7 +55,7 @@ public class BattleUI : MonoBehaviour
         }
     }
 
-    public void SetCharacterInfoUI_2(BattleCharacterControllerData info)
+    public void SetCharacterInfoUI_2(BattleCharacterInfo info)
     {
         if (info != null)
         {
@@ -84,12 +84,12 @@ public class BattleUI : MonoBehaviour
         ActionButtonGroup.SetScrollView(list);
     }
 
-    public void SetPredictionInfo_1(BattleCharacterControllerData info, int predictionHp)
+    public void SetPredictionInfo_1(BattleCharacterInfo info, int predictionHp)
     {
         CharacterInfoUI_1.SetHpPrediction(info.CurrentHP, predictionHp, info.MaxHP);
     }
 
-    public void SetPredictionInfo_2(BattleCharacterControllerData info, int predictionHp)
+    public void SetPredictionInfo_2(BattleCharacterInfo info, int predictionHp)
     {
         CharacterInfoUI_2.SetHpPrediction(info.CurrentHP, predictionHp, info.MaxHP);
     }

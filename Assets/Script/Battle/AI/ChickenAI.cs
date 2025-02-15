@@ -31,7 +31,7 @@ namespace Battle
             Vector2Int start = Utility.ConvertToVector2Int(_controller.transform.position);
             SelectedSkill = _controller.Info.SkillList[0];
             _stepList = BattleController.Instance.GetStepList(_controller);
-            List<BattleCharacterController> targetList = GetTargetList(BattleCharacterControllerData.FactionEnum.Player);
+            List<BattleCharacterController> targetList = GetTargetList(BattleCharacterInfo.FactionEnum.Player);
             Dictionary<BattleCharacterController, List<Vector2Int>> canHitDic = GetCanHitDic(targetList);
             Vector2Int moveTo;
             if (canHitDic.Count > 0) //���i�H�������ؼ�

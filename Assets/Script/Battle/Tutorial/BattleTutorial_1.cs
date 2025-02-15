@@ -365,7 +365,7 @@ namespace Battle
 
             public override void Next()
             {
-                if (BattleController.Instance.SelectedCharacter.Info.Faction == BattleCharacterControllerData.FactionEnum.Player)
+                if (BattleController.Instance.SelectedCharacter.Info.Faction == BattleCharacterInfo.FactionEnum.Player)
                 {
                     BattleController.Instance.CharacterStateBeginHandler -= Next;
                     _context.SetState<State_10>();

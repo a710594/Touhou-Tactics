@@ -40,7 +40,7 @@ namespace Battle
                 List<BattleCharacterController> playerList = new List<BattleCharacterController>();
                 for (int i=0; i<Instance.CharacterList.Count; i++) 
                 {
-                    if(Instance.CharacterList[i].Info.Faction == BattleCharacterControllerData.FactionEnum.Player) 
+                    if(Instance.CharacterList[i].Info.Faction == BattleCharacterInfo.FactionEnum.Player) 
                     {
                         playerList.Add(Instance.CharacterList[i]);
                     }

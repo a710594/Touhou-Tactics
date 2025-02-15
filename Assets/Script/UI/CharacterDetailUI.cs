@@ -38,7 +38,7 @@ public class CharacterDetailUI : MonoBehaviour
     public Button CloseButton;
 
     private CharacterInfo _characterInfo = null;
-    private BattleCharacterControllerData _battleCharacterInfo = null;
+    private BattleCharacterInfo _battleCharacterInfo = null;
 
     public static CharacterDetailUI Open(bool canSelectEquip) 
     {

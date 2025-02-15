@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CardEvent : MyEvent
+/*public class CardEvent : MyEvent
 {
     public override void Start()
     {
@@ -15,4 +15,4 @@ public class CardEvent : MyEvent
             exploreUI.SetVisible(true);
         }, null);
     }
-}
+}*/

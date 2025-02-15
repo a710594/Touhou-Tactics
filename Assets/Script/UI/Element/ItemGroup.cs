@@ -9,7 +9,7 @@ public class ItemGroup : MonoBehaviour
     public PointGroup PPGroup;
     public ScrollView ScrollView;
 
-    public void SetScrollView(BattleCharacterControllerData info)
+    public void SetScrollView(BattleCharacterInfo info)
     {
         List<object> list = new List<object>(ItemManager.Instance.GetBattleItemList());
         ScrollView.SetData(list);

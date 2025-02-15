@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class Event_9 : MyEvent
+/*public class Event_9 : MyEvent
 {
     public override void Start()
     {
@@ -23,4 +23,4 @@ public class Event_9 : MyEvent
             });
         }
     }
-}
+}*/

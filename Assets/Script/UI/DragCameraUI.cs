@@ -148,6 +148,11 @@ public class DragCameraUI : MonoBehaviour
 
     }
 
+    private void OnDestroy()
+    {
+        CameraRoot.DOKill();
+    }
+
     private void Awake()
     {
         _cameraRotate = Camera.main.GetComponent<CameraRotate>();

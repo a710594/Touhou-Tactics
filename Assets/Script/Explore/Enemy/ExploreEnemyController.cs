@@ -52,6 +52,10 @@ namespace Explore
                 });
                 transform.DORotate(rotation, 0.5f).SetEase(Ease.Linear);
             }
+            else 
+            {
+                ExploreManager.Instance.WaitForAllMoveComplete();
+            }
         }
 
         public void Rotate()
