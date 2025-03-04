@@ -16,15 +16,20 @@ namespace Battle
         public override void Start()
         {
             BattleController.Instance.SetState<BattleController.PrepareState>();
-            BattleController.Instance.ChangeStateHandler += CheckState;
+            BattleController.Instance.CharacterStateBeginHandler += CheckCharacter;
         }
 
-        public override void CheckState(State state)
+        public override void Deregister()
         {
-            if(state is BattleController.CommandState && BattleController.Instance.SelectedCharacter.Info is BattlePlayerInfo && ((BattlePlayerInfo)BattleController.Instance.SelectedCharacter.Info).Job.ID == 7) 
+            BattleController.Instance.CharacterStateBeginHandler -= CheckCharacter;
+        }
+
+        public void CheckCharacter()
+        {
+            if(BattleController.Instance.SelectedCharacter.Info is BattlePlayerInfo && ((BattlePlayerInfo)BattleController.Instance.SelectedCharacter.Info).Job.ID == 7) 
             {
                 IsActive = true;
-                BattleController.Instance.ChangeStateHandler -= CheckState;
+                BattleController.Instance.CharacterStateBeginHandler -= CheckCharacter;
                 _context.SetState<State_1>();
             }
         }
@@ -37,10 +42,8 @@ namespace Battle
 
             public override void Begin()
             {
-                BattleUI.Instance.SetArrowVisible(false);
                 ((SanaeTutorial)_context.Parent)._conversationUI = ConversationUI.Open(10, false, null, () =>
                 {
-                    BattleUI.Instance.SetArrowVisible(true);
                     BattleController.Instance.EndTutorial();
                 });
             }

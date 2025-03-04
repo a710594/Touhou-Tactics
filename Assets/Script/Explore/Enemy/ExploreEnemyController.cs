@@ -16,23 +16,23 @@ namespace Explore
         public void SetAI(ExploreFileEnemy enemy)
         {
             Enemy = enemy;
-            if(enemy.AI == ExploreFileEnemy.AiEnum.NotMove) 
+            if(enemy.AI == EnemyGroupModel.AiEnum.NotMove) 
             {
                 AI = new NotMoveAI();
             }
-            else if (enemy.AI == ExploreFileEnemy.AiEnum.Default)
+            else if (enemy.AI == EnemyGroupModel.AiEnum.Default)
             {
                 AI = new DefaultAI();
             }
         }
 
-        public void Init(ExploreFileEnemy.AiEnum ai)
+        public void Init(EnemyGroupModel.AiEnum ai)
         {
-            if (ai == ExploreFileEnemy.AiEnum.NotMove)
+            if (ai == EnemyGroupModel.AiEnum.NotMove)
             {
                 AI = new NotMoveAI();
             }
-            else if (ai == ExploreFileEnemy.AiEnum.Default)
+            else if (ai == EnemyGroupModel.AiEnum.Default)
             {
                 AI = new DefaultAI();
             }

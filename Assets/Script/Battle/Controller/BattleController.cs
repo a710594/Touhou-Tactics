@@ -40,13 +40,13 @@ namespace Battle
         public Action MoveStateEndHandler;
         public Action DirectionStateBeginHandler;
         public Action CharacterStateBeginHandler;
-        public Action<State> ChangeStateHandler;
 
         public BattleTutorial Tutorial = null;
         public BattleCharacterController SelectedCharacter;
         public List<BattleCharacterController> CharacterList = new List<BattleCharacterController>(); //�s��������
         public List<BattleCharacterController> DyingList = new List<BattleCharacterController>(); //�x�����ڤ訤��
         public List<BattleCharacterController> DeadList = new List<BattleCharacterController>(); //���`���ڤ訤��
+        public List<BattleCharacterController> TempList = new List<BattleCharacterController>(); //for PrepareState
 
         public int MinX;
         public int MaxX;
@@ -65,16 +65,16 @@ namespace Battle
         private bool _canClick = true;
         private int _maxIndex = 0;
         private Vector2Int _selectedPosition;
-        private CameraDraw _cameraController;
-        public CameraRotate CameraRotate;
+        private Vector2Int _cameraDefaultPosition; //戰鬥一開始的時候攝影機的位置
+        private CameraDraw _cameraDraw;
+        private CameraController _cameraController;
         private StateContext _context = new StateContext();
         public BattleUI BattleUI;
-        public DragCameraUI DragCameraUI;
+        public CharacterInfoUIGroup CharacterInfoUIGroup;
         public BattleResultUI BattleResultUI;
         public SelectCharacterUI SelectBattleCharacterUI;
         private Transform _root;
         private List<CharacterInfo> _candidateList = new List<CharacterInfo>();
-        //private Dictionary<int, BattleCharacterController> _controllerDic = new Dictionary<int, BattleCharacterController>();
         private Dictionary<Command, List<BattleCharacterController>> _commandTargetDic = new Dictionary<Command, List<BattleCharacterController>>();
 
         public List<Log> LogList = new List<Log>();
@@ -87,6 +87,8 @@ namespace Battle
             Exp = file.Exp;
             MinPlayerCount = file.PlayerCount;
             MaxPlayerCount = file.PlayerCount;
+            _maxIndex = 0;
+            _canClick = true;
             CharacterList.Clear();
             DyingList.Clear();
             DeadList.Clear();
@@ -107,8 +109,10 @@ namespace Battle
                 TileDic.Add(file.TileList[i].Position, tile);
             }
 
+            SetMinAndMax();
             CreateObject();
-            Init(tutorial);
+            InitState();
+            SetTutorial(tutorial);
         }
 
         public void Init(string tutorial, EnemyGroupModel enemyGroup) 
@@ -116,6 +120,7 @@ namespace Battle
             GetGameObject();
             BattleFileRandom file = DataContext.Instance.Load<BattleFileRandom>(enemyGroup.GetMap(), DataContext.PrePathEnum.MapSeed);
             PlayerPositionList = file.PlayerPositionList;
+            _cameraDefaultPosition = file.CameraDefaultPosition;
             Exp = enemyGroup.Exp;
             MinPlayerCount = enemyGroup.MinPlayerCount;
             MaxPlayerCount = enemyGroup.MaxPlayerCount;
@@ -123,6 +128,12 @@ namespace Battle
             {
                 MaxPlayerCount = CharacterManager.Instance.SurvivalCount();
             }
+            _maxIndex = 0;
+            _canClick = true;
+            CharacterList.Clear();
+            DyingList.Clear();
+            DeadList.Clear();
+            EnemyDataList.Clear();
 
             Vector2Int position;
             TileModel tileData;
@@ -238,8 +249,10 @@ namespace Battle
                 }
             }
 
+            SetMinAndMax();
             CreateObject();
-            Init(tutorial);
+            InitState();
+            SetTutorial(tutorial);
         }
 
         private void GetGameObject() 
@@ -247,47 +260,43 @@ namespace Battle
             BattleUI = GameObject.Find("BattleUI").GetComponent<BattleUI>();
             BattleResultUI = GameObject.Find("BattleResultUI").GetComponent<BattleResultUI>();
             SelectBattleCharacterUI = GameObject.Find("SelectBattleCharacterUI").GetComponent<SelectCharacterUI>();
-            DragCameraUI = GameObject.Find("DragCameraUI").GetComponent<DragCameraUI>();
+            CharacterInfoUIGroup = GameObject.Find("CharacterInfoUIGroup").GetComponent<CharacterInfoUIGroup>();
             BattleUI.gameObject.SetActive(false);
             BattleResultUI.gameObject.SetActive(false);
-            CameraRotate = Camera.main.GetComponent<CameraRotate>();
             _root = GameObject.Find("BattleController").transform;
-            _cameraController = Camera.main.GetComponent<CameraDraw>();
+            _cameraDraw = Camera.main.GetComponent<CameraDraw>();
+            _cameraController = Camera.main.GetComponent<CameraController>();
         }
 
-        private void Init(string tutorial)
+        private void SetMinAndMax() 
         {
-            if (tutorial!=null && tutorial!="")
-            {
-                var objectType = Type.GetType("Battle." + tutorial);
-                Tutorial = (BattleTutorial)Activator.CreateInstance(objectType);
-            }
-
             MinX = int.MaxValue;
             MaxX = int.MinValue;
             MinY = int.MaxValue;
             MaxY = int.MinValue;
-            foreach(KeyValuePair<Vector2Int, BattleInfoTile> pair in TileDic) 
+            foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in TileDic)
             {
-                if(pair.Key.x < MinX) 
+                if (pair.Key.x < MinX)
                 {
                     MinX = pair.Key.x;
                 }
-                if(pair.Key.x > MaxX) 
+                if (pair.Key.x > MaxX)
                 {
                     MaxX = pair.Key.x;
                 }
-                if(pair.Key.y < MinY) 
+                if (pair.Key.y < MinY)
                 {
                     MinY = pair.Key.y;
                 }
-                if(pair.Key.y > MaxY) 
+                if (pair.Key.y > MaxY)
                 {
                     MaxY = pair.Key.y;
                 }
             }
-            DragCameraUI.Init(MinX, MaxX, MinY, MaxY);
+        }
 
+        private void InitState() 
+        {
             _context.ClearState();
             _context.AddState(new PrepareState(_context));
             _context.AddState(new CharacterState(_context));
@@ -300,7 +309,15 @@ namespace Battle
             _context.AddState(new WinState(_context));
             _context.AddState(new LoseState(_context));
             _context.AddState(new DirectionState(_context));
-            _context.ChangeStateHandler = OnStateChange;
+        }
+
+        private void SetTutorial(string tutorial)
+        {
+            if (tutorial!=null && tutorial!="")
+            {
+                var objectType = Type.GetType("Battle." + tutorial);
+                Tutorial = (BattleTutorial)Activator.CreateInstance(objectType);
+            }
 
             _candidateList = new List<CharacterInfo>(CharacterManager.Instance.Info.CharacterList);
 
@@ -334,33 +351,33 @@ namespace Battle
             ((BattleControllerState)_context.CurrentState).Click(position);
         }
 
-        public BattleCharacterController PlaceCharacter(Vector2Int position, CharacterInfo characterInfo)
+        public bool PlaceCharacter(BattleCharacterController character)
         {
             if(_context.CurrentState is PrepareState) 
             {
-                return ((PrepareState)_context.CurrentState).PlaceCharacter(position, characterInfo);
+                return ((PrepareState)_context.CurrentState).PlaceCharacter(character);
             }
             else
             {
-                return null;
+                return false;
             }
         }
 
-        public void SetCharacterSpriteVisible(CharacterInfo characterInfo, bool isVisible)
-        {
-            if (_context.CurrentState is PrepareState)
-            {
-                ((PrepareState)_context.CurrentState).SetCharacterSpriteVisible(characterInfo, isVisible);
-            }
-        }
+        //public void SetCharacterSpriteVisible(CharacterInfo characterInfo, bool isVisible)
+        //{
+        //    if (_context.CurrentState is PrepareState)
+        //    {
+        //        ((PrepareState)_context.CurrentState).SetCharacterSpriteVisible(characterInfo, isVisible);
+        //    }
+        //}
 
-        public void RemoveCharacterSprite(int jobId)
-        {
-            if (_context.CurrentState is PrepareState)
-            {
-                ((PrepareState)_context.CurrentState).RemoveCharacterSprite(jobId);
-            }
-        }
+        //public void RemoveCharacterSprite(int jobId)
+        //{
+        //    if (_context.CurrentState is PrepareState)
+        //    {
+        //        ((PrepareState)_context.CurrentState).RemoveCharacterSprite(jobId);
+        //    }
+        //}
 
         //public void SetCharacterState() 
         //{
@@ -540,20 +557,19 @@ namespace Battle
         {
             if(_context.CurrentState is DirectionState)
             {
-                Vector2Int globalDirection = Vector2Int.RoundToInt(Quaternion.AngleAxis(CameraRotate.Angle, Vector3.back) * (Vector2)direction);
-                ((DirectionState)_context.CurrentState).SetDirection(globalDirection);
+                ((DirectionState)_context.CurrentState).SetDirection(direction);
             }
         }
 
         public bool SetCharacterInfoUI_2(Vector2 position)
         {
             //��ܨ�����
-            Instance.BattleUI.SetCharacterInfoUI_2(null);
+            Instance.CharacterInfoUIGroup.SetCharacterInfoUI_2(null);
             for (int i = 0; i < CharacterList.Count; i++)
             {
                 if (CharacterList[i] != Instance.SelectedCharacter && position == new Vector2(CharacterList[i].transform.position.x, CharacterList[i].transform.position.z))
                 {
-                    BattleUI.SetCharacterInfoUI_2(CharacterList[i].Info);
+                    CharacterInfoUIGroup.SetCharacterInfoUI_2(CharacterList[i].Info);
                     ShowTileBuff(CharacterList[i]);
                     ShowRange(CharacterList[i]);
                     return true;
@@ -578,25 +594,19 @@ namespace Battle
 
         public void CreateEnemy(EnemyModel enemyData, int lv, Vector3 position)
         {
-            GameObject obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/Enemy/" + enemyData.Controller), Vector3.zero, Quaternion.identity);
+            GameObject obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Battle/" + enemyData.Controller), Vector3.zero, Quaternion.identity);
             obj.transform.position = position;
             BattleCharacterController controller = obj.GetComponent<BattleCharacterController>();
             controller.Init(lv, enemyData);
-            controller.SetAngle();
             controller.MoveEndHandler += OnMoveEnd;
+            controller.Outline.OutlineColor = Color.red;
             CharacterList.Add(controller);
             _maxIndex++;
-            controller.Info.Index = _maxIndex;
+            controller.Index = _maxIndex;
             BattleUI.CharacterListGroup.Add(controller);
             BattleUI.SetLittleHpBarAnchor(controller);
             BattleUI.SetLittleHpBarValue(controller);
             BattleUI.SetFloatingNumberPoolAnchor(controller);
-        }
-
-        public void ChangeSprite(BattleCharacterController controller, string sprite) 
-        {
-            controller.ChangeSprite(sprite);
-            BattleUI.CharacterListGroup.Refresh();
         }
 
         public void SortCharacterList(bool isStart)
@@ -621,7 +631,7 @@ namespace Battle
                     {
                         if (x.Info.CurrentWT == y.Info.CurrentWT)
                         {
-                            if (x.Info.Index > y.Info.Index)
+                            if (x.Index > y.Index)
                             {
                                 return 1;
                             }
@@ -637,11 +647,6 @@ namespace Battle
                     }
                 }
             });
-        }
-
-        public void CharacterListGroupInit() 
-        {
-            BattleUI.CharacterListGroupInit(CharacterList);
         }
 
         private void ShowTileBuff(BattleCharacterController controller) 
@@ -702,19 +707,6 @@ namespace Battle
             {
                 Tutorial.Deregister();
                 Tutorial = null;
-            }
-        }
-
-        //public void SetCandidateList(List<CharacterInfo> list) 
-        //{
-        //    _candidateList = list;
-        //}
-
-        private void OnStateChange(State state) 
-        {
-            if (ChangeStateHandler != null) 
-            {
-                ChangeStateHandler(state);
             }
         }
 

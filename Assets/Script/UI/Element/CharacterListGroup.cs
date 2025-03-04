@@ -11,23 +11,6 @@ public class CharacterListGroup : MonoBehaviour
     public Image Image;
 
     private List<Image> _imageList = new List<Image>();
-    private List<BattleCharacterController> _characterList = new List<BattleCharacterController>();
-
-    public void Init(List<BattleCharacterController> characterList)
-    {
-        _characterList = characterList;
-        Image image;
-        for (int i=0; i<_characterList.Count; i++) 
-        {
-            image = Instantiate(Image);
-            image.transform.SetParent(transform);
-            if (i > _max)
-            {
-                image.gameObject.SetActive(false);
-            }
-            _imageList.Add(image);
-        }
-    }
 
     public void Add(BattleCharacterController controller)
     {
@@ -37,36 +20,23 @@ public class CharacterListGroup : MonoBehaviour
         image.transform.SetParent(transform);
         image.gameObject.SetActive(false);
         _imageList.Add(image);
-        sprite = Resources.Load<Sprite>("Image/" + controller.SpriteFront);
-        
+        sprite = Resources.Load<Sprite>("Image/" + controller.Info.FileName + "_F");
+        controller.Sprite = sprite;
     }
 
     public void Refresh() 
     {
         for (int i=0; i<_imageList.Count; i++) 
         {
-            if (i < _characterList.Count)
+            if (i < BattleController.Instance.CharacterList.Count)
             {
                 _imageList[i].gameObject.SetActive(true);
-                _imageList[i].sprite = _characterList[i].SpriteFront;
+                _imageList[i].sprite = BattleController.Instance.CharacterList[i].Sprite;
             }
             else
             {
                 _imageList[i].gameObject.SetActive(false);
             }
         }
-
-        //for (int i=0; i<_characterList.Count; i++) 
-        //{
-        //    if (i < _max)
-        //    {
-        //        _imageList[i].gameObject.SetActive(true);
-        //        _imageList[i].sprite = _spriteDic[_characterList[i]];
-        //    }
-        //    else
-        //    {
-        //        _imageList[i].gameObject.SetActive(false);
-        //    }
-        //}
     }
 }

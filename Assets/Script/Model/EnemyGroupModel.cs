@@ -2,12 +2,20 @@ using System.Collections.Generic;
 
 public class EnemyGroupModel
 {
+    public enum AiEnum
+    {
+        NotMove = 0,
+        Default,
+        Trace,
+    }
+
     public int ID;
     public int Lv;
     public int Exp;
     public int MinPlayerCount;
     public int MaxPlayerCount;
     public string Prefab;
+    public AiEnum AI;
 
     public int Enemy_1;
     public int Enemy_2;

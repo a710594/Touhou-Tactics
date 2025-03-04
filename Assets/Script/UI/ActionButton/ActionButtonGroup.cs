@@ -37,7 +37,7 @@ public class ActionButtonGroup : MonoBehaviour
 
     private void MoveOnClick() 
     {
-        if (BattleController.Instance.IsTutorialActive && !BattleController.Instance.Tutorial.CanMove())
+        if (BattleController.Instance.IsTutorialActive && !BattleController.Instance.Tutorial.CheckMove())
         {
             return;
         }
@@ -46,7 +46,7 @@ public class ActionButtonGroup : MonoBehaviour
 
     private void SkillOnClick() 
     {
-        if (BattleController.Instance.IsTutorialActive && !BattleController.Instance.Tutorial.CanSkill())
+        if (BattleController.Instance.IsTutorialActive && !BattleController.Instance.Tutorial.CheckSkill())
         {
             return;
         }
@@ -61,7 +61,7 @@ public class ActionButtonGroup : MonoBehaviour
 
     private void SupportOnClick()
     {
-        if (BattleController.Instance.IsTutorialActive && !BattleController.Instance.Tutorial.CanSupport())
+        if (BattleController.Instance.IsTutorialActive && !BattleController.Instance.Tutorial.CheckSupport())
         {
             return;
         }
@@ -76,7 +76,7 @@ public class ActionButtonGroup : MonoBehaviour
 
     private void SpellOnClick()
     {
-        if (BattleController.Instance.IsTutorialActive && !BattleController.Instance.Tutorial.CanSpell())
+        if (BattleController.Instance.IsTutorialActive && !BattleController.Instance.Tutorial.CheckSpell())
         {
             return;
         }
@@ -91,7 +91,7 @@ public class ActionButtonGroup : MonoBehaviour
 
     private void ItemOnClick() 
     {
-        if (BattleController.Instance.IsTutorialActive && !BattleController.Instance.Tutorial.CanItem())
+        if (BattleController.Instance.IsTutorialActive && !BattleController.Instance.Tutorial.CheckItem())
         {
             return;
         }
@@ -106,7 +106,7 @@ public class ActionButtonGroup : MonoBehaviour
 
     private void IdleOnClick() 
     {
-        if (BattleController.Instance.IsTutorialActive && !BattleController.Instance.Tutorial.CanIdle())
+        if (BattleController.Instance.IsTutorialActive && !BattleController.Instance.Tutorial.CheckIdle())
         {
             return;
         }
@@ -117,7 +117,7 @@ public class ActionButtonGroup : MonoBehaviour
 
     private void ResetOnClick() 
     {
-        if (BattleController.Instance.IsTutorialActive && !BattleController.Instance.Tutorial.CanReset())
+        if (BattleController.Instance.IsTutorialActive && !BattleController.Instance.Tutorial.CheckReset())
         {
             return;
         }

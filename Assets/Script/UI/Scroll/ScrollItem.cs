@@ -8,22 +8,8 @@ using UnityEngine.UI;
 public class ScrollItem : ButtonPlus
 {
     public Image Background;
-    public Image SelectedImage;
-
-
-    public void SetSelected(bool show)
-    {
-        if (SelectedImage != null)
-        {
-            SelectedImage.gameObject.SetActive(show);
-        }
-    }
 
     protected virtual void Awake()
     {
-        if (SelectedImage != null)
-        {
-            SelectedImage.gameObject.SetActive(false);
-        }
     }
 }

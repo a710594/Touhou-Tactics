@@ -15,12 +15,9 @@ namespace Battle
         protected BattleCharacterController _target;
         protected Timer _timer = new Timer();
 
-        private CameraMove _cameraMove;
-
         public virtual void Init(BattleCharacterController controller)
         {
             _controller = controller;
-            _cameraMove = Camera.main.transform.parent.gameObject.GetComponent<CameraMove>();
             SelectedSkill = _controller.Info.SkillList[0];
         }
 
@@ -35,10 +32,7 @@ namespace Battle
                 BattleController.Instance.SetSelectedCommand(SelectedSkill);
                 BattleController.Instance.SetState<BattleController.TargetState>();
                 BattleController.Instance.Click(Utility.ConvertToVector2Int(_target.transform.position));
-                MoveCamera(_target.transform.position, () =>
-                {
-                    BattleController.Instance.Click(Utility.ConvertToVector2Int(_target.transform.position));
-                });
+                BattleController.Instance.Click(Utility.ConvertToVector2Int(_target.transform.position));
             }
             else
             {
@@ -238,24 +232,6 @@ namespace Battle
             }
 
             return target;
-        }
-
-        protected void MoveCamera(Vector3 position, Action callback) 
-        {
-            _cameraMove.Move(position, callback);
-            //if (BattleController.Instance.CameraRotate.CurrentState == CameraRotate.StateEnum.Slope)
-            //{
-            //    position += new Vector3(-10, 10, -10);
-            //}
-            //else
-            //{
-            //    position += new Vector3(0, 10, 0);
-            //}
-            //float distance = Vector3.Distance(Camera.main.transform.position, position);
-            //Camera.main.transform.DOMove(position, 0.1f * distance).OnComplete(() =>
-            //{
-            //    callback();
-            //});
         }
     }
 }

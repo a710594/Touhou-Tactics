@@ -30,12 +30,12 @@ namespace Explore
 
         public ExploreFile File;
         public ExploreCharacterController Player;
-        //public ExploreInfo Info;
         public Dictionary<Vector2Int, ExploreFileTile> TileDic = new Dictionary<Vector2Int, ExploreFileTile>();
         private LayerMask _mapLayer = LayerMask.NameToLayer("Map");
         private LayerMask _transparentFXLayer = LayerMask.NameToLayer("TransparentFX");
 
         private bool _hasCollision = false;
+        private Transform _parent;
         private Timer _timer = new Timer();
 
         public void Init() 
@@ -98,9 +98,8 @@ namespace Explore
                     TileDic[File.PlayerPosition].IsWalkable = true;
                     enemy = File.EnemyList[i];
                     File.EnemyList.RemoveAt(i);
-                    _timer.Start(1f, () =>
-                    {
-                        SceneController.Instance.ChangeScene("Battle", (sceneName) =>
+
+                        SceneController.Instance.ChangeScene("Battle", ChangeSceneUI.TypeEnum.Fade, (sceneName) =>
                         {
                             InputMamager.Instance.Unlock();
                             string tutorial = null;
@@ -111,20 +110,15 @@ namespace Explore
                             else
                             {
                                 EnemyGroupModel enemyGroup = DataContext.Instance.EnemyGroupDic[enemy.EnemyGroupId];
-                                if(File.Floor>1 && !FlowController.Instance.Info.HasSanaeTutorial)
+                                if(File.Floor>1 && !EventManager.Instance.Info.SanaeTutorial)
                                 {
-                                    FlowController.Instance.Info.HasSanaeTutorial = true;
+                                    EventManager.Instance.Info.SanaeTutorial = true;
                                     tutorial = "SanaeTutorial";
-                                }
-                                else if (!FlowController.Instance.Info.HasUseCard) 
-                                {
-                                    FlowController.Instance.Info.HasUseCard = true;
-                                    tutorial = "UseCardTutorial";
                                 }
                                 BattleController.Instance.Init(tutorial, enemyGroup);
                             }
                         });
-                    });
+
 
                     return true;
                 }
@@ -147,9 +141,10 @@ namespace Explore
 
                     _timer.Start(1f, () =>
                     {
-                        SceneController.Instance.ChangeScene("Camp", (sceneName) =>
+                        SceneController.Instance.ChangeScene("Camp", ChangeSceneUI.TypeEnum.Loading, (sceneName) =>
                         {
                             CharacterManager.Instance.RecoverAllHP();
+                            ItemManager.Instance.Info.Key = 0;
                             InputMamager.Instance.Unlock();
                         });
                     });
@@ -167,10 +162,11 @@ namespace Explore
 
         private bool CheckEvent(Vector2Int v2) 
         {
-            if(TileDic[v2].Event != null && !FlowController.Instance.Info.EventConditionList.Contains(TileDic[v2].Event)) 
+            string trigger = TileDic [v2].Event;
+            if(trigger != null && !EventManager.Instance.Info.TriggerList.Contains(trigger)) 
             {
-                FlowController.Instance.Info.EventConditionList.Add(TileDic[v2].Event);
-                Type objectType = Type.GetType(TileDic[v2].Event);
+                EventManager.Instance.Info.TriggerList.Add(trigger);
+                Type objectType = Type.GetType(trigger);
                 MyEvent myEvent = (MyEvent)Activator.CreateInstance(objectType);
                 myEvent.Start();
                 return true;
@@ -180,15 +176,6 @@ namespace Explore
 
         public void CheckVidsit(Transform transform) 
         {
-            //for (int i = 0; i <= 2; i++)
-            //{
-            //    for (int j=-2; j<=2; j++) 
-            //    {
-            //        v2 = Utility.ConvertToVector2Int(transform.position + transform.forward * i + transform.right * j);
-            //        CheckVidsit(v2);
-            //    }
-            //}
-
             bool leftBlock = false;
             bool rightBlock = false;
             Vector2Int v2;
@@ -248,10 +235,15 @@ namespace Explore
             {
                 TileDic[v2].IsVisited = true;
                 TileDic[v2].Object.Quad.layer = _mapLayer;
-                if(TileDic[v2].Object.Icon != null) 
+                if (TileDic[v2].Treasure != null) 
                 {
-                    TileDic[v2].Object.Icon.layer = _mapLayer;
+                    TileDic[v2].Treasure.Object.Icon.layer = _mapLayer;
                 }
+            }
+
+            if(v2 == File.Goal) 
+            {
+                File.GoalObj.Quad.layer = _mapLayer;
             }
         }
 
@@ -262,7 +254,6 @@ namespace Explore
                 pair.Value.IsVisited = true;
                 pair.Value.Object.Quad.layer = _mapLayer;
             }
-            TileDic[File.Goal].Object.Icon.layer = _mapLayer;
 
             for (int i = 0; i < File.EnemyList.Count; i++)
             {
@@ -272,8 +263,12 @@ namespace Explore
 
         public void Reload() 
         {
+            if (File.PlayerPosition == File.Goal)
+            {
+                File.IsArrive = true;
+            }
             CreateObject();
-            if (File.PlayerPosition == File.Goal) 
+            if (File.IsArrive) 
             {
                 if (File.Floor == _maxFloor)
                 {
@@ -284,7 +279,7 @@ namespace Explore
                 }
                 else
                 {
-                    File.IsArrive = true;
+                    InputMamager.Instance.Lock();
                     ConfirmUI.Open("你打倒了出口的守衛！要前往下一層嗎？", "確定", "取消", () =>
                     {
                         File.Floor++;
@@ -293,11 +288,16 @@ namespace Explore
                             SystemManager.Instance.Info.MaxFloor = File.Floor;
                         }
 
-                        SceneController.Instance.ChangeScene("Camp", (sceneName) =>
+                        SceneController.Instance.ChangeScene("Camp", ChangeSceneUI.TypeEnum.Loading, (sceneName) =>
                         {
                             CharacterManager.Instance.RecoverAllHP();
+                            ItemManager.Instance.Info.Key = 0;
+                            InputMamager.Instance.Unlock();
                         });
-                    }, null);
+                    }, ()=> 
+                    {
+                        InputMamager.Instance.Unlock();
+                    });
                 }
             }
 
@@ -312,11 +312,11 @@ namespace Explore
             if (TileDic.ContainsKey(position))
             {
                 bool result = TileDic[position].Treasure != null;
-                if (!FlowController.Instance.Info.HasGetItem && result)
+                if (!EventManager.Instance.Info.GetItem && result)
                 {
                     GetItemEvent getItemEvent = new GetItemEvent();
                     getItemEvent.Start();
-                    FlowController.Instance.Info.HasGetItem = true;
+                    EventManager.Instance.Info.GetItem = true;
                 }
                 return result;
             }
@@ -333,10 +333,6 @@ namespace Explore
                treasure = TileDic[v2].Treasure;
 
                 bool bagIsFull = false;
-                // if (treasure.Type == TreasureModel.TypeEnum.Equip)
-                // {
-                //     bagIsFull = ItemManager.Instance.AddEquip(treasure.ItemID);
-                // }
 
                 if (!bagIsFull) 
                 {
@@ -353,13 +349,6 @@ namespace Explore
                     GameObject.Destroy(TileDic[v2].Treasure.Object.gameObject);
                     File.TreasureList.Remove(treasure);
                     TileDic[v2].Treasure = null;
-
-                    //if(!FlowController.Instance.Info.HasGetCard)
-                    //{
-                    //    CardEvent cardEvent = new CardEvent();
-                    //    cardEvent.Start();
-                    //    FlowController.Instance.Info.HasGetCard = true;
-                    //}
                 }
             }
 
@@ -400,11 +389,11 @@ namespace Explore
             GameObject gameObj;
             TileObject tileObj;
             TreasureObject treasureObj;
-            Transform parent = GameObject.Find("Generator2D").transform;
+            _parent = GameObject.Find("Generator2D").transform;
 
-            for (int i = parent.childCount; i > 0; --i)
+            for (int i = _parent.childCount; i > 0; --i)
             {
-                GameObject.DestroyImmediate(parent.GetChild(0).gameObject);
+                GameObject.DestroyImmediate(_parent.GetChild(0).gameObject);
             }
 
             TileDic.Clear();
@@ -417,7 +406,7 @@ namespace Explore
                     gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + File.TileList[i].Prefab), Vector3.zero, Quaternion.identity);
                     tileObj = gameObj.GetComponent<TileObject>();
                     tileObj.transform.position = new Vector3(File.TileList[i].Position.x, 0, File.TileList[i].Position.y);
-                    tileObj.transform.SetParent(parent);
+                    tileObj.transform.SetParent(_parent);
                     if (File.TileList[i].IsVisited)
                     {
                         tileObj.Quad.layer = _mapLayer;
@@ -437,7 +426,7 @@ namespace Explore
                 {
                     gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Door_Cube"), Vector3.zero, Quaternion.identity);
                     gameObj.transform.position = new Vector3(File.DoorList[i].PositionList[j].x, 1, File.DoorList[i].PositionList[j].y);
-                    gameObj.transform.SetParent(parent);
+                    gameObj.transform.SetParent(_parent);
                     TileDic[File.DoorList[i].PositionList[j]].Door = gameObj;
                     TileDic[File.DoorList[i].PositionList[j]].IsWalkable = false;
                 }
@@ -449,7 +438,7 @@ namespace Explore
                 gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + File.TreasureList[i].Prefab), Vector3.zero, Quaternion.identity);
                 treasureObj = gameObj.GetComponent<TreasureObject>();
                 treasureObj.transform.position = new Vector3(File.TreasureList[i].Position.x, File.TreasureList[i].Height, File.TreasureList[i].Position.y);
-                treasureObj.transform.SetParent(parent);
+                treasureObj.transform.SetParent(_parent);
                 TileDic[File.TreasureList[i].Position].Treasure.Object = treasureObj;
                 TileDic[File.TreasureList[i].Position].IsWalkable = false;
                 if (TileDic[File.TreasureList[i].Position].IsVisited && treasureObj.Icon != null)
@@ -464,17 +453,13 @@ namespace Explore
                 TileDic[File.TriggerList[i].Position].Event = File.TriggerList[i].Name;
             }
 
-            gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/GoalParticle"), Vector3.zero, Quaternion.identity);
+            gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Goal"), Vector3.zero, Quaternion.identity);
             gameObj.transform.position = new Vector3(File.Goal.x, 0, File.Goal.y);
-            gameObj.transform.eulerAngles = new Vector3(90, 0, 0);
-            gameObj.transform.SetParent(parent);
-            TileDic[File.Goal].Object.Icon = gameObj;
-            if (TileDic[File.Goal].IsVisited)
-            {
-                TileDic[File.Goal].Object.Icon.layer = _mapLayer;
-            }
-            TileDic[File.Goal].Object.Icon.GetComponent<Goal>().Red.SetActive(!File.IsArrive);
-            TileDic[File.Goal].Object.Icon.GetComponent<Goal>().Blue.SetActive(File.IsArrive);
+            gameObj.transform.SetParent(_parent);
+            Goal goal = gameObj.GetComponent<Goal>();
+            goal.Red.SetActive(!File.IsArrive);
+            goal.Blue.SetActive(File.IsArrive);
+            File.GoalObj = goal;
 
             ExploreEnemyController controller;
             for (int i = 0; i < File.EnemyList.Count; i++)
@@ -482,7 +467,7 @@ namespace Explore
                 gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + File.EnemyList[i].Prefab), Vector3.zero, Quaternion.identity);
                 gameObj.transform.position = new Vector3(File.EnemyList[i].Position.x, 1, File.EnemyList[i].Position.y);
                 gameObj.transform.eulerAngles = new Vector3(0, File.EnemyList[i].RotationY, 0);
-                gameObj.transform.SetParent(parent);
+                gameObj.transform.SetParent(_parent);
                 controller = gameObj.GetComponent<ExploreEnemyController>();
                 controller.SetAI(File.EnemyList[i]);
                 TileDic[File.EnemyList[i].Position].IsWalkable = false;
@@ -503,9 +488,6 @@ namespace Explore
             {
                 y = File.Size.y / 60f;
             }
-            //Camera bigMapCamera = GameObject.Find("BigMapCamera").GetComponent<Camera>();
-            //bigMapCamera.orthographicSize = (bigMapCamera.orthographicSize * x) + 2;
-            //bigMapCamera.gameObject.SetActive(false);
 
             ExploreUI exploreUI = GameObject.Find("ExploreUI").GetComponent<ExploreUI>();
             exploreUI.SetCameraPosition(File.Size.x / 2, File.Size.y / 2, x);
@@ -514,34 +496,6 @@ namespace Explore
             CheckEvent(v2);
             CheckVidsit(Player.transform);
         }
-
-        /*public void SetCamera()
-        {
-            Info.Player = Camera.main.GetComponent<ExploreCharacterController>();
-            Info.Player.transform.position = new Vector3(Info.Start.x, 1, Info.Start.y);
-            Info.Player.transform.eulerAngles = new Vector3(0, 0, 0);
-
-            float x = 1;
-            float y = 1;
-            if(Info.Size.x > 60) 
-            {
-                x = Info.Size.x / 60f;
-            }
-            if (Info.Size.y > 60)
-            {
-                y = Info.Size.y / 60f;
-            }
-            Camera bigMapCamera = GameObject.Find("BigMapCamera").GetComponent<Camera>();
-            bigMapCamera.orthographicSize = (bigMapCamera.orthographicSize * x) + 2;
-            bigMapCamera.gameObject.SetActive(false);
-
-            ExploreUI exploreUI = GameObject.Find("ExploreUI").GetComponent<ExploreUI>();
-            exploreUI.SetCameraPosition(Info.Size.x / 2, Info.Size.y / 2 - 2, x);
-
-            Vector2Int v2 = Utility.ConvertToVector2Int(Info.Player.transform.position);
-            CheckEvent(v2);
-            CheckVidsit(Info.Player.transform);
-        }*/
 
         private int _enemyMoveCount;
         public void EnemyMove() 
@@ -556,7 +510,6 @@ namespace Explore
         public void WaitForAllMoveComplete() 
         {
             _enemyMoveCount++;
-            Debug.Log(_enemyMoveCount);
             if (_enemyMoveCount == File.EnemyList.Count + 1) 
             {
                 CheckVidsit(Player.transform);

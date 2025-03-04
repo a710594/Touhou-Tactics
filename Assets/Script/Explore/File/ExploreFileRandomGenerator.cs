@@ -1,14 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Explore;
 using Graphs;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering;
-using static Generator2D;
-using static UnityEditor.PlayerSettings;
 
 public class ExploreFileRandomGenerator
 {
@@ -90,17 +84,13 @@ public class ExploreFileRandomGenerator
         RoomModel roomData;
         for (int i = 0; i < floorData.RoomCount * 2; i++) 
         {
-            roomData = DataContext.Instance.RoomDic[floorData.GetRoomID()];
+            roomData = DataContext.Instance.RoomDic[1];
             Vector2Int location = new Vector2Int(
-                //Random.Range(0, File.Size.x),
-                //Random.Range(0, File.Size.y)
                 _random.Next(0, File.Size.x),
                 _random.Next(0, File.Size.y)
             );
 
             Vector2Int roomSize = new Vector2Int(
-                //Random.Range(roomData.MinWidth, roomData.MaxWidth + 1),
-                //Random.Range(roomData.MinHeight, roomData.MaxHeight + 1)
                 _random.Next(roomData.MinWidth, roomData.MaxWidth + 1),
                 _random.Next(roomData.MinHeight, roomData.MaxHeight + 1)
             );
@@ -122,6 +112,7 @@ public class ExploreFileRandomGenerator
             }
 
             if (add) {
+                newRoom.Data = roomData;
                 _roomList.Add(newRoom);
                 Vector2Int pos;
                 for (int j=newRoom.bounds.xMin + 1; j<newRoom.bounds.xMax; j++) 
@@ -221,21 +212,20 @@ public class ExploreFileRandomGenerator
 
     private void SetTreasure() 
     {
+        int count;
         Vector2Int pos;
         Room room;
         TreasureModel treasureData;
         ExploreFileTreasure treasureFile;
-        List<TreasureModel> treasureList;
 
         for (int i = 0; i < _isolatedList.Count; i++)
         {
-            treasureList = DataContext.Instance.TreasureDic[TreasureModel.TypeEnum.Special];
-            treasureData = treasureList[UnityEngine.Random.Range(0, treasureList.Count)];
-
-            pos = _isolatedList[i].GetRandomPosition();
-            treasureFile = new ExploreFileTreasure(treasureData.GetID(), treasureData.Prefab, treasureData.Height, pos, 0);
+            room = _isolatedList[i];
+            pos = room.GetRandomPosition();
+            treasureData = DataContext.Instance.TreasureDic[3];
+            treasureFile = new ExploreFileTreasure(treasureData.GetItemID(), treasureData.Prefab, treasureData.Height, pos, 0);
             File.TreasureList.Add(treasureFile);
-            _isolatedList[i].SetNotAvailable(pos);
+            room.SetNotAvailable(pos);
 
 
             //create key
@@ -248,27 +238,16 @@ public class ExploreFileRandomGenerator
 
         for (int i = 0; i < _otherList.Count; i++)
         {
-            treasureList = DataContext.Instance.TreasureDic[TreasureModel.TypeEnum.Normal];
-            treasureData = treasureList[UnityEngine.Random.Range(0, treasureList.Count)];
-
-            pos = _otherList[i].GetRandomPosition();
-            treasureFile = new ExploreFileTreasure(treasureData.GetID(), treasureData.Prefab, treasureData.Height, pos, 0);
-            File.TreasureList.Add(treasureFile);
-            _otherList[i].SetNotAvailable(pos);
-        }
-    }
-
-    private void SetEnemy(RandomFloorModel data) 
-    {
-        Vector2Int pos;
-        Room room;
-        EnemyGroupModel enemyGroup;
-        for(int i=0; i<data.EnemyCount; i++) 
-        {
-            enemyGroup = DataContext.Instance.EnemyGroupDic[data.GetEnemyGroupID()];
-            room = _otherList[UnityEngine.Random.Range(0, _otherList.Count)];
-            pos = room.GetRandomPosition();
-            File.EnemyList.Add(new ExploreFileEnemy(enemyGroup, pos));
+            room = _otherList[i];
+            count = UnityEngine.Random.Range(room.Data.MinTreasureCount, room.Data.MaxTreasureCount + 1);
+            for (int j=0; j<count; j++) 
+            {
+                pos = _otherList[i].GetRandomPosition();
+                treasureData = DataContext.Instance.TreasureDic[room.Data.GetTreasure()];
+                treasureFile = new ExploreFileTreasure(treasureData.GetItemID(), treasureData.Prefab, treasureData.Height, pos, 0);
+                File.TreasureList.Add(treasureFile);
+                _otherList[i].SetNotAvailable(pos);
+            }
         }
     }
 
@@ -437,5 +416,21 @@ public class ExploreFileRandomGenerator
 
         File.Goal = _endRoom.GetRandomPosition();
         _endRoom.SetNotAvailable(File.Goal);
+    }
+
+    private void SetEnemy(RandomFloorModel data)
+    {
+        Vector2Int pos;
+        EnemyGroupModel enemyGroup;
+        for (int i = 0; i < _otherList.Count; i++) //每個房間有一隻怪
+        {
+            enemyGroup = DataContext.Instance.EnemyGroupDic[data.GetEnemyGroupID()];
+            pos = _otherList[i].GetRandomPosition();
+            File.EnemyList.Add(new ExploreFileEnemy(enemyGroup, pos));
+        }
+
+        enemyGroup = DataContext.Instance.EnemyGroupDic[data.BossEnemyGroup];
+        pos = File.Goal;
+        File.EnemyList.Add(new ExploreFileEnemy(enemyGroup, pos));
     }
 }

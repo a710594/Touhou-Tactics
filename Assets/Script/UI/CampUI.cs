@@ -72,10 +72,18 @@ public class CampUI : MonoBehaviour
 
     private void FloorOnClick(PointerEventData eventData, ButtonPlus buttonPlus) 
     {
-        SceneController.Instance.ChangeScene("Explore", (sceneName) =>
+        int floor = (int)buttonPlus.Data;
+        if (floor < 3)
         {
-            Explore.ExploreManager.Instance.Init((int)buttonPlus.Data);
-        });
+            SceneController.Instance.ChangeScene("Explore", ChangeSceneUI.TypeEnum.Loading, (sceneName) =>
+            {
+                Explore.ExploreManager.Instance.Init((int)buttonPlus.Data);
+            });
+        }
+        else
+        {
+            ConfirmUI.Open("·q½Ð´Á«Ý¡I", "½T©w", null);
+        }
     }
 
     private void Update()
@@ -103,9 +111,5 @@ public class CampUI : MonoBehaviour
         CookButton.onClick.AddListener(CookOnClick);
         ExploreButton.onClick.AddListener(ExploreOnClick);
         FloorScrollView.ClickHandler += FloorOnClick;
-
-        ShopButton.enabled = !FlowController.Instance.Info.LockDic[FlowInfo.LockEnum.Shop];
-        ShopButton.GetComponent<ButtonColorSetting>().SetColor(ShopButton.enabled);
-        SetCookButton(!FlowController.Instance.Info.LockDic[FlowInfo.LockEnum.Cook]);
     }
 }

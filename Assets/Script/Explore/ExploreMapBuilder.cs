@@ -91,25 +91,6 @@ public class ExploreMapBuilder : MonoBehaviour
         gameObj.transform.position = new Vector3(file.Goal.x, 1, file.Goal.y);
         gameObj.transform.eulerAngles = new Vector3(90, 0, 0);
         gameObj.transform.SetParent(parent);
-        tileDic[file.Goal].Object.Icon = gameObj;
-        if (tileDic[file.Goal].IsVisited)
-        {
-            tileDic[file.Goal].Object.Icon.layer = _mapLayer;
-        }
-
-        /*ExploreEnemyController enemy;
-        enemyList = new List<ExploreEnemyController>();
-        for (int i = 0; i < file.EnemyList.Count; i++)
-        {
-            gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/" + file.EnemyList[i].Prefab), Vector3.zero, Quaternion.identity);
-            gameObj.transform.position = new Vector3(file.EnemyList[i].Position.x, 1, file.EnemyList[i].Position.y);
-            gameObj.transform.eulerAngles = new Vector3(0, file.EnemyList[i].RotationY, 0);
-            gameObj.transform.SetParent(parent);
-            enemy = gameObj.GetComponent<ExploreEnemyController>();
-            enemy.SetAI(file.EnemyList[i]);
-            enemyList.Add(enemy);
-            tileDic[file.EnemyList[i].Position].IsWalkable = false;
-        }*/
 
         float x = 1;
         float y = 1;
@@ -121,9 +102,6 @@ public class ExploreMapBuilder : MonoBehaviour
         {
             y = file.Size.y / 60f;
         }
-
-        //ExploreUI exploreUI = GameObject.Find("ExploreUI").GetComponent<ExploreUI>();
-        //exploreUI.SetCameraPosition(file.Size.x / 2, file.Size.y / 2, x);
     }
 
     private void Awake()

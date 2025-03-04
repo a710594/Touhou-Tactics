@@ -2975,6 +2975,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ScrollView
       objectReference: {fileID: 0}
+    - target: {fileID: 5268101871429733702, guid: 4335952fe4221004c9dfb002e53effea, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5268101871429733704, guid: 4335952fe4221004c9dfb002e53effea, type: 3}
       propertyPath: m_HorizontalScrollbar
       value: 
@@ -3167,12 +3171,31 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5268101871429733709, guid: 4335952fe4221004c9dfb002e53effea, type: 3}
   m_PrefabInstance: {fileID: 715762085}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 715762088}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b427451918d3a8141abee16679327dd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &715762088 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5268101871429733702, guid: 4335952fe4221004c9dfb002e53effea, type: 3}
+  m_PrefabInstance: {fileID: 715762085}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &715762089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 715762088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26135afdc50ac044db08ea09d68c73e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentSelect: {fileID: 0}
+  Buttons: []
 --- !u!1001 &731136648
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3908,6 +3931,7 @@ MonoBehaviour:
   AGILabel: {fileID: 1740846251}
   MOVLabel: {fileID: 421419441}
   MaterialLabel: {fileID: 1780475455}
+  ButtonGroup: {fileID: 1399857397}
 --- !u!1 &842175342
 GameObject:
   m_ObjectHideFlags: 0
@@ -6261,12 +6285,31 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5268101871429733709, guid: 4335952fe4221004c9dfb002e53effea, type: 3}
   m_PrefabInstance: {fileID: 1399857393}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1399857396}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b427451918d3a8141abee16679327dd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1399857396 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5268101871429733702, guid: 4335952fe4221004c9dfb002e53effea, type: 3}
+  m_PrefabInstance: {fileID: 1399857393}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1399857397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1399857396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26135afdc50ac044db08ea09d68c73e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentSelect: {fileID: 0}
+  Buttons: []
 --- !u!1 &1408653823
 GameObject:
   m_ObjectHideFlags: 0
@@ -8268,6 +8311,7 @@ MonoBehaviour:
   ScrollView: {fileID: 715762087}
   CommentLabel: {fileID: 1375573638}
   MaterialLabel: {fileID: 187108311}
+  ButtonGroup: {fileID: 715762089}
 --- !u!1001 &1887132966
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -10,15 +10,26 @@ namespace Battle
         public class CharacterState : BattleControllerState
         {
             private BattleCharacterController _controller;
-            private CameraMove _cameraMove;
 
             public CharacterState(StateContext context) : base(context)
             {
-                _cameraMove = Camera.main.transform.parent.gameObject.GetComponent<CameraMove>();
             }
 
             public override void Begin()
             {
+                if(Instance.SelectedCharacter != null) 
+                {
+                    Instance.SelectedCharacter.Outline.OutlineWidth = 1;
+                    if (Instance.SelectedCharacter.Info.Faction == BattleCharacterInfo.FactionEnum.Player) 
+                    {
+                        Instance.SelectedCharacter.Outline.OutlineColor = Color.blue;
+                    }
+                    else
+                    {
+                        Instance.SelectedCharacter.Outline.OutlineColor = Color.red;
+                    }
+                }
+
                 _controller = Instance.CharacterList[0];
                 Instance.SelectedCharacter = _controller;
                 
@@ -35,12 +46,13 @@ namespace Battle
                 }
 
                 Instance.BattleUI.SetActionVisible(false);
-                _cameraMove.Move(_controller.transform.position, ()=> 
+                _controller.Outline.OutlineWidth = 2;
+                _controller.Outline.OutlineColor = Color.yellow;
+                Instance.BattleUI.CharacterListGroupRefresh();
+                Instance._cameraController.SetMyGameObj(_controller.gameObject, ()=> 
                 {
                     _context.SetState<CommandState>();
                 });
-                Instance.BattleUI.SetArrowTransform(_controller.transform);
-                Instance.BattleUI.CharacterListGroupRefresh();
             }
         }
     }

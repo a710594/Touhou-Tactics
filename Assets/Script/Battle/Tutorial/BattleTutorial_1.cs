@@ -81,7 +81,6 @@ namespace Battle
 
             public override void Begin()
             {
-                BattleUI.Instance.SetArrowVisible(false);
                 Vector3 offset = new Vector3(-200, 0, 0);
                 TutorialArrowUI.Open("選擇移動。", BattleUI.Instance.ActionButtonGroup.MoveButton.transform, offset, Vector2Int.right);
             }
@@ -262,10 +261,6 @@ namespace Battle
                 {
                     TutorialArrowUI.Open("選擇目標。", new Vector3(4, 2, 4), Vector2Int.down);
                 });
-                //TutorialUI.Open("現在地圖上白色的範圍是可以放技能的地方。\n請點選箭頭指示的位置。", "Tutorial_3", () =>
-                //{
-                //    TutorialArrowUI.Open("選擇目標。", new Vector3(4, 2, 4), Vector2Int.down, null);
-                //});
             }
 
             public override void End()
@@ -638,7 +633,6 @@ namespace Battle
             public override void Begin()
             {
                 BattleController.Instance.EndTutorial();
-                BattleUI.Instance.SetArrowVisible(true);
             }
         }
     }

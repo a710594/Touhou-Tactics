@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraMove : MonoBehaviour
+/*public class CameraMove : MonoBehaviour
 {
     public Transform Root;
     public Transform Main;
@@ -38,4 +38,4 @@ public class CameraMove : MonoBehaviour
         //     Camera.main.transform.localPosition = _verticalPosition;
         // }
     }
-}
+}*/

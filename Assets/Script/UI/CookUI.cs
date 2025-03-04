@@ -114,11 +114,11 @@ public class CookUI : MonoBehaviour
         }
     }
 
-    private void MaterialOnClick(PointerEventData eventData, object data) 
+    private void MaterialOnClick(PointerEventData eventData, ButtonPlus button) 
     {
-        if (data != null) 
+        if (button != null) 
         {
-            _materialList.Remove((ItemModel)data);
+            _materialList.Remove((ItemModel)button.Data);
             SetMaterialLabel();
             SetResult();
         }
@@ -133,6 +133,7 @@ public class CookUI : MonoBehaviour
             {
                 ItemManager.Instance.MinusItem(_materialList[i].ID, 1);
             }
+            TipLabel.SetLabel("¿Ú±o " + _food.Name, true);
             _food = null;
             _materialList.Clear();
             SetMaterialLabel();

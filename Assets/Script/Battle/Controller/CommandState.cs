@@ -24,8 +24,8 @@ namespace Battle
                 Instance.BattleUI.SetActionVisible(true);
                 Instance.BattleUI.ActionButtonGroup.SetButton(_character.Info);
                 Instance.BattleUI.ActionButtonGroup.ResetButton.gameObject.SetActive(_character.Info.HasMove);
-                Instance.BattleUI.SetCharacterInfoUI_1(_character.Info);
-                Instance.BattleUI.SetCharacterInfoUI_2(null);
+                Instance.CharacterInfoUIGroup.SetCharacterInfoUI_1(_character.Info);
+                Instance.CharacterInfoUIGroup.SetCharacterInfoUI_2(null);
                 Instance.BattleUI.ActionButtonGroup.SkillInfoGroup.gameObject.SetActive(false);
                 Instance.ClearQuad();
                 Instance.ShowTileBuff(_character);

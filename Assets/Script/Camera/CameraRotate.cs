@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class CameraRotate : MonoBehaviour
+/*public class CameraRotate : MonoBehaviour
 {
     public Action<int> RotateHandler;
 
@@ -113,4 +113,4 @@ public class CameraRotate : MonoBehaviour
             }
         }
     }
-}
+}*/

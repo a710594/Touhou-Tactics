@@ -12,15 +12,8 @@ public class ExploreFileEnemy
         Random,
     }
 
-    public enum AiEnum 
-    {
-        NotMove = 0,
-        Default,
-        Trace,
-    }
-
     public TypeEnum Type;
-    public AiEnum AI;
+    public EnemyGroupModel.AiEnum AI;
     public Vector2Int Position;
     public int RotationY;
     public string Prefab;
@@ -40,7 +33,7 @@ public class ExploreFileEnemy
     public ExploreFileEnemy(EnemyGroupModel data, Vector2Int pos) 
     {
         Type = TypeEnum.Random;
-        AI = AiEnum.Default;
+        AI = data.AI;
         Prefab = data.Prefab;
         Position = pos;
         EnemyGroupId = data.ID;

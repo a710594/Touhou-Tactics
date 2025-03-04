@@ -938,7 +938,6 @@ GameObject:
   - component: {fileID: 411605168}
   - component: {fileID: 411605167}
   - component: {fileID: 411605169}
-  - component: {fileID: 411605170}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -984,32 +983,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 411605166}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5920fca7afc6cc64d937d6472726a988, type: 3}
+  m_Script: {fileID: 11500000, guid: 23f14a6f8cd47b049a436fbb462a63c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   FileName: Hill_2
-  Type: 1
-  MustBeEqualToNeedCount: 0
-  NeedCount: 3
-  Exp: 1
   Tilemap: {fileID: 1377411095}
-  EnemyGroup: {fileID: 1632593920}
---- !u!114 &411605170
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 411605166}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 131db34bb1175d04ea7cf4d83e0bf3cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FileName: Tutorial_1
-  Generator: {fileID: 411605169}
-  Tilemap: {fileID: 1377411095}
-  EnemyGroup: {fileID: 1632593920}
+  CameraDefaultPosition: {fileID: 1338422222}
+  PlayerPosition:
+  - {fileID: 1036784587}
+  - {fileID: 63307292}
+  - {fileID: 1398430261}
+  - {fileID: 729800431}
+  - {fileID: 950059764}
+  - {fileID: 1115838902}
+  - {fileID: 142476410}
+  - {fileID: 108181455}
+  - {fileID: 1338422222}
 --- !u!1001 &498390046
 PrefabInstance:
   m_ObjectHideFlags: 0

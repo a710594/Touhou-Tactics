@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,5 +19,8 @@ namespace Explore
         public List<ExploreFileTreasure> TreasureList = new List<ExploreFileTreasure>();
         public List<ExploreFileTrigger> TriggerList = new List<ExploreFileTrigger>();
         public List<ExploreFIleDoor> DoorList = new List<ExploreFIleDoor>();
+
+        [NonSerialized]
+        public Goal GoalObj;
     }
 }

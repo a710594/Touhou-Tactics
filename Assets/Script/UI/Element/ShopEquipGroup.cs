@@ -25,20 +25,19 @@ public class ShopEquipGroup : MonoBehaviour
     public Text AGILabel;
     public Text MOVLabel;
     public Text MaterialLabel;
+    public ButtonPlusGroup ButtonGroup;
 
     public void SetScrollViewBuy()
     {
         ScrollView.SetData(new List<object>(DataContext.Instance.ShopItemDic[ItemModel.CategoryEnum.Equip]));
+        SetButtonGroup();
+        MaterialLabel.text = "";
     }
 
     public void SetScrollViewSell()
     {
         ScrollView.SetData(new List<object>(ItemManager.Instance.Info.EquipList));
-    }
-
-    public void CancelScrollViewSelect()
-    {
-        ScrollView.CancelSelect();
+        SetButtonGroup();
         MaterialLabel.text = "";
     }
 
@@ -123,6 +122,19 @@ public class ShopEquipGroup : MonoBehaviour
             itemData = DataContext.Instance.ItemDic[shopData.MaterialIDList[i]];
             MaterialLabel.text += itemData.Name + " " + ItemManager.Instance.GetAmount(itemData.ID) + "/" + shopData.MaterialAmountList[i] + " ";
         }
+    }
+
+    private void SetButtonGroup()
+    {
+        ButtonGroup.Clear();
+        for (int i = 0; i < ScrollView.GridList.Count; i++)
+        {
+            for (int j = 0; j < ScrollView.GridList[i].ScrollItemList.Count; j++)
+            {
+                ButtonGroup.Add(ScrollView.GridList[i].ScrollItemList[j].GetComponent<ButtonPlusSingle>());
+            }
+        }
+        ButtonGroup.CancelAllSelect();
     }
 
     private void ScrollItemOnClick(PointerEventData eventData, ButtonPlus buttonPlus)

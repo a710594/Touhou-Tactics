@@ -183,7 +183,7 @@ GameObject:
   - component: {fileID: 6230375192170202156}
   m_Layer: 0
   m_Name: 1_5
-  m_TagString: Untagged
+  m_TagString: BattleTile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

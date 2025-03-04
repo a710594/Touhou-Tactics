@@ -79,7 +79,7 @@ public class DataContext
     public Dictionary<int, FixedFloorModel> FixedFloorDic = new Dictionary<int, FixedFloorModel>();
     public Dictionary<int, RandomFloorModel> RandomFloorDic = new Dictionary<int, RandomFloorModel>();
     public Dictionary<int, RoomModel> RoomDic = new Dictionary<int, RoomModel>();
-    public Dictionary<TreasureModel.TypeEnum, List<TreasureModel>> TreasureDic = new Dictionary<TreasureModel.TypeEnum, List<TreasureModel>>();
+    public Dictionary<int, TreasureModel> TreasureDic = new Dictionary<int, TreasureModel>();
     public Dictionary<ItemModel.CategoryEnum, List<ShopModel>> ShopItemDic = new Dictionary<ItemModel.CategoryEnum, List<ShopModel>>();
     public Dictionary<int, FoodMaterial> FoodMaterialDic = new Dictionary<int, FoodMaterial>();
     public Dictionary<int, FoodResult> FoodResultDic = new Dictionary<int, FoodResult>();
@@ -188,7 +188,6 @@ public class DataContext
         RandomFloorDic.Clear();
         for (int i = 0; i < RandomFloorList.Count; i++)
         {
-            RandomFloorList[i].GetRoomPool();
             RandomFloorList[i].GetEnemyGroupPool();
             RandomFloorDic.Add(RandomFloorList[i].Floor, RandomFloorList[i]);
         }
@@ -205,12 +204,8 @@ public class DataContext
         TreasureDic.Clear();
         for (int i = 0; i < TreasureList.Count; i++)
         {
-            TreasureList[i].GetList();
-            if (!TreasureDic.ContainsKey(TreasureList[i].Type)) 
-            {
-                TreasureDic.Add(TreasureList[i].Type, new List<TreasureModel>());
-            }
-            TreasureDic[TreasureList[i].Type].Add(TreasureList[i]);
+            TreasureList[i].SetItemList();
+            TreasureDic.Add(TreasureList[i].ID, TreasureList[i]);
         }
 
         ShopList = Load<List<ShopModel>>("Shop", PrePathEnum.Data);

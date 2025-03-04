@@ -15,8 +15,8 @@ public partial class ShopUI : MonoBehaviour
         {
             _shopContext.ShopUI.ShopItemGroup.gameObject.SetActive(true);
             _shopContext.ShopUI.ShopEquipGroup.gameObject.SetActive(false);
+            _shopContext.ShopUI.ShopItemGroup.Init();
             _shopContext.ShopUI.ShopItemGroup.SetScrollViewSell(ItemModel.CategoryEnum.Consumables);
-            _shopContext.ShopUI.ShopItemGroup.CancelScrollViewSelect();
             _shopContext.ShopUI.ShopItemGroup.SetComment("");
             _shopContext.ShopUI._selectedSell = null;
         }
@@ -25,8 +25,8 @@ public partial class ShopUI : MonoBehaviour
         {
             _shopContext.ShopUI.ShopItemGroup.gameObject.SetActive(true);
             _shopContext.ShopUI.ShopEquipGroup.gameObject.SetActive(false);
+            _shopContext.ShopUI.ShopItemGroup.Init();
             _shopContext.ShopUI.ShopItemGroup.SetScrollViewSell(ItemModel.CategoryEnum.Food);
-            _shopContext.ShopUI.ShopItemGroup.CancelScrollViewSelect();
             _shopContext.ShopUI.ShopItemGroup.SetComment("");
             _shopContext.ShopUI._selectedSell = null;
         }
@@ -35,8 +35,8 @@ public partial class ShopUI : MonoBehaviour
         {
             _shopContext.ShopUI.ShopItemGroup.gameObject.SetActive(true);
             _shopContext.ShopUI.ShopEquipGroup.gameObject.SetActive(false);
+            _shopContext.ShopUI.ShopItemGroup.Init();
             _shopContext.ShopUI.ShopItemGroup.SetScrollViewSell(ItemModel.CategoryEnum.Item);
-            _shopContext.ShopUI.ShopItemGroup.CancelScrollViewSelect();
             _shopContext.ShopUI.ShopItemGroup.SetComment("");
             _shopContext.ShopUI._selectedSell = null;
         }
@@ -46,7 +46,6 @@ public partial class ShopUI : MonoBehaviour
             _shopContext.ShopUI.ShopItemGroup.gameObject.SetActive(false);
             _shopContext.ShopUI.ShopEquipGroup.gameObject.SetActive(true);
             _shopContext.ShopUI.ShopEquipGroup.SetScrollViewSell();
-            _shopContext.ShopUI.ShopEquipGroup.CancelScrollViewSelect();
             _shopContext.ShopUI.ShopEquipGroup.SetDetailByData(null, null);
             _shopContext.ShopUI._selectedSell = null;
         }

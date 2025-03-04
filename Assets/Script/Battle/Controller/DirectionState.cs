@@ -10,11 +10,9 @@ namespace Battle
         {
             private bool _lock = false;
             private Timer _timer = new Timer();
-            private CameraRotate _cameraRotate;
 
             public DirectionState(StateContext context) : base(context)
             {
-                _cameraRotate = Camera.main.GetComponent<CameraRotate>();
             }
 
             public override void Begin()
@@ -22,7 +20,7 @@ namespace Battle
                 _character = Instance.SelectedCharacter;
                 Instance.ClearQuad();
                 Instance.BattleUI.SetActionVisible(false);
-                Instance.BattleUI.SetCharacterInfoUI_1(null);
+                Instance.CharacterInfoUIGroup.SetCharacterInfoUI_1(null);
                 Instance.BattleUI.SetDirectionGroupVisible(true);
                 Instance.BattleUI.SetDirectionGroupPosition(_character.transform.position);
 
@@ -32,32 +30,12 @@ namespace Battle
                 }
             }
 
-            /*public override void Click(Vector2Int position)
-            {
-                BattleCharacterController _controller = Instance._controllerDic[_character.Index];
-                if (!_lock)
-                {
-                    if (Vector2Int.Distance(position, Utility.ConvertToVector2Int(_character.Position)) == 1)
-                    {
-                        _lock = true;
-                        _controller.SetDirection(position - Utility.ConvertToVector2Int(_controller.transform.position));
-                        _controller.SetSprite();
-                        _timer.Start(0.5f, () =>
-                        {
-                            _lock = false;
-                            _context.SetState<CharacterState>();
-                        });
-                    }
-                }
-            }*/
-
             public void SetDirection(Vector2Int direction)
             {
                 if (!_lock)
                 {
                     _lock = true;
                     _character.SetDirection(direction);
-                    _character.SetSprite();
                     _timer.Start(0.5f, () =>
                     {
                         _lock = false;

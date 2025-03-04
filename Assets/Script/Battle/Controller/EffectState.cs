@@ -18,7 +18,7 @@ namespace Battle
 
             public override void Begin()
             {
-                Instance.BattleUI.SetCharacterInfoUI_2(null);
+                Instance.CharacterInfoUIGroup.SetCharacterInfoUI_2(null);
                 Instance.ClearQuad();
                 _characterList = Instance.CharacterList;
                 _character = Instance.SelectedCharacter;
@@ -179,7 +179,7 @@ namespace Battle
                                 {
                                     _characterList.Remove(target);
                                     Instance.DyingList.Add(target);
-                                    target.SetFlash(true);
+                                    target.StartFlash();
                                 }
                             }
                             else
@@ -192,7 +192,7 @@ namespace Battle
                         {
                             _characterList.Add(target);
                             Instance.DyingList.Remove(target);
-                            target.SetFlash(false);
+                            target.StopFlash();
                         }
                     }
                  }

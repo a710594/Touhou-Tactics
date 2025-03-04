@@ -20,22 +20,22 @@ public class TreasureModel
     public int ID_3;
     public int ID_4;
 
-    public List<int> IDList = new List<int>();
+    public List<int> ItemList = new List<int>();
 
-    public void GetList()
+    public void SetItemList()
     {
         if (ID_1 != -1)
-            IDList.Add(ID_1);
+            ItemList.Add(ID_1);
         if (ID_2 != -1)
-            IDList.Add(ID_2);
+            ItemList.Add(ID_2);
         if (ID_3 != -1)
-            IDList.Add(ID_3);
+            ItemList.Add(ID_3);
         if (ID_4 != -1)
-            IDList.Add(ID_4);
+            ItemList.Add(ID_4);
     }
 
-    public int GetID()
+    public int GetItemID()
     {
-        return IDList[Random.Range(0, IDList.Count)];
+        return ItemList[Random.Range(0, ItemList.Count)];
     }
 }

@@ -30,10 +30,7 @@ namespace Battle
             List<BattleCharacterController> targetList = GetTargetList(BattleCharacterInfo.FactionEnum.Player);
             _target = GetAttackTarget(targetList);
             BattleController.Instance.Click(Utility.ConvertToVector2Int(_target.transform.position));
-            MoveCamera(_target.transform.position, () =>
-            {
-                BattleController.Instance.Click(Utility.ConvertToVector2Int(_target.transform.position));
-            });
+            BattleController.Instance.Click(Utility.ConvertToVector2Int(_target.transform.position));
         }
 
         private void LayEgg() 
@@ -47,10 +44,7 @@ namespace Battle
             Vector2Int targetPosition = rangeList[UnityEngine.Random.Range(0, rangeList.Count)];
             BattleController.Instance.Click(targetPosition);
             Vector3 v3 = new Vector3(targetPosition.x, BattleController.Instance.TileDic[targetPosition].TileData.Height, targetPosition.y);
-            MoveCamera(v3, () =>
-            {
-                BattleController.Instance.Click(targetPosition);
-            });
+            BattleController.Instance.Click(targetPosition);
         }
     }
 }

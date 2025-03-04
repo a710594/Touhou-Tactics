@@ -36,8 +36,8 @@ public partial class ShopUI : MonoBehaviour
         ItemButton.gameObject.SetActive(false);
         ShopItemGroup.gameObject.SetActive(true);
         ShopEquipGroup.gameObject.SetActive(false);
+        ShopItemGroup.Init();
         ShopItemGroup.SetScrollViewBuy(ItemModel.CategoryEnum.Consumables);
-        ShopItemGroup.CancelScrollViewSelect();
         MoneyLabel.text = ItemManager.Instance.Info.Money + "$";
         ModeGroup.SetSelect(BuyModeButton.gameObject);
         CategoryGroup.SetSelect(ConsumablesButton.gameObject);
@@ -67,11 +67,11 @@ public partial class ShopUI : MonoBehaviour
     {
         if(_selectedShopData==null)
         {
-            TipLabel.SetLabel("�|����ܪ��~");
+            TipLabel.SetLabel("尚未選擇商品");
         }
         else if(_selectedShopData.Price > ItemManager.Instance.Info.Money)
         {
-            TipLabel.SetLabel("�l�B����");
+            TipLabel.SetLabel("餘額不足");
         }
         else
         {
@@ -119,7 +119,7 @@ public partial class ShopUI : MonoBehaviour
                 }
                 else
                 {
-                    TipLabel.SetLabel("���Ƥ���");
+                    TipLabel.SetLabel("材料不足");
                 }
             }
         }
@@ -139,7 +139,6 @@ public partial class ShopUI : MonoBehaviour
                 if (consumables.Amount == 0)
                 {
                     _selectedSell = null;
-                    ShopItemGroup.CancelScrollViewSelect();
                 }
             }
             else if (_selectedSell is Item)
@@ -152,7 +151,6 @@ public partial class ShopUI : MonoBehaviour
                 if (item.Amount == 0)
                 {
                     _selectedSell = null;
-                    ShopItemGroup.CancelScrollViewSelect();
                 }
             }
             else if(_selectedSell is Food) 
@@ -162,7 +160,6 @@ public partial class ShopUI : MonoBehaviour
                 MoneyLabel.text = ItemManager.Instance.Info.Money + "$";
                 ItemManager.Instance.MinusFood(food);
                 ShopItemGroup.SetScrollViewSell(ItemModel.CategoryEnum.Food);
-                ShopItemGroup.CancelScrollViewSelect();
                 _selectedSell = null;
             }
             else if(_selectedSell is Equip) 
@@ -172,13 +169,12 @@ public partial class ShopUI : MonoBehaviour
                 MoneyLabel.text = ItemManager.Instance.Info.Money + "$";
                 ItemManager.Instance.MinusEquip(equip);
                 ShopEquipGroup.SetScrollViewSell();
-                ShopEquipGroup.CancelScrollViewSelect();
                 _selectedSell = null;
             }
         }
         else
         {
-            TipLabel.SetLabel("�|����ܪ��~");
+            TipLabel.SetLabel("尚未選擇");
         }
     }
 

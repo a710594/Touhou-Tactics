@@ -6,4 +6,5 @@ public class Goal : MonoBehaviour
 {
     public GameObject Red;
     public GameObject Blue;
+    public GameObject Quad;
 }

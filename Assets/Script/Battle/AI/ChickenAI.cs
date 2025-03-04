@@ -13,7 +13,6 @@ namespace Battle
             if (_count == 0) 
             {
                 _count++;
-                BattleController.Instance.ChangeSprite(_controller, ((BattleEnemyInfo)_controller.Info).Enemy.Sprite_2);
                 _timer.Start(1f, ()=> 
                 {
                     BattleController.Instance.SelectedCharacter.Info.ActionCount = 0;

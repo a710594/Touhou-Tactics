@@ -71,6 +71,8 @@ public class BagUI : MonoBehaviour
         BagEquipGroup.SetScrollView(category, character);
         BagEquipGroup.SetDetail(null);
         ButtonGroup.gameObject.SetActive(false);
+        MoneyLabel.text = "Money: " + ItemManager.Instance.Info.Money;
+        KeyLabel.text = "Key: " + ItemManager.Instance.Info.Key;
     }
 
     public void SetUseState()
@@ -82,6 +84,8 @@ public class BagUI : MonoBehaviour
         EquipButton.gameObject.SetActive(false);
         BagItemGroup.SetScrollView(ItemModel.CategoryEnum.Food);
         ButtonGroup.SetSelect(FoodButton.gameObject);
+        MoneyLabel.text = "Money: " + ItemManager.Instance.Info.Money;
+        KeyLabel.text = "Key: " + ItemManager.Instance.Info.Key;
     }
 
 
@@ -89,8 +93,8 @@ public class BagUI : MonoBehaviour
     {
         BagItemGroup.gameObject.SetActive(true);
         BagEquipGroup.gameObject.SetActive(false);
-        BagItemGroup.ScrollView.CancelSelect();
         BagItemGroup.SetScrollView(ItemModel.CategoryEnum.Consumables);
+        BagItemGroup.SetName("");
         BagItemGroup.SetComment("");
     }
 
@@ -98,8 +102,8 @@ public class BagUI : MonoBehaviour
     {
         BagItemGroup.gameObject.SetActive(true);
         BagEquipGroup.gameObject.SetActive(false);
-        BagItemGroup.ScrollView.CancelSelect();
         BagItemGroup.SetScrollView(ItemModel.CategoryEnum.Food);
+        BagItemGroup.SetName("");
         BagItemGroup.SetComment("");
     }
 
@@ -107,8 +111,8 @@ public class BagUI : MonoBehaviour
     {
         BagItemGroup.gameObject.SetActive(true);
         BagEquipGroup.gameObject.SetActive(false);
-        BagItemGroup.ScrollView.CancelSelect();
         BagItemGroup.SetScrollView(ItemModel.CategoryEnum.Item);
+        BagItemGroup.SetName("");
         BagItemGroup.SetComment("");
     }
 

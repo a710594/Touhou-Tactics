@@ -1,5 +1,5 @@
 [{"ID":1,"Name":"回復藥","Price":10,"UnlockFloor":1,"MaterialID_1":-1,"MaterialAmount_1":-1,"MaterialID_2":-1,"MaterialAmount_2":-1,"MaterialID_3":-1,"MaterialAmount_3":-1},
-{"ID":21,"Name":"獸牙手環","Price":20,"UnlockFloor":1,"MaterialID_1":12,"MaterialAmount_1":1,"MaterialID_2":25,"MaterialAmount_2":1,"MaterialID_3":-1,"MaterialAmount_3":-1},
-{"ID":22,"Name":"玉石手環","Price":20,"UnlockFloor":1,"MaterialID_1":12,"MaterialAmount_1":1,"MaterialID_2":14,"MaterialAmount_2":1,"MaterialID_3":-1,"MaterialAmount_3":-1},
-{"ID":23,"Name":"厚重的項鍊","Price":20,"UnlockFloor":1,"MaterialID_1":10,"MaterialAmount_1":1,"MaterialID_2":8,"MaterialAmount_2":1,"MaterialID_3":-1,"MaterialAmount_3":-1},
-{"ID":24,"Name":"輕巧的項鍊","Price":20,"UnlockFloor":1,"MaterialID_1":10,"MaterialAmount_1":1,"MaterialID_2":26,"MaterialAmount_2":1,"MaterialID_3":-1,"MaterialAmount_3":-1}]
+{"ID":21,"Name":"木刀","Price":20,"UnlockFloor":1,"MaterialID_1":13,"MaterialAmount_1":2,"MaterialID_2":-1,"MaterialAmount_2":-1,"MaterialID_3":-1,"MaterialAmount_3":-1},
+{"ID":22,"Name":"掃把","Price":20,"UnlockFloor":1,"MaterialID_1":13,"MaterialAmount_1":2,"MaterialID_2":14,"MaterialAmount_2":1,"MaterialID_3":-1,"MaterialAmount_3":-1},
+{"ID":23,"Name":"安全帽","Price":20,"UnlockFloor":1,"MaterialID_1":8,"MaterialAmount_1":1,"MaterialID_2":12,"MaterialAmount_2":1,"MaterialID_3":-1,"MaterialAmount_3":-1},
+{"ID":24,"Name":"兔子吊飾","Price":20,"UnlockFloor":1,"MaterialID_1":14,"MaterialAmount_1":1,"MaterialID_2":-1,"MaterialAmount_2":-1,"MaterialID_3":-1,"MaterialAmount_3":-1}]

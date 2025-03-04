@@ -12,39 +12,28 @@ public class BattleCharacterController : MonoBehaviour
     public Action MoveEndHandler;
     public Action<int> RightClickHandler;
 
-    public Transform HpAnchor;
-    public SpriteRenderer SpriteRenderer;
-    public SpriteFlash SpriteFlash;
-    public Vector2 Direction = Vector2Int.left;
-    public Vector3 LastPosition = new Vector3();
     public BattleAI AI = null;
     public BattleCharacterInfo Info;
-    public Sprite SpriteFront;
-    public Sprite SpriteBack;
+    public Outline Outline;
+    public Flash Flash;
 
-    private CameraRotate _cameraRotate;
+    [NonSerialized]
+    public int Index;
+    [NonSerialized]
+    public Vector2 Direction = Vector2Int.left;
+    [NonSerialized]
+    public Sprite Sprite;
+    [NonSerialized]
+    public Vector3 LastPosition = new Vector3();
 
     public void Init(int lv, EnemyModel enemy)
     {
         Info = new BattleEnemyInfo(lv, enemy);
-
-        SpriteFront = Resources.Load<Sprite>("Image/" + enemy.Sprite_1 + "_F");
-        SpriteBack = Resources.Load<Sprite>("Image/" + enemy.Sprite_1 + "_B");
-        SpriteRenderer.sprite = SpriteFront;
-        SpriteRenderer.flipX = false;
+        //transform.eulerAngles = new Vector3(0, Vector3.Angle(transform.forward, Direction), 0);
 
         Type t = Type.GetType("Battle." + enemy.AI);
         AI = (BattleAI)Activator.CreateInstance(t);
         AI.Init(this);
-    }
-
-    public void Init(int lv, JobModel job) 
-    {
-        Info = new BattlePlayerInfo(lv, job);
-        SpriteFront = Resources.Load<Sprite>("Image/" + job.Controller + "_F");
-        SpriteBack = Resources.Load<Sprite>("Image/" + job.Controller + "_B");
-        SpriteRenderer.sprite = SpriteFront;
-        SpriteRenderer.flipX = false;
     }
 
     public void Move(List<Vector2Int> paths)
@@ -52,7 +41,6 @@ public class BattleCharacterController : MonoBehaviour
         if (paths.Count > 0)
         {
             SetDirection(paths[0] - Utility.ConvertToVector2Int(transform.position));
-            SetSprite();
 
             transform.DOMove(new Vector3(paths[0].x, BattleController.Instance.TileDic[paths[0]].TileData.Height, paths[0].y), 0.25f).SetEase(Ease.Linear).OnComplete(() =>
             {
@@ -81,99 +69,22 @@ public class BattleCharacterController : MonoBehaviour
 
     public void SetDirection(Vector2Int direction)
     {
-        Direction = direction;
-    }
-
-    public void SetSprite()
-    {
-        Vector2Int localDirection = Vector2Int.RoundToInt(Quaternion.AngleAxis(_cameraRotate.Angle, Vector3.forward) * Direction);
-        if (_cameraRotate.CurrentState == CameraRotate.StateEnum.Slope)
+        if (direction != Vector2Int.zero)
         {
-            if (localDirection == Vector2Int.right)
-            {
-                SpriteRenderer.sprite = SpriteBack;
-                SpriteRenderer.flipX = false;
-            }
-            else if (localDirection == Vector2Int.left)
-            {
-                SpriteRenderer.sprite = SpriteFront;
-                SpriteRenderer.flipX = false;
-            }
-            else if (localDirection == Vector2Int.up)
-            {
-                SpriteRenderer.sprite = SpriteBack;
-                SpriteRenderer.flipX = true;
-            }
-            else if (localDirection == Vector2Int.down)
-            {
-                SpriteRenderer.sprite = SpriteFront;
-                SpriteRenderer.flipX = true;
-            }
-        }
-        else
-        {
-            if (localDirection == Vector2Int.right)
-            {
-                SpriteRenderer.sprite = SpriteFront;
-                SpriteRenderer.flipX = true;
-            }
-            else if (localDirection == Vector2Int.left)
-            {
-                SpriteRenderer.sprite = SpriteFront;
-                SpriteRenderer.flipX = false;
-            }
-            else if (localDirection == Vector2Int.up)
-            {
-                SpriteRenderer.sprite = SpriteBack;
-                SpriteRenderer.flipX = true;
-            }
-            else if (localDirection == Vector2Int.down)
-            {
-                SpriteRenderer.sprite = SpriteFront;
-                SpriteRenderer.flipX = true;
-            }
+            Direction = direction;
+            float angle = Vector3.SignedAngle(Vector3.forward, new Vector3(Direction.x, 0, Direction.y), Vector3.up) + 90;
+            transform.eulerAngles = new Vector3(0, angle, 0);
         }
     }
 
-    public void ChangeSprite(string sprite)
+    public void StartFlash() 
     {
-        SpriteFront = Resources.Load<Sprite>("Image/" + sprite + "_F");
-        SpriteBack = Resources.Load<Sprite>("Image/" + sprite + "_B");
-        SpriteRenderer.sprite = SpriteFront;
-        SpriteRenderer.flipX = false;
+        Flash.Begin();
     }
 
-    public void SetFlash(bool enable)
+    public void StopFlash() 
     {
-        SpriteFlash.SetFlash(enable);
-    }
-
-    public void Rotate(int angle) 
-    {
-        if (_cameraRotate.CurrentState == CameraRotate.StateEnum.Slope) 
-        {
-            transform.DORotate(new Vector3(30, 45 + angle, 0), 1f);
-        }
-        else
-        {
-            transform.DORotate(new Vector3(90, angle, 0), 1f);
-        }
-
-        SetSprite();
-    }
-
-    public void SetAngle() 
-    {
-        if (_cameraRotate.CurrentState == CameraRotate.StateEnum.Slope) 
-        {
-            transform.eulerAngles = new Vector3(30, 45 + _cameraRotate.Angle, 0);
-        }
-        else
-        {
-            transform.eulerAngles = new Vector3(90, _cameraRotate.Angle, 0);
-        }
-
-        SetSprite();
+        Flash.End();
     }
 
     private void OnMouseOver()
@@ -185,14 +96,9 @@ public class BattleCharacterController : MonoBehaviour
     }
     private void Awake()
     {
-        transform.eulerAngles = new Vector3(30, 45, 0);
-
-        _cameraRotate = Camera.main.GetComponent<CameraRotate>();
-        _cameraRotate.RotateHandler += Rotate;
     }
 
     private void OnDestroy()
     {
-        _cameraRotate.RotateHandler -= Rotate;
     }
 }

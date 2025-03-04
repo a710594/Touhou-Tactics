@@ -47,10 +47,10 @@ namespace Battle
                 if(target!=null)
                 {
                     predictionHp = Instance.GetPredictionHp(_character, target, target.Info.CurrentHP, command.Effect);
-                    Instance.BattleUI.SetCharacterInfoUI_2(target.Info);
-                    Instance.BattleUI.SetPredictionInfo_2(target.Info, predictionHp);
+                    Instance.CharacterInfoUIGroup.SetCharacterInfoUI_2(target.Info);
+                    Instance.CharacterInfoUIGroup.SetPredictionInfo_2(target.Info, predictionHp);
                     float hitRate = Instance.GetHitRate(command.Hit, _character, target);
-                    Instance.BattleUI.SetHitRate(Mathf.RoundToInt(hitRate * 100));
+                    Instance.CharacterInfoUIGroup.SetHitRate(Mathf.RoundToInt(hitRate * 100));
                 }
                 
                 Instance.ClearQuad();
@@ -72,7 +72,6 @@ namespace Battle
 
 
                 _character.SetDirection(selectedPosition - Utility.ConvertToVector2Int(_character.transform.position));
-                _character.SetSprite();
 
                 Instance.TileDic[Instance._selectedPosition].TileObject.Select.gameObject.SetActive(true);
             }
@@ -83,8 +82,8 @@ namespace Battle
                 {
                     Instance.BattleUI.StopPredictionLittleHpBar(_allCharacterList[i]);
                 }
-                Instance.BattleUI.StopPredictionInfo();
-                Instance.BattleUI.HideHitRate();
+                Instance.CharacterInfoUIGroup.StopPredictionInfo();
+                Instance.CharacterInfoUIGroup.HideHitRate();
 
                 if (position == Instance._selectedPosition)
                 {
@@ -92,7 +91,7 @@ namespace Battle
                 }
                 else
                 {
-                    Instance.BattleUI.SetCharacterInfoUI_2(null);
+                    Instance.CharacterInfoUIGroup.SetCharacterInfoUI_2(null);
                     Instance.ClearQuad();
                     _context.SetState<CommandState>();
                 }
@@ -100,7 +99,7 @@ namespace Battle
 
             public override void End()
             {
-                Instance._cameraController.Clear();
+                Instance._cameraDraw.Clear();
                 Instance.TileDic[Instance._selectedPosition].TileObject.Select.gameObject.SetActive(false);
             }
         }

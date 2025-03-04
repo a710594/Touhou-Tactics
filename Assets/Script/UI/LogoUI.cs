@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.Networking;
 
 public class LogoUI : MonoBehaviour
 {
@@ -23,14 +24,14 @@ public class LogoUI : MonoBehaviour
     {
         if (SystemManager.Instance.Info.CurrentScene == "Explore")
         {
-            SceneController.Instance.ChangeScene("Explore", (sceneName) =>
+            SceneController.Instance.ChangeScene("Explore", ChangeSceneUI.TypeEnum.Loading,(sceneName) =>
             {
                 Explore.ExploreManager.Instance.Init();
             });
         }
         else
         {
-            SceneController.Instance.ChangeScene("Camp", null);
+            SceneController.Instance.ChangeScene("Camp", ChangeSceneUI.TypeEnum.Loading, null);
         }
     }
 
@@ -38,7 +39,7 @@ public class LogoUI : MonoBehaviour
     {
         if (DataContext.Instance.IsSaveEmpty())
         {
-            SceneController.Instance.ChangeScene("Explore", (sceneName) =>
+            SceneController.Instance.ChangeScene("Explore", ChangeSceneUI.TypeEnum.Loading, (sceneName) =>
             {
                 Explore.ExploreManager.Instance.Init();
             });
@@ -49,7 +50,7 @@ public class LogoUI : MonoBehaviour
             {
                 FileSystem.Instance.Delete();
                 FileSystem.Instance.Init();
-                SceneController.Instance.ChangeScene("Explore", (sceneName) =>
+                SceneController.Instance.ChangeScene("Explore", ChangeSceneUI.TypeEnum.Loading, (sceneName) =>
                 {
                     Explore.ExploreManager.Instance.Init();
                 });
@@ -66,14 +67,34 @@ public class LogoUI : MonoBehaviour
     private void Awake()
     {
         FileSystem.Instance.Init();
-        if (DataContext.Instance.IsSaveEmpty())
-        {
-            ContinueButton.gameObject.SetActive(false);
-        }
+        //if (DataContext.Instance.IsSaveEmpty())
+        //{
+        //    ContinueButton.gameObject.SetActive(false);
+        //}
+        //StartCoroutine(LoadJSON());
 
         StartButton.onClick.AddListener(StartOnClick);
         ContinueButton.onClick.AddListener(ContinueOnClick);
         NewGameButton.onClick.AddListener(NewGameOnClick);
         StartLabel.transform.DOScale(Vector3.one * 1.2f, 1).SetLoops(-1, LoopType.Yoyo);
+    }
+
+    IEnumerator LoadJSON()
+    {
+        string path = Application.streamingAssetsPath + "/Data/Cook.json";
+
+        // WebGL 需要用 UnityWebRequest
+        UnityWebRequest request = UnityWebRequest.Get(path);
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            string json = request.downloadHandler.text;
+            Debug.Log(json);
+        }
+        else
+        {
+            Debug.LogError("無法讀取 JSON：" + request.error);
+        }
     }
 }

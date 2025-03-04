@@ -10,6 +10,7 @@ public class BattleEnemyInfo : BattleCharacterInfo
     {
         Enemy = enemy;
         Name = enemy.Name;
+        FileName = enemy.Controller;
         Lv = lv;
 
         float n = (1 + (lv - 1) * 0.1f);

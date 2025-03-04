@@ -29,6 +29,11 @@ namespace Battle
             };
         }
 
+        public override void Deregister()
+        {
+            BattleController.Instance.CommandStateBeginHandler = null;
+        }
+
         private class State_1 : TutorialState
         {
             public State_1(StateContext context) : base(context)
@@ -38,7 +43,6 @@ namespace Battle
             public override void Begin()
             {
                 BattleController.Instance.CommandStateBeginHandler = null;
-                BattleUI.Instance.SetArrowVisible(false);
                 ((ReimuTutorial)_context.Parent)._conversationUI = ConversationUI.Open(6, false, null, () => 
                 {
                     Vector3 offset = new Vector3(-200, 0, 0);
@@ -171,7 +175,6 @@ namespace Battle
                 ((ReimuTutorial)_context.Parent)._conversationUI.Continue(() =>
                 {
                     BattleController.Instance.EndTutorial();
-                    BattleUI.Instance.SetArrowVisible(true);
                 });
             }
         }

@@ -18,7 +18,7 @@ public class AnchorValueBar : BattleValueBar //顯示在戰場上的小HP條
         base.UpdateData();
         if (_anchor != null)
         {
-            this.transform.position = Camera.main.WorldToScreenPoint(_anchor.position);
+            this.transform.position = Camera.main.WorldToScreenPoint(_anchor.position) + Vector3.up * 70;
         }
     }
 }

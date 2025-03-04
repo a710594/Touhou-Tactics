@@ -26,11 +26,6 @@ public static class Utility
         return new string(charArray);
     }
 
-    //public static Vector2 ConvertToVector2(Vector3 vector3)
-    //{
-    //    return new Vector2(vector3.x, vector3.z);
-    //}
-
     public static Vector2Int ConvertToVector2Int(Vector3 v3)
     {
         return new Vector2Int(Mathf.RoundToInt(v3.x), Mathf.RoundToInt(v3.z));
@@ -517,5 +512,17 @@ public static class Utility
                 }
             }
         }
+    }
+
+    public static Vector3 GetRotateAroundPosition(Vector3 point, Vector3 pivot, Vector3 axis, float angle)
+    {
+        // 計算旋轉後的位置
+        return Quaternion.AngleAxis(angle, axis) * (point - pivot) + pivot;
+    }
+
+    public static Quaternion GetRotateAroundRotation(Quaternion currentRotation, Vector3 axis, float angle)
+    {
+        // 計算旋轉後的 Quaternion
+        return Quaternion.AngleAxis(angle, axis) * currentRotation;
     }
 }

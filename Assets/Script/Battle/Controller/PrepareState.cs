@@ -8,17 +8,13 @@ namespace Battle
     {
         public class PrepareState : BattleControllerState 
         {
-            private Dictionary<int, BattleCharacterController> _tempDic = new Dictionary<int, BattleCharacterController>(); //<JobID, BattleCharacterController>
-
             public PrepareState(StateContext context) : base(context)
             {
-                _characterList = Instance.CharacterList;
+                Instance.TempList.Clear();
             }
 
             public override void Begin()
             {
-                Camera.main.transform.localPosition = new Vector3(-10, 10, -10);
-
                 Instance.SelectBattleCharacterUI.Init(Instance.MinPlayerCount, Instance.MaxPlayerCount, Instance._candidateList);
 
                 for (int i=0; i< Instance.PlayerPositionList.Count; i++) 
@@ -34,76 +30,46 @@ namespace Battle
 
             public override void End()
             {
-                foreach (KeyValuePair<int, BattleCharacterController> pair in _tempDic)
+                for(int i=0; i<Instance.TempList.Count; i++)
                 {
                     Instance._maxIndex++;
-                    pair.Value.Info.Index = Instance._maxIndex;
-                    _characterList.Add(pair.Value);
+                    Instance.TempList[i].Index = Instance._maxIndex;
+                    Instance.TempList[i].Outline.OutlineColor = Color.blue;
+                    Instance.CharacterList.Add(Instance.TempList[i]);
 
-                    pair.Value.MoveEndHandler += Instance.OnMoveEnd;
-                    Instance.BattleUI.SetLittleHpBarAnchor(pair.Value);
-                    Instance.BattleUI.SetLittleHpBarValue(pair.Value);
-                    Instance.BattleUI.SetFloatingNumberPoolAnchor(pair.Value);
+                    Instance.TempList[i].MoveEndHandler += Instance.OnMoveEnd;
+                    Instance.BattleUI.CharacterListGroup.Add(Instance.TempList[i]);
+                    Instance.BattleUI.SetLittleHpBarAnchor(Instance.TempList[i]);
+                    Instance.BattleUI.SetLittleHpBarValue(Instance.TempList[i]);
+                    Instance.BattleUI.SetFloatingNumberPoolAnchor(Instance.TempList[i]);
                 }
                 Instance.BattleUI.gameObject.SetActive(true);
                 Instance.SelectBattleCharacterUI.gameObject.SetActive(false);
 
                 Instance.SortCharacterList(true);
-                Instance.CharacterListGroupInit();
             }
 
-            public BattleCharacterController PlaceCharacter(Vector2Int position, CharacterInfo info)
+            public bool PlaceCharacter(BattleCharacterController character)
             {
+                Vector2Int position = Utility.ConvertToVector2Int(character.transform.position);
                 if (Instance.PlayerPositionList.Contains(position))
                 {
-                    //????M??L?????|
-                    foreach (KeyValuePair<int, BattleCharacterController> pair in _tempDic)
+                    for (int i = 0; i < Instance.TempList.Count; i++)
                     {
-                        if (pair.Key != info.JobId && Utility.ConvertToVector2Int(pair.Value.transform.position) == position)
+                        if (Utility.ConvertToVector2Int(Instance.TempList[i].transform.position) == position)
                         {
-                            return null;
+                            GameObject.Destroy(character.gameObject);
+                            return false;
                         }
                     }
-
-                    if (!_tempDic.ContainsKey(info.JobId))
-                    {
-                        BattleCharacterController character = ((GameObject)GameObject.Instantiate(Resources.Load("Prefab/Character/Player/" + info.Controller), Vector3.zero, Quaternion.identity)).GetComponent<BattleCharacterController>();
-                        character.transform.position = new Vector3(position.x, Instance.TileDic[position].TileData.Height, position.y);
-                        character.transform.SetParent(Instance._root);
-                        JobModel job = DataContext.Instance.JobDic[info.JobId];
-                        character.Init(CharacterManager.Instance.Info.Lv, job);
-                        character.SetAngle();
-                        _tempDic.Add(info.JobId, character);
-                    }
-                    else
-                    {
-                        _tempDic[info.JobId].gameObject.SetActive(true);
-                        _tempDic[info.JobId].transform.position = new Vector3(position.x, Instance.TileDic[position].TileData.Height, position.y);
-                    }
-                    Instance.DragCameraUI.DontDrag = false;
-
-                    return _tempDic[info.JobId];
+                    Instance.TempList.Add(character);
+                    return true;
                 }
                 else
                 {
-                    return null;
+                    GameObject.Destroy(character.gameObject);
+                    return false;
                 }
-            }
-
-            public void SetCharacterSpriteVisible(CharacterInfo characterInfo, bool isVisible) 
-            {
-                Instance.DragCameraUI.DontDrag = !isVisible;
-                if (_tempDic.ContainsKey(characterInfo.JobId))
-                {
-                    _tempDic[characterInfo.JobId].gameObject.SetActive(isVisible);
-                }
-            }
-
-            public void RemoveCharacterSprite(int jobId)
-            {
-                Instance.DragCameraUI.DontDrag = false;
-                GameObject.Destroy(_tempDic[jobId].gameObject);
-                _tempDic.Remove(jobId);
             }
         }
     }

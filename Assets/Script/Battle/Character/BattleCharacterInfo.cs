@@ -15,7 +15,6 @@ public class BattleCharacterInfo
     }
 
     public bool IsAuto = false;
-    public int Index; //sort
     public int ActionCount = 2; //每個角色都有兩次的行動機會
 
     public bool HasUseSkill = false;
@@ -27,6 +26,7 @@ public class BattleCharacterInfo
     public bool CanUseSpell = true; //是否能使用符卡
 
     public string Name;
+    public string FileName;
     public int Lv;
     public int MaxHP;
     public int CurrentHP;

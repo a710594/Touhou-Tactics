@@ -39,13 +39,15 @@ public class ScrollView : MonoBehaviour
     public ScrollGrid SubGrid;
     public ScrollItem ScrollItem;
 
+    [NonSerialized]
+    public List<ScrollGrid> GridList = new List<ScrollGrid>();
+
     private bool _isLock = false;
     private int _currentIndex = 0;
     private int _subGridAmount = 0;
     private int _scrollItemAmount = 0;
     private Vector2 _originGridAnchoredPosition;
     private Vector2 _originContentAnchoredPosition = new Vector2();
-    private List<ScrollGrid> _gridList = new List<ScrollGrid>();
     private List<object> _dataList = new List<object>();
 
     public void Init()
@@ -88,7 +90,7 @@ public class ScrollView : MonoBehaviour
             grid.DragHandler = OnDrag;
             grid.DragEndHandler = OnEndDrag;
             grid.Init(ScrollItem, Type, length, CellSizeX, CellSizeY, SpacingX, SpacingY, _scrollItemAmount);
-            _gridList.Add(grid);
+            GridList.Add(grid);
         }
         _originContentAnchoredPosition = Content.anchoredPosition;
     }
@@ -112,14 +114,6 @@ public class ScrollView : MonoBehaviour
             MainGridRect.anchoredPosition = new Vector2(0, (Content.sizeDelta.y - MainGridRect.sizeDelta.y) / 2);
         }
         _originGridAnchoredPosition = MainGridRect.anchoredPosition;
-    }
-
-    public void CancelSelect() 
-    {
-        for (int i = 0; i < _gridList.Count; i++)
-        {
-            _gridList[i].SetSelect(null);
-        }
     }
 
     public void SetIndex(int index)
@@ -167,28 +161,20 @@ public class ScrollView : MonoBehaviour
     private IEnumerator WaitOneFrame()
     {
         _isLock = true;
-        Debug.Log("Before:" + Content.anchoredPosition);
         yield return new WaitForEndOfFrame();
         _isLock = false;
-        //_originContentAnchoredPosition = Content.anchoredPosition;
-        Debug.Log("After:" + Content.anchoredPosition);
     }
 
     private void Refresh(int index) 
     {
-        for (int i = 0; i < _gridList.Count; i++)
+        for (int i = 0; i < GridList.Count; i++)
         {
-            _gridList[i].RefreshData(index + i, _dataList);
+            GridList[i].RefreshData(index + i, _dataList);
         }
     }
 
     private void OnClick(PointerEventData eventData, ButtonPlus buttonPlus)
     {
-        //for (int i = 0; i < _gridList.Count; i++)
-        //{
-        //    _gridList[i].SetSelect((ScrollItem)buttonPlus);
-        //}
-
         if (ClickHandler != null) 
         {
             ClickHandler(eventData, buttonPlus);

@@ -12,7 +12,7 @@ public class LoadingUI : MonoBehaviour
     private int _count = 0;
     private float _startTime = -1;
 
-    public void Open(Action callback = null)
+    public void Open(Action callback)
     {
         StartCoroutine(Loading(callback));
         _startTime = Time.time;
@@ -38,7 +38,7 @@ public class LoadingUI : MonoBehaviour
 
     private void Update()
     {
-        if (_startTime != -1 && (Time.time - _startTime) > 0.1f)
+        if (_startTime != -1 && (Time.time - _startTime) > 0.5f)
         {
             string text = "Loading.";
             for (int i = 0; i < _count; i++)

@@ -28,44 +28,39 @@ namespace Battle
             return ((TutorialState)_context.CurrentState).CheckScrollItem(obj);
         }
 
-        public virtual bool CanMove() 
+        public virtual bool CheckMove() 
         {
             return ((TutorialState)_context.CurrentState).CanMove();
         }
 
-        public virtual bool CanSkill()
+        public virtual bool CheckSkill()
         {
             return ((TutorialState)_context.CurrentState).CanSkill();
         }
 
-        public virtual bool CanSupport()
+        public virtual bool CheckSupport()
         {
             return ((TutorialState)_context.CurrentState).CanSupport();
         }
 
-        public virtual bool CanSpell()
+        public virtual bool CheckSpell()
         {
             return ((TutorialState)_context.CurrentState).CanSpell();
         }
 
-        public virtual bool CanItem()
+        public virtual bool CheckItem()
         {
             return ((TutorialState)_context.CurrentState).CanItem();
         }
 
-        public virtual bool CanIdle()
+        public virtual bool CheckIdle()
         {
             return ((TutorialState)_context.CurrentState).CanIdle();
         }
 
-        public virtual bool CanReset()
+        public virtual bool CheckReset()
         {
             return ((TutorialState)_context.CurrentState).CanReset();
-        }
-
-        public virtual void CheckState(State state)
-        {
-
         }
 
         protected class TutorialState : State

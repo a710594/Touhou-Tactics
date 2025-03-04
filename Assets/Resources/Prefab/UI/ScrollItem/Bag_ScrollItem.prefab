@@ -171,6 +171,7 @@ GameObject:
   - component: {fileID: 6693603909932070366}
   - component: {fileID: 6079212725711596701}
   - component: {fileID: -717294977607847620}
+  - component: {fileID: 4482144416303560716}
   m_Layer: 5
   m_Name: Bag_ScrollItem
   m_TagString: Untagged
@@ -337,6 +338,30 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4482144416303560716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7601412409212720730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93723e1bc02174441a4806255449d71c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 0
+  Select: {fileID: 3734527666384717746}
+  NotSelect: {fileID: 0}
+  SelectColor: {r: 0, g: 0, b: 0, a: 0}
+  NotSelectColor: {r: 0, g: 0, b: 0, a: 0}
+  SelectImage: {fileID: 0}
+  NotSelectImage: {fileID: 0}
+  Button: {fileID: 4179395175751857934}
+  SelectOnUp: {fileID: 0}
+  SelectOnDown: {fileID: 0}
+  SelectOnLeft: {fileID: 0}
+  SelectOnRight: {fileID: 0}
 --- !u!1 &7928356146514959836
 GameObject:
   m_ObjectHideFlags: 0

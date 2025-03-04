@@ -11,11 +11,9 @@ namespace Battle
         {
             private Command _command;
             private List<Vector2Int> _rangeList;
-            private CameraRotate _cameraRotate;
 
             public TargetState(StateContext context) : base(context)
             {
-                _cameraRotate = Camera.main.GetComponent<CameraRotate>();
             }
 
             public override void Begin()
@@ -50,13 +48,13 @@ namespace Battle
                     if (_command.Track == TrackEnum.Straight)
                     {
                         Utility.CheckLine(_character.transform.position, p, Instance.CharacterList, Instance.TileDic, out bool isBlock, out Vector3 result);
-                        Instance._cameraController.DrawLine(_character.transform.position, result, isBlock);
+                        Instance._cameraDraw.DrawLine(_character.transform.position, result, isBlock);
                         Instance._selectedPosition = Utility.ConvertToVector2Int(result);
                     }
                     else if (_command.Track == TrackEnum.Parabola)
                     {
                         Utility.CheckParabola(_character.transform.position, p, 4, Instance.CharacterList, Instance.TileDic, out bool isBlock, out List<Vector3> result); //?n?????u??????
-                        Instance._cameraController.DrawParabola(result, isBlock);
+                        Instance._cameraDraw.DrawParabola(result, isBlock);
                         Instance._selectedPosition = Utility.ConvertToVector2Int(result.Last());
                     }
                     else

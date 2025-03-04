@@ -130,7 +130,7 @@
 
 				float4 sample = tex2D(_MainTex, i.uv);
 
-				return (light + _AmbientColor + specular + rim) * _Color * sample;
+				return (light + _AmbientColor + rim) * _Color * sample;
 			}
 			ENDCG
 		}

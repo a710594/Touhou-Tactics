@@ -166,6 +166,10 @@ namespace Battle
                 tileObj.transform.SetParent(_root);
                 tileObj.transform.position = new Vector3(pair.Key.x, 0, pair.Key.y);
                 pair.Value.TileObject = tileObj;
+                if(pair.Key == _cameraDefaultPosition) 
+                {
+                    _cameraController.SetMyGameObj(obj);
+                }
 
                 if (pair.Value.AttachData != null)
                 {

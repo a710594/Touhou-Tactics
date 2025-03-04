@@ -1,1 +1,1 @@
-{"HasGetItem":false,"HasSanaeTutorial":false,"HasGetCard":false,"HasUseCard":false,"TriggerEvent":1,"EventConditionList":["TriggerEvent_1","TriggerEvent_2","TriggerEvent_3","SanaeJoin"],"LockDic":{"BackCamp":true,"Cook":true,"Shop":true}}
+{"GetItem":true,"SanaeJoin":true,"SanaeTutorial":true,"MarisaJoin":false,"F2":true,"TriggerList":["TriggerEvent_1","TriggerEvent_2","TriggerEvent_3"]}

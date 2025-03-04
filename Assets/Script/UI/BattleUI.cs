@@ -14,58 +14,22 @@ public class BattleUI : MonoBehaviour
 
     public static BattleUI Instance = null;
 
-    //public Button IdleButton;
-    public ButtonPlus BackgroundButton;
-    public CharacterInfoUI CharacterInfoUI_1;
-    public CharacterInfoUI CharacterInfoUI_2;
+    public Button BackgroundButton;
     public ActionButtonGroup ActionButtonGroup;
-    //public SkillGroup SkillGroup;
     public LittleHpBarWithStatus LittleHpBarWithStatus;
     public Transform HPGroup;
     public FloatingNumberPool FloatingNumberPool;
     public CharacterListGroup CharacterListGroup;
-    //public GameObject PowerPoint;
-    public TipLabel TipLabel;
     public DirectionGroup DirectionGroup;
-    public CameraRotate CameraRotate;
     public LogGroup LogGroup;
-    public Image Arrow;
 
-    private Vector3 _arrowOffset = new Vector3(0, 1.5f, 0);
     private Vector3 _directionPosition = new Vector3();    
     private Dictionary<BattleCharacterController, LittleHpBarWithStatus> _littleHpBarDic = new Dictionary<BattleCharacterController, LittleHpBarWithStatus>();
-    private Transform _arrowTransform = null;
     private Dictionary<BattleCharacterController, FloatingNumberPool> _floatingNumberPoolDic  = new Dictionary<BattleCharacterController, FloatingNumberPool>();
 
     public void SetVisible(bool isVisible) 
     {
         gameObject.SetActive(isVisible);
-    }
-
-    public void SetCharacterInfoUI_1(BattleCharacterInfo info) 
-    {
-        if (info != null)
-        {
-            CharacterInfoUI_1.SetVisible(true);
-            CharacterInfoUI_1.SetData(info);
-        }
-        else 
-        {
-            CharacterInfoUI_1.SetVisible(false);
-        }
-    }
-
-    public void SetCharacterInfoUI_2(BattleCharacterInfo info)
-    {
-        if (info != null)
-        {
-            CharacterInfoUI_2.SetVisible(true);
-            CharacterInfoUI_2.SetData(info);
-        }
-        else
-        {
-            CharacterInfoUI_2.SetVisible(false);
-        }
     }
 
     public void SetActionVisible(bool isVisible)
@@ -84,25 +48,10 @@ public class BattleUI : MonoBehaviour
         ActionButtonGroup.SetScrollView(list);
     }
 
-    public void SetPredictionInfo_1(BattleCharacterInfo info, int predictionHp)
-    {
-        CharacterInfoUI_1.SetHpPrediction(info.CurrentHP, predictionHp, info.MaxHP);
-    }
-
-    public void SetPredictionInfo_2(BattleCharacterInfo info, int predictionHp)
-    {
-        CharacterInfoUI_2.SetHpPrediction(info.CurrentHP, predictionHp, info.MaxHP);
-    }
-
     public void SetPredictionLittleHpBar(BattleCharacterController controller, int predictionHp)
     {
         LittleHpBarWithStatus hpBar = _littleHpBarDic[controller];
         hpBar.SetPrediction(controller.Info.CurrentHP, predictionHp, controller.Info.MaxHP);
-    }
-
-    public void StopPredictionInfo()
-    {
-        CharacterInfoUI_2.StopHpPrediction();
     }
 
     public void StopPredictionLittleHpBar(BattleCharacterController controller)
@@ -111,21 +60,11 @@ public class BattleUI : MonoBehaviour
         hpBar.StopPrediction();
     }
 
-    public void SetHitRate(int hitRate)
-    {
-        CharacterInfoUI_2.SetHitRate(hitRate);
-    }
-
-    public void HideHitRate()
-    {
-        CharacterInfoUI_2.HideHitRate();
-    }
-
     public void SetLittleHpBarAnchor(BattleCharacterController controller) 
     {
         LittleHpBarWithStatus hpBar = Instantiate(LittleHpBarWithStatus);
         hpBar.transform.SetParent(HPGroup);
-        hpBar.SetAnchor(controller.HpAnchor);
+        hpBar.SetAnchor(controller.transform);
         _littleHpBarDic.Add(controller, hpBar);
     }
 
@@ -147,7 +86,7 @@ public class BattleUI : MonoBehaviour
     {
         FloatingNumberPool floatingNumberPool = Instantiate(FloatingNumberPool);
         floatingNumberPool.transform.SetParent(transform);
-        floatingNumberPool.SetAnchor(controller.HpAnchor);
+        floatingNumberPool.SetAnchor(controller.transform);
         _floatingNumberPoolDic.Add(controller, floatingNumberPool);
     }
 
@@ -157,10 +96,6 @@ public class BattleUI : MonoBehaviour
         floatingNumberPool.Play(new Queue<Log>(logList));
     }
 
-    public void CharacterListGroupInit(List<BattleCharacterController> characterList)
-    {
-        CharacterListGroup.Init(characterList);
-    }
 
     public void CharacterListGroupRefresh()
     {
@@ -177,49 +112,9 @@ public class BattleUI : MonoBehaviour
         _directionPosition = position;
     }
 
-    public void SetArrowVisible(bool isVisible)
-    {
-        Arrow.gameObject.SetActive(isVisible);
-    }
-
-    public void SetArrowTransform(Transform transform)
-    {
-        _arrowTransform = transform;
-    }
-
     public void AddLog(string text)
     {
         LogGroup.AddLog(text);
-    }
-
-    private void Rotate(int angle)
-    {
-        if (CameraRotate.CurrentState == CameraRotate.StateEnum.Slope)
-        {
-            DirectionGroup.transform.eulerAngles = new Vector3(60, 0, 45);
-            _arrowOffset = new Vector3(0, 1.5f, 0);
-        }
-        else
-        {
-            DirectionGroup.transform.eulerAngles = new Vector3(0, 0, 0);
-            angle = angle % 360;;
-            if (angle == 0)
-            {
-                _arrowOffset = new Vector3(0, 0, 1.5f);
-            }
-            else if(angle == 90) 
-            {
-                _arrowOffset = new Vector3(1.5f, 0, 0);
-            }
-            else if (angle == 180)
-            {
-                _arrowOffset = new Vector3(0, 0, -1.5f);
-            }
-            else if (angle == 270 || angle == -90)
-            {
-                _arrowOffset = new Vector3(-1.5f, 0, 0);
-            }
-        }
     }
 
     private void DirectionButtonOnClick(Vector2Int direction)
@@ -232,21 +127,41 @@ public class BattleUI : MonoBehaviour
         BattleController.Instance.SetDirection(direction);
     }
 
+    private void BackgroundOnClick() 
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 100))
+        {
+            Vector2Int v2 = Utility.ConvertToVector2Int(hit.point);
+            if (BattleController.Instance.IsTutorialActive && !BattleController.Instance.Tutorial.CheckClick(v2))
+            {
+                return;
+            }
+            BattleController.Instance.Click(v2);
+        }
+        else //?N??????S???????a??
+        {
+            if (BattleController.Instance.IsTutorialActive)
+            {
+                return;
+            }
+            BattleController.Instance.Click(new Vector2Int(int.MinValue, int.MinValue));
+        }
+    }
+
     private void Awake()
     {
         Instance = this;
         SetDirectionGroupVisible(false);
-        CameraRotate.RotateHandler += Rotate;
         DirectionGroup.ClickHandler += DirectionButtonOnClick;
+        BackgroundButton.onClick.AddListener(BackgroundOnClick);
     }
 
     private void Update()
     {
         DirectionGroup.transform.position = Camera.main.WorldToScreenPoint(_directionPosition + Vector3.down * 0.4f);
-        if (_arrowTransform != null) 
-        {
-            Arrow.transform.position = Camera.main.WorldToScreenPoint(_arrowTransform.position + _arrowOffset);
-        }
+        DirectionGroup.transform.eulerAngles = new Vector3(90 - Camera.main.transform.eulerAngles.x, 0, Camera.main.transform.eulerAngles.y);
     }
 
     void Destroy()

@@ -26,7 +26,7 @@ public class FileSystem
         CharacterManager.Instance.Init();
         InputMamager.Instance.Init();
         FlagManager.Instance.Init();
-        FlowController.Instance.Load();
+        EventManager.Instance.Load();
     }
 
     public void Save() 
@@ -36,7 +36,7 @@ public class FileSystem
         Explore.ExploreManager.Instance.Save();
         SystemManager.Instance.Save();
         FlagManager.Instance.Save();
-        FlowController.Instance.Save();
+        EventManager.Instance.Save();
     }
 
     public void Delete() 
@@ -46,6 +46,6 @@ public class FileSystem
         Explore.ExploreManager.Instance.Delete();
         SystemManager.Instance.Delete();
         FlagManager.Instance.Delete();
-        FlowController.Instance.Delete();
+        EventManager.Instance.Delete();
     }
 }

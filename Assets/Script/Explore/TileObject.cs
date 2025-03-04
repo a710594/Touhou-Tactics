@@ -9,7 +9,5 @@ namespace Explore
         public string Name;
         public GameObject Cube;
         public GameObject Quad;
-        public GameObject Icon;
-        public GameObject Treasure;
     }
 }

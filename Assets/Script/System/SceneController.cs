@@ -40,27 +40,29 @@ public class SceneController
     private bool _isInit = false;
     private string _tempScene;
     private string _lastScene;
-    private LoadingUI LoadingUI;
+    private ChangeSceneUI.TypeEnum _changeType;
+    private ChangeSceneUI _changeSceneUI;
     //private SceneMemo _sceneMemo;
 
     public void Init()
     {
-        GameObject obj = GameObject.Find("LoadingUI");
+        GameObject obj = GameObject.Find("ChangeSceneUI");
         if (!_isInit && obj != null)
         {
             SceneManager.sceneLoaded += SceneLoaded;
-            LoadingUI = obj.GetComponent<LoadingUI>();
+            _changeSceneUI = obj.GetComponent<ChangeSceneUI>();
             _isInit = true;
         }
     }
 
-    public void ChangeScene(string scene, Action<string> callback)
+    public void ChangeScene(string scene, ChangeSceneUI.TypeEnum type, Action<string> callback)
     {
         if (!_isLock)
         {
             _isLock = true;
             _tempScene = scene;
             _lastScene = CurrentScene;
+            _changeType = type;
 
             if (BeforeSceneLoadedHandler != null)
             {
@@ -68,8 +70,10 @@ public class SceneController
                 BeforeSceneLoadedHandler = null;
             }
 
-            LoadingUI.Open();
-            SceneManager.LoadSceneAsync(scene);
+            _changeSceneUI.Open(type, () =>
+            {
+                SceneManager.LoadSceneAsync(scene);
+            });
 
             if (callback != null)
             {
@@ -86,7 +90,8 @@ public class SceneController
         {
             CurrentScene = _tempScene;
         }
-        LoadingUI.Close();
+
+        _changeSceneUI.Close(_changeType);
 
         if (AfterSceneLoadedHandler != null)
         {
@@ -94,35 +99,6 @@ public class SceneController
             AfterSceneLoadedHandler -= _tempHandler;
         }
 
-        if (scene.name == "Camp") 
-        {
-            if(!FlowController.Instance.Info.EventConditionList.Contains("SanaeJoin")) 
-            {
-                SanaeJoinEvent sanaeJoinEvent = new SanaeJoinEvent();
-                sanaeJoinEvent.Start();
-                FlowController.Instance.Info.EventConditionList.Add("SanaeJoin");
-            }
-            else if(SystemManager.Instance.Info.MaxFloor == 3 && !FlowController.Instance.Info.EventConditionList.Contains("MarisaJoin"))
-            {
-                MarisaJoinEvent marisaJoinEvent = new MarisaJoinEvent();
-                marisaJoinEvent.Start();
-                FlowController.Instance.Info.EventConditionList.Add("MarisaJoin");
-            }
-            else if(!FlowController.Instance.Info.EventConditionList.Contains("Cook") && _lastScene == "Explore")
-            {
-                CookEvent cookEvent = new CookEvent();
-                cookEvent.Start();
-                FlowController.Instance.Info.EventConditionList.Add("Cook");
-            }
-        }
-        else if(scene.name == "Explore" && _lastScene == "Camp")
-        {
-            if(!FlowController.Instance.Info.EventConditionList.Contains("F2")) 
-            {
-                F2Event f2Event = new F2Event();
-                f2Event.Start();
-                FlowController.Instance.Info.EventConditionList.Add("F2");
-            }
-        }
+        EventManager.Instance.CheckEvent(scene.name, SystemManager.Instance.Info.MaxFloor);
     }
 }

@@ -31,7 +31,7 @@ namespace Battle
                 Instance.BattleResultUI.gameObject.SetActive(true);
                 Instance.BattleResultUI.SetWin(CharacterManager.Instance.Info.Lv, CharacterManager.Instance.Info.Exp, Instance.Exp, itemList, ()=> 
                 {
-                    SceneController.Instance.ChangeScene("Explore", (sceneName) =>
+                    SceneController.Instance.ChangeScene("Explore", ChangeSceneUI.TypeEnum.Fade, (sceneName) =>
                     {
                         Explore.ExploreManager.Instance.Reload();
                     });

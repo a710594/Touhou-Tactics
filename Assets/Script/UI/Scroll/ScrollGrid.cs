@@ -21,10 +21,10 @@ public class ScrollGrid : MonoBehaviour
     public GridLayoutGroup Grid;
 
 
-    [NonReorderable]
+    [NonSerialized]
     public int ItemAmount;
-
-    private List<ScrollItem> _scrollItemList = new List<ScrollItem>();
+    [NonSerialized]
+    public List<ScrollItem> ScrollItemList = new List<ScrollItem>();
 
     public void Init(ScrollItem scrollItem, ScrollView.TypeEnum type, float length, float cellSizeX, float cellSizeY, float spacingX, float spacingY, int itemAmount)
     {
@@ -56,7 +56,7 @@ public class ScrollGrid : MonoBehaviour
             item.DragBegingHandler = OnBeginDrag;
             item.DragHandler = OnDrag;
             item.DragEndHandler = OnEndDrag;
-            _scrollItemList.Add(item);
+            ScrollItemList.Add(item);
         }
     }
 
@@ -64,37 +64,22 @@ public class ScrollGrid : MonoBehaviour
     {
         if(index >= 0)
         {
-            for (int i = 0; i < _scrollItemList.Count; i++)
+            for (int i = 0; i < ScrollItemList.Count; i++)
             {
                 if (index * ItemAmount + i < list.Count)
                 {
                     gameObject.SetActive(true);
-                    _scrollItemList[i].gameObject.SetActive(true);
-                    _scrollItemList[i].SetData(list[index * ItemAmount + i]);
+                    ScrollItemList[i].gameObject.SetActive(true);
+                    ScrollItemList[i].SetData(list[index * ItemAmount + i]);
                 }
                 else
                 {
-                    _scrollItemList[i].gameObject.SetActive(false);
+                    ScrollItemList[i].gameObject.SetActive(false);
                     if (i == 0) 
                     {
                         gameObject.SetActive(false);
                     }
                 }
-            }
-        }
-    }
-
-    public void SetSelect(ScrollItem scrollItem)
-    {
-        for (int i = 0; i < _scrollItemList.Count; i++)
-        {
-            if (_scrollItemList[i].Equals(scrollItem))
-            {
-                _scrollItemList[i].SetSelected(true);
-            }
-            else
-            {
-                _scrollItemList[i].SetSelected(false);
             }
         }
     }
