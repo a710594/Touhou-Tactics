@@ -9,7 +9,7 @@ public class SanaeJoinEvent : MyEvent
         InputMamager.Instance.IsLock = true;
         ConversationUI.Open(7, true, () =>
         {
-            CharacterManager.Instance.Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[7]));
+            CharacterManager.Instance.Info.CharacterList.Add(new CharacterInfo(DataTable.Instance.JobDic[7]));
             InputMamager.Instance.IsLock = false;
         }, null);
     }

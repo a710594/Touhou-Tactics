@@ -37,53 +37,32 @@ namespace Explore
         private bool _hasCollision = false;
         private Transform _parent;
         private Timer _timer = new Timer();
+        private FileLoader _fileLoader;
 
-        public void Init() 
+
+        public void SetFileLoader(FileLoader fileLoader) 
         {
-            if(SystemManager.Instance.Info.MaxFloor == 0) 
-            {
-                File = DataContext.Instance.Load<ExploreFile>("Floor_1", DataContext.PrePathEnum.MapExplore);
-                SystemManager.Instance.Info.CurrentFloor = File.Floor;
-                SystemManager.Instance.Info.MaxFloor = 1;
-            }
-            else
-            {
-                File = DataContext.Instance.Load<ExploreFile>(_fileName, DataContext.PrePathEnum.Save);
-                SystemManager.Instance.Info.CurrentFloor = File.Floor;
-            }
-
-            CreateObject();
+            _fileLoader = fileLoader;
         }
 
-        public void Init(int floor) 
+        public void LoadFile() 
         {
-            if (DataContext.Instance.FixedFloorDic.ContainsKey(floor))
+            SaveManager.Instance.LoadExploreFile((file)=> 
             {
-                FixedFloorModel data = DataContext.Instance.FixedFloorDic[floor];
-                File = DataContext.Instance.Load<ExploreFile>(data.Name, DataContext.PrePathEnum.MapExplore);
-                SystemManager.Instance.Info.CurrentFloor = File.Floor;
-            }
-            else
-            {
-                RandomFloorModel data = DataContext.Instance.RandomFloorDic[floor];
-                File = ExploreFileRandomGenerator.Instance.Create(data);
-            }
-            
-            CreateObject();
+                File = file;
+                CreateObject();
+            });
         }
 
-
-        public void Save()
+        public void CreateFile(int floor) 
         {
-            if (SceneController.Instance.CurrentScene == "Explore")
+            SceneController.Instance.Info.CurrentFloor = floor;
+
+            SaveManager.Instance.CreateExploreFile(floor, (file)=> 
             {
-                DataContext.Instance.Save(File, _fileName, DataContext.PrePathEnum.Save);
-            }
-        }
-
-        public void Delete()
-        {
-            DataContext.Instance.DeleteData(_fileName, DataContext.PrePathEnum.Save);
+                File = file;
+                CreateObject();
+            });
         }
 
         public bool CheckEnemyCollision() 
@@ -109,11 +88,16 @@ namespace Explore
                             }
                             else
                             {
-                                EnemyGroupModel enemyGroup = DataContext.Instance.EnemyGroupDic[enemy.EnemyGroupId];
-                                if(File.Floor>1 && !EventManager.Instance.Info.SanaeTutorial)
+                                EnemyGroupModel enemyGroup = DataTable.Instance.EnemyGroupDic[enemy.EnemyGroupId];
+                                if (File.Floor > 1 && !EventManager.Instance.Info.SanaeTutorial)
                                 {
                                     EventManager.Instance.Info.SanaeTutorial = true;
                                     tutorial = "SanaeTutorial";
+                                }
+                                else if (File.Floor > 1 && !EventManager.Instance.Info.SpellTutorial) 
+                                {
+                                    EventManager.Instance.Info.SpellTutorial = true;
+                                    tutorial = "SpellTutorial";
                                 }
                                 BattleController.Instance.Init(tutorial, enemyGroup);
                             }
@@ -134,9 +118,9 @@ namespace Explore
                 ConfirmUI.Open("要前往下一層嗎？", "確定", "取消", () =>
                 {
                     File.Floor++;
-                    if (File.Floor > SystemManager.Instance.Info.MaxFloor)
+                    if (File.Floor > SceneController.Instance.Info.MaxFloor)
                     {
-                        SystemManager.Instance.Info.MaxFloor = File.Floor;
+                        SceneController.Instance.Info.MaxFloor = File.Floor;
                     }
 
                     _timer.Start(1f, () =>
@@ -283,9 +267,9 @@ namespace Explore
                     ConfirmUI.Open("你打倒了出口的守衛！要前往下一層嗎？", "確定", "取消", () =>
                     {
                         File.Floor++;
-                        if (File.Floor > SystemManager.Instance.Info.MaxFloor)
+                        if (File.Floor > SceneController.Instance.Info.MaxFloor)
                         {
-                            SystemManager.Instance.Info.MaxFloor = File.Floor;
+                            SceneController.Instance.Info.MaxFloor = File.Floor;
                         }
 
                         SceneController.Instance.ChangeScene("Camp", ChangeSceneUI.TypeEnum.Loading, (sceneName) =>

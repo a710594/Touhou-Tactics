@@ -54,12 +54,12 @@ public class CookUI : MonoBehaviour
 
         bool check;
         List<CookModel> cookList = new List<CookModel>();
-        for (int i=0; i<DataContext.Instance.CookList.Count; i++) 
+        for (int i=0; i< DataTable.Instance.CookList.Count; i++) 
         {
             check = true;
-            for (int j=0; j< DataContext.Instance.CookList[i].MaterialList.Count; j++) 
+            for (int j=0; j< DataTable.Instance.CookList[i].MaterialList.Count; j++) 
             {
-                if (!materialIdList.Contains(DataContext.Instance.CookList[i].MaterialList[j])) 
+                if (!materialIdList.Contains(DataTable.Instance.CookList[i].MaterialList[j])) 
                 {
                     check = false;
                     break;
@@ -67,7 +67,7 @@ public class CookUI : MonoBehaviour
             }
             if (check) 
             {
-                cookList.Add(DataContext.Instance.CookList[i]);
+                cookList.Add(DataTable.Instance.CookList[i]);
             }
         }
 
@@ -86,7 +86,7 @@ public class CookUI : MonoBehaviour
 
         if (cook != null)
         {
-            _food = new Food(DataContext.Instance.ItemDic[cook.Result], DataContext.Instance.FoodResultDic[cook.Result], materialIdList);
+            _food = new Food(DataTable.Instance.ItemDic[cook.Result], DataTable.Instance.FoodResultDic[cook.Result], materialIdList);
             ResultNameLabel.text = _food.Name;
             ResultCommentLabel.text = _food.Comment;
             CookButton.gameObject.SetActive(true);

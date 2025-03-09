@@ -1282,7 +1282,7 @@ MonoBehaviour:
   CurrentMode: 1
   EnemyGroupId: 1
   Map: Tutorial_2
-  Tutorial: ReimuTutorial
+  Tutorial: SanaeTutorial
 --- !u!1001 &1507878404
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1611,7 +1611,6 @@ MonoBehaviour:
   Speed: 2
   Distance: 20
   Height: 20
-  CameraObj: {fileID: 1702431277}
   MyGameObj: {fileID: 0}
   Enable: 1
 --- !u!1 &1749139749

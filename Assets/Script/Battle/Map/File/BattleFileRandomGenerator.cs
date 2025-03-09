@@ -10,6 +10,7 @@ namespace Battle
         public Transform Tilemap;
         public Transform CameraDefaultPosition;
         public Transform[] PlayerPosition;
+        public FileLoader FileLoader;
 
         public void BuildFile()
         {
@@ -65,7 +66,7 @@ namespace Battle
             file.TileList = tileList;
             file.PlayerPositionList = playerPositionList;
             file.CameraDefaultPosition = Utility.ConvertToVector2Int(CameraDefaultPosition.position);
-            DataContext.Instance.Save(file, FileName, DataContext.PrePathEnum.MapSeed);
+            FileLoader.Save(file, FileName, FileLoader.PathEnum.MapBattleRandom);
         }
     }
 }

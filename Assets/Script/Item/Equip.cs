@@ -62,8 +62,8 @@ public class Equip
 
     public Equip(int id)
     {
-        ItemModel item = DataContext.Instance.ItemDic[id];
-        EquipModel equip = DataContext.Instance.EquipDic[id];
+        ItemModel item = DataTable.Instance.ItemDic[id];
+        EquipModel equip = DataTable.Instance.EquipDic[id];
 
         Category = equip.Category;
         ID = equip.ID;

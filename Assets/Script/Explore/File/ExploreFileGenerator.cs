@@ -15,6 +15,7 @@ namespace Explore
         public Transform Enemy;
         public Transform Trigger;
         public Transform Treasure;
+        public FileLoader FileLoader;
 
         public void BuildFile()
         {
@@ -100,7 +101,7 @@ namespace Explore
             file.PlayerPosition = file.Start;
             file.PlayerRotationY = 0;
 
-            DataContext.Instance.Save(file, FileName, DataContext.PrePathEnum.MapExplore);
+            FileLoader.Save(file, FileName, FileLoader.PathEnum.MapExplore);
         }
     }
 }

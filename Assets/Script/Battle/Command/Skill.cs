@@ -31,7 +31,7 @@ public class Skill : Command
         Effect = EffectFactory.GetEffect(data.EffectID);
         if(data.SubSkillID != -1)
         {
-            SubCommand = new Skill(DataContext.Instance.SkillDic[data.SubSkillID]);
+            SubCommand = new Skill(DataTable.Instance.SkillDic[data.SubSkillID]);
         }
     }
 

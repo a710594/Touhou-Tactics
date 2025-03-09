@@ -23,53 +23,15 @@ public class ItemManager
     }
 
     public BagInfo Info;
-
-    public void Init()
+    
+    public void Init(BagInfo info) 
     {
-        Load();
-    }
-
-    public void Load()
-    {
-        BagInfo baginfo = DataContext.Instance.Load<BagInfo>(_fileName, DataContext.PrePathEnum.Save);
-        if (baginfo != null)
-        {
-            Info = baginfo;
-
-            foreach(KeyValuePair<int, Consumables> pair in baginfo.ConsumablesDic)
-            {
-                pair.Value.Init();
-            }
-
-            foreach (KeyValuePair<int, Item> pair in baginfo.ItemDic)
-            {
-                pair.Value.Init();
-            }
-
-            for (int i=0; i<baginfo.FoodList.Count; i++) 
-            {
-                baginfo.FoodList[i].Init();
-            }
-        }
-        else
-        {
-            Info = new BagInfo();
-        }
-    }
-
-    public void Save()
-    {
-        DataContext.Instance.Save(Info, _fileName, DataContext.PrePathEnum.Save);
-    }
-
-    public void Delete()
-    {
-        DataContext.Instance.DeleteData(_fileName, DataContext.PrePathEnum.Save);
+        Info = info;
     }
 
     public void AddItem(int id, int amount)
     {
-        ItemModel data = DataContext.Instance.ItemDic[id];
+        ItemModel data = DataTable.Instance.ItemDic[id];
 
         if (data.Category == ItemModel.CategoryEnum.Item)
         {
@@ -103,7 +65,7 @@ public class ItemManager
 
     public bool MinusItem(int id, int amount)
     {
-        ItemModel data = DataContext.Instance.ItemDic[id];
+        ItemModel data = DataTable.Instance.ItemDic[id];
         if (data.Category == ItemModel.CategoryEnum.Item)
         {
             Item item = Info.ItemDic[id];
@@ -198,7 +160,7 @@ public class ItemManager
 
     public int GetAmount(int id)
     {
-        ItemModel data = DataContext.Instance.ItemDic[id];
+        ItemModel data = DataTable.Instance.ItemDic[id];
         if (data.Category == ItemModel.CategoryEnum.Item)
         {
             if (Info.ItemDic.TryGetValue(id, out Item item))

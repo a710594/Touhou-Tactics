@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlagManager
+/*public class FlagManager
 {
     private readonly string _fileName = "FlagInfo";
 
@@ -21,23 +21,9 @@ public class FlagManager
 
     public FlagInfo Info;
 
-    public void Init()
+    public void Init(FlagInfo info)
     {
-        Load();
-    }
-
-    public void Load() 
-    {
-        FlagInfo info = DataContext.Instance.Load<FlagInfo>(_fileName, DataContext.PrePathEnum.Save);
-        if (info != null)
-        {
-            Info = info;
-        }
-        else
-        {
-            Info = new FlagInfo();
-            Info.Init();
-        }
+        Info = info;
     }
 
     public void Save()
@@ -49,4 +35,4 @@ public class FlagManager
     {
         DataContext.Instance.DeleteData(_fileName, DataContext.PrePathEnum.Save);
     }
-}
+}*/

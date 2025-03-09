@@ -11,7 +11,7 @@ public class MarisaJoinEvent : MyEvent
         InputMamager.Instance.IsLock = true;
         ConversationUI.Open(11, true, () =>
         {
-            CharacterManager.Instance.Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[2]));
+            CharacterManager.Instance.Info.CharacterList.Add(new CharacterInfo(DataTable.Instance.JobDic[2]));
             ItemManager.Instance.AddItem(7, 5);
             _campUI = GameObject.Find("CampUI").GetComponent<CampUI>();
             _campUI.CookHandler = CookTutorial;

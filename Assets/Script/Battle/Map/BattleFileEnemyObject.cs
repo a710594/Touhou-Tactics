@@ -11,7 +11,7 @@ public class BattleFileEnemyObject : MonoBehaviour
     public void Init(int id)
     {
         ID = id;
-        EnemyModel data = DataContext.Instance.EnemyDic[ID];
+        EnemyModel data = DataTable.Instance.EnemyDic[ID];
         Sprite.sprite = Resources.Load<Sprite>("Image/" + data.Controller + "_F");
     }
 }

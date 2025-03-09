@@ -19,7 +19,7 @@ public class Food : Command
 
     public Food() { }
 
-    public Food(ItemModel item, FoodResult food, List<int> materialList)
+    public Food(ItemModel item, FoodResultModel food, List<int> materialList)
     {
         ID = item.ID;
         Name = item.Name;
@@ -43,10 +43,10 @@ public class Food : Command
         Track = TrackEnum.None;
         ArrayList = new List<Vector2Int>(){Vector2Int.zero};
 
-        FoodMaterial foodMaterial;
+        FoodMaterialModel foodMaterial;
         for (int i=0; i<materialList.Count; i++) 
         {
-            foodMaterial = DataContext.Instance.FoodMaterialDic[materialList[i]];
+            foodMaterial = DataTable.Instance.FoodMaterialDic[materialList[i]];
             HP += foodMaterial.HP;
             STR += foodMaterial.STR;
             CON += foodMaterial.CON;
@@ -64,8 +64,8 @@ public class Food : Command
     //for debug
     public Food(int id) 
     {
-        ItemModel item = DataContext.Instance.ItemDic[id];
-        FoodResult food = DataContext.Instance.FoodResultDic[id];
+        ItemModel item = DataTable.Instance.ItemDic[id];
+        FoodResultModel food = DataTable.Instance.FoodResultDic[id];
 
         ID = item.ID;
         Name = item.Name;

@@ -17,7 +17,7 @@ public class TreasureUI : MonoBehaviour
         gameObject.SetActive(true);
         TitleLabel_1.gameObject.SetActive(true);
         TitleLabel_2.gameObject.SetActive(false);
-        ItemModel data = DataContext.Instance.ItemDic[id];
+        ItemModel data = DataTable.Instance.ItemDic[id];
         NameLabel.text = data.Name;
     }
 

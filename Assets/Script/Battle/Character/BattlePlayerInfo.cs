@@ -9,7 +9,7 @@ public class BattlePlayerInfo : BattleCharacterInfo
 
     public BattlePlayerInfo(int lv, CharacterInfo info)
     {
-        Job = DataContext.Instance.JobDic[info.JobId];
+        Job = DataTable.Instance.JobDic[info.JobId];
         Name = info.Name;
         FileName = info.Controller;
         Lv = lv;
@@ -31,6 +31,7 @@ public class BattlePlayerInfo : BattleCharacterInfo
 
         SkillList = info.SkillList;
         SupportList = info.SupportList;
+        SpellList = info.SpellList;
 
         Weapon = info.Weapon;
         Armor = info.Armor;

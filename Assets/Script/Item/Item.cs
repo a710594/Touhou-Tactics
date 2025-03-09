@@ -16,13 +16,13 @@ public class Item
     public Item(int id, int amount)
     {
         ID = id;
-        Data = DataContext.Instance.ItemDic[id];
+        Data = DataTable.Instance.ItemDic[id];
         Amount = amount;
     }
 
     public void Init() 
     {
-        Data = DataContext.Instance.ItemDic[ID];
+        Data = DataTable.Instance.ItemDic[ID];
         //if (Data.EffectID != -1)
         //{
         //    Effect = EffectFactory.GetEffect(Data.EffectID);

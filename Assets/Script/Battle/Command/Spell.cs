@@ -25,7 +25,7 @@ public class Spell : Command
 
         if(data.SubSpellID != -1)
         {
-            SubCommand = new Spell(DataContext.Instance.SpellDic[data.SubSpellID]);
+            SubCommand = new Spell(DataTable.Instance.SpellDic[data.SubSpellID]);
         }
     }
 }

@@ -1,10 +1,10 @@
-using System.Collections;
+/*using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SystemManager 
 {
-    private readonly string _fileName = "SystemInfo";
+    private readonly string _fileName = "SceneInfo";
 
     private static SystemManager _instance;
     public static SystemManager Instance
@@ -19,14 +19,12 @@ public class SystemManager
         }
     }
 
-    public SystemInfo Info;
-
     public void Init() 
     {
-        SystemInfo info = DataContext.Instance.Load<SystemInfo>(_fileName, DataContext.PrePathEnum.Save);
+        SceneInfo info = DataContext.Instance.Load<SceneInfo>(_fileName, DataContext.PrePathEnum.Save);
         if (info == null) 
         {
-            info = new SystemInfo();
+            info = new SceneInfo();
         }
         Info = info;
     }
@@ -41,4 +39,4 @@ public class SystemManager
     {
         DataContext.Instance.DeleteData(_fileName, DataContext.PrePathEnum.Save);
     }
-}
+}*/

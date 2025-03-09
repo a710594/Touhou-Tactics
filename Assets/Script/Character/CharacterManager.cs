@@ -5,7 +5,7 @@ using Battle;
 
 public class CharacterManager
 {
-    private readonly string _fileName = "CharacterInfoGroup";
+    private readonly string _fileName = "CharacterGroupInfo";
 
     private static CharacterManager _instance;
     public static CharacterManager Instance
@@ -20,42 +20,11 @@ public class CharacterManager
         }
     }
 
-    public CharacterInfoGroup Info;
+    public CharacterGroupInfo Info;
 
-    public void Init() 
+    public void Init(CharacterGroupInfo info) 
     {
-        CharacterInfoGroup characterInfoGroup = DataContext.Instance.Load<CharacterInfoGroup>(_fileName, DataContext.PrePathEnum.Save);
-        if (characterInfoGroup != null)
-        {
-            Info = characterInfoGroup;
-            for (int i=0; i<characterInfoGroup.CharacterList.Count; i++) 
-            {
-                characterInfoGroup.CharacterList[i].Init();
-            }
-        }
-        else
-        {
-            Info = new CharacterInfoGroup();
-            Info.Lv = 1;
-            Info.Exp = 0;
-            //Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[1]));
-            //Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[2]));
-            //Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[3]));
-            Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[4]));
-            //Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[5]));
-            //Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[6]));
-            //Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[7]));
-        }
-    }
-
-    public void Save()
-    {
-        DataContext.Instance.Save(Info, _fileName, DataContext.PrePathEnum.Save);
-    }
-
-    public void Delete()
-    {
-        DataContext.Instance.DeleteData(_fileName, DataContext.PrePathEnum.Save);
+        Info = info;
     }
 
     public void AddExp(int addExp) 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EventManager
 {
-    private readonly string _fileName = "FlowInfo";
+    private readonly string _fileName = "EventInfo";
 
     private static EventManager _instance;
     public static EventManager Instance
@@ -21,27 +21,9 @@ public class EventManager
 
     public EventInfo Info;
 
-    public void Load() 
+    public void Init(EventInfo info) 
     {
-        EventInfo info = DataContext.Instance.Load<EventInfo>(_fileName, DataContext.PrePathEnum.Save);
-        if (info != null)
-        {
-            Info = info;
-        }
-        else
-        {
-            Info = new EventInfo();
-        }
-    }
-
-    public void Save()
-    {
-        DataContext.Instance.Save(Info, _fileName, DataContext.PrePathEnum.Save);
-    }
-
-    public void Delete()
-    {
-        DataContext.Instance.DeleteData(_fileName, DataContext.PrePathEnum.Save);
+        Info = info;
     }
 
     public void CheckEvent(string scene, int maxFloor) 

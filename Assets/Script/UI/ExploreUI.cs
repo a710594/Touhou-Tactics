@@ -48,7 +48,7 @@ public class ExploreUI : MonoBehaviour
     void Update()
     {
         ExploreFile file = ExploreManager.Instance.File;
-        if (!InputMamager.Instance.IsLock)
+        if (file!=null && !InputMamager.Instance.IsLock)
         {
             Vector2Int v2 = Utility.ConvertToVector2Int(Camera.main.transform.position + Camera.main.transform.forward);
             SpaceLabel.SetActive(ExploreManager.Instance.CheckTreasure(v2));

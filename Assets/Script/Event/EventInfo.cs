@@ -10,6 +10,7 @@ public class EventInfo
     public bool SanaeTutorial = false;
     public bool MarisaJoin = false;
     public bool F2 = false;
+    public bool SpellTutorial = false;
 
     public List<string> TriggerList = new List<string>(); //已觸發的踩地事件
 }

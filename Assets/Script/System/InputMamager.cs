@@ -47,7 +47,7 @@ public class InputMamager
 
     private void Update() 
     {
-        if(SceneController.Instance.CurrentScene != "Battle") 
+        if(SceneController.Instance.Info != null && SceneController.Instance.Info.CurrentScene != "Battle") 
         {
             if (!IsLock)
             {

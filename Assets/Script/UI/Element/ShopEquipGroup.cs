@@ -29,7 +29,7 @@ public class ShopEquipGroup : MonoBehaviour
 
     public void SetScrollViewBuy()
     {
-        ScrollView.SetData(new List<object>(DataContext.Instance.ShopItemDic[ItemModel.CategoryEnum.Equip]));
+        ScrollView.SetData(new List<object>(DataTable.Instance.ShopItemDic[ItemModel.CategoryEnum.Equip]));
         SetButtonGroup();
         MaterialLabel.text = "";
     }
@@ -119,7 +119,7 @@ public class ShopEquipGroup : MonoBehaviour
         MaterialLabel.text = "";
         for (int i = 0; i < shopData.MaterialIDList.Count; i++)
         {
-            itemData = DataContext.Instance.ItemDic[shopData.MaterialIDList[i]];
+            itemData = DataTable.Instance.ItemDic[shopData.MaterialIDList[i]];
             MaterialLabel.text += itemData.Name + " " + ItemManager.Instance.GetAmount(itemData.ID) + "/" + shopData.MaterialAmountList[i] + " ";
         }
     }
@@ -142,7 +142,7 @@ public class ShopEquipGroup : MonoBehaviour
         if (buttonPlus.Data is ShopModel)
         {
             ShopModel shopData = (ShopModel)buttonPlus.Data;
-            SetDetailByData(DataContext.Instance.ItemDic[shopData.ID], DataContext.Instance.EquipDic[shopData.ID]);
+            SetDetailByData(DataTable.Instance.ItemDic[shopData.ID], DataTable.Instance.EquipDic[shopData.ID]);
             SetMaterial(shopData);
             ShopDataHandler(shopData);
         }

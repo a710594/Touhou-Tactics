@@ -22,7 +22,7 @@ public class BagInfo
         List<Item> list = new List<Item>();
         foreach(KeyValuePair<int, Item> pair in ItemDic) 
         {
-            if (DataContext.Instance.FoodMaterialDic.ContainsKey(pair.Key)) 
+            if (DataTable.Instance.FoodMaterialDic.ContainsKey(pair.Key)) 
             {
                 list.Add(pair.Value);
             }

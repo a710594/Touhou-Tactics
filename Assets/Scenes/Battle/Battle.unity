@@ -933,6 +933,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4717055257057571077, guid: 4cc41468816d82647965f9cbcad0f811, type: 3}
+      propertyPath: TipLabel
+      value: 
+      objectReference: {fileID: 861492191}
     - target: {fileID: 4717055257328476972, guid: 4cc41468816d82647965f9cbcad0f811, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1739,7 +1743,6 @@ MonoBehaviour:
   Speed: 2
   Distance: 20
   Height: 20
-  CameraObj: {fileID: 1460439611}
   MyGameObj: {fileID: 0}
   Enable: 1
 --- !u!114 &1460439613

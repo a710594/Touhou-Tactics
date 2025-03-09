@@ -8,14 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class DataContext
+/*public class DataContext
 {
     private static readonly string _dataPrePath = Application.streamingAssetsPath + "/Data/";
     private static readonly string _savePrePath = Application.streamingAssetsPath + "/Save/";
-    private static readonly string _settingPrePath = Application.streamingAssetsPath + "/Setting/";
     private static readonly string _mapExplorePrePath = Application.streamingAssetsPath + "/Map/Explore/";
-    private static readonly string _mapBattlePrePath = Application.streamingAssetsPath + "/Map/Battle/";
-    private static readonly string _mapSeedPrePath = Application.streamingAssetsPath + "/MapSeed/";
+    private static readonly string _mapBattleRandomPrePath = Application.streamingAssetsPath + "/Map/Battle/Random/";
+    private static readonly string _mapBattleFixedPrePath = Application.streamingAssetsPath + "/Map/Battle/Fixed/";
 
 
     private static DataContext _instance;
@@ -36,10 +35,9 @@ public class DataContext
         None = -1,
         Data,
         Save,
-        Setting,
         MapExplore,
-        MapBattle,
-        MapSeed,
+        MapBattleFixed,
+        MapBattleRandom,
     }
 
     public List<JobModel> JobList = new List<JobModel>();
@@ -58,8 +56,8 @@ public class DataContext
     public List<TreasureModel> TreasureList = new List<TreasureModel>();
     public List<ShopModel> ShopList = new List<ShopModel>();
     public List<CookModel> CookList = new List<CookModel>();
-    public List<FoodMaterial> FoodMaterialList = new List<FoodMaterial>();
-    public List<FoodResult> FoodResultList = new List<FoodResult>();
+    public List<FoodMaterialModel> FoodMaterialList = new List<FoodMaterialModel>();
+    public List<FoodResultModel> FoodResultList = new List<FoodResultModel>();
     public List<ConsumablesModel> ConsumablesList = new List<ConsumablesModel>();
     public List<SpellModel> SpellList = new List<SpellModel>();
     public List<ConversationModel> ConversationList = new List<ConversationModel>();
@@ -81,17 +79,14 @@ public class DataContext
     public Dictionary<int, RoomModel> RoomDic = new Dictionary<int, RoomModel>();
     public Dictionary<int, TreasureModel> TreasureDic = new Dictionary<int, TreasureModel>();
     public Dictionary<ItemModel.CategoryEnum, List<ShopModel>> ShopItemDic = new Dictionary<ItemModel.CategoryEnum, List<ShopModel>>();
-    public Dictionary<int, FoodMaterial> FoodMaterialDic = new Dictionary<int, FoodMaterial>();
-    public Dictionary<int, FoodResult> FoodResultDic = new Dictionary<int, FoodResult>();
+    public Dictionary<int, FoodMaterialModel> FoodMaterialDic = new Dictionary<int, FoodMaterialModel>();
+    public Dictionary<int, FoodResultModel> FoodResultDic = new Dictionary<int, FoodResultModel>();
     public Dictionary<int, ConsumablesModel> ConsumablesDic = new Dictionary<int, ConsumablesModel>();
     public Dictionary<int, SpellModel> SpellDic = new Dictionary<int, SpellModel>();
-    public Dictionary<int, List<SpellModel>> JobCardDic = new Dictionary<int, List<SpellModel>>();
+    public Dictionary<int, List<SpellModel>> JobSpellDic = new Dictionary<int, List<SpellModel>>();
     public Dictionary<int, Dictionary<int, ConversationModel>> ConversationDic = new Dictionary<int, Dictionary<int, ConversationModel>>();
     public Dictionary<int, TileModel> TileDic = new Dictionary<int, TileModel>();
     public Dictionary<int, AttachModel> AttachDic = new Dictionary<int, AttachModel>();
-
-    //public Dictionary<string, TileSetting> TileSettingDic = new Dictionary<string, TileSetting>();
-    //public Dictionary<string, AttachSetting> AttachSettingDic = new Dictionary<string, AttachSetting>();
 
     public void Init() 
     {
@@ -228,14 +223,14 @@ public class DataContext
             CookList[i].GetList();
         }
 
-        FoodMaterialList = Load<List<FoodMaterial>>("FoodMaterial", PrePathEnum.Data);
+        FoodMaterialList = Load<List<FoodMaterialModel>>("FoodMaterial", PrePathEnum.Data);
         FoodMaterialDic.Clear();
         for (int i = 0; i < FoodMaterialList.Count; i++)
         {
             FoodMaterialDic.Add(FoodMaterialList[i].ID, FoodMaterialList[i]);
         }
 
-        FoodResultList = Load<List<FoodResult>>("FoodResult", PrePathEnum.Data);
+        FoodResultList = Load<List<FoodResultModel>>("FoodResult", PrePathEnum.Data);
         FoodResultDic.Clear();
         for (int i = 0; i < FoodResultList.Count; i++)
         {
@@ -254,11 +249,11 @@ public class DataContext
         for (int i = 0; i < SpellList.Count; i++)
         {
             SpellDic.Add(SpellList[i].ID, SpellList[i]);
-            if (!JobCardDic.ContainsKey(SpellList[i].Job)) 
+            if (!JobSpellDic.ContainsKey(SpellList[i].Job)) 
             {
-                JobCardDic.Add(SpellList[i].Job, new List<SpellModel>());
+                JobSpellDic.Add(SpellList[i].Job, new List<SpellModel>());
             }
-            JobCardDic[SpellList[i].Job].Add(SpellList[i]);
+            JobSpellDic[SpellList[i].Job].Add(SpellList[i]);
         }
 
         ConversationList = Load<List<ConversationModel>>("Conversation", PrePathEnum.Data);
@@ -289,78 +284,13 @@ public class DataContext
         {
             AttachDic.Add(AttachList[i].ID, AttachList[i]);
         }
-
-        /*DirectoryInfo d;
-        FileInfo[] Files;
-        string str = ""; 
-        string jsonString;
-        AttachSetting attach;
-        TileSetting tile;
-
-        d = new DirectoryInfo(Application.streamingAssetsPath + "./Attach/"); //Assuming Test is your Folder
-        Files = d.GetFiles("*.json"); //Getting Text files
-        AttachSettingDic.Clear();
-        foreach (FileInfo file in Files)
-        {
-            str = str + ", " + file.Name;
-            jsonString = File.ReadAllText(file.FullName);
-            attach = JsonConvert.DeserializeObject<AttachSetting>(jsonString);
-            AttachSettingDic.Add(attach.ID, attach);
-
-        }
-
-        d = new DirectoryInfo(Application.streamingAssetsPath + "./Tile/"); //Assuming Test is your Folder
-        Files = d.GetFiles("*.json"); //Getting Text files
-        TileSettingDic.Clear();
-        foreach (FileInfo file in Files)
-        {
-            str = str + ", " + file.Name;
-            jsonString = File.ReadAllText(file.FullName);
-            tile = JsonConvert.DeserializeObject<TileSetting>(jsonString);
-            TileSettingDic.Add(tile.ID, tile);
-
-        }*/
     }
 
     public T Load<T>(string fileName, PrePathEnum prePathEnum)
     {
         try
         {
-            string path;
-            string prePath = "";
-            if(prePathEnum == PrePathEnum.Data) 
-            {
-                prePath = _dataPrePath;
-            }
-            else if(prePathEnum == PrePathEnum.Save) 
-            {
-                prePath = _savePrePath;
-            }
-            else if (prePathEnum == PrePathEnum.Setting)
-            {
-                prePath = _settingPrePath;
-            }
-            else if (prePathEnum == PrePathEnum.MapExplore)
-            {
-                prePath = _mapExplorePrePath;
-            }
-            else if (prePathEnum == PrePathEnum.MapBattle)
-            {
-                prePath = _mapBattlePrePath;
-            }
-            else if (prePathEnum == PrePathEnum.MapSeed)
-            {
-                prePath = _mapSeedPrePath;
-            }
-
-            if (fileName == "")
-            {
-                path = Path.Combine(prePath, typeof(T).Name + ".json");
-            }
-            else
-            {
-                path = Path.Combine(prePath, fileName + ".json");
-            }
+            string path = GetPath(fileName, prePathEnum);
             string jsonString = File.ReadAllText(path);
             T info = JsonConvert.DeserializeObject<T>(jsonString);
             return info;
@@ -376,41 +306,7 @@ public class DataContext
     {
         try
         {
-            string path;
-            string prePath = "";
-            if (prePathEnum == PrePathEnum.Data)
-            {
-                prePath = _dataPrePath;
-            }
-            else if (prePathEnum == PrePathEnum.Save)
-            {
-                prePath = _savePrePath;
-            }
-            else if (prePathEnum == PrePathEnum.Setting)
-            {
-                prePath = _settingPrePath;
-            }
-            else if (prePathEnum == PrePathEnum.MapExplore)
-            {
-                prePath = _mapExplorePrePath;
-            }
-            else if (prePathEnum == PrePathEnum.MapBattle)
-            {
-                prePath = _mapBattlePrePath;
-            }
-            else if (prePathEnum == PrePathEnum.MapSeed)
-            {
-                prePath = _mapSeedPrePath;
-            }
-
-            if (fileName == "")
-            {
-                path = Path.Combine(prePath, typeof(T).Name + ".json");
-            }
-            else
-            {
-                path = Path.Combine(prePath, fileName + ".json");
-            }
+            string path = GetPath(fileName, prePathEnum);
             File.WriteAllText(path, JsonConvert.SerializeObject(t));
         }
         catch (Exception ex)
@@ -441,21 +337,21 @@ public class DataContext
         {
             prePath = _savePrePath;
         }
-        else if (prePathEnum == PrePathEnum.Setting)
-        {
-            prePath = _settingPrePath;
-        }
         else if (prePathEnum == PrePathEnum.MapExplore)
         {
             prePath = _mapExplorePrePath;
         }
-        else if (prePathEnum == PrePathEnum.MapBattle)
+        else if (prePathEnum == PrePathEnum.MapBattleFixed)
         {
-            prePath = _mapBattlePrePath;
+            prePath = _mapBattleFixedPrePath;
+        }
+        else if(prePathEnum == PrePathEnum.MapBattleRandom) 
+        {
+            prePath = _mapBattleRandomPrePath;
         }
 
         path = Path.Combine(prePath, fileName + ".json");
 
         return path;
     }
-}
+}*/

@@ -84,7 +84,7 @@ public class ExploreFileRandomGenerator
         RoomModel roomData;
         for (int i = 0; i < floorData.RoomCount * 2; i++) 
         {
-            roomData = DataContext.Instance.RoomDic[1];
+            roomData = DataTable.Instance.RoomDic[1];
             Vector2Int location = new Vector2Int(
                 _random.Next(0, File.Size.x),
                 _random.Next(0, File.Size.y)
@@ -222,7 +222,7 @@ public class ExploreFileRandomGenerator
         {
             room = _isolatedList[i];
             pos = room.GetRandomPosition();
-            treasureData = DataContext.Instance.TreasureDic[3];
+            treasureData = DataTable.Instance.TreasureDic[3];
             treasureFile = new ExploreFileTreasure(treasureData.GetItemID(), treasureData.Prefab, treasureData.Height, pos, 0);
             File.TreasureList.Add(treasureFile);
             room.SetNotAvailable(pos);
@@ -243,7 +243,7 @@ public class ExploreFileRandomGenerator
             for (int j=0; j<count; j++) 
             {
                 pos = _otherList[i].GetRandomPosition();
-                treasureData = DataContext.Instance.TreasureDic[room.Data.GetTreasure()];
+                treasureData = DataTable.Instance.TreasureDic[room.Data.GetTreasure()];
                 treasureFile = new ExploreFileTreasure(treasureData.GetItemID(), treasureData.Prefab, treasureData.Height, pos, 0);
                 File.TreasureList.Add(treasureFile);
                 _otherList[i].SetNotAvailable(pos);
@@ -424,12 +424,12 @@ public class ExploreFileRandomGenerator
         EnemyGroupModel enemyGroup;
         for (int i = 0; i < _otherList.Count; i++) //每個房間有一隻怪
         {
-            enemyGroup = DataContext.Instance.EnemyGroupDic[data.GetEnemyGroupID()];
+            enemyGroup = DataTable.Instance.EnemyGroupDic[data.GetEnemyGroupID()];
             pos = _otherList[i].GetRandomPosition();
             File.EnemyList.Add(new ExploreFileEnemy(enemyGroup, pos));
         }
 
-        enemyGroup = DataContext.Instance.EnemyGroupDic[data.BossEnemyGroup];
+        enemyGroup = DataTable.Instance.EnemyGroupDic[data.BossEnemyGroup];
         pos = File.Goal;
         File.EnemyList.Add(new ExploreFileEnemy(enemyGroup, pos));
     }

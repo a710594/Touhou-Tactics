@@ -16,7 +16,7 @@ public class DebugItemUI : MonoBehaviour
         {
             int id = int.Parse(IDField.text);
             int amount = int.Parse(AmountField.text);
-            ItemModel data = DataContext.Instance.ItemDic[id];
+            ItemModel data = DataTable.Instance.ItemDic[id];
             if (data.Category == ItemModel.CategoryEnum.Equip)
             {
                 for (int i = 0; i < amount; i++)
@@ -35,7 +35,7 @@ public class DebugItemUI : MonoBehaviour
             {
                 ItemManager.Instance.AddItem(id, amount);
             }
-            Debug.Log(DataContext.Instance.ItemDic[id].Name + " " + AmountField.text);
+            Debug.Log(DataTable.Instance.ItemDic[id].Name + " " + AmountField.text);
         }
         catch(Exception ex) 
         {

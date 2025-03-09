@@ -78,7 +78,7 @@ public partial class ShopUI : MonoBehaviour
             if (_selectedShopData.MaterialAmountList.Count == 0)
             {
                 ItemManager.Instance.AddItem(_selectedShopData.ID, 1);
-                ItemModel item = DataContext.Instance.ItemDic[_selectedShopData.ID];
+                ItemModel item = DataTable.Instance.ItemDic[_selectedShopData.ID];
                 ShopItemGroup.SetScrollViewBuy(item.Category);
                 ItemManager.Instance.Info.Money -= _selectedShopData.Price;
                 MoneyLabel.text = ItemManager.Instance.Info.Money + "$";
@@ -103,7 +103,7 @@ public partial class ShopUI : MonoBehaviour
                     ItemManager.Instance.Info.Money -= _selectedShopData.Price;
                     MoneyLabel.text = ItemManager.Instance.Info.Money + "$";
 
-                    ItemModel itemData = DataContext.Instance.ItemDic[_selectedShopData.ID];
+                    ItemModel itemData = DataTable.Instance.ItemDic[_selectedShopData.ID];
                     if (itemData.Category == ItemModel.CategoryEnum.Equip)
                     {
                         ItemManager.Instance.AddEquip(_selectedShopData.ID);

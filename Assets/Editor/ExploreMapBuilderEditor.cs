@@ -14,7 +14,7 @@ public class ExploreMapBuilderEditor : Editor
         ExploreMapBuilder builder = (ExploreMapBuilder)target;
         if (GUILayout.Button("¿é¥XÀÉ®×"))
         {
-            RandomFloorModel data = DataContext.Instance.RandomFloorDic[builder.Floor];
+            RandomFloorModel data = DataTable.Instance.RandomFloorDic[builder.Floor];
             ExploreFile file = ExploreFileRandomGenerator.Instance.Create(data, builder.Seed);
             builder.GetRandom(file, out Dictionary<Vector2Int, ExploreFileTile> tileDic);
         }

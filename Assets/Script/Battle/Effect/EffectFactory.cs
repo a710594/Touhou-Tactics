@@ -10,7 +10,7 @@ namespace Battle
     {
         public static Effect GetEffect(int id)
         {
-            return GetEffect(DataContext.Instance.EffectDic[id]);
+            return GetEffect(DataTable.Instance.EffectDic[id]);
         }
 
         public static Effect GetEffect(EffectModel data)
@@ -72,7 +72,7 @@ namespace Battle
         public static Effect GetEffect(int id, int addValue)
         {
             Effect effect = null;
-            EffectModel data = DataContext.Instance.EffectDic[id];
+            EffectModel data = DataTable.Instance.EffectDic[id];
 
             if (data.Type == EffectModel.TypeEnum.Medicine)
             {

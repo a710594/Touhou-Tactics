@@ -47,11 +47,6 @@ namespace Battle
                     BattleController.Instance.EndTutorial();
                 });
             }
-
-            public override bool CanMove()
-            {
-                return true;
-            }
         }
     }
 }

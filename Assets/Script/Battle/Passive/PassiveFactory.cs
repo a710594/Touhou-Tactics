@@ -11,31 +11,31 @@ namespace Battle
             Passive passive = null;
             if (id == 1)
             {
-                passive = new TankPassive(DataContext.Instance.PassiveDic[id]);
+                passive = new TankPassive(DataTable.Instance.PassiveDic[id]);
             }
             else if (id == 2)
             {
-                passive = new MagicianPassive(DataContext.Instance.PassiveDic[id]);
+                passive = new MagicianPassive(DataTable.Instance.PassiveDic[id]);
             }
             else if (id == 3)
             {
-                passive = new ArcherPassive(DataContext.Instance.PassiveDic[id]);
+                passive = new ArcherPassive(DataTable.Instance.PassiveDic[id]);
             }
             else if (id == 4)
             {
-                passive = new SwordmanPassive(DataContext.Instance.PassiveDic[id]);
+                passive = new SwordmanPassive(DataTable.Instance.PassiveDic[id]);
             }
             else if (id == 5)
             {
-                passive = new DreamEaterPassive(DataContext.Instance.PassiveDic[id]);
+                passive = new DreamEaterPassive(DataTable.Instance.PassiveDic[id]);
             }
             else if (id == 6)
             {
-                passive = new PhoenixPassive(DataContext.Instance.PassiveDic[id]);
+                passive = new PhoenixPassive(DataTable.Instance.PassiveDic[id]);
             }
             else if (id == 7)
             {
-                passive = new MiraclePassive(DataContext.Instance.PassiveDic[id]);
+                passive = new MiraclePassive(DataTable.Instance.PassiveDic[id]);
             }
 
             return passive;

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FileSystem
+/*public class FileSystem
 {
     private static FileSystem _instance;
     public static FileSystem Instance
@@ -48,4 +48,4 @@ public class FileSystem
         FlagManager.Instance.Delete();
         EventManager.Instance.Delete();
     }
-}
+}*/

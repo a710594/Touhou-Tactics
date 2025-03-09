@@ -3,7 +3,7 @@
 {"ID":1,"Page":3,"Pause":0,"Name":"魂魄妖夢","Dialog":"總之先想辦法找到靈夢吧","Image_1":"魂魄妖夢","Motion_1":0,"Image_2":"x","Motion_2":0,"Image_3":"x"},
 {"ID":1,"Page":4,"Pause":0,"Name":"[教學]","Dialog":"基本操作 W/上：向前移動 S/下：向下移動 A/左：向左旋轉 D/右：向右旋轉 Q：向左平移 E：向右平移","Image_1":"x","Motion_1":0,"Image_2":"x","Motion_2":0,"Image_3":"x"},
 {"ID":2,"Page":1,"Pause":0,"Name":"魂魄妖夢","Dialog":"感覺不對勁，是敵人嗎？","Image_1":"魂魄妖夢","Motion_1":0,"Image_2":"x","Motion_2":0,"Image_3":"x"},
-{"ID":2,"Page":2,"Pause":0,"Name":"[教學]","Dialog":"地圖中黃色的球體代表敵人，碰到它就會進入戰鬥","Image_1":"x","Motion_1":0,"Image_2":"x","Motion_2":0,"Image_3":"x"},
+{"ID":2,"Page":2,"Pause":0,"Name":"[教學]","Dialog":"碰到敵人就會進入戰鬥","Image_1":"x","Motion_1":0,"Image_2":"x","Motion_2":0,"Image_3":"x"},
 {"ID":3,"Page":1,"Pause":1,"Name":"[教學]","Dialog":"將角色從下方拖曳至場景的白色區域中。 白色的區域代表可放置角色的位置。 將角色配置完後按開始戰鬥。","Image_1":"x","Motion_1":0,"Image_2":"x","Motion_2":0,"Image_3":"Tutorial_1"},
 {"ID":3,"Page":2,"Pause":1,"Name":"[教學]","Dialog":"地圖上白色的區域代表可移動的範圍。 請點選箭頭指示的位置。","Image_1":"x","Motion_1":0,"Image_2":"x","Motion_2":0,"Image_3":"x"},
 {"ID":3,"Page":3,"Pause":1,"Name":"[教學]","Dialog":"現在地圖上白色的範圍是可以放技能的地方。 請點選箭頭指示的位置。","Image_1":"x","Motion_1":0,"Image_2":"x","Motion_2":0,"Image_3":"x"},
@@ -54,4 +54,5 @@
 {"ID":11,"Page":7,"Pause":0,"Name":"[系統]","Dialog":"霧雨魔理沙加入了隊伍！","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
 {"ID":11,"Page":8,"Pause":0,"Name":"[系統]","Dialog":"得到了5個野菇","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
 {"ID":12,"Page":1,"Pause":0,"Name":"[教學]","Dialog":"有一部分的素材能被做成料理。料理可以在探索或戰鬥中回復角色的 HP","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"},
-{"ID":12,"Page":2,"Pause":0,"Name":"[教學]","Dialog":"不同的素材組合能做出擁有不同效果的料理","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"}]
+{"ID":12,"Page":2,"Pause":0,"Name":"[教學]","Dialog":"不同的素材組合能做出擁有不同效果的料理","Image_1":"-","Motion_1":0,"Image_2":"","Motion_2":0,"Image_3":"x"},
+{"ID":13,"Page":1,"Pause":0,"Name":"[教學]","Dialog":"符卡的效果非常強大，但是使用後所有的隊友的符卡都會進入冷卻狀態，必需等到下次行動的時候才能使用符卡。","Image_1":"-","Motion_1":0,"Image_2":"-","Motion_2":0,"Image_3":"x"}]

@@ -16,7 +16,7 @@ public class ShopScrollItem : ScrollItem
         if (obj is ShopModel)
         {
             ShopModel shopData = (ShopModel)obj;
-            ItemModel itemData = DataContext.Instance.ItemDic[shopData.ID];
+            ItemModel itemData = DataTable.Instance.ItemDic[shopData.ID];
             NameLabel.text = itemData.Name;
             if(itemData.Category == ItemModel.CategoryEnum.Consumables || itemData.Category == ItemModel.CategoryEnum.Item) 
             {

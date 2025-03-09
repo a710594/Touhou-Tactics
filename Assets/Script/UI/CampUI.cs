@@ -52,7 +52,7 @@ public class CampUI : MonoBehaviour
         {
             FloorGroup.SetActive(true);
             List<object> floorList = new List<object>();
-            for (int i = 1; i <= SystemManager.Instance.Info.MaxFloor; i++)
+            for (int i = 1; i <= SceneController.Instance.Info.MaxFloor; i++)
             {
                 floorList.Add(i);
             }
@@ -77,7 +77,7 @@ public class CampUI : MonoBehaviour
         {
             SceneController.Instance.ChangeScene("Explore", ChangeSceneUI.TypeEnum.Loading, (sceneName) =>
             {
-                Explore.ExploreManager.Instance.Init((int)buttonPlus.Data);
+                Explore.ExploreManager.Instance.CreateFile(floor);
             });
         }
         else

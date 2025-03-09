@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class SceneController
 {
+    private readonly string _fileName = "SceneInfo";
+
     private static SceneController _instance;
     public static SceneController Instance
     {
@@ -19,22 +21,12 @@ public class SceneController
         }
     }
 
-    public string CurrentScene
-    {
-        get 
-        { 
-            return SystemManager.Instance.Info.CurrentScene;
-        }
-        set 
-        {
-            SystemManager.Instance.Info.CurrentScene = value;
-        }
-    }
-
     public Action BeforeSceneLoadedHandler;
     public Action<string> AfterSceneLoadedHandler;
 
     private Action<string> _tempHandler;
+
+    public SceneInfo Info;
 
     private bool _isLock = false;
     private bool _isInit = false;
@@ -44,8 +36,9 @@ public class SceneController
     private ChangeSceneUI _changeSceneUI;
     //private SceneMemo _sceneMemo;
 
-    public void Init()
+    public void Init(SceneInfo info)
     {
+        Info = info;
         GameObject obj = GameObject.Find("ChangeSceneUI");
         if (!_isInit && obj != null)
         {
@@ -61,7 +54,7 @@ public class SceneController
         {
             _isLock = true;
             _tempScene = scene;
-            _lastScene = CurrentScene;
+            _lastScene = Info.CurrentScene;
             _changeType = type;
 
             if (BeforeSceneLoadedHandler != null)
@@ -88,7 +81,7 @@ public class SceneController
         _isLock = false;
         if (_tempScene != null)
         {
-            CurrentScene = _tempScene;
+            Info.CurrentScene = _tempScene;
         }
 
         _changeSceneUI.Close(_changeType);
@@ -99,6 +92,6 @@ public class SceneController
             AfterSceneLoadedHandler -= _tempHandler;
         }
 
-        EventManager.Instance.CheckEvent(scene.name, SystemManager.Instance.Info.MaxFloor);
+        EventManager.Instance.CheckEvent(scene.name, Info.MaxFloor);
     }
 }

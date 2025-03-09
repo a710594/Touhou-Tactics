@@ -13,6 +13,7 @@ public class LogoUI : MonoBehaviour
     public GameObject LogoGroup;
     public GameObject ButtonGroup;
     public GameObject StartLabel;
+    public FileLoader FileLoader;
 
     private void StartOnClick() 
     {
@@ -22,11 +23,11 @@ public class LogoUI : MonoBehaviour
 
     private void ContinueOnClick() 
     {
-        if (SystemManager.Instance.Info.CurrentScene == "Explore")
+        if (SceneController.Instance.Info.CurrentScene == "Explore")
         {
             SceneController.Instance.ChangeScene("Explore", ChangeSceneUI.TypeEnum.Loading,(sceneName) =>
             {
-                Explore.ExploreManager.Instance.Init();
+                Explore.ExploreManager.Instance.LoadFile();
             });
         }
         else
@@ -37,26 +38,49 @@ public class LogoUI : MonoBehaviour
 
     private void NewGameOnClick() 
     {
-        if (DataContext.Instance.IsSaveEmpty())
+        if (SceneController.Instance.Info.CurrentFloor == 0)
         {
             SceneController.Instance.ChangeScene("Explore", ChangeSceneUI.TypeEnum.Loading, (sceneName) =>
             {
-                Explore.ExploreManager.Instance.Init();
+                Explore.ExploreManager.Instance.CreateFile(1);
             });
         }
         else
         {
             ConfirmUI.Open("確定要刪除存檔，重新開始遊戲嗎？", "確定", "取消", () =>
             {
-                FileSystem.Instance.Delete();
-                FileSystem.Instance.Init();
-                SceneController.Instance.ChangeScene("Explore", ChangeSceneUI.TypeEnum.Loading, (sceneName) =>
+                SaveManager.Instance.Delete();
+                SaveManager.Instance.Load(()=> 
                 {
-                    Explore.ExploreManager.Instance.Init();
+                    SceneController.Instance.ChangeScene("Explore", ChangeSceneUI.TypeEnum.Loading, (sceneName) =>
+                    {
+                        Explore.ExploreManager.Instance.CreateFile(1);
+                    });
                 });
 
             }, null);
         }
+    }
+
+    private void LoadData() 
+    {
+        DataTable.Instance.Load(LoadSave);
+    }
+
+    private void LoadSave() 
+    {
+        SaveManager.Instance.Load(()=> 
+        {
+            if((SceneController.Instance.Info.CurrentFloor == 0)) 
+            {
+                ContinueButton.gameObject.SetActive(false);
+            }
+
+            StartButton.onClick.AddListener(StartOnClick);
+            ContinueButton.onClick.AddListener(ContinueOnClick);
+            NewGameButton.onClick.AddListener(NewGameOnClick);
+            StartLabel.transform.DOScale(Vector3.one * 1.2f, 1).SetLoops(-1, LoopType.Yoyo);
+        });
     }
 
     private void OnDestroy()
@@ -66,35 +90,8 @@ public class LogoUI : MonoBehaviour
 
     private void Awake()
     {
-        FileSystem.Instance.Init();
-        //if (DataContext.Instance.IsSaveEmpty())
-        //{
-        //    ContinueButton.gameObject.SetActive(false);
-        //}
-        //StartCoroutine(LoadJSON());
-
-        StartButton.onClick.AddListener(StartOnClick);
-        ContinueButton.onClick.AddListener(ContinueOnClick);
-        NewGameButton.onClick.AddListener(NewGameOnClick);
-        StartLabel.transform.DOScale(Vector3.one * 1.2f, 1).SetLoops(-1, LoopType.Yoyo);
-    }
-
-    IEnumerator LoadJSON()
-    {
-        string path = Application.streamingAssetsPath + "/Data/Cook.json";
-
-        // WebGL 需要用 UnityWebRequest
-        UnityWebRequest request = UnityWebRequest.Get(path);
-        yield return request.SendWebRequest();
-
-        if (request.result == UnityWebRequest.Result.Success)
-        {
-            string json = request.downloadHandler.text;
-            Debug.Log(json);
-        }
-        else
-        {
-            Debug.LogError("無法讀取 JSON：" + request.error);
-        }
+        LoadData();
+        InputMamager.Instance.Init();
+        Explore.ExploreManager.Instance.SetFileLoader(FileLoader);
     }
 }

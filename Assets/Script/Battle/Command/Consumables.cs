@@ -14,8 +14,8 @@ public class Consumables : Command
 
     public Consumables(int id, int amount)
     {
-        ItemModel itemData = DataContext.Instance.ItemDic[id];
-        ConsumablesModel consumablesData = DataContext.Instance.ConsumablesDic[id];
+        ItemModel itemData = DataTable.Instance.ItemDic[id];
+        ConsumablesModel consumablesData = DataTable.Instance.ConsumablesDic[id];
         ID = id;
         Amount = amount;
         Price = itemData.Price;
@@ -38,7 +38,7 @@ public class Consumables : Command
 
     public void Init()
     {
-        ConsumablesModel consumablesData = DataContext.Instance.ConsumablesDic[ID];
+        ConsumablesModel consumablesData = DataTable.Instance.ConsumablesDic[ID];
         if (consumablesData.EffectID != -1)
         {
             Effect = EffectFactory.GetEffect(consumablesData.EffectID);

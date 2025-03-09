@@ -74,6 +74,7 @@ namespace Battle
         public BattleResultUI BattleResultUI;
         public SelectCharacterUI SelectBattleCharacterUI;
         private Transform _root;
+        private FileLoader _fileLoader;
         private List<CharacterInfo> _candidateList = new List<CharacterInfo>();
         private Dictionary<Command, List<BattleCharacterController>> _commandTargetDic = new Dictionary<Command, List<BattleCharacterController>>();
 
@@ -82,177 +83,183 @@ namespace Battle
         public void Init(string tutorial, string map) 
         {
             GetGameObject();
-            BattleFileFixed file = DataContext.Instance.Load<BattleFileFixed>(map, DataContext.PrePathEnum.MapBattle);
-            PlayerPositionList = file.PlayerPositionList;
-            Exp = file.Exp;
-            MinPlayerCount = file.PlayerCount;
-            MaxPlayerCount = file.PlayerCount;
-            _maxIndex = 0;
-            _canClick = true;
-            CharacterList.Clear();
-            DyingList.Clear();
-            DeadList.Clear();
-            EnemyDataList.Clear();
-
-            for (int i=0; i<file.EnemyList.Count; i++) 
+            _fileLoader.Load<BattleFileFixed>(map, FileLoader.PathEnum.MapBattleFixed, (obj)=> 
             {
-                EnemyDataList.Add(DataContext.Instance.EnemyDic[file.EnemyList[i].ID]);
-                CreateEnemy(file.EnemyList[i].ID, file.EnemyList[i].Lv, file.EnemyList[i].Position);
-            }
+                BattleFileFixed file = (BattleFileFixed)obj;
+                PlayerPositionList = file.PlayerPositionList;
+                Exp = file.Exp;
+                MinPlayerCount = file.PlayerCount;
+                MaxPlayerCount = file.PlayerCount;
+                _maxIndex = 0;
+                _canClick = true;
+                CharacterList.Clear();
+                DyingList.Clear();
+                DeadList.Clear();
+                EnemyDataList.Clear();
 
-            BattleInfoTile tile;
-            TileDic.Clear();
-            for (int i = 0; i < file.TileList.Count; i++)
-            {
-                tile = new BattleInfoTile();
-                tile.TileData = DataContext.Instance.TileDic[file.TileList[i].ID];
-                TileDic.Add(file.TileList[i].Position, tile);
-            }
+                for (int i = 0; i < file.EnemyList.Count; i++)
+                {
+                    EnemyDataList.Add(DataTable.Instance.EnemyDic[file.EnemyList[i].ID]);
+                    CreateEnemy(file.EnemyList[i].ID, file.EnemyList[i].Lv, file.EnemyList[i].Position);
+                }
 
-            SetMinAndMax();
-            CreateObject();
-            InitState();
-            SetTutorial(tutorial);
+                BattleInfoTile tile;
+                TileDic.Clear();
+                for (int i = 0; i < file.TileList.Count; i++)
+                {
+                    tile = new BattleInfoTile();
+                    tile.TileData = DataTable.Instance.TileDic[file.TileList[i].ID];
+                    TileDic.Add(file.TileList[i].Position, tile);
+                }
+
+                SetMinAndMax();
+                CreateObject();
+                InitState();
+                SetTutorial(tutorial);
+            });
         }
 
         public void Init(string tutorial, EnemyGroupModel enemyGroup) 
         {
             GetGameObject();
-            BattleFileRandom file = DataContext.Instance.Load<BattleFileRandom>(enemyGroup.GetMap(), DataContext.PrePathEnum.MapSeed);
-            PlayerPositionList = file.PlayerPositionList;
-            _cameraDefaultPosition = file.CameraDefaultPosition;
-            Exp = enemyGroup.Exp;
-            MinPlayerCount = enemyGroup.MinPlayerCount;
-            MaxPlayerCount = enemyGroup.MaxPlayerCount;
-            if (CharacterManager.Instance.SurvivalCount() < MaxPlayerCount)
+            _fileLoader.Load<BattleFileRandom>(enemyGroup.GetMap(), FileLoader.PathEnum.MapBattleRandom, (obj) => 
             {
-                MaxPlayerCount = CharacterManager.Instance.SurvivalCount();
-            }
-            _maxIndex = 0;
-            _canClick = true;
-            CharacterList.Clear();
-            DyingList.Clear();
-            DeadList.Clear();
-            EnemyDataList.Clear();
-
-            Vector2Int position;
-            TileModel tileData;
-            BattleInfoTile tileInfo;
-            AttachModel attachData;
-            Queue<Vector2Int> queue = new Queue<Vector2Int>();
-
-            BattleInfoTile tile;
-            TileDic.Clear();
-            for (int i = 0; i < file.TileList.Count; i++)
-            {
-                tile = new BattleInfoTile();
-                tile.TileData = DataContext.Instance.TileDic[file.TileList[i].ID];
-                TileDic.Add(file.TileList[i].Position, tile);
-                if (tile.TileData.Enqueue)
+                BattleFileRandom file = (BattleFileRandom)obj;
+                PlayerPositionList = file.PlayerPositionList;
+                _cameraDefaultPosition = file.CameraDefaultPosition;
+                Exp = enemyGroup.Exp;
+                MinPlayerCount = enemyGroup.MinPlayerCount;
+                MaxPlayerCount = enemyGroup.MaxPlayerCount;
+                if (CharacterManager.Instance.SurvivalCount() < MaxPlayerCount)
                 {
-                    queue.Enqueue(file.TileList[i].Position);
+                    MaxPlayerCount = CharacterManager.Instance.SurvivalCount();
                 }
-            }
+                _maxIndex = 0;
+                _canClick = true;
+                CharacterList.Clear();
+                DyingList.Clear();
+                DeadList.Clear();
+                EnemyDataList.Clear();
 
-            //BFS
-            while (queue.Count != 0)
-            {
-                position = queue.Dequeue();
-                if ((position + Vector2Int.up).y <= file.MaxY && !TileDic.ContainsKey(position + Vector2Int.up))
+                Vector2Int position;
+                TileModel tileData;
+                BattleInfoTile tileInfo;
+                AttachModel attachData;
+                Queue<Vector2Int> queue = new Queue<Vector2Int>();
+
+                BattleInfoTile tile;
+                TileDic.Clear();
+                for (int i = 0; i < file.TileList.Count; i++)
                 {
-                    tileData = GetAdjacentTile(TileDic[position].TileData, Vector2Int.up);
-                    tileInfo = new BattleInfoTile();
-                    tileInfo.TileData = tileData;
-                    TileDic.Add(position + Vector2Int.up, tileInfo);
-                    if (tileData.Enqueue)
+                    tile = new BattleInfoTile();
+                    tile.TileData = DataTable.Instance.TileDic[file.TileList[i].ID];
+                    TileDic.Add(file.TileList[i].Position, tile);
+                    if (tile.TileData.Enqueue)
                     {
-                        queue.Enqueue(position + Vector2Int.up);
+                        queue.Enqueue(file.TileList[i].Position);
                     }
                 }
-                if ((position + Vector2Int.down).y >= file.MinY && !TileDic.ContainsKey(position + Vector2Int.down))
+
+                //BFS
+                while (queue.Count != 0)
                 {
-                    tileData = GetAdjacentTile(TileDic[position].TileData, Vector2Int.down);
-                    tileInfo = new BattleInfoTile();
-                    tileInfo.TileData = tileData;
-                    TileDic.Add(position + Vector2Int.down, tileInfo);
-                    if (tileData.Enqueue)
+                    position = queue.Dequeue();
+                    if ((position + Vector2Int.up).y <= file.MaxY && !TileDic.ContainsKey(position + Vector2Int.up))
                     {
-                        queue.Enqueue(position + Vector2Int.down);
+                        tileData = GetAdjacentTile(TileDic[position].TileData, Vector2Int.up);
+                        tileInfo = new BattleInfoTile();
+                        tileInfo.TileData = tileData;
+                        TileDic.Add(position + Vector2Int.up, tileInfo);
+                        if (tileData.Enqueue)
+                        {
+                            queue.Enqueue(position + Vector2Int.up);
+                        }
+                    }
+                    if ((position + Vector2Int.down).y >= file.MinY && !TileDic.ContainsKey(position + Vector2Int.down))
+                    {
+                        tileData = GetAdjacentTile(TileDic[position].TileData, Vector2Int.down);
+                        tileInfo = new BattleInfoTile();
+                        tileInfo.TileData = tileData;
+                        TileDic.Add(position + Vector2Int.down, tileInfo);
+                        if (tileData.Enqueue)
+                        {
+                            queue.Enqueue(position + Vector2Int.down);
+                        }
+                    }
+                    if ((position + Vector2Int.left).x >= file.MinX && !TileDic.ContainsKey(position + Vector2Int.left))
+                    {
+                        tileData = GetAdjacentTile(TileDic[position].TileData, Vector2Int.left);
+                        tileInfo = new BattleInfoTile();
+                        tileInfo.TileData = tileData;
+                        TileDic.Add(position + Vector2Int.left, tileInfo);
+                        if (tileData.Enqueue)
+                        {
+                            queue.Enqueue(position + Vector2Int.left);
+                        }
+                    }
+                    if ((position + Vector2Int.right).x <= file.MaxX && !TileDic.ContainsKey(position + Vector2Int.right))
+                    {
+                        tileData = GetAdjacentTile(TileDic[position].TileData, Vector2Int.right);
+                        tileInfo = new BattleInfoTile();
+                        tileInfo.TileData = tileData;
+                        TileDic.Add(position + Vector2Int.right, tileInfo);
+                        if (tileData.Enqueue)
+                        {
+                            queue.Enqueue(position + Vector2Int.right);
+                        }
                     }
                 }
-                if ((position + Vector2Int.left).x >= file.MinX && !TileDic.ContainsKey(position + Vector2Int.left))
+
+                //Attach
+                foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in TileDic)
                 {
-                    tileData = GetAdjacentTile(TileDic[position].TileData, Vector2Int.left);
-                    tileInfo = new BattleInfoTile();
-                    tileInfo.TileData = tileData;
-                    TileDic.Add(position + Vector2Int.left, tileInfo);
-                    if (tileData.Enqueue)
+                    if (!file.PlayerPositionList.Contains(pair.Key))
                     {
-                        queue.Enqueue(position + Vector2Int.left);
+                        attachData = GetAttachRandomly(pair.Value.TileData);
+                        pair.Value.AttachData = attachData;
                     }
                 }
-                if ((position + Vector2Int.right).x <= file.MaxX && !TileDic.ContainsKey(position + Vector2Int.right))
+
+                //Life Game
+                int count = 5;
+                while (count > 0)
                 {
-                    tileData = GetAdjacentTile(TileDic[position].TileData, Vector2Int.right);
-                    tileInfo = new BattleInfoTile();
-                    tileInfo.TileData = tileData;
-                    TileDic.Add(position + Vector2Int.right, tileInfo);
-                    if (tileData.Enqueue)
+                    NextGeneration(file);
+                    count--;
+                }
+
+                //Create Enemy
+                List<Vector2Int> invalidList = new List<Vector2Int>();
+                foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in TileDic)
+                {
+                    if (pair.Value.MoveCost == 0)
                     {
-                        queue.Enqueue(position + Vector2Int.right);
+                        invalidList.Add(pair.Key);
                     }
                 }
-            }
 
-            //Attach
-            foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in TileDic)
-            {
-                if (!file.PlayerPositionList.Contains(pair.Key))
+                for (int i = 0; i < PlayerPositionList.Count; i++)
                 {
-                    attachData = GetAttachRandomly(pair.Value.TileData);
-                    pair.Value.AttachData = attachData;
+                    invalidList.Add(PlayerPositionList[i]);
                 }
-            }
 
-            //Life Game
-            int count = 5;
-            while (count > 0)
-            {
-                NextGeneration(file);
-                count--;
-            }
-
-            //Create Enemy
-            List<Vector2Int> invalidList = new List<Vector2Int>();
-            foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in TileDic)
-            {
-                if (pair.Value.MoveCost == 0)
+                int height;
+                for (int i = 0; i < enemyGroup.EnemyList.Count; i++)
                 {
-                    invalidList.Add(pair.Key);
+                    if (Utility.GetRandomPosition(file.MinX, file.MaxX, file.MinY, file.MaxY, invalidList, out Vector2Int result))
+                    {
+                        EnemyDataList.Add(DataTable.Instance.EnemyDic[enemyGroup.EnemyList[i]]);
+                        height = TileDic[result].TileData.Height;
+                        CreateEnemy(enemyGroup.EnemyList[i], enemyGroup.Lv, new Vector3(result.x, height, result.y));
+                        invalidList.Add(result);
+                    }
                 }
-            }
 
-            for (int i = 0; i < PlayerPositionList.Count; i++)
-            {
-                invalidList.Add(PlayerPositionList[i]);
-            }
-
-            int height;
-            for (int i = 0; i < enemyGroup.EnemyList.Count; i++)
-            {
-                if (Utility.GetRandomPosition(file.MinX, file.MaxX, file.MinY, file.MaxY, invalidList, out Vector2Int result))
-                {
-                    EnemyDataList.Add(DataContext.Instance.EnemyDic[enemyGroup.EnemyList[i]]);
-                    height = TileDic[result].TileData.Height;
-                    CreateEnemy(enemyGroup.EnemyList[i], enemyGroup.Lv, new Vector3(result.x, height, result.y));
-                    invalidList.Add(result);
-                }
-            }
-
-            SetMinAndMax();
-            CreateObject();
-            InitState();
-            SetTutorial(tutorial);
+                SetMinAndMax();
+                CreateObject();
+                InitState();
+                SetTutorial(tutorial);
+            });
         }
 
         private void GetGameObject() 
@@ -266,6 +273,7 @@ namespace Battle
             _root = GameObject.Find("BattleController").transform;
             _cameraDraw = Camera.main.GetComponent<CameraDraw>();
             _cameraController = Camera.main.GetComponent<CameraController>();
+            _fileLoader = GameObject.Find("FileLoader").GetComponent<FileLoader>();
         }
 
         private void SetMinAndMax() 
@@ -588,7 +596,7 @@ namespace Battle
 
         public void CreateEnemy(int id, int lv, Vector3 position) 
         {
-            EnemyModel enemyData = DataContext.Instance.EnemyDic[id];
+            EnemyModel enemyData = DataTable.Instance.EnemyDic[id];
             CreateEnemy(enemyData, lv, position);
         }
 

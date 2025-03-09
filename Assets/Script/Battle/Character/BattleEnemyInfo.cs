@@ -31,7 +31,7 @@ public class BattleEnemyInfo : BattleCharacterInfo
 
         for (int i = 0; i < enemy.SkillList.Count; i++)
         {
-            SkillList.Add(new Skill(DataContext.Instance.SkillDic[enemy.SkillList[i]]));
+            SkillList.Add(new Skill(DataTable.Instance.SkillDic[enemy.SkillList[i]]));
         }
 
         Weapon = new Equip(EquipModel.CategoryEnum.Weapon);

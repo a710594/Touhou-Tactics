@@ -28,7 +28,7 @@ public class SystemUI : MonoBehaviour
 
     public void Init() 
     {
-        CampButton.gameObject.SetActive(SceneController.Instance.CurrentScene == "Explore");
+        CampButton.gameObject.SetActive(SceneController.Instance.Info.CurrentScene == "Explore");
     }
 
     private void CampOnClick() 
@@ -48,7 +48,7 @@ public class SystemUI : MonoBehaviour
     {
         ConfirmUI.Open("要存檔嗎？", "確定", "取消", () =>
         {
-            FileSystem.Instance.Save();
+            SaveManager.Instance.Save();
             InputMamager.Instance.Unlock();
             Destroy(gameObject);
         }, null);

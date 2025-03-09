@@ -8,7 +8,7 @@ namespace Battle
     {
         public static Status GetStatus(int id)
         {
-            return GetStatus(DataContext.Instance.StatusDic[id]);
+            return GetStatus(DataTable.Instance.StatusDic[id]);
         }
 
         public static Status GetStatus(StatusModel data)

@@ -32,7 +32,7 @@ public class CharacterInfo
     [NonSerialized]
     public List<Passive> PassiveList = new List<Passive>();
     [NonSerialized]
-    public List<Spell> CardList = new List<Spell>();
+    public List<Spell> SpellList = new List<Spell>();
 
     public int JobId;
 
@@ -75,48 +75,48 @@ public class CharacterInfo
 
     public void Init() 
     {
-        JobModel job = DataContext.Instance.JobDic[JobId];
+        JobModel job = DataTable.Instance.JobDic[JobId];
 
         if (job.Skill_1 != -1)
         {
-            SkillList.Add(new Skill(DataContext.Instance.SkillDic[job.Skill_1]));
+            SkillList.Add(new Skill(DataTable.Instance.SkillDic[job.Skill_1]));
         }
         if (job.Skill_2 != -1)
         {
-            SkillList.Add(new Skill(DataContext.Instance.SkillDic[job.Skill_2]));
+            SkillList.Add(new Skill(DataTable.Instance.SkillDic[job.Skill_2]));
         }
         if (job.Skill_3 != -1)
         {
-            SkillList.Add(new Skill(DataContext.Instance.SkillDic[job.Skill_3]));
+            SkillList.Add(new Skill(DataTable.Instance.SkillDic[job.Skill_3]));
         }
         if (job.Skill_4 != -1)
         {
-            SkillList.Add(new Skill(DataContext.Instance.SkillDic[job.Skill_4]));
+            SkillList.Add(new Skill(DataTable.Instance.SkillDic[job.Skill_4]));
         }
         if (job.Skill_5 != -1)
         {
-            SkillList.Add(new Skill(DataContext.Instance.SkillDic[job.Skill_5]));
+            SkillList.Add(new Skill(DataTable.Instance.SkillDic[job.Skill_5]));
         }
 
         if (job.Support_1 != -1)
         {
-            SupportList.Add(new Support(DataContext.Instance.SupportDic[job.Support_1]));
+            SupportList.Add(new Support(DataTable.Instance.SupportDic[job.Support_1]));
         }
         if (job.Support_2 != -1)
         {
-            SupportList.Add(new Support(DataContext.Instance.SupportDic[job.Support_2]));
+            SupportList.Add(new Support(DataTable.Instance.SupportDic[job.Support_2]));
         }
         if (job.Support_3 != -1)
         {
-            SupportList.Add(new Support(DataContext.Instance.SupportDic[job.Support_3]));
+            SupportList.Add(new Support(DataTable.Instance.SupportDic[job.Support_3]));
         }
         if (job.Support_4 != -1)
         {
-            SupportList.Add(new Support(DataContext.Instance.SupportDic[job.Support_4]));
+            SupportList.Add(new Support(DataTable.Instance.SupportDic[job.Support_4]));
         }
         if (job.Support_5 != -1)
         {
-            SupportList.Add(new Support(DataContext.Instance.SupportDic[job.Support_5]));
+            SupportList.Add(new Support(DataTable.Instance.SupportDic[job.Support_5]));
         }
 
         if (job.Passive != -1)
@@ -126,13 +126,13 @@ public class CharacterInfo
 
         if (job.Spell_1 != -1)
         {
-            CardList.Add(new Spell(DataContext.Instance.SpellDic[job.Spell_1]));
+            SpellList.Add(new Spell(DataTable.Instance.SpellDic[job.Spell_1]));
         }
     }
 
     public void SetLv(int lv) 
     {
-        JobModel job = DataContext.Instance.JobDic[JobId];
+        JobModel job = DataTable.Instance.JobDic[JobId];
         float n = (1 + (lv - 1) * 0.1f);
         MaxHP = Mathf.RoundToInt(job.HP * n);
         STR = Mathf.RoundToInt(job.STR * n);

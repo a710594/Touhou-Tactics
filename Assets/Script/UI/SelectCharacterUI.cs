@@ -61,7 +61,6 @@ namespace Battle
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit, 100))
             {
-                Debug.Log(hit.collider.name + " " + hit.collider.transform.position);
                 if (hit.collider.tag == "BattleTile" && BattleController.Instance.PlayerPositionList.Contains(Utility.ConvertToVector2Int(hit.collider.transform.position)))
                 {
                     BattleInfoTile tile = BattleController.Instance.TileDic[Utility.ConvertToVector2Int(hit.collider.transform.position)];

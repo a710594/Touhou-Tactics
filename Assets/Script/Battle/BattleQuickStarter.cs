@@ -16,20 +16,30 @@ public class BattleQuickStarter : MonoBehaviour
     public string Map;
     public string Tutorial;
 
+    private void LoadData()
+    {
+        DataTable.Instance.Load(LoadSave);
+    }
+
+    private void LoadSave()
+    {
+        SaveManager.Instance.Load(() =>
+        {
+            if (CurrentMode == ModeEnum.Fixed)
+            {
+                BattleController.Instance.Init(Tutorial, Map);
+            }
+            else
+            {
+                EnemyGroupModel enemyGroup = DataTable.Instance.EnemyGroupDic[EnemyGroupId];
+                BattleController.Instance.Init(Tutorial, enemyGroup);
+            }
+        });
+    }
+
     void Start()
     {
-        DataContext.Instance.Init();
-        CharacterManager.Instance.Init();
-
-        if(CurrentMode == ModeEnum.Fixed) 
-        {
-            BattleController.Instance.Init(Tutorial, Map);
-        }
-        else
-        {
-            EnemyGroupModel enemyGroup = DataContext.Instance.EnemyGroupDic[EnemyGroupId];
-            BattleController.Instance.Init("", enemyGroup);
-        }
+        LoadData();
     }
 
     // Update is called once per frame

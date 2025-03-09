@@ -189,22 +189,22 @@ namespace Battle
 
             if (direction == Vector2Int.left)
             {
-                pool = DataContext.Instance.TileDic[tile.ID].LeftPool;
+                pool = DataTable.Instance.TileDic[tile.ID].LeftPool;
             }
             else if (direction == Vector2Int.right)
             {
-                pool = DataContext.Instance.TileDic[tile.ID].RightPool;
+                pool = DataTable.Instance.TileDic[tile.ID].RightPool;
             }
             else if (direction == Vector2Int.up)
             {
-                pool = DataContext.Instance.TileDic[tile.ID].UpPool;
+                pool = DataTable.Instance.TileDic[tile.ID].UpPool;
             }
             else if (direction == Vector2Int.down)
             {
-                pool = DataContext.Instance.TileDic[tile.ID].DownPool;
+                pool = DataTable.Instance.TileDic[tile.ID].DownPool;
             }
             random = UnityEngine.Random.Range(0, pool.Count);
-            adjacentTile = DataContext.Instance.TileDic[pool[random]];
+            adjacentTile = DataTable.Instance.TileDic[pool[random]];
 
             return adjacentTile;
         }
@@ -216,7 +216,7 @@ namespace Battle
             AttachModel attach = null;
             if (id != 0)
             {
-                attach = DataContext.Instance.AttachDic[id];
+                attach = DataTable.Instance.AttachDic[id];
             }
 
             return attach;

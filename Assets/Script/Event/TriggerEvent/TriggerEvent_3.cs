@@ -11,7 +11,7 @@ public class TriggerEvent_3 : MyEvent
         exploreUI.SetVisible(false);
         ConversationUI.Open(4, true, () =>
         {
-            CharacterManager.Instance.Info.CharacterList.Add(new CharacterInfo(DataContext.Instance.JobDic[1]));
+            CharacterManager.Instance.Info.CharacterList.Add(new CharacterInfo(DataTable.Instance.JobDic[1]));
             InputMamager.Instance.IsLock = false;
             exploreUI.SetVisible(true);
         }, null);

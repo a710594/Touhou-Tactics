@@ -63,7 +63,7 @@ public class ConversationUI : MonoBehaviour
 
     private void Init(int id, bool canSkip, Action finishCallback, Action pauseCallback)
     {
-        ConversationModel data = DataContext.Instance.ConversationDic[id][1];
+        ConversationModel data = DataTable.Instance.ConversationDic[id][1];
         NormalTypewriter.ClearText();
         SkipButton.gameObject.SetActive(canSkip);
         SetData(data);
@@ -75,7 +75,7 @@ public class ConversationUI : MonoBehaviour
 
     private void NextConversationID(int id, int page)
     {
-        DataContext.Instance.ConversationDic[id].TryGetValue(page, out ConversationModel data);
+        DataTable.Instance.ConversationDic[id].TryGetValue(page, out ConversationModel data);
         if (data == null)
         {
             Finish();
