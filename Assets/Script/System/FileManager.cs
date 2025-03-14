@@ -7,7 +7,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class FileLoader : MonoBehaviour
+public class FileManager : MonoBehaviour
 {
     private static readonly string _dataPath = "/Data/";
     private static readonly string _savePath = "/Save/";
@@ -23,6 +23,14 @@ public class FileLoader : MonoBehaviour
         MapExplore,
         MapBattleFixed,
         MapBattleRandom,
+    }
+
+    public void Init()
+    {
+        if (!Directory.Exists(Application.streamingAssetsPath + "/Save/"))
+        {
+            DirectoryInfo b = Directory.CreateDirectory(Application.streamingAssetsPath + "/Save/");
+        }
     }
 
     public void Load<T>(string fileName, PathEnum prePathEnum, Action<object> callback)

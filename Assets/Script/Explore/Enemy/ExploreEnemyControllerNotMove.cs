@@ -4,17 +4,13 @@ using UnityEngine;
 
 namespace Explore
 {
-    public class Goal : MonoBehaviour
+    public class ExploreEnemyControllerNotMove : ExploreEnemyController
     {
-        public GameObject Red;
-        public GameObject Blue;
-        public GameObject Quad;
-
         private void OnTriggerEnter(Collider other)
         {
             if (other.tag == "Player")
             {
-                ExploreManager.Instance.CheckGoal();
+                ExploreManager.Instance.EnterBattle(File);
             }
         }
     }

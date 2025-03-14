@@ -8,7 +8,7 @@ public class ExploreUI : MonoBehaviour
 {
     public GameObject BigMapBG;
     public RectTransform BigMap;
-    public GameObject SpaceLabel;
+    public GameObject TreasureLabel;
     public TreasureUI TreasureUI;
     public Text fpsText;
     public Text FloorLabel;
@@ -36,44 +36,67 @@ public class ExploreUI : MonoBehaviour
         {
             CanvasGroup.alpha = 0;
         }
+    }
 
+    public void ShowTreasureLabel(bool show) 
+    {
+        TreasureLabel.gameObject.SetActive(show);
+    }
+
+    public void ShowDoorLabel(bool show) 
+    {
+        KeyLabel.gameObject.SetActive(show);
+        if (ItemManager.Instance.Info.Key > 0)
+        {
+            KeyLabel.text = "按空白鍵使用鑰匙開門";
+        }
+        else
+        {
+            KeyLabel.text = "需要鑰匙開門";
+        }
+    }
+
+    public void OpenTreasure(int id) 
+    {
+        TreasureUI.Open(id);
+        InputMamager.Instance.Lock();
     }
 
     private void Awake()
     {
-        SpaceLabel.SetActive(false);
+        TreasureLabel.SetActive(false);
         KeyLabel.gameObject.SetActive(false);
     }
 
     void Update()
     {
         ExploreFile file = ExploreManager.Instance.File;
-        if (file!=null && !InputMamager.Instance.IsLock)
-        {
-            Vector2Int v2 = Utility.ConvertToVector2Int(Camera.main.transform.position + Camera.main.transform.forward);
-            SpaceLabel.SetActive(ExploreManager.Instance.CheckTreasure(v2));
-            KeyLabel.gameObject.SetActive(ExploreManager.Instance.CheckDoor(v2) != null);
-            if (ItemManager.Instance.Info.Key > 0) 
-            {
-                KeyLabel.text = "按空白鍵使用鑰匙開門";
-            }
-            else
-            {
-                KeyLabel.text = "需要鑰匙開門";
-            }
+        //if (file!=null && !InputMamager.Instance.IsLock)
+        //{
+        //    Vector2Int v2 = Utility.ConvertToVector2Int(Camera.main.transform.position + Camera.main.transform.forward);
+        //    SpaceLabel.SetActive(ExploreManager.Instance.CheckTreasure(v2));
+        //    KeyLabel.gameObject.SetActive(ExploreManager.Instance.CheckDoor(v2) != null);
+        //    if (ItemManager.Instance.Info.Key > 0) 
+        //    {
+        //        KeyLabel.text = "按空白鍵使用鑰匙開門";
+        //    }
+        //    else
+        //    {
+        //        KeyLabel.text = "需要鑰匙開門";
+        //    }
 
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                ExploreFileTreasure treasure = ExploreManager.Instance.GetTreasure();
-                if (treasure != null)
-                {
-                    TreasureUI.Open(treasure.ItemID);
-                    InputMamager.Instance.Lock();
-                }
+        //    if (Input.GetKeyDown(KeyCode.Space))
+        //    {
+        //        ExploreFileTreasure treasure = ExploreManager.Instance.GetTreasure();
+        //        if (treasure != null)
+        //        {
+        //            TreasureUI.Open(treasure.ItemID);
+        //            InputMamager.Instance.Lock();
+        //        }
 
-                ExploreManager.Instance.OpenDoor();
-            }
-        }
+        //        ExploreManager.Instance.OpenDoor();
+        //    }
+        //}
 
         if (Input.GetKeyDown(KeyCode.M))
         {

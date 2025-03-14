@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6892967740122840598}
   - component: {fileID: 6172638718829281565}
   - component: {fileID: 6528567230189271495}
+  - component: {fileID: 3731135022889514111}
   m_Layer: 0
   m_Name: Ground
   m_TagString: Untagged
@@ -100,8 +101,19 @@ MonoBehaviour:
   Name: 
   Cube: {fileID: 1600654761285109684}
   Quad: {fileID: 7977864655095238157}
-  Icon: {fileID: 0}
-  Treasure: {fileID: 0}
+--- !u!65 &3731135022889514111
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1600654761285109684}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7977864655095238157
 GameObject:
   m_ObjectHideFlags: 0

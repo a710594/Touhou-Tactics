@@ -7,4 +7,5 @@ public class TreasureObject : MonoBehaviour
     public int ItemID;
     public string Prefab;
     public GameObject Icon;
+    public Outline Outline;
 }

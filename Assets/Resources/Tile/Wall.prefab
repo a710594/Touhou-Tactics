@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 9076367599852384588}
   - component: {fileID: 8643709129749892679}
   - component: {fileID: 4899550285494994216}
+  - component: {fileID: 269599277403131968}
   m_Layer: 0
   m_Name: Wall
   m_TagString: Wall
@@ -100,8 +101,19 @@ MonoBehaviour:
   Name: 
   Cube: {fileID: 3777300297731311854}
   Quad: {fileID: 6794477528003581290}
-  Icon: {fileID: 0}
-  Treasure: {fileID: 0}
+--- !u!65 &269599277403131968
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3777300297731311854}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 5, z: 1}
+  m_Center: {x: 0, y: 2, z: 0}
 --- !u!1 &6794477528003581290
 GameObject:
   m_ObjectHideFlags: 0

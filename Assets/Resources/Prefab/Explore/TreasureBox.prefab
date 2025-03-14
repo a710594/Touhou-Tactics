@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 2515957047720550200}
   - component: {fileID: 364385657719024626}
   - component: {fileID: -1524596994757873547}
+  - component: {fileID: 5344785854982355466}
+  - component: {fileID: 5756725919157554908}
   m_Layer: 0
   m_Name: TreasureBox
   m_TagString: Untagged
@@ -100,6 +102,38 @@ MonoBehaviour:
   ItemID: 0
   Prefab: TreasureBox
   Icon: {fileID: 4408427368557872344}
+  Outline: {fileID: 5344785854982355466}
+--- !u!114 &5344785854982355466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2165794515472435751}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 10
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!65 &5756725919157554908
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2165794515472435751}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.0000001, y: 1.0112605, z: 1.024928}
+  m_Center: {x: 0, y: -0.0056302547, z: -0.024999991}
 --- !u!1 &4408427368557872344
 GameObject:
   m_ObjectHideFlags: 0
@@ -111,7 +145,6 @@ GameObject:
   - component: {fileID: 2913489483770896819}
   - component: {fileID: 2014611583290718061}
   - component: {fileID: 8648925229894241446}
-  - component: {fileID: 86383265626226443}
   m_Layer: 1
   m_Name: Quad
   m_TagString: Untagged
@@ -184,17 +217,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &86383265626226443
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4408427368557872344}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}

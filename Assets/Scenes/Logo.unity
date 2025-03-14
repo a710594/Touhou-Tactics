@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 126823335}
   - component: {fileID: 126823336}
   m_Layer: 0
-  m_Name: FileLoader
+  m_Name: FileManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1302,7 +1302,7 @@ MonoBehaviour:
   LogoGroup: {fileID: 1639863287}
   ButtonGroup: {fileID: 184095199}
   StartLabel: {fileID: 1587112585}
-  FileLoader: {fileID: 126823336}
+  FileManager: {fileID: 126823336}
 --- !u!1 &1587112585
 GameObject:
   m_ObjectHideFlags: 0

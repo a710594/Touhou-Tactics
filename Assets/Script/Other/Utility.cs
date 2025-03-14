@@ -31,9 +31,9 @@ public static class Utility
         return new Vector2Int(Mathf.RoundToInt(v3.x), Mathf.RoundToInt(v3.z));
     }
 
-    public static Vector3Int ConvertToVector3Int(Vector2Int v2, Dictionary<Vector2Int, BattleInfoTile> tileDic)
+    public static Vector3 ConvertToVector3(Vector2Int v2)
     {
-        return new Vector3Int(v2.x, tileDic[v2].TileData.Height, v2.y);
+        return new Vector3(v2.x, 0, v2.y);
     }
 
     public static List<Vector2Int> DrawLine2D(Vector2Int a, Vector2Int b)

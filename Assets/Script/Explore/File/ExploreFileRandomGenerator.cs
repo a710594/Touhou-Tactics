@@ -411,8 +411,22 @@ public class ExploreFileRandomGenerator
     private void PlaceStartAndGoal()
     {
         File.Start = _startRoom.GetRandomPosition();
-        File.PlayerPosition = File.Start;
         _startRoom.SetNotAvailable(File.Start);
+        File.PlayerPositionX = File.Start.x;
+        File.PlayerPositionZ = File.Start.y;
+
+        if (_wallList.Contains(File.Start + Vector2Int.up))
+        {
+            File.PlayerRotationY = 90;
+            if (_wallList.Contains(File.Start + Vector2Int.right))
+            {
+                File.PlayerRotationY = 180;
+                if (_wallList.Contains(File.Start + Vector2Int.down))
+                {
+                    File.PlayerRotationY = 270;
+                }
+            }
+        }
 
         File.Goal = _endRoom.GetRandomPosition();
         _endRoom.SetNotAvailable(File.Goal);

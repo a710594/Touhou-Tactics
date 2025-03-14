@@ -70,15 +70,19 @@ public class DataTable
 
     private int _count = 0;
     private Action _callback;
-    private FileLoader _fileLoader;
+    private FileManager _fileManager;
+
+    public void SetFileManager(FileManager fileManager)
+    {
+        _fileManager = fileManager;
+    }
 
     public void Load(Action callback) 
     {
         _count = 0;
         _callback = callback;
-        _fileLoader = GameObject.Find("FileLoader").GetComponent<FileLoader>();
 
-        _fileLoader.Load<List<AttachModel>>("Attach", FileLoader.PathEnum.Data, (obj) =>
+        _fileManager.Load<List<AttachModel>>("Attach", FileManager.PathEnum.Data, (obj) =>
         {
             AttachList = (List<AttachModel>)obj;
             AttachDic.Clear();
@@ -89,7 +93,7 @@ public class DataTable
             CheckComplete();
         });
 
-        _fileLoader.Load<List<ConsumablesModel>>("Consumables", FileLoader.PathEnum.Data, (obj) =>
+        _fileManager.Load<List<ConsumablesModel>>("Consumables", FileManager.PathEnum.Data, (obj) =>
         {
             ConsumablesList = (List<ConsumablesModel>)obj;
             ConsumablesDic.Clear();
@@ -100,7 +104,7 @@ public class DataTable
             CheckComplete();
         });
 
-        _fileLoader.Load<List<ConversationModel>>("Conversation", FileLoader.PathEnum.Data, (obj) =>
+        _fileManager.Load<List<ConversationModel>>("Conversation", FileManager.PathEnum.Data, (obj) =>
         {
             ConversationList = (List<ConversationModel>)obj;
             ConversationDic.Clear();
@@ -118,7 +122,7 @@ public class DataTable
             CheckComplete();
         });
 
-        _fileLoader.Load<List<CookModel>>("Cook", FileLoader.PathEnum.Data, (obj) =>
+        _fileManager.Load<List<CookModel>>("Cook", FileManager.PathEnum.Data, (obj) =>
         {
             CookList = (List<CookModel>)obj;
             for (int i = 0; i < CookList.Count; i++)
@@ -128,7 +132,7 @@ public class DataTable
             CheckComplete();
         });
 
-        _fileLoader.Load<List<EffectModel>>("Effect", FileLoader.PathEnum.Data, (obj) =>
+        _fileManager.Load<List<EffectModel>>("Effect", FileManager.PathEnum.Data, (obj) =>
         {
             EffectList = (List<EffectModel>)obj;
             EffectDic.Clear();
@@ -139,7 +143,7 @@ public class DataTable
             CheckComplete();
         });
 
-        _fileLoader.Load<List<EnemyModel>>("Enemy", FileLoader.PathEnum.Data, (obj) =>
+        _fileManager.Load<List<EnemyModel>>("Enemy", FileManager.PathEnum.Data, (obj) =>
         {
             EnemyList = (List<EnemyModel>)obj;
             EnemyDic.Clear();
@@ -153,7 +157,7 @@ public class DataTable
             CheckComplete();
         });
 
-        _fileLoader.Load<List<EnemyGroupModel>>("EnemyGroup", FileLoader.PathEnum.Data, (obj) =>
+        _fileManager.Load<List<EnemyGroupModel>>("EnemyGroup", FileManager.PathEnum.Data, (obj) =>
         {
             EnemyGroupList = (List<EnemyGroupModel>)obj;
             EnemyGroupDic.Clear();
@@ -166,7 +170,7 @@ public class DataTable
             CheckComplete();
         });
 
-        _fileLoader.Load<List<EquipModel>>("Equip", FileLoader.PathEnum.Data, (obj) =>
+        _fileManager.Load<List<EquipModel>>("Equip", FileManager.PathEnum.Data, (obj) =>
         {
             EquipList = (List<EquipModel>)obj;
             EquipDic.Clear();
@@ -177,7 +181,7 @@ public class DataTable
             CheckComplete();
         });
 
-        _fileLoader.Load<List<FixedFloorModel>>("FixedFloor", FileLoader.PathEnum.Data, (obj) =>
+        _fileManager.Load<List<FixedFloorModel>>("FixedFloor", FileManager.PathEnum.Data, (obj) =>
         {
             FixedFloorList = (List<FixedFloorModel>)obj;
             FixedFloorDic.Clear();
@@ -188,7 +192,7 @@ public class DataTable
             CheckComplete();
         });
 
-        _fileLoader.Load<List<FoodMaterialModel>>("FoodMaterial", FileLoader.PathEnum.Data, (obj) =>
+        _fileManager.Load<List<FoodMaterialModel>>("FoodMaterial", FileManager.PathEnum.Data, (obj) =>
         {
             FoodMaterialList = (List<FoodMaterialModel>)obj;
             FoodMaterialDic.Clear();
@@ -199,7 +203,7 @@ public class DataTable
             CheckComplete();
         });
 
-        _fileLoader.Load<List<FoodResultModel>>("FoodResult", FileLoader.PathEnum.Data, (obj) =>
+        _fileManager.Load<List<FoodResultModel>>("FoodResult", FileManager.PathEnum.Data, (obj) =>
         {
             FoodResultList = (List<FoodResultModel>)obj;
             FoodResultDic.Clear();
@@ -210,7 +214,7 @@ public class DataTable
             CheckComplete();
         });
 
-        _fileLoader.Load<List<ItemModel>>("Item", FileLoader.PathEnum.Data, (obj) =>
+        _fileManager.Load<List<ItemModel>>("Item", FileManager.PathEnum.Data, (obj) =>
         {
             ItemList = (List<ItemModel>)obj;
             ItemDic.Clear();
@@ -221,7 +225,7 @@ public class DataTable
             CheckComplete();
         });
 
-        _fileLoader.Load<List<JobModel>>("Job", FileLoader.PathEnum.Data, (obj) =>
+        _fileManager.Load<List<JobModel>>("Job", FileManager.PathEnum.Data, (obj) =>
         {
             JobList = (List<JobModel>)obj;
             JobDic.Clear();
@@ -232,7 +236,7 @@ public class DataTable
             CheckComplete();
         });
 
-        _fileLoader.Load<List<PassiveModel>>("Passive", FileLoader.PathEnum.Data, (obj) =>
+        _fileManager.Load<List<PassiveModel>>("Passive", FileManager.PathEnum.Data, (obj) =>
         {
             PassiveList = (List<PassiveModel>)obj;
             PassiveDic.Clear();
@@ -243,7 +247,7 @@ public class DataTable
             CheckComplete();
         });
 
-        _fileLoader.Load<List<RandomFloorModel>>("RandomFloor", FileLoader.PathEnum.Data, (obj) =>
+        _fileManager.Load<List<RandomFloorModel>>("RandomFloor", FileManager.PathEnum.Data, (obj) =>
         {
             RandomFloorList = (List<RandomFloorModel>)obj;
             RandomFloorDic.Clear();
@@ -255,7 +259,7 @@ public class DataTable
             CheckComplete();
         });
 
-        _fileLoader.Load<List<RoomModel>>("Room", FileLoader.PathEnum.Data, (obj) =>
+        _fileManager.Load<List<RoomModel>>("Room", FileManager.PathEnum.Data, (obj) =>
         {
             RoomList = (List<RoomModel>)obj;
             RoomDic.Clear();
@@ -267,7 +271,7 @@ public class DataTable
             CheckComplete();
         });
 
-        _fileLoader.Load<List<ShopModel>>("Shop", FileLoader.PathEnum.Data, (obj) =>
+        _fileManager.Load<List<ShopModel>>("Shop", FileManager.PathEnum.Data, (obj) =>
         {
             ShopList = (List<ShopModel>)obj;
             ShopItemDic.Clear();
@@ -285,7 +289,7 @@ public class DataTable
             CheckComplete();
         });
 
-        _fileLoader.Load<List<SkillModel>>("Skill", FileLoader.PathEnum.Data, (obj) =>
+        _fileManager.Load<List<SkillModel>>("Skill", FileManager.PathEnum.Data, (obj) =>
         {
             SkillList = (List<SkillModel>)obj;
             SkillDic.Clear();
@@ -296,7 +300,7 @@ public class DataTable
             CheckComplete();
         });
 
-        _fileLoader.Load<List<SpellModel>>("Spell", FileLoader.PathEnum.Data, (obj) =>
+        _fileManager.Load<List<SpellModel>>("Spell", FileManager.PathEnum.Data, (obj) =>
         {
             SpellList = (List<SpellModel>)obj;
             SpellDic.Clear();
@@ -312,7 +316,7 @@ public class DataTable
             CheckComplete();
         });
 
-        _fileLoader.Load<List<StatusModel>>("Status", FileLoader.PathEnum.Data, (obj) =>
+        _fileManager.Load<List<StatusModel>>("Status", FileManager.PathEnum.Data, (obj) =>
         {
             StatusList = (List<StatusModel>)obj;
             StatusDic.Clear();
@@ -324,7 +328,7 @@ public class DataTable
             CheckComplete();
         });
 
-        _fileLoader.Load<List<SupportModel>>("Support", FileLoader.PathEnum.Data, (obj) =>
+        _fileManager.Load<List<SupportModel>>("Support", FileManager.PathEnum.Data, (obj) =>
         {
             SupportList = (List<SupportModel>)obj;
             SupportDic.Clear();
@@ -335,7 +339,7 @@ public class DataTable
             CheckComplete();
         });
 
-        _fileLoader.Load<List<TileModel>>("Tile", FileLoader.PathEnum.Data, (obj) =>
+        _fileManager.Load<List<TileModel>>("Tile", FileManager.PathEnum.Data, (obj) =>
         {
             TileList = (List<TileModel>)obj;
             TileDic.Clear();
@@ -347,7 +351,7 @@ public class DataTable
             CheckComplete();
         });
 
-        _fileLoader.Load<List<TreasureModel>>("Treasure", FileLoader.PathEnum.Data, (obj) =>
+        _fileManager.Load<List<TreasureModel>>("Treasure", FileManager.PathEnum.Data, (obj) =>
         {
             TreasureList = (List<TreasureModel>)obj;
             TreasureDic.Clear();

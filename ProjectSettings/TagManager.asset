@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Wall
   - BattleTile
+  - Treasure
+  - NoAttach
+  - FOE
   layers:
   - Default
   - TransparentFX
@@ -16,7 +19,7 @@ TagManager:
   - Map
   - Player
   - PostProcessing
-  - 
+  - FOE
   - 
   - 
   - 

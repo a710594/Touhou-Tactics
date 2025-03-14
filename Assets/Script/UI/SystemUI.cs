@@ -28,7 +28,15 @@ public class SystemUI : MonoBehaviour
 
     public void Init() 
     {
-        CampButton.gameObject.SetActive(SceneController.Instance.Info.CurrentScene == "Explore");
+        if (SceneController.Instance.Info.CurrentScene == "Explore")
+        {
+            Explore.ExploreManager.Instance.UpdateFile();
+            CampButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            CampButton.gameObject.SetActive(false);
+        }
     }
 
     private void CampOnClick() 

@@ -74,7 +74,7 @@ namespace Battle
         public BattleResultUI BattleResultUI;
         public SelectCharacterUI SelectBattleCharacterUI;
         private Transform _root;
-        private FileLoader _fileLoader;
+        private FileManager _fileLoader;
         private List<CharacterInfo> _candidateList = new List<CharacterInfo>();
         private Dictionary<Command, List<BattleCharacterController>> _commandTargetDic = new Dictionary<Command, List<BattleCharacterController>>();
 
@@ -83,7 +83,7 @@ namespace Battle
         public void Init(string tutorial, string map) 
         {
             GetGameObject();
-            _fileLoader.Load<BattleFileFixed>(map, FileLoader.PathEnum.MapBattleFixed, (obj)=> 
+            _fileLoader.Load<BattleFileFixed>(map, FileManager.PathEnum.MapBattleFixed, (obj)=> 
             {
                 BattleFileFixed file = (BattleFileFixed)obj;
                 PlayerPositionList = file.PlayerPositionList;
@@ -122,7 +122,7 @@ namespace Battle
         public void Init(string tutorial, EnemyGroupModel enemyGroup) 
         {
             GetGameObject();
-            _fileLoader.Load<BattleFileRandom>(enemyGroup.GetMap(), FileLoader.PathEnum.MapBattleRandom, (obj) => 
+            _fileLoader.Load<BattleFileRandom>(enemyGroup.GetMap(), FileManager.PathEnum.MapBattleRandom, (obj) => 
             {
                 BattleFileRandom file = (BattleFileRandom)obj;
                 PlayerPositionList = file.PlayerPositionList;
@@ -273,7 +273,7 @@ namespace Battle
             _root = GameObject.Find("BattleController").transform;
             _cameraDraw = Camera.main.GetComponent<CameraDraw>();
             _cameraController = Camera.main.GetComponent<CameraController>();
-            _fileLoader = GameObject.Find("FileLoader").GetComponent<FileLoader>();
+            _fileLoader = GameObject.Find("FileManager").GetComponent<FileManager>();
         }
 
         private void SetMinAndMax() 

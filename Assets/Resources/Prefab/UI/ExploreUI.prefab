@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4579184673840173209}
   - component: {fileID: 4579184673840173208}
   m_Layer: 5
-  m_Name: Space_Label
+  m_Name: Treasure_Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -634,7 +634,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BigMapBG: {fileID: 4579184674371796989}
   BigMap: {fileID: 4579184673856774817}
-  SpaceLabel: {fileID: 4579184673840173222}
+  TreasureLabel: {fileID: 4579184673840173222}
   TreasureUI: {fileID: 0}
   fpsText: {fileID: 4579184675373834148}
   FloorLabel: {fileID: 4579184674741426249}

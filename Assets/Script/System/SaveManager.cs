@@ -23,20 +23,24 @@ public class SaveManager
 
     private int _count = 0;
     private Action _callback;
-    private FileLoader _fileLoader;
+    private FileManager _fileManager;
     private BagInfo _baginfo;
     private CharacterGroupInfo _characterGroupInfo;
     private EventInfo _eventInfo;
     private SceneInfo _sceneInfo;
     private ExploreFile _exploreFile;
 
+    public void SetFileManager(FileManager fileManager)
+    {
+        _fileManager = fileManager;
+    }
+
     public void Load(Action callback) 
     {
         _count = 0;
         _callback = callback;
-        _fileLoader = GameObject.Find("FileLoader").GetComponent<FileLoader>();
 
-        _fileLoader.Load<BagInfo>("BagInfo", FileLoader.PathEnum.Save, (obj) =>
+        _fileManager.Load<BagInfo>("BagInfo", FileManager.PathEnum.Save, (obj) =>
         {
             _baginfo = (BagInfo)obj;
             if (_baginfo != null)
@@ -64,7 +68,7 @@ public class SaveManager
             CheckComplete();
         });
 
-        _fileLoader.Load<CharacterGroupInfo>("CharacterGroupInfo", FileLoader.PathEnum.Save, (obj) =>
+        _fileManager.Load<CharacterGroupInfo>("CharacterGroupInfo", FileManager.PathEnum.Save, (obj) =>
         {
             _characterGroupInfo = (CharacterGroupInfo)obj;
             if (_characterGroupInfo != null)
@@ -91,7 +95,7 @@ public class SaveManager
             CheckComplete();
         });
 
-        _fileLoader.Load<EventInfo>("EventInfo", FileLoader.PathEnum.Save, (obj) =>
+        _fileManager.Load<EventInfo>("EventInfo", FileManager.PathEnum.Save, (obj) =>
         {
             _eventInfo = (EventInfo)obj;
             if (_eventInfo == null)
@@ -102,7 +106,7 @@ public class SaveManager
             CheckComplete();
         });
 
-        _fileLoader.Load<SceneInfo>("SceneInfo", FileLoader.PathEnum.Save, (obj) =>
+        _fileManager.Load<SceneInfo>("SceneInfo", FileManager.PathEnum.Save, (obj) =>
         {
             _sceneInfo = (SceneInfo)obj;
             if (_sceneInfo == null)
@@ -120,7 +124,7 @@ public class SaveManager
         if (DataTable.Instance.FixedFloorDic.ContainsKey(floor))
         {
             FixedFloorModel data = DataTable.Instance.FixedFloorDic[floor];
-            _fileLoader.Load<ExploreFile>(data.Name, FileLoader.PathEnum.MapExplore, (obj) =>
+            _fileManager.Load<ExploreFile>(data.Name, FileManager.PathEnum.MapExplore, (obj) =>
             {
                 _exploreFile = (ExploreFile)obj;
                 callback(_exploreFile);
@@ -136,7 +140,7 @@ public class SaveManager
 
     public void LoadExploreFile(Action<ExploreFile> callback) 
     {
-        _fileLoader.Load<ExploreFile>("ExploreFile", FileLoader.PathEnum.Save, (obj) =>
+        _fileManager.Load<ExploreFile>("ExploreFile", FileManager.PathEnum.Save, (obj) =>
         {
             _exploreFile = (ExploreFile)obj;
             callback(_exploreFile);
@@ -145,20 +149,20 @@ public class SaveManager
 
     public void Save() 
     {
-        _fileLoader.Save(_baginfo, "BagInfo", FileLoader.PathEnum.Save);
-        _fileLoader.Save(_characterGroupInfo, "CharacterGroupInfo", FileLoader.PathEnum.Save);
-        _fileLoader.Save(_eventInfo, "EventInfo", FileLoader.PathEnum.Save);
-        _fileLoader.Save(_sceneInfo, "SceneInfo", FileLoader.PathEnum.Save);
-        _fileLoader.Save(_exploreFile, "ExploreFile", FileLoader.PathEnum.Save);
+        _fileManager.Save(_baginfo, "BagInfo", FileManager.PathEnum.Save);
+        _fileManager.Save(_characterGroupInfo, "CharacterGroupInfo", FileManager.PathEnum.Save);
+        _fileManager.Save(_eventInfo, "EventInfo", FileManager.PathEnum.Save);
+        _fileManager.Save(_sceneInfo, "SceneInfo", FileManager.PathEnum.Save);
+        _fileManager.Save(_exploreFile, "ExploreFile", FileManager.PathEnum.Save);
     }
 
     public void Delete() 
     {
-        _fileLoader.Delete("BagInfo", FileLoader.PathEnum.Save);
-        _fileLoader.Delete("CharacterGroupInfo", FileLoader.PathEnum.Save);
-        _fileLoader.Delete("EventInfo", FileLoader.PathEnum.Save);
-        _fileLoader.Delete("SceneInfo", FileLoader.PathEnum.Save);
-        _fileLoader.Delete("ExploreFile", FileLoader.PathEnum.Save);
+        _fileManager.Delete("BagInfo", FileManager.PathEnum.Save);
+        _fileManager.Delete("CharacterGroupInfo", FileManager.PathEnum.Save);
+        _fileManager.Delete("EventInfo", FileManager.PathEnum.Save);
+        _fileManager.Delete("SceneInfo", FileManager.PathEnum.Save);
+        _fileManager.Delete("ExploreFile", FileManager.PathEnum.Save);
     }
 
     private void CheckComplete()

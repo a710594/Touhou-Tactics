@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-namespace Explore
+/*namespace Explore
 {
     public class ExploreCharacterController : MonoBehaviour
     {
@@ -135,4 +135,4 @@ namespace Explore
             }
         }
     }
-}
+}*/

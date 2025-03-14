@@ -9572,7 +9572,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AiType: 0
-  Prefab: FOE
+  Prefab: FOE_NotMove
   Map: Tutorial_1
   Seed: 
   Tutorial: BattleTutorial_1
@@ -31226,7 +31226,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AiType: 0
-  Prefab: FOE
+  Prefab: FOE_NotMove
   Map: Tutorial_2
   Seed: 
   Tutorial: ReimuTutorial
@@ -39711,6 +39711,7 @@ GameObject:
   - component: {fileID: 1991001380}
   - component: {fileID: 1991001379}
   - component: {fileID: 1991001381}
+  - component: {fileID: 1991001382}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -39771,6 +39772,19 @@ MonoBehaviour:
   Enemy: {fileID: 1451080758}
   Trigger: {fileID: 1593225327}
   Treasure: {fileID: 1350023969}
+  FileManager: {fileID: 1991001382}
+--- !u!114 &1991001382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1991001377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7b209e5a90c1ca468e023c698a5d44e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2012187368
 GameObject:
   m_ObjectHideFlags: 0

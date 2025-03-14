@@ -13,7 +13,7 @@ public class LogoUI : MonoBehaviour
     public GameObject LogoGroup;
     public GameObject ButtonGroup;
     public GameObject StartLabel;
-    public FileLoader FileLoader;
+    public FileManager FileManager;
 
     private void StartOnClick() 
     {
@@ -90,8 +90,10 @@ public class LogoUI : MonoBehaviour
 
     private void Awake()
     {
-        LoadData();
         InputMamager.Instance.Init();
-        Explore.ExploreManager.Instance.SetFileLoader(FileLoader);
+        FileManager.Init();
+        DataTable.Instance.SetFileManager(FileManager);
+        SaveManager.Instance.SetFileManager(FileManager);
+        LoadData();
     }
 }

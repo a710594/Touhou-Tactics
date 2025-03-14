@@ -5,7 +5,7 @@ public class EnemyGroupModel
     public enum AiEnum
     {
         NotMove = 0,
-        Default,
+        Move,
         Trace,
     }
 

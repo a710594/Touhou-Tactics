@@ -22,6 +22,7 @@ public class InputMamager
     public Action DownHandler;
     public Action LeftHandler;
     public Action RightHandler;
+    public Action SpaceHandler;
 
     public bool IsLock = false;
 
@@ -109,6 +110,13 @@ public class InputMamager
                     if (RightHandler != null)
                     {
                         RightHandler();
+                    }
+                }
+                else if (Input.GetKeyDown(KeyCode.Space)) 
+                {
+                    if (SpaceHandler != null) 
+                    {
+                        SpaceHandler();
                     }
                 }
 

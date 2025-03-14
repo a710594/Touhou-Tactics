@@ -15,7 +15,7 @@ namespace Explore
         public Transform Enemy;
         public Transform Trigger;
         public Transform Treasure;
-        public FileLoader FileLoader;
+        public FileManager FileManager;
 
         public void BuildFile()
         {
@@ -59,7 +59,6 @@ namespace Explore
             {
                 file.Goal = new Vector2Int(int.MinValue, int.MinValue);
             }
-            file.PlayerPosition = file.Start;
             file.Size = new Vector2Int(maxX - minX, maxY - minY);
 
             ExploreFileEnemy enemy;
@@ -98,10 +97,11 @@ namespace Explore
                 file.TreasureList.Add(treasure);
             }
 
-            file.PlayerPosition = file.Start;
+            file.PlayerPositionX = file.Start.x;
+            file.PlayerPositionZ = file.Start.y;
             file.PlayerRotationY = 0;
 
-            FileLoader.Save(file, FileName, FileLoader.PathEnum.MapExplore);
+            FileManager.Save(file, FileName, FileManager.PathEnum.MapExplore);
         }
     }
 }
