@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Battle
 {
-    public partial class BattleController
+    /*public partial class BattleController
     {
         private class EffectState : BattleControllerState
         {
@@ -232,5 +232,5 @@ namespace Battle
                 }
             }
         }
-    }
+    }*/
 }

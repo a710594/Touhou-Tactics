@@ -8,7 +8,7 @@ public class SpriteOutline : MonoBehaviour
     public bool showOutline = false;
     public int OutlineSize = 10;
     public SpriteRenderer SpriteRenderer;
-    public Material Material;
+    public UnityEngine.Material Material;
 
     public void SetOutline(bool show)
     {

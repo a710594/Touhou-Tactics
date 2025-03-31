@@ -15,7 +15,6 @@ namespace Battle
                 _count++;
                 _timer.Start(1f, ()=> 
                 {
-                    BattleController.Instance.SelectedCharacter.Info.ActionCount = 0;
                     BattleController.Instance.SetState<BattleController.EndState>();
                 });
             }

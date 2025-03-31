@@ -134,7 +134,8 @@ namespace Explore
                 string tutorial = null;
                 if (enemy.Type == ExploreFileEnemy.TypeEnum.Fixed)
                 {
-                    BattleController.Instance.Init(enemy.Tutorial, enemy.Map);
+                    BattleController.Instance.Init();
+                    BattleController.Instance.SetFixed(enemy.Tutorial, enemy.Map);
                 }
                 else
                 {
@@ -149,7 +150,8 @@ namespace Explore
                         EventManager.Instance.Info.SpellTutorial = true;
                         tutorial = "SpellTutorial";
                     }
-                    BattleController.Instance.Init(tutorial, enemyGroup);
+                    BattleController.Instance.Init();
+                    BattleController.Instance.SetRandom(tutorial, enemyGroup);
                 }
             });
         }

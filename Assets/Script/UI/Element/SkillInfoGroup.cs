@@ -71,12 +71,12 @@ public class SkillInfoGroup : MonoBehaviour
         RangeLabel.text = "射程：" + skill.Range;
     }
 
-    public void SetData(Support support)
+    public void SetData(Sub sub)
     {
-        NameLabel.text = support.Name;
-        string comment = support.Comment;
+        NameLabel.text = sub.Name;
+        string comment = sub.Comment;
         int index;
-        Effect effect = support.Effect;
+        Effect effect = sub.Effect;
         while (comment.Contains("{"))
         {
             index = comment.IndexOf("{");
@@ -95,42 +95,29 @@ public class SkillInfoGroup : MonoBehaviour
             {
                 comment = comment.Remove(index, 3).Insert(index, effect.Value.ToString());
             }
-            effect = support.Effect.SubEffect;
+            effect = sub.Effect.SubEffect;
         }
         CommentLabel.text = comment;
-        CDLabel.text = "冷卻：" + support.CD + "回合";
+        CDLabel.text = "冷卻：" + sub.CD + "回合";
 
-        /*if (support.Effect.Target == EffectModel.TargetEnum.All)
-        {
-            TargetLabel.text = "�ؼСG�����ħ�";
-        }
-        else if (support.Effect.Target == EffectModel.TargetEnum.Them)
-        {
-            TargetLabel.text = "�ؼСG�Ĥ�";
-        }
-        else if (support.Effect.Target == EffectModel.TargetEnum.Us)
-        {
-            TargetLabel.text = "�ؼСG�ڤ�";
-        }*/
-
-        if (support.Track == TrackEnum.None)
+        if (sub.Track == TrackEnum.None)
         {
             TrackLabel.text = "軌跡：無視地形";
         }
-        else if (support.Track == TrackEnum.Parabola)
+        else if (sub.Track == TrackEnum.Parabola)
         {
             TrackLabel.text = "軌跡：拋物線";
         }
-        else if (support.Track == TrackEnum.Straight)
+        else if (sub.Track == TrackEnum.Straight)
         {
             TrackLabel.text = "軌跡：直線";
         }
-        else if (support.Track == TrackEnum.Through)
+        else if (sub.Track == TrackEnum.Through)
         {
             TrackLabel.text = "軌跡：貫穿";
         }
 
-        RangeLabel.text = "射程：" + support.Range;
+        RangeLabel.text = "射程：" + sub.Range;
     }
 
     public void SetData(Spell spell)
@@ -158,81 +145,29 @@ public class SkillInfoGroup : MonoBehaviour
         RangeLabel.text = "射程：" + spell.Range;
     }
 
-    public void SetData(Consumables consumbles)
+    public void SetData(ItemCommand item)
     {
-        NameLabel.text = consumbles.Name;
-        CommentLabel.text = consumbles.Comment;
+        NameLabel.text = item.Name;
+        CommentLabel.text = item.Comment;
         CDLabel.text = "";
 
-        /*if (consumbles.Effect.Target == EffectModel.TargetEnum.All)
-        {
-            TargetLabel.text = "�ؼСG�����ħ�";
-        }
-        else if (consumbles.Effect.Target == EffectModel.TargetEnum.Them)
-        {
-            TargetLabel.text = "�ؼСG�Ĥ�";
-        }
-        else if (consumbles.Effect.Target == EffectModel.TargetEnum.Us)
-        {
-            TargetLabel.text = "�ؼСG�ڤ�";
-        }*/
-
-        if (consumbles.Track == TrackEnum.None)
+        if (item.Track == TrackEnum.None)
         {
             TrackLabel.text = "軌跡：無視地形";
         }
-        else if (consumbles.Track == TrackEnum.Parabola)
+        else if (item.Track == TrackEnum.Parabola)
         {
             TrackLabel.text = "軌跡：拋物線";
         }
-        else if (consumbles.Track == TrackEnum.Straight)
+        else if (item.Track == TrackEnum.Straight)
         {
             TrackLabel.text = "軌跡：直線";
         }
-        else if (consumbles.Track == TrackEnum.Through)
+        else if (item.Track == TrackEnum.Through)
         {
             TrackLabel.text = "軌跡：貫穿";
         }
 
-        RangeLabel.text = "射程：" + consumbles.Range;
-    }
-
-    public void SetData(Food food)
-    {
-        NameLabel.text = food.Name;
-        CommentLabel.text = food.Comment;
-        CDLabel.text = "";
-
-        /*if (food.Effect.Target == EffectModel.TargetEnum.All)
-        {
-            TargetLabel.text = "�ؼСG�����ħ�";
-        }
-        else if (food.Effect.Target == EffectModel.TargetEnum.Them)
-        {
-            TargetLabel.text = "�ؼСG�Ĥ�";
-        }
-        else if (food.Effect.Target == EffectModel.TargetEnum.Us)
-        {
-            TargetLabel.text = "�ؼСG�ڤ�";
-        }*/
-
-        if (food.Track == TrackEnum.None)
-        {
-            TrackLabel.text = "軌跡：無視地形";
-        }
-        else if (food.Track == TrackEnum.Parabola)
-        {
-            TrackLabel.text = "軌跡：拋物線";
-        }
-        else if (food.Track == TrackEnum.Straight)
-        {
-            TrackLabel.text =  "軌跡：直線";
-        }
-        else if (food.Track == TrackEnum.Through)
-        {
-            TrackLabel.text = "軌跡：貫穿";
-        }
-
-        RangeLabel.text = "射程：" + food.Range;
+        RangeLabel.text = "射程：" + item.Range;
     }
 }

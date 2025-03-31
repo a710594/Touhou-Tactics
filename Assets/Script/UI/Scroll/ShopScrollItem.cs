@@ -18,7 +18,7 @@ public class ShopScrollItem : ScrollItem
             ShopModel shopData = (ShopModel)obj;
             ItemModel itemData = DataTable.Instance.ItemDic[shopData.ID];
             NameLabel.text = itemData.Name;
-            if(itemData.Category == ItemModel.CategoryEnum.Consumables || itemData.Category == ItemModel.CategoryEnum.Item) 
+            if(itemData.Category == ItemModel.CategoryEnum.Consumables || itemData.Category == ItemModel.CategoryEnum.Material) 
             {
                 AmountLabel.text = ItemManager.Instance.GetAmount(shopData.ID).ToString();
             }
@@ -36,13 +36,6 @@ public class ShopScrollItem : ScrollItem
                 NameLabel.text = item.Data.Name;
                 AmountLabel.text = item.Amount.ToString();
                 PriceLabel.text = item.Data.Price + "$";
-            }
-            else if(obj is Consumables) 
-            {
-                Consumables consumables = (Consumables)obj;
-                NameLabel.text = consumables.Name;
-                AmountLabel.text = consumables.Amount.ToString();
-                PriceLabel.text = consumables.Price + "$";
             }
             else if(obj is Food) 
             {

@@ -40,10 +40,10 @@ public class CharacterScrollItem : ScrollItem
     private void UseItem(object obj) 
     {
         int add = 0;
-        if(obj is Consumables) 
+        if(obj is Battle.ItemCommand) 
         {
-            Consumables consumables = (Consumables)obj;
-            add = consumables.Effect.Value;
+            Battle.ItemCommand item = (Battle.ItemCommand)obj;
+            add = item.Effect.Value;
         }
         else if(obj is Food) 
         {

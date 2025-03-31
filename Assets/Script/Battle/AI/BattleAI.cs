@@ -30,13 +30,12 @@ namespace Battle
             if (_useSkill)
             {
                 BattleController.Instance.SetSelectedCommand(SelectedSkill);
-                BattleController.Instance.SetState<BattleController.TargetState>();
+                //BattleController.Instance.SetState<BattleController.TargetState>();
                 BattleController.Instance.Click(Utility.ConvertToVector2Int(_target.transform.position));
                 BattleController.Instance.Click(Utility.ConvertToVector2Int(_target.transform.position));
             }
             else
             {
-                BattleController.Instance.SelectedCharacter.Info.ActionCount = 0;
                 BattleController.Instance.SetState<BattleController.EndState>();
             }
         }
@@ -73,7 +72,7 @@ namespace Battle
 
             for (int i = 0; i < _stepList.Count; i++) //我可以移動的範圍
             {
-                rangeList = BattleController.Instance.GetRange(SelectedSkill.Range, _stepList[i]);
+                rangeList = BattleController.Instance.GetRangeList(SelectedSkill.Range, _stepList[i]);
                 for (int j = 0; j < targetList.Count; j++)
                 {
                     targetPosition_v2 = Utility.ConvertToVector2Int(targetList[j].transform.position);

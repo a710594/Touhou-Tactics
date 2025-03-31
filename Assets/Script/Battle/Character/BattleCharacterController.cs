@@ -67,6 +67,37 @@ public class BattleCharacterController : MonoBehaviour
         }
     }
 
+    public void Move(List<Vector2Int> paths, Action callback)
+    {
+        if (paths.Count > 0)
+        {
+            SetDirection(paths[0] - Utility.ConvertToVector2Int(transform.position));
+
+            transform.DOMove(new Vector3(paths[0].x, BattleController.Instance.TileDic[paths[0]].TileData.Height, paths[0].y), 0.25f).SetEase(Ease.Linear).OnComplete(() =>
+            {
+                paths.RemoveAt(0);
+                if (paths.Count > 0)
+                {
+                    Move(paths, callback);
+                }
+                else
+                {
+                    if (callback != null)
+                    {
+                        callback();
+                    }
+                }
+            });
+        }
+        else
+        {
+            if (callback != null)
+            {
+                callback();
+            }
+        }
+    }
+
     public void SetDirection(Vector2Int direction)
     {
         if (direction != Vector2Int.zero)

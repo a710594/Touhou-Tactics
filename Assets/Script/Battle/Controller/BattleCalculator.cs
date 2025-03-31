@@ -17,7 +17,7 @@ namespace Battle
              xxx
               x
         */
-        public List<Vector2Int> GetRange(int range, Vector2Int start)
+        public List<Vector2Int> GetRangeList(int range, Vector2Int start)
         {
             Vector2Int position;
             List<Vector2Int> list = new List<Vector2Int>();
@@ -96,7 +96,7 @@ namespace Battle
                 }
             }
 
-            RemoveByFaction(areaTarget, result);
+            RemoveRange(areaTarget, result);
 
             return result;
         }
@@ -115,7 +115,7 @@ namespace Battle
             return list;
         }
 
-        public void RemoveByFaction(TargetEnum target, List<Vector2Int> list) 
+        public void RemoveRange(TargetEnum target, List<Vector2Int> list) 
         {
             Vector2Int v2;
             for (int i = 0; i < CharacterList.Count; i++)
@@ -131,6 +131,11 @@ namespace Battle
                         i--;
                     }
                 }
+            }
+
+            if(target == TargetEnum.All) 
+            {
+                list.Remove(Utility.ConvertToVector2Int(SelectedCharacter.transform.position));
             }
         }
 
@@ -416,25 +421,114 @@ namespace Battle
             return v3;
         }
 
-        public bool HasCharacter(Vector2Int start, Vector2Int target) 
+        public BattleCharacterController GetCharacterByPosition(Vector2Int position) 
         {
-            if (start == target) //自己的位置不算
-            {
-                return false;
-            }
-
-            bool hasCharacter = false;
-
+            BattleCharacterController character = null;
             for (int i=0; i<CharacterList.Count; i++) 
             {
-            if(Utility.ConvertToVector2Int(CharacterList[i].transform.position) == target) 
+                if(Utility.ConvertToVector2Int(CharacterList[i].transform.position) == position) 
                 {
-                    hasCharacter = true;
+                    character = CharacterList[i];
                     break;
                 }
             }
 
-            return hasCharacter;
+            for (int i = 0; i < DyingList.Count; i++)
+            {
+                if (Utility.ConvertToVector2Int(DyingList[i].transform.position) == position)
+                {
+                    character = DyingList[i];
+                    break;
+                }
+            }
+
+            return character;
+        }
+
+        public ResultType GetResult()
+        {
+            BattleCharacterController target;
+            foreach (KeyValuePair<Command, List<BattleCharacterController>> pair in _commandTargetDic)
+            {
+                for (int i = 0; i < pair.Value.Count; i++)
+                {
+                    target = pair.Value[i];
+                    if (target.Info.CurrentHP <= 0)
+                    {
+                        if (target.Info.Faction == BattleCharacterInfo.FactionEnum.Player)
+                        {
+                            if (DyingList.Contains(target))
+                            {
+                                target.gameObject.SetActive(false);
+                                DyingList.Remove(target);
+                                DeadList.Add(target);
+                            }
+                            else
+                            {
+                                CharacterList.Remove(target);
+                                DyingList.Add(target);
+                                target.StartFlash();
+                            }
+                        }
+                        else
+                        {
+                            CharacterList.Remove(target);
+                            target.gameObject.SetActive(false);
+                        }
+                    }
+                    else if (DyingList.Contains(target))
+                    {
+                        CharacterList.Add(target);
+                        DyingList.Remove(target);
+                        target.StopFlash();
+                    }
+                }
+            }
+            _commandTargetDic.Clear();
+
+            int playerCount = 0;
+            int enemyCount = 0;
+            for (int i = 0; i < CharacterList.Count; i++)
+            {
+                if (CharacterList[i].Info.Faction == BattleCharacterInfo.FactionEnum.Player)
+                {
+                    playerCount++;
+                }
+                else
+                {
+                    enemyCount++;
+                }
+            }
+
+            if (playerCount == 0)
+            {
+                return ResultType.Lose;
+            }
+            else if (enemyCount == 0)
+            {
+                return ResultType.Win;
+            }
+            else
+            {
+                return ResultType.None;
+            }
+        }
+
+        public void CheckResult() 
+        {
+            ResultType result = Instance.GetResult();
+            if (result == ResultType.Win)
+            {
+                _context.SetState<WinState>();
+            }
+            else if (result == ResultType.Lose)
+            {
+                _context.SetState<LoseState>();
+            }
+            else
+            {
+                _context.SetState<CommandState>();
+            }
         }
     }
 }

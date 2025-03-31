@@ -6,7 +6,7 @@ public class SupportActionButton : ActionButton
 {
     public override void SetColor(BattleCharacterInfo character)
     {
-        if (character.HasUseSupport)
+        if (character.HasSub)
         {
             _canUse = false;
             _tipText = "這回合已經使用過支援了";

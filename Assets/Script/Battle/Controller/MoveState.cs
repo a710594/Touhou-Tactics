@@ -8,7 +8,10 @@ namespace Battle
     {
         public class MoveState : BattleControllerState
         {
-            private Vector2Int _originalPosition;
+            private static readonly Vector2Int _maxVector2Int = new Vector2Int(int.MaxValue, int.MaxValue);
+
+            private bool _canClick = true;
+            private Vector2Int _lastPosition = _maxVector2Int;
             private List<Vector2Int> _stepList;
 
             public MoveState(StateContext context) : base(context)
@@ -17,10 +20,9 @@ namespace Battle
 
             public override void Begin()
             {
-                _originalPosition = new Vector2Int(int.MaxValue, int.MaxValue);
                 _character = Instance.SelectedCharacter;
                 _characterList = Instance.CharacterList;
-                Instance.BattleUI.SetActionVisible(false);
+                Instance.BattleUI.SetCommandVisible(false);
                 _stepList = Instance.GetStepList(_character);
                 Instance.ClearQuad();
                 Instance.SetQuad(_stepList, Instance._white);
@@ -31,41 +33,72 @@ namespace Battle
                 if(Instance.MoveStateEndHandler!=null)
                 {
                     Instance.MoveStateEndHandler();
-                }
+                }          
             }
 
-            public override void Click(Vector2Int position)
+            public override void Update()
             {
-                if (_stepList.Contains(position))
+                if (Input.GetMouseButtonDown(1))
                 {
-                    if (position == _originalPosition) //�T�w����
+                    _context.SetState<CommandState>();
+                    _character.Info.HasMove = false;
+                    return;
+                }
+
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if (_canClick && Physics.Raycast(ray, out hit, 100))
+                {
+                    Vector2Int v2 = Utility.ConvertToVector2Int(hit.point);
+
+                    if(_lastPosition != _maxVector2Int && _lastPosition != v2) 
                     {
-                        Instance._canClick = false;
-                        Instance.BattleUI.SetSkillVisible(false);
-                        Instance.TileDic[_originalPosition].TileObject.Select.gameObject.SetActive(false);
-                        Instance.ClearQuad();
-                        List<Vector2Int> path = Instance.GetPath(Utility.ConvertToVector2Int(_character.transform.position), position, _character.Info.Faction);
-                        _character.Move(path);
-                        _character.LastPosition = _character.transform.position;
-                        _character.Info.HasMove = true;
+                        Instance.SetQuad(new List<Vector2Int>() { _lastPosition }, Color.white);
                     }
-                    else
+
+                    if (_stepList.Contains(v2)) 
                     {
-                        if (Instance.TileDic.ContainsKey(_originalPosition))
+                        Instance.SetQuad(new List<Vector2Int>() { v2 }, Color.yellow);
+                        _lastPosition = v2;
+
+                        if (Input.GetMouseButtonDown(0)) 
                         {
-                            Instance.TileDic[_originalPosition].TileObject.Select.gameObject.SetActive(false);
+                            _canClick = false;
+                            Instance.ClearQuad();
+                            List<Vector2Int> path = Instance.GetPath(Utility.ConvertToVector2Int(_character.transform.position), v2, _character.Info.Faction);
+                            _character.LastPosition = _character.transform.position;
+                            _character.Move(path, ()=> 
+                            {
+                                _canClick = true;
+                                
+                                if (!_character.Info.HasMove)
+                                {
+                                    _character.Info.HasMove = true;
+                                }
+                                else if (!_character.Info.MoveAgain)
+                                {
+                                    _character.Info.MoveAgain = true;
+                                }
+
+                                if (_character.AI != null)
+                                {
+                                    _character.AI.OnMoveEnd();
+                                }
+                                else
+                                {
+                                    _context.SetState<CommandState>();
+                                }
+                            });
                         }
-                        _originalPosition = position;
-                        Instance.TileDic[_originalPosition].TileObject.Select.gameObject.SetActive(true);
                     }
                 }
                 else
                 {
-                    if (Instance.TileDic.ContainsKey(_originalPosition))
+                    if (_lastPosition != _maxVector2Int)
                     {
-                        Instance.TileDic[_originalPosition].TileObject.Select.gameObject.SetActive(false);
+                        Instance.ClearQuad(_lastPosition);
+                        _lastPosition = _maxVector2Int;
                     }
-                    _context.SetState<CommandState>();
                 }
             }
         }

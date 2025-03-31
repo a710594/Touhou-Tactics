@@ -6,6 +6,7 @@ namespace Battle
 {
     public partial class BattleController
     {
+
         public class CommandState : BattleControllerState
         {
             public CommandState(StateContext context) : base(context)
@@ -14,19 +15,17 @@ namespace Battle
 
             public override void Begin()
             {
-                if(Instance.CommandStateBeginHandler != null)
+                if (Instance.CommandStateBeginHandler != null)
                 {
                     Instance.CommandStateBeginHandler();
                 }
 
                 _character = Instance.SelectedCharacter;
                 _characterList = Instance.CharacterList;
-                Instance.BattleUI.SetActionVisible(true);
-                Instance.BattleUI.ActionButtonGroup.SetButton(_character.Info);
-                Instance.BattleUI.ActionButtonGroup.ResetButton.gameObject.SetActive(_character.Info.HasMove);
+                Instance.BattleUI.CommandGroup.SetData(_character.Info);
+                Instance.BattleUI.CommandGroup.Reset();
                 Instance.CharacterInfoUIGroup.SetCharacterInfoUI_1(_character.Info);
                 Instance.CharacterInfoUIGroup.SetCharacterInfoUI_2(null);
-                Instance.BattleUI.ActionButtonGroup.SkillInfoGroup.gameObject.SetActive(false);
                 Instance.ClearQuad();
                 Instance.ShowTileBuff(_character);
 
@@ -42,19 +41,23 @@ namespace Battle
 
                 if (sleep)
                 {
-                    _character.Info.ActionCount = 0;
                     _context.SetState<EndState>();
                 }
                 else if (_character.Info.IsAuto)
                 {
                     _character.AI.Start();
+                    Instance.BattleUI.SetCommandVisible(false);
+                }
+                else
+                {
+                    Instance.BattleUI.SetCommandVisible(true);
                 }
             }
 
-            public override void Click(Vector2Int position)
+            public void SetCommand(Command command)
             {
-                Instance.ClearQuad();
-                Instance.SetCharacterInfoUI_2(position);
+                _character.Info.SelectedCommand = command;
+                _context.SetState<RangeState>();
             }
         }
     }

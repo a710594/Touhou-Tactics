@@ -22,8 +22,6 @@ namespace Battle
 
         public Effect SubEffect;
 
-        public Effect SelfEffect;
-
         public Effect() { }
 
         public Effect(EffectModel data)

@@ -38,9 +38,41 @@ namespace Battle
                 moveTo = GetMoveTo(MoveToEnum.Near, _stepList, Utility.ConvertToVector2Int(_target.transform.position));
             }
 
-            BattleController.Instance.SetState<BattleController.MoveState>();
-            BattleController.Instance.Click(moveTo);
-            BattleController.Instance.Click(moveTo);
+            List<Vector2Int> path = BattleController.Instance.GetPath(Utility.ConvertToVector2Int(_controller.transform.position), moveTo, _controller.Info.Faction);
+            _controller.LastPosition = _controller.transform.position;
+            _controller.Move(path, () =>
+            {
+                if (_useSkill) 
+                {
+                    HitType hitType = BattleController.Instance.CheckHit(SelectedSkill.Hit, _controller, _target);
+                    List<Log> logList = new List<Log>();
+                    SelectedSkill.Effect.Use(hitType, _controller, _target, logList);
+                    BattleController.Instance.BattleUI.SetLittleHpBarValue(_target);
+                    BattleController.Instance.BattleUI.PlayFloatingNumberPool(_target, logList);
+
+                    _timer.Start(1, () => {
+                        ResultType result = BattleController.Instance.GetResult();
+                        if (result == ResultType.Win)
+                        {
+                            BattleController.Instance.SetState<BattleController.WinState>();
+                        }
+                        else if (result == ResultType.Lose)
+                        {
+                            BattleController.Instance.SetState<BattleController.LoseState>();
+                        }
+                        else
+                        {
+                            BattleController.Instance.SetState<BattleController.DirectionState>();
+                            BattleController.Instance.SetDirection(Utility.ConvertToVector2Int(_controller.transform.forward));
+                        }
+                    });
+                }
+                else
+                {
+                    BattleController.Instance.SetState<BattleController.DirectionState>();
+                    BattleController.Instance.SetDirection(Utility.ConvertToVector2Int(_controller.transform.forward));
+                }
+            });
         }
     }
 }

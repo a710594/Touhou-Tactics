@@ -16,14 +16,14 @@ public class CommandScrollItem : ScrollItem
             Skill skill = (Skill)obj;
             Label.text = command.Name;
         }
-        else if(obj is Support) 
+        else if(obj is Sub) 
         {
-            Support support = (Support)obj;
+            Sub support = (Sub)obj;
             Label.text = support.Name;
         }
-        else if(obj is Consumables) 
+        else if(obj is Battle.ItemCommand) 
         {
-            Label.text = ((Consumables)obj).Name;
+            Label.text = ((Battle.ItemCommand)obj).Name;
         }
         else if (obj is Food)
         {

@@ -33,7 +33,7 @@ public class ItemManager
     {
         ItemModel data = DataTable.Instance.ItemDic[id];
 
-        if (data.Category == ItemModel.CategoryEnum.Item)
+        if (data.Category == ItemModel.CategoryEnum.Material)
         {
             if (!Info.ItemDic.ContainsKey(id))
             {
@@ -49,7 +49,7 @@ public class ItemManager
         {
             if (!Info.ConsumablesDic.ContainsKey(id))
             {
-                Consumables consumables = new Consumables(id, amount);
+                Item consumables = new Item(id, amount);
                 Info.ConsumablesDic.Add(id, consumables);
             }
             else
@@ -66,7 +66,7 @@ public class ItemManager
     public bool MinusItem(int id, int amount)
     {
         ItemModel data = DataTable.Instance.ItemDic[id];
-        if (data.Category == ItemModel.CategoryEnum.Item)
+        if (data.Category == ItemModel.CategoryEnum.Material)
         {
             Item item = Info.ItemDic[id];
             if (amount <= item.Amount)
@@ -85,7 +85,7 @@ public class ItemManager
         }
         else if (data.Category == ItemModel.CategoryEnum.Consumables)
         {
-            Consumables consumables = Info.ConsumablesDic[id];
+            Item consumables = Info.ConsumablesDic[id];
             if (amount <= consumables.Amount)
             {
                 consumables.Amount -= amount;
@@ -145,14 +145,14 @@ public class ItemManager
     {
         List<object> resultList = new List<object>();
 
-        foreach (KeyValuePair<int, Consumables> pair in Info.ConsumablesDic) 
+        foreach (KeyValuePair<int, Item> pair in Info.ConsumablesDic) 
         {
-            resultList.Add(pair.Value);
+            resultList.Add(new ItemCommand(pair.Key, pair.Value.Amount));
         }
 
         for(int i=0; i<Info.FoodList.Count; i++)
         {
-            resultList.Add(Info.FoodList[i]);
+            resultList.Add(new ItemCommand(Info.FoodList[i]));
         }
 
         return resultList;
@@ -161,7 +161,7 @@ public class ItemManager
     public int GetAmount(int id)
     {
         ItemModel data = DataTable.Instance.ItemDic[id];
-        if (data.Category == ItemModel.CategoryEnum.Item)
+        if (data.Category == ItemModel.CategoryEnum.Material)
         {
             if (Info.ItemDic.TryGetValue(id, out Item item))
             {
@@ -174,7 +174,7 @@ public class ItemManager
         }
         else if (data.Category == ItemModel.CategoryEnum.Consumables)
         {
-            if (Info.ConsumablesDic.TryGetValue(id, out Consumables consumables))
+            if (Info.ConsumablesDic.TryGetValue(id, out Item consumables))
             {
                 return consumables.Amount;
             }

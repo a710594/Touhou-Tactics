@@ -29,9 +29,9 @@ public class UseCommandScrollItem : ScrollItem
                 Background.color = _notUseColor;
             }
         }
-        else if(obj is Support) 
+        else if(obj is Sub) 
         {
-            Support support = (Support)obj;
+            Sub support = (Sub)obj;
             Label.text = support.Name;
             if (support.CurrentCD == 0)
             {
@@ -42,9 +42,9 @@ public class UseCommandScrollItem : ScrollItem
                 Background.color = _notUseColor;
             }
         }
-        else if(obj is Consumables) 
+        else if(obj is Battle.ItemCommand) 
         {
-            Label.text = ((Consumables)obj).Name;
+            Label.text = ((Battle.ItemCommand)obj).Name;
             Background.color = _canUseColor;
         }
         else if (obj is Food)

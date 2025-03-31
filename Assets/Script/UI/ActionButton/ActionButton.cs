@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.EventSystems;
 
 public class ActionButton : MonoBehaviour
 {
     public Action ClickHandler;
 
-    public Button Button;
+    public ButtonPlus Button;
     public Image Image;
     public TipLabel TipLabel;
 
@@ -21,7 +22,7 @@ public class ActionButton : MonoBehaviour
     { 
     }
 
-    protected void OnClick() 
+    protected void OnClick(PointerEventData eventData, ButtonPlus button) 
     {
         if(_canUse) 
         {
@@ -38,6 +39,6 @@ public class ActionButton : MonoBehaviour
 
     private void Awake()
     {
-        Button.onClick.AddListener(OnClick);
+        Button.ClickHandler += OnClick;
     }
 }

@@ -48,11 +48,11 @@ public class CharacterDetailUI : MonoBehaviour
         CharacterDetailUI characterDetailUI = obj.GetComponent<CharacterDetailUI>();
         characterDetailUI.RectTransform.offsetMax = Vector3.zero;
         characterDetailUI.RectTransform.offsetMin = Vector3.zero;
-        characterDetailUI.WeaponButton.Button.interactable = canSelectEquip;
-        characterDetailUI.ArmorButtons[0].Button.interactable = canSelectEquip;
-        characterDetailUI.ArmorButtons[1].Button.interactable = canSelectEquip;
-        characterDetailUI.AmuletButtons[0].Button.interactable = canSelectEquip;
-        characterDetailUI.AmuletButtons[1].Button.interactable = canSelectEquip;
+        characterDetailUI.WeaponButton.enabled = canSelectEquip;
+        characterDetailUI.ArmorButtons[0].enabled = canSelectEquip;
+        characterDetailUI.ArmorButtons[1].enabled = canSelectEquip;
+        characterDetailUI.AmuletButtons[0].enabled = canSelectEquip;
+        characterDetailUI.AmuletButtons[1].enabled = canSelectEquip;
 
         return characterDetailUI;
     }
@@ -126,9 +126,9 @@ public class CharacterDetailUI : MonoBehaviour
             SkillScrollView.gameObject.SetActive(false);
         }
 
-        if (character.SupportList.Count > 0)
+        if (character.SubList.Count > 0)
         {
-            List<object> list = new List<object>(character.SupportList);
+            List<object> list = new List<object>(character.SubList);
             SupportScrollView.SetData(list);
             SupportScrollView.gameObject.SetActive(true);
         }
@@ -344,7 +344,7 @@ public class CharacterDetailUI : MonoBehaviour
 
     private void ShowSupportInfo(ButtonPlus buttonPlus)
     {
-        Support support = (Support)buttonPlus.Data;
+        Sub support = (Sub)buttonPlus.Data;
         SkillInfoGroup.SetData(support);
         SkillInfoGroup.transform.localPosition = new Vector3(0, -540, 0);
         SkillInfoGroup.gameObject.SetActive(true);

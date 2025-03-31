@@ -80,22 +80,35 @@ namespace Battle
 
         public List<Log> LogList = new List<Log>();
 
-        public void Init(string tutorial, string map) 
+        public void Init() 
         {
+            _maxIndex = 0;
+            _canClick = true;
+            CharacterList.Clear();
+            DyingList.Clear();
+            DeadList.Clear();
+            EnemyDataList.Clear();
+            TileDic.Clear();
             GetGameObject();
-            _fileLoader.Load<BattleFileFixed>(map, FileManager.PathEnum.MapBattleFixed, (obj)=> 
+            TimerUpdater.UpdateHandler += Update;
+        }
+
+        public void DeInit() 
+        {
+            Instance.BattleUI.gameObject.SetActive(false);
+            Instance.BattleResultUI.gameObject.SetActive(true);
+            TimerUpdater.UpdateHandler -= Update;
+        }
+
+        public void SetFixed(string tutorial, string map) 
+        {
+            _fileLoader.Load<BattleFileFixed>(map, FileManager.PathEnum.MapBattleFixed, (obj) =>
             {
                 BattleFileFixed file = (BattleFileFixed)obj;
                 PlayerPositionList = file.PlayerPositionList;
                 Exp = file.Exp;
                 MinPlayerCount = file.PlayerCount;
                 MaxPlayerCount = file.PlayerCount;
-                _maxIndex = 0;
-                _canClick = true;
-                CharacterList.Clear();
-                DyingList.Clear();
-                DeadList.Clear();
-                EnemyDataList.Clear();
 
                 for (int i = 0; i < file.EnemyList.Count; i++)
                 {
@@ -104,7 +117,6 @@ namespace Battle
                 }
 
                 BattleInfoTile tile;
-                TileDic.Clear();
                 for (int i = 0; i < file.TileList.Count; i++)
                 {
                     tile = new BattleInfoTile();
@@ -112,16 +124,12 @@ namespace Battle
                     TileDic.Add(file.TileList[i].Position, tile);
                 }
 
-                SetMinAndMax();
-                CreateObject();
-                InitState();
-                SetTutorial(tutorial);
+                Start(tutorial);
             });
         }
 
-        public void Init(string tutorial, EnemyGroupModel enemyGroup) 
+        public void SetRandom(string tutorial, EnemyGroupModel enemyGroup) 
         {
-            GetGameObject();
             _fileLoader.Load<BattleFileRandom>(enemyGroup.GetMap(), FileManager.PathEnum.MapBattleRandom, (obj) => 
             {
                 BattleFileRandom file = (BattleFileRandom)obj;
@@ -134,12 +142,6 @@ namespace Battle
                 {
                     MaxPlayerCount = CharacterManager.Instance.SurvivalCount();
                 }
-                _maxIndex = 0;
-                _canClick = true;
-                CharacterList.Clear();
-                DyingList.Clear();
-                DeadList.Clear();
-                EnemyDataList.Clear();
 
                 Vector2Int position;
                 TileModel tileData;
@@ -148,7 +150,6 @@ namespace Battle
                 Queue<Vector2Int> queue = new Queue<Vector2Int>();
 
                 BattleInfoTile tile;
-                TileDic.Clear();
                 for (int i = 0; i < file.TileList.Count; i++)
                 {
                     tile = new BattleInfoTile();
@@ -255,10 +256,7 @@ namespace Battle
                     }
                 }
 
-                SetMinAndMax();
-                CreateObject();
-                InitState();
-                SetTutorial(tutorial);
+                Start(tutorial);
             });
         }
 
@@ -274,6 +272,14 @@ namespace Battle
             _cameraDraw = Camera.main.GetComponent<CameraDraw>();
             _cameraController = Camera.main.GetComponent<CameraController>();
             _fileLoader = GameObject.Find("FileManager").GetComponent<FileManager>();
+        }
+
+        private void Start(string tutorial) 
+        {
+            SetMinAndMax();
+            CreateObject();
+            InitState();
+            SetTutorial(tutorial);
         }
 
         private void SetMinAndMax() 
@@ -310,13 +316,19 @@ namespace Battle
             _context.AddState(new CharacterState(_context));
             _context.AddState(new CommandState(_context));
             _context.AddState(new MoveState(_context));
-            _context.AddState(new TargetState(_context));
-            _context.AddState(new ConfirmState(_context));
-            _context.AddState(new EffectState(_context));
+            _context.AddState(new RangeState(_context));
+            //_context.AddState(new TargetState(_context));
+            //_context.AddState(new ConfirmState(_context));
+            //_context.AddState(new EffectState(_context));
             _context.AddState(new EndState(_context));
             _context.AddState(new WinState(_context));
             _context.AddState(new LoseState(_context));
             _context.AddState(new DirectionState(_context));
+
+            _context.AddState(new SubState(_context));
+            _context.AddState(new SkillState(_context));
+            _context.AddState(new ItemState(_context));
+            _context.AddState(new SpellState(_context));
         }
 
         private void SetTutorial(string tutorial)
@@ -421,7 +433,10 @@ namespace Battle
 
         public void SetSelectedCommand(Command command) 
         {
-            SelectedCharacter.Info.SelectedCommand = command;
+            if(_context.CurrentState is CommandState) 
+            {
+                ((CommandState)_context.CurrentState).SetCommand(command);
+            }
         }
 
         public void SetQuad(List<Vector2Int> list, Color color)
@@ -448,7 +463,7 @@ namespace Battle
         //     return areaList;
         // }
 
-        public List<Vector2Int> SetCommandPosition(Vector2Int from, Vector2Int to, Command command)
+        public List<Vector2Int> GetAreaList(Vector2Int from, Vector2Int to, Command command)
         {
             List<Vector2Int> commandPositionList =new List<Vector2Int>();
             if(command.AreaType == AreaTypeEnum.Point)
@@ -525,6 +540,12 @@ namespace Battle
             return commandPositionList;
         }
 
+        public void ClearQuad(Vector2Int v2)
+        {
+            TileDic[v2].TileObject.Quad.gameObject.SetActive(false);
+            TileDic[v2].TileObject.Buff.gameObject.SetActive(false);
+        }
+
         public void ClearQuad()
         {
             foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in TileDic)
@@ -542,22 +563,10 @@ namespace Battle
         public void OnMoveEnd()
         {
             _canClick = true;
-            SelectedCharacter.Info.ActionCount--;
 
             if (SelectedCharacter.AI != null)
             {
                 SelectedCharacter.AI.OnMoveEnd();
-            }
-            else
-            {
-                if (SelectedCharacter.Info.ActionCount > 0)
-                {
-                    _context.SetState<CommandState>();
-                }
-                else
-                {
-                    _context.SetState<EndState>();
-                }
             }
         }
 
@@ -584,14 +593,6 @@ namespace Battle
                 }
             }
             return false;
-        }
-
-        public void ResetAction()
-        {
-            SelectedCharacter.Info.HasMove = false;
-            SelectedCharacter.Info.ActionCount = 2;
-            SelectedCharacter.transform.position = SelectedCharacter.LastPosition;
-            SelectedCharacter.LastPosition = BattleCharacterInfo.DefaultLastPosition;
         }
 
         public void CreateEnemy(int id, int lv, Vector3 position) 
@@ -686,7 +687,7 @@ namespace Battle
                 List<Vector2Int> rangeList = new List<Vector2Int>();
                 for (int i = 0; i < stepList.Count; i++) //�ڥi�H���ʪ��d��
                 {
-                    tempList = GetRange(controller.AI.SelectedSkill.Range, stepList[i]);
+                    tempList = GetRangeList(controller.AI.SelectedSkill.Range, stepList[i]);
                     for (int j=0; j<tempList.Count; j++) 
                     {
                         if(!stepList.Contains(tempList[j]) && !rangeList.Contains(tempList[j])) 
@@ -697,6 +698,25 @@ namespace Battle
                 }
                 Instance.SetQuad(rangeList, _yellow);
             }
+        }
+
+        public void UseEffect(Command command, BattleCharacterController user, BattleCharacterController target)
+        {
+            HitType hitType;
+
+            if (command.AreaTarget == TargetEnum.Us || command.AreaTarget == TargetEnum.Self || command.AreaTarget == TargetEnum.UsMinHP || Instance.Tutorial != null)
+            {
+                hitType = HitType.Hit;
+            }
+            else
+            {
+                hitType = Instance.CheckHit(command.Hit, user, target);
+            }
+
+            List<Log> logList = new List<Log>();
+            command.Effect.Use(hitType, user, target, logList);
+            Instance.BattleUI.SetLittleHpBarValue(target);
+            Instance.BattleUI.PlayFloatingNumberPool(target, logList);
         }
 
         public void SetWin() 
@@ -718,6 +738,12 @@ namespace Battle
             }
         }
 
+        private void Update() 
+        {
+            ((BattleControllerState)_context.CurrentState).Update();
+        }
+
+
         public class BattleControllerState : State
         {
             protected BattleCharacterController _character;
@@ -730,9 +756,7 @@ namespace Battle
 
             public virtual void Next() { }
 
-            public virtual void Click(Vector2Int position)
-            {
-            }
+            public virtual void Click(Vector2Int position) { }
 
             public List<BattleCharacterController> GetAllCharacterList() 
             {
@@ -740,6 +764,8 @@ namespace Battle
                 list.AddRange(Instance.DyingList);
                 return list;
             }
+
+            public virtual void Update() { }
         }
     }
 }

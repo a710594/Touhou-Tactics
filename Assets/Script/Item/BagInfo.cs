@@ -7,7 +7,7 @@ public class BagInfo
     public int Money;
     public int Key;
     public Dictionary<int, Item> ItemDic = new Dictionary<int, Item>();
-    public Dictionary<int, Consumables> ConsumablesDic = new Dictionary<int, Consumables>();
+    public Dictionary<int, Item> ConsumablesDic = new Dictionary<int, Item>();
     public List<Food> FoodList = new List<Food>();
     public List<Equip> EquipList = new List<Equip>();
 

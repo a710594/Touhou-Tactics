@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Battle
 {
-    public partial class BattleController
+    /*public partial class BattleController
     {
         private class ConfirmState : BattleControllerState
         {
@@ -25,7 +25,7 @@ namespace Battle
                 Command command = _character.Info.SelectedCommand;
                 while(command != null)
                 {
-                    commandPositionList = Instance.SetCommandPosition(Utility.ConvertToVector2Int(_character.transform.position), selectedPosition, command);
+                    commandPositionList = Instance.GetAreaList(Utility.ConvertToVector2Int(_character.transform.position), selectedPosition, command);
                     commandPositionDic.Add(command, commandPositionList);
                     command = command.SubCommand;
                 }
@@ -103,5 +103,5 @@ namespace Battle
                 Instance.TileDic[Instance._selectedPosition].TileObject.Select.gameObject.SetActive(false);
             }
         }
-    }
+    }*/
 }

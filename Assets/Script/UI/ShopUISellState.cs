@@ -36,7 +36,7 @@ public partial class ShopUI : MonoBehaviour
             _shopContext.ShopUI.ShopItemGroup.gameObject.SetActive(true);
             _shopContext.ShopUI.ShopEquipGroup.gameObject.SetActive(false);
             _shopContext.ShopUI.ShopItemGroup.Init();
-            _shopContext.ShopUI.ShopItemGroup.SetScrollViewSell(ItemModel.CategoryEnum.Item);
+            _shopContext.ShopUI.ShopItemGroup.SetScrollViewSell(ItemModel.CategoryEnum.Material);
             _shopContext.ShopUI.ShopItemGroup.SetComment("");
             _shopContext.ShopUI._selectedSell = null;
         }

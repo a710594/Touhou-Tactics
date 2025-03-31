@@ -129,19 +129,7 @@ public partial class ShopUI : MonoBehaviour
     {
         if (_selectedSell != null) 
         {
-            if(_selectedSell is Consumables) 
-            {
-                Consumables consumables = (Consumables)_selectedSell;
-                ItemManager.Instance.Info.Money += consumables.Price;
-                MoneyLabel.text = ItemManager.Instance.Info.Money + "$";
-                ItemManager.Instance.MinusItem(consumables.ID, 1);
-                ShopItemGroup.SetScrollViewSell(consumables.Category);
-                if (consumables.Amount == 0)
-                {
-                    _selectedSell = null;
-                }
-            }
-            else if (_selectedSell is Item)
+            if (_selectedSell is Item)
             {
                 Item item = (Item)_selectedSell;
                 ItemManager.Instance.Info.Money += item.Data.Price;

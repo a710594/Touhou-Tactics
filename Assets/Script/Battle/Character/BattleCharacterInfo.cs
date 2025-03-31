@@ -15,13 +15,13 @@ public class BattleCharacterInfo
     }
 
     public bool IsAuto = false;
-    public int ActionCount = 2; //每個角色都有兩次的行動機會
+    //public int ActionCount = 2; //每個角色都有兩次的行動機會
 
-    public bool HasUseSkill = false;
-    public bool HasUseSupport = false;
-    public bool HasUseItem = false;
     public bool HasMove = false;
-    public bool HasUseSpell = false; //該回合是否已用過符卡
+    public bool MoveAgain = false;
+    public bool HasSub = false;
+    public bool HasMain = false;
+    public bool HasSpell = false;
 
     public bool CanUseSpell = true; //是否能使用符卡
 
@@ -43,7 +43,7 @@ public class BattleCharacterInfo
     public Command SelectedCommand = null; //可能是技能,輔助,或道具(消耗品,料理,符卡)
 
     public List<Skill> SkillList = new List<Skill>();
-    public List<Support> SupportList = new List<Support>();
+    public List<Sub> SubList = new List<Sub>();
     public List<Spell> SpellList = new List<Spell>();
     public List<Passive> PassiveList = new List<Passive>();
 

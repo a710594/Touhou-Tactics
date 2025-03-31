@@ -40,9 +40,18 @@ public class Room
             || (a.bounds.position.y >= (b.bounds.position.y + b.bounds.size.y)) || ((a.bounds.position.y + a.bounds.size.y) <= b.bounds.position.y));
     }
 
-    public Vector2Int GetRandomPosition()
+    public bool TryGetRandomPosition(out Vector2Int result)
     {
-        return _availableList[Random.Range(0, _availableList.Count)];
+        result = new Vector2Int();
+        if(_availableList.Count>0)
+        {
+            result = _availableList[Random.Range(0, _availableList.Count)]; ;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public void SetNotAvailable(Vector2Int v2)

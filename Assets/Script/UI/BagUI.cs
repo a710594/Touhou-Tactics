@@ -111,7 +111,7 @@ public class BagUI : MonoBehaviour
     {
         BagItemGroup.gameObject.SetActive(true);
         BagEquipGroup.gameObject.SetActive(false);
-        BagItemGroup.SetScrollView(ItemModel.CategoryEnum.Item);
+        BagItemGroup.SetScrollView(ItemModel.CategoryEnum.Material);
         BagItemGroup.SetName("");
         BagItemGroup.SetComment("");
     }
@@ -169,9 +169,9 @@ public class BagUI : MonoBehaviour
                 UseHandler(_selectedObj);
             }
         }
-        else if (_selectedObj is Consumables)
+        else if (_selectedObj is Item)
         {
-            Consumables consumables = (Consumables)_selectedObj;
+            Item consumables = (Item)_selectedObj;
             ItemManager.Instance.MinusItem(consumables.ID, 1);
             if (UseHandler != null)
             {

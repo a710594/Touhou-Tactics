@@ -6,7 +6,7 @@ public class SpellActionButton : ActionButton
 {
     public override void SetColor(BattleCharacterInfo character)
     {
-        if (character.HasUseSpell)
+        if (character.HasMain)
         {
             _canUse = false;
             _tipText = "這回合已經使用過符卡了";

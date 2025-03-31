@@ -6,37 +6,36 @@ namespace Battle
 {
     public partial class BattleController
     {
-        /*private class SkillState : BattleControllerState
+        public class SkillState : BattleControllerState
         {
+            private Timer _timer = new Timer();
+
             public SkillState(StateContext context) : base(context)
             {
             }
 
-            public override void Begin(object obj)
+            public override void Begin() 
             {
-                //Instance._battleUI.ActionButtonGroup.gameObject.SetActive(false);
                 _character = Instance.SelectedCharacter;
-                if (!_character.IsAuto)
-                {
-                    Instance._battleUI.SetActionVisible(true);
-                    Instance._battleUI.SetSkillVisible(true);
-                    Instance._battleUI.SetSkillData(_character.SkillList);
-                }
-            }
+                _characterList = Instance.CharacterList;
 
-            public override void End()
-            {
-                Instance._battleUI.SetSkillVisible(false);
-            }
-
-            public override void Click(Vector2Int position)
-            {
-                bool show = Instance.SetCharacterInfoUI_2(position);
-                if (!show)
+                _character.Info.HasMain = true;
+                foreach (KeyValuePair<Command, List<BattleCharacterController>> pair in Instance._commandTargetDic) 
                 {
-                    _context.SetState<ActionState>();
+                    for (int i = 0; i < pair.Value.Count; i++)
+                    {
+                        Instance.UseEffect(pair.Key, _character, pair.Value[i]);
+                    }
+
+                    Skill skill = (Skill)pair.Key;
+                    if (skill.CD > 0)
+                    {
+                        skill.CurrentCD = skill.CD + 1;
+                    }
                 }
+
+                _timer.Start(1, Instance.CheckResult);
             }
-        }*/
+        }
     }
 }

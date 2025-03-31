@@ -15,7 +15,7 @@ public class BattleUI : MonoBehaviour
     public static BattleUI Instance = null;
 
     public Button BackgroundButton;
-    public ActionButtonGroup ActionButtonGroup;
+    public CommandGroup CommandGroup;
     public LittleHpBarWithStatus LittleHpBarWithStatus;
     public Transform HPGroup;
     public FloatingNumberPool FloatingNumberPool;
@@ -32,20 +32,10 @@ public class BattleUI : MonoBehaviour
         gameObject.SetActive(isVisible);
     }
 
-    public void SetActionVisible(bool isVisible)
+    public void SetCommandVisible(bool isVisible)
     {
-        ActionButtonGroup.gameObject.SetActive(isVisible);
+        CommandGroup.gameObject.SetActive(isVisible);
         LogGroup.OpenButton.gameObject.SetActive(isVisible);
-    }
-
-    public void SetSkillVisible(bool isVisible) 
-    {
-        ActionButtonGroup.ScrollView.transform.parent.gameObject.SetActive(isVisible);
-    }
-
-    public void SetActionScrollView(List<object> list) 
-    {
-        ActionButtonGroup.SetScrollView(list);
     }
 
     public void SetPredictionLittleHpBar(BattleCharacterController controller, int predictionHp)

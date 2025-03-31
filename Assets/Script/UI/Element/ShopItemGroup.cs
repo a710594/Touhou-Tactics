@@ -45,7 +45,7 @@ public class ShopItemGroup : MonoBehaviour
         {
             ScrollView.SetData(new List<object>(ItemManager.Instance.Info.FoodList));
         }
-        else if (category == ItemModel.CategoryEnum.Item)
+        else if (category == ItemModel.CategoryEnum.Material)
         {
             ScrollView.SetData(new List<object>(ItemManager.Instance.Info.ItemDic.Values));
         }
@@ -101,30 +101,7 @@ public class ShopItemGroup : MonoBehaviour
                         SetComment("");
                     }
                 }
-                else if (data is Consumables)
-                {
-                    Consumables consumables = (Consumables)data;
-                    if (ItemManager.Instance.GetAmount(consumables.ID) > 0)
-                    {
-                        ButtonGroup.SetSelect(_selectedButton);
-                    }
-                    else
-                    {
-                        SetComment("");
-                    }
-                }
-                else if (data is Food)
-                {
-                    Food food = (Food)data;
-                    if (ItemManager.Instance.GetAmount(food.ID) > 0)
-                    {
-                        ButtonGroup.SetSelect(_selectedButton);
-                    }
-                    else
-                    {
-                        SetComment("");
-                    }
-                }
+
                 MaterialLabel.text = "";
                 SellHandler(data);
             }
@@ -148,11 +125,6 @@ public class ShopItemGroup : MonoBehaviour
             {
                 Item item = (Item)data;
                 SetComment(item.Data.Comment);
-            }
-            else if(data is Consumables)
-            {
-                Consumables consumables = (Consumables)data;
-                SetComment(consumables.Comment);
             }
             else if(data is Food) 
             {

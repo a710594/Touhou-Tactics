@@ -81,5 +81,61 @@ namespace Battle
 
             return effect;
         }
+
+        public static Effect GetEffect(Food food)
+        {
+            Effect effect;
+            List<Effect> effectList = new List<Effect>();
+            if (food.HP > 0)
+            {
+                effect = new MedicineEffect(food.HP);
+                effectList.Add(effect);
+            }
+            if (food.STR > 0)
+            {
+                effect = new BuffEffect(StatusModel.TypeEnum.STR, food.STR + 100, food.Time);
+                effectList.Add(effect);
+            }
+            if (food.CON > 0)
+            {
+                effect = new BuffEffect(StatusModel.TypeEnum.CON, food.CON + 100, food.Time);
+                effectList.Add(effect);
+            }
+            if (food.INT > 0)
+            {
+                effect = new BuffEffect(StatusModel.TypeEnum.INT, food.INT + 100, food.Time);
+                effectList.Add(effect);
+            }
+            if (food.MEN > 0)
+            {
+                effect = new BuffEffect(StatusModel.TypeEnum.MEN, food.MEN + 100, food.Time);
+                effectList.Add(effect);
+            }
+            if (food.SEN > 0)
+            {
+                effect = new BuffEffect(StatusModel.TypeEnum.SEN, food.SEN + 100, food.Time);
+                effectList.Add(effect);
+            }
+            if (food.AGI > 0)
+            {
+                effect = new BuffEffect(StatusModel.TypeEnum.AGI, food.AGI + 100, food.Time);
+                effectList.Add(effect);
+            }
+            if (food.MOV > 0)
+            {
+                effect = new BuffEffect(StatusModel.TypeEnum.MOV, food.MOV, food.Time);
+                effectList.Add(effect);
+            }
+
+            effect = effectList[0];
+            Effect temp = effect;
+            for (int i = 1; i < effectList.Count; i++)
+            {
+                temp.SubEffect = effectList[i];
+                temp = effect.SubEffect;
+            }
+
+            return effect;
+        }
     }
 }

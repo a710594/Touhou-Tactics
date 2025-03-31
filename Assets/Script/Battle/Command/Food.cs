@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Battle;
 
-public class Food : Command
+public class Food
 {
+    public string Name;
+    public string Comment;
     public int HP = 0;
     public int STR = 0;
     public int CON = 0;
@@ -21,7 +23,6 @@ public class Food : Command
 
     public Food(ItemModel item, FoodResultModel food, List<int> materialList)
     {
-        ID = item.ID;
         Name = item.Name;
         Comment = item.Comment + "\n";
         HP = food.HP;
@@ -34,14 +35,6 @@ public class Food : Command
         MOV = food.MOV;
         Time = food.Time;
         Price = item.Price;
-        
-        Hit = 100;
-        Range = 1;
-        RangeTarget = TargetEnum.Us;
-        AreaTarget = TargetEnum.Us;
-        AreaType = AreaTypeEnum.Point;;
-        Track = TrackEnum.None;
-        ArrayList = new List<Vector2Int>(){Vector2Int.zero};
 
         FoodMaterialModel foodMaterial;
         for (int i=0; i<materialList.Count; i++) 
@@ -58,7 +51,6 @@ public class Food : Command
         }
 
         SetComment();
-        SetEffect();
     }
 
     //for debug
@@ -67,7 +59,6 @@ public class Food : Command
         ItemModel item = DataTable.Instance.ItemDic[id];
         FoodResultModel food = DataTable.Instance.FoodResultDic[id];
 
-        ID = item.ID;
         Name = item.Name;
         Comment = item.Comment + "\n";
         HP = food.HP;
@@ -81,22 +72,8 @@ public class Food : Command
         Time = food.Time;
         Price = item.Price;
 
-        Hit = 100;
-        Range = 1;
-        RangeTarget = TargetEnum.Us;
-        AreaTarget = TargetEnum.Us;
-        AreaType = AreaTypeEnum.Point;
-        Track = TrackEnum.None;
-        ArrayList = new List<Vector2Int>(){Vector2Int.zero};
-
         SetComment();
-        SetEffect();
 
-    }
-
-    public void Init()
-    {
-        SetEffect();
     }
 
     private void SetComment() 
@@ -132,60 +109,6 @@ public class Food : Command
         if (MOV > 0)
         {
             Comment += "MOV+" + MOV + " ";
-        }
-    }
-
-    private void SetEffect() 
-    {
-        Effect effect;
-        List<Effect> effectList = new List<Effect>();
-        if (HP > 0) 
-        {
-            effect = new MedicineEffect(HP);
-            effectList.Add(effect);
-        }
-        if (STR > 0) 
-        {
-            effect = new BuffEffect(StatusModel.TypeEnum.STR, STR + 100, Time);
-            effectList.Add(effect);
-        }
-        if (CON > 0)
-        {
-            effect = new BuffEffect(StatusModel.TypeEnum.CON, CON + 100, Time);
-            effectList.Add(effect);
-        }
-        if (INT > 0)
-        {
-            effect = new BuffEffect(StatusModel.TypeEnum.INT, INT + 100, Time);
-            effectList.Add(effect);
-        }
-        if (MEN > 0)
-        {
-            effect = new BuffEffect(StatusModel.TypeEnum.MEN, MEN + 100, Time);
-            effectList.Add(effect);
-        }
-        if (SEN > 0)
-        {
-            effect = new BuffEffect(StatusModel.TypeEnum.SEN, SEN + 100, Time);
-            effectList.Add(effect);
-        }
-        if (AGI > 0)
-        {
-            effect = new BuffEffect(StatusModel.TypeEnum.AGI, AGI + 100, Time);
-            effectList.Add(effect);
-        }
-        if (MOV > 0)
-        {
-            effect = new BuffEffect(StatusModel.TypeEnum.MOV, MOV, Time);
-            effectList.Add(effect);
-        }
-
-        Effect = effectList[0];
-        effect = Effect;
-        for (int i=1; i<effectList.Count; i++) 
-        {
-            effect.SubEffect = effectList[i];
-            effect = effect.SubEffect;
         }
     }
 }

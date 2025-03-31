@@ -42,6 +42,7 @@ public class ScrollView : MonoBehaviour
     [NonSerialized]
     public List<ScrollGrid> GridList = new List<ScrollGrid>();
 
+    private bool _isInit = false;
     private bool _isLock = false;
     private int _currentIndex = 0;
     private int _subGridAmount = 0;
@@ -52,6 +53,24 @@ public class ScrollView : MonoBehaviour
 
     public void Init()
     {
+        if (_isInit) 
+        {
+            return;
+        }
+        else
+        {
+            _isInit = true;
+        }
+
+        if (Type == TypeEnum.Horizontal)
+        {
+            SubGrid.Grid.spacing = new Vector3(0, SubSpacing);
+        }
+        else if (Type == TypeEnum.Vertical)
+        {
+            SubGrid.Grid.spacing = new Vector3(SubSpacing, 0);
+        }
+
         float length = 0;
         if (Type == TypeEnum.Horizontal)
         {
@@ -247,14 +266,6 @@ public class ScrollView : MonoBehaviour
 
     private void Awake()
     {
-        if (Type == TypeEnum.Horizontal)
-        {
-            SubGrid.Grid.spacing = new Vector3(0, SubSpacing);
-        }
-        else if (Type == TypeEnum.Vertical)
-        {
-            SubGrid.Grid.spacing = new Vector3(SubSpacing, 0);
-        }
         Init();
     }
 

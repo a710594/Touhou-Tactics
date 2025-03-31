@@ -9,7 +9,7 @@ public class Flash : MonoBehaviour
 
     private bool _enable = false;
     private float _amount = 0;
-    private Material _material;
+    private UnityEngine.Material _material;
     private Renderer[] _renderers;
 
     public void Begin()
@@ -36,7 +36,7 @@ public class Flash : MonoBehaviour
 
     private void Awake()
     {
-        _material = Instantiate(Resources.Load<Material>("Material/Flash"));
+        _material = Instantiate(Resources.Load<UnityEngine.Material>("Material/Flash"));
         _renderers = GetComponentsInChildren<Renderer>();
 
         foreach (var renderer in _renderers)

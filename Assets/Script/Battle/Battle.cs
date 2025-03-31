@@ -15,12 +15,12 @@ namespace Battle
         UsMinHP,
     }
 
-public enum AreaTypeEnum
-{
-    Point=1,
-    Array,
-    Global,
-}
+    public enum AreaTypeEnum
+    {
+        Point=1,
+        Array,
+        Global,
+    }
 
     public enum TrackEnum 
     {
@@ -30,11 +30,18 @@ public enum AreaTypeEnum
         Through,
     }
 
-            public enum HitType
-        {
-            Miss,
-            Hit,
-            Critical,
-            NoDamage,
-        }
+    public enum HitType
+    {
+        Miss,
+        Hit,
+        Critical,
+        NoDamage,
+    }
+
+    public enum ResultType 
+    {   
+        None,
+        Win,
+        Lose,
+    }
 }

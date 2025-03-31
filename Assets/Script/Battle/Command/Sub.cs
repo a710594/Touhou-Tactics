@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace Battle
 {
-    public class Support : Command
+    public class Sub : Command
     {
         public int CD;
         public int CurrentCD;
-        public Support(SupportModel data)
+        public Sub(SupportModel data)
         {
             ID = data.ID;
             Name = data.Name;

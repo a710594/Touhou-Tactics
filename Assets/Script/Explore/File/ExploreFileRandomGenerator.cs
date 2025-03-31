@@ -221,19 +221,22 @@ public class ExploreFileRandomGenerator
         for (int i = 0; i < _isolatedList.Count; i++)
         {
             room = _isolatedList[i];
-            pos = room.GetRandomPosition();
-            treasureData = DataTable.Instance.TreasureDic[3];
-            treasureFile = new ExploreFileTreasure(treasureData.GetItemID(), treasureData.Prefab, treasureData.Height, pos, 0);
-            File.TreasureList.Add(treasureFile);
-            room.SetNotAvailable(pos);
-
+            if (room.TryGetRandomPosition(out pos))
+            {
+                treasureData = DataTable.Instance.TreasureDic[3];
+                treasureFile = new ExploreFileTreasure(treasureData.GetItemID(), treasureData.Prefab, treasureData.Height, pos, 0);
+                File.TreasureList.Add(treasureFile);
+                room.SetNotAvailable(pos);
+            }
 
             //create key
             room = _otherList[UnityEngine.Random.Range(0, _otherList.Count)];
-            pos = room.GetRandomPosition();
-            treasureFile = new ExploreFileTreasure(ItemManager.KeyID, "Key", 1, pos, 0);
-            File.TreasureList.Add(treasureFile);
-            room.SetNotAvailable(pos);
+            if (room.TryGetRandomPosition(out pos))
+            {
+                treasureFile = new ExploreFileTreasure(ItemManager.KeyID, "Key", 1, pos, 0);
+                File.TreasureList.Add(treasureFile);
+                room.SetNotAvailable(pos);
+            }
         }
 
         for (int i = 0; i < _otherList.Count; i++)
@@ -242,11 +245,13 @@ public class ExploreFileRandomGenerator
             count = UnityEngine.Random.Range(room.Data.MinTreasureCount, room.Data.MaxTreasureCount + 1);
             for (int j=0; j<count; j++) 
             {
-                pos = _otherList[i].GetRandomPosition();
-                treasureData = DataTable.Instance.TreasureDic[room.Data.GetTreasure()];
-                treasureFile = new ExploreFileTreasure(treasureData.GetItemID(), treasureData.Prefab, treasureData.Height, pos, 0);
-                File.TreasureList.Add(treasureFile);
-                _otherList[i].SetNotAvailable(pos);
+                if (_otherList[i].TryGetRandomPosition(out pos))
+                {
+                    treasureData = DataTable.Instance.TreasureDic[room.Data.GetTreasure()];
+                    treasureFile = new ExploreFileTreasure(treasureData.GetItemID(), treasureData.Prefab, treasureData.Height, pos, 0);
+                    File.TreasureList.Add(treasureFile);
+                    _otherList[i].SetNotAvailable(pos);
+                }
             }
         }
     }
@@ -255,18 +260,18 @@ public class ExploreFileRandomGenerator
     {
         Room current = null;
         List<Room> visited = new List<Room>();
-        Queue<Room> unVisited = new Queue<Room>();
-        unVisited.Enqueue(start);
+        Stack<Room> unVisited = new Stack<Room>();
+        unVisited.Push(start);
 
         while (unVisited.Count != 0)
         {
-            current = unVisited.Dequeue(); //当前访问的
+            current = unVisited.Pop(); //当前访问的
             visited.Add(current);
             for(int i=0; i<current.AdjList.Count; i++)
             {
                 if (!visited.Contains(current.AdjList[i]))
                 {
-                    unVisited.Enqueue(current.AdjList[i]);
+                    unVisited.Push(current.AdjList[i]);
                 }
             }         
         }
@@ -410,7 +415,7 @@ public class ExploreFileRandomGenerator
 
     private void PlaceStartAndGoal()
     {
-        File.Start = _startRoom.GetRandomPosition();
+        _startRoom.TryGetRandomPosition(out File.Start);
         _startRoom.SetNotAvailable(File.Start);
         File.PlayerPositionX = File.Start.x;
         File.PlayerPositionZ = File.Start.y;
@@ -428,7 +433,7 @@ public class ExploreFileRandomGenerator
             }
         }
 
-        File.Goal = _endRoom.GetRandomPosition();
+        _endRoom.TryGetRandomPosition(out File.Goal);
         _endRoom.SetNotAvailable(File.Goal);
     }
 
@@ -439,8 +444,10 @@ public class ExploreFileRandomGenerator
         for (int i = 0; i < _otherList.Count; i++) //每個房間有一隻怪
         {
             enemyGroup = DataTable.Instance.EnemyGroupDic[data.GetEnemyGroupID()];
-            pos = _otherList[i].GetRandomPosition();
-            File.EnemyList.Add(new ExploreFileEnemy(enemyGroup, pos));
+            if (_otherList[i].TryGetRandomPosition(out pos))
+            {
+                File.EnemyList.Add(new ExploreFileEnemy(enemyGroup, pos));
+            }
         }
 
         enemyGroup = DataTable.Instance.EnemyGroupDic[data.BossEnemyGroup];

@@ -3,8 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//道具中的素材類別
-public class Item 
+public class Item
 {
     public int ID;
     public int Amount;
@@ -20,24 +19,8 @@ public class Item
         Amount = amount;
     }
 
-    public void Init() 
+    public void Init()
     {
         Data = DataTable.Instance.ItemDic[ID];
-        //if (Data.EffectID != -1)
-        //{
-        //    Effect = EffectFactory.GetEffect(Data.EffectID);
-        //}
     }
-
-    //public virtual void SetEffect(BattleCharacterInfo user, BattleCharacterInfo target, List<FloatingNumberData> floatingList, List<BattleCharacterInfo> characterList)
-    //{
-    //    Effect.SetEffect(user, target, floatingList, characterList);
-    //    user.HasUseItem = true;
-    //    user.ActionCount--;
-    //    if (user.CurrentPP < BattleCharacterInfo.MaxPP)
-    //    {
-    //        user.CurrentPP++;
-    //    }
-    //    ItemManager.Instance.MinusItem(this, 1);
-    //}
 }

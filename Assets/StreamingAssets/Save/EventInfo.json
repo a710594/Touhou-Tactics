@@ -1,1 +1,1 @@
-{"GetItem":false,"SanaeJoin":true,"SanaeTutorial":false,"MarisaJoin":false,"F2":false,"SpellTutorial":false,"TriggerList":["TriggerEvent_1","TriggerEvent_2","TriggerEvent_3"]}
+{"GetItem":false,"SanaeJoin":true,"SanaeTutorial":true,"MarisaJoin":false,"F2":true,"SpellTutorial":false,"TriggerList":["TriggerEvent_1","TriggerEvent_2","TriggerEvent_3"]}

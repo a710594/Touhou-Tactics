@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Battle
 {
-    public partial class BattleController
+    /*public partial class BattleController
     {
         public class TargetState : BattleControllerState
         {
@@ -28,7 +28,7 @@ namespace Battle
                 }
                 else
                 {
-                    _rangeList = Instance.GetRange(_character.Info.SelectedCommand.Range, Utility.ConvertToVector2Int(_character.transform.position));
+                    _rangeList = Instance.GetRangeList(_character.Info.SelectedCommand.Range, Utility.ConvertToVector2Int(_character.transform.position));
                 }
 
                 Instance.RemoveByFaction(_command.RangeTarget, _rangeList);
@@ -71,5 +71,5 @@ namespace Battle
                 }
             }
         }
-    }
+    }*/
 }

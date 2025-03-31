@@ -15,6 +15,7 @@ public class BattleQuickStarter : MonoBehaviour
     public int EnemyGroupId;
     public string Map;
     public string Tutorial;
+    public FileManager FileManager;
 
     private void LoadData()
     {
@@ -27,24 +28,24 @@ public class BattleQuickStarter : MonoBehaviour
         {
             if (CurrentMode == ModeEnum.Fixed)
             {
-                BattleController.Instance.Init(Tutorial, Map);
+                BattleController.Instance.Init();
+                BattleController.Instance.SetFixed(Tutorial, Map);
             }
             else
             {
                 EnemyGroupModel enemyGroup = DataTable.Instance.EnemyGroupDic[EnemyGroupId];
-                BattleController.Instance.Init(Tutorial, enemyGroup);
+                BattleController.Instance.Init();
+                BattleController.Instance.SetRandom(Tutorial, enemyGroup);
             }
         });
     }
 
-    void Start()
+    private void Awake()
     {
+        FileManager.Init();
+        InputMamager.Instance.Init();
+        DataTable.Instance.SetFileManager(FileManager);
+        SaveManager.Instance.SetFileManager(FileManager);
         LoadData();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

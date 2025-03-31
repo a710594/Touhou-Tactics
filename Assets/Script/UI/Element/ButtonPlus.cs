@@ -19,7 +19,6 @@ public class ButtonPlus : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     public float DownThreshold = 0.2f; //開始 Down 事件
     public float PressDuration = 0.1f; //Down 之後執行 Press 的週期
-    public Button Button;
     public Text Label;
     public Image Image;
     public object Data = null;
@@ -58,7 +57,7 @@ public class ButtonPlus : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if(EnterHandler!= null) 
+        if(EnterHandler!= null && eventData.pointerCurrentRaycast.gameObject == gameObject) 
         {
             EnterHandler(this);
         }

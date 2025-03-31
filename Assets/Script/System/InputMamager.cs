@@ -158,7 +158,7 @@ public class InputMamager
         }
         else
         {
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
             if (Input.GetKeyDown(KeyCode.V))
             {
                 Battle.BattleController.Instance.EndTutorial();
@@ -169,7 +169,7 @@ public class InputMamager
                 Battle.BattleController.Instance.EndTutorial();
                 Battle.BattleController.Instance.SetLose();
             }
-#endif
+//#endif
         }
     }
 }

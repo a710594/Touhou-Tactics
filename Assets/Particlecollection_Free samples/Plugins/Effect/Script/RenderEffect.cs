@@ -17,7 +17,7 @@ public enum RenderBillBoardType{
 [System.Serializable]
 public class MaterialEffect
 {
-    public Material m_EffectMaterial;
+    public UnityEngine.Material m_EffectMaterial;
     public bool m_EnableAlphaAnimation = false;
     public float m_AlphaAnimationTimeScale = 1.0f;
     public AnimationCurve m_AlphaCurve = new AnimationCurve();
@@ -33,12 +33,12 @@ public class MaterialEffect
     public bool m_EditorExtend = false;
 #endif
 
-    public MaterialEffect(Material material)
+    public MaterialEffect(UnityEngine.Material material)
     {
         
     }
 
-    public void ReInitMaterial(Material material)
+    public void ReInitMaterial(UnityEngine.Material material)
     {
         if (material == null)
             return;

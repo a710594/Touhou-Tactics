@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraDraw : MonoBehaviour
 {
     private bool _isBlock = false;
-    private Material _mat;
+    private UnityEngine.Material _mat;
     private Vector3 _p1;
     private Vector3 _p2;
     private List<Vector3> _list = new List<Vector3>();
@@ -81,7 +81,7 @@ public class CameraDraw : MonoBehaviour
             // Unity has a built-in shader that is useful for drawing
             // simple colored things.
             Shader shader = Shader.Find("Hidden/Internal-Colored");
-            _mat = new Material(shader);
+            _mat = new UnityEngine.Material(shader);
             _mat.hideFlags = HideFlags.HideAndDontSave;
             // Turn on alpha blending
             _mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);

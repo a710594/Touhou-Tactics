@@ -9,7 +9,7 @@ public class ItemModel
         Consumables = 1,
         Food,
         Equip,
-        Item, //¯À§÷
+        Material, //¯À§÷
     }
 
     public CategoryEnum Category;

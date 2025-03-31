@@ -369,21 +369,17 @@ public static class Utility
         {
             return ((Skill)obj).Effect;
         }
-        else if (obj is Support)
+        else if (obj is Sub)
         {
-            return ((Support)obj).Effect;
+            return ((Sub)obj).Effect;
         }
         else if (obj is Spell)
         {
             return ((Spell)obj).Effect;
         }
-        else if (obj is Consumables)
+        else if (obj is Battle.ItemCommand)
         {
-            return ((Consumables)obj).Effect;
-        }
-        else if (obj is Food)
-        {
-            return ((Food)obj).Effect;
+            return ((Battle.ItemCommand)obj).Effect;
         }
         else
         {

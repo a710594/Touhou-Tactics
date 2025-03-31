@@ -9,8 +9,6 @@ namespace Battle
     {
         public class CharacterState : BattleControllerState
         {
-            private BattleCharacterController _controller;
-
             public CharacterState(StateContext context) : base(context)
             {
             }
@@ -30,26 +28,31 @@ namespace Battle
                     }
                 }
 
-                _controller = Instance.CharacterList[0];
-                Instance.SelectedCharacter = _controller;
+                _character = Instance.CharacterList[0];
+                Instance.SelectedCharacter = _character;
                 
                 if(Instance.CharacterStateBeginHandler != null)
                 {
                     Instance.CharacterStateBeginHandler();
                 }
 
-                int wt = _controller.Info.CurrentWT;
+                int wt = _character.Info.CurrentWT;
                 List<BattleCharacterController> characterList = Instance.CharacterList;
                 for (int i = 0; i < characterList.Count; i++)
                 {
                     characterList[i].Info.CurrentWT -= wt;
                 }
 
-                Instance.BattleUI.SetActionVisible(false);
-                _controller.Outline.OutlineWidth = 2;
-                _controller.Outline.OutlineColor = Color.yellow;
+                Instance.BattleUI.SetCommandVisible(false);
+                _character.Outline.OutlineWidth = 2;
+                _character.Outline.OutlineColor = Color.yellow;
+                _character.Info.HasMove = false;
+                _character.Info.MoveAgain = false;
+                _character.Info.HasSub = false;
+                _character.Info.HasMain = false;
+                _character.Info.HasSpell = false;
                 Instance.BattleUI.CharacterListGroupRefresh();
-                Instance._cameraController.SetMyGameObj(_controller.gameObject, ()=> 
+                Instance._cameraController.SetMyGameObj(_character.gameObject, ()=> 
                 {
                     _context.SetState<CommandState>();
                 });

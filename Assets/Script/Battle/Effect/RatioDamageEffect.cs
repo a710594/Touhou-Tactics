@@ -35,10 +35,5 @@ public class RatioDamageEffect : Effect
         {
             SubEffect.Use(hitType, user, target, logList);
         }
-
-        if (SelfEffect != null && hitType != HitType.Miss)
-        {
-            SelfEffect.Use(hitType, user, user, logList);
-        }
     }
 }

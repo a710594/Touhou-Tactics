@@ -6,7 +6,7 @@ namespace Battle
 {
     public partial class BattleController
     {
-        private class LoseState : BattleControllerState
+        public class LoseState : BattleControllerState
         {
             public LoseState(StateContext context) : base(context)
             {
@@ -14,8 +14,8 @@ namespace Battle
 
             public override void Begin()
             {
-                Instance.BattleUI.gameObject.SetActive(false);
-                Instance.BattleResultUI.gameObject.SetActive(true);
+                Instance.DeInit();
+
                 Instance.BattleResultUI.SetLose(() =>
                 {
                     SceneController.Instance.ChangeScene("Camp", ChangeSceneUI.TypeEnum.Fade, (sceneName) =>

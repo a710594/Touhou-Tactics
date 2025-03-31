@@ -24,7 +24,7 @@ public class BagItemGroup : MonoBehaviour
         {
             ScrollView.SetData(new List<object>(ItemManager.Instance.Info.FoodList));
         }
-        else if (category == ItemModel.CategoryEnum.Item)
+        else if (category == ItemModel.CategoryEnum.Material)
         {
             ScrollView.SetData(new List<object>(ItemManager.Instance.Info.ItemDic.Values));
         }
@@ -59,11 +59,11 @@ public class BagItemGroup : MonoBehaviour
             SetName(item.Data.Name);
             SetComment(item.Data.Comment);
         }
-        else if(data is Consumables) 
+        else if(data is Battle.ItemCommand) 
         {
-            Consumables consumables = (Consumables)data;
-            SetName(consumables.Name);
-            SetComment(consumables.Comment);
+            Battle.ItemCommand item = (Battle.ItemCommand)data;
+            SetName(item.Name);
+            SetComment(item.Comment);
         }
         else if(data is Food) 
         {

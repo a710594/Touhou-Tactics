@@ -90,8 +90,8 @@ public class LogoUI : MonoBehaviour
 
     private void Awake()
     {
-        InputMamager.Instance.Init();
         FileManager.Init();
+        InputMamager.Instance.Init();
         DataTable.Instance.SetFileManager(FileManager);
         SaveManager.Instance.SetFileManager(FileManager);
         LoadData();

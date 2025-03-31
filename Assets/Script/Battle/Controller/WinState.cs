@@ -6,7 +6,7 @@ namespace Battle
 {
     public partial class BattleController
     {
-        private class WinState : BattleControllerState 
+        public class WinState : BattleControllerState 
         {
             public WinState(StateContext context) : base(context)
             {
@@ -14,6 +14,8 @@ namespace Battle
 
             public override void Begin() 
             {
+                Instance.DeInit();
+
                 int itemId;
                 EnemyModel enemy;
                 List<int> itemList = new List<int>();
@@ -27,8 +29,7 @@ namespace Battle
                         ItemManager.Instance.AddItem(itemId, 1);
                     }
                 }
-                Instance.BattleUI.gameObject.SetActive(false);
-                Instance.BattleResultUI.gameObject.SetActive(true);
+
                 Instance.BattleResultUI.SetWin(CharacterManager.Instance.Info.Lv, CharacterManager.Instance.Info.Exp, Instance.Exp, itemList, ()=> 
                 {
                     SceneController.Instance.ChangeScene("Explore", ChangeSceneUI.TypeEnum.Fade, (sceneName) =>

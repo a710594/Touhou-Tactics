@@ -16,7 +16,7 @@ public class ShaderMaterialsEditor : ShaderGUI
         bool bRange02 = false;
         bool bRange03 = false;
         bool bRange04 = false;
-        Material targetMat = materialEditor.target as Material;
+        UnityEngine.Material targetMat = materialEditor.target as UnityEngine.Material;
         foreach (MaterialProperty property in properties)
         {
 			materialEditor.ShaderProperty (property, property.displayName);

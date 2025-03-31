@@ -40,12 +40,12 @@ public class SaveManager
         _count = 0;
         _callback = callback;
 
-        _fileManager.Load<BagInfo>("BagInfo", FileManager.PathEnum.Save, (obj) =>
+        _fileManager.Load<BagInfo>("BagInfo", FileManager.PathEnum.Save, (Action<object>)((obj) =>
         {
             _baginfo = (BagInfo)obj;
             if (_baginfo != null)
             {
-                foreach (KeyValuePair<int, Consumables> pair in _baginfo.ConsumablesDic)
+                foreach (KeyValuePair<int, Item> pair in _baginfo.ConsumablesDic)
                 {
                     pair.Value.Init();
                 }
@@ -54,11 +54,6 @@ public class SaveManager
                 {
                     pair.Value.Init();
                 }
-
-                for (int i = 0; i < _baginfo.FoodList.Count; i++)
-                {
-                    _baginfo.FoodList[i].Init();
-                }
             }
             else
             {
@@ -66,7 +61,7 @@ public class SaveManager
             }
             ItemManager.Instance.Init(_baginfo);
             CheckComplete();
-        });
+        }));
 
         _fileManager.Load<CharacterGroupInfo>("CharacterGroupInfo", FileManager.PathEnum.Save, (obj) =>
         {

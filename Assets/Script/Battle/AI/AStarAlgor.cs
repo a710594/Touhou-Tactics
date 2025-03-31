@@ -136,7 +136,7 @@ namespace Battle
         {
             int distance;
             Vector2Int start = Utility.ConvertToVector2Int(character.transform.position);
-            List<Vector2Int> stepList = GetRange(character.Info.MOV, start);
+            List<Vector2Int> stepList = GetRangeList(character.Info.MOV, start);
             for (int i = 0; i < stepList.Count; i++)
             {
                 distance = GetDistance(start, stepList[i], character.Info.Faction);

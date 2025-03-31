@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Battle
+/*namespace Battle
 {
     public class BattleTutorial_1 : BattleTutorial
     {
@@ -636,4 +636,4 @@ namespace Battle
             }
         }
     }
-}
+}*/

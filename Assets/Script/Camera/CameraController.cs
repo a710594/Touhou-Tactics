@@ -73,7 +73,7 @@ public class CameraController : MonoBehaviour
             return;
         }
 
-        if (Input.GetMouseButton(0))
+        /*if (Input.GetMouseButton(0))
         {
             _mouseX = Input.GetAxis("Mouse X");
             _mouseY = Input.GetAxis("Mouse Y");
@@ -101,32 +101,83 @@ public class CameraController : MonoBehaviour
         {
             _mouseX = Input.GetAxis("Mouse X");
             transform.RotateAround(MyGameObj.transform.position, Vector3.up, -_mouseX * Speed);
-
-            //_position = Utility.GetRotateAroundPosition(transform.position, MyGameObj.transform.position, Vector3.up, -_mouseX * Speed);
-            //_angle = Utility.GetRotateAroundRotation(transform.rotation, Vector3.up, -_mouseX * Speed).eulerAngles;
-            //GetMinAndMax(_angle);
-            //if (_position.x > _minX && _position.x < _maxX && _position.z > _minZ && _position.z < _maxZ)
-            //{
-            //    transform.position = _position;
-            //    transform.eulerAngles = _angle;
-            //}
-        }
+        }*/
+        GetMinAndMax(transform.eulerAngles);
         if (Input.GetMouseButton(2))
         {
             _mouseY = Input.GetAxis("Mouse Y");
             if (transform.eulerAngles.x - _mouseY * Speed < 89 && transform.eulerAngles.x - _mouseY * Speed > 0)
             {
                 transform.RotateAround(MyGameObj.transform.position, transform.right, -_mouseY * Speed);
+                _position = transform.position;
             }
-
-            //_position = Utility.GetRotateAroundPosition(transform.position, MyGameObj.transform.position, transform.right, -_mouseY * Speed);
-            //_angle = Utility.GetRotateAroundRotation(transform.rotation, transform.right, -_mouseY * Speed).eulerAngles;
-            //GetMinAndMax(_angle);
-            //if (_position.x > _minX && _position.x < _maxX && _position.z > _minZ && _position.z < _maxZ && _angle.x < 89 && _angle.x > 0)
-            //{
-            //    transform.position = _position;
-            //    transform.eulerAngles = _angle;
-            //}
+            CheckCameraPosition();
         }
+
+        if (Input.GetKey(KeyCode.A)) 
+        {
+            _position = transform.position - transform.right.normalized * Time.deltaTime * Speed * 5;
+            if (_position.x > _minX && _position.x < _maxX && _position.z > _minZ && _position.z < _maxZ)
+            {
+                transform.position = _position;
+            }
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            _position = transform.position + transform.right.normalized * Time.deltaTime * Speed * 5;
+            if (_position.x > _minX && _position.x < _maxX && _position.z > _minZ && _position.z < _maxZ)
+            {
+                transform.position = _position;
+            }
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            _position = transform.position - (new Vector3(transform.forward.x, 0, transform.forward.z)).normalized * Time.deltaTime * Speed * 5;
+            if (_position.x > _minX && _position.x < _maxX && _position.z > _minZ && _position.z < _maxZ)
+            {
+                transform.position = _position;
+            }
+        }
+        if (Input.GetKey(KeyCode.W))
+        {
+            _position = transform.position + (new Vector3(transform.forward.x, 0, transform.forward.z)).normalized * Time.deltaTime * Speed * 5;
+            if (_position.x > _minX && _position.x < _maxX && _position.z > _minZ && _position.z < _maxZ)
+            {
+                transform.position = _position;
+            }
+        }
+        if (Input.GetKey(KeyCode.E)) 
+        {
+            transform.RotateAround(MyGameObj.transform.position, Vector3.up, - Time.deltaTime * Speed * 20);
+            _position = transform.position;
+            CheckCameraPosition();
+        }
+        if (Input.GetKey(KeyCode.Q))
+        {
+            transform.RotateAround(MyGameObj.transform.position, Vector3.up, +Time.deltaTime * Speed * 20);
+            _position = transform.position;
+            CheckCameraPosition();
+        }
+    }
+
+    private void CheckCameraPosition() 
+    {
+        if (_position.x < _minX)
+        {
+            _position = new Vector3(_minX, _position.y, _position.z);
+        }
+        if (_position.x > _maxX)
+        {
+            _position = new Vector3(_maxX, _position.y, _position.z);
+        }
+        if (_position.z < _minZ)
+        {
+            _position = new Vector3(_position.x, _position.y, _minZ);
+        }
+        if (_position.z > _maxZ)
+        {
+            _position = new Vector3(_position.x, _position.y, _maxZ);
+        }
+        transform.position = _position;
     }
 }

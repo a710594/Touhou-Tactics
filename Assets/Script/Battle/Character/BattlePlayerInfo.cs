@@ -30,7 +30,7 @@ public class BattlePlayerInfo : BattleCharacterInfo
         CurrentWT = WT;
 
         SkillList = info.SkillList;
-        SupportList = info.SupportList;
+        SubList = info.SupportList;
         SpellList = info.SpellList;
 
         Weapon = info.Weapon;

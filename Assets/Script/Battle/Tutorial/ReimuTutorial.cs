@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Battle
+/*namespace Battle
 {
 
     //ÆF¹Ú±Ð¾Ç
@@ -179,4 +179,4 @@ namespace Battle
             }
         }
     }
-}
+}*/
