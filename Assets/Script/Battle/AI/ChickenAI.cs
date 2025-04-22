@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Battle
 {
-    public class ChickenAI : BattleAI
+    public class ChickenAI : OldBattleAI
     {
         private int _count = 0;
 

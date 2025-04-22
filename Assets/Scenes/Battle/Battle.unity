@@ -933,6 +933,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -85
       objectReference: {fileID: 0}
+    - target: {fileID: 4635922187720146112, guid: 4cc41468816d82647965f9cbcad0f811, type: 3}
+      propertyPath: TipLabel
+      value: 
+      objectReference: {fileID: 861492191}
     - target: {fileID: 4717055256450547553, guid: 4cc41468816d82647965f9cbcad0f811, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

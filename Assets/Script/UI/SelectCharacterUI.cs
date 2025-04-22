@@ -18,6 +18,7 @@ namespace Battle
         private int _minCount;
         private int _maxCount;
         private CameraController _camera;
+        private LayerMask _battleTileLayer;
 
         private BattleCharacterController _characterController;
         private List<BattleCharacterInfo> _candidateList = new List<BattleCharacterInfo>();
@@ -40,8 +41,8 @@ namespace Battle
             ScrollView.EnterHandler = OnEnter;
             ScrollView.ExitHandler = OnExit;
 
-            BattleController.Instance.CharacterInfoUIGroup.SetCharacterInfoUI_1(null);
-            BattleController.Instance.CharacterInfoUIGroup.SetCharacterInfoUI_2(null);
+            BattleController.Instance.CharacterInfoUIGroup.HideCharacterInfoUI_1();
+            BattleController.Instance.CharacterInfoUIGroup.HideCharacterInfoUI_2();
         }
 
 
@@ -52,6 +53,7 @@ namespace Battle
             _characterController.Info = info;
             Vector3 screenPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10));
             _characterController.transform.position = screenPos;
+            _characterController.transform.localEulerAngles = new Vector3(0, -90, 0);
             _isDrag = true;
         }
 
@@ -59,12 +61,12 @@ namespace Battle
         {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit, 100))
+            if (Physics.Raycast(ray, out hit, 100, _battleTileLayer))
             {
-                if (hit.collider.tag == "BattleTile" && BattleController.Instance.PlayerPositionList.Contains(Utility.ConvertToVector2Int(hit.collider.transform.position)))
+                if (hit.collider.tag == "BattleTile" && BattleController.Instance.PlayerPositionList.Contains(Utility.ConvertToVector2Int(hit.transform.position)))
                 {
-                    BattleInfoTile tile = BattleController.Instance.TileDic[Utility.ConvertToVector2Int(hit.collider.transform.position)];
-                    _characterController.transform.position = hit.collider.transform.position + hit.collider.transform.up * tile.TileData.Height;
+                    BattleInfoTile tile = BattleController.Instance.TileDic[Utility.ConvertToVector2Int(hit.transform.position)];
+                    _characterController.transform.position = hit.transform.position + hit.transform.up * tile.TileData.Height;
                 }
                 else
                 {
@@ -83,28 +85,19 @@ namespace Battle
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            Vector2Int position;
-            if (Physics.Raycast(ray, out hit, 100))
+            if (Physics.Raycast(ray, out hit, 100, _battleTileLayer))
             {
-                position = Utility.ConvertToVector2Int(hit.point);
                 if (BattleController.Instance.PlaceCharacter(_characterController))
                 {
                     _characterController.RightClickHandler = OnRightClick;
                     _candidateList.Remove(_characterController.Info);
                     ScrollView.SetData(new List<object>(_candidateList));
                 }
-                else
-                {
-                    //BattleController.Instance.SetCharacterSpriteVisible(character, true);
-                }
             }
             else
             {
-                //BattleController.Instance.SetCharacterSpriteVisible(character, true);
                 GameObject.Destroy(_characterController.gameObject);
             }
-            //buttonPlus.Image.transform.SetParent(buttonPlus.transform);
-            //buttonPlus.Image.transform.localPosition = Vector3.zero;
             _camera.enabled = true;
             _isDrag = false;
         }
@@ -120,13 +113,13 @@ namespace Battle
 
         private void OnEnter(ButtonPlus buttonPlus)
         {
-            BattleController.Instance.CharacterInfoUIGroup.SetCharacterInfoUI_1((BattleCharacterInfo)buttonPlus.Data);
+            BattleController.Instance.CharacterInfoUIGroup.ShowCharacterInfoUI_1((BattleCharacterInfo)buttonPlus.Data, Vector2Int.zero);
             _camera.enabled = false;
         }
 
         private void OnExit(ButtonPlus buttonPlus)
         {
-            BattleController.Instance.CharacterInfoUIGroup.SetCharacterInfoUI_1(null);
+            BattleController.Instance.CharacterInfoUIGroup.HideCharacterInfoUI_1();
             if (!_isDrag) 
             {
                 _camera.enabled = true;
@@ -162,7 +155,7 @@ namespace Battle
             {
                 RaycastHit hit;
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out hit, 100))
+                if (Physics.Raycast(ray, out hit, 100, _battleTileLayer))
                 {
                     if (hit.collider.tag == "BattleTile")
                     {
@@ -191,6 +184,8 @@ namespace Battle
         {
             _camera = Camera.main.GetComponent<CameraController>();
             ConfirmButton.onClick.AddListener(ConfirmOnClick);
+
+            _battleTileLayer = LayerMask.GetMask("BattleTile");
         }
     }
 }

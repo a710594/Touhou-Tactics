@@ -7,8 +7,10 @@ using UnityEngine.UI;
 
 public class DropdownButton : DropdownNode
 {
-    private static readonly Color _darkGray = new Color(0.5f, 0.5f, 0.5f);
-    private static readonly Color _lightGray = new Color(0.7f, 0.7f, 0.7f);
+    private static readonly Color32 _white = new Color32(255, 236, 191, 255);
+    private static readonly Color _lightGray = new Color32(200, 190, 160, 255);
+    private static readonly Color32 _darkGray = new Color32(160, 150, 130, 255);
+    private static readonly Color32 _black = new Color32(120, 110, 90, 255);
 
     public ButtonPlus Button;
     public DropdownGroup DropdownGroup;
@@ -41,7 +43,7 @@ public class DropdownButton : DropdownNode
         _hasUse = hasUse;
         if (!hasUse) 
         {
-            Button.Image.color = Color.white;
+            Button.Image.color = _white;
             Button.Label.color = Color.black;
         }
         else
@@ -60,7 +62,7 @@ public class DropdownButton : DropdownNode
         }
         else
         {
-            Button.Image.color = Color.black;
+            Button.Image.color = _black;
             Button.Label.color = Color.white;
         }
 
@@ -74,7 +76,7 @@ public class DropdownButton : DropdownNode
     {
         if (!_hasUse)
         {
-            Button.Image.color = Color.white;
+            Button.Image.color = _white;
             Button.Label.color = Color.black;
         }
         else

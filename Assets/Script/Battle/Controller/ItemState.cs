@@ -8,7 +8,9 @@ namespace Battle
     {
         public class ItemState : BattleControllerState
         {
+            private int _originalHP;
             private Timer _timer = new Timer();
+            private BattleCharacterController _target = null;
 
             public ItemState(StateContext context) : base(context)
             {
@@ -16,19 +18,33 @@ namespace Battle
 
             public override void Begin()
             {
-                _character = Instance.SelectedCharacter;
-                _characterList = Instance.CharacterList;
+                _selectedCharacter = Instance.SelectedCharacter;
+                _characterList = Instance.CharacterAliveList;
+                _selectedCharacter.Info.HasMain = true;
 
-                _character.Info.HasMain = true;
-                foreach (KeyValuePair<Command, List<BattleCharacterController>> pair in Instance._commandTargetDic)
+                _target = null;
+                if (Instance._targetList.Count > 0 && Instance._targetList[0] != _selectedCharacter)
                 {
-                    for (int i = 0; i < pair.Value.Count; i++)
+                    _target = Instance._targetList[0];
+                    _originalHP = _target.Info.CurrentHP;
+                }
+
+                int maxCount = -1;
+                for (int i = 0; i < Instance._targetList.Count; i++)
+                {
+                    Instance.UseEffect(_selectedCharacter.Info.SelectedCommand, _selectedCharacter, Instance._targetList[i], out int count);
+                    if (count > maxCount)
                     {
-                        Instance.UseEffect(pair.Key, _character, pair.Value[i]);
+                        maxCount = count;
                     }
                 }
 
-                _timer.Start(1, Instance.CheckResult);
+                if (_target != null)
+                {
+                    Instance.CharacterInfoUIGroup.SetCharacterInfoUIWithTween_2(_target, _originalHP, Utility.ConvertToVector2Int(_target.transform.position));
+                }
+
+                _timer.Start(maxCount * 0.5f, Instance.CheckResult);
             }
         }
     }

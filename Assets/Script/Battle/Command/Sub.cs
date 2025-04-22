@@ -8,18 +8,19 @@ namespace Battle
     {
         public int CD;
         public int CurrentCD;
-        public Sub(SupportModel data)
+        public Sub(SubModel data)
         {
             ID = data.ID;
             Name = data.Name;
             Comment = data.Comment;
             Hit = data.Hit;
             Range = data.Range;
-            RangeTarget = data.RangeTarget;
-            AreaTarget = data.AreaTarget;
+            Target = data.Target;
             AreaType = data.AreaType;
             Track = data.Track;
-            ArrayList = Utility.GetAreaList(data.Array);
+            ArrayList = Utility.GetAreaList(data.AreaArray);
+            Particle = data.Particle;
+            Shake = data.Shake;
             CD = data.CD;
             CurrentCD = 0;
             Effect = EffectFactory.GetEffect(data.EffectID);

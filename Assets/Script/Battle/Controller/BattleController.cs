@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using DG.Tweening;
 
 namespace Battle
 {
@@ -24,7 +26,7 @@ namespace Battle
         {
             get
             {
-                if (Tutorial == null) 
+                if (Tutorial == null)
                 {
                     return false;
                 }
@@ -43,9 +45,9 @@ namespace Battle
 
         public BattleTutorial Tutorial = null;
         public BattleCharacterController SelectedCharacter;
-        public List<BattleCharacterController> CharacterList = new List<BattleCharacterController>(); //�s��������
-        public List<BattleCharacterController> DyingList = new List<BattleCharacterController>(); //�x�����ڤ訤��
-        public List<BattleCharacterController> DeadList = new List<BattleCharacterController>(); //���`���ڤ訤��
+        public List<BattleCharacterController> CharacterAliveList = new List<BattleCharacterController>();
+        public List<BattleCharacterController> CharacterDyingList = new List<BattleCharacterController>();
+        public List<BattleCharacterController> CharacterDeadList = new List<BattleCharacterController>();
         public List<BattleCharacterController> TempList = new List<BattleCharacterController>(); //for PrepareState
 
         public int MinX;
@@ -59,8 +61,8 @@ namespace Battle
         public List<EnemyModel> EnemyDataList = new List<EnemyModel>();
         public Dictionary<Vector2Int, BattleInfoTile> TileDic = new Dictionary<Vector2Int, BattleInfoTile>();
 
-        private readonly Color _white = new Color(1, 1, 1, 0.5f);
-        private readonly Color _yellow = new Color(1, 1, 0, 0.5f);
+        private static readonly Color _white = new Color(1, 1, 1, 0.5f);
+        private static readonly Color _yellow = new Color(1, 1, 0, 0.5f);
 
         private bool _canClick = true;
         private int _maxIndex = 0;
@@ -75,32 +77,33 @@ namespace Battle
         public SelectCharacterUI SelectBattleCharacterUI;
         private Transform _root;
         private FileManager _fileLoader;
+        private LineSetting _line;
         private List<CharacterInfo> _candidateList = new List<CharacterInfo>();
-        private Dictionary<Command, List<BattleCharacterController>> _commandTargetDic = new Dictionary<Command, List<BattleCharacterController>>();
+        private List<BattleCharacterController> _targetList = new List<BattleCharacterController>();
 
         public List<Log> LogList = new List<Log>();
 
-        public void Init() 
+        public void Init()
         {
             _maxIndex = 0;
             _canClick = true;
-            CharacterList.Clear();
-            DyingList.Clear();
-            DeadList.Clear();
+            CharacterAliveList.Clear();
+            CharacterDyingList.Clear();
+            CharacterDeadList.Clear();
             EnemyDataList.Clear();
             TileDic.Clear();
             GetGameObject();
             TimerUpdater.UpdateHandler += Update;
         }
 
-        public void DeInit() 
+        public void DeInit()
         {
             Instance.BattleUI.gameObject.SetActive(false);
             Instance.BattleResultUI.gameObject.SetActive(true);
             TimerUpdater.UpdateHandler -= Update;
         }
 
-        public void SetFixed(string tutorial, string map) 
+        public void SetFixed(string tutorial, string map)
         {
             _fileLoader.Load<BattleFileFixed>(map, FileManager.PathEnum.MapBattleFixed, (obj) =>
             {
@@ -128,9 +131,9 @@ namespace Battle
             });
         }
 
-        public void SetRandom(string tutorial, EnemyGroupModel enemyGroup) 
+        public void SetRandom(string tutorial, EnemyGroupModel enemyGroup)
         {
-            _fileLoader.Load<BattleFileRandom>(enemyGroup.GetMap(), FileManager.PathEnum.MapBattleRandom, (obj) => 
+            _fileLoader.Load<BattleFileRandom>(enemyGroup.GetMap(), FileManager.PathEnum.MapBattleRandom, (obj) =>
             {
                 BattleFileRandom file = (BattleFileRandom)obj;
                 PlayerPositionList = file.PlayerPositionList;
@@ -233,7 +236,7 @@ namespace Battle
                 List<Vector2Int> invalidList = new List<Vector2Int>();
                 foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in TileDic)
                 {
-                    if (pair.Value.MoveCost == 0)
+                    if (pair.Value.MoveCost == -1)
                     {
                         invalidList.Add(pair.Key);
                     }
@@ -260,7 +263,7 @@ namespace Battle
             });
         }
 
-        private void GetGameObject() 
+        private void GetGameObject()
         {
             BattleUI = GameObject.Find("BattleUI").GetComponent<BattleUI>();
             BattleResultUI = GameObject.Find("BattleResultUI").GetComponent<BattleResultUI>();
@@ -272,9 +275,11 @@ namespace Battle
             _cameraDraw = Camera.main.GetComponent<CameraDraw>();
             _cameraController = Camera.main.GetComponent<CameraController>();
             _fileLoader = GameObject.Find("FileManager").GetComponent<FileManager>();
+            _line = GameObject.Find("Line").GetComponent<LineSetting>();
+            _line.Hide();
         }
 
-        private void Start(string tutorial) 
+        private void Start(string tutorial)
         {
             SetMinAndMax();
             CreateObject();
@@ -282,7 +287,7 @@ namespace Battle
             SetTutorial(tutorial);
         }
 
-        private void SetMinAndMax() 
+        private void SetMinAndMax()
         {
             MinX = int.MaxValue;
             MaxX = int.MinValue;
@@ -309,7 +314,7 @@ namespace Battle
             }
         }
 
-        private void InitState() 
+        private void InitState()
         {
             _context.ClearState();
             _context.AddState(new PrepareState(_context));
@@ -333,7 +338,7 @@ namespace Battle
 
         private void SetTutorial(string tutorial)
         {
-            if (tutorial!=null && tutorial!="")
+            if (tutorial != null && tutorial != "")
             {
                 var objectType = Type.GetType("Battle." + tutorial);
                 Tutorial = (BattleTutorial)Activator.CreateInstance(objectType);
@@ -341,7 +346,7 @@ namespace Battle
 
             _candidateList = new List<CharacterInfo>(CharacterManager.Instance.Info.CharacterList);
 
-            if (Tutorial!=null) 
+            if (Tutorial != null)
             {
                 Tutorial.Start();
             }
@@ -373,7 +378,7 @@ namespace Battle
 
         public bool PlaceCharacter(BattleCharacterController character)
         {
-            if(_context.CurrentState is PrepareState) 
+            if (_context.CurrentState is PrepareState)
             {
                 return ((PrepareState)_context.CurrentState).PlaceCharacter(character);
             }
@@ -426,9 +431,17 @@ namespace Battle
         //    _context.SetState<TargetState>();
         //}
 
-        public void SetState<T>() 
+        public void SetState<T>()
         {
             _context.SetState<T>();
+        }
+
+        public void Move(Vector2Int position, Action callback) 
+        {
+            if(_context.CurrentState is MoveState) 
+            {
+                ((MoveState)_context.CurrentState).Move(position, callback);
+            }
         }
 
         public void SetSelectedCommand(Command command) 
@@ -443,25 +456,15 @@ namespace Battle
         {
             for (int i = 0; i < list.Count; i++)
             {
-                TileDic[list[i]].TileObject.Quad.gameObject.SetActive(true);
-                TileDic[list[i]].TileObject.Quad.material.SetColor("_Color", color);
+                SetQuad(list[i], color);
             }
         }
 
-        // public List<Vector2Int> GetAreaList(Command command) 
-        // {
-        //     List<Vector2Int> areaList = new List<Vector2Int>();
-        //     if (command.Track == TrackEnum.Through)
-        //     {
-        //         areaList = GetTroughAreaList(SelectedCharacter.Position, new Vector3(_selectedPosition.x, Instance.Info.TileAttachInfoDic[_selectedPosition].Height, _selectedPosition.y));
-        //     }
-        //     else
-        //     {
-        //         areaList = GetNormalAreaList(Utility.ConvertToVector2Int(SelectedCharacter.Position), _selectedPosition, command.AreaList);
-        //     }
-
-        //     return areaList;
-        // }
+        public void SetQuad(Vector2Int position, Color color)
+        {
+            TileDic[position].TileObject.Quad.gameObject.SetActive(true);
+            TileDic[position].TileObject.Quad.material.SetColor("_Color", color);
+        }
 
         public List<Vector2Int> GetAreaList(Vector2Int from, Vector2Int to, Command command)
         {
@@ -472,54 +475,23 @@ namespace Battle
             }
             else if(command.AreaType == AreaTypeEnum.Array)
             {
-                commandPositionList = GetNormalAreaList(from, to, command.AreaTarget, command.ArrayList);
+                commandPositionList = GetNormalAreaList(from, to, command.Target, command.ArrayList);
             }
-            else
+            else if(command.AreaType == AreaTypeEnum.Global)
             {
-                if(command.AreaTarget == TargetEnum.Self)
+                for (int i = 0; i < CharacterAliveList.Count; i++)
                 {
-                    commandPositionList.Add(from);
-                }
-                else if(command.AreaTarget == TargetEnum.UsMinHP)
-                {
-                    List<BattleCharacterController> tempList = new List<BattleCharacterController>();
-                    for(int i=0; i<CharacterList.Count; i++)
+                    if (command.Target == TargetEnum.Us && SelectedCharacter.Info.Faction == CharacterAliveList[i].Info.Faction)
                     {
-                        if(SelectedCharacter.Info.Faction == CharacterList[i].Info.Faction)
-                        {
-                            tempList.Add(CharacterList[i]);  
-                        }  
+                        commandPositionList.Add(Utility.ConvertToVector2Int(CharacterAliveList[i].transform.position));
                     }
-
-                    if(tempList.Count>0)
+                    else if (command.Target == TargetEnum.Them && SelectedCharacter.Info.Faction != CharacterAliveList[i].Info.Faction)
                     {
-                        BattleCharacterController minHPCharacter = tempList[0];
-                        for(int i=1; i<tempList.Count; i++)
-                        {
-                            if(tempList[i].Info.CurrentHP < minHPCharacter.Info.CurrentHP)
-                            {
-                                minHPCharacter = tempList[i];
-                            }
-                        }
-                        commandPositionList.Add(Utility.ConvertToVector2Int(minHPCharacter.transform.position)); 
+                        commandPositionList.Add(Utility.ConvertToVector2Int(CharacterAliveList[i].transform.position));
                     }
-                }
-                else
-                {
-                    for(int i=0; i<CharacterList.Count; i++)
+                    else if (command.Target == TargetEnum.All)
                     {
-                        if(command.AreaTarget == TargetEnum.Us && SelectedCharacter.Info.Faction == CharacterList[i].Info.Faction)
-                        {
-                            commandPositionList.Add(Utility.ConvertToVector2Int(CharacterList[i].transform.position));  
-                        }   
-                        else if(command.AreaTarget == TargetEnum.Them && SelectedCharacter.Info.Faction != CharacterList[i].Info.Faction)
-                        {
-                            commandPositionList.Add(Utility.ConvertToVector2Int(CharacterList[i].transform.position)); 
-                        }
-                        else if(command.AreaTarget == TargetEnum.All)
-                        {
-                            commandPositionList.Add(Utility.ConvertToVector2Int(CharacterList[i].transform.position));  
-                        }
+                        commandPositionList.Add(Utility.ConvertToVector2Int(CharacterAliveList[i].transform.position));
                     }
                 }
             }
@@ -540,18 +512,29 @@ namespace Battle
             return commandPositionList;
         }
 
+        public void SetTargetList(List<Vector2Int> areaList) 
+        {
+            BattleCharacterController character;
+            for (int i = 0; i < areaList.Count; i++)
+            {
+                character = Instance.GetCharacterByPosition(areaList[i]);
+                if (character != null)
+                {
+                    Instance._targetList.Add(character);
+                }
+            }
+        }
+
         public void ClearQuad(Vector2Int v2)
         {
             TileDic[v2].TileObject.Quad.gameObject.SetActive(false);
-            TileDic[v2].TileObject.Buff.gameObject.SetActive(false);
         }
 
-        public void ClearQuad()
+        public void ClearQuad(List<Vector2Int> list)
         {
-            foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in TileDic)
+            for (int i=0; i<list.Count; i++) 
             {
-                pair.Value.TileObject.Quad.gameObject.SetActive(false);
-                pair.Value.TileObject.Buff.gameObject.SetActive(false);
+                ClearQuad(list[i]);
             }
         }
 
@@ -564,10 +547,10 @@ namespace Battle
         {
             _canClick = true;
 
-            if (SelectedCharacter.AI != null)
-            {
-                SelectedCharacter.AI.OnMoveEnd();
-            }
+            //if (SelectedCharacter.AI != null)
+            //{
+            //    SelectedCharacter.AI.OnMoveEnd();
+            //}
         }
 
         public void SetDirection(Vector2Int direction) 
@@ -576,23 +559,6 @@ namespace Battle
             {
                 ((DirectionState)_context.CurrentState).SetDirection(direction);
             }
-        }
-
-        public bool SetCharacterInfoUI_2(Vector2 position)
-        {
-            //��ܨ�����
-            Instance.CharacterInfoUIGroup.SetCharacterInfoUI_2(null);
-            for (int i = 0; i < CharacterList.Count; i++)
-            {
-                if (CharacterList[i] != Instance.SelectedCharacter && position == new Vector2(CharacterList[i].transform.position.x, CharacterList[i].transform.position.z))
-                {
-                    CharacterInfoUIGroup.SetCharacterInfoUI_2(CharacterList[i].Info);
-                    ShowTileBuff(CharacterList[i]);
-                    ShowRange(CharacterList[i]);
-                    return true;
-                }
-            }
-            return false;
         }
 
         public void CreateEnemy(int id, int lv, Vector3 position) 
@@ -605,22 +571,21 @@ namespace Battle
         {
             GameObject obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Battle/" + enemyData.Controller), Vector3.zero, Quaternion.identity);
             obj.transform.position = position;
+            obj.transform.localEulerAngles = new Vector3(0, -90, 0);
             BattleCharacterController controller = obj.GetComponent<BattleCharacterController>();
             controller.Init(lv, enemyData);
             controller.MoveEndHandler += OnMoveEnd;
             controller.Outline.OutlineColor = Color.red;
-            CharacterList.Add(controller);
+            CharacterAliveList.Add(controller);
             _maxIndex++;
             controller.Index = _maxIndex;
             BattleUI.CharacterListGroup.Add(controller);
-            BattleUI.SetLittleHpBarAnchor(controller);
-            BattleUI.SetLittleHpBarValue(controller);
             BattleUI.SetFloatingNumberPoolAnchor(controller);
         }
 
         public void SortCharacterList(bool isStart)
         {
-            CharacterList.Sort((x, y) =>
+            CharacterAliveList.Sort((x, y) =>
             {
                 if (isStart && !Passive.Contains<TankPassive>(x.Info.PassiveList) && Passive.Contains<TankPassive>(y.Info.PassiveList))
                 {
@@ -658,53 +623,55 @@ namespace Battle
             });
         }
 
-        private void ShowTileBuff(BattleCharacterController controller) 
+
+        protected static LayerMask _battleTileLayer = LayerMask.GetMask("BattleTile");
+        private Vector2Int? _lastPosition = null;
+        public bool UpdatePosition(out Vector2Int? currentPosition) //位置有更新時回傳 true
         {
-            Vector2Int position;
-            for (int i = 0; i < controller.Info.StatusList.Count; i++)
+            currentPosition = null;
+
+            if (EventSystem.current.IsPointerOverGameObject()) //block by UI
             {
-                if (controller.Info.StatusList[i].AreaList.Count > 1)
+                if (_lastPosition != null)
                 {
-                    for (int j = 0; j < controller.Info.StatusList[i].AreaList.Count; j++)
-                    {
-                        position = Utility.ConvertToVector2Int(controller.transform.position) + controller.Info.StatusList[i].AreaList[j];
-                        if (TileDic.ContainsKey(position))
-                        {
-                            TileDic[position].TileObject.Buff.SetActive(true);
-                        }
-                    }
+                    _lastPosition = null;
+                    return true;
+                }
+                else
+                {
+                    return false;
                 }
             }
-        }
 
-        public void ShowRange(BattleCharacterController controller) 
-        {
-            List<Vector2Int> stepList = GetStepList(controller);
-            Instance.SetQuad(stepList, _white);
-            if (controller.AI != null)
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out hit, 100, _battleTileLayer))
             {
-                List<Vector2Int> tempList = new List<Vector2Int>();
-                List<Vector2Int> rangeList = new List<Vector2Int>();
-                for (int i = 0; i < stepList.Count; i++) //�ڥi�H���ʪ��d��
+                currentPosition = Utility.ConvertToVector2Int(hit.transform.position);
+                if(_lastPosition == null || ((Vector2Int)currentPosition != (Vector2Int)_lastPosition)) 
                 {
-                    tempList = GetRangeList(controller.AI.SelectedSkill.Range, stepList[i]);
-                    for (int j=0; j<tempList.Count; j++) 
-                    {
-                        if(!stepList.Contains(tempList[j]) && !rangeList.Contains(tempList[j])) 
-                        {
-                            rangeList.Add(tempList[j]);
-                        }
-                    }
+                    _lastPosition = currentPosition;
+                    return true;
                 }
-                Instance.SetQuad(rangeList, _yellow);
             }
+            else if(_lastPosition != null)
+            {
+                _lastPosition = null;
+                return true;
+            }
+            return false;
         }
 
-        public void UseEffect(Command command, BattleCharacterController user, BattleCharacterController target)
+        public void SetSelect(Vector2Int position, bool show) 
+        {
+            TileDic[position].TileObject.Select.gameObject.SetActive(show);
+        }
+
+        public void UseEffect(Command command, BattleCharacterController user, BattleCharacterController target, out int count)
         {
             HitType hitType;
 
-            if (command.AreaTarget == TargetEnum.Us || command.AreaTarget == TargetEnum.Self || command.AreaTarget == TargetEnum.UsMinHP || Instance.Tutorial != null)
+            if (command.Target == TargetEnum.Us || Instance.Tutorial != null)
             {
                 hitType = HitType.Hit;
             }
@@ -715,8 +682,33 @@ namespace Battle
 
             List<Log> logList = new List<Log>();
             command.Effect.Use(hitType, user, target, logList);
-            Instance.BattleUI.SetLittleHpBarValue(target);
-            Instance.BattleUI.PlayFloatingNumberPool(target, logList);
+
+            for (int i=0; i<logList.Count; i++) 
+            {
+                Instance.BattleUI.PlayFloatingNumberPool(logList[i].Target, logList[i]);
+            }
+            count = logList.Count;
+
+            GameObject partilce;
+            if (command.Effect.Status != null)
+            {
+                for (int i = 0; i < command.Effect.Status.AreaList.Count; i++)
+                {
+                    partilce = GameObject.Instantiate(Resources.Load("Particle/" + command.Particle), Vector3.zero, Quaternion.identity) as GameObject;
+                    partilce.transform.position = target.transform.position + new Vector3(command.Effect.Status.AreaList[i].x, 0, command.Effect.Status.AreaList[i].y);
+                }
+            }
+            else
+            {
+                partilce = GameObject.Instantiate(Resources.Load("Particle/" + command.Particle), Vector3.zero, Quaternion.identity) as GameObject;
+                partilce.transform.position = target.transform.position;
+            }
+
+            if (command.Shake)
+            {
+                target.transform.DOShakePosition(0.5f, 0.1f);
+            }
+
         }
 
         public void SetWin() 
@@ -746,7 +738,7 @@ namespace Battle
 
         public class BattleControllerState : State
         {
-            protected BattleCharacterController _character;
+            protected BattleCharacterController _selectedCharacter;
             protected List<BattleCharacterController> _characterList;
             protected List<BattleCharacterController> _allCharacterList; //Include dying character
 
@@ -757,13 +749,6 @@ namespace Battle
             public virtual void Next() { }
 
             public virtual void Click(Vector2Int position) { }
-
-            public List<BattleCharacterController> GetAllCharacterList() 
-            {
-                List<BattleCharacterController> list = new List<BattleCharacterController>(Instance.CharacterList);
-                list.AddRange(Instance.DyingList);
-                return list;
-            }
 
             public virtual void Update() { }
         }

@@ -72,51 +72,6 @@ namespace Explore
             File.PlayerRotationY = Player.transform.eulerAngles.y;
         }
 
-        /*public bool CheckEnemyCollision() 
-        {
-            ExploreFileEnemy enemy;
-            for (int i = 0; i < File.EnemyList.Count; i++)
-            {
-                if (File.EnemyList[i].Position == File.PlayerPosition)
-                {
-                    _hasCollision = true;
-                    InputMamager.Instance.Lock();
-                    TileDic[File.PlayerPosition].IsWalkable = true;
-                    enemy = File.EnemyList[i];
-                    File.EnemyList.RemoveAt(i);
-
-                        SceneController.Instance.ChangeScene("Battle", ChangeSceneUI.TypeEnum.Fade, (sceneName) =>
-                        {
-                            InputMamager.Instance.Unlock();
-                            string tutorial = null;
-                            if (enemy.Type == ExploreFileEnemy.TypeEnum.Fixed)
-                            {
-                                BattleController.Instance.Init(enemy.Tutorial, enemy.Map);
-                            }
-                            else
-                            {
-                                EnemyGroupModel enemyGroup = DataTable.Instance.EnemyGroupDic[enemy.EnemyGroupId];
-                                if (File.Floor > 1 && !EventManager.Instance.Info.SanaeTutorial)
-                                {
-                                    EventManager.Instance.Info.SanaeTutorial = true;
-                                    tutorial = "SanaeTutorial";
-                                }
-                                else if (File.Floor > 1 && !EventManager.Instance.Info.SpellTutorial) 
-                                {
-                                    EventManager.Instance.Info.SpellTutorial = true;
-                                    tutorial = "SpellTutorial";
-                                }
-                                BattleController.Instance.Init(tutorial, enemyGroup);
-                            }
-                        });
-
-
-                    return true;
-                }
-            }
-            return false;
-        }*/
-
         public void EnterBattle(ExploreFileEnemy enemy) 
         {
             _hasCollision = true;
@@ -130,6 +85,7 @@ namespace Explore
             DeInit();
             SceneController.Instance.ChangeScene("Battle", ChangeSceneUI.TypeEnum.Fade, (sceneName) =>
             {
+                Cursor.lockState = CursorLockMode.None;
                 InputMamager.Instance.Unlock();
                 string tutorial = null;
                 if (enemy.Type == ExploreFileEnemy.TypeEnum.Fixed)
@@ -334,6 +290,7 @@ namespace Explore
                 File.TreasureList.Remove(_treasure);
                 TileDic[v2].Treasure = null;
                 _treasure = null;
+                _exploreUI.ShowTreasureLabel(false);
                 //}
 
             }
@@ -373,6 +330,7 @@ namespace Explore
                 }
                 ItemManager.Instance.Info.Key--;
                 File.DoorList.Remove(_door);
+                _exploreUI.ShowDoorLabel(false);
             }
         }
 
@@ -505,35 +463,6 @@ namespace Explore
             CheckVisit(Player.transform);
             ExploreManager.Instance.CheckEvent(Utility.ConvertToVector2Int(Player.transform.position));
         }
-
-        /*public void WaitForAllMoveComplete() 
-        {
-            _enemyMoveCount++;
-            if (_enemyMoveCount == File.EnemyList.Count + 1) 
-            {
-                CheckVidsit(Player.transform);
-                Vector2Int v2 = Utility.ConvertToVector2Int(Player.transform.position);
-                if (!_hasCollision)
-                {
-                    if (CheckEnemyCollision())
-                    {
-                        return;
-                    }
-                    else if (CheckGoal(v2))
-                    {
-                        return;
-                    }
-                    else
-                    {
-                        CheckEvent(v2);
-                    }
-                }
-                else
-                {
-                    _hasCollision = false;
-                }
-            }
-        }*/
 
         private void Init() 
         {

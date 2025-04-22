@@ -15,10 +15,10 @@ public class SkillModel
     public int EffectID;
     public int Hit;
     public int Range;
-    public string Array;
-    public TargetEnum RangeTarget;
-    public TargetEnum AreaTarget;
+    public string AreaArray;
+    public TargetEnum Target;
     public AreaTypeEnum AreaType;
-    public Battle.TrackEnum Track;
-    public int SubSkillID;
+    public TrackEnum Track;
+    public string Particle;
+    public bool Shake;
 }

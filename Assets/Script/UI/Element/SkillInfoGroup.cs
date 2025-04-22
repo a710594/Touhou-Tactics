@@ -42,11 +42,6 @@ public class SkillInfoGroup : MonoBehaviour
             {
                 tempEffect = tempSkill.Effect.SubEffect;
             }
-            else if(tempSkill.SubCommand!=null)
-            {
-                tempSkill = (Skill)tempSkill.SubCommand;
-                tempEffect = tempSkill.Effect;
-            }
         }
         CommentLabel.text = comment;
         CDLabel.text = "冷卻：" + skill.CD + "回合";

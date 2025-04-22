@@ -15,17 +15,12 @@ public class Spell : Command
         Comment = data.Comment;
         Hit = data.Hit;
         Range = data.Range;
-        RangeTarget = data.RangeTarget;
-        AreaTarget = data.AreaTarget;
+        Target = data.Target;
         AreaType = data.AreaType;
         Track = data.Track;
-        ArrayList = Utility.GetAreaList(data.Array);
-
+        Particle = data.Particle;
+        Shake = data.Shake;
+        ArrayList = Utility.GetAreaList(data.AreaArray);
         Effect = EffectFactory.GetEffect(data.EffectID);
-
-        if(data.SubSpellID != -1)
-        {
-            SubCommand = new Spell(DataTable.Instance.SpellDic[data.SubSpellID]);
-        }
     }
 }

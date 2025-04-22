@@ -20,8 +20,6 @@ public class BattleCharacterController : MonoBehaviour
     [NonSerialized]
     public int Index;
     [NonSerialized]
-    public Vector2 Direction = Vector2Int.left;
-    [NonSerialized]
     public Sprite Sprite;
     [NonSerialized]
     public Vector3 LastPosition = new Vector3();
@@ -32,7 +30,7 @@ public class BattleCharacterController : MonoBehaviour
         //transform.eulerAngles = new Vector3(0, Vector3.Angle(transform.forward, Direction), 0);
 
         Type t = Type.GetType("Battle." + enemy.AI);
-        AI = (BattleAI)Activator.CreateInstance(t);
+        AI = gameObject.AddComponent(t) as BattleAI;
         AI.Init(this);
     }
 
@@ -102,10 +100,14 @@ public class BattleCharacterController : MonoBehaviour
     {
         if (direction != Vector2Int.zero)
         {
-            Direction = direction;
-            float angle = Vector3.SignedAngle(Vector3.forward, new Vector3(Direction.x, 0, Direction.y), Vector3.up) + 90;
+            float angle = Vector3.SignedAngle(Vector3.forward, new Vector3(direction.x, 0, direction.y), Vector3.up);
             transform.eulerAngles = new Vector3(0, angle, 0);
         }
+    }
+
+    public void SetDirection(float angle) 
+    {
+        transform.eulerAngles = new Vector3(0, transform.eulerAngles.y - angle, 0);
     }
 
     public void StartFlash() 

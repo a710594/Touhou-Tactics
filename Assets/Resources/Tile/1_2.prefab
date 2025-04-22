@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 2118578120520798503}
   - component: {fileID: 3083109795570491010}
   - component: {fileID: 949590261360585288}
-  - component: {fileID: 5101289369527810875}
   - component: {fileID: 1817592597546696405}
-  m_Layer: 0
+  - component: {fileID: 5101289369527810875}
+  m_Layer: 9
   m_Name: 1_2
   m_TagString: BattleTile
   m_Icon: {fileID: 0}
@@ -88,19 +88,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &5101289369527810875
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1598042569118239645}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 2, z: 1}
-  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!114 &1817592597546696405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,6 +104,19 @@ MonoBehaviour:
   Quad: {fileID: 8803855766484687067}
   Select: {fileID: 9048441379475268003}
   Buff: {fileID: 4041944703891774546}
+--- !u!65 &5101289369527810875
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1598042569118239645}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.1, z: 1}
+  m_Center: {x: 0, y: 1.45, z: 0}
 --- !u!1 &2715352649894536278
 GameObject:
   m_ObjectHideFlags: 0

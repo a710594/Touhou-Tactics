@@ -17,35 +17,33 @@ namespace Battle
 
             public override void Begin()
             {
-                _character = Instance.SelectedCharacter;
-                Instance.ClearQuad();
+                _selectedCharacter = Instance.SelectedCharacter;
                 Instance.BattleUI.SetCommandVisible(false);
-                Instance.CharacterInfoUIGroup.SetCharacterInfoUI_1(null);
-                Instance.BattleUI.SetDirectionGroupVisible(!_character.Info.IsAuto);
-                Instance.BattleUI.SetDirectionGroupPosition(_character.transform.position);
+                Instance.CharacterInfoUIGroup.HideCharacterInfoUI_1();
+                Instance.BattleUI.SetDirectionGroupVisible(!_selectedCharacter.Info.IsAuto);
+                Instance.BattleUI.SetDirectionGroupPosition(_selectedCharacter.transform.position);
 
-                List<Log> logList = _character.Info.CheckStatus();
-                Instance.BattleUI.SetLittleHpBarValue(_character);
-                if (logList.Count > 0)
+                List<Log> logList = _selectedCharacter.Info.CheckStatus();
+                for(int i=0; i<logList.Count; i++)
                 {
-                    Instance.BattleUI.PlayFloatingNumberPool(_character, logList);
+                    Instance.BattleUI.PlayFloatingNumberPool(_selectedCharacter, logList[i]);
                 }
-                for (int i = 0; i < _character.Info.SkillList.Count; i++)
+                for (int i = 0; i < _selectedCharacter.Info.SkillList.Count; i++)
                 {
-                    _character.Info.SkillList[i].CheckCD();
+                    _selectedCharacter.Info.SkillList[i].CheckCD();
                 }
-                for (int i = 0; i < _character.Info.SubList.Count; i++)
+                for (int i = 0; i < _selectedCharacter.Info.SubList.Count; i++)
                 {
-                    _character.Info.SubList[i].CheckCD();
-                }
-
-                if (!_character.Info.CanUseSpell && !_character.Info.HasSpell)
-                {
-                    _character.Info.CanUseSpell = true;
+                    _selectedCharacter.Info.SubList[i].CheckCD();
                 }
 
-                _character.Info.CurrentWT = _character.Info.WT;
-                _character.LastPosition = BattleCharacterInfo.DefaultLastPosition;
+                if (!_selectedCharacter.Info.CanUseSpell && !_selectedCharacter.Info.HasSpell)
+                {
+                    _selectedCharacter.Info.CanUseSpell = true;
+                }
+
+                _selectedCharacter.Info.CurrentWT = _selectedCharacter.Info.WT;
+                _selectedCharacter.LastPosition = BattleCharacterInfo.DefaultLastPosition;
                 Instance.SortCharacterList(false);
 
                 if (Instance.DirectionStateBeginHandler!=null)
@@ -59,7 +57,7 @@ namespace Battle
                 if (!_lock)
                 {
                     _lock = true;
-                    _character.SetDirection(direction);
+                    _selectedCharacter.SetDirection(direction);
                     _timer.Start(0.5f, () =>
                     {
                         _lock = false;
@@ -72,6 +70,16 @@ namespace Battle
             {
                 //Instance.DirectionGroup.SetActive(false);
                 Instance.BattleUI.SetDirectionGroupVisible(false);
+            }
+
+            public override void Update()
+            {
+                if (Input.GetMouseButtonDown(1))
+                {
+                    _context.SetState<CommandState>();
+                    _selectedCharacter.Info.HasMove = false;
+                    return;
+                }
             }
         }
     }

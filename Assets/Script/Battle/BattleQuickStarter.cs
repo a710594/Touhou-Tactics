@@ -26,6 +26,8 @@ public class BattleQuickStarter : MonoBehaviour
     {
         SaveManager.Instance.Load(() =>
         {
+            SceneController.Instance.Info.CurrentScene = "Battle";
+
             if (CurrentMode == ModeEnum.Fixed)
             {
                 BattleController.Instance.Init();

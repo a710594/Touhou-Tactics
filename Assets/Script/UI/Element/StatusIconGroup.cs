@@ -10,7 +10,7 @@ public class StatusIconGroup : MonoBehaviour
 
     private List<StatusIcon> _statusIconList = new List<StatusIcon>();
 
-    public void SetData(BattleCharacterInfo character, bool raycastTarget) 
+    public void SetData(BattleCharacterInfo info, bool raycastTarget, Vector2Int position) 
     {
         StatusIcon icon;
 
@@ -18,7 +18,10 @@ public class StatusIconGroup : MonoBehaviour
         {
             _statusIconList[i].gameObject.SetActive(false);
         }
-        for (int i = 0; i < character.StatusList.Count; i++)
+
+        List<Status> list = BattleController.Instance.GetStatueList(info, StatusModel.TypeEnum.None, position);
+
+        for (int i = 0; i < list.Count; i++)
         {
             if (i >= _statusIconList.Count)
             {
@@ -27,7 +30,7 @@ public class StatusIconGroup : MonoBehaviour
                 _statusIconList.Add(icon);
             }
             _statusIconList[i].gameObject.SetActive(true);
-            _statusIconList[i].SetData(character.StatusList[i], raycastTarget);
+            _statusIconList[i].SetData(list[i], raycastTarget);
         }
     }
 }

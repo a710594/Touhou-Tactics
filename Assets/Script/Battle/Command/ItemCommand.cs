@@ -24,11 +24,12 @@ namespace Battle
 
             Hit = 100;
             Range = 1;
-            RangeTarget = TargetEnum.Us;
-            AreaTarget = TargetEnum.Us;
+            Target = TargetEnum.Us;
             AreaType = AreaTypeEnum.Point;
             Track = TrackEnum.None;
             ArrayList = Utility.GetAreaList("");
+            Particle = consumablesData.Particle;
+            Shake = consumablesData.Shake;
         }
 
         public ItemCommand(Food food)
@@ -39,11 +40,12 @@ namespace Battle
 
             Hit = 100;
             Range = 1;
-            RangeTarget = TargetEnum.Us;
-            AreaTarget = TargetEnum.Us;
+            Target = TargetEnum.Us;
             AreaType = AreaTypeEnum.Point;
             Track = TrackEnum.None;
             ArrayList = Utility.GetAreaList("");
+            Particle = "Cure";
+            Shake = false;
         }
     }
 }

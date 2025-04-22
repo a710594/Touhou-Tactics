@@ -1,4 +1,4 @@
-using System.Collections;
+嚜簑sing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,73 +6,131 @@ namespace Battle
 {
     public class NearCombatAI : BattleAI
     {
-        public override void Start() 
+        private bool _canAttack = false;
+        private BattleCharacterController _target;
+
+        public override void Begin() 
         {
-            Vector2Int start = Utility.ConvertToVector2Int(_controller.transform.position);
-            _stepList = BattleController.Instance.GetStepList(_controller);
+            List<Vector2Int> stepList = BattleController.Instance.GetStepList(_character);
             List<BattleCharacterController> targetList = GetTargetList(BattleCharacterInfo.FactionEnum.Player);
-            Dictionary<BattleCharacterController, List<Vector2Int>> canHitDic = GetCanHitDic(targetList);
-            Vector2Int moveTo;
-            if (canHitDic.Count > 0) //有可以攻擊的目標
-            {
-                _useSkill = true;
-                _target = GetAttackTarget(new List<BattleCharacterController>(canHitDic.Keys));
-                moveTo = GetMoveTo(MoveToEnum.Near, start, canHitDic[_target]); //選擇距離目標近的位置
-            }
-            else //盡量靠近想攻擊的目標
-            {
-                _useSkill = false;
-                int distance;
-                Vector2Int targetPosition;
-                for (int i = 0; i < targetList.Count; i++)
-                {
-                    targetPosition = Utility.ConvertToVector2Int(targetList[i].transform.position);
-                    distance = BattleController.Instance.GetDistance(start, targetPosition, _controller.Info.Faction);
-                    if(distance == -1)
-                    {
-                        targetList.RemoveAt(i);
-                        i--;
-                    }
-                }
-                _target = GetAttackTarget(targetList);
-                moveTo = GetMoveTo(MoveToEnum.Near, _stepList, Utility.ConvertToVector2Int(_target.transform.position));
-            }
+            Dictionary<BattleCharacterController, List<Vector2Int>> canHitDic = GetCanHitDic(SelectedSkill, stepList, targetList);
+            Vector2Int moveTo = GetMoveTo(stepList, targetList, canHitDic);
 
-            List<Vector2Int> path = BattleController.Instance.GetPath(Utility.ConvertToVector2Int(_controller.transform.position), moveTo, _controller.Info.Faction);
-            _controller.LastPosition = _controller.transform.position;
-            _controller.Move(path, () =>
+            BattleController.Instance.SetState<BattleController.MoveState>();
+            BattleController.Instance.Move(moveTo, ()=> 
             {
-                if (_useSkill) 
+                if (_canAttack) 
                 {
-                    HitType hitType = BattleController.Instance.CheckHit(SelectedSkill.Hit, _controller, _target);
-                    List<Log> logList = new List<Log>();
-                    SelectedSkill.Effect.Use(hitType, _controller, _target, logList);
-                    BattleController.Instance.BattleUI.SetLittleHpBarValue(_target);
-                    BattleController.Instance.BattleUI.PlayFloatingNumberPool(_target, logList);
-
-                    _timer.Start(1, () => {
-                        ResultType result = BattleController.Instance.GetResult();
-                        if (result == ResultType.Win)
-                        {
-                            BattleController.Instance.SetState<BattleController.WinState>();
-                        }
-                        else if (result == ResultType.Lose)
-                        {
-                            BattleController.Instance.SetState<BattleController.LoseState>();
-                        }
-                        else
-                        {
-                            BattleController.Instance.SetState<BattleController.DirectionState>();
-                            BattleController.Instance.SetDirection(Utility.ConvertToVector2Int(_controller.transform.forward));
-                        }
-                    });
+                    Attack();
                 }
                 else
                 {
-                    BattleController.Instance.SetState<BattleController.DirectionState>();
-                    BattleController.Instance.SetDirection(Utility.ConvertToVector2Int(_controller.transform.forward));
+                    SetDirection();
                 }
             });
+
+        }
+
+        private void Attack() 
+        {
+            BattleController.Instance.SetState<BattleController.CommandState>();
+            BattleController.Instance.SetSelectedCommand(SelectedSkill);
+            List<Vector2Int> areaList = BattleController.Instance.GetAreaList(Utility.ConvertToVector2Int(_character.transform.position), Utility.ConvertToVector2Int(_target.transform.position), SelectedSkill);
+            BattleController.Instance.SetTargetList(areaList);
+            BattleController.Instance.SetState<BattleController.SkillState>();
+            BattleController.Instance.CommandStateBeginHandler += SetDirection;
+        }
+
+        private void SetDirection() 
+        {
+            BattleController.Instance.CommandStateBeginHandler -= SetDirection;
+            BattleController.Instance.SetState<BattleController.DirectionState>();
+            Vector3 v3 = _target.transform.position - transform.position;
+            Vector2Int v2;
+            if(Mathf.Abs(v3.x) > Mathf.Abs(v3.z)) 
+            {
+                if (v3.x > 0) 
+                {
+                    v2 = Vector2Int.right;
+                }
+                else
+                {
+                    v2 = Vector2Int.left;
+                }
+            }
+            else
+            {
+                if (v3.z > 0)
+                {
+                    v2 = Vector2Int.up;
+                }
+                else
+                {
+                    v2 = Vector2Int.down;
+                }
+            }
+            BattleController.Instance.SetDirection(v2);
+        }
+
+        protected override Vector2Int GetMoveTo(List<Vector2Int> stepList, List<BattleCharacterController> targetList, Dictionary<BattleCharacterController, List<Vector2Int>> canHitDic)
+        {
+            int distance;
+            int minDistance = int.MaxValue;
+            Vector2Int start = Utility.ConvertToVector2Int(transform.position);
+            Vector2Int targetPosition;
+            Vector2Int moveTo = new Vector2Int();
+            if(canHitDic.Count> 0) 
+            {
+                _canAttack = true;
+                _target = GetTarget(new List<BattleCharacterController>(canHitDic.Keys));
+                for (int i = 0; i < canHitDic[_target].Count; i++)
+                {
+                    distance = BattleController.Instance.GetDistance(start, canHitDic[_target][i], _character.Info.Faction);
+                    if (distance < minDistance)
+                    {
+                        minDistance = distance;
+                        moveTo = canHitDic[_target][i];
+                    }
+                }
+            }
+            else
+            {
+                _canAttack = false;
+                _target = GetTarget(targetList);
+                targetPosition = Utility.ConvertToVector2Int(_target.transform.position);
+                for (int i = 0; i < stepList.Count; i++)
+                {
+                    distance = BattleController.Instance.GetDistance(stepList[i], targetPosition, _character.Info.Faction);
+                    if (distance < minDistance)
+                    {
+                        minDistance = distance;
+                        moveTo = stepList[i];
+                    }
+                }
+            }
+            return moveTo;
+        }
+
+        protected override BattleCharacterController GetTarget(List<BattleCharacterController> list)
+        {
+            int damage;
+            int maxDamage = -1;
+            BattleCharacterController target = _character.Info.GetProvocativeTarget();
+
+            if (target == null) 
+            {
+                for (int i = 0; i < list.Count; i++)
+                {
+                    damage = BattleController.Instance.GetDamage(SelectedSkill.Effect, _character, list[i]);
+                    if (damage > maxDamage)
+                    {
+                        maxDamage = damage;
+                        target = list[i];
+                    }
+                }
+            }
+
+            return target;
         }
     }
 }

@@ -13,10 +13,10 @@ public class LittleHpBarWithStatus : MonoBehaviour
         HpBar.SetAnchor(anchor);
     }
 
-    public void SetData(BattleCharacterInfo info) 
+    public void SetData(BattleCharacterInfo info, Vector2Int position) 
     {
         HpBar.SetValue(info.CurrentHP, info.MaxHP);
-        StatusIconGroup.SetData(info, false);
+        StatusIconGroup.SetData(info, false, position);
     }
 
     public void SetPrediction(int origin, int prediction, int max) 
@@ -24,8 +24,8 @@ public class LittleHpBarWithStatus : MonoBehaviour
         HpBar.SetPrediction(origin, prediction, max);
     }
 
-    public void StopPrediction()
-    {
-        HpBar.StopPrediction();
-    }
+    //public void StopPrediction()
+    //{
+    //    HpBar.StopPrediction();
+    //}
 }

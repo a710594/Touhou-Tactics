@@ -21,9 +21,9 @@ namespace Battle
                 {
                     return TileData.MoveCost;
                 }
-                else if (AttachData.MoveCost >= 0) 
+                else if (AttachData.MoveCost != -1) 
                 {
-                return AttachData.MoveCost;
+                    return TileData.MoveCost + AttachData.MoveCost;
                 }
                 else
                 {

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Battle
 {
-    public class KutakaAI : BattleAI
+    public class KutakaAI : OldBattleAI
     {
         private int _count = 0;
 
@@ -38,7 +38,7 @@ namespace Battle
             BattleController.Instance.SetSelectedCommand(SelectedSkill);
             //BattleController.Instance.SetState<BattleController.TargetState>();
             List<Vector2Int> rangeList = BattleController.Instance.GetRangeList(SelectedSkill.Range, Utility.ConvertToVector2Int(_controller.transform.position));
-            BattleController.Instance.RemoveRange(SelectedSkill.RangeTarget, rangeList);
+            BattleController.Instance.RemoveRange(SelectedSkill.Target, rangeList);
             Vector2Int targetPosition = rangeList[UnityEngine.Random.Range(0, rangeList.Count)];
             BattleController.Instance.Click(targetPosition);
             Vector3 v3 = new Vector3(targetPosition.x, BattleController.Instance.TileDic[targetPosition].TileData.Height, targetPosition.y);

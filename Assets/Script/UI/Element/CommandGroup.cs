@@ -97,6 +97,10 @@ namespace Battle
                     {
                         TipLabel.SetLabel("這回合已經使用過主要動作了");
                     }
+                    else
+                    {
+                        BattleController.Instance.SetState<BattleController.MoveState>();
+                    }
                 }
                 else
                 {
@@ -158,7 +162,7 @@ namespace Battle
             else if(data is Spell) 
             {
                 Spell spell = (Spell)data;
-                if (_character.HasSpell)
+                if (_character.HasMain)
                 {
                     TipLabel.SetLabel("這回合已經使用過主要動作了");
                 }

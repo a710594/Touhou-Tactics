@@ -16,10 +16,12 @@ public class CameraController : MonoBehaviour
     public float Speed;
     public float Distance;
     public float Height;
-    public GameObject MyGameObj;
+    public Camera Camera;
 
-    [NonReorderable]
+    [NonSerialized]
     public bool Enable = true;
+    [NonSerialized]
+    public GameObject TargetObject;
 
     private float _minX;
     private float _maxX;
@@ -28,32 +30,37 @@ public class CameraController : MonoBehaviour
     private float _mouseX;
     private float _mouseY;
     private Vector3 _position;
-    private Vector3 _angle;
-
-    public void SetMyGameObj(GameObject obj)
-    {
-        float radiansX = transform.eulerAngles.x * Mathf.PI / 180f;
-        float radiansY = transform.eulerAngles.y * Mathf.PI / 180f;
-        MyGameObj = obj;
-        Vector3 position = new Vector3(-Mathf.Sin(radiansY) * MathF.Cos(radiansX) * Distance + MyGameObj.transform.position.x, MathF.Sin(radiansX) * Height, -Mathf.Cos(radiansY) * MathF.Cos(radiansX) * Distance + MyGameObj.transform.position.z);
-        transform.position = position;
-    }
+    private Timer _timer = new Timer();
 
     public void SetMyGameObj(GameObject obj, Action callback) 
     {
         Enable = false;
         float radiansX = transform.eulerAngles.x * Mathf.PI / 180f;
         float radiansY = transform.eulerAngles.y * Mathf.PI / 180f;
-        MyGameObj = obj;
-        Vector3 position = new Vector3(-Mathf.Sin(radiansY) * MathF.Cos(radiansX) * Distance + MyGameObj.transform.position.x, MathF.Sin(radiansX) * Height, -Mathf.Cos(radiansY) * MathF.Cos(radiansX) * Distance + MyGameObj.transform.position.z);
-        transform.DOMove(position, 0.5f).OnComplete(()=> 
+        TargetObject = obj;
+        Vector2Int objPosition = Utility.ConvertToVector2Int(obj.transform.position);
+        int objHeight = BattleController.Instance.TileDic[objPosition].TileData.Height;
+        Vector3 cameraPosition = new Vector3(-Mathf.Sin(radiansY) * MathF.Cos(radiansX) * Distance + TargetObject.transform.position.x, MathF.Sin(radiansX) * Height + objHeight, -Mathf.Cos(radiansY) * MathF.Cos(radiansX) * Distance + TargetObject.transform.position.z);
+
+        if (callback != null)
+        {
+            transform.DOMove(cameraPosition, 0.5f).OnComplete(() =>
+            {
+                _timer.Start(0.5f, ()=> 
+                {
+                    Enable = true;
+                    if (callback != null)
+                    {
+                        callback();
+                    }
+                });
+            });
+        }
+        else
         {
             Enable = true;
-            if (callback != null) 
-            {
-                callback();
-            }
-        });
+            transform.position = cameraPosition;
+        }
     }
 
     private void GetMinAndMax(Vector3 angle) 
@@ -73,44 +80,23 @@ public class CameraController : MonoBehaviour
             return;
         }
 
-        /*if (Input.GetMouseButton(0))
-        {
-            _mouseX = Input.GetAxis("Mouse X");
-            _mouseY = Input.GetAxis("Mouse Y");
-            GetMinAndMax(transform.eulerAngles);
-
-            if(Mathf.Abs(_mouseX) > 0.1f) 
-            {
-                _position = transform.position - transform.right.normalized * _mouseX;
-                if (_position.x > _minX && _position.x < _maxX && _position.z > _minZ && _position.z < _maxZ)
-                {
-                    transform.position = _position;
-                }
-            }
-
-            if (Mathf.Abs(_mouseY) > 0.1f)
-            {
-                _position = transform.position - (new Vector3(transform.forward.x, 0, transform.forward.z)).normalized * _mouseY;
-                if (_position.x > _minX && _position.x < _maxX && _position.z > _minZ && _position.z < _maxZ)
-                {
-                    transform.position = _position;
-                }
-            }
-        }
-        else if (Input.GetMouseButton(1))
-        {
-            _mouseX = Input.GetAxis("Mouse X");
-            transform.RotateAround(MyGameObj.transform.position, Vector3.up, -_mouseX * Speed);
-        }*/
         GetMinAndMax(transform.eulerAngles);
         if (Input.GetMouseButton(2))
         {
+            _mouseX = Input.GetAxis("Mouse X");
             _mouseY = Input.GetAxis("Mouse Y");
-            if (transform.eulerAngles.x - _mouseY * Speed < 89 && transform.eulerAngles.x - _mouseY * Speed > 0)
+            if (Math.Abs(_mouseX) > Math.Abs(_mouseY)) 
             {
-                transform.RotateAround(MyGameObj.transform.position, transform.right, -_mouseY * Speed);
-                _position = transform.position;
+                transform.RotateAround(TargetObject.transform.position, Vector3.up, _mouseX * Speed);
             }
+            else
+            {
+                if (transform.eulerAngles.x - _mouseY * Speed < 89 && transform.eulerAngles.x - _mouseY * Speed > 0)
+                {
+                    transform.RotateAround(TargetObject.transform.position, transform.right, -_mouseY * Speed);
+                }
+            }
+            _position = transform.position;
             CheckCameraPosition();
         }
 
@@ -148,13 +134,13 @@ public class CameraController : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.E)) 
         {
-            transform.RotateAround(MyGameObj.transform.position, Vector3.up, - Time.deltaTime * Speed * 20);
+            transform.RotateAround(TargetObject.transform.position, Vector3.up, -Time.deltaTime * Speed * 20);
             _position = transform.position;
             CheckCameraPosition();
         }
         if (Input.GetKey(KeyCode.Q))
         {
-            transform.RotateAround(MyGameObj.transform.position, Vector3.up, +Time.deltaTime * Speed * 20);
+            transform.RotateAround(TargetObject.transform.position, Vector3.up, Time.deltaTime * Speed * 20);
             _position = transform.position;
             CheckCameraPosition();
         }

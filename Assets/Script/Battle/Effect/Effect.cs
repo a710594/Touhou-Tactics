@@ -9,16 +9,10 @@ namespace Battle
 {
     public class Effect
     {
-        //public EffectModel Data;
         public EffectModel.TypeEnum Type;
         public int Value;
-        // public int Hit;
-        // public int Range;
-        // public EffectModel.TargetEnum Target;
-        // public EffectModel.TrackEnum Track;
-        // public string Area;
-        // public List<Vector2Int> AreaList = new List<Vector2Int>();
         public Status Status;
+        public EffectModel.TargetEnum Target;
 
         public Effect SubEffect;
 
@@ -28,6 +22,7 @@ namespace Battle
         {
             Type = data.Type;
             Value = data.Value;
+            Target = data.Target;
             if (data.StatusID != -1)
             {
                 Status = StatusFactory.GetStatus(data.StatusID);
@@ -41,6 +36,10 @@ namespace Battle
         public virtual void Use(BattleCharacterController user, Vector3 position) { }
 
         public virtual void Use(HitType hitType, BattleCharacterController user, BattleCharacterController target, List<Log> logList)
+        {
+        }
+
+        public virtual void Use(HitType hitType, BattleCharacterController user, List<Log> logList)
         {
         }
     }

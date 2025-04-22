@@ -2,7 +2,7 @@
 using UnityEngine;
 using Battle;
 
-public class SupportModel
+public class SubModel
 {
     public int ID;
     public string Name;
@@ -11,9 +11,10 @@ public class SupportModel
     public int EffectID;
     public int Hit;
     public int Range;
-    public string Array;
-    public TargetEnum RangeTarget;
-    public TargetEnum AreaTarget;
+    public string AreaArray;
+    public TargetEnum Target;
     public AreaTypeEnum AreaType;
     public TrackEnum Track;
+    public string Particle;
+    public bool Shake;
 }

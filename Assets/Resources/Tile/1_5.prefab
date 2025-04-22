@@ -181,7 +181,7 @@ GameObject:
   - component: {fileID: 5810752800915933058}
   - component: {fileID: 8525769066156691866}
   - component: {fileID: 6230375192170202156}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: 1_5
   m_TagString: BattleTile
   m_Icon: {fileID: 0}
@@ -267,8 +267,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 5, z: 1}
-  m_Center: {x: 0, y: 2, z: 0}
+  m_Size: {x: 1, y: 0.1, z: 1}
+  m_Center: {x: 0, y: 4.45, z: 0}
 --- !u!114 &6230375192170202156
 MonoBehaviour:
   m_ObjectHideFlags: 0

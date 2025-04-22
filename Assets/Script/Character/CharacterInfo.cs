@@ -100,23 +100,23 @@ public class CharacterInfo
 
         if (job.Support_1 != -1)
         {
-            SupportList.Add(new Sub(DataTable.Instance.SupportDic[job.Support_1]));
+            SupportList.Add(new Sub(DataTable.Instance.SubDic[job.Support_1]));
         }
         if (job.Support_2 != -1)
         {
-            SupportList.Add(new Sub(DataTable.Instance.SupportDic[job.Support_2]));
+            SupportList.Add(new Sub(DataTable.Instance.SubDic[job.Support_2]));
         }
         if (job.Support_3 != -1)
         {
-            SupportList.Add(new Sub(DataTable.Instance.SupportDic[job.Support_3]));
+            SupportList.Add(new Sub(DataTable.Instance.SubDic[job.Support_3]));
         }
         if (job.Support_4 != -1)
         {
-            SupportList.Add(new Sub(DataTable.Instance.SupportDic[job.Support_4]));
+            SupportList.Add(new Sub(DataTable.Instance.SubDic[job.Support_4]));
         }
         if (job.Support_5 != -1)
         {
-            SupportList.Add(new Sub(DataTable.Instance.SupportDic[job.Support_5]));
+            SupportList.Add(new Sub(DataTable.Instance.SubDic[job.Support_5]));
         }
 
         if (job.Passive != -1)

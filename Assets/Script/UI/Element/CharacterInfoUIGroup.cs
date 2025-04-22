@@ -1,31 +1,50 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class CharacterInfoUIGroup : MonoBehaviour
 {
     public CharacterInfoUI CharacterInfoUI_1;
     public CharacterInfoUI CharacterInfoUI_2;
 
-    public void SetCharacterInfoUI_1(BattleCharacterInfo info)
+    private Timer _timer = new Timer();
+
+    public void ShowCharacterInfoUI_1(BattleCharacterInfo info, Vector2Int position)
     {
-        if (info != null)
-        {
-            CharacterInfoUI_1.SetVisible(true);
-            CharacterInfoUI_1.SetData(info);
-        }
-        else
-        {
-            CharacterInfoUI_1.SetVisible(false);
-        }
+        CharacterInfoUI_1.SetVisible(true);
+        CharacterInfoUI_1.SetData(info, position);
     }
 
-    public void SetCharacterInfoUI_2(BattleCharacterInfo info)
+    public void HideCharacterInfoUI_1()
     {
-        if (info != null)
+        CharacterInfoUI_1.SetVisible(false);
+    }
+
+    public void ShowCharacterInfoUI_2(BattleCharacterInfo info, Vector2Int position)
+    {
+        CharacterInfoUI_2.SetVisible(true);
+        CharacterInfoUI_2.SetData(info, position);
+    }
+
+    public void HideCharacterInfoUI_2()
+    {
+        CharacterInfoUI_2.SetVisible(false);
+    }
+
+    public void SetCharacterInfoUIWithTween_2(BattleCharacterController character, int originalHP, Vector2Int position)
+    {
+        if (character != null)
         {
-            CharacterInfoUI_2.SetVisible(true);
-            CharacterInfoUI_2.SetData(info);
+            if (character.Info != null)
+            {
+                CharacterInfoUI_2.SetVisible(true);
+                CharacterInfoUI_2.SetDataWithTween(character.Info, originalHP, position);
+            }
+            else
+            {
+                CharacterInfoUI_2.SetVisible(false);
+            }
         }
         else
         {
@@ -43,9 +62,16 @@ public class CharacterInfoUIGroup : MonoBehaviour
         CharacterInfoUI_2.SetHpPrediction(info.CurrentHP, predictionHp, info.MaxHP);
     }
 
-    public void StopPredictionInfo()
+    public void MoveCharacterInfoUI_1() 
     {
-        CharacterInfoUI_2.StopHpPrediction();
+        CharacterInfoUI_1.transform.localPosition = new Vector3(1100, CharacterInfoUI_1.transform.localPosition.y, CharacterInfoUI_1.transform.localPosition.z);
+        _timer.Start(0.5f, ()=> 
+        {
+            CharacterInfoUI_1.transform.DOLocalMoveX(-250, 0.5f).SetEase(Ease.OutQuint).OnComplete(() =>
+            {
+                CharacterInfoUI_1.transform.DOLocalMoveX(-827, 0.5f).SetEase(Ease.OutQuint);
+            });
+        });
     }
 
     public void SetHitRate(int hitRate)

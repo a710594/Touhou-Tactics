@@ -40,7 +40,7 @@ public class DataTable
     public List<SkillModel> SkillList = new List<SkillModel>();
     public List<SpellModel> SpellList = new List<SpellModel>();
     public List<StatusModel> StatusList = new List<StatusModel>();
-    public List<SupportModel> SupportList = new List<SupportModel>();
+    public List<SubModel> SubList = new List<SubModel>();
     public List<TileModel> TileList = new List<TileModel>();
     public List<TreasureModel> TreasureList = new List<TreasureModel>();
 
@@ -64,7 +64,7 @@ public class DataTable
     public Dictionary<int, SpellModel> SpellDic = new Dictionary<int, SpellModel>();
     public Dictionary<int, List<SpellModel>> JobSpellDic = new Dictionary<int, List<SpellModel>>();
     public Dictionary<int, StatusModel> StatusDic = new Dictionary<int, StatusModel>();
-    public Dictionary<int, SupportModel> SupportDic = new Dictionary<int, SupportModel>();
+    public Dictionary<int, SubModel> SubDic = new Dictionary<int, SubModel>();
     public Dictionary<int, TileModel> TileDic = new Dictionary<int, TileModel>();
     public Dictionary<int, TreasureModel> TreasureDic = new Dictionary<int, TreasureModel>();
 
@@ -328,13 +328,13 @@ public class DataTable
             CheckComplete();
         });
 
-        _fileManager.Load<List<SupportModel>>("Support", FileManager.PathEnum.Data, (obj) =>
+        _fileManager.Load<List<SubModel>>("Sub", FileManager.PathEnum.Data, (obj) =>
         {
-            SupportList = (List<SupportModel>)obj;
-            SupportDic.Clear();
-            for (int i = 0; i < SupportList.Count; i++)
+            SubList = (List<SubModel>)obj;
+            SubDic.Clear();
+            for (int i = 0; i < SubList.Count; i++)
             {
-                SupportDic.Add(SupportList[i].ID, SupportList[i]);
+                SubDic.Add(SubList[i].ID, SubList[i]);
             }
             CheckComplete();
         });

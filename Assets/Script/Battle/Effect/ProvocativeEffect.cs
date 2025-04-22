@@ -14,7 +14,7 @@ public class ProvocativeEffect : Effect
     {
         if (hitType != HitType.Miss)
         {
-            ((ProvocativeStatus)Status).Target = user;
+            ((Provocative)Status).Target = user;
             target.Info.AddStatus(Status);
             logList.Add(new Log(user, target, this, hitType, Status.Name));
         }

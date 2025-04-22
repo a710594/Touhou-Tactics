@@ -5,11 +5,11 @@ using UnityEngine;
 namespace Battle
 {
 
-    public class ProvocativeStatus : Status
+    public class Provocative : Status
     {
         public BattleCharacterController Target; //§ðÀ»¥Ø¼Ð
 
-        public ProvocativeStatus(StatusModel data) : base(data)
+        public Provocative(StatusModel data) : base(data)
         {
         }
     }

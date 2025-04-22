@@ -19,6 +19,7 @@ namespace Explore
 
         void Start()
         {
+            Cursor.lockState = CursorLockMode.Locked;
             _lastPosition = transform.position;
         }
 
@@ -61,18 +62,14 @@ namespace Explore
 
         void Look()
         {
-            if (Input.GetMouseButton(1))
-            {
-                float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
-                float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
+            float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
+            float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
 
-                verticalRotation -= mouseY;
-                verticalRotation = Mathf.Clamp(verticalRotation, -90f, 90f);
+            verticalRotation -= mouseY;
+            verticalRotation = Mathf.Clamp(verticalRotation, -90f, 90f);
 
-                cameraTransform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
-                //cameraTransform.Rotate(Vector3.right * verticalRotation);
-                transform.Rotate(Vector3.up * mouseX);
-            }
+            cameraTransform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
+            transform.Rotate(Vector3.up * mouseX);           
         }
 
         void OnControllerColliderHit(ControllerColliderHit hit)

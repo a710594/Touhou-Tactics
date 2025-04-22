@@ -28,7 +28,14 @@ public class MagicAttackEffect : Effect
 
         if (SubEffect != null && hitType != HitType.Miss)
         {
-            SubEffect.Use(hitType, user, target, logList);
+            if (SubEffect.Target != EffectModel.TargetEnum.None)
+            {
+                SubEffect.Use(hitType, user, logList);
+            }
+            else
+            {
+                SubEffect.Use(hitType, user, target, logList);
+            }
         }
     }
 }

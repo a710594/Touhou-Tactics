@@ -113,6 +113,18 @@ public class BattleCharacterInfo
         return false;
     }
 
+    public BattleCharacterController GetProvocativeTarget() 
+    {
+        for (int i = 0; i < StatusList.Count; i++)
+        {
+            if (StatusList[i] is Provocative)
+            {
+                return ((Provocative)StatusList[i]).Target;
+            }
+        }
+        return null;
+    }
+
     public void SetRecover(int recover)
     {
         CurrentHP += recover;

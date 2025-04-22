@@ -8,11 +8,15 @@ namespace Battle
     public enum TargetEnum 
     {
         All=0,
-        Self,
         Us,
         Them, 
         None,
-        UsMinHP,
+    }
+
+    public enum SubTargetEnum 
+    {
+        Self=1,
+        MinHp=2,
     }
 
     public enum AreaTypeEnum

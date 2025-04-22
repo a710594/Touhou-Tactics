@@ -147,19 +147,19 @@ namespace Battle
                 }
             }
 
-            for (int i = 0; i < CharacterList.Count; i++)
+            for (int i = 0; i < CharacterAliveList.Count; i++)
             {
-                if (CharacterList[i] != character)
+                if (CharacterAliveList[i] != character)
                 {
-                    stepList.Remove(Utility.ConvertToVector2Int(CharacterList[i].transform.position));
+                    stepList.Remove(Utility.ConvertToVector2Int(CharacterAliveList[i].transform.position));
                 }
             }
 
-            for (int i = 0; i < DyingList.Count; i++)
+            for (int i = 0; i < CharacterDyingList.Count; i++)
             {
-                if (DyingList[i] != character)
+                if (CharacterDyingList[i] != character)
                 {
-                    stepList.Remove(Utility.ConvertToVector2Int(DyingList[i].transform.position));
+                    stepList.Remove(Utility.ConvertToVector2Int(CharacterDyingList[i].transform.position));
                 }
             }
 
@@ -218,12 +218,17 @@ namespace Battle
             int cost = 0;
             try
             {
-                for (int i = 0; i < CharacterList.Count; i++)
+                if (TileDic[to].MoveCost == -1) 
+                {
+                    return -1;
+                }
+
+                for (int i = 0; i < CharacterAliveList.Count; i++)
                 {
                     //如果有角色不為目標且與自己陣營不同,就視為障礙物
-                    if (Utility.ConvertToVector2Int(CharacterList[i].transform.position) == to && Utility.ConvertToVector2Int(CharacterList[i].transform.position) != goal)
+                    if (Utility.ConvertToVector2Int(CharacterAliveList[i].transform.position) == to && Utility.ConvertToVector2Int(CharacterAliveList[i].transform.position) != goal)
                     {
-                        if (faction != BattleCharacterInfo.FactionEnum.None && CharacterList[i].Info.Faction != faction)
+                        if (faction != BattleCharacterInfo.FactionEnum.None && CharacterAliveList[i].Info.Faction != faction)
                         {
                             return -1;
                         }

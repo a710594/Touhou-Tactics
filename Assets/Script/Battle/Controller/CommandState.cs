@@ -9,6 +9,9 @@ namespace Battle
 
         public class CommandState : BattleControllerState
         {
+            private Vector2Int? _lastPosition = null;
+            private List<Vector2Int> _stepList = new List<Vector2Int>();
+
             public CommandState(StateContext context) : base(context)
             {
             }
@@ -20,19 +23,18 @@ namespace Battle
                     Instance.CommandStateBeginHandler();
                 }
 
-                _character = Instance.SelectedCharacter;
-                _characterList = Instance.CharacterList;
-                Instance.BattleUI.CommandGroup.SetData(_character.Info);
+                _stepList.Clear();
+                _selectedCharacter = Instance.SelectedCharacter;
+                _characterList = Instance.CharacterAliveList;
+                Instance.BattleUI.CommandGroup.SetData(_selectedCharacter.Info);
                 Instance.BattleUI.CommandGroup.Reset();
-                Instance.CharacterInfoUIGroup.SetCharacterInfoUI_1(_character.Info);
-                Instance.CharacterInfoUIGroup.SetCharacterInfoUI_2(null);
-                Instance.ClearQuad();
-                Instance.ShowTileBuff(_character);
+                Instance.CharacterInfoUIGroup.ShowCharacterInfoUI_1(_selectedCharacter.Info, Utility.ConvertToVector2Int(_selectedCharacter.transform.position));
+                Instance._line.gameObject.SetActive(false);
 
                 bool sleep = false;
-                for (int i = 0; i < _character.Info.StatusList.Count; i++)
+                for (int i = 0; i < _selectedCharacter.Info.StatusList.Count; i++)
                 {
-                    if (_character.Info.StatusList[i] is Sleep)
+                    if (_selectedCharacter.Info.StatusList[i] is Sleep)
                     {
                         sleep = true;
                         break;
@@ -43,11 +45,6 @@ namespace Battle
                 {
                     _context.SetState<EndState>();
                 }
-                else if (_character.Info.IsAuto)
-                {
-                    _character.AI.Start();
-                    Instance.BattleUI.SetCommandVisible(false);
-                }
                 else
                 {
                     Instance.BattleUI.SetCommandVisible(true);
@@ -56,8 +53,59 @@ namespace Battle
 
             public void SetCommand(Command command)
             {
-                _character.Info.SelectedCommand = command;
+                _selectedCharacter.Info.SelectedCommand = command;
                 _context.SetState<RangeState>();
+            }
+
+            public override void Update()
+            {
+                if (Instance.UpdatePosition(out Vector2Int? position))
+                {
+                    if (_lastPosition != null)
+                    {
+                        Instance.SetSelect((Vector2Int)_lastPosition, false);
+                    }
+
+                    if (position != null)
+                    {
+                        Instance.ClearQuad(_stepList);
+                        Instance.SetSelect((Vector2Int)position, true);
+                        BattleCharacterController character = Instance.GetCharacterByPosition((Vector2Int)position);
+                        if (character != null)
+                        {
+                            _stepList = Instance.GetStepList(character);
+                            Instance.SetQuad(_stepList, _white);
+                            if (character != _selectedCharacter) 
+                            {
+                                Instance.CharacterInfoUIGroup.ShowCharacterInfoUI_2(character.Info, Utility.ConvertToVector2Int(character.transform.position));
+                            }
+                        }
+                        else
+                        {
+                            _stepList.Clear();
+                            Instance.CharacterInfoUIGroup.HideCharacterInfoUI_2();
+                        }
+                    }
+                    _lastPosition = position;
+                }
+
+                if (Utility.GetMouseButtonDoubleClick(0)) 
+                {
+                    RaycastHit hit;
+                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    if (Physics.Raycast(ray, out hit, 100, _battleTileLayer)) 
+                    {
+                        Vector2Int v2 = Utility.ConvertToVector2Int(hit.transform.position);
+                        BattleCharacterController character = Instance.GetCharacterByPosition(v2);
+                        CharacterDetailUI characterDetailUI = CharacterDetailUI.Open(false);
+                        characterDetailUI.SetData(character.Info, v2);
+                    }
+                }
+            }
+
+            public override void End()
+            {
+                Instance.ClearQuad(_stepList);
             }
         }
     }

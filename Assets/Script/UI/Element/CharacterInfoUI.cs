@@ -9,36 +9,43 @@ public class CharacterInfoUI : MonoBehaviour
     public Text LvLabel;
     public Text NameLabel;
     public Text HitRateLabel;
+    public Image Image;
     public BattleValueBar HpBar;
-    public ValueBar PpBar;
     public StatusIconGroup StatusIconGroup;
     public Button Button;
 
     private BattleCharacterInfo _character;
+    private Vector2Int _position;
 
     public void SetVisible(bool isVisible) 
     {
         gameObject.SetActive(isVisible);
     }
 
-    public void SetData(BattleCharacterInfo character) 
+    public void SetData(BattleCharacterInfo character, Vector2Int position) 
     {
         _character = character;
+        _position = position;
         LvLabel.text = "Lv. " + character.Lv;
         NameLabel.text = character.Name;
         HitRateLabel.gameObject.SetActive(false);
         HpBar.SetValue(character.CurrentHP, character.MaxHP);
+        Image.sprite = Resources.Load<Sprite>("Image/Character/" + character.FileName + "_Head");
 
-        StatusIconGroup.SetData(character, true);
+        StatusIconGroup.SetData(character, true, position);
     }
 
-    public void SetData(CharacterInfo character)
+    public void SetDataWithTween(BattleCharacterInfo character, int originalHP, Vector2Int position)
     {
-        LvLabel.text = "Lv. " + CharacterManager.Instance.Info.Lv;
+        _character = character;
+        _position = position;
+        LvLabel.text = "Lv. " + character.Lv;
         NameLabel.text = character.Name;
         HitRateLabel.gameObject.SetActive(false);
-        HpBar.SetValue(character.CurrentHP, character.MaxHP);
-        PpBar.gameObject.SetActive(false);
+        HpBar.SetValueTween(originalHP, character.CurrentHP, character.MaxHP, null);
+        Image.sprite = Resources.Load<Sprite>("Image/Character/" + character.FileName + "_Head");
+
+        StatusIconGroup.SetData(character, true, position);
     }
 
     public void SetHpPrediction(int origin, int prediction, int max) 
@@ -46,10 +53,10 @@ public class CharacterInfoUI : MonoBehaviour
         HpBar.SetPrediction(origin, prediction, max);
     }
 
-    public void StopHpPrediction() 
-    {
-        HpBar.StopPrediction();
-    }
+    //public void StopHpPrediction() 
+    //{
+    //    HpBar.StopPrediction();
+    //}
 
     public void SetHitRate(int hitRate) 
     {
@@ -67,7 +74,7 @@ public class CharacterInfoUI : MonoBehaviour
         if (_character != null)
         {
             CharacterDetailUI characterDetailUI = CharacterDetailUI.Open(false);
-            characterDetailUI.SetData((BattlePlayerInfo)_character);
+            characterDetailUI.SetData((BattlePlayerInfo)_character, _position);
         }
     }
 

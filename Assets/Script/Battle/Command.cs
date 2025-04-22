@@ -14,11 +14,11 @@ namespace Battle
         public int Range;
         public string Name;
         public string Comment;
-        public TargetEnum RangeTarget;
-        public TargetEnum AreaTarget;
+        public string Particle;
+        public bool Shake;
+        public TargetEnum Target;
         public AreaTypeEnum AreaType;
         public TrackEnum Track;
-        public Command SubCommand;
         public List<Vector2Int> ArrayList = new List<Vector2Int>();
 
     }

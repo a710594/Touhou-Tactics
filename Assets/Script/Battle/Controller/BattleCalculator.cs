@@ -68,7 +68,7 @@ namespace Battle
         public List<Vector2Int> GetNormalAreaList(Vector2Int from, Vector2Int to, TargetEnum areaTarget, List<Vector2Int> areaList)
         {
             Vector2 v2 = to - from;
-            int angle = (int)Vector2.Angle(v2, Vector2.up) / 90 * 90; //取最接近90的倍數的數
+            int angle = Mathf.RoundToInt(Vector2.Angle(v2, Vector2.up) / 90f) * 90; //取最接近90的倍數的數
             Vector3 cross = Vector3.Cross(v2, Vector2.up);
             if (cross.z > 0)
             {
@@ -118,14 +118,14 @@ namespace Battle
         public void RemoveRange(TargetEnum target, List<Vector2Int> list) 
         {
             Vector2Int v2;
-            for (int i = 0; i < CharacterList.Count; i++)
+            for (int i = 0; i < CharacterAliveList.Count; i++)
             {
-                v2 = Utility.ConvertToVector2Int(CharacterList[i].transform.position);
+                v2 = Utility.ConvertToVector2Int(CharacterAliveList[i].transform.position);
                 if (list.Contains(v2))
                 {
                     if (target == TargetEnum.None ||
-                       (target == TargetEnum.Us && SelectedCharacter.Info.Faction != CharacterList[i].Info.Faction) ||
-                       (target == TargetEnum.Them && SelectedCharacter.Info.Faction == CharacterList[i].Info.Faction))
+                       (target == TargetEnum.Us && SelectedCharacter.Info.Faction != CharacterAliveList[i].Info.Faction) ||
+                       (target == TargetEnum.Them && SelectedCharacter.Info.Faction == CharacterAliveList[i].Info.Faction))
                     {
                         list.Remove(v2);
                         i--;
@@ -202,15 +202,20 @@ namespace Battle
             //角度越大則命中越低
             //面對面的時候命中率只有一半
             //從背面攻擊時命中率則為1.5倍
-            Vector3 v = target.transform.position - user.transform.position;
-            float angle = Vector2.Angle(new Vector2(v.x, v.z), target.Direction);
+            Vector3 v3 = target.transform.position - user.transform.position;
+            Vector2Int v2 = Utility.ConvertToVector2Int(v3);
+            
+            float angle1 = Vector2.Angle(v2, Utility.ConvertToVector2Int(target.transform.forward));
+            float angle2 = Vector2.Angle(v2, Utility.ConvertToVector2Int(user.transform.forward));
+            Debug.Log(angle1 + " " + angle2);
+
             //戰士的被動技能
-            if (Passive.Contains<SwordmanPassive>(user.Info.PassiveList) && angle > 90)
+            if (Passive.Contains<SwordmanPassive>(user.Info.PassiveList) && angle1 > 90)
             {
-                angle = 90;
+                angle1 = 90;
 
             }
-            hitRate = (angle * (-1 / 180f) + 1.5f) * hitRate;
+            hitRate = (angle1 * (-1 / 180f) + 1.5f) * hitRate;
 
             return hitRate;
         }
@@ -221,32 +226,17 @@ namespace Battle
             if (effect.Type == EffectModel.TypeEnum.PhysicalAttack)
             {
                 float atk = (float)user.Info.STR;
-                float def = (float)target.Info.CON;
-                for (int i = 0; i < CharacterList.Count; i++)
+                List<Status> strBuffList = GetStatueList(user.Info, StatusModel.TypeEnum.STR, Utility.ConvertToVector2Int(user.transform.position));
+                for (int i=0; i<strBuffList.Count;i++) 
                 {
-                    for (int j = 0; j < CharacterList[i].Info.StatusList.Count; j++)
-                    {
-                        if (CharacterList[i].Info.StatusList[j].Type == StatusModel.TypeEnum.STR && user.Info.Faction == CharacterList[i].Info.Faction)
-                        {
-                            for (int k = 0; k < CharacterList[i].Info.StatusList[j].AreaList.Count; k++)
-                            {
-                                if (Utility.ConvertToVector2Int(CharacterList[i].transform.position) + CharacterList[i].Info.StatusList[j].AreaList[k] == Utility.ConvertToVector2Int(user.transform.position))
-                                {
-                                    atk *= CharacterList[i].Info.StatusList[j].Value / 100f;
-                                }
-                            }
-                        }
-                        else if (CharacterList[i].Info.StatusList[j].Type == StatusModel.TypeEnum.CON && target.Info.Faction == CharacterList[i].Info.Faction)
-                        {
-                            for (int k = 0; k < CharacterList[i].Info.StatusList[j].AreaList.Count; k++)
-                            {
-                                if (Utility.ConvertToVector2Int(CharacterList[i].transform.position) + CharacterList[i].Info.StatusList[j].AreaList[k] == Utility.ConvertToVector2Int(target.transform.position))
-                                {
-                                    def *= CharacterList[i].Info.StatusList[j].Value / 100f;
-                                }
-                            }
-                        }
-                    }
+                    atk *= strBuffList[i].Value / 100f;
+                }
+
+                float def = (float)target.Info.CON;
+                List<Status> conBuffList = GetStatueList(target.Info, StatusModel.TypeEnum.CON, Utility.ConvertToVector2Int(target.transform.position));
+                for (int i = 0; i < conBuffList.Count; i++)
+                {
+                    def *= conBuffList[i].Value / 100f;
                 }
 
                 int armorDef = 0;
@@ -260,33 +250,47 @@ namespace Battle
             else if (effect.Type == EffectModel.TypeEnum.MagicAttack)
             {
                 float mtk = (float)user.Info.INT;
-                float mef = (float)target.Info.MEN;
-                for (int i = 0; i < CharacterList.Count; i++)
+                List<Status> intBuffList = GetStatueList(user.Info, StatusModel.TypeEnum.INT, Utility.ConvertToVector2Int(user.transform.position));
+                for (int i = 0; i < intBuffList.Count; i++)
                 {
-                    for (int j = 0; j < CharacterList[i].Info.StatusList.Count; j++)
-                    {
-                        if (CharacterList[i].Info.StatusList[j].Type == StatusModel.TypeEnum.INT && user.Info.Faction == CharacterList[i].Info.Faction)
-                        {
-                            for (int k = 0; k < CharacterList[i].Info.StatusList[j].AreaList.Count; k++)
-                            {
-                                if (Utility.ConvertToVector2Int(CharacterList[i].transform.position) + CharacterList[i].Info.StatusList[j].AreaList[k] == Utility.ConvertToVector2Int(user.transform.position))
-                                {
-                                    mtk *= CharacterList[i].Info.StatusList[j].Value / 100f;
-                                }
-                            }
-                        }
-                        else if (CharacterList[i].Info.StatusList[j].Type == StatusModel.TypeEnum.MEN && target.Info.Faction == CharacterList[i].Info.Faction)
-                        {
-                            for (int k = 0; k < CharacterList[i].Info.StatusList[j].AreaList.Count; k++)
-                            {
-                                if (Utility.ConvertToVector2Int(CharacterList[i].transform.position) + CharacterList[i].Info.StatusList[j].AreaList[k] == Utility.ConvertToVector2Int(target.transform.position))
-                                {
-                                    mef *= CharacterList[i].Info.StatusList[j].Value / 100f;
-                                }
-                            }
-                        }
-                    }
+                    mtk *= intBuffList[i].Value / 100f;
                 }
+
+                float mef = (float)target.Info.MEN;
+                List<Status> menBuffList = GetStatueList(target.Info, StatusModel.TypeEnum.MEN, Utility.ConvertToVector2Int(target.transform.position));
+                for (int i = 0; i < menBuffList.Count; i++)
+                {
+                    mef *= menBuffList[i].Value / 100f;
+                }
+
+                //float mtk = (float)user.Info.INT;
+                //float mef = (float)target.Info.MEN;
+                //for (int i = 0; i < CharacterAliveList.Count; i++)
+                //{
+                //    for (int j = 0; j < CharacterAliveList[i].Info.StatusList.Count; j++)
+                //    {
+                //        if (CharacterAliveList[i].Info.StatusList[j].Type == StatusModel.TypeEnum.INT && user.Info.Faction == CharacterAliveList[i].Info.Faction)
+                //        {
+                //            for (int k = 0; k < CharacterAliveList[i].Info.StatusList[j].AreaList.Count; k++)
+                //            {
+                //                if (Utility.ConvertToVector2Int(CharacterAliveList[i].transform.position) + CharacterAliveList[i].Info.StatusList[j].AreaList[k] == Utility.ConvertToVector2Int(user.transform.position))
+                //                {
+                //                    mtk *= CharacterAliveList[i].Info.StatusList[j].Value / 100f;
+                //                }
+                //            }
+                //        }
+                //        else if (CharacterAliveList[i].Info.StatusList[j].Type == StatusModel.TypeEnum.MEN && target.Info.Faction == CharacterAliveList[i].Info.Faction)
+                //        {
+                //            for (int k = 0; k < CharacterAliveList[i].Info.StatusList[j].AreaList.Count; k++)
+                //            {
+                //                if (Utility.ConvertToVector2Int(CharacterAliveList[i].transform.position) + CharacterAliveList[i].Info.StatusList[j].AreaList[k] == Utility.ConvertToVector2Int(target.transform.position))
+                //                {
+                //                    mef *= CharacterAliveList[i].Info.StatusList[j].Value / 100f;
+                //                }
+                //            }
+                //        }
+                //    }
+                //}
 
                 int armorMef = 0;
                 for (int i = 0; i < target.Info.Armor.Count; i++)
@@ -336,7 +340,7 @@ namespace Battle
             {
                 prediction = targetCurrentHp - GetDamage(effect, user, target);
             }
-            else if (effect.Type == EffectModel.TypeEnum.Recover) 
+            else if (effect.Type == EffectModel.TypeEnum.Recover && effect.Target == EffectModel.TargetEnum.None) 
             {
                 prediction = targetCurrentHp + Mathf.RoundToInt((float)effect.Value * (float)user.Info.MEN / 100f);
             }
@@ -388,9 +392,9 @@ namespace Battle
 
                     //檢查位置是否有和其他角色重複
                     isRepeat = false;
-                    for (int i = 0; i < CharacterList.Count; i++)
+                    for (int i = 0; i < CharacterAliveList.Count; i++)
                     {
-                        if (v2 == Utility.ConvertToVector2Int(CharacterList[i].transform.position))
+                        if (v2 == Utility.ConvertToVector2Int(CharacterAliveList[i].transform.position))
                         {
                             isRepeat = true;
                             break;
@@ -402,7 +406,7 @@ namespace Battle
                         //檢查是否與其他角色之間有路徑
                         for (int i = 0; i < PlayerPositionList.Count; i++)
                         {
-                            path = GetPath(v2, Utility.ConvertToVector2Int(CharacterList[i].transform.position), CharacterList[i].Info.Faction);
+                            path = GetPath(v2, Utility.ConvertToVector2Int(CharacterAliveList[i].transform.position), CharacterAliveList[i].Info.Faction);
                             if (path != null)
                             {
                                 v3 = new Vector3(v2.x, TileDic[v2].TileData.Height, v2.y);
@@ -424,20 +428,29 @@ namespace Battle
         public BattleCharacterController GetCharacterByPosition(Vector2Int position) 
         {
             BattleCharacterController character = null;
-            for (int i=0; i<CharacterList.Count; i++) 
+            for (int i=0; i<CharacterAliveList.Count; i++) 
             {
-                if(Utility.ConvertToVector2Int(CharacterList[i].transform.position) == position) 
+                if(Utility.ConvertToVector2Int(CharacterAliveList[i].transform.position) == position) 
                 {
-                    character = CharacterList[i];
+                    character = CharacterAliveList[i];
                     break;
                 }
             }
 
-            for (int i = 0; i < DyingList.Count; i++)
+            for (int i = 0; i < CharacterDyingList.Count; i++)
             {
-                if (Utility.ConvertToVector2Int(DyingList[i].transform.position) == position)
+                if (Utility.ConvertToVector2Int(CharacterDyingList[i].transform.position) == position)
                 {
-                    character = DyingList[i];
+                    character = CharacterDyingList[i];
+                    break;
+                }
+            }
+
+            for (int i = 0; i < TempList.Count; i++)
+            {
+                if (Utility.ConvertToVector2Int(TempList[i].transform.position) == position)
+                {
+                    character = TempList[i];
                     break;
                 }
             }
@@ -448,49 +461,48 @@ namespace Battle
         public ResultType GetResult()
         {
             BattleCharacterController target;
-            foreach (KeyValuePair<Command, List<BattleCharacterController>> pair in _commandTargetDic)
+
+            for (int i = 0; i < _targetList.Count; i++)
             {
-                for (int i = 0; i < pair.Value.Count; i++)
+                target = _targetList[i];
+                if (target.Info.CurrentHP <= 0)
                 {
-                    target = pair.Value[i];
-                    if (target.Info.CurrentHP <= 0)
+                    if (target.Info.Faction == BattleCharacterInfo.FactionEnum.Player)
                     {
-                        if (target.Info.Faction == BattleCharacterInfo.FactionEnum.Player)
+                        if (CharacterDyingList.Contains(target))
                         {
-                            if (DyingList.Contains(target))
-                            {
-                                target.gameObject.SetActive(false);
-                                DyingList.Remove(target);
-                                DeadList.Add(target);
-                            }
-                            else
-                            {
-                                CharacterList.Remove(target);
-                                DyingList.Add(target);
-                                target.StartFlash();
-                            }
+                            target.gameObject.SetActive(false);
+                            CharacterDyingList.Remove(target);
+                            CharacterDeadList.Add(target);
                         }
                         else
                         {
-                            CharacterList.Remove(target);
-                            target.gameObject.SetActive(false);
+                            CharacterAliveList.Remove(target);
+                            CharacterDyingList.Add(target);
+                            target.StartFlash();
                         }
                     }
-                    else if (DyingList.Contains(target))
+                    else
                     {
-                        CharacterList.Add(target);
-                        DyingList.Remove(target);
-                        target.StopFlash();
+                        CharacterAliveList.Remove(target);
+                        target.gameObject.SetActive(false);
                     }
                 }
+                else if (CharacterDyingList.Contains(target))
+                {
+                    CharacterAliveList.Add(target);
+                    CharacterDyingList.Remove(target);
+                    target.StopFlash();
+                }
             }
-            _commandTargetDic.Clear();
+            
+            _targetList.Clear();
 
             int playerCount = 0;
             int enemyCount = 0;
-            for (int i = 0; i < CharacterList.Count; i++)
+            for (int i = 0; i < CharacterAliveList.Count; i++)
             {
-                if (CharacterList[i].Info.Faction == BattleCharacterInfo.FactionEnum.Player)
+                if (CharacterAliveList[i].Info.Faction == BattleCharacterInfo.FactionEnum.Player)
                 {
                     playerCount++;
                 }
@@ -529,6 +541,36 @@ namespace Battle
             {
                 _context.SetState<CommandState>();
             }
+        }
+
+        public List<BattleCharacterController> GetAliveAndDyingCharacterList()
+        {
+            List<BattleCharacterController> list = new List<BattleCharacterController>(Instance.CharacterAliveList);
+            list.AddRange(Instance.CharacterDyingList);
+            return list;
+        }
+
+        public List<Status> GetStatueList(BattleCharacterInfo info, StatusModel.TypeEnum type, Vector2Int position) 
+        {
+            List<Status> list = new List<Status>();
+            for (int i = 0; i < CharacterAliveList.Count; i++)
+            {
+                for (int j = 0; j < CharacterAliveList[i].Info.StatusList.Count; j++)
+                {
+                    if ((type == StatusModel.TypeEnum.None || CharacterAliveList[i].Info.StatusList[j].Type == type) && info.Faction == CharacterAliveList[i].Info.Faction)
+                    {
+                        for (int k = 0; k < CharacterAliveList[i].Info.StatusList[j].AreaList.Count; k++)
+                        {
+                            if (Utility.ConvertToVector2Int(CharacterAliveList[i].transform.position) + CharacterAliveList[i].Info.StatusList[j].AreaList[k] == position)
+                            {
+                                list.Add(CharacterAliveList[i].Info.StatusList[j]);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return list;
         }
     }
 }

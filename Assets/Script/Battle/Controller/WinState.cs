@@ -39,20 +39,20 @@ namespace Battle
                 });
 
                 List<BattleCharacterController> playerList = new List<BattleCharacterController>();
-                for (int i=0; i<Instance.CharacterList.Count; i++) 
+                for (int i=0; i<Instance.CharacterAliveList.Count; i++) 
                 {
-                    if(Instance.CharacterList[i].Info.Faction == BattleCharacterInfo.FactionEnum.Player) 
+                    if(Instance.CharacterAliveList[i].Info.Faction == BattleCharacterInfo.FactionEnum.Player) 
                     {
-                        playerList.Add(Instance.CharacterList[i]);
+                        playerList.Add(Instance.CharacterAliveList[i]);
                     }
                 }
-                for (int i = 0; i < Instance.DyingList.Count; i++)
+                for (int i = 0; i < Instance.CharacterDyingList.Count; i++)
                 {
-                    playerList.Add(Instance.DyingList[i]);
+                    playerList.Add(Instance.CharacterDyingList[i]);
                 }
-                for (int i=0; i<Instance.DeadList.Count; i++) 
+                for (int i=0; i<Instance.CharacterDeadList.Count; i++) 
                 {
-                    playerList.Add(Instance.DeadList[i]);
+                    playerList.Add(Instance.CharacterDeadList[i]);
                 }
                 CharacterManager.Instance.Refresh(playerList);
                 CharacterManager.Instance.AddExp(Instance.Exp);

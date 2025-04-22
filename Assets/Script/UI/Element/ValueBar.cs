@@ -35,6 +35,7 @@ public class ValueBar : MonoBehaviour
         {
             _tweener = Bar.DOFillAmount((float)current / (float)max, 0.5f).OnComplete(() =>
             {
+                _isTweening = false;
                 if (callback != null)
                 {
                     callback();
@@ -57,6 +58,7 @@ public class ValueBar : MonoBehaviour
             Bar.fillAmount = (float)from / (float)max;
             _tweener = Bar.DOFillAmount((float)to / (float)max, 0.5f).OnComplete(() =>
             {
+                _isTweening = false;
                 if (callback != null)
                 {
                     callback();
@@ -80,6 +82,7 @@ public class ValueBar : MonoBehaviour
         {
             _tweener = Bar.DOFillAmount((float)current / (float)max, 0.5f).OnComplete(() =>
             {
+                _isTweening = false;
                 if (callback != null)
                 {
                     callback();

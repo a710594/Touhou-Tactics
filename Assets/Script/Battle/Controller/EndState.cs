@@ -14,10 +14,10 @@ namespace Battle
 
             public override void Begin()
             {
-                _characterList = Instance.CharacterList;
-                _character = Instance.SelectedCharacter;
+                _characterList = Instance.CharacterAliveList;
+                _selectedCharacter = Instance.SelectedCharacter;
 
-                if (_characterList.Contains(_character))
+                if (_characterList.Contains(_selectedCharacter))
                 {
                     //if (_character.Info.ActionCount == 0)
                     //{

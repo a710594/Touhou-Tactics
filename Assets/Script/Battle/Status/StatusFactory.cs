@@ -17,7 +17,7 @@ namespace Battle
 
             if (data.Type == StatusModel.TypeEnum.Provocative)
             {
-                status = new ProvocativeStatus(data);
+                status = new Provocative(data);
             }
             else if (data.Type == StatusModel.TypeEnum.Poison)
             {

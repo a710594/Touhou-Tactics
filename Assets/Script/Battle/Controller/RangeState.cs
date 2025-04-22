@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Battle
@@ -8,8 +9,9 @@ namespace Battle
     {
         public class RangeState : BattleControllerState
         {
+            private Vector2Int? _lastPosition = null;
             private List<Vector2Int> _rangeList = new List<Vector2Int>();
-            Dictionary<Command, List<Vector2Int>> _areaDic = new Dictionary<Command, List<Vector2Int>>();
+            private List<Vector2Int> _areaList = new List<Vector2Int>();
 
             public RangeState(StateContext context) : base(context)
             {
@@ -17,24 +19,23 @@ namespace Battle
 
             public override void Begin()
             {
-                _character = Instance.SelectedCharacter;
-                _characterList = Instance.CharacterList;
+                _selectedCharacter = Instance.SelectedCharacter;
+                _characterList = Instance.CharacterAliveList;
                 _rangeList.Clear();
-                _areaDic.Clear();
+                _areaList.Clear();
 
-                if (Passive.Contains<ArcherPassive>(_character.Info.PassiveList))
+                if (Passive.Contains<ArcherPassive>(_selectedCharacter.Info.PassiveList))
                 {
-                    _rangeList = ArcherPassive.GetRange(_character.Info.SelectedCommand.Range, Utility.ConvertToVector2Int(_character.transform.position));
+                    _rangeList = ArcherPassive.GetRange(_selectedCharacter.Info.SelectedCommand.Range, Utility.ConvertToVector2Int(_selectedCharacter.transform.position));
                 }
                 else
                 {
-                    _rangeList = Instance.GetRangeList(_character.Info.SelectedCommand.Range, Utility.ConvertToVector2Int(_character.transform.position));
+                    _rangeList = Instance.GetRangeList(_selectedCharacter.Info.SelectedCommand.Range, Utility.ConvertToVector2Int(_selectedCharacter.transform.position));
                 }
 
-                Instance.RemoveRange(_character.Info.SelectedCommand.RangeTarget, _rangeList);
+                Instance.RemoveRange(_selectedCharacter.Info.SelectedCommand.Target, _rangeList);
 
-                Instance.ClearQuad();
-                Instance.SetQuad(_rangeList, Instance._white);
+                Instance.SetQuad(_rangeList, _white);
                 Instance.BattleUI.SetCommandVisible(false);
             }
 
@@ -43,92 +44,140 @@ namespace Battle
                 if (Input.GetMouseButtonDown(1))
                 {
                     _context.SetState<CommandState>();
-                    _character.Info.HasMove = false;
                     return;
                 }
 
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, 100))
+                if (Instance.UpdatePosition(out Vector2Int? position))
                 {
-                    Vector2Int v2 = Utility.ConvertToVector2Int(hit.point);
-
-                    ResetQuad();
-
-                    if (_rangeList.Contains(v2))
+                    if (_lastPosition != null)
                     {
-                        _areaDic.Clear();
-                        Command command = _character.Info.SelectedCommand;
-                        List<Vector2Int> areaList;
-                        while (command != null)
-                        {
-                            areaList = Instance.GetAreaList(Utility.ConvertToVector2Int(_character.transform.position), v2, command);
-                            _areaDic.Add(command, areaList);
-                            command = command.SubCommand;
-                        }
+                        Instance.SetSelect((Vector2Int)_lastPosition, false);
+                    }
 
-                        foreach (KeyValuePair<Command, List<Vector2Int>> pair in _areaDic)
-                        {
-                            Instance.SetQuad(pair.Value, Color.yellow);
-                        }
+                    if (position != null)
+                    {
+                        Instance.ClearQuad(_areaList);
+                        Instance.SetQuad(_rangeList, _white);
+                        Instance._line.Hide();
+                        BattleCharacterController target = Instance.GetCharacterByPosition((Vector2Int)position);
 
-                        if (Input.GetMouseButtonDown(0))
+                        if (_rangeList.Contains((Vector2Int)position))
                         {
-                            BattleCharacterController character;
-                            foreach (KeyValuePair<Command, List<Vector2Int>> pair1 in _areaDic)
+                            Command command = _selectedCharacter.Info.SelectedCommand;
+                            if (target != null)
                             {
-                                Instance._commandTargetDic.Add(pair1.Key, new List<BattleCharacterController>());
-                                foreach (Vector2Int pair2 in pair1.Value)
+                                if (command.Track == TrackEnum.Straight)
                                 {
-                                    character = Instance.GetCharacterByPosition(pair2);
-                                    if (character != null)
+                                    Utility.CheckLine(_selectedCharacter.transform.position, target.transform.position, Instance.CharacterAliveList, Instance.TileDic, out bool isBlock, out Vector3 result);
+                                    if (isBlock)
                                     {
-                                        Instance._commandTargetDic[pair1.Key].Add(character);
+                                        Instance._line.Show(_selectedCharacter.transform.position, result, Color.red);
                                     }
+                                    else
+                                    {
+                                        Instance._line.Show(_selectedCharacter.transform.position, result, Color.blue);
+                                    }
+                                    position = Utility.ConvertToVector2Int(result);
+                                    target = Instance.GetCharacterByPosition((Vector2Int)position);
+                                }
+                                else if (command.Track == TrackEnum.Parabola)
+                                {
+                                    Utility.CheckParabola(_selectedCharacter.transform.position, target.transform.position, Instance.TileDic[Utility.ConvertToVector2Int(_selectedCharacter.transform.position)].TileData.Height + 2, Instance.CharacterAliveList, Instance.TileDic, out bool isBlock, out List<Vector3> result);
+                                    if (isBlock)
+                                    {
+                                        Instance._line.Show(result, Color.red);
+                                    }
+                                    else
+                                    {
+                                        Instance._line.Show(result, Color.blue);
+                                    }
+                                    position = Utility.ConvertToVector2Int(result.Last());
+                                    target = Instance.GetCharacterByPosition((Vector2Int)position);
+                                }
+
+                                if (target != null && target != _selectedCharacter)
+                                {
+                                    Instance.CharacterInfoUIGroup.ShowCharacterInfoUI_2(target.Info, Utility.ConvertToVector2Int(target.transform.position));
+                                    if (command.Target == TargetEnum.Us)
+                                    {
+                                        Instance.CharacterInfoUIGroup.SetHitRate(100);
+                                    }
+                                    else
+                                    {
+                                        float hitRate = Instance.GetHitRate(command.Hit, _selectedCharacter, target);
+                                        Instance.CharacterInfoUIGroup.SetHitRate(Mathf.RoundToInt(hitRate * 100));
+                                    }
+                                    int predictionHp = Instance.GetPredictionHp(_selectedCharacter, target, target.Info.CurrentHP, command.Effect);
+                                    Instance.CharacterInfoUIGroup.SetPredictionInfo_2(target.Info, predictionHp);
+                                }
+                                else
+                                {
+                                    Instance.CharacterInfoUIGroup.HideCharacterInfoUI_2();
                                 }
                             }
+                            else 
+                            {
+                                Instance.CharacterInfoUIGroup.HideCharacterInfoUI_2();
+                            }
 
-                            if (_character.Info.SelectedCommand is Sub)
-                            {
-                                _context.SetState<SubState>();
-                            }
-                            else if (_character.Info.SelectedCommand is Skill)
-                            {
-                                _context.SetState<SkillState>();
-                            }
-                            else if (_character.Info.SelectedCommand is ItemCommand)
-                            {
-                                _context.SetState<ItemState>();
-                            }
-                            else if (_character.Info.SelectedCommand is Spell)
-                            {
-                                _context.SetState<SpellState>();
-                            }
-                        }
-                    }
-                }
-                else if(Input.GetMouseButtonDown(1))
-                {
-                    ResetQuad();
-                    _context.SetState<CommandState>();
-                }
-            }
-
-            private void ResetQuad()
-            {
-                foreach (KeyValuePair<Command, List<Vector2Int>> pair1 in _areaDic)
-                {
-                    foreach (Vector2Int pair2 in pair1.Value)
-                    {
-                        if (_rangeList.Contains(pair2))
-                        {
-                            Instance.SetQuad(pair1.Value, Color.white);
+                            Instance.SetSelect((Vector2Int)position, true);
+                            _areaList = Instance.GetAreaList(Utility.ConvertToVector2Int(_selectedCharacter.transform.position), (Vector2Int)position, command);
+                            Instance.SetQuad(_areaList, Color.yellow);
                         }
                         else
                         {
-                            Instance.ClearQuad(pair2);
+                            if (target != null && target != _selectedCharacter)
+                            {
+                                Instance.CharacterInfoUIGroup.ShowCharacterInfoUI_2(target.Info, Utility.ConvertToVector2Int(target.transform.position));
+                            }
+                            else
+                            {
+                                Instance.CharacterInfoUIGroup.HideCharacterInfoUI_2();
+                            }
                         }
                     }
+                    _lastPosition = position;
+                }
+
+                if (Input.GetMouseButtonDown(0)  && _areaList.Count > 0)
+                {
+                    Instance.SetTargetList(_areaList);
+
+                    Vector2Int v2 = (Vector2Int)position - Utility.ConvertToVector2Int(_selectedCharacter.transform.position);
+                    float angle = Vector2.Angle(v2, Utility.ConvertToVector2Int(_selectedCharacter.transform.forward));
+                    angle = Mathf.RoundToInt(angle / 90f) * 90; //取最接近90的倍數的數
+                    Vector3 cross = Vector3.Cross((Vector2)v2, Vector2.up);
+                    if (cross.z > 0)
+                    {
+                        angle = 360 - angle;
+                    }
+                    _selectedCharacter.SetDirection(angle);
+
+                    if (_selectedCharacter.Info.SelectedCommand is Sub)
+                    {
+                        _context.SetState<SubState>();
+                    }
+                    else if (_selectedCharacter.Info.SelectedCommand is Skill)
+                    {
+                        _context.SetState<SkillState>();
+                    }
+                    else if (_selectedCharacter.Info.SelectedCommand is ItemCommand)
+                    {
+                        _context.SetState<ItemState>();
+                    }
+                    else if (_selectedCharacter.Info.SelectedCommand is Spell)
+                    {
+                        _context.SetState<SpellState>();
+                    }
+                }
+            }
+
+            public override void End()
+            {
+                Instance.ClearQuad(_rangeList);
+                if (_lastPosition != null)
+                {
+                    Instance.SetSelect((Vector2Int)_lastPosition, false);
                 }
             }
         }

@@ -94,7 +94,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DownThreshold: 0.2
   PressDuration: 0.1
-  Button: {fileID: -3294762781510720845}
   Label: {fileID: 4075583423622268716}
   Image: {fileID: 0}
 --- !u!114 &-3294762781510720845
@@ -155,11 +154,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DownThreshold: 0.2
   PressDuration: 0.1
-  Button: {fileID: 0}
   Label: {fileID: 4075583423622268716}
   Image: {fileID: 0}
   Background: {fileID: 2120444013385833796}
-  SelectedImage: {fileID: 0}
 --- !u!1 &2688946866806302095
 GameObject:
   m_ObjectHideFlags: 0
@@ -220,7 +217,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

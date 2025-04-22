@@ -97,12 +97,12 @@ public static class Utility
     public static List<Vector3> DrawLine3D(Vector3 a, Vector3 b)
     {
         bool reverse = false;
-        int dx = (int)Math.Abs(b.x - a.x);
-        int dy = (int)Math.Abs(b.y - a.y);
-        int dz = (int)Math.Abs(b.z - a.z);
+        float dx = Math.Abs(b.x - a.x);
+        float dy = Math.Abs(b.y - a.y);
+        float dz = Math.Abs(b.z - a.z);
         List<Vector3> list = new List<Vector3>();
 
-        if (dx > dy && dx > dz) //dx 最大
+        if (dx > dz) //dx 最大
         {
             if (a.x > b.x)
             {
@@ -112,63 +112,27 @@ public static class Utility
                 reverse = true;
             }
 
-            int y;
-            int z;
+            float y;
+            float z;
             for (int i = (int)a.x; i <= b.x; i++)
             {
                 if (a.y > b.y)
                 {
-                    y = (int)MathF.Round(a.y - dy * (i - a.x) / dx);
+                    y = a.y - dy * (i - a.x) / dx;
                 }
                 else
                 {
-                    y = (int)MathF.Round(a.y + dy * (i - a.x) / dx);
+                    y = a.y + dy * (i - a.x) / dx;
                 }
                 if (a.z > b.z)
                 {
-                    z = (int)MathF.Round(a.z - dz * (i - a.x) / dx);
+                    z = a.z - dz * (i - a.x) / dx;
                 }
                 else
                 {
-                    z = (int)MathF.Round(a.z + dz * (i - a.x) / dx);
+                    z = a.z + dz * (i - a.x) / dx;
                 }
-                Console.WriteLine(i + " " + y + " " + z);
                 list.Add(new Vector3(i, y, z));
-            }
-        }
-        else if (dy > dx && dy > dz) //dy 最大
-        {
-            if (a.y > b.y)
-            {
-                Vector3 temp = a;
-                a = b;
-                b = temp;
-                reverse = true;
-            }
-
-
-            int x;
-            int z;
-            for (int i = (int)a.y; i <= b.y; i++)
-            {
-                if (a.x > b.x)
-                {
-                    x = (int)MathF.Round(a.x - dx * (i - a.y) / dy);
-                }
-                else
-                {
-                    x = (int)MathF.Round(a.x + dx * (i - a.y) / dy);
-                }
-                if (a.z > b.z)
-                {
-                    z = (int)MathF.Round(a.z - dz * (i - a.y) / dy);
-                }
-                else
-                {
-                    z = (int)MathF.Round(a.z + dz * (i - a.y) / dy);
-                }
-                Console.WriteLine(x + " " + i + " " + z);
-                list.Add(new Vector3(x, i, z));
             }
         }
         else //dz 最大
@@ -181,25 +145,25 @@ public static class Utility
                 reverse = true;
             }
 
-            int x;
-            int y;
+            float x;
+            float y;
             for (int i = (int)a.z; i <= b.z; i++)
             {
                 if (a.x > b.x)
                 {
-                    x = (int)MathF.Round(a.x - dx * (i - a.z) / dz);
+                    x = a.x - dx * (i - a.z) / dz;
                 }
                 else
                 {
-                    x = (int)MathF.Round(a.x + dx * (i - a.z) / dz);
+                    x = a.x + dx * (i - a.z) / dz;
                 }
                 if (a.y > b.y)
                 {
-                    y = (int)MathF.Round(a.y - dy * (i - a.z) / dz);
+                    y = a.y - dy * (i - a.z) / dz;
                 }
                 else
                 {
-                    y = (int)MathF.Round(a.y + dy * (i - a.z) / dz);
+                    y = a.y + dy * (i - a.z) / dz;
                 }
                 list.Add(new Vector3(x, y, i));
             }
@@ -228,23 +192,10 @@ public static class Utility
         return list;
     }
 
-    public static List<Vector3> DrawParabola(Vector3 point0, Vector3 point1, int height, bool isInt)
+    public static List<Vector3> DrawParabola(Vector3 point0, Vector3 point1, int height, int count)
     {
-        List<Vector3> line = DrawLine3D(point0, point1);
-        Vector3 center = new Vector3((int)Math.Ceiling((point0.x + point1.x) / 2f), height * 2, (int)Math.Ceiling((point0.z + point1.z) / 2f));
-        List<Vector3> bezier = new List<Vector3>();
-        if (isInt)
-        {
-            bezier = DrawQuadraticBezierCurve(point0, center, point1, line.Count - 1);
-            for (int i=0; i<bezier.Count; i++) 
-            {
-                bezier[i] = new Vector3(Mathf.RoundToInt(bezier[i].x), Mathf.RoundToInt(bezier[i].y), Mathf.RoundToInt(bezier[i].z));
-            }
-        }
-        else
-        {
-            bezier = DrawQuadraticBezierCurve(point0, center, point1, 10);
-        }
+        Vector3 center = new Vector3((point0.x + point1.x) / 2f, height, (point0.z + point1.z) / 2f);
+        List<Vector3> bezier = DrawQuadraticBezierCurve(point0, center, point1, count);
 
         return bezier;
     }
@@ -396,31 +347,33 @@ public static class Utility
         for (int i = 0; i < list.Count; i++)
         {
             position = ConvertToVector2Int(list[i]);
-            if (tileDic.ContainsKey(position))
             {
-                height = tileDic[position].TileData.Height;
-                if (tileDic[position].AttachData != null)
+                if (tileDic.ContainsKey(position))
                 {
-                    height += tileDic[position].AttachData.Height;
-                }
-
-                for (int j = 0; j < characterList.Count; j++)
-                {
-                    if (ConvertToVector2Int(from) != ConvertToVector2Int(characterList[j].transform.position) && ConvertToVector2Int(to) != ConvertToVector2Int(characterList[j].transform.position) && position == ConvertToVector2Int(characterList[j].transform.position))
+                    height = tileDic[position].TileData.Height;
+                    if (tileDic[position].AttachData != null)
                     {
-                        height++;
+                        height += tileDic[position].AttachData.Height;
+                    }
+
+                    for (int j = 0; j < characterList.Count; j++)
+                    {
+                        if (ConvertToVector2Int(from) != ConvertToVector2Int(characterList[j].transform.position) && ConvertToVector2Int(to) != ConvertToVector2Int(characterList[j].transform.position) && position == ConvertToVector2Int(characterList[j].transform.position))
+                        {
+                            height++;
+                        }
+                    }
+
+                    if (height > list[i].y)
+                    {
+                        isBlock = true;
+                        result = list[i];
+                        return;
                     }
                 }
 
-                if (height > list[i].y)
-                {
-                    isBlock = true;
-                    result = list[i];
-                    return;
-                }
             }
         }
-
         result = to;
     }
 
@@ -438,7 +391,7 @@ public static class Utility
             {
                 height = tileDic[position].TileData.Height;
 
-                if (height > list[i].y)
+                if (height - list[i].y > 1)
                 {
                     isBlock = true;
                     result = list[i];
@@ -453,12 +406,15 @@ public static class Utility
     public static void CheckParabola(Vector3 from, Vector3 to, int parabolaHeight, List<BattleCharacterController> characterList, Dictionary<Vector2Int, BattleInfoTile> tileDic, out bool isBlock, out List<Vector3> result)
     {
         isBlock = false;
+        result = null;
         int height;
         Vector2Int position;
-        List<Vector3> list = DrawParabola(from, to, parabolaHeight, true);
-        for (int i = 0; i < list.Count; i++)
+        List<Vector3> line = DrawLine3D(from, to);
+        List<Vector3> list_1 = DrawParabola(from, to, parabolaHeight, line.Count - 1);
+        List<Vector3> list_2 = DrawParabola(from, to, parabolaHeight, (line.Count - 1) * 10);
+        for (int i = 0; i < list_1.Count; i++)
         {
-            position = ConvertToVector2Int(list[i]);
+            position = ConvertToVector2Int(list_1[i]);
             if (tileDic.ContainsKey(position))
             {
                 height = tileDic[position].TileData.Height;
@@ -474,16 +430,26 @@ public static class Utility
                     }
                 }
 
-                if (height > list[i].y)
+                if (height - list_1[i].y > 1)
                 {
                     isBlock = true;
-                    to = list[i];
+                    result = new List<Vector3>();
+                    for (int j=0; j<i; j++) 
+                    {
+                        for (int k = 0; k < 10; k++)
+                        {
+                            result.Add(list_2[j * 10 + k]);
+                        }
+                    }
                     break;
                 }
             }
         }
-
-        result = DrawParabola(from, to, parabolaHeight, false);
+        
+        if(result == null) 
+        {
+            result = list_2;
+        }
     }
 
     public static bool GetRandomPosition(int minX, int maxX, int minY, int maxY, List<Vector2Int> invalidList, out Vector2Int result)
@@ -520,5 +486,23 @@ public static class Utility
     {
         // 計算旋轉後的 Quaternion
         return Quaternion.AngleAxis(angle, axis) * currentRotation;
+    }
+
+    private static float doubleClickTime = 0.2f;
+    private static float lastClickTime = 0;
+    public static bool GetMouseButtonDoubleClick(int n)
+    {
+        if (Input.GetMouseButtonDown(n))
+        {
+            bool result = false;
+            float timeSinceLastClick = Time.time - lastClickTime;
+
+            if (timeSinceLastClick <= doubleClickTime)
+                result = true;
+
+            lastClickTime = Time.time;
+            return result;
+        }
+        return false;
     }
 }

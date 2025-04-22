@@ -20,19 +20,16 @@ public class Skill : Command
         Comment = data.Comment;
         Hit = data.Hit;
         Range = data.Range;
-        RangeTarget = data.RangeTarget;
-        AreaTarget = data.AreaTarget;
+        Target = data.Target;
         AreaType = data.AreaType;
         Track = data.Track;
-        ArrayList = Utility.GetAreaList(data.Array);
+        ArrayList = Utility.GetAreaList(data.AreaArray);
+        Particle = data.Particle;
+        Shake = data.Shake;
 
         CD = data.CD;
         CurrentCD = 0;
         Effect = EffectFactory.GetEffect(data.EffectID);
-        if(data.SubSkillID != -1)
-        {
-            SubCommand = new Skill(DataTable.Instance.SkillDic[data.SubSkillID]);
-        }
     }
 
     public void CheckCD() 

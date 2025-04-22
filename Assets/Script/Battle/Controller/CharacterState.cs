@@ -28,33 +28,44 @@ namespace Battle
                     }
                 }
 
-                _character = Instance.CharacterList[0];
-                Instance.SelectedCharacter = _character;
+                _selectedCharacter = Instance.CharacterAliveList[0];
+                Instance.SelectedCharacter = _selectedCharacter;
                 
                 if(Instance.CharacterStateBeginHandler != null)
                 {
                     Instance.CharacterStateBeginHandler();
                 }
 
-                int wt = _character.Info.CurrentWT;
-                List<BattleCharacterController> characterList = Instance.CharacterList;
+                int wt = _selectedCharacter.Info.CurrentWT;
+                List<BattleCharacterController> characterList = Instance.CharacterAliveList;
                 for (int i = 0; i < characterList.Count; i++)
                 {
                     characterList[i].Info.CurrentWT -= wt;
                 }
 
                 Instance.BattleUI.SetCommandVisible(false);
-                _character.Outline.OutlineWidth = 2;
-                _character.Outline.OutlineColor = Color.yellow;
-                _character.Info.HasMove = false;
-                _character.Info.MoveAgain = false;
-                _character.Info.HasSub = false;
-                _character.Info.HasMain = false;
-                _character.Info.HasSpell = false;
+                _selectedCharacter.Outline.OutlineWidth = 2;
+                _selectedCharacter.Outline.OutlineColor = Color.yellow;
+                _selectedCharacter.Info.HasMove = false;
+                _selectedCharacter.Info.MoveAgain = false;
+                _selectedCharacter.Info.HasSub = false;
+                _selectedCharacter.Info.HasMain = false;
+                _selectedCharacter.Info.HasSpell = false;
                 Instance.BattleUI.CharacterListGroupRefresh();
-                Instance._cameraController.SetMyGameObj(_character.gameObject, ()=> 
+                Instance.BattleUI.ShowArrow(_selectedCharacter.transform);
+                Instance.CharacterInfoUIGroup.ShowCharacterInfoUI_1(_selectedCharacter.Info, Utility.ConvertToVector2Int(_selectedCharacter.transform.position));
+                Instance.CharacterInfoUIGroup.MoveCharacterInfoUI_1();
+                Instance.CharacterInfoUIGroup.HideCharacterInfoUI_2();
+                Instance._cameraController.SetMyGameObj(_selectedCharacter.gameObject, ()=> 
                 {
-                    _context.SetState<CommandState>();
+                    if (_selectedCharacter.Info.IsAuto)
+                    {
+                        _selectedCharacter.AI.Begin();
+                    }
+                    else
+                    {
+                        _context.SetState<CommandState>();
+                    }
                 });
             }
         }

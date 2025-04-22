@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Battle
 {
-    public class CureAI : BattleAI
+    public class CureAI : OldBattleAI
     {
         public override void Start()
         {

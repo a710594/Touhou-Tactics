@@ -13,10 +13,11 @@ public class SpellModel
     public string Comment;
     public int Hit;
     public int Range;
-    public string Array;
-    public TargetEnum RangeTarget;
-    public TargetEnum AreaTarget;
+    public string AreaArray;
+    public TargetEnum Target;
     public AreaTypeEnum AreaType;
     public TrackEnum Track;
     public int SubSpellID;
+    public string Particle;
+    public bool Shake;
 }

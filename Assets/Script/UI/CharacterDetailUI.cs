@@ -34,6 +34,7 @@ public class CharacterDetailUI : MonoBehaviour
     public ScrollView SupportScrollView;
     public EquipDetail EquipDetail;
     public SkillInfoGroup SkillInfoGroup;
+    public StatusIconGroup StatusIconGroup;
 
     public Button CloseButton;
 
@@ -57,23 +58,28 @@ public class CharacterDetailUI : MonoBehaviour
         return characterDetailUI;
     }
 
-    public void SetData(BattlePlayerInfo character) 
+    public void SetData(BattleCharacterInfo character, Vector2Int position) 
     {
         _battleCharacterInfo = character;
         NameLabel.text = character.Name;
         LvLabel.text = "Lv. " + character.Lv;
-        Sprite sprite = Resources.Load<Sprite>("Image/Character/" + character.Job.Name + "(裁切去背");
-        Image.sprite = sprite;
-        Image.transform.GetChild(0).gameObject.SetActive(sprite == null);
+        if (character is BattlePlayerInfo)
+        {
+            Sprite sprite = Resources.Load<Sprite>("Image/Character/" + ((BattlePlayerInfo)character).Job.Name + "(裁切去背");
+            Image.sprite = sprite;
+            Image.transform.GetChild(0).gameObject.SetActive(sprite == null);
+        }
         ExpLabel.text = "經驗值：" + CharacterManager.Instance.Info.Exp + "/" + CharacterManager.Instance.NeedExp(CharacterManager.Instance.Info.Lv);
         if (character.PassiveList.Count>0)
         {
-            PassiveLabel.text = character.PassiveList[0].Data.Name;
+            PassiveLabel.text = "被動技能：" + character.PassiveList[0].Data.Name;
+            PassiveCommentLabel.text = character.PassiveList[0].Data.Comment;
         }
         else
         {
             PassiveLabel.text = string.Empty;
             PassiveCommentButton.gameObject.SetActive(false);
+            PassiveCommentLabel.text = string.Empty;
         }
         HPLabel.text = "HP " + character.CurrentHP + "/" + character.MaxHP;
         STRLabel.text = "力量 " + character.STR;
@@ -136,6 +142,8 @@ public class CharacterDetailUI : MonoBehaviour
         {
             SupportScrollView.gameObject.SetActive(false);
         }
+
+        StatusIconGroup.SetData(character, true, position);
     }
 
     public void SetData(CharacterInfo character)
@@ -149,12 +157,14 @@ public class CharacterDetailUI : MonoBehaviour
         Image.transform.GetChild(0).gameObject.SetActive(sprite == null);
         if (character.PassiveList[0] != null)
         {
-            PassiveLabel.text = character.PassiveList[0].Data.Name;
+            PassiveLabel.text = "被動技能：" + character.PassiveList[0].Data.Name;
+            PassiveCommentLabel.text = character.PassiveList[0].Data.Comment;
         }
         else
         {
             PassiveLabel.text = string.Empty;
             PassiveCommentButton.gameObject.SetActive(false);
+            PassiveCommentLabel.text = string.Empty;
         }
         HPLabel.text = "HP " + character.CurrentHP + "/" + character.MaxHP;
         STRLabel.text = "力量 " + character.STR;
@@ -382,7 +392,6 @@ public class CharacterDetailUI : MonoBehaviour
     {
         EquipDetail.gameObject.SetActive(false);
         SkillInfoGroup.gameObject.SetActive(false);
-        PassiveCommentLabel.gameObject.SetActive(false);
         WeaponButton.ClickHandler += WeaponOnClick;
         WeaponButton.EnterHandler += ShowEquipDetail;
         WeaponButton.ExitHandler += HideEquipDetail;

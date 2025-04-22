@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Battle
 {
-    public class FarCombatAI : BattleAI
+    public class FarCombatAI : OldBattleAI
     {
         public override void Start()
         {

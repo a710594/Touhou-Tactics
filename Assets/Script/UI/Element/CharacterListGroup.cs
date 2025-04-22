@@ -28,10 +28,10 @@ public class CharacterListGroup : MonoBehaviour
     {
         for (int i=0; i<_imageList.Count; i++) 
         {
-            if (i < BattleController.Instance.CharacterList.Count)
+            if (i < BattleController.Instance.CharacterAliveList.Count)
             {
                 _imageList[i].gameObject.SetActive(true);
-                _imageList[i].sprite = BattleController.Instance.CharacterList[i].Sprite;
+                _imageList[i].sprite = BattleController.Instance.CharacterAliveList[i].Sprite;
             }
             else
             {

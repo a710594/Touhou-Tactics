@@ -17,10 +17,10 @@ TagManager:
   - Water
   - UI
   - Map
-  - Player
-  - PostProcessing
-  - FOE
   - 
+  - PostProcessing
+  - BattleTile
+  - BattleCharacter
   - 
   - 
   - 
