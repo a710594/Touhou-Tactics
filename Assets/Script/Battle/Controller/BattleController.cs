@@ -247,13 +247,13 @@ namespace Battle
                     invalidList.Add(PlayerPositionList[i]);
                 }
 
-                int height;
+                float height;
                 for (int i = 0; i < enemyGroup.EnemyList.Count; i++)
                 {
                     if (Utility.GetRandomPosition(file.MinX, file.MaxX, file.MinY, file.MaxY, invalidList, out Vector2Int result))
                     {
                         EnemyDataList.Add(DataTable.Instance.EnemyDic[enemyGroup.EnemyList[i]]);
-                        height = TileDic[result].TileData.Height;
+                        height = TileDic[result].TileData.Height * 0.5f + 0.5f;
                         CreateEnemy(enemyGroup.EnemyList[i], enemyGroup.Lv, new Vector3(result.x, height, result.y));
                         invalidList.Add(result);
                     }
@@ -664,7 +664,7 @@ namespace Battle
 
         public void SetSelect(Vector2Int position, bool show) 
         {
-            TileDic[position].TileObject.Select.gameObject.SetActive(show);
+            TileDic[position].TileObject.Select.SetActive(show);
         }
 
         public void UseEffect(Command command, BattleCharacterController user, BattleCharacterController target, out int count)

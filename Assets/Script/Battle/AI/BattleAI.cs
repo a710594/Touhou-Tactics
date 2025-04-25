@@ -56,7 +56,7 @@ namespace Battle
                         //檢查射擊是否會被地形阻礙
                         if (skill.Track == TrackEnum.Straight)
                         {
-                            Utility.CheckLine(myPosition, targetList[j].transform.position, BattleController.Instance.CharacterAliveList, BattleController.Instance.TileDic, out isBlock, out Vector3 result);
+                            BattleController.Instance.CheckLine(myPosition, targetList[j].transform.position, out isBlock, out Vector3 result);
                         }
                         else if (skill.Track == TrackEnum.Parabola)
                         {

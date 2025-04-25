@@ -338,45 +338,6 @@ public static class Utility
         }
     }
 
-    public static void CheckLine(Vector3 from, Vector3 to, List<BattleCharacterController> characterList, Dictionary<Vector2Int, BattleInfoTile> tileDic, out bool isBlock, out Vector3 result)
-    {
-        isBlock = false;
-        int height;
-        Vector2Int position;
-        List<Vector3> list = DrawLine3D(from, to);
-        for (int i = 0; i < list.Count; i++)
-        {
-            position = ConvertToVector2Int(list[i]);
-            {
-                if (tileDic.ContainsKey(position))
-                {
-                    height = tileDic[position].TileData.Height;
-                    if (tileDic[position].AttachData != null)
-                    {
-                        height += tileDic[position].AttachData.Height;
-                    }
-
-                    for (int j = 0; j < characterList.Count; j++)
-                    {
-                        if (ConvertToVector2Int(from) != ConvertToVector2Int(characterList[j].transform.position) && ConvertToVector2Int(to) != ConvertToVector2Int(characterList[j].transform.position) && position == ConvertToVector2Int(characterList[j].transform.position))
-                        {
-                            height++;
-                        }
-                    }
-
-                    if (height > list[i].y)
-                    {
-                        isBlock = true;
-                        result = list[i];
-                        return;
-                    }
-                }
-
-            }
-        }
-        result = to;
-    }
-
     //和 CheckLine 相似,但是無視 attach 和 character
     public static void CheckThrough(Vector3 from, Vector3 to, Dictionary<Vector2Int, BattleInfoTile> tileDic, out bool isBlock, out Vector3 result)
     {

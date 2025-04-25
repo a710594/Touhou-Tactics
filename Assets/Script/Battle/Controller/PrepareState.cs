@@ -121,8 +121,11 @@ namespace Battle
                     {
                         Vector2Int v2 = Utility.ConvertToVector2Int(hit.transform.position);
                         BattleCharacterController character = Instance.GetCharacterByPosition(Utility.ConvertToVector2Int(hit.transform.position));
-                        CharacterDetailUI characterDetailUI = CharacterDetailUI.Open(false);
-                        characterDetailUI.SetData(character.Info, v2);
+                        if (character != null)
+                        {
+                            CharacterDetailUI characterDetailUI = CharacterDetailUI.Open(false);
+                            characterDetailUI.SetData(character.Info, v2);
+                        }
                     }
                 }
             }
@@ -159,7 +162,7 @@ namespace Battle
                         if (hit.collider.tag == "BattleTile" && Instance.PlayerPositionList.Contains(Utility.ConvertToVector2Int(hit.transform.position)))
                         {
                             BattleInfoTile tile = BattleController.Instance.TileDic[Utility.ConvertToVector2Int(hit.transform.position)];
-                            _dragCharacter.transform.position = hit.transform.position + hit.transform.up * tile.TileData.Height;
+                            _dragCharacter.transform.position = hit.transform.position + hit.transform.up * (tile.TileData.Height * 0.5f + 0.5f);
                         }
                         else
                         {

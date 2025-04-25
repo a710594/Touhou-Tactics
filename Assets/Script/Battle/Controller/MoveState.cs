@@ -82,6 +82,22 @@ namespace Battle
                         _context.SetState<CommandState>();
                     });
                 }
+
+                if (Utility.GetMouseButtonDoubleClick(0))
+                {
+                    RaycastHit hit;
+                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    if (Physics.Raycast(ray, out hit, 100, _battleTileLayer))
+                    {
+                        Vector2Int v2 = Utility.ConvertToVector2Int(hit.transform.position);
+                        BattleCharacterController character = Instance.GetCharacterByPosition(v2);
+                        if (character != null)
+                        {
+                            CharacterDetailUI characterDetailUI = CharacterDetailUI.Open(false);
+                            characterDetailUI.SetData(character.Info, v2);
+                        }
+                    }
+                }
             }
 
             public void Move(Vector2Int v2, Action callback) 

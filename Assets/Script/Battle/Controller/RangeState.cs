@@ -68,7 +68,7 @@ namespace Battle
                             {
                                 if (command.Track == TrackEnum.Straight)
                                 {
-                                    Utility.CheckLine(_selectedCharacter.transform.position, target.transform.position, Instance.CharacterAliveList, Instance.TileDic, out bool isBlock, out Vector3 result);
+                                    Instance.CheckLine(_selectedCharacter.transform.position, target.transform.position, out bool isBlock, out Vector3 result);
                                     if (isBlock)
                                     {
                                         Instance._line.Show(_selectedCharacter.transform.position, result, Color.red);
@@ -82,7 +82,7 @@ namespace Battle
                                 }
                                 else if (command.Track == TrackEnum.Parabola)
                                 {
-                                    Utility.CheckParabola(_selectedCharacter.transform.position, target.transform.position, Instance.TileDic[Utility.ConvertToVector2Int(_selectedCharacter.transform.position)].TileData.Height + 2, Instance.CharacterAliveList, Instance.TileDic, out bool isBlock, out List<Vector3> result);
+                                    Utility.CheckParabola(_selectedCharacter.transform.position, target.transform.position, Instance.TileDic[Utility.ConvertToVector2Int(_selectedCharacter.transform.position)].TileData.Height + 1, Instance.CharacterAliveList, Instance.TileDic, out bool isBlock, out List<Vector3> result);
                                     if (isBlock)
                                     {
                                         Instance._line.Show(result, Color.red);
@@ -144,9 +144,9 @@ namespace Battle
                     Instance.SetTargetList(_areaList);
 
                     Vector2Int v2 = (Vector2Int)position - Utility.ConvertToVector2Int(_selectedCharacter.transform.position);
-                    float angle = Vector2.Angle(v2, Utility.ConvertToVector2Int(_selectedCharacter.transform.forward));
-                    angle = Mathf.RoundToInt(angle / 90f) * 90; //程钡90计计
-                    Vector3 cross = Vector3.Cross((Vector2)v2, Vector2.up);
+                    Vector2Int forward = Utility.ConvertToVector2Int(_selectedCharacter.transform.forward);
+                    float angle = Mathf.RoundToInt(Vector2.Angle(v2, forward) / 90f) * 90; //程钡90计计
+                    Vector3 cross = Vector3.Cross((Vector2)v2, (Vector2)forward);
                     if (cross.z > 0)
                     {
                         angle = 360 - angle;
@@ -168,6 +168,22 @@ namespace Battle
                     else if (_selectedCharacter.Info.SelectedCommand is Spell)
                     {
                         _context.SetState<SpellState>();
+                    }
+                }
+
+                if (Utility.GetMouseButtonDoubleClick(0))
+                {
+                    RaycastHit hit;
+                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    if (Physics.Raycast(ray, out hit, 100, _battleTileLayer))
+                    {
+                        Vector2Int v2 = Utility.ConvertToVector2Int(hit.transform.position);
+                        BattleCharacterController character = Instance.GetCharacterByPosition(v2);
+                        if (character != null)
+                        {
+                            CharacterDetailUI characterDetailUI = CharacterDetailUI.Open(false);
+                            characterDetailUI.SetData(character.Info, v2);
+                        }
                     }
                 }
             }

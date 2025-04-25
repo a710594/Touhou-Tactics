@@ -71,6 +71,7 @@ public class ConversationUI : MonoBehaviour
         _data = data;
         _pauseCallback = pauseCallback;
         _finishCallback = finishCallback;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     private void NextConversationID(int id, int page)
@@ -225,6 +226,11 @@ public class ConversationUI : MonoBehaviour
         for (int i=0; i<CharacterImage.Length; i++) 
         {
             CharacterImage[i].transform.DOKill();
+        }
+
+        if(SceneController.Instance.Info.CurrentScene == "Explore") 
+        {
+            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 

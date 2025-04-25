@@ -8,7 +8,7 @@ namespace Battle
     {
         public int ID;
         public MeshRenderer Quad;
-        public SpriteRenderer Select;
+        public GameObject Select;
         //public GameObject Buff;
     }
 }

@@ -30,6 +30,7 @@ public class CharacterUI : MonoBehaviour
         characterUI.LvLabel.text = "∂§•Óµ•Ø≈°G" + CharacterManager.Instance.Info.Lv;
         characterUI.ExpLabel.text = "∏g≈Á≠»°G" + CharacterManager.Instance.Info.Exp + "/" + CharacterManager.Instance.NeedExp(CharacterManager.Instance.Info.Lv);
         _tipLabel = characterUI.TipLabel;
+        Cursor.lockState = CursorLockMode.None;
 
         return characterUI;
     }
@@ -47,6 +48,11 @@ public class CharacterUI : MonoBehaviour
         }
 
         Destroy(gameObject);
+
+        if (SceneController.Instance.Info.CurrentScene == "Explore")
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
     }
 
     private void Awake()

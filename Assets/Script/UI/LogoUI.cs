@@ -95,5 +95,6 @@ public class LogoUI : MonoBehaviour
         DataTable.Instance.SetFileManager(FileManager);
         SaveManager.Instance.SetFileManager(FileManager);
         LoadData();
+        Cursor.lockState = CursorLockMode.None;
     }
 }

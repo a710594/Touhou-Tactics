@@ -40,7 +40,7 @@ public class CameraController : MonoBehaviour
         TargetObject = obj;
         Vector2Int objPosition = Utility.ConvertToVector2Int(obj.transform.position);
         int objHeight = BattleController.Instance.TileDic[objPosition].TileData.Height;
-        Vector3 cameraPosition = new Vector3(-Mathf.Sin(radiansY) * MathF.Cos(radiansX) * Distance + TargetObject.transform.position.x, MathF.Sin(radiansX) * Height + objHeight, -Mathf.Cos(radiansY) * MathF.Cos(radiansX) * Distance + TargetObject.transform.position.z);
+        Vector3 cameraPosition = new Vector3(-Mathf.Sin(radiansY) * MathF.Cos(radiansX) * Distance + TargetObject.transform.position.x, MathF.Sin(radiansX) * Height + objHeight * 0.5f, -Mathf.Cos(radiansY) * MathF.Cos(radiansX) * Distance + TargetObject.transform.position.z);
 
         if (callback != null)
         {

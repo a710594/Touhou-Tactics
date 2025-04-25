@@ -37,6 +37,11 @@ public class ConfirmUI : MonoBehaviour
     private void Close()
     {
         Destroy(gameObject);
+
+        if (SceneController.Instance.Info.CurrentScene == "Explore")
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
     }
 
     private void Init(string commentText, string confirmText, Action confirmCallback)
@@ -45,6 +50,7 @@ public class ConfirmUI : MonoBehaviour
         ConfirmLabel.text = confirmText;
         CancelButton.gameObject.SetActive(false);
         _onConfirmHandler = confirmCallback;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     private void Init(string commentText, string confirmText, string cancelText, Action confirmCallback, Action cancelCallback)
@@ -54,6 +60,7 @@ public class ConfirmUI : MonoBehaviour
         CancelLabel.text = cancelText;
         _onConfirmHandler = confirmCallback;
         _onCancelHandler = cancelCallback;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     private void ConfirmOnClick()

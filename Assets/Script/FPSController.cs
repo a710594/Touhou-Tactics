@@ -13,14 +13,12 @@ namespace Explore
         public Transform cameraTransform;
         public CharacterController characterController;
 
-        private Vector3 velocity;
-        private float verticalRotation = 0f;
-        private Vector3 _lastPosition = new Vector3();
+        private float _verticalRotation = 0f;
+        private Vector3? _lastPosition = null;
 
-        void Start()
+        void Awake()
         {
             Cursor.lockState = CursorLockMode.Locked;
-            _lastPosition = transform.position;
         }
 
         void Update()
@@ -39,7 +37,10 @@ namespace Explore
                 }
             }
 
-            ExploreManager.Instance.PlayerSpeed = Vector3.Distance(_lastPosition, transform.position);
+            if (_lastPosition != null)
+            {
+                ExploreManager.Instance.PlayerSpeed = Vector3.Distance((Vector3)_lastPosition, transform.position);
+            }
             _lastPosition = transform.position;
         }
 
@@ -65,10 +66,10 @@ namespace Explore
             float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
             float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
 
-            verticalRotation -= mouseY;
-            verticalRotation = Mathf.Clamp(verticalRotation, -90f, 90f);
+            _verticalRotation -= mouseY;
+            _verticalRotation = Mathf.Clamp(_verticalRotation, -90f, 90f);
 
-            cameraTransform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
+            cameraTransform.localRotation = Quaternion.Euler(_verticalRotation, 0f, 0f);
             transform.Rotate(Vector3.up * mouseX);           
         }
 

@@ -11,7 +11,7 @@ namespace Battle
         public int Exp;
         public Transform Tilemap;
         public Transform EnemyGroup;
-        public FileManager FileLoader;
+        public FileManager FileManager;
 
         public void BuildFile()
         {
@@ -53,7 +53,7 @@ namespace Battle
             file.TileList = tileList;
             file.PlayerPositionList = playerPositionList;
             file.EnemyList = enemyList;
-            FileLoader.Save(file, FileName, FileManager.PathEnum.MapBattleFixed);
+            FileManager.Save(file, FileName, FileManager.PathEnum.MapBattleFixed);
         }
     }
 }

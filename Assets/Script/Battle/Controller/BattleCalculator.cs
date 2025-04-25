@@ -43,19 +43,19 @@ namespace Battle
                         list.Add(position);
                     }
 
-                    if (!list.Contains(position + Vector2Int.up) && TileDic.ContainsKey(position + Vector2Int.up) && Utility.ManhattanDistance(position + Vector2Int.up, start) <= range)
+                    if (!list.Contains(position + Vector2Int.up) && TileDic.ContainsKey(position + Vector2Int.up) && CheckRange(start, position + Vector2Int.up, range))
                     {
                         queue.Enqueue(position + Vector2Int.up);
                     }
-                    if (!list.Contains(position + Vector2Int.down) && TileDic.ContainsKey(position + Vector2Int.down) && Utility.ManhattanDistance(position + Vector2Int.down, start) <= range)
+                    if (!list.Contains(position + Vector2Int.down) && TileDic.ContainsKey(position + Vector2Int.down) && CheckRange(start, position + Vector2Int.down, range))
                     {
                         queue.Enqueue(position + Vector2Int.down);
                     }
-                    if (!list.Contains(position + Vector2Int.left) && TileDic.ContainsKey(position + Vector2Int.left) && Utility.ManhattanDistance(position + Vector2Int.left, start) <= range)
+                    if (!list.Contains(position + Vector2Int.left) && TileDic.ContainsKey(position + Vector2Int.left) && CheckRange(start, position + Vector2Int.left, range))
                     {
                         queue.Enqueue(position + Vector2Int.left);
                     }
-                    if (!list.Contains(position + Vector2Int.right) && TileDic.ContainsKey(position + Vector2Int.right) && Utility.ManhattanDistance(position + Vector2Int.right, start) <= range)
+                    if (!list.Contains(position + Vector2Int.right) && TileDic.ContainsKey(position + Vector2Int.right) && CheckRange(start, position + Vector2Int.right, range))
                     {
                         queue.Enqueue(position + Vector2Int.right);
                     }
@@ -63,6 +63,18 @@ namespace Battle
             }
 
             return list;
+        }
+
+        private bool CheckRange(Vector2Int start, Vector2Int position, int range) 
+        {
+            if (Utility.ManhattanDistance(start, position) <= range && Mathf.Abs(TileDic[start].TileData.Height - TileDic[position].TileData.Height) <= range) 
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public List<Vector2Int> GetNormalAreaList(Vector2Int from, Vector2Int to, TargetEnum areaTarget, List<Vector2Int> areaList)
@@ -368,63 +380,6 @@ namespace Battle
             }
         }
 
-        public Vector3 RandomCharacterPosition(BattleCharacterInfo.FactionEnum faction) 
-        {
-            bool isRepeat = false;
-            bool hasPath = false;
-            Vector2Int v2;
-            Vector3 v3 = new Vector3();
-            List<Vector2Int> path;
-
-            while (true) 
-            {
-                //常態分佈
-                //v2 = new Vector2Int(Mathf.RoundToInt(Utility.RandomGaussian(Info.MinX, Info.MaxX)), Mathf.RoundToInt(Utility.RandomGaussian(Info.MinY, Info.MaxY)));
-                List<Vector2Int> list = new List<Vector2Int>(TileDic.Keys);
-                v2 = list[UnityEngine.Random.Range(0, list.Count)];
-                if(TileDic[v2].MoveCost > 0) 
-                {
-                    //檢查是否為保留區
-                    if (PlayerPositionList.Contains(v2)) 
-                    {
-                        continue;
-                    }
-
-                    //檢查位置是否有和其他角色重複
-                    isRepeat = false;
-                    for (int i = 0; i < CharacterAliveList.Count; i++)
-                    {
-                        if (v2 == Utility.ConvertToVector2Int(CharacterAliveList[i].transform.position))
-                        {
-                            isRepeat = true;
-                            break;
-                        }
-                    }
-
-                    if (!isRepeat)
-                    {
-                        //檢查是否與其他角色之間有路徑
-                        for (int i = 0; i < PlayerPositionList.Count; i++)
-                        {
-                            path = GetPath(v2, Utility.ConvertToVector2Int(CharacterAliveList[i].transform.position), CharacterAliveList[i].Info.Faction);
-                            if (path != null)
-                            {
-                                v3 = new Vector3(v2.x, TileDic[v2].TileData.Height, v2.y);
-                                hasPath = true;
-                                break;
-                            }
-                        }
-                        if (hasPath)
-                        {
-                            break;
-                        }
-                    }
-                }
-            }
-
-            return v3;
-        }
-
         public BattleCharacterController GetCharacterByPosition(Vector2Int position) 
         {
             BattleCharacterController character = null;
@@ -571,6 +526,42 @@ namespace Battle
             }
 
             return list;
+        }
+
+        public void CheckLine(Vector3 from, Vector3 to, out bool isBlock, out Vector3 result)
+        {
+            isBlock = false;
+            float height;
+            Vector2Int position;
+            List<Vector3> list = Utility.DrawLine3D(from, to);
+            for (int i = 0; i < list.Count; i++)
+            {
+                position = Utility.ConvertToVector2Int(list[i]);
+                {
+                    if (TileDic.ContainsKey(position))
+                    {
+                        height = TileDic[position].TileData.Height * 0.5f + 0.5f;
+                        if (TileDic[position].AttachData != null)
+                        {
+                            height += TileDic[position].AttachData.Height * 0.5f;
+                        }
+
+                        if(position != Utility.ConvertToVector2Int(from) && position != Utility.ConvertToVector2Int(to) && GetCharacterByPosition(position) != null) 
+                        {
+                            height += 0.5f;
+                        }
+
+                        if (height > list[i].y)
+                        {
+                            isBlock = true;
+                            result = list[i];
+                            return;
+                        }
+                    }
+
+                }
+            }
+            result = to;
         }
     }
 }

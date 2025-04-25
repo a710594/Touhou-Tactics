@@ -97,8 +97,11 @@ namespace Battle
                     {
                         Vector2Int v2 = Utility.ConvertToVector2Int(hit.transform.position);
                         BattleCharacterController character = Instance.GetCharacterByPosition(v2);
-                        CharacterDetailUI characterDetailUI = CharacterDetailUI.Open(false);
-                        characterDetailUI.SetData(character.Info, v2);
+                        if (character != null)
+                        {
+                            CharacterDetailUI characterDetailUI = CharacterDetailUI.Open(false);
+                            characterDetailUI.SetData(character.Info, v2);
+                        }
                     }
                 }
             }

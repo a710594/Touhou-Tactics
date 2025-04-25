@@ -271,12 +271,11 @@ namespace Explore
         {
             if (_treasure != null)
             {
-                Vector2Int v2 = Utility.ConvertToVector2Int(Camera.main.transform.position + Camera.main.transform.forward);
                 //bool bagIsFull = false;
                 //if (!bagIsFull)
                 //{
                 _exploreUI.OpenTreasure(_treasure.ItemID);
-                TileDic[v2].IsWalkable = true;
+                TileDic[_treasure.Position].IsWalkable = true;
                 if (_treasure.ItemID == ItemManager.KeyID)
                 {
                     ItemManager.Instance.Info.Key++;
@@ -286,9 +285,9 @@ namespace Explore
                     ItemManager.Instance.AddItem(_treasure.ItemID, 1);
                 }
 
-                GameObject.Destroy(TileDic[v2].Treasure.Object.gameObject);
+                GameObject.Destroy(TileDic[_treasure.Position].Treasure.Object.gameObject);
                 File.TreasureList.Remove(_treasure);
-                TileDic[v2].Treasure = null;
+                TileDic[_treasure.Position].Treasure = null;
                 _treasure = null;
                 _exploreUI.ShowTreasureLabel(false);
                 //}
@@ -439,10 +438,7 @@ namespace Explore
                 File.EnemyList[i].Controller = controller;
             }
 
-            //Player = Camera.main.GetComponent<ExploreCharacterController>();
             Player = GameObject.Find("Player").GetComponent<FPSController>();
-            //gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Explore/Player"), Vector3.zero, Quaternion.identity);
-            //Player = gameObj.GetComponent<FPSController>();
             Player.transform.position = new Vector3(File.PlayerPositionX, Player.transform.position.y, File.PlayerPositionZ);
             Player.transform.eulerAngles = new Vector3(0, File.PlayerRotationY, 0);
 

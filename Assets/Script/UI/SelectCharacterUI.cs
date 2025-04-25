@@ -66,7 +66,7 @@ namespace Battle
                 if (hit.collider.tag == "BattleTile" && BattleController.Instance.PlayerPositionList.Contains(Utility.ConvertToVector2Int(hit.transform.position)))
                 {
                     BattleInfoTile tile = BattleController.Instance.TileDic[Utility.ConvertToVector2Int(hit.transform.position)];
-                    _characterController.transform.position = hit.transform.position + hit.transform.up * tile.TileData.Height;
+                    _characterController.transform.position = hit.transform.position + hit.transform.up * (tile.TileData.Height * 0.5f + 0.5f);
                 }
                 else
                 {

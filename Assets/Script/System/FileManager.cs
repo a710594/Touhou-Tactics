@@ -87,7 +87,7 @@ public class FileManager : MonoBehaviour
             }
             catch (Exception ex) 
             {
-                Debug.LogError(ex);
+                Debug.LogWarning(ex);
                 callback(null);
                 return true;
             }

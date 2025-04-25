@@ -193,8 +193,8 @@ public class ExploreFileRandomGenerator
             }
         }
 
-        _startRoom = DFS(_roomList, _roomList[0]);
-        _endRoom = DFS(_roomList, _startRoom);
+        _startRoom = BFS(_roomList, _roomList[0]);
+        _endRoom = BFS(_roomList, _startRoom);
 
         for (int i = 0; i < _roomList.Count; i++) 
         {
@@ -256,27 +256,45 @@ public class ExploreFileRandomGenerator
         }
     }
 
-    private Room DFS(List<Room> roomList, Room start) 
+    private Room DFS(List<Room> roomList, Room room, List<Room> visited) 
     {
-        Room current = null;
-        List<Room> visited = new List<Room>();
-        Stack<Room> unVisited = new Stack<Room>();
-        unVisited.Push(start);
-
-        while (unVisited.Count != 0)
+        if(visited==null)
         {
-            current = unVisited.Pop(); //当前访问的
-            visited.Add(current);
-            for(int i=0; i<current.AdjList.Count; i++)
+            visited = new List<Room>();
+        }
+        visited.Add(room);
+        Room last = room;
+        for (int i=0; i<room.AdjList.Count; i++) 
+        {
+            if (!visited.Contains(room.AdjList[i])) 
             {
-                if (!visited.Contains(current.AdjList[i]))
+                last = DFS(roomList, room.AdjList[i], visited);
+            }
+        }
+        return last;
+    }
+
+    private Room BFS(List<Room> roomList, Room start) 
+    {
+        Queue<Room> queue = new Queue<Room>();
+        List<Room> visited = new List<Room>();
+        queue.Enqueue(start);
+
+        Room room = null;
+        while (queue.Count != 0)
+        {
+            room = queue.Dequeue();
+            visited.Add(room);
+            for (int i=0; i<room.AdjList.Count; i++) 
+            {
+                if (!visited.Contains(room.AdjList[i])) 
                 {
-                    unVisited.Push(current.AdjList[i]);
+                    queue.Enqueue(room.AdjList[i]);
                 }
-            }         
+            }      
         }
 
-        return current;
+        return room;
     }
 
     void PathfindHallways() {

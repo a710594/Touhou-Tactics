@@ -71,35 +71,10 @@ public class ExploreUI : MonoBehaviour
     void Update()
     {
         ExploreFile file = ExploreManager.Instance.File;
-        //if (file!=null && !InputMamager.Instance.IsLock)
-        //{
-        //    Vector2Int v2 = Utility.ConvertToVector2Int(Camera.main.transform.position + Camera.main.transform.forward);
-        //    SpaceLabel.SetActive(ExploreManager.Instance.CheckTreasure(v2));
-        //    KeyLabel.gameObject.SetActive(ExploreManager.Instance.CheckDoor(v2) != null);
-        //    if (ItemManager.Instance.Info.Key > 0) 
-        //    {
-        //        KeyLabel.text = "按空白鍵使用鑰匙開門";
-        //    }
-        //    else
-        //    {
-        //        KeyLabel.text = "需要鑰匙開門";
-        //    }
-
-        //    if (Input.GetKeyDown(KeyCode.Space))
-        //    {
-        //        ExploreFileTreasure treasure = ExploreManager.Instance.GetTreasure();
-        //        if (treasure != null)
-        //        {
-        //            TreasureUI.Open(treasure.ItemID);
-        //            InputMamager.Instance.Lock();
-        //        }
-
-        //        ExploreManager.Instance.OpenDoor();
-        //    }
-        //}
 
         if (Input.GetKeyDown(KeyCode.M))
         {
+            Cursor.lockState = CursorLockMode.None;
             BigMapBG.SetActive(!BigMapBG.activeSelf);
             if (BigMapBG.activeSelf)
             {
@@ -113,6 +88,7 @@ public class ExploreUI : MonoBehaviour
             }
             else
             {
+                Cursor.lockState = CursorLockMode.Locked;
                 InputMamager.Instance.Unlock();
             }
         }

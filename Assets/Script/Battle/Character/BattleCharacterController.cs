@@ -34,44 +34,13 @@ public class BattleCharacterController : MonoBehaviour
         AI.Init(this);
     }
 
-    public void Move(List<Vector2Int> paths)
-    {
-        if (paths.Count > 0)
-        {
-            SetDirection(paths[0] - Utility.ConvertToVector2Int(transform.position));
-
-            transform.DOMove(new Vector3(paths[0].x, BattleController.Instance.TileDic[paths[0]].TileData.Height, paths[0].y), 0.25f).SetEase(Ease.Linear).OnComplete(() =>
-            {
-                paths.RemoveAt(0);
-                if (paths.Count > 0)
-                {
-                    Move(paths);
-                }
-                else
-                {
-                    if (MoveEndHandler != null)
-                    {
-                        MoveEndHandler();
-                    }
-                }
-            });
-        }
-        else 
-        {
-            if (MoveEndHandler != null)
-            {
-                MoveEndHandler();
-            }
-        }
-    }
-
     public void Move(List<Vector2Int> paths, Action callback)
     {
         if (paths.Count > 0)
         {
             SetDirection(paths[0] - Utility.ConvertToVector2Int(transform.position));
 
-            transform.DOMove(new Vector3(paths[0].x, BattleController.Instance.TileDic[paths[0]].TileData.Height, paths[0].y), 0.25f).SetEase(Ease.Linear).OnComplete(() =>
+            transform.DOMove(new Vector3(paths[0].x, BattleController.Instance.TileDic[paths[0]].TileData.Height * 0.5f + 0.5f, paths[0].y), 0.25f).SetEase(Ease.Linear).OnComplete(() =>
             {
                 paths.RemoveAt(0);
                 if (paths.Count > 0)

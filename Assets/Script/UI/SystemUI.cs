@@ -32,6 +32,7 @@ public class SystemUI : MonoBehaviour
         {
             Explore.ExploreManager.Instance.UpdateFile();
             CampButton.gameObject.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
         }
         else
         {
@@ -75,5 +76,13 @@ public class SystemUI : MonoBehaviour
         CampButton.onClick.AddListener(CampOnClick);
         SaveButton.onClick.AddListener(SaveOnClick);
         ExitButton.onClick.AddListener(ExitOnClick);
+    }
+
+    private void OnDestroy()
+    {
+        if (SceneController.Instance.Info.CurrentScene == "Explore")
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
     }
 }
