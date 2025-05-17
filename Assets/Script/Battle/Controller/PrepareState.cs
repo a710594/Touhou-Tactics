@@ -8,6 +8,8 @@ namespace Battle
     {
         public class PrepareState : BattleControllerState 
         {
+            public bool CanDrag = true;
+            
             private Vector2Int? _lastPosition = null;
             private Vector3 _originalPosition;
             private BattleCharacterController _dragCharacter = null;
@@ -19,13 +21,14 @@ namespace Battle
 
             public override void Begin()
             {
-                Instance.SelectBattleCharacterUI.Init(Instance.MinPlayerCount, Instance.MaxPlayerCount, Instance._candidateList);
-                Instance.SetQuad(Instance.PlayerPositionList, _white);
-
-                if(Instance.PrepareStateBeginHandler!=null)
+                if (Instance.PrepareStateBeginHandler != null)
                 {
                     Instance.PrepareStateBeginHandler();
                 }
+
+                CanDrag = true;
+                Instance.SelectCharacterUI.Init(Instance.MinPlayerCount, Instance.MaxPlayerCount, Instance._candidateList);
+                Instance.SetQuad(Instance.PlayerPositionList, _white);
             }
 
             public override void End()
@@ -34,7 +37,6 @@ namespace Battle
                 {
                     Instance._maxIndex++;
                     Instance.TempList[i].Index = Instance._maxIndex;
-                    Instance.TempList[i].Outline.OutlineColor = Color.blue;
                     Instance.CharacterAliveList.Add(Instance.TempList[i]);
 
                     Instance.TempList[i].MoveEndHandler += Instance.OnMoveEnd;
@@ -42,9 +44,10 @@ namespace Battle
                     Instance.BattleUI.SetFloatingNumberPoolAnchor(Instance.TempList[i]);
                 }
                 Instance.BattleUI.gameObject.SetActive(true);
-                Instance.SelectBattleCharacterUI.gameObject.SetActive(false);
+                Instance.SelectCharacterUI.gameObject.SetActive(false);
                 Instance.SortCharacterList(true);
                 Instance.ClearQuad(Instance.PlayerPositionList);
+                Instance.TempList.Clear();
 
                 if (_lastPosition != null)
                 {
@@ -100,17 +103,20 @@ namespace Battle
                     _lastPosition = position;
                 }
 
-                if (Input.GetMouseButtonDown(0)) 
+                if (CanDrag)
                 {
-                    OnDragBegin();
-                }
-                else if (Input.GetMouseButton(0)) 
-                {
-                    OnDrag();
-                }
-                else if (Input.GetMouseButtonUp(0)) 
-                {
-                    OnDragEnd();
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        OnDragBegin();
+                    }
+                    else if (Input.GetMouseButton(0))
+                    {
+                        OnDrag();
+                    }
+                    else if (Input.GetMouseButtonUp(0))
+                    {
+                        OnDragEnd();
+                    }
                 }
 
                 if (Utility.GetMouseButtonDoubleClick(0))

@@ -7,9 +7,20 @@ namespace Battle
     public class BattleTutorial : Tutorial
     {
         public bool IsActive = true;
-        public int PlayerCount;
+        public bool CanMove = false;
+        public Vector2Int? MovePosition = null;
+        public int? SkillID = null;
+        public int? SubID = null;
+        public int? ItemID = null;
+        public int? SpellID = null;
+        public Vector2Int? CommandPosition = null;
+        public bool CanFinish = false;
+        public Vector2Int? Direction = null;
+        public bool Hit = false;
+        public bool Critical = false;
 
         protected ConversationUI _conversationUI;
+        protected TutorialArrowUI _tutorialArrowUI;
 
         public virtual bool CheckClick(Vector2Int position)
         {
@@ -23,45 +34,45 @@ namespace Battle
             }
         }
 
-        public virtual bool CheckScrollItem(object obj) 
-        {
-            return ((TutorialState)_context.CurrentState).CheckScrollItem(obj);
-        }
+        //public virtual bool CheckScrollItem(object obj) 
+        //{
+        //    return ((TutorialState)_context.CurrentState).CheckScrollItem(obj);
+        //}
 
-        public virtual bool CheckMove() 
-        {
-            return ((TutorialState)_context.CurrentState).CanMove();
-        }
+        //public virtual bool CheckMove() 
+        //{
+        //    return ((TutorialState)_context.CurrentState).CanMove();
+        //}
 
-        public virtual bool CheckSkill()
-        {
-            return ((TutorialState)_context.CurrentState).CanSkill();
-        }
+        //public virtual bool CheckSkill()
+        //{
+        //    return ((TutorialState)_context.CurrentState).CanSkill();
+        //}
 
-        public virtual bool CheckSupport()
-        {
-            return ((TutorialState)_context.CurrentState).CanSupport();
-        }
+        //public virtual bool CheckSupport()
+        //{
+        //    return ((TutorialState)_context.CurrentState).CanSupport();
+        //}
 
-        public virtual bool CheckSpell()
-        {
-            return ((TutorialState)_context.CurrentState).CanSpell();
-        }
+        //public virtual bool CheckSpell()
+        //{
+        //    return ((TutorialState)_context.CurrentState).CanSpell();
+        //}
 
-        public virtual bool CheckItem()
-        {
-            return ((TutorialState)_context.CurrentState).CanItem();
-        }
+        //public virtual bool CheckItem()
+        //{
+        //    return ((TutorialState)_context.CurrentState).CanItem();
+        //}
 
-        public virtual bool CheckIdle()
-        {
-            return ((TutorialState)_context.CurrentState).CanIdle();
-        }
+        //public virtual bool CheckIdle()
+        //{
+        //    return ((TutorialState)_context.CurrentState).CanIdle();
+        //}
 
-        public virtual bool CheckReset()
-        {
-            return ((TutorialState)_context.CurrentState).CanReset();
-        }
+        //public virtual bool CheckReset()
+        //{
+        //    return ((TutorialState)_context.CurrentState).CanReset();
+        //}
 
         protected class TutorialState : State
         {
@@ -116,10 +127,6 @@ namespace Battle
             public virtual bool CheckScrollItem(object obj)
             {
                 return false;
-            }
-
-            public virtual void Deregister()
-            {
             }
         }
     }

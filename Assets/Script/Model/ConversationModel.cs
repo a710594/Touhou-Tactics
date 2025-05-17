@@ -13,7 +13,6 @@ public class ConversationModel
 
     public int ID;
     public int Page;
-    public bool Pause;
     public string Name;
     public string Dialog;
     public string Image_1;

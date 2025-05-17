@@ -6,6 +6,6 @@ namespace Explore
 {
     public class ExploreFIleDoor
     {
-        public List<Vector2Int> PositionList = new List<Vector2Int>();
+        public Vector2Int Position;
     }
 }

@@ -17,6 +17,11 @@ namespace Battle
 
             public override void Begin()
             {
+                if (Instance.DirectionStateBeginHandler != null)
+                {
+                    Instance.DirectionStateBeginHandler();
+                }
+
                 _selectedCharacter = Instance.SelectedCharacter;
                 Instance.BattleUI.SetCommandVisible(false);
                 Instance.CharacterInfoUIGroup.HideCharacterInfoUI_1();
@@ -45,11 +50,6 @@ namespace Battle
                 _selectedCharacter.Info.CurrentWT = _selectedCharacter.Info.WT;
                 _selectedCharacter.LastPosition = BattleCharacterInfo.DefaultLastPosition;
                 Instance.SortCharacterList(false);
-
-                if (Instance.DirectionStateBeginHandler!=null)
-                {
-                    Instance.DirectionStateBeginHandler();
-                }
             }
 
             public void SetDirection(Vector2Int direction)

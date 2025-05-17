@@ -347,7 +347,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DownThreshold: 0.2
   PressDuration: 0.1
-  Button: {fileID: 148859332}
   Label: {fileID: 2005041126}
   Image: {fileID: 0}
 --- !u!114 &148859332
@@ -605,7 +604,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DownThreshold: 0.2
   PressDuration: 0.1
-  Button: {fileID: 165291077}
   Label: {fileID: 2078154856}
   Image: {fileID: 0}
 --- !u!114 &165291077
@@ -1603,7 +1601,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DownThreshold: 0.2
   PressDuration: 0.1
-  Button: {fileID: 380326900}
   Label: {fileID: 1798475765}
   Image: {fileID: 0}
 --- !u!114 &380326900
@@ -3368,7 +3365,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DownThreshold: 0.2
   PressDuration: 0.1
-  Button: {fileID: 753802596}
   Label: {fileID: 1594680866}
   Image: {fileID: 0}
 --- !u!114 &753802596
@@ -4597,7 +4593,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DownThreshold: 0.2
   PressDuration: 0.1
-  Button: {fileID: 999674860}
   Label: {fileID: 2012029504}
   Image: {fileID: 0}
 --- !u!114 &999674860
@@ -6410,7 +6405,7 @@ RectTransform:
   m_Children:
   - {fileID: 987759497}
   m_Father: {fileID: 2052946723}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -7988,7 +7983,7 @@ RectTransform:
   m_Children:
   - {fileID: 1227226062}
   m_Father: {fileID: 2052946723}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -8951,6 +8946,7 @@ MonoBehaviour:
   ShopUI: {fileID: 1453188049}
   CookUI: {fileID: 426884965}
   BagUI: {fileID: 310089253}
+  MainGroup: {fileID: 261530248}
   FloorGroup: {fileID: 201563505}
   FloorScrollView: {fileID: 1749862829}
 --- !u!1 &1998384408
@@ -9222,16 +9218,16 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1787776820}
-  - {fileID: 1944279675}
   - {fileID: 1429132543}
+  - {fileID: 1944279675}
+  - {fileID: 1787776820}
   m_Father: {fileID: 261530249}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 150, y: -200}
-  m_SizeDelta: {x: 300, y: 300}
+  m_AnchoredPosition: {x: 150, y: -225}
+  m_SizeDelta: {x: 300, y: 350}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2052946724
 MonoBehaviour:
@@ -9250,7 +9246,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 4
+  m_ChildAlignment: 1
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1

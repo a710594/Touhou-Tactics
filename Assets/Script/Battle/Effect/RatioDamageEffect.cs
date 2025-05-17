@@ -24,11 +24,11 @@ public class RatioDamageEffect : Effect
         {
             int damage = Mathf.RoundToInt((float)Value * (float)target.Info.MaxHP / 100f);
             target.Info.SetDamage(damage);
-            logList.Add(new Log(user, target, this, hitType, damage.ToString()));
+            logList.Add(new Log(user, target, Type, hitType, damage.ToString()));
         }
         else
         {
-            logList.Add(new Log(user, target, this, hitType, "Miss"));
+            logList.Add(new Log(user, target, Type, hitType, "Miss"));
         }
 
         if (SubEffect != null && hitType != HitType.Miss)

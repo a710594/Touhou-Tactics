@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class DataTable
 {
-    private static readonly int _fileCount = 23;
+    private static readonly int _fileCount = 24;
 
     private static DataTable _instance;
     public static DataTable Instance
@@ -43,6 +43,7 @@ public class DataTable
     public List<SubModel> SubList = new List<SubModel>();
     public List<TileModel> TileList = new List<TileModel>();
     public List<TreasureModel> TreasureList = new List<TreasureModel>();
+    public List<TutorialModel> TutorialList = new List<TutorialModel>();
 
     public Dictionary<int, AttachModel> AttachDic = new Dictionary<int, AttachModel>();
     public Dictionary<int, ConsumablesModel> ConsumablesDic = new Dictionary<int, ConsumablesModel>();
@@ -67,6 +68,7 @@ public class DataTable
     public Dictionary<int, SubModel> SubDic = new Dictionary<int, SubModel>();
     public Dictionary<int, TileModel> TileDic = new Dictionary<int, TileModel>();
     public Dictionary<int, TreasureModel> TreasureDic = new Dictionary<int, TreasureModel>();
+    public Dictionary<int, Dictionary<int, TutorialModel>> TutorialDic = new Dictionary<int, Dictionary<int, TutorialModel>>();
 
     private int _count = 0;
     private Action _callback;
@@ -359,6 +361,23 @@ public class DataTable
             {
                 TreasureList[i].SetItemList();
                 TreasureDic.Add(TreasureList[i].ID, TreasureList[i]);
+            }
+            CheckComplete();
+        });
+
+        _fileManager.Load<List<TutorialModel>>("Tutorial", FileManager.PathEnum.Data, (obj) =>
+        {
+            TutorialList = (List<TutorialModel>)obj;
+            TutorialDic.Clear();
+            int id;
+            for (int i = 0; i < TutorialList.Count; i++)
+            {
+                id = TutorialList[i].ID;
+                if (!TutorialDic.ContainsKey(id))
+                {
+                    TutorialDic.Add(id, new Dictionary<int, TutorialModel>());
+                }
+                TutorialDic[id].Add(TutorialList[i].Page, TutorialList[i]);
             }
             CheckComplete();
         });

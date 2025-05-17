@@ -5,43 +5,67 @@ using UnityEngine;
 
 namespace Battle
 {
-    public class FarCombatAI : OldBattleAI
+    public class FarCombatAI : BattleAI
     {
-        public override void Start()
+        protected override Vector2Int GetMoveTo(List<Vector2Int> stepList, List<BattleCharacterController> targetList, Dictionary<BattleCharacterController, List<Vector2Int>> canHitDic)
         {
-            Vector2Int start = Utility.ConvertToVector2Int(_controller.transform.position);
-            _stepList = BattleController.Instance.GetStepList(_controller);
-            List<BattleCharacterController> targetList = GetTargetList(BattleCharacterInfo.FactionEnum.Player);
-            Dictionary<BattleCharacterController, List<Vector2Int>> canHitDic = GetCanHitDic(targetList);
-            Vector2Int moveTo;
-            if (canHitDic.Count > 0) //有可以攻擊的目標
+            int distance;
+            int maxDistance = -1;
+            Vector2Int targetPosition;
+            Vector2Int moveTo = new Vector2Int();
+            if (canHitDic.Count > 0)
             {
-                _useSkill = true;
-                _target = GetAttackTarget(new List<BattleCharacterController>(canHitDic.Keys));
-                moveTo = GetMoveTo(MoveToEnum.Far, start, canHitDic[_target]); //選擇距離目標遠的位置
-            }
-            else //盡量靠近想攻擊的目標
-            {
-                _useSkill = false;
-                int distance;
-                Vector2Int targetPosition;
-                for (int i = 0; i < targetList.Count; i++)
+                _canAttack = true;
+                _target = GetTarget(new List<BattleCharacterController>(canHitDic.Keys));
+                targetPosition = Utility.ConvertToVector2Int(_target.transform.position);
+                for (int i = 0; i < canHitDic[_target].Count; i++)
                 {
-                    targetPosition = Utility.ConvertToVector2Int(targetList[i].transform.position);
-                    distance = BattleController.Instance.GetDistance(start, targetPosition, _controller.Info.Faction);
-                    if (distance == -1)
+                    distance = BattleController.Instance.GetDistance(targetPosition, canHitDic[_target][i], _character.Info.Faction); //盡量遠離目標
+                    if (distance > maxDistance)
                     {
-                        targetList.RemoveAt(i);
-                        i--;
+                        maxDistance = distance;
+                        moveTo = canHitDic[_target][i];
                     }
                 }
-                _target = GetAttackTarget(targetList);
-                moveTo = GetMoveTo(MoveToEnum.Near, _stepList, Utility.ConvertToVector2Int(_target.transform.position));
+            }
+            else
+            {
+                _canAttack = false;
+                _target = GetTarget(targetList);
+                targetPosition = Utility.ConvertToVector2Int(_target.transform.position);
+                for (int i = 0; i < stepList.Count; i++)
+                {
+                    distance = BattleController.Instance.GetDistance(stepList[i], targetPosition, _character.Info.Faction); //盡量靠近目標
+                    if (distance < maxDistance)
+                    {
+                        maxDistance = distance;
+                        moveTo = stepList[i];
+                    }
+                }
+            }
+            return moveTo;
+        }
+
+        protected override BattleCharacterController GetTarget(List<BattleCharacterController> list)
+        {
+            int damage;
+            int maxDamage = -1;
+            BattleCharacterController target = _character.Info.GetProvocativeTarget();
+
+            if (target == null)
+            {
+                for (int i = 0; i < list.Count; i++)
+                {
+                    damage = BattleController.Instance.GetDamage(SelectedSkill.Effect, _character, list[i]);
+                    if (damage > maxDamage)
+                    {
+                        maxDamage = damage;
+                        target = list[i];
+                    }
+                }
             }
 
-            BattleController.Instance.SetState<BattleController.MoveState>();
-            BattleController.Instance.Click(moveTo);
-            BattleController.Instance.Click(moveTo);
+            return target;
         }
     }
 }

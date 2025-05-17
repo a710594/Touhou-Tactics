@@ -18,14 +18,33 @@ public class DropdownButton : DropdownNode
 
     [NonSerialized]
     public object Data = null;
+    public Type Type;
+    [NonSerialized]
+    public bool Lock = false;
 
     private bool _hasUse = false;
     private DropdownRoot _root;
 
-    public void SetData(string text, object data, DropdownRoot root) 
+    public void SetData(string text, object data, DropdownRoot root, Type type) 
     {
-        Button.Label.text = text;
+        if (data is Battle.ItemCommand)
+        {
+            Battle.ItemCommand itemCommand = (Battle.ItemCommand)data;
+            if (itemCommand.Amount > 0)
+            {
+                Button.Label.text = text + " x" + itemCommand.Amount;
+            }
+            else
+            {
+                Button.Label.text = text;
+            }
+        }
+        else
+        {
+            Button.Label.text = text;
+        }
         Data = data;
+        Type = type;
         _root = root;
 
         if (data is List<KeyValuePair<string, object>>)
@@ -55,6 +74,11 @@ public class DropdownButton : DropdownNode
 
     private void OnEnter(ButtonPlus button)
     {
+        if (Lock) 
+        {
+            return;
+        }
+
         if (!_hasUse) 
         {
             Button.Image.color = _lightGray;
@@ -68,7 +92,7 @@ public class DropdownButton : DropdownNode
 
         if (_root != null)
         {
-            _root.ButtonOnEnter(Data, this, DropdownGroup);
+            _root.ButtonOnEnter(this);
         }
     }
 

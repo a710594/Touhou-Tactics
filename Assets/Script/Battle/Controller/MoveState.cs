@@ -11,7 +11,7 @@ namespace Battle
         {
             private static readonly Vector2Int _maxVector2Int = new Vector2Int(int.MaxValue, int.MaxValue);
 
-            private bool _canClick = true;
+            private bool _isMoving = false;
             private Vector2Int? _lastPosition = null;
             private List<Vector2Int> _stepList;
 
@@ -21,6 +21,12 @@ namespace Battle
 
             public override void Begin()
             {
+                if (Instance.MoveStateBeginHandler != null)
+                {
+                    Instance.MoveStateBeginHandler();
+                }
+
+                _isMoving = false;
                 _selectedCharacter = Instance.SelectedCharacter;
                 _characterList = Instance.CharacterAliveList;
                 Instance.BattleUI.SetCommandVisible(false);
@@ -30,17 +36,12 @@ namespace Battle
 
             public override void End()
             {
-                Instance.ClearQuad(_stepList);
-                
-                if(Instance.MoveStateEndHandler!=null)
-                {
-                    Instance.MoveStateEndHandler();
-                }          
+                Instance.ClearQuad(_stepList);    
             }
 
             public override void Update()
             {
-                if (!_canClick) 
+                if (_isMoving || _selectedCharacter.Info.IsAuto) 
                 {
                     return;
                 }
@@ -75,9 +76,12 @@ namespace Battle
                     _lastPosition = position;
                 }
 
-                if (position != null && _stepList.Contains((Vector2Int)position) && Input.GetMouseButtonDown(0))
+                if (position != null && _stepList.Contains((Vector2Int)position) && Input.GetMouseButtonDown(0) &&
+                    (Instance.Tutorial == null || !Instance.Tutorial.IsActive || position == Instance.Tutorial.MovePosition))
                 {
-                    Move((Vector2Int)position, () =>
+                    _isMoving = true;
+                    Instance.SetSelect((Vector2Int)position, false);
+                    Instance.Move((Vector2Int)position, () =>
                     {
                         _context.SetState<CommandState>();
                     });
@@ -98,36 +102,6 @@ namespace Battle
                         }
                     }
                 }
-            }
-
-            public void Move(Vector2Int v2, Action callback) 
-            {
-                if (_lastPosition != null)
-                {
-                    Instance.SetSelect((Vector2Int)_lastPosition, false);
-                }
-
-                _canClick = false;
-                List<Vector2Int> path = Instance.GetPath(Utility.ConvertToVector2Int(_selectedCharacter.transform.position), v2, _selectedCharacter.Info.Faction);
-                _selectedCharacter.LastPosition = _selectedCharacter.transform.position;
-                _selectedCharacter.Move(path, () =>
-                {
-                    _canClick = true;
-
-                    if (!_selectedCharacter.Info.HasMove)
-                    {
-                        _selectedCharacter.Info.HasMove = true;
-                    }
-                    else if (!_selectedCharacter.Info.MoveAgain)
-                    {
-                        _selectedCharacter.Info.MoveAgain = true;
-                    }
-
-                    if (callback != null) 
-                    {
-                        callback();
-                    }
-                });
             }
         }
     }

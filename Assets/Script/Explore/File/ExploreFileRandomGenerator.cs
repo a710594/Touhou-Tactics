@@ -183,7 +183,6 @@ public class ExploreFileRandomGenerator
         for (int i = 0; i < remainList.Count; i++)
         {
             if (UnityEngine.Random.Range(0f, 1f) < 0.125)
-            //if (_random.NextDouble() < 0.125)
             {
                 selectedEdges.Add(remainList[i]);
                 uRoom = ((Vertex<Room>)remainList[i].U).Item;
@@ -198,14 +197,16 @@ public class ExploreFileRandomGenerator
 
         for (int i = 0; i < _roomList.Count; i++) 
         {
-            if(_roomList[i] != _startRoom && _roomList[i] != _endRoom)
-            if (_roomList[i].Isolated) 
+            if (_roomList[i] != _startRoom)
             {
-                _isolatedList.Add(_roomList[i]);
-            }
-            else
-            {
-                _otherList.Add(_roomList[i]);
+                if (_roomList[i].Isolated)
+                {
+                    _isolatedList.Add(_roomList[i]);
+                }
+                else
+                {
+                    _otherList.Add(_roomList[i]);
+                }
             }
         }
     }
@@ -311,11 +312,11 @@ public class ExploreFileRandomGenerator
             //門的位置在距離孤立房間最遠的相鄰走廊
             //所以 room_2.Isolated 的情況下 pos_1 和 pos_2 要交換
             Room isolatedRoom = null;
-            if (room_1.Isolated && room_1 != _startRoom && room_1 != _endRoom) 
+            if (room_1.Isolated && room_1 != _startRoom) 
             {
                 isolatedRoom = room_1;
             }
-            else if (room_2.Isolated && room_2 != _startRoom && room_2 != _endRoom) 
+            else if (room_2.Isolated && room_2 != _startRoom) 
             {
                 isolatedRoom = room_2;
                 temp = pos_1;
@@ -347,6 +348,7 @@ public class ExploreFileRandomGenerator
             });
 
             if (path != null) {
+                List<Vector2Int> positionList = new List<Vector2Int>();
                 ExploreFIleDoor door = new ExploreFIleDoor();
                 for (int i = 0; i < path.Count; i++) {
                     var current = path[i];
@@ -365,23 +367,21 @@ public class ExploreFileRandomGenerator
                                isolatedRoom.InBound(current + Vector2Int.left) ||
                                isolatedRoom.InBound(current + Vector2Int.right))
                             {
-                                door.PositionList.Add(current);
+                                positionList.Add(current);
                             }
                         }
                     }
-
-                    if (i > 0) {
-                        var prev = path[i - 1];
-
-                        var delta = current - prev;
-                    }
                 }
 
-                while (door.PositionList.Count > 1)
+                if (positionList.Count > 0)
                 {
-                    door.PositionList.RemoveAt(0);
+                    while (positionList.Count > 1)
+                    {
+                        positionList.RemoveAt(0);
+                    }
+                    door.Position = positionList[0];
+                    _doorList.Add(door);
                 }
-                _doorList.Add(door);
             }
         }
         File.DoorList = _doorList;
@@ -467,9 +467,5 @@ public class ExploreFileRandomGenerator
                 File.EnemyList.Add(new ExploreFileEnemy(enemyGroup, pos));
             }
         }
-
-        enemyGroup = DataTable.Instance.EnemyGroupDic[data.BossEnemyGroup];
-        pos = File.Goal;
-        File.EnemyList.Add(new ExploreFileEnemy(enemyGroup, pos));
     }
 }

@@ -39,7 +39,7 @@ namespace Battle
                     }
                 }
 
-                if(_target != null) 
+                if (_target != null) 
                 {
                     Instance.CharacterInfoUIGroup.SetCharacterInfoUIWithTween_2(_target, _originalHP, Utility.ConvertToVector2Int(_target.transform.position));
                 }

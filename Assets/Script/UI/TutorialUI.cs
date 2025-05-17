@@ -6,45 +6,90 @@ using UnityEngine.UI;
 
 public class TutorialUI : MonoBehaviour
 {
+    public Text TitleLabel;
     public Text CommentLabel;
-    public Text BigCommentLabel;
     public Image Image;
+    public Button PreviouButton;
+    public Button NextButton;
     public Button CloseButton;
 
-    private Action _confirmCallback;
+    private int _page;
+    private Action _callback;
+    private Dictionary<int, TutorialModel> _dataDic;
 
-    public static void Open(string commentText, string image, Action confirmCallback)
+    public static void Open(int id, Action callback)
     {
         GameObject obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/UI/TutorialUI"), Vector3.zero, Quaternion.identity);
         obj.transform.SetParent(GameObject.Find("Canvas").transform);
         obj.transform.localPosition = Vector3.zero;
         TutorialUI tutorialUI = obj.GetComponent<TutorialUI>();
-        tutorialUI.CommentLabel.gameObject.SetActive(true);
-        tutorialUI.CommentLabel.text = commentText;
-        tutorialUI.BigCommentLabel.gameObject.SetActive(false);
-        tutorialUI.Image.gameObject.SetActive(true);
-        tutorialUI.Image.sprite = Resources.Load<Sprite>("Image/" + image);
-        tutorialUI._confirmCallback = confirmCallback;
+        tutorialUI.Init(id, callback);
     }
 
-    public static void Open(string commentText, Action confirmCallback)
+    public void Init(int id, Action callback)
     {
-        GameObject obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/UI/TutorialUI"), Vector3.zero, Quaternion.identity);
-        obj.transform.SetParent(GameObject.Find("Canvas").transform);
-        obj.transform.localPosition = Vector3.zero;
-        TutorialUI tutorialUI = obj.GetComponent<TutorialUI>();
-        tutorialUI.CommentLabel.gameObject.SetActive(false);
-        tutorialUI.BigCommentLabel.gameObject.SetActive(true);
-        tutorialUI.BigCommentLabel.text = commentText;
-        tutorialUI.Image.gameObject.SetActive(false);
-        tutorialUI._confirmCallback = confirmCallback;
+        _page = 1;
+        _dataDic = DataTable.Instance.TutorialDic[id];
+        SetContent();
+        PreviouButton.gameObject.SetActive(false);
+        if (DataTable.Instance.TutorialDic[id].ContainsKey(_page + 1)) 
+        {
+            NextButton.gameObject.SetActive(true);
+            CloseButton.gameObject.SetActive(false);
+        }
+        else
+        {
+            NextButton.gameObject.SetActive(false);
+            CloseButton.gameObject.SetActive(true);
+        }
+        _callback = callback;
+    }
+
+    private void SetContent() 
+    {
+        TutorialModel data = _dataDic[_page];
+        TitleLabel.text = data.Title;
+        CommentLabel.text = data.Comment;
+        if (data.Image != "x")
+        {
+            Image.gameObject.SetActive(true);
+            Image.sprite = Resources.Load<Sprite>("Image/Tutorial/" + data.Image);
+        }
+        else
+        {
+            Image.gameObject.SetActive(false);
+        }
+    }
+
+    private void PreviouOnClick() 
+    {
+        _page--;
+        SetContent();
+        NextButton.gameObject.SetActive(true);
+        CloseButton.gameObject.SetActive(false);
+        if (!_dataDic.ContainsKey(_page - 1)) 
+        {
+            PreviouButton.gameObject.SetActive(false);
+        }
+    }
+
+    private void NextOnClick() 
+    {
+        _page++;
+        SetContent();
+        PreviouButton.gameObject.SetActive(true);
+        if (!_dataDic.ContainsKey(_page + 1)) 
+        {
+            NextButton.gameObject.SetActive(false);
+            CloseButton.gameObject.SetActive(true);
+        }
     }
 
     private void CloseOnClick() 
     {
-        if (_confirmCallback != null) 
+        if (_callback != null) 
         {
-            _confirmCallback();
+            _callback();
         }
 
         Destroy(gameObject);
@@ -52,6 +97,8 @@ public class TutorialUI : MonoBehaviour
 
     private void Awake()
     {
+        PreviouButton.onClick.AddListener(PreviouOnClick);
+        NextButton.onClick.AddListener(NextOnClick);
         CloseButton.onClick.AddListener(CloseOnClick);
     }
 }

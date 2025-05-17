@@ -9,10 +9,10 @@ public class F2Event : MyEvent
         InputMamager.Instance.IsLock = true;
         ExploreUI exploreUI = GameObject.Find("ExploreUI").GetComponent<ExploreUI>();
         exploreUI.SetVisible(false);
-        ConversationUI.Open(8, true, () =>
+        ConversationUI.Open(5, true, () =>
         {
             InputMamager.Instance.IsLock = false;
             exploreUI.SetVisible(true);
-        }, null);
+        });
     }
 }

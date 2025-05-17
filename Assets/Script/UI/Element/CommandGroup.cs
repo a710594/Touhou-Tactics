@@ -11,6 +11,7 @@ namespace Battle
         public DropdownButton MoveButton;
         public DropdownButton SubButton;
         public DropdownButton MainButton;
+        public DropdownButton ItemButton;
         public DropdownButton FinishButton;
         public GridLayoutGroup GridLayout;
         public TipLabel TipLabel;
@@ -20,35 +21,48 @@ namespace Battle
         private DropdownNode _lastNode = null;
         private BattleCharacterInfo _character;
 
+        private TutorialArrowUI _tutorialArrowUI = null;
+        private Type _tutorialType = null;
+        private int? _tutoriaID = null;
+
         public void SetData(BattleCharacterInfo character) 
         {
             _character = character;
 
             List<object> subList = new List<object>(_character.SubList);
-            SubButton.SetData("次要動作", ConvertToPair(subList), this);
+            SubButton.SetData("次要動作", ConvertToPair(subList), this, typeof(Sub));
             SubButton.SetHasUse(false);
 
+            //List<object> skillList = new List<object>(_character.SkillList);
+            //List<object> itemList = ItemManager.Instance.GetBattleItemList();
+            //List<object> spellList = new List<object>(_character.SpellList);
+            //List<KeyValuePair<string, object>> mainList = new List<KeyValuePair<string, object>>();
+            //mainList.Add(new KeyValuePair<string, object>("技能", ConvertToPair(skillList)));
+            //mainList.Add(new KeyValuePair<string, object>("道具", ConvertToPair(itemList)));
+            //mainList.Add(new KeyValuePair<string, object>("符卡", ConvertToPair(spellList)));
+            //MainButton.SetData("主要動作", mainList, this);
             List<object> skillList = new List<object>(_character.SkillList);
-            List<object> itemList = ItemManager.Instance.GetBattleItemList();
-            List<object> spellList = new List<object>(_character.SpellList);
-            List<KeyValuePair<string, object>> mainList = new List<KeyValuePair<string, object>>();
-            mainList.Add(new KeyValuePair<string, object>("技能", ConvertToPair(skillList)));
-            mainList.Add(new KeyValuePair<string, object>("道具", ConvertToPair(itemList)));
-            mainList.Add(new KeyValuePair<string, object>("符卡", ConvertToPair(spellList)));
-            MainButton.SetData("主要動作", mainList, this);
+            MainButton.SetData("主要動作", ConvertToPair(skillList), this, typeof(Skill));
             MainButton.SetHasUse(false);
+
+            List<object> itemList = ItemManager.Instance.GetBattleItemList();
+            ItemButton.SetData("道具", ConvertToPair(itemList), this, typeof(ItemCommand));
+            ItemButton.SetHasUse(false);
         }
 
         public void Reset() 
         {
             SubButton.DropdownGroup.Clear();
             MainButton.DropdownGroup.Clear();
+            ItemButton.DropdownGroup.Clear();
 
             SubButton.DropdownGroup.gameObject.SetActive(false);
             MainButton.DropdownGroup.gameObject.SetActive(false);
+            ItemButton.DropdownGroup.gameObject.SetActive(false);
 
             SubButton.SetHasUse(_character.HasSub);
             MainButton.SetHasUse(_character.HasMain);
+            ItemButton.SetHasUse(_character.HasItem);
 
             if (_character.HasMove)
             {
@@ -99,12 +113,12 @@ namespace Battle
                     }
                     else
                     {
-                        BattleController.Instance.SetState<BattleController.MoveState>();
+                        BattleController.Instance.SetMoveState();
                     }
                 }
                 else
                 {
-                    BattleController.Instance.SetState<BattleController.MoveState>();
+                    BattleController.Instance.SetMoveState();
                 }
             }
             else if (data is Sub)
@@ -149,7 +163,11 @@ namespace Battle
             }
             else if(data is ItemCommand) 
             {
-                if (_character.MoveAgain)
+                if (_character.HasItem)
+                {
+                    TipLabel.SetLabel("這回合已經使用過道具了");
+                }
+                else if (_character.MoveAgain)
                 {
                     TipLabel.SetLabel("這回合已經使用過再次移動了");
                 }
@@ -177,21 +195,33 @@ namespace Battle
             }
             else if(data is string && (string)data == "Finish") 
             {
-                BattleController.Instance.SetState<BattleController.DirectionState>();
+                BattleController.Instance.SetDirectionState();
             }
 
             SkillInfoGroup.gameObject.SetActive(false);
         }
 
-        public override void ButtonOnEnter(object data, DropdownButton button, DropdownGroup group) 
+        public void SetTutorial(Type type, int? id) 
         {
+            if (type == typeof(Skill))
+            {
+                _tutorialArrowUI = TutorialArrowUI.Open("選擇主要動作。", MainButton.transform, new Vector3(-200, 0, 0), Vector2Int.right);
+            }
+            else if (type == typeof(Sub))
+            {
+                _tutorialArrowUI = TutorialArrowUI.Open("選擇次要動作。", SubButton.transform, new Vector3(-200, 0, 0), Vector2Int.right);
+            }
+            _tutorialType = type;
+            _tutoriaID = id;
+        }
 
-            //if (_showedDropdownGroup != null && group.transform.parent.parent != _showedDropdownGroup.transform) 
-            //{
-            //    _showedDropdownGroup.gameObject.SetActive(false);
-            //}
+        public override void ButtonOnEnter(DropdownButton button) 
+        {
+            object data = button.Data;
+            DropdownGroup group = button.DropdownGroup;
+            List<DropdownButton> buttonList = null;
 
-            while(_lastNode!= null && _lastNode != button.Parent) 
+            while (_lastNode!= null && _lastNode != button.Parent) 
             {
                 if (_lastNode is DropdownButton)
                 {
@@ -206,38 +236,34 @@ namespace Battle
                 group.SetPosition(button.transform, GridLayout);
 
                 bool hasUse = false;
-                if(((button == MainButton || button.Parent == MainButton) && _character.HasMain) ||
-                    (button == SubButton && _character.HasSub) ||
-                    ((button == MainButton || button.Parent == MainButton || button == SubButton) && _character.MoveAgain)) 
+                if((button == MainButton && _character.HasMain) ||
+                   (button == SubButton && _character.HasSub) ||
+                   (button == ItemButton && _character.HasItem) ||
+                   ((button == MainButton || button == SubButton || button ==  ItemButton) && _character.MoveAgain)) 
                 {
                     hasUse = true;
                 }
-                group.SetData(this, button, hasUse, (List<KeyValuePair<string, object>>)data);
-
-                if (button == SubButton || button == MainButton)
+                group.SetData(this, button, hasUse, (List<KeyValuePair<string, object>>)data, button.Type);
+                buttonList = group.ButtonList;
+                for (int i=0; i<buttonList.Count; i++) 
                 {
-                    List<DropdownButton> buttonList = group.ButtonList;
-                    for (int i=0; i<buttonList.Count; i++) 
+                    if(buttonList[i].Data is Sub) 
                     {
-                        if(buttonList[i].Data is Sub) 
+                        Sub sub = (Sub)buttonList[i].Data;
+                        if (sub.CurrentCD > 0) 
                         {
-                            Sub sub = (Sub)buttonList[i].Data;
-                            if (sub.CurrentCD > 0) 
-                            {
-                                buttonList[i].SetHasUse(true);
-                            }
+                            buttonList[i].SetHasUse(true);
                         }
-                        else if (buttonList[i].Data is Skill)
+                    }
+                    else if (buttonList[i].Data is Skill)
+                    {
+                        Skill skill = (Skill)buttonList[i].Data;
+                        if (skill.CurrentCD > 0)
                         {
-                            Skill skill = (Skill)buttonList[i].Data;
-                            if (skill.CurrentCD > 0)
-                            {
-                                buttonList[i].SetHasUse(true);
-                            }
+                            buttonList[i].SetHasUse(true);
                         }
                     }
                 }
-
             }
             else if(data is Sub)
             {
@@ -263,8 +289,36 @@ namespace Battle
                 SkillInfoGroup.gameObject.SetActive(true);
                 SkillInfoGroup.transform.position = new Vector3(button.transform.position.x - 285, SkillInfoGroup.transform.position.y, SkillInfoGroup.transform.position.z);
             }
-
             _lastNode = button;
+
+            if (_tutorialArrowUI != null)
+            {
+                if (button.Type == _tutorialType && buttonList != null)
+                {
+                    Command command;
+                    for (int i = 0; i < buttonList.Count; i++)
+                    {
+                        command = (Command)buttonList[i].Data;
+                        if (command.ID == _tutoriaID)
+                        {
+                            _tutorialArrowUI.SetAnchor(buttonList[i].transform, new Vector3(-200, 0, 0));
+                        }
+                    }
+                }
+                else if (button.Type != _tutorialType)
+                {
+                    if (_tutorialType == typeof(Skill))
+                    {
+                        _tutorialArrowUI.SetAnchor(BattleUI.Instance.CommandGroup.MainButton.transform, new Vector3(-200, 0, 0));
+                    }
+                    else if (_tutorialType == typeof(Sub))
+                    {
+                        _tutorialArrowUI.SetAnchor(BattleUI.Instance.CommandGroup.SubButton.transform, new Vector3(-200, 0, 0));
+                    }
+
+                }
+                BattleUI.Instance.CommandGroup.SkillInfoGroup.gameObject.SetActive(false);
+            }
         }
 
         public override void ButtonOnExit()
@@ -303,9 +357,9 @@ namespace Battle
 
         private void Awake()
         {
-            MoveButton.SetData("移動", "Move", this);
+            MoveButton.SetData("移動", "Move", this, null);
             MoveButton.SetHasUse(false);
-            FinishButton.SetData("結束", "Finish", this);
+            FinishButton.SetData("結束", "Finish", this, null);
             FinishButton.SetHasUse(false);
 
             ChildList.Add(MoveButton);

@@ -30,6 +30,7 @@ namespace Battle
                 Instance.BattleUI.CommandGroup.Reset();
                 Instance.CharacterInfoUIGroup.ShowCharacterInfoUI_1(_selectedCharacter.Info, Utility.ConvertToVector2Int(_selectedCharacter.transform.position));
                 Instance._line.gameObject.SetActive(false);
+                Instance._targetList.Clear();
 
                 bool sleep = false;
                 for (int i = 0; i < _selectedCharacter.Info.StatusList.Count; i++)
@@ -45,16 +46,10 @@ namespace Battle
                 {
                     _context.SetState<EndState>();
                 }
-                else
+                else if(!_selectedCharacter.Info.IsAuto)
                 {
                     Instance.BattleUI.SetCommandVisible(true);
                 }
-            }
-
-            public void SetCommand(Command command)
-            {
-                _selectedCharacter.Info.SelectedCommand = command;
-                _context.SetState<RangeState>();
             }
 
             public override void Update()

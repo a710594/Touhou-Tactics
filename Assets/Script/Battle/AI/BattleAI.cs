@@ -9,6 +9,8 @@ namespace Battle
         public Skill SelectedSkill;
 
         protected BattleCharacterController _character;
+        protected bool _canAttack = false;
+        protected BattleCharacterController _target;
 
         public virtual void Init(BattleCharacterController character)
         {
@@ -18,11 +20,75 @@ namespace Battle
 
         public virtual void Begin()
         {
+            Move();
+        }
+
+        private void Move()
+        {
+            List<Vector2Int> stepList = BattleController.Instance.GetStepList(_character);
+            List<BattleCharacterController> targetList = GetTargetList(BattleCharacterInfo.FactionEnum.Player);
+            Dictionary<BattleCharacterController, List<Vector2Int>> canHitDic = GetCanHitDic(SelectedSkill, stepList, targetList);
+            Vector2Int moveTo = GetMoveTo(stepList, targetList, canHitDic);
+            BattleController.Instance.SetState<BattleController.MoveState>();
+            BattleController.Instance.Move(moveTo, () =>
+            {
+                if (_canAttack)
+                {
+                    Attack();
+                }
+                else
+                {
+                    SetDirection();
+                }
+            });
+        }
+
+        private void Attack()
+        {
+            BattleController.Instance.SetState<BattleController.CommandState>();
+            BattleController.Instance.SetSelectedCommand(SelectedSkill);
+            Vector2Int userPosition = Utility.ConvertToVector2Int(_character.transform.position);
+            Vector2Int targetPosition = Utility.ConvertToVector2Int(_target.transform.position);
+            List<Vector2Int> areaList = BattleController.Instance.GetAreaList(userPosition, targetPosition, SelectedSkill);
+            BattleController.Instance.UseCommand(targetPosition, areaList);
+            BattleController.Instance.CommandStateBeginHandler += SetDirection;
+        }
+
+        private void SetDirection()
+        {
+            BattleController.Instance.CommandStateBeginHandler -= SetDirection;
+            BattleController.Instance.SetState<BattleController.DirectionState>();
+            Vector3 v3 = _target.transform.position - transform.position;
+            Vector2Int v2;
+            if (Mathf.Abs(v3.x) > Mathf.Abs(v3.z))
+            {
+                if (v3.x > 0)
+                {
+                    v2 = Vector2Int.right;
+                }
+                else
+                {
+                    v2 = Vector2Int.left;
+                }
+            }
+            else
+            {
+                if (v3.z > 0)
+                {
+                    v2 = Vector2Int.up;
+                }
+                else
+                {
+                    v2 = Vector2Int.down;
+                }
+            }
+            BattleController.Instance.SetDirection(v2);
         }
 
         protected List<BattleCharacterController> GetTargetList(BattleCharacterInfo.FactionEnum faction)
         {
-            List<BattleCharacterController> list = BattleController.Instance.GetAliveAndDyingCharacterList();
+            List<BattleCharacterController> list = new List<BattleCharacterController>(BattleController.Instance.CharacterAliveList);
+            list.AddRange(BattleController.Instance.CharacterDyingList);
             List<BattleCharacterController> targetList = new List<BattleCharacterController>();
 
             for (int i = 0; i < list.Count; i++)
@@ -60,7 +126,7 @@ namespace Battle
                         }
                         else if (skill.Track == TrackEnum.Parabola)
                         {
-                            Utility.CheckParabola(myPosition, targetList[j].transform.position, 4, BattleController.Instance.CharacterAliveList, BattleController.Instance.TileDic, out isBlock, out List<Vector3> result); //�n�ɩߪ��u������
+                            BattleController.Instance.CheckParabola(myPosition, targetList[j].transform.position, 4, out isBlock, out List<Vector3> result); //�n�ɩߪ��u������
                         }
                         else
                         {

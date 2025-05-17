@@ -6,5 +6,5 @@ public class BattleFileEnemy
 {
     public int ID;
     public int Lv;
-    public Vector3Int Position;
+    public Vector2Int Position;
 }

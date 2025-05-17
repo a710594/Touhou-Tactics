@@ -13,6 +13,6 @@ public class TriggerEvent_1 : MyEvent
         {
             InputMamager.Instance.IsLock = false;;
             exploreUI.SetVisible(true);
-        }, null);
+        });
     }
 }

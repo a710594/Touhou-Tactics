@@ -14,6 +14,11 @@ namespace Battle
 
             public override void Begin() 
             {
+                if (Instance.WinStateBeginHandler != null)
+                {
+                    Instance.WinStateBeginHandler();
+                }
+
                 Instance.DeInit();
 
                 int itemId;

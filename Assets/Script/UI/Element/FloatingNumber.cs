@@ -23,7 +23,7 @@ public class FloatingNumber : MonoBehaviour
         this.transform.position = position;
         Label.text = log.Text;
 
-        if (log.Effect.Type == EffectModel.TypeEnum.MagicAttack || log.Effect.Type == EffectModel.TypeEnum.PhysicalAttack || log.Effect.Type == EffectModel.TypeEnum.RatioDamage)
+        if (log.Type == EffectModel.TypeEnum.MagicAttack || log.Type == EffectModel.TypeEnum.PhysicalAttack || log.Type == EffectModel.TypeEnum.RatioDamage)
         {
             if (log.HitType == HitType.Critical)
             {
@@ -38,15 +38,15 @@ public class FloatingNumber : MonoBehaviour
                 Label.color = Color.blue;
             }
         }
-        else if (log.Effect.Type == EffectModel.TypeEnum.Poison)
+        else if (log.Type == EffectModel.TypeEnum.Poison)
         {
             Label.color = new Color32(180, 0, 180, 255);
         }
-        else if (log.Effect.Type == EffectModel.TypeEnum.Recover || log.Effect.Type == EffectModel.TypeEnum.Medicine || log.Effect.Type == EffectModel.TypeEnum.Purify || log.Effect.Type == EffectModel.TypeEnum.RecoverAll)
+        else if (log.Type == EffectModel.TypeEnum.Recover || log.Type == EffectModel.TypeEnum.Medicine || log.Type == EffectModel.TypeEnum.Purify || log.Type == EffectModel.TypeEnum.RecoverAll)
         {
             Label.color = Color.green;
         }
-        else if (log.Effect.Type == EffectModel.TypeEnum.Sleep)
+        else if (log.Type == EffectModel.TypeEnum.Sleep)
         {
             Label.color = new Color32(0, 150, 200, 255);
         }

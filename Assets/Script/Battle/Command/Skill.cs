@@ -30,6 +30,11 @@ public class Skill : Command
         CD = data.CD;
         CurrentCD = 0;
         Effect = EffectFactory.GetEffect(data.EffectID);
+        if (data.SubEffect != -1)
+        {
+            SubEffect = EffectFactory.GetEffect(data.SubEffect);
+            SubTarget = data.SubTarget;
+        }
     }
 
     public void CheckCD() 

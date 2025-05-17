@@ -7,7 +7,6 @@ namespace Explore
 {
     public class ExploreFile
     {
-        public bool IsArrive = false; //��F���I
         public int Floor;
         public Vector2Int Size;
         public Vector2Int Start;

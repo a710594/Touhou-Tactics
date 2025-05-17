@@ -13,7 +13,7 @@ public class DropdownGroup : MonoBehaviour
     [NonSerialized]
     public List<DropdownButton> ButtonList = new List<DropdownButton>();
 
-    public void SetData(DropdownRoot root, DropdownButton parent, bool hasUse, List<KeyValuePair<string, object>> list)
+    public void SetData(DropdownRoot root, DropdownButton parent, bool hasUse, List<KeyValuePair<string, object>> list, Type type)
     {
         Clear();
 
@@ -24,7 +24,7 @@ public class DropdownGroup : MonoBehaviour
             {
                 dropdownButton = Instantiate(Resources.Load<DropdownButton>("Prefab/UI/Element/DropdownButton"));
                 dropdownButton.transform.SetParent(transform);
-                dropdownButton.SetData(list[i].Key, list[i].Value, root);
+                dropdownButton.SetData(list[i].Key, list[i].Value, root, type);
                 dropdownButton.SetHasUse(hasUse);
                 parent.ChildList.Add(dropdownButton);
                 dropdownButton.Parent = parent;

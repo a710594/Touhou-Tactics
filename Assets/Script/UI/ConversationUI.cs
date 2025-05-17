@@ -25,13 +25,12 @@ public class ConversationUI : MonoBehaviour
     //private bool _isFadeEnd = true; //結束時淡出
     private ConversationModel _data;
     private Timer _timer = new Timer();
-    private Action _pauseCallback;
     private Action _finishCallback;
     private List<string> _conversationList = new List<string>();
 
     private static ConversationUI _conversationUI;
 
-    public static ConversationUI Open(int id, bool canSkip, Action finishCallback, Action pauseCallback)
+    public static ConversationUI Open(int id, bool canSkip, Action finishCallback)
     {
         if (_conversationUI == null)
         {
@@ -41,7 +40,7 @@ public class ConversationUI : MonoBehaviour
             _conversationUI = obj.GetComponent<ConversationUI>();
             _conversationUI.RectTransform.offsetMax = Vector3.zero;
             _conversationUI.RectTransform.offsetMin = Vector3.zero;
-            _conversationUI.Init(id, canSkip, finishCallback, pauseCallback);
+            _conversationUI.Init(id, canSkip, finishCallback);
         }
         return _conversationUI;
     }
@@ -54,14 +53,7 @@ public class ConversationUI : MonoBehaviour
         }
     }
 
-    public void Continue(Action pauseCallback = null) 
-    {
-        gameObject.SetActive(true);
-        _pauseCallback = pauseCallback;
-        NextConversationID(_data.ID, _data.Page + 1);
-    }
-
-    private void Init(int id, bool canSkip, Action finishCallback, Action pauseCallback)
+    private void Init(int id, bool canSkip, Action finishCallback)
     {
         ConversationModel data = DataTable.Instance.ConversationDic[id][1];
         NormalTypewriter.ClearText();
@@ -69,7 +61,6 @@ public class ConversationUI : MonoBehaviour
         SetData(data);
 
         _data = data;
-        _pauseCallback = pauseCallback;
         _finishCallback = finishCallback;
         Cursor.lockState = CursorLockMode.None;
     }
@@ -165,10 +156,6 @@ public class ConversationUI : MonoBehaviour
         {
             _finishCallback();
         }
-        else if (_pauseCallback != null) 
-        {
-            _pauseCallback();
-        }
 
         Close();
     }
@@ -182,20 +169,7 @@ public class ConversationUI : MonoBehaviour
 
         if (!NormalTypewriter.IsTyping)
         {
-            if (_data.Pause)
-            {
-                NormalTypewriter.SetText();
-                gameObject.SetActive(false);
-                if (_pauseCallback != null)
-                {
-                    _pauseCallback();
-                }
-                return;
-            }
-            else
-            {
-                NextConversationID(_data.ID, _data.Page + 1);
-            }
+            NextConversationID(_data.ID, _data.Page + 1);
         }
         else
         {

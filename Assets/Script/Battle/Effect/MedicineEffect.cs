@@ -23,11 +23,11 @@ public class MedicineEffect : Effect
         {
             int recover = Value;
             target.Info.SetRecover(recover);
-            logList.Add(new Log(user, target, this, hitType, recover.ToString()));
+            logList.Add(new Log(user, target, Type, hitType, recover.ToString()));
         }
         else
         {
-            logList.Add(new Log(user, target, this, hitType, "Miss"));
+            logList.Add(new Log(user, target, Type, hitType, "Miss"));
         }
 
         if (SubEffect != null && hitType != HitType.Miss)

@@ -20,7 +20,7 @@ namespace Battle
             {
                 _selectedCharacter = Instance.SelectedCharacter;
                 _characterList = Instance.CharacterAliveList;
-                _selectedCharacter.Info.HasMain = true;
+                _selectedCharacter.Info.HasItem = true;
 
                 _target = null;
                 if (Instance._targetList.Count > 0 && Instance._targetList[0] != _selectedCharacter)

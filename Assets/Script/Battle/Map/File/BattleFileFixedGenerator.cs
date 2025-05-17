@@ -12,6 +12,8 @@ namespace Battle
         public Transform Tilemap;
         public Transform EnemyGroup;
         public FileManager FileManager;
+        public Transform CameraDefaultPosition;
+        public Transform[] PlayerPosition;
 
         public void BuildFile()
         {
@@ -28,10 +30,11 @@ namespace Battle
                 tile.ID = obj.ID;
                 tile.Position = new Vector2Int(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.z));
                 tileList.Add(tile);
-                if (obj.tag == "PlayerPosition")
-                {
-                    playerPositionList.Add(tile.Position);
-                }
+            }
+
+            for (int i = 0; i < PlayerPosition.Length; i++)
+            {
+                playerPositionList.Add(Utility.ConvertToVector2Int(PlayerPosition[i].position));
             }
 
             BattleFileEnemyObject enemyObj;
@@ -43,13 +46,14 @@ namespace Battle
                 enemyFile = new BattleFileEnemy();
                 enemyFile.ID = enemyObj.ID;
                 enemyFile.Lv = enemyObj.Lv;
-                enemyFile.Position = new Vector3Int(Mathf.RoundToInt(child.position.x), Mathf.RoundToInt(child.position.y), Mathf.RoundToInt(child.position.z));
+                enemyFile.Position = new Vector2Int(Mathf.RoundToInt(child.position.x), Mathf.RoundToInt(child.position.z));
                 enemyList.Add(enemyFile);
             }
 
             BattleFileFixed file = new BattleFileFixed();
             file.PlayerCount = PlayerCount;
             file.Exp = Exp;
+            file.CameraDefaultPosition = Utility.ConvertToVector2Int(CameraDefaultPosition.position);
             file.TileList = tileList;
             file.PlayerPositionList = playerPositionList;
             file.EnemyList = enemyList;

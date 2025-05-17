@@ -19,6 +19,11 @@ namespace Battle
 
             public override void Begin()
             {
+                if (Instance.RangeStateBeginHandler != null)
+                {
+                    Instance.RangeStateBeginHandler();
+                }
+
                 _selectedCharacter = Instance.SelectedCharacter;
                 _characterList = Instance.CharacterAliveList;
                 _rangeList.Clear();
@@ -82,7 +87,7 @@ namespace Battle
                                 }
                                 else if (command.Track == TrackEnum.Parabola)
                                 {
-                                    Utility.CheckParabola(_selectedCharacter.transform.position, target.transform.position, Instance.TileDic[Utility.ConvertToVector2Int(_selectedCharacter.transform.position)].TileData.Height + 1, Instance.CharacterAliveList, Instance.TileDic, out bool isBlock, out List<Vector3> result);
+                                    Instance.CheckParabola(_selectedCharacter.transform.position, target.transform.position, Instance.TileDic[Utility.ConvertToVector2Int(_selectedCharacter.transform.position)].TileData.Height + 1, out bool isBlock, out List<Vector3> result);
                                     if (isBlock)
                                     {
                                         Instance._line.Show(result, Color.red);
@@ -98,15 +103,8 @@ namespace Battle
                                 if (target != null && target != _selectedCharacter)
                                 {
                                     Instance.CharacterInfoUIGroup.ShowCharacterInfoUI_2(target.Info, Utility.ConvertToVector2Int(target.transform.position));
-                                    if (command.Target == TargetEnum.Us)
-                                    {
-                                        Instance.CharacterInfoUIGroup.SetHitRate(100);
-                                    }
-                                    else
-                                    {
-                                        float hitRate = Instance.GetHitRate(command.Hit, _selectedCharacter, target);
-                                        Instance.CharacterInfoUIGroup.SetHitRate(Mathf.RoundToInt(hitRate * 100));
-                                    }
+                                    float hitRate = Instance.GetHitRate(command.Hit, _selectedCharacter, target);
+                                    Instance.CharacterInfoUIGroup.SetHitRate(Mathf.RoundToInt(hitRate * 100));
                                     int predictionHp = Instance.GetPredictionHp(_selectedCharacter, target, target.Info.CurrentHP, command.Effect);
                                     Instance.CharacterInfoUIGroup.SetPredictionInfo_2(target.Info, predictionHp);
                                 }
@@ -139,36 +137,9 @@ namespace Battle
                     _lastPosition = position;
                 }
 
-                if (Input.GetMouseButtonDown(0)  && _areaList.Count > 0)
+                if (Input.GetMouseButtonDown(0) && position != null && _areaList.Count > 0)
                 {
-                    Instance.SetTargetList(_areaList);
-
-                    Vector2Int v2 = (Vector2Int)position - Utility.ConvertToVector2Int(_selectedCharacter.transform.position);
-                    Vector2Int forward = Utility.ConvertToVector2Int(_selectedCharacter.transform.forward);
-                    float angle = Mathf.RoundToInt(Vector2.Angle(v2, forward) / 90f) * 90; //取最接近90的倍數的數
-                    Vector3 cross = Vector3.Cross((Vector2)v2, (Vector2)forward);
-                    if (cross.z > 0)
-                    {
-                        angle = 360 - angle;
-                    }
-                    _selectedCharacter.SetDirection(angle);
-
-                    if (_selectedCharacter.Info.SelectedCommand is Sub)
-                    {
-                        _context.SetState<SubState>();
-                    }
-                    else if (_selectedCharacter.Info.SelectedCommand is Skill)
-                    {
-                        _context.SetState<SkillState>();
-                    }
-                    else if (_selectedCharacter.Info.SelectedCommand is ItemCommand)
-                    {
-                        _context.SetState<ItemState>();
-                    }
-                    else if (_selectedCharacter.Info.SelectedCommand is Spell)
-                    {
-                        _context.SetState<SpellState>();
-                    }
+                    Instance.UseCommand((Vector2Int)position, _areaList);
                 }
 
                 if (Utility.GetMouseButtonDoubleClick(0))
@@ -191,6 +162,7 @@ namespace Battle
             public override void End()
             {
                 Instance.ClearQuad(_rangeList);
+                Instance.ClearQuad(_areaList);
                 if (_lastPosition != null)
                 {
                     Instance.SetSelect((Vector2Int)_lastPosition, false);

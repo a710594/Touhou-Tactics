@@ -15,11 +15,11 @@ public class SleepEffect : Effect
         if (hitType != HitType.Miss)
         {
             target.Info.AddStatus(Status);
-            logList.Add(new Log(user, target, this, hitType, Status.Name));
+            logList.Add(new Log(user, target, Type, hitType, Status.Name));
         }
         else
         {
-            logList.Add(new Log(user, target, this, hitType, "Miss")); 
+            logList.Add(new Log(user, target, Type, hitType, "Miss")); 
         }
 
         if (SubEffect != null && hitType != HitType.Miss)

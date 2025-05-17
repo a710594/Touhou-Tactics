@@ -22,6 +22,7 @@ public class BattleCharacterInfo
     public bool HasSub = false;
     public bool HasMain = false;
     public bool HasSpell = false;
+    public bool HasItem = false;
 
     public bool CanUseSpell = true; //是否能使用符卡
 

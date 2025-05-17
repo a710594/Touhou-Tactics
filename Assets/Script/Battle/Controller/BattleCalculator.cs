@@ -194,42 +194,48 @@ namespace Battle
 
         public float GetHitRate(int hit, BattleCharacterController user, BattleCharacterController target) 
         {
-            int decorationDex = 0;
-            for (int i = 0; i < user.Info.Decoration.Count; i++)
+            if (hit == -1)
             {
-                decorationDex += user.Info.Decoration[i].DEX;
+                return 1;
             }
-            int userDEX = user.Info.DEX + decorationDex;
-
-            int decorationAGI = 0;
-            for (int i = 0; i < target.Info.Decoration.Count; i++)
+            else
             {
-                decorationAGI += target.Info.Decoration[i].AGI;
+                int decorationDex = 0;
+                for (int i = 0; i < user.Info.Decoration.Count; i++)
+                {
+                    decorationDex += user.Info.Decoration[i].DEX;
+                }
+                int userDEX = user.Info.DEX + decorationDex;
+
+                int decorationAGI = 0;
+                for (int i = 0; i < target.Info.Decoration.Count; i++)
+                {
+                    decorationAGI += target.Info.Decoration[i].AGI;
+                }
+                int targetAGI = target.Info.AGI + decorationAGI;
+
+                float hitRate = userDEX * (hit / 100f) / targetAGI;
+
+                //角色互相面對時角度為180,方向相同時角度為0
+                //角度越大則命中越低
+                //面對面的時候命中率只有一半
+                //從背面攻擊時命中率則為1.5倍
+                Vector3 v3 = target.transform.position - user.transform.position;
+                Vector2Int v2 = Utility.ConvertToVector2Int(v3);
+
+                float angle1 = Vector2.Angle(v2, Utility.ConvertToVector2Int(target.transform.forward));
+                float angle2 = Vector2.Angle(v2, Utility.ConvertToVector2Int(user.transform.forward));
+
+                //戰士的被動技能
+                if (Passive.Contains<SwordmanPassive>(user.Info.PassiveList) && angle1 > 90)
+                {
+                    angle1 = 90;
+
+                }
+                hitRate = (angle1 * (-1 / 180f) + 1.5f) * hitRate;
+
+                return hitRate;
             }
-            int targetAGI = target.Info.AGI + decorationAGI;
-
-            float hitRate = userDEX * (hit / 100f) / targetAGI;
-
-            //角色互相面對時角度為180,方向相同時角度為0
-            //角度越大則命中越低
-            //面對面的時候命中率只有一半
-            //從背面攻擊時命中率則為1.5倍
-            Vector3 v3 = target.transform.position - user.transform.position;
-            Vector2Int v2 = Utility.ConvertToVector2Int(v3);
-            
-            float angle1 = Vector2.Angle(v2, Utility.ConvertToVector2Int(target.transform.forward));
-            float angle2 = Vector2.Angle(v2, Utility.ConvertToVector2Int(user.transform.forward));
-            Debug.Log(angle1 + " " + angle2);
-
-            //戰士的被動技能
-            if (Passive.Contains<SwordmanPassive>(user.Info.PassiveList) && angle1 > 90)
-            {
-                angle1 = 90;
-
-            }
-            hitRate = (angle1 * (-1 / 180f) + 1.5f) * hitRate;
-
-            return hitRate;
         }
 
         public int GetDamage(Effect effect, BattleCharacterController user, BattleCharacterController target)
@@ -275,35 +281,6 @@ namespace Battle
                     mef *= menBuffList[i].Value / 100f;
                 }
 
-                //float mtk = (float)user.Info.INT;
-                //float mef = (float)target.Info.MEN;
-                //for (int i = 0; i < CharacterAliveList.Count; i++)
-                //{
-                //    for (int j = 0; j < CharacterAliveList[i].Info.StatusList.Count; j++)
-                //    {
-                //        if (CharacterAliveList[i].Info.StatusList[j].Type == StatusModel.TypeEnum.INT && user.Info.Faction == CharacterAliveList[i].Info.Faction)
-                //        {
-                //            for (int k = 0; k < CharacterAliveList[i].Info.StatusList[j].AreaList.Count; k++)
-                //            {
-                //                if (Utility.ConvertToVector2Int(CharacterAliveList[i].transform.position) + CharacterAliveList[i].Info.StatusList[j].AreaList[k] == Utility.ConvertToVector2Int(user.transform.position))
-                //                {
-                //                    mtk *= CharacterAliveList[i].Info.StatusList[j].Value / 100f;
-                //                }
-                //            }
-                //        }
-                //        else if (CharacterAliveList[i].Info.StatusList[j].Type == StatusModel.TypeEnum.MEN && target.Info.Faction == CharacterAliveList[i].Info.Faction)
-                //        {
-                //            for (int k = 0; k < CharacterAliveList[i].Info.StatusList[j].AreaList.Count; k++)
-                //            {
-                //                if (Utility.ConvertToVector2Int(CharacterAliveList[i].transform.position) + CharacterAliveList[i].Info.StatusList[j].AreaList[k] == Utility.ConvertToVector2Int(target.transform.position))
-                //                {
-                //                    mef *= CharacterAliveList[i].Info.StatusList[j].Value / 100f;
-                //                }
-                //            }
-                //        }
-                //    }
-                //}
-
                 int armorMef = 0;
                 for (int i = 0; i < target.Info.Armor.Count; i++)
                 {
@@ -344,6 +321,20 @@ namespace Battle
             return damage;
         }
 
+        public int GetRecover(Effect effect, BattleCharacterController user)
+        {
+            float men = (float)user.Info.MEN;
+            List<Status> menBuffList = GetStatueList(user.Info, StatusModel.TypeEnum.MEN, Utility.ConvertToVector2Int(user.transform.position));
+            for (int i = 0; i < menBuffList.Count; i++)
+            {
+                men *= menBuffList[i].Value / 100f;
+            }
+
+            int recover = Mathf.RoundToInt(men * effect.Value / 100f);
+
+            return recover;
+        }
+
         public int GetPredictionHp(BattleCharacterController user, BattleCharacterController target, int targetCurrentHp, Effect effect)
         {
             int prediction = targetCurrentHp;
@@ -352,9 +343,9 @@ namespace Battle
             {
                 prediction = targetCurrentHp - GetDamage(effect, user, target);
             }
-            else if (effect.Type == EffectModel.TypeEnum.Recover && effect.Target == EffectModel.TargetEnum.None) 
+            else if (effect.Type == EffectModel.TypeEnum.Recover) 
             {
-                prediction = targetCurrentHp + Mathf.RoundToInt((float)effect.Value * (float)user.Info.MEN / 100f);
+                prediction = targetCurrentHp + GetRecover(effect, user);
             }
             else if(effect.Type == EffectModel.TypeEnum.Medicine) 
             {
@@ -415,11 +406,13 @@ namespace Battle
 
         public ResultType GetResult()
         {
+            List<BattleCharacterController> list = new List<BattleCharacterController>(Instance.CharacterAliveList);
+            list.AddRange(Instance.CharacterDyingList);
             BattleCharacterController target;
 
-            for (int i = 0; i < _targetList.Count; i++)
+            for (int i = 0; i < list.Count; i++)
             {
-                target = _targetList[i];
+                target = list[i];
                 if (target.Info.CurrentHP <= 0)
                 {
                     if (target.Info.Faction == BattleCharacterInfo.FactionEnum.Player)
@@ -449,9 +442,7 @@ namespace Battle
                     CharacterDyingList.Remove(target);
                     target.StopFlash();
                 }
-            }
-            
-            _targetList.Clear();
+            }          
 
             int playerCount = 0;
             int enemyCount = 0;
@@ -498,13 +489,6 @@ namespace Battle
             }
         }
 
-        public List<BattleCharacterController> GetAliveAndDyingCharacterList()
-        {
-            List<BattleCharacterController> list = new List<BattleCharacterController>(Instance.CharacterAliveList);
-            list.AddRange(Instance.CharacterDyingList);
-            return list;
-        }
-
         public List<Status> GetStatueList(BattleCharacterInfo info, StatusModel.TypeEnum type, Vector2Int position) 
         {
             List<Status> list = new List<Status>();
@@ -540,7 +524,7 @@ namespace Battle
                 {
                     if (TileDic.ContainsKey(position))
                     {
-                        height = TileDic[position].TileData.Height * 0.5f + 0.5f;
+                        height = TileDic[position].TileData.Height * 0.5f;
                         if (TileDic[position].AttachData != null)
                         {
                             height += TileDic[position].AttachData.Height * 0.5f;
@@ -551,7 +535,7 @@ namespace Battle
                             height += 0.5f;
                         }
 
-                        if (height > list[i].y)
+                        if (height >= list[i].y)
                         {
                             isBlock = true;
                             result = list[i];
@@ -562,6 +546,53 @@ namespace Battle
                 }
             }
             result = to;
+        }
+
+        public void CheckParabola(Vector3 from, Vector3 to, int parabolaHeight, out bool isBlock, out List<Vector3> result)
+        {
+            isBlock = false;
+            result = null;
+            float height;
+            Vector2Int position;
+            List<Vector3> line = Utility.DrawLine3D(from, to);
+            List<Vector3> list_1 = Utility.DrawParabola(from, to, parabolaHeight, line.Count - 1);
+            List<Vector3> list_2 = Utility.DrawParabola(from, to, parabolaHeight, (line.Count - 1) * 10);
+            for (int i = 0; i < list_1.Count; i++)
+            {
+                position = Utility.ConvertToVector2Int(list_1[i]);
+                if (TileDic.ContainsKey(position))
+                {
+                    height = TileDic[position].TileData.Height * 0.5f + 0.5f;
+                    if (TileDic[position].AttachData != null)
+                    {
+                        height += TileDic[position].AttachData.Height * 0.5f;
+                    }
+
+                    if (position != Utility.ConvertToVector2Int(from) && position != Utility.ConvertToVector2Int(to) && GetCharacterByPosition(position) != null)
+                    {
+                        height += 0.5f;
+                    }
+
+                    if (height - list_1[i].y > 1)
+                    {
+                        isBlock = true;
+                        result = new List<Vector3>();
+                        for (int j = 0; j < i; j++)
+                        {
+                            for (int k = 0; k < 10; k++)
+                            {
+                                result.Add(list_2[j * 10 + k]);
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+
+            if (result == null)
+            {
+                result = list_2;
+            }
         }
     }
 }

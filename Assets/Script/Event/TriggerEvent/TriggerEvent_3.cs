@@ -9,11 +9,11 @@ public class TriggerEvent_3 : MyEvent
         InputMamager.Instance.IsLock = true;
         ExploreUI exploreUI = GameObject.Find("ExploreUI").GetComponent<ExploreUI>();
         exploreUI.SetVisible(false);
-        ConversationUI.Open(4, true, () =>
+        ConversationUI.Open(3, true, () =>
         {
-            CharacterManager.Instance.Info.CharacterList.Add(new CharacterInfo(DataTable.Instance.JobDic[1]));
+            CharacterManager.Instance.Info.CharacterList.Add(new CharacterInfo(DataTable.Instance.JobDic[7]));
             InputMamager.Instance.IsLock = false;
             exploreUI.SetVisible(true);
-        }, null);
+        });
     }
 }

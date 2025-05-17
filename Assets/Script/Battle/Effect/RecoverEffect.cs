@@ -13,17 +13,13 @@ public class RecoverEffect : Effect
     {
         if (hitType != HitType.Miss)
         {
-            int recover = Mathf.RoundToInt((float)Value * (float)user.Info.MEN / 100f);
-            if (Passive.Contains<MiraclePassive>(user.Info.PassiveList))
-            {
-                recover = MiraclePassive.GetValue(recover);
-            }
+            int recover = BattleController.Instance.GetRecover(this, user);
             target.Info.SetRecover(recover);
-            logList.Add(new Log(user, target, this, hitType, recover.ToString()));
+            logList.Add(new Log(user, target, Type, hitType, recover.ToString()));
         }
         else
         {
-            logList.Add(new Log(user, target, this, hitType, "Miss"));  
+            logList.Add(new Log(user, target, Type, hitType, "Miss"));  
         }
 
         if (SubEffect != null && hitType != HitType.Miss)
@@ -32,43 +28,28 @@ public class RecoverEffect : Effect
         }
     }
 
-    public override void Use(HitType hitType, BattleCharacterController user, List<Log> logList)
+    public override void Use(BattleCharacterController user, SubTargetEnum subTarget, List<Log> logList)
     {
         BattleCharacterController target = null;
-        if (hitType != HitType.Miss)
+
+        if(subTarget == SubTargetEnum.MinHp) 
         {
-            if (Target == EffectModel.TargetEnum.MinHP) 
+            List<BattleCharacterController> list = new List<BattleCharacterController>(BattleController.Instance.CharacterAliveList);
+            list.AddRange(BattleController.Instance.CharacterDyingList);
+            for (int i = 0; i < list.Count; i++)
             {
-                List<BattleCharacterController> list = BattleController.Instance.CharacterAliveList;
-                for (int i=0; i<list.Count; i++) 
+                if (list[i].Info.Faction == user.Info.Faction)
                 {
-                    if(list[i].Info.Faction == user.Info.Faction) 
+                    if (target == null || list[i].Info.CurrentHP < target.Info.CurrentHP)
                     {
-                        if(target == null || list[i].Info.CurrentHP < target.Info.CurrentHP) 
-                        {
-                            target = list[i];
-                        }
+                        target = list[i];
                     }
                 }
-
             }
 
-            int recover = Mathf.RoundToInt((float)Value * (float)user.Info.MEN / 100f);
-            if (Passive.Contains<MiraclePassive>(user.Info.PassiveList))
-            {
-                recover = MiraclePassive.GetValue(recover);
-            }
+            int recover = BattleController.Instance.GetRecover(this, user);
             target.Info.SetRecover(recover);
-            logList.Add(new Log(user, target, this, hitType, recover.ToString()));
-        }
-        else
-        {
-            logList.Add(new Log(user, target, this, hitType, "Miss"));
-        }
-
-        if (SubEffect != null && hitType != HitType.Miss)
-        {
-            SubEffect.Use(hitType, user, target, logList);
+            logList.Add(new Log(user, target, Type, HitType.Hit, recover.ToString()));
         }
     }
 }

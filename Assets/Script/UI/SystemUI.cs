@@ -46,6 +46,7 @@ public class SystemUI : MonoBehaviour
         {
             SceneController.Instance.ChangeScene("Camp", ChangeSceneUI.TypeEnum.Loading, (sceneName)=> 
             {
+                Cursor.lockState = CursorLockMode.None;
                 CharacterManager.Instance.RecoverAllHP();
                 ItemManager.Instance.Info.Key = 0;
                 InputMamager.Instance.Unlock();

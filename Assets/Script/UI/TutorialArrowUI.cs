@@ -14,13 +14,21 @@ public class TutorialArrowUI : MonoBehaviour
     private Transform _anchor;
     private static TutorialArrowUI _tutorialArrowUI;
 
-    public static void Open(string commentText, Transform anchor, Vector3 offset, Vector2Int direction)
+    public static TutorialArrowUI Open(string commentText, Transform anchor, Vector3 offset, Vector2Int direction)
     {
         GameObject obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/UI/TutorialArrowUI"), Vector3.zero, Quaternion.identity);
         obj.transform.SetParent(GameObject.Find("Canvas").transform);
         obj.transform.localPosition = Vector3.zero;
         _tutorialArrowUI = obj.GetComponent<TutorialArrowUI>();
-        _tutorialArrowUI.CommentLabel.text = commentText;
+        if(commentText == "") 
+        {
+            _tutorialArrowUI.CommentLabel.transform.parent.gameObject.SetActive(false);
+        }
+        else
+        {
+            _tutorialArrowUI.CommentLabel.transform.parent.gameObject.SetActive(true);
+            _tutorialArrowUI.CommentLabel.text = commentText;
+        }
         _tutorialArrowUI._anchor = anchor;
         _tutorialArrowUI._offset = offset;
 
@@ -36,6 +44,8 @@ public class TutorialArrowUI : MonoBehaviour
         {
             _tutorialArrowUI.Arrow.transform.localEulerAngles = new Vector3(0, 0, 180);
         }
+
+        return _tutorialArrowUI;
     }
 
     public static void Open(string commentText, Vector3 position, Vector2Int direction)
@@ -64,7 +74,16 @@ public class TutorialArrowUI : MonoBehaviour
 
     public static void Close()
     {
-        Destroy(_tutorialArrowUI.gameObject);
+        if (_tutorialArrowUI != null)
+        {
+            Destroy(_tutorialArrowUI.gameObject);
+        }
+    }
+
+    public void SetAnchor(Transform anchor, Vector3 offset) 
+    {
+        _anchor = anchor;
+        _offset = offset;
     }
 
     private void Update()

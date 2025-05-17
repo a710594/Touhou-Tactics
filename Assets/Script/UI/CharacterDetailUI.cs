@@ -28,7 +28,6 @@ public class CharacterDetailUI : MonoBehaviour
     public ButtonPlus WeaponButton;
     public ButtonPlus[] ArmorButtons;
     public ButtonPlus[] AmuletButtons;
-    public ButtonPlus PassiveCommentButton;
 
     public ScrollView SkillScrollView;
     public ScrollView SupportScrollView;
@@ -78,7 +77,6 @@ public class CharacterDetailUI : MonoBehaviour
         else
         {
             PassiveLabel.text = string.Empty;
-            PassiveCommentButton.gameObject.SetActive(false);
             PassiveCommentLabel.text = string.Empty;
         }
         HPLabel.text = "HP " + character.CurrentHP + "/" + character.MaxHP;
@@ -150,7 +148,7 @@ public class CharacterDetailUI : MonoBehaviour
     {
         _characterInfo = character;
         NameLabel.text = character.Name;
-        LvLabel.text = "∂§•Óµ•Ø≈°G" + CharacterManager.Instance.Info.Lv;
+        LvLabel.text = "Lv." + CharacterManager.Instance.Info.Lv;
         ExpLabel.text = "∏g≈Á≠»°G" + CharacterManager.Instance.Info.Exp + "/" + CharacterManager.Instance.NeedExp(CharacterManager.Instance.Info.Lv);
         Sprite sprite = Resources.Load<Sprite>("Image/Character/" + character.Name + "(µÙ§¡•h≠I");
         Image.sprite = sprite;
@@ -163,7 +161,6 @@ public class CharacterDetailUI : MonoBehaviour
         else
         {
             PassiveLabel.text = string.Empty;
-            PassiveCommentButton.gameObject.SetActive(false);
             PassiveCommentLabel.text = string.Empty;
         }
         HPLabel.text = "HP " + character.CurrentHP + "/" + character.MaxHP;
@@ -206,7 +203,7 @@ public class CharacterDetailUI : MonoBehaviour
             }
         }
 
-        if (character.SkillList.Count > 0)
+        /*if (character.SkillList.Count > 0)
         {
             List<object> list = new List<object>(character.SkillList);
             SkillScrollView.SetData(list);
@@ -226,7 +223,7 @@ public class CharacterDetailUI : MonoBehaviour
         else
         {
             SupportScrollView.gameObject.SetActive(false);
-        }
+        }*/
     }
 
     private void WeaponOnClick(PointerEventData eventData, ButtonPlus buttonPlus)
@@ -330,8 +327,11 @@ public class CharacterDetailUI : MonoBehaviour
     private void ShowEquipDetail(ButtonPlus button) 
     {
         Equip equip = (Equip)button.Data;
-        EquipDetail.SetData(equip);
-        EquipDetail.gameObject.SetActive(true);
+        if (equip.ID != 0)
+        {
+            EquipDetail.SetData(equip);
+            EquipDetail.gameObject.SetActive(true);
+        }
     }
 
     private void HideEquipDetail(ButtonPlus button)
@@ -365,24 +365,6 @@ public class CharacterDetailUI : MonoBehaviour
         SkillInfoGroup.gameObject.SetActive(false);
     }
 
-    private void ShowPassiveComment(ButtonPlus button)
-    {
-        if (_characterInfo != null && _characterInfo.PassiveList.Count > 0)
-        {
-            PassiveCommentLabel.text = _characterInfo.PassiveList[0].Data.Comment;
-        }
-        else if (_battleCharacterInfo != null && _battleCharacterInfo.PassiveList.Count > 0)
-        {
-            PassiveCommentLabel.text = _battleCharacterInfo.PassiveList[0].Data.Comment;
-        }
-        PassiveCommentLabel.gameObject.SetActive(true);
-    }
-
-    private void HidePassiveComment(ButtonPlus button)
-    {
-        PassiveCommentLabel.gameObject.SetActive(false);
-    }
-
     private void Close() 
     {
         Destroy(gameObject);
@@ -411,8 +393,6 @@ public class CharacterDetailUI : MonoBehaviour
         SkillScrollView.ExitHandler += HideSkillInfo;
         SupportScrollView.EnterHandler += ShowSupportInfo;
         SupportScrollView.ExitHandler += HideSupportInfo;
-        PassiveCommentButton.EnterHandler += ShowPassiveComment;
-        PassiveCommentButton.ExitHandler += HidePassiveComment;
         CloseButton.onClick.AddListener(Close);
     }
 }

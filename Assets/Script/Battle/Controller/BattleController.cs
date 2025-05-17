@@ -38,10 +38,14 @@ namespace Battle
         }
 
         public Action PrepareStateBeginHandler;
-        public Action CommandStateBeginHandler;
-        public Action MoveStateEndHandler;
-        public Action DirectionStateBeginHandler;
         public Action CharacterStateBeginHandler;
+        public Action CommandStateBeginHandler;
+        public Action MoveStateBeginHandler;
+        public Action RangeStateBeginHandler;
+        public Action DirectionStateBeginHandler;
+        public Action WinStateBeginHandler;
+
+        public Action PlaceCharacterHandler;
 
         public BattleTutorial Tutorial = null;
         public BattleCharacterController SelectedCharacter;
@@ -74,7 +78,7 @@ namespace Battle
         public BattleUI BattleUI;
         public CharacterInfoUIGroup CharacterInfoUIGroup;
         public BattleResultUI BattleResultUI;
-        public SelectCharacterUI SelectBattleCharacterUI;
+        public SelectCharacterUI SelectCharacterUI;
         private Transform _root;
         private FileManager _fileLoader;
         private LineSetting _line;
@@ -101,7 +105,14 @@ namespace Battle
             Instance.BattleUI.gameObject.SetActive(false);
             Instance.BattleResultUI.gameObject.SetActive(true);
             TimerUpdater.UpdateHandler -= Update;
-        }
+            PrepareStateBeginHandler = null;
+            CharacterStateBeginHandler = null;
+            CommandStateBeginHandler = null;
+            MoveStateBeginHandler = null;
+            RangeStateBeginHandler = null;
+            DirectionStateBeginHandler = null;
+            WinStateBeginHandler = null;
+    }
 
         public void SetFixed(string tutorial, string map)
         {
@@ -109,15 +120,10 @@ namespace Battle
             {
                 BattleFileFixed file = (BattleFileFixed)obj;
                 PlayerPositionList = file.PlayerPositionList;
+                _cameraDefaultPosition = file.CameraDefaultPosition;
                 Exp = file.Exp;
                 MinPlayerCount = file.PlayerCount;
                 MaxPlayerCount = file.PlayerCount;
-
-                for (int i = 0; i < file.EnemyList.Count; i++)
-                {
-                    EnemyDataList.Add(DataTable.Instance.EnemyDic[file.EnemyList[i].ID]);
-                    CreateEnemy(file.EnemyList[i].ID, file.EnemyList[i].Lv, file.EnemyList[i].Position);
-                }
 
                 BattleInfoTile tile;
                 for (int i = 0; i < file.TileList.Count; i++)
@@ -125,6 +131,12 @@ namespace Battle
                     tile = new BattleInfoTile();
                     tile.TileData = DataTable.Instance.TileDic[file.TileList[i].ID];
                     TileDic.Add(file.TileList[i].Position, tile);
+                }
+
+                for (int i = 0; i < file.EnemyList.Count; i++)
+                {
+                    EnemyDataList.Add(DataTable.Instance.EnemyDic[file.EnemyList[i].ID]);
+                    CreateEnemy(file.EnemyList[i].ID, file.EnemyList[i].Lv, file.EnemyList[i].Position);
                 }
 
                 Start(tutorial);
@@ -254,7 +266,7 @@ namespace Battle
                     {
                         EnemyDataList.Add(DataTable.Instance.EnemyDic[enemyGroup.EnemyList[i]]);
                         height = TileDic[result].TileData.Height * 0.5f + 0.5f;
-                        CreateEnemy(enemyGroup.EnemyList[i], enemyGroup.Lv, new Vector3(result.x, height, result.y));
+                        CreateEnemy(enemyGroup.EnemyList[i], enemyGroup.Lv, result);
                         invalidList.Add(result);
                     }
                 }
@@ -267,7 +279,7 @@ namespace Battle
         {
             BattleUI = GameObject.Find("BattleUI").GetComponent<BattleUI>();
             BattleResultUI = GameObject.Find("BattleResultUI").GetComponent<BattleResultUI>();
-            SelectBattleCharacterUI = GameObject.Find("SelectBattleCharacterUI").GetComponent<SelectCharacterUI>();
+            SelectCharacterUI = GameObject.Find("SelectBattleCharacterUI").GetComponent<SelectCharacterUI>();
             CharacterInfoUIGroup = GameObject.Find("CharacterInfoUIGroup").GetComponent<CharacterInfoUIGroup>();
             BattleUI.gameObject.SetActive(false);
             BattleResultUI.gameObject.SetActive(false);
@@ -346,22 +358,15 @@ namespace Battle
 
             _candidateList = new List<CharacterInfo>(CharacterManager.Instance.Info.CharacterList);
 
-            if (Tutorial != null)
+            for (int i = 0; i < _candidateList.Count; i++)
             {
-                Tutorial.Start();
-            }
-            else
-            {
-                for (int i = 0; i < _candidateList.Count; i++)
+                if (_candidateList[i].CurrentHP == 0)
                 {
-                    if (_candidateList[i].CurrentHP == 0)
-                    {
-                        _candidateList.RemoveAt(i);
-                        i--;
-                    }
+                    _candidateList.RemoveAt(i);
+                    i--;
                 }
-                _context.SetState<PrepareState>();
             }
+            _context.SetState<PrepareState>();
 
             LogList.Clear();
         }
@@ -378,9 +383,14 @@ namespace Battle
 
         public bool PlaceCharacter(BattleCharacterController character)
         {
-            if (_context.CurrentState is PrepareState)
+            if (((PrepareState)_context.CurrentState).PlaceCharacter(character)) 
             {
-                return ((PrepareState)_context.CurrentState).PlaceCharacter(character);
+                if (PlaceCharacterHandler != null)
+                {
+                    PlaceCharacterHandler();
+                }
+
+                return true;
             }
             else
             {
@@ -388,67 +398,138 @@ namespace Battle
             }
         }
 
-        //public void SetCharacterSpriteVisible(CharacterInfo characterInfo, bool isVisible)
-        //{
-        //    if (_context.CurrentState is PrepareState)
-        //    {
-        //        ((PrepareState)_context.CurrentState).SetCharacterSpriteVisible(characterInfo, isVisible);
-        //    }
-        //}
-
-        //public void RemoveCharacterSprite(int jobId)
-        //{
-        //    if (_context.CurrentState is PrepareState)
-        //    {
-        //        ((PrepareState)_context.CurrentState).RemoveCharacterSprite(jobId);
-        //    }
-        //}
-
-        //public void SetCharacterState() 
-        //{
-        //    _context.SetState<CharacterState>();
-        //}
-
-        //public void SetActionState()
-        //{
-        //    _context.SetState<ActionState>();
-        //}
-
-        //public void SetMoveState()
-        //{
-        //    _context.SetState<MoveState>();
-        //}
-
-        //public void Idle()
-        //{
-        //    SelectedCharacter.ActionCount = 0;
-        //    _context.SetState<EndState>();
-        //}
-
-        //public void SetTargetState(Command command)
-        //{
-        //    SelectedCharacter.SelectedCommand = command;
-        //    _context.SetState<TargetState>();
-        //}
+        public void PrepareStateStopDrag() 
+        {
+            ((PrepareState)_context.CurrentState).CanDrag = false;
+        }
 
         public void SetState<T>()
         {
             _context.SetState<T>();
         }
 
-        public void Move(Vector2Int position, Action callback) 
+        public void SetMoveState() 
         {
-            if(_context.CurrentState is MoveState) 
+            if (Tutorial == null || !Tutorial.IsActive || Tutorial.CanMove) 
             {
-                ((MoveState)_context.CurrentState).Move(position, callback);
+                _context.SetState<MoveState>();
             }
         }
 
-        public void SetSelectedCommand(Command command) 
+        public void Move(Vector2Int position, Action callback) 
         {
-            if(_context.CurrentState is CommandState) 
+            if (_lastPosition != null)
             {
-                ((CommandState)_context.CurrentState).SetCommand(command);
+                SetSelect((Vector2Int)_lastPosition, false);
+            }
+
+            _canClick = false;
+            List<Vector2Int> path = GetPath(Utility.ConvertToVector2Int(SelectedCharacter.transform.position), position, SelectedCharacter.Info.Faction);
+            SelectedCharacter.LastPosition = SelectedCharacter.transform.position;
+            SelectedCharacter.Move(path, () =>
+            {
+                _canClick = true;
+
+                if (!SelectedCharacter.Info.HasMove)
+                {
+                    SelectedCharacter.Info.HasMove = true;
+                }
+                else if (!SelectedCharacter.Info.MoveAgain)
+                {
+                    SelectedCharacter.Info.MoveAgain = true;
+                }
+
+                if (callback != null)
+                {
+                    callback();
+                }
+            });     
+        }
+
+        public void SetSelectedCommand(Skill skill) 
+        {
+            if (Tutorial == null || !Tutorial.IsActive || skill.ID == Tutorial.SkillID)
+            {
+                SelectedCharacter.Info.SelectedCommand = skill;
+                _context.SetState<RangeState>();
+            }
+        }
+
+        public void SetSelectedCommand(Sub sub)
+        {
+            if (Tutorial == null || !Tutorial.IsActive || sub.ID == Tutorial.SubID)
+            {
+                SelectedCharacter.Info.SelectedCommand = sub;
+                _context.SetState<RangeState>();
+            }
+        }
+
+        public void SetSelectedCommand(ItemCommand item)
+        {
+            if (Tutorial == null || !Tutorial.IsActive || item.ID == Tutorial.ItemID)
+            {
+                SelectedCharacter.Info.SelectedCommand = item;
+                _context.SetState<RangeState>();
+            }
+        }
+
+        public void SetSelectedCommand(Spell spell)
+        {
+            if (Tutorial == null || !Tutorial.IsActive || spell.ID == Tutorial.SpellID)
+            {
+                SelectedCharacter.Info.SelectedCommand = spell;
+                _context.SetState<RangeState>();
+            }
+        }
+
+        public void UseCommand(Vector2Int position, List<Vector2Int> areaList) 
+        {
+            if (Tutorial == null || !Tutorial.IsActive || position == Tutorial.CommandPosition)
+            {
+                SetTargetList(areaList);
+
+                Vector2Int v2 = position - Utility.ConvertToVector2Int(SelectedCharacter.transform.position);
+                Vector2Int forward = Utility.ConvertToVector2Int(SelectedCharacter.transform.forward);
+                float angle = Mathf.RoundToInt(Vector2.Angle(v2, forward) / 90f) * 90; //取最接近90的倍數的數
+                Vector3 cross = Vector3.Cross((Vector2)v2, (Vector2)forward);
+                if (cross.z > 0)
+                {
+                    angle = 360 - angle;
+                }
+                SelectedCharacter.SetDirection(angle);
+
+                if (SelectedCharacter.Info.SelectedCommand is Sub)
+                {
+                    _context.SetState<SubState>();
+                }
+                else if (SelectedCharacter.Info.SelectedCommand is Skill)
+                {
+                    _context.SetState<SkillState>();
+                }
+                else if (SelectedCharacter.Info.SelectedCommand is ItemCommand)
+                {
+                    _context.SetState<ItemState>();
+                }
+                else if (SelectedCharacter.Info.SelectedCommand is Spell)
+                {
+                    _context.SetState<SpellState>();
+                }
+            }
+        }
+
+        public void SetDirectionState()
+        {
+            if (Tutorial == null || !Tutorial.IsActive || Tutorial.CanFinish)
+            {
+                _context.SetState<DirectionState>();
+            }
+        }
+
+        public void SetDirection(Vector2Int direction)
+        {
+            if (Tutorial == null || !Tutorial.IsActive || direction == Tutorial.Direction)
+            {
+                ((DirectionState)_context.CurrentState).SetDirection(direction);
             }
         }
 
@@ -553,29 +634,20 @@ namespace Battle
             //}
         }
 
-        public void SetDirection(Vector2Int direction) 
-        {
-            if(_context.CurrentState is DirectionState)
-            {
-                ((DirectionState)_context.CurrentState).SetDirection(direction);
-            }
-        }
-
-        public void CreateEnemy(int id, int lv, Vector3 position) 
+        public void CreateEnemy(int id, int lv, Vector2Int position) 
         {
             EnemyModel enemyData = DataTable.Instance.EnemyDic[id];
             CreateEnemy(enemyData, lv, position);
         }
 
-        public void CreateEnemy(EnemyModel enemyData, int lv, Vector3 position)
+        public void CreateEnemy(EnemyModel enemyData, int lv, Vector2Int position)
         {
             GameObject obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Battle/" + enemyData.Controller), Vector3.zero, Quaternion.identity);
-            obj.transform.position = position;
+            obj.transform.position = new Vector3(position.x, TileDic[position].TileData.Height * 0.5f + 0.5f, position.y);
             obj.transform.localEulerAngles = new Vector3(0, -90, 0);
             BattleCharacterController controller = obj.GetComponent<BattleCharacterController>();
             controller.Init(lv, enemyData);
             controller.MoveEndHandler += OnMoveEnd;
-            controller.Outline.OutlineColor = Color.red;
             CharacterAliveList.Add(controller);
             _maxIndex++;
             controller.Index = _maxIndex;
@@ -671,9 +743,20 @@ namespace Battle
         {
             HitType hitType;
 
-            if (command.Target == TargetEnum.Us || Instance.Tutorial != null)
+            if (Instance.Tutorial != null)
             {
-                hitType = HitType.Hit;
+                if (Instance.Tutorial.Hit)
+                {
+                    hitType = HitType.Hit;
+                }
+                else if (Instance.Tutorial.Critical) 
+                {
+                    hitType = HitType.Critical;
+                }
+                else
+                {
+                    hitType = Instance.CheckHit(command.Hit, user, target);
+                }
             }
             else
             {
@@ -682,6 +765,31 @@ namespace Battle
 
             List<Log> logList = new List<Log>();
             command.Effect.Use(hitType, user, target, logList);
+
+            if (command.SubEffect != null) 
+            {
+                command.SubEffect.Use(user, command.SubTarget, logList);
+            }
+
+            if (Passive.Contains<MiraclePassive>(user.Info.PassiveList) && command.Effect is RecoverEffect)
+            {
+                int recover = (int)(user.Info.MaxHP / 10f);
+                user.Info.SetRecover(recover);
+                logList.Add(new Log(user, user, EffectModel.TypeEnum.Recover, hitType, recover.ToString()));
+            }
+
+            if (command is ItemCommand) 
+            {
+                ItemCommand itemCommand = (ItemCommand)command;
+                if (itemCommand.ItemID != 0)
+                {
+                    ItemManager.Instance.MinusItem(itemCommand.ItemID, 1);
+                }
+                else if (itemCommand.Food !=null) 
+                {
+                    ItemManager.Instance.MinusFood(itemCommand.Food);
+                }
+            }
 
             for (int i=0; i<logList.Count; i++) 
             {
@@ -723,12 +831,13 @@ namespace Battle
 
         public void EndTutorial()
         {
-            if (Tutorial != null)
-            {
-                Tutorial.Deregister();
-                Tutorial = null;
-            }
+            Tutorial = null;
+            BattleUI.CommandGroup.MainButton.Lock = false;
+            BattleUI.CommandGroup.SubButton.Lock = false;
+            BattleUI.CommandGroup.ItemButton.Lock = false;
         }
+
+
 
         private void Update() 
         {

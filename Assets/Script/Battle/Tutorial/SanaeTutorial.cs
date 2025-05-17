@@ -42,7 +42,7 @@ namespace Battle
 
             public override void Begin()
             {
-                ((SanaeTutorial)_context.Parent)._conversationUI = ConversationUI.Open(10, false, null, () =>
+                ((SanaeTutorial)_context.Parent)._conversationUI = ConversationUI.Open(10, false, () =>
                 {
                     BattleController.Instance.EndTutorial();
                 });

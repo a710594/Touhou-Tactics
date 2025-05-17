@@ -12,10 +12,10 @@ public class BattleCharacterController : MonoBehaviour
     public Action MoveEndHandler;
     public Action<int> RightClickHandler;
 
+    [NonSerialized]
     public BattleAI AI = null;
     public BattleCharacterInfo Info;
-    public Outline Outline;
-    public Flash Flash;
+    public Flash Flash; //玩家的角色會用到
 
     [NonSerialized]
     public int Index;

@@ -87,7 +87,7 @@ namespace Battle
                         }
                         else if (SelectedSkill.Track == TrackEnum.Parabola)
                         {
-                            Utility.CheckParabola(step_v3, targetList[j].transform.position, 4, BattleController.Instance.CharacterAliveList, BattleController.Instance.TileDic, out isBlock, out List<Vector3> result); //�n�ɩߪ��u������
+                            BattleController.Instance.CheckParabola(step_v3, targetList[j].transform.position, 4, out isBlock, out List<Vector3> result); //�n�ɩߪ��u������
                         }
                         else
                         {

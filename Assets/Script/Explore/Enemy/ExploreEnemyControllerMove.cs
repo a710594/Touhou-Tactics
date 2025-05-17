@@ -6,8 +6,6 @@ namespace Explore
 {
     public class ExploreEnemyControllerMove : ExploreEnemyController
     {
-        public CharacterController CharacterController;
-
         void OnControllerColliderHit(ControllerColliderHit hit)
         {
             if (hit.collider.tag == "Wall" || hit.collider.tag == "Treasure")

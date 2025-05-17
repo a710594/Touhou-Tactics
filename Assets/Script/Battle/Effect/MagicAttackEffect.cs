@@ -18,24 +18,11 @@ public class MagicAttackEffect : Effect
                 damage *= 2;
             }
             target.Info.SetDamage(damage);
-            logList.Add(new Log(user, target, this, hitType, damage.ToString()));
+            logList.Add(new Log(user, target, Type, hitType, damage.ToString()));
         }
         else
         {
-            logList.Add(new Log(user, target, this, hitType, "Miss"));
-        }
-
-
-        if (SubEffect != null && hitType != HitType.Miss)
-        {
-            if (SubEffect.Target != EffectModel.TargetEnum.None)
-            {
-                SubEffect.Use(hitType, user, logList);
-            }
-            else
-            {
-                SubEffect.Use(hitType, user, target, logList);
-            }
+            logList.Add(new Log(user, target, Type, hitType, "Miss"));
         }
     }
 }

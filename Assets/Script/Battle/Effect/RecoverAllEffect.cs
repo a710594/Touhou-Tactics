@@ -13,7 +13,7 @@ public class RecoverAllEffect : Effect
     {
         int recover = user.Info.MaxHP - user.Info.CurrentHP;
         target.Info.SetRecover(recover);
-        logList.Add(new Log(user, target, this, hitType, recover.ToString()));
+        logList.Add(new Log(user, target, Type, hitType, recover.ToString()));
 
         if (SubEffect != null && hitType != HitType.Miss)
         {

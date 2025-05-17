@@ -47,10 +47,6 @@ namespace Battle
                 tile.ID = obj.ID;
                 tile.Position = Utility.ConvertToVector2Int(position);
                 tileList.Add(tile);
-                //if (obj.tag == "PlayerPosition")
-                //{
-                //    playerPositionList.Add(tile.Position);
-                //}
             }
 
             for (int i=0; i< PlayerPosition.Length; i++) 

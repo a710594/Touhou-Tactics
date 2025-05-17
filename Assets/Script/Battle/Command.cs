@@ -19,6 +19,8 @@ namespace Battle
         public TargetEnum Target;
         public AreaTypeEnum AreaType;
         public TrackEnum Track;
+        public Effect SubEffect;
+        public SubTargetEnum SubTarget;
         public List<Vector2Int> ArrayList = new List<Vector2Int>();
 
     }

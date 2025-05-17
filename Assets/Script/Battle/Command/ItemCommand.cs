@@ -8,6 +8,10 @@ namespace Battle
 
     public class ItemCommand : Command
     {
+        public int ItemID = 0;
+        public int Amount = 0;
+        public Food Food = null;
+
         public ItemCommand() { }
 
         public ItemCommand(int id, int amount)
@@ -15,14 +19,16 @@ namespace Battle
             ItemModel itemData = DataTable.Instance.ItemDic[id];
             ConsumablesModel consumablesData = DataTable.Instance.ConsumablesDic[id];
             ID = id;
+            ItemID = id;
             Name = itemData.Name;
             Comment = itemData.Comment;
+            Amount = amount;
             if (consumablesData.EffectID != -1)
             {
                 Effect = EffectFactory.GetEffect(consumablesData.EffectID);
             }
 
-            Hit = 100;
+            Hit = -1;
             Range = 1;
             Target = TargetEnum.Us;
             AreaType = AreaTypeEnum.Point;
@@ -34,11 +40,12 @@ namespace Battle
 
         public ItemCommand(Food food)
         {
+            Food = food;
             Name = food.Name;
             Comment = food.Comment;
             Effect = EffectFactory.GetEffect(food);
 
-            Hit = 100;
+            Hit = -1;
             Range = 1;
             Target = TargetEnum.Us;
             AreaType = AreaTypeEnum.Point;

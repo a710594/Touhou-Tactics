@@ -14,8 +14,9 @@ public class ExploreFileEnemy
 
     public TypeEnum Type;
     public EnemyGroupModel.AiEnum AI;
-    public Vector2Int Position;
-    public int RotationY;
+    public float PositionX;
+    public float PositionZ;
+    public float RotationY;
     public string Prefab;
 
     //fixed
@@ -35,7 +36,8 @@ public class ExploreFileEnemy
         Type = TypeEnum.Random;
         AI = data.AI;
         Prefab = data.Prefab;
-        Position = pos;
+        PositionX = pos.x;
+        PositionZ = pos.y;
         EnemyGroupId = data.ID;
     }
 }

@@ -19,6 +19,8 @@ public class SkillModel
     public TargetEnum Target;
     public AreaTypeEnum AreaType;
     public TrackEnum Track;
+    public int SubEffect;
+    public SubTargetEnum SubTarget;
     public string Particle;
     public bool Shake;
 }

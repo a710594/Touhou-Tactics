@@ -38,9 +38,10 @@
 {"Type":1,"ID":38,"Name":"不死之煙","Value":150,"StatusID":-1,"Target":-1,"SubID":-1},
 {"Type":12,"ID":39,"Name":"不死之煙","Value":-1,"StatusID":-1,"Target":-1,"SubID":38},
 {"Type":3,"ID":40,"Name":"範圍治癒","Value":80,"StatusID":-1,"Target":-1,"SubID":-1},
-{"Type":2,"ID":41,"Name":"祈禱之箭","Value":100,"StatusID":-1,"Target":-1,"SubID":42},
+{"Type":2,"ID":41,"Name":"祈禱之箭","Value":100,"StatusID":-1,"Target":-1,"SubID":-1},
 {"Type":3,"ID":42,"Name":"祈禱之箭_1","Value":100,"StatusID":-1,"Target":2,"SubID":-1},
 {"Type":5,"ID":43,"Name":"奇蹟之雨","Value":-1,"StatusID":12,"Target":-1,"SubID":44},
 {"Type":5,"ID":44,"Name":"奇蹟之雨_1","Value":-1,"StatusID":13,"Target":-1,"SubID":45},
 {"Type":5,"ID":45,"Name":"奇蹟之雨_2","Value":-1,"StatusID":14,"Target":-1,"SubID":46},
-{"Type":5,"ID":46,"Name":"奇蹟之雨_3","Value":-1,"StatusID":15,"Target":-1,"SubID":-1}]
+{"Type":5,"ID":46,"Name":"奇蹟之雨_3","Value":-1,"StatusID":15,"Target":-1,"SubID":-1},
+{"Type":5,"ID":47,"Name":"信仰之力","Value":-1,"StatusID":16,"Target":-1,"SubID":-1}]

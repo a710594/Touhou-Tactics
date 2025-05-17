@@ -52,7 +52,7 @@ public class CampTutorial_1 : CampTutorial
             ConversationUI.Open(12, false, ()=> 
             {
                 //EndTutorial();  
-            }, null);
+            });
         }
     }
 }

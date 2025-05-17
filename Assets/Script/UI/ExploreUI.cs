@@ -15,6 +15,7 @@ public class ExploreUI : MonoBehaviour
     public Text KeyLabel;
     public Camera BigMapCamera;
     public CanvasGroup CanvasGroup;
+    public TipLabel TipLabel;
 
     private float deltaTime;
     private float _scale;

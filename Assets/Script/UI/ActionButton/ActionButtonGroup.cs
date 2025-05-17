@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ActionButtonGroup : MonoBehaviour
+/*public class ActionButtonGroup : MonoBehaviour
 {
     public ButtonPlus MoveButton;
     public ButtonPlus SubButton;
@@ -228,4 +228,4 @@ public class ActionButtonGroup : MonoBehaviour
         SkillInfoGroup.gameObject.SetActive(false);
         SubScrollView.Init();
     }
-}
+}*/

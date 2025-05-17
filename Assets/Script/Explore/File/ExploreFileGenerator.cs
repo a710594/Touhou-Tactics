@@ -15,6 +15,7 @@ namespace Explore
         public Transform Enemy;
         public Transform Trigger;
         public Transform Treasure;
+        public Transform Door;
         public FileManager FileManager;
 
         public void BuildFile()
@@ -69,8 +70,9 @@ namespace Explore
                 enemyObj = child.gameObject.GetComponent<ExploreFileEnemyObject>();
                 enemy.AI = enemyObj.AiType;
                 enemy.Prefab = enemyObj.Prefab;
-                enemy.Position = Utility.ConvertToVector2Int(enemyObj.transform.position);
-                enemy.RotationY = (int)enemyObj.transform.eulerAngles.y;
+                enemy.PositionX = enemyObj.transform.position.x;
+                enemy.PositionZ = enemyObj.transform.position.z;
+                enemy.RotationY = enemyObj.transform.eulerAngles.y;
                 enemy.Map = enemyObj.Map;
                 enemy.Tutorial = enemyObj.Tutorial;
                 enemy.EnemyGroupId = enemyObj.EnemyGroup;
@@ -95,6 +97,13 @@ namespace Explore
                 treasure.ItemID = treasureObj.ItemID;
                 treasure.Prefab = treasureObj.Prefab;
                 file.TreasureList.Add(treasure);
+            }
+
+            foreach (Transform child in Door) 
+            {
+                ExploreFIleDoor door = new ExploreFIleDoor();
+                door.Position = Utility.ConvertToVector2Int(child.position);
+                file.DoorList.Add(door);
             }
 
             file.PlayerPositionX = file.Start.x;

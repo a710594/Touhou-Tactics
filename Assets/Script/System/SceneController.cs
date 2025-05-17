@@ -92,6 +92,6 @@ public class SceneController
             AfterSceneLoadedHandler -= _tempHandler;
         }
 
-        EventManager.Instance.CheckEvent(scene.name, Info.MaxFloor);
+        EventManager.Instance.CheckSceneEvent(scene.name, Info.MaxFloor);
     }
 }

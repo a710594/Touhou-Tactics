@@ -10,6 +10,7 @@ namespace Explore
         {
             if (other.tag == "Player")
             {
+                Debug.Log(transform.position);
                 ExploreManager.Instance.EnterBattle(File);
             }
         }

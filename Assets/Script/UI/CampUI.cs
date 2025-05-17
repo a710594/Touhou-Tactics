@@ -17,6 +17,7 @@ public class CampUI : MonoBehaviour
     public ShopUI ShopUI;
     public CookUI CookUI;
     public BagUI BagUI;
+    public GameObject MainGroup;
     public GameObject FloorGroup;
     public ScrollView FloorScrollView;
 
@@ -73,7 +74,7 @@ public class CampUI : MonoBehaviour
     private void FloorOnClick(PointerEventData eventData, ButtonPlus buttonPlus) 
     {
         int floor = (int)buttonPlus.Data;
-        if (floor < 3)
+        if (floor < 4)
         {
             SceneController.Instance.ChangeScene("Explore", ChangeSceneUI.TypeEnum.Loading, (sceneName) =>
             {
@@ -86,26 +87,11 @@ public class CampUI : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        //if (Input.GetKeyDown(KeyCode.S))
-        //{
-        //    FileSystem.Instance.Save();
-        //}
-        //if (Input.GetKeyDown(KeyCode.I))
-        //{
-        //    BagUI bagUI = BagUI.Open();
-        //    bagUI.SetNormalState();
-        //}
-        //if (Input.GetKeyDown(KeyCode.C))
-        //{
-        //    SelectCharacterUI selectCharacterUI = SelectCharacterUI.Open();
-        //}
-    }
-
     private void Awake()
     {
         FloorGroup.SetActive(false);
+        CookButton.gameObject.SetActive(EventManager.Instance.Info.UnlockCook);
+        ShopButton.gameObject.SetActive(EventManager.Instance.Info.UnlockShop);
 
         ShopButton.onClick.AddListener(ShopOnClick);
         CookButton.onClick.AddListener(CookOnClick);

@@ -1,4 +1,6 @@
-[{"ID":1,"Name":"魔力壓縮","Comment":"該回合的魔法攻擊力上升{1}%","CD":1,"EffectID":21,"Hit":100,"Range":0,"Target":1,"AreaType":1,"AreaArray":null,"Track":1,"Particle":"Buff","Shake":0},
-{"ID":2,"Name":"猛力一擊","Comment":"該回合的物理攻擊力上升{1}%","CD":1,"EffectID":22,"Hit":100,"Range":0,"Target":1,"AreaType":1,"AreaArray":null,"Track":1,"Particle":"Buff","Shake":0},
-{"ID":3,"Name":"金剛結界","Comment":"使距離自己2格內的夥伴物理防禦力上升{1}%","CD":2,"EffectID":19,"Hit":100,"Range":0,"Target":1,"AreaType":1,"AreaArray":null,"Track":1,"Particle":"Buff","Shake":0},
-{"ID":4,"Name":"退魔結界","Comment":"使距離自己2格內的夥伴魔法防禦力上升{1}%","CD":2,"EffectID":20,"Hit":100,"Range":0,"Target":1,"AreaType":1,"AreaArray":null,"Track":1,"Particle":"Buff","Shake":0}]
+[{"ID":1,"Name":"魔力壓縮","Comment":"該回合的魔法攻擊力上升{1}%","CD":1,"EffectID":21,"Hit":-1,"Range":0,"Target":1,"AreaType":1,"AreaArray":null,"Track":1,"Particle":"Buff","Shake":0},
+{"ID":2,"Name":"全力一擊","Comment":"該回合的物理攻擊力上升{1}%","CD":1,"EffectID":22,"Hit":-1,"Range":0,"Target":1,"AreaType":1,"AreaArray":null,"Track":1,"Particle":"Buff","Shake":0},
+{"ID":3,"Name":"金剛結界","Comment":"使距離自己2格內的夥伴物理防禦力上升{1}%","CD":2,"EffectID":19,"Hit":-1,"Range":0,"Target":1,"AreaType":1,"AreaArray":null,"Track":1,"Particle":"Buff","Shake":0},
+{"ID":4,"Name":"退魔結界","Comment":"使距離自己2格內的夥伴魔法防禦力上升{1}%","CD":2,"EffectID":20,"Hit":-1,"Range":0,"Target":1,"AreaType":1,"AreaArray":null,"Track":1,"Particle":"Buff","Shake":0},
+{"ID":5,"Name":"挑釁","Comment":"使目標失去理性，接下來的行動必定會攻擊挑釁者","CD":1,"EffectID":18,"Hit":-1,"Range":5,"Target":2,"AreaType":1,"AreaArray":null,"Track":1,"Particle":"Hit","Shake":1},
+{"ID":6,"Name":"信仰之力","Comment":"該回合的魔法防禦力上升{1}%","CD":1,"EffectID":47,"Hit":-1,"Range":0,"Target":1,"AreaType":1,"AreaArray":null,"Track":1,"Particle":"Buff","Shake":0}]

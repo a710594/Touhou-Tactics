@@ -15,19 +15,6 @@ namespace Battle
 
             public override void Begin()
             {
-                if(Instance.SelectedCharacter != null) 
-                {
-                    Instance.SelectedCharacter.Outline.OutlineWidth = 1;
-                    if (Instance.SelectedCharacter.Info.Faction == BattleCharacterInfo.FactionEnum.Player) 
-                    {
-                        Instance.SelectedCharacter.Outline.OutlineColor = Color.blue;
-                    }
-                    else
-                    {
-                        Instance.SelectedCharacter.Outline.OutlineColor = Color.red;
-                    }
-                }
-
                 _selectedCharacter = Instance.CharacterAliveList[0];
                 Instance.SelectedCharacter = _selectedCharacter;
                 
@@ -44,13 +31,12 @@ namespace Battle
                 }
 
                 Instance.BattleUI.SetCommandVisible(false);
-                _selectedCharacter.Outline.OutlineWidth = 2;
-                _selectedCharacter.Outline.OutlineColor = Color.yellow;
                 _selectedCharacter.Info.HasMove = false;
                 _selectedCharacter.Info.MoveAgain = false;
                 _selectedCharacter.Info.HasSub = false;
                 _selectedCharacter.Info.HasMain = false;
                 _selectedCharacter.Info.HasSpell = false;
+                _selectedCharacter.Info.HasItem = false;
                 Instance.BattleUI.CharacterListGroupRefresh();
                 Instance.BattleUI.ShowArrow(_selectedCharacter.transform);
                 Instance.CharacterInfoUIGroup.ShowCharacterInfoUI_1(_selectedCharacter.Info, Utility.ConvertToVector2Int(_selectedCharacter.transform.position));
@@ -58,6 +44,11 @@ namespace Battle
                 Instance.CharacterInfoUIGroup.HideCharacterInfoUI_2();
                 Instance._cameraController.SetMyGameObj(_selectedCharacter.gameObject, ()=> 
                 {
+                    if (_selectedCharacter.Info is BattlePlayerInfo)
+                    {
+                        EventManager.Instance.CheckCharacterStateEvent(_selectedCharacter);
+                    }
+
                     if (_selectedCharacter.Info.IsAuto)
                     {
                         _selectedCharacter.AI.Begin();

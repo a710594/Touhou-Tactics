@@ -27,18 +27,10 @@ public class EffectModel
         RecoverAll
     }
 
-    public enum TargetEnum 
-    {
-        None=-1,
-        Self=1,
-        MinHP=2,
-    }
-
     public TypeEnum Type;
     public int ID;
     public string Name;
     public int Value;
     public int StatusID;
-    public TargetEnum Target;
     public int SubID;
 }

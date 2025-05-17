@@ -12,7 +12,6 @@ namespace Battle
         public EffectModel.TypeEnum Type;
         public int Value;
         public Status Status;
-        public EffectModel.TargetEnum Target;
 
         public Effect SubEffect;
 
@@ -22,7 +21,6 @@ namespace Battle
         {
             Type = data.Type;
             Value = data.Value;
-            Target = data.Target;
             if (data.StatusID != -1)
             {
                 Status = StatusFactory.GetStatus(data.StatusID);
@@ -33,13 +31,13 @@ namespace Battle
             }
         }
 
-        public virtual void Use(BattleCharacterController user, Vector3 position) { }
+        public virtual void Use(BattleCharacterController user, Vector2Int position) { }
 
         public virtual void Use(HitType hitType, BattleCharacterController user, BattleCharacterController target, List<Log> logList)
         {
         }
 
-        public virtual void Use(HitType hitType, BattleCharacterController user, List<Log> logList)
+        public virtual void Use(BattleCharacterController user, SubTargetEnum subTarget, List<Log> logList)
         {
         }
     }

@@ -364,55 +364,6 @@ public static class Utility
         result = to;
     }
 
-    public static void CheckParabola(Vector3 from, Vector3 to, int parabolaHeight, List<BattleCharacterController> characterList, Dictionary<Vector2Int, BattleInfoTile> tileDic, out bool isBlock, out List<Vector3> result)
-    {
-        isBlock = false;
-        result = null;
-        int height;
-        Vector2Int position;
-        List<Vector3> line = DrawLine3D(from, to);
-        List<Vector3> list_1 = DrawParabola(from, to, parabolaHeight, line.Count - 1);
-        List<Vector3> list_2 = DrawParabola(from, to, parabolaHeight, (line.Count - 1) * 10);
-        for (int i = 0; i < list_1.Count; i++)
-        {
-            position = ConvertToVector2Int(list_1[i]);
-            if (tileDic.ContainsKey(position))
-            {
-                height = tileDic[position].TileData.Height;
-                if (tileDic[position].AttachData != null)
-                {
-                    height += tileDic[position].AttachData.Height;
-                }
-                for (int j = 0; j < characterList.Count; j++)
-                {
-                    if (ConvertToVector2Int(from) != ConvertToVector2Int(characterList[j].transform.position) && ConvertToVector2Int(to) != ConvertToVector2Int(characterList[j].transform.position) && position == ConvertToVector2Int(characterList[j].transform.position))
-                    {
-                        height++;
-                    }
-                }
-
-                if (height - list_1[i].y > 1)
-                {
-                    isBlock = true;
-                    result = new List<Vector3>();
-                    for (int j=0; j<i; j++) 
-                    {
-                        for (int k = 0; k < 10; k++)
-                        {
-                            result.Add(list_2[j * 10 + k]);
-                        }
-                    }
-                    break;
-                }
-            }
-        }
-        
-        if(result == null) 
-        {
-            result = list_2;
-        }
-    }
-
     public static bool GetRandomPosition(int minX, int maxX, int minY, int maxY, List<Vector2Int> invalidList, out Vector2Int result)
     {
         int count = 0;
@@ -464,6 +415,23 @@ public static class Utility
             lastClickTime = Time.time;
             return result;
         }
+        return false;
+    }
+
+    public static bool LookPlayer(Transform transform, float angle, int amount) 
+    {
+        float subAngle = angle / amount;
+        Vector3 direction;
+        for (int i=-amount; i<=amount; i++) 
+        {
+            direction = Quaternion.AngleAxis(subAngle * i, Vector3.up) * transform.forward;
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, direction, out hit, 5) && hit.collider.tag == "Player")
+            {
+                return true;
+            }
+        }
+
         return false;
     }
 }

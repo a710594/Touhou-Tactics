@@ -21,7 +21,7 @@ namespace Battle
 
         public override void Deregister()
         {
-            ((TutorialState)_context.CurrentState).Deregister();
+            //((TutorialState)_context.CurrentState).Deregister();
         }
 
         private class State_1 : TutorialState
@@ -32,7 +32,7 @@ namespace Battle
 
             public override void Begin()
             {
-                ((SpellTutorial)_context.Parent)._conversationUI = ConversationUI.Open(13, false, null, () =>
+                ((SpellTutorial)_context.Parent)._conversationUI = ConversationUI.Open(13, false, () =>
                 {
                     BattleController.Instance.EndTutorial();
                 });

@@ -86,11 +86,6 @@ public class BattleUI : MonoBehaviour
 
     private void DirectionButtonOnClick(Vector2Int direction)
     {
-        if (BattleController.Instance.IsTutorialActive && !BattleController.Instance.Tutorial.CheckClick(direction))
-        {
-            return;
-        }
-
         BattleController.Instance.SetDirection(direction);
     }
 
