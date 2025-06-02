@@ -9,22 +9,25 @@ public class PoisonEffect : Effect
     {
     }
 
-    public override void Use(HitType hitType, BattleCharacterController user, BattleCharacterController target, List<Log> logList)
+    public override void Use(HitType hitType, BattleCharacterController user, BattleCharacterController target, Dictionary<BattleCharacterController, List<FloatingNumberData>> floatingNumberDic)
     {
+        string text = "";
         if (hitType != HitType.Miss)
         {
             target.Info.AddStatus(Status);
-            logList.Add(new Log(user, target, Type, hitType, Status.Name));
+            text = Status.Name;
         }
-        else
+
+        if (!floatingNumberDic.ContainsKey(target))
         {
-            logList.Add(new Log(user, target, Type, hitType, "Miss"));      
+            floatingNumberDic.Add(target, new List<FloatingNumberData>());
         }
+        floatingNumberDic[target].Add(new FloatingNumberData(text, Type, hitType));
 
 
         if (SubEffect != null && hitType != HitType.Miss)
         {
-            SubEffect.Use(hitType, user, target, logList);
+            SubEffect.Use(hitType, user, target, floatingNumberDic);
         }
     }
 }

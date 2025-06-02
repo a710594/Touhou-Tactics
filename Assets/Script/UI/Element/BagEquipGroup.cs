@@ -10,6 +10,7 @@ public class BagEquipGroup : MonoBehaviour
     public Action<object> ScrollHandler;
 
     public ScrollView ScrollView;
+    public ButtonPlusGroup ButtonGroup;
     public Text CommentLabel;
     public Text ATKLabel;
     public Text DEFLabel;
@@ -27,6 +28,16 @@ public class BagEquipGroup : MonoBehaviour
     public void SetScrollView()
     {
         ScrollView.SetData(new List<object>(ItemManager.Instance.Info.EquipList));
+
+        ButtonGroup.Clear();
+        for (int i = 0; i < ScrollView.GridList.Count; i++)
+        {
+            for (int j = 0; j < ScrollView.GridList[i].ScrollItemList.Count; j++)
+            {
+                ButtonGroup.Add(ScrollView.GridList[i].ScrollItemList[j].GetComponent<ButtonPlusSingle>());
+            }
+        }
+        ButtonGroup.CancelAllSelect();
     }
 
     public void SetScrollView(EquipModel.CategoryEnum category, CharacterInfo character) 
@@ -39,10 +50,18 @@ public class BagEquipGroup : MonoBehaviour
                 list.Add(ItemManager.Instance.Info.EquipList[i]);
             }
         }
-
         list.Insert(0, new Equip(category));
-
         ScrollView.SetData(new List<object>(list));
+
+        ButtonGroup.Clear();
+        for (int i = 0; i < ScrollView.GridList.Count; i++)
+        {
+            for (int j = 0; j < ScrollView.GridList[i].ScrollItemList.Count; j++)
+            {
+                ButtonGroup.Add(ScrollView.GridList[i].ScrollItemList[j].GetComponent<ButtonPlusSingle>());
+            }
+        }
+        ButtonGroup.CancelAllSelect();
     }
 
     public void SetDetail(Equip equip) 
@@ -84,13 +103,6 @@ public class BagEquipGroup : MonoBehaviour
     private void ScrollItemOnClick(PointerEventData eventData, ButtonPlus button)
     {
         object data = button.Data;
-        Equip equip = null;
-        if (data is Equip)
-        {
-            equip = (Equip)data;
-        }
-
-        SetDetail(equip);
         ScrollHandler(data);
     }
 

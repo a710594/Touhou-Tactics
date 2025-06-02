@@ -11,6 +11,7 @@ namespace Battle
         {
             int distance;
             int maxDistance = -1;
+            int minDistance = int.MaxValue;
             Vector2Int targetPosition;
             Vector2Int moveTo = new Vector2Int();
             if (canHitDic.Count > 0)
@@ -36,9 +37,9 @@ namespace Battle
                 for (int i = 0; i < stepList.Count; i++)
                 {
                     distance = BattleController.Instance.GetDistance(stepList[i], targetPosition, _character.Info.Faction); //盡量靠近目標
-                    if (distance < maxDistance)
+                    if (distance < minDistance)
                     {
-                        maxDistance = distance;
+                        minDistance = distance;
                         moveTo = stepList[i];
                     }
                 }
@@ -46,20 +47,19 @@ namespace Battle
             return moveTo;
         }
 
+        //選HP最少的
         protected override BattleCharacterController GetTarget(List<BattleCharacterController> list)
         {
-            int damage;
-            int maxDamage = -1;
+            int minHP = int.MaxValue;
             BattleCharacterController target = _character.Info.GetProvocativeTarget();
 
             if (target == null)
             {
                 for (int i = 0; i < list.Count; i++)
                 {
-                    damage = BattleController.Instance.GetDamage(SelectedSkill.Effect, _character, list[i]);
-                    if (damage > maxDamage)
+                    if (minHP > list[i].Info.CurrentHP)
                     {
-                        maxDamage = damage;
+                        minHP = list[i].Info.CurrentHP;
                         target = list[i];
                     }
                 }

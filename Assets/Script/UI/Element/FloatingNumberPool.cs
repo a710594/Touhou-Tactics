@@ -23,32 +23,6 @@ public class FloatingNumberPool : MonoBehaviour
         _anchor = anchor;
     }
 
-    /*public void Play(Queue<Log> logQueue)
-    {
-        if (logQueue != null && logQueue.Count > 0)
-        {
-            FloatingNumber floatingNumber;
-            if (_floatingNumberQueue.Count == 0)
-            {
-                floatingNumber = Instantiate(FloatingNumber);
-                floatingNumber.transform.SetParent(transform);
-                _floatingNumberQueue.Enqueue(floatingNumber);
-            }
-            floatingNumber = _floatingNumberQueue.Dequeue();
-            floatingNumber.Play(logQueue.Dequeue(), transform.position);
-
-            _showTimer.Start(NextTime, () => //顯示下一個數字
-            {
-                Play(logQueue);
-            });
-
-            _recycleTimer.Start(ShowTime, () => //當前的數字消失
-            {
-                _floatingNumberQueue.Enqueue(floatingNumber);
-            });
-        }
-    }*/
-
     public void Play(Log log)
     {
         FloatingNumber floatingNumber;

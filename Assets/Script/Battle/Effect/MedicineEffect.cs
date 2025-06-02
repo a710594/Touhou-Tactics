@@ -17,22 +17,25 @@ public class MedicineEffect : Effect
         Type = EffectModel.TypeEnum.Medicine;
     }
 
-    public override void Use(HitType hitType, BattleCharacterController user, BattleCharacterController target, List<Log> logList)
+    public override void Use(HitType hitType, BattleCharacterController user, BattleCharacterController target, Dictionary<BattleCharacterController, List<FloatingNumberData>> floatingNumberDic)
     {
+        string text = "";
         if (hitType != HitType.Miss)
         {
             int recover = Value;
             target.Info.SetRecover(recover);
-            logList.Add(new Log(user, target, Type, hitType, recover.ToString()));
+            text = recover.ToString();
         }
-        else
+
+        if (!floatingNumberDic.ContainsKey(target))
         {
-            logList.Add(new Log(user, target, Type, hitType, "Miss"));
+            floatingNumberDic.Add(target, new List<FloatingNumberData>());
         }
+        floatingNumberDic[target].Add(new FloatingNumberData(text, Type, hitType));
 
         if (SubEffect != null && hitType != HitType.Miss)
         {
-            SubEffect.Use(hitType, user, target, logList);
+            SubEffect.Use(hitType, user, target, floatingNumberDic);
         }        
     }
 }

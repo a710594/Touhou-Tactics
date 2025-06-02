@@ -33,12 +33,22 @@ namespace Battle
 
         public virtual void Use(BattleCharacterController user, Vector2Int position) { }
 
-        public virtual void Use(HitType hitType, BattleCharacterController user, BattleCharacterController target, List<Log> logList)
+        //public virtual void Use(HitType hitType, BattleCharacterController user, BattleCharacterController target, List<Log> logList)
+        //{
+        //}
+
+        //public virtual void Use(BattleCharacterController user, SubTargetEnum subTarget, List<Log> logList)
+        //{
+        //}
+
+        public virtual void Use(HitType hitType, BattleCharacterController user, BattleCharacterController target, Dictionary<BattleCharacterController, List<FloatingNumberData>> floatingNumberDic)
         {
         }
 
-        public virtual void Use(BattleCharacterController user, SubTargetEnum subTarget, List<Log> logList)
+        //command.SubEffect
+        public virtual void Use(BattleCharacterController user, SubTargetEnum subTarget, Dictionary<BattleCharacterController, List<FloatingNumberData>> floatingNumberDic, out BattleCharacterController target)
         {
+            target = null;
         }
     }
 }

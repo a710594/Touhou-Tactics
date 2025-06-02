@@ -8,8 +8,9 @@ public class MagicAttackEffect : Effect
     public MagicAttackEffect(EffectModel data) : base(data)
     {
     }
-    public override void Use(HitType hitType, BattleCharacterController user, BattleCharacterController target, List<Log> logList)
+    public override void Use(HitType hitType, BattleCharacterController user, BattleCharacterController target, Dictionary<BattleCharacterController, List<FloatingNumberData>> floatingNumberDic)
     {
+        string text = "";
         if (hitType != HitType.Miss)
         {
             int damage = BattleController.Instance.GetDamage(this, user, target);
@@ -18,11 +19,18 @@ public class MagicAttackEffect : Effect
                 damage *= 2;
             }
             target.Info.SetDamage(damage);
-            logList.Add(new Log(user, target, Type, hitType, damage.ToString()));
+            text = damage.ToString();
         }
-        else
+
+        if (!floatingNumberDic.ContainsKey(target))
         {
-            logList.Add(new Log(user, target, Type, hitType, "Miss"));
+            floatingNumberDic.Add(target, new List<FloatingNumberData>());
+        }
+        floatingNumberDic[target].Add(new FloatingNumberData(text, Type, hitType));
+
+        if (SubEffect != null && hitType != HitType.Miss)
+        {
+            SubEffect.Use(hitType, user, target, floatingNumberDic);
         }
     }
 }

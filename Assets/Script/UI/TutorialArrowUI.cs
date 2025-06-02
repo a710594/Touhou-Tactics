@@ -7,7 +7,8 @@ using UnityEngine.UI;
 public class TutorialArrowUI : MonoBehaviour
 {
     public Text CommentLabel;
-    public GameObject Arrow;
+    public RectTransform Arrow;
+    public RectTransform BG;
 
     private Vector3 _worldPosition;
     private Vector3 _offset;
@@ -20,30 +21,7 @@ public class TutorialArrowUI : MonoBehaviour
         obj.transform.SetParent(GameObject.Find("Canvas").transform);
         obj.transform.localPosition = Vector3.zero;
         _tutorialArrowUI = obj.GetComponent<TutorialArrowUI>();
-        if(commentText == "") 
-        {
-            _tutorialArrowUI.CommentLabel.transform.parent.gameObject.SetActive(false);
-        }
-        else
-        {
-            _tutorialArrowUI.CommentLabel.transform.parent.gameObject.SetActive(true);
-            _tutorialArrowUI.CommentLabel.text = commentText;
-        }
-        _tutorialArrowUI._anchor = anchor;
-        _tutorialArrowUI._offset = offset;
-
-        if(direction == Vector2Int.right) 
-        {
-            _tutorialArrowUI.Arrow.transform.localEulerAngles = new Vector3(0, 0, 90);
-        }
-        else if (direction == Vector2Int.left)
-        {
-            _tutorialArrowUI.Arrow.transform.localEulerAngles = new Vector3(0, 0, -90);
-        }
-        else if (direction == Vector2Int.up)
-        {
-            _tutorialArrowUI.Arrow.transform.localEulerAngles = new Vector3(0, 0, 180);
-        }
+        _tutorialArrowUI.Init(commentText, anchor, offset, direction);
 
         return _tutorialArrowUI;
     }
@@ -84,6 +62,54 @@ public class TutorialArrowUI : MonoBehaviour
     {
         _anchor = anchor;
         _offset = offset;
+    }
+
+    private void Init(string commentText, Transform anchor, Vector3 offset, Vector2Int direction)
+    {
+        if (commentText == "")
+        {
+            CommentLabel.transform.parent.gameObject.SetActive(false);
+        }
+        else
+        {
+            CommentLabel.transform.parent.gameObject.SetActive(true);
+            CommentLabel.text = commentText;
+        }
+        _anchor = anchor;
+        _offset = offset;
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)_tutorialArrowUI.BG.transform);
+        StartCoroutine(SetPosition(direction));
+    }
+
+    private void Init(string commentText, Vector3 position, Vector2Int direction)
+    {
+        CommentLabel.text = commentText;
+        _anchor = null;
+        _worldPosition = position;
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)_tutorialArrowUI.BG.transform);
+        StartCoroutine(SetPosition(direction));
+    }
+
+    private IEnumerator SetPosition(Vector2Int direction)
+    {
+        yield return new WaitForEndOfFrame();
+        if (direction == Vector2Int.right)
+        {
+            Arrow.transform.localEulerAngles = new Vector3(0, 0, 90);
+            BG.transform.localPosition = new Vector3(-((BG.sizeDelta.x + Arrow.sizeDelta.x) / 2f), 0, 0);
+        }
+        else if (direction == Vector2Int.left)
+        {
+            Arrow.transform.localEulerAngles = new Vector3(0, 0, -90);
+            BG.transform.localPosition = new Vector3((BG.sizeDelta.x + Arrow.sizeDelta.x) / 2f, 0, 0);
+        }
+        else if (direction == Vector2Int.up)
+        {
+            _tutorialArrowUI.Arrow.transform.localEulerAngles = new Vector3(0, 0, 180);
+            BG.transform.localPosition = new Vector3(0, (BG.sizeDelta.y + Arrow.sizeDelta.y) / 2f, 0);
+        }
     }
 
     private void Update()

@@ -338,7 +338,7 @@ public static class Utility
         }
     }
 
-    //和 CheckLine 相似,但是無視 attach 和 character
+    //和 CheckLine 相似,但是無視地型
     public static void CheckThrough(Vector3 from, Vector3 to, Dictionary<Vector2Int, BattleInfoTile> tileDic, out bool isBlock, out Vector3 result)
     {
         isBlock = false;
@@ -433,5 +433,51 @@ public static class Utility
         }
 
         return false;
+    }
+
+    public static Vector2Int GenerateNormalPoints(Vector2Int center, float stdDev, int minX, int maxX, int minY, int maxY, List<Vector2Int> invalidList) 
+    {
+        Vector2Int result = new Vector2Int();
+
+        while(true)
+        {
+            float u1 = 1f - UnityEngine.Random.Range(0, 1f); // Uniform(0,1] random doubles
+            float u2 = 1f - UnityEngine.Random.Range(0, 1f);
+            float randStdNormal = (float)(Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2)); // Standard normal
+            float randStdNormal2 = (float)(Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Cos(2.0 * Math.PI * u2)); // Second value
+
+            float x = center.x + stdDev * randStdNormal;
+            float y = center.y + stdDev * randStdNormal2;
+
+            result = new Vector2Int(Mathf.RoundToInt(x), Mathf.RoundToInt(y));
+
+            if (!invalidList.Contains(result) && result.x >= minX && result.x <= maxX && result.y >= minY && result.y <=maxY) 
+            {
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    public static float GetRandomAngle() 
+    {
+        int random = UnityEngine.Random.Range(0, 4);
+        if (random == 0) 
+        {
+            return 0;
+        }
+        else if (random == 1) 
+        {
+            return 90;
+        }
+        else if(random == 2) 
+        {
+            return 180;
+        }
+        else 
+        {
+            return 270;
+        }
     }
 }

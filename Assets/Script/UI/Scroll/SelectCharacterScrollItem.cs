@@ -17,7 +17,7 @@ namespace Battle
         {
             base.SetData(data);
 
-            Sprite sprite = Resources.Load<Sprite>("Image/" + ((BattleCharacterInfo)Data).FileName + "_F");
+            Sprite sprite = Resources.Load<Sprite>("Image/Character/" + ((BattleCharacterInfo)Data).FileName + "_Little");
             Image.sprite = sprite;
             Image.transform.localPosition = Vector3.zero;
         }

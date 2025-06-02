@@ -22,7 +22,6 @@ namespace Battle
                     {
                         CharacterManager.Instance.RecoverAllHP();
                         ItemManager.Instance.Info.Key = 0;
-                        InputMamager.Instance.Unlock();
                     });
                 });
             }

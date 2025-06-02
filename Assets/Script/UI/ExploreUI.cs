@@ -59,8 +59,21 @@ public class ExploreUI : MonoBehaviour
 
     public void OpenTreasure(int id) 
     {
-        TreasureUI.Open(id);
-        InputMamager.Instance.Lock();
+        InputMamager.Instance.IsLock = true;
+        ItemModel data = DataTable.Instance.ItemDic[id];
+        TreasureUI.Open(data, ()=> 
+        {
+            if(data.Category == ItemModel.CategoryEnum.Equip && !EventManager.Instance.Info.EquipIntroduction) 
+            {
+                EquipIntroduction equipIntroduction = new EquipIntroduction();
+                equipIntroduction.Start(data);
+                EventManager.Instance.Info.EquipIntroduction = true;
+            }
+            else
+            {
+                InputMamager.Instance.IsLock = false;
+            }
+        });
     }
 
     private void Awake()
@@ -85,12 +98,12 @@ public class ExploreUI : MonoBehaviour
                 BigMap.anchoredPosition = new Vector2(x, y);
                 BigMapCamera.Render();
                 FloorLabel.text = file.Floor + "F";
-                InputMamager.Instance.Lock();
+                InputMamager.Instance.IsLock = true;
             }
             else
             {
                 Cursor.lockState = CursorLockMode.Locked;
-                InputMamager.Instance.Unlock();
+                InputMamager.Instance.IsLock = false;
             }
         }
 

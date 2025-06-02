@@ -47,6 +47,7 @@ namespace Battle
                 enemyFile.ID = enemyObj.ID;
                 enemyFile.Lv = enemyObj.Lv;
                 enemyFile.Position = new Vector2Int(Mathf.RoundToInt(child.position.x), Mathf.RoundToInt(child.position.z));
+                enemyFile.Angle = child.transform.eulerAngles.y;
                 enemyList.Add(enemyFile);
             }
 

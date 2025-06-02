@@ -9,31 +9,25 @@ public class RatioDamageEffect : Effect
     {
     }
 
-    public override void Use(HitType hitType, BattleCharacterController user, BattleCharacterController target, List<Log> logList)
+    public override void Use(HitType hitType, BattleCharacterController user, BattleCharacterController target, Dictionary<BattleCharacterController, List<FloatingNumberData>> floatingNumberDic)
     {
-        // if(user!=target)
-        // {
-        //     hitType = BattleController.Instance.CheckHit(hit, user, target, true);
-        // }
-        // else
-        // {
-        //     hitType = BattleController.HitType.Hit;
-        // }
-
+        string text = "";
         if (hitType == HitType.Hit)
         {
             int damage = Mathf.RoundToInt((float)Value * (float)target.Info.MaxHP / 100f);
             target.Info.SetDamage(damage);
-            logList.Add(new Log(user, target, Type, hitType, damage.ToString()));
+            text = damage.ToString();
         }
-        else
+
+        if (!floatingNumberDic.ContainsKey(target))
         {
-            logList.Add(new Log(user, target, Type, hitType, "Miss"));
+            floatingNumberDic.Add(target, new List<FloatingNumberData>());
         }
+        floatingNumberDic[target].Add(new FloatingNumberData(text, Type, hitType));
 
         if (SubEffect != null && hitType != HitType.Miss)
         {
-            SubEffect.Use(hitType, user, target, logList);
+            SubEffect.Use(hitType, user, target, floatingNumberDic);
         }
     }
 }

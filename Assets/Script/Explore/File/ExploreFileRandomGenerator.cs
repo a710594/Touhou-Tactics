@@ -182,7 +182,7 @@ public class ExploreFileRandomGenerator
 
         for (int i = 0; i < remainList.Count; i++)
         {
-            if (UnityEngine.Random.Range(0f, 1f) < 0.125)
+            if (UnityEngine.Random.Range(0f, 1f) < 0.25)
             {
                 selectedEdges.Add(remainList[i]);
                 uRoom = ((Vertex<Room>)remainList[i].U).Item;
@@ -219,9 +219,28 @@ public class ExploreFileRandomGenerator
         TreasureModel treasureData;
         ExploreFileTreasure treasureFile;
 
+        //create key
         for (int i = 0; i < _isolatedList.Count; i++)
         {
-            room = _isolatedList[i];
+            room = _otherList[UnityEngine.Random.Range(0, _otherList.Count)];
+            if (room.TryGetRandomPosition(out pos))
+            {
+                treasureFile = new ExploreFileTreasure(ItemManager.KeyID, "Key", 1, pos, 0);
+                File.TreasureList.Add(treasureFile);
+                room.SetNotAvailable(pos);
+            }
+            else
+            {
+                i--;
+            }
+        }
+
+        //create treasure
+        List<Room> list = new List<Room>(_isolatedList);
+        list.Remove(_endRoom);
+        for (int i = 0; i < list.Count; i++)
+        {
+            room = list[i];
             if (room.TryGetRandomPosition(out pos))
             {
                 treasureData = DataTable.Instance.TreasureDic[3];
@@ -229,14 +248,9 @@ public class ExploreFileRandomGenerator
                 File.TreasureList.Add(treasureFile);
                 room.SetNotAvailable(pos);
             }
-
-            //create key
-            room = _otherList[UnityEngine.Random.Range(0, _otherList.Count)];
-            if (room.TryGetRandomPosition(out pos))
+            else
             {
-                treasureFile = new ExploreFileTreasure(ItemManager.KeyID, "Key", 1, pos, 0);
-                File.TreasureList.Add(treasureFile);
-                room.SetNotAvailable(pos);
+                i--;
             }
         }
 

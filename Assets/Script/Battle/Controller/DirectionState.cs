@@ -28,10 +28,10 @@ namespace Battle
                 Instance.BattleUI.SetDirectionGroupVisible(!_selectedCharacter.Info.IsAuto);
                 Instance.BattleUI.SetDirectionGroupPosition(_selectedCharacter.transform.position);
 
-                List<Log> logList = _selectedCharacter.Info.CheckStatus();
-                for(int i=0; i<logList.Count; i++)
+                List<FloatingNumberData> list = _selectedCharacter.Info.CheckStatus();
+                for(int i=0; i< list.Count; i++)
                 {
-                    Instance.BattleUI.PlayFloatingNumberPool(_selectedCharacter, logList[i]);
+                    Instance.BattleUI.PlayFloatingNumberPool(_selectedCharacter, list);
                 }
                 for (int i = 0; i < _selectedCharacter.Info.SkillList.Count; i++)
                 {

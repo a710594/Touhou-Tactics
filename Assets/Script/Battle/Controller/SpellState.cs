@@ -22,7 +22,7 @@ namespace Battle
                 _selectedCharacter.Info.HasMain = true;
                 _selectedCharacter.Info.HasSpell = true;
 
-                _target = null;
+                /*_target = null;
                 if (Instance._targetList.Count > 0 && Instance._targetList[0] != _selectedCharacter)
                 {
                     _target = Instance._targetList[0];
@@ -37,7 +37,7 @@ namespace Battle
                     {
                         maxCount = count;
                     }
-                }
+                }*/
 
                 for (int i = 0; i < _characterList.Count; i++)
                 {
@@ -47,12 +47,14 @@ namespace Battle
                     }
                 }
 
-                if (_target != null)
+                /*if (_target != null)
                 {
                     Instance.CharacterInfoUIGroup.SetCharacterInfoUIWithTween_2(_target, _originalHP, Utility.ConvertToVector2Int(_target.transform.position));
                 }
 
-                _timer.Start(maxCount * 0.5f, Instance.CheckResult);
+                _timer.Start(maxCount * 0.5f, Instance.CheckResult);*/
+
+                Instance.UseEffect();
             }
         }
     }

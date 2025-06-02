@@ -94,8 +94,7 @@ namespace Battle
                         BattleCharacterController character = Instance.GetCharacterByPosition(v2);
                         if (character != null)
                         {
-                            CharacterDetailUI characterDetailUI = CharacterDetailUI.Open(false);
-                            characterDetailUI.SetData(character.Info, v2);
+                            Instance.OpenCharacterDetail(character.Info, v2);
                         }
                     }
                 }

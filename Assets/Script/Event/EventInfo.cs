@@ -17,6 +17,7 @@ public class EventInfo
     public bool ReimuIntroduction = false;
     public bool MarisaIntroduction = false;
     public bool ItemIntroduction = false;
+    public bool EquipIntroduction = false;
 
     public List<string> TriggerList = new List<string>(); //已觸發的踩地事件
 }

@@ -22,7 +22,7 @@ namespace Battle
         protected ConversationUI _conversationUI;
         protected TutorialArrowUI _tutorialArrowUI;
 
-        public virtual bool CheckClick(Vector2Int position)
+        public virtual bool CheckClick(Vector2Int position) //­n§R¶Ü?
         {
             if(_context.CurrentState!=null)
             {

@@ -16,7 +16,7 @@ public class BuffEffect : Effect
         Status = new Status(type, value, time);
     }
 
-    public override void Use(HitType hitType, BattleCharacterController user, BattleCharacterController target, List<Log> logList)
+    public override void Use(HitType hitType, BattleCharacterController user, BattleCharacterController target, Dictionary<BattleCharacterController, List<FloatingNumberData>> floatingNumberDic)
     {
         if (hitType != HitType.Miss)
         {
@@ -25,12 +25,17 @@ public class BuffEffect : Effect
         else
         {
         }
-        logList.Add(new Log(user, target, Type, hitType, Status.Name));
+
+        if(!floatingNumberDic.ContainsKey(target))
+        {
+            floatingNumberDic.Add(target, new List<FloatingNumberData>());
+        }
+        floatingNumberDic[target].Add(new FloatingNumberData(Status.Name, Type, hitType));
 
 
         if (SubEffect != null && hitType != HitType.Miss)
         {
-            SubEffect.Use(hitType, user, target, logList);
+            SubEffect.Use(hitType, user, target, floatingNumberDic);
         }
     }
 }

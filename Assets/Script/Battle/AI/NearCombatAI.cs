@@ -1,4 +1,4 @@
-嚜簑sing System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +6,6 @@ namespace Battle
 {
     public class NearCombatAI : BattleAI
     {
-
         protected override Vector2Int GetMoveTo(List<Vector2Int> stepList, List<BattleCharacterController> targetList, Dictionary<BattleCharacterController, List<Vector2Int>> canHitDic)
         {
             int distance;
@@ -14,13 +13,13 @@ namespace Battle
             Vector2Int start = Utility.ConvertToVector2Int(transform.position);
             Vector2Int targetPosition;
             Vector2Int moveTo = new Vector2Int();
-            if(canHitDic.Count> 0) 
+            if (canHitDic.Count > 0)
             {
                 _canAttack = true;
                 _target = GetTarget(new List<BattleCharacterController>(canHitDic.Keys));
                 for (int i = 0; i < canHitDic[_target].Count; i++)
                 {
-                    distance = BattleController.Instance.GetDistance(start, canHitDic[_target][i], _character.Info.Faction);
+                    distance = BattleController.Instance.GetDistance(start, canHitDic[_target][i], _character.Info.Faction); //盡量接近目標
                     if (distance < minDistance)
                     {
                         minDistance = distance;
@@ -46,20 +45,21 @@ namespace Battle
             return moveTo;
         }
 
+        //選最近的
         protected override BattleCharacterController GetTarget(List<BattleCharacterController> list)
         {
-            int damage;
-            int maxDamage = -1;
+            int distance;
+            int minDistance = int.MaxValue;
             BattleCharacterController target = _character.Info.GetProvocativeTarget();
 
-            if (target == null) 
+            if (target == null)
             {
                 for (int i = 0; i < list.Count; i++)
                 {
-                    damage = BattleController.Instance.GetDamage(SelectedSkill.Effect, _character, list[i]);
-                    if (damage > maxDamage)
+                    distance = BattleController.Instance.GetDistance(Utility.ConvertToVector2Int(_character.transform.position), Utility.ConvertToVector2Int(list[i].transform.position), _character.Info.Faction);
+                    if (minDistance > distance)
                     {
-                        maxDamage = damage;
+                        minDistance = distance;
                         target = list[i];
                     }
                 }

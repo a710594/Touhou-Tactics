@@ -9,15 +9,21 @@ public class RecoverAllEffect : Effect
     {
     }
 
-    public override void Use(HitType hitType, BattleCharacterController user, BattleCharacterController target, List<Log> logList)
+    public override void Use(HitType hitType, BattleCharacterController user, BattleCharacterController target, Dictionary<BattleCharacterController, List<FloatingNumberData>> floatingNumberDic)
     {
         int recover = user.Info.MaxHP - user.Info.CurrentHP;
+        string text = recover.ToString();
         target.Info.SetRecover(recover);
-        logList.Add(new Log(user, target, Type, hitType, recover.ToString()));
+
+        if (!floatingNumberDic.ContainsKey(target))
+        {
+            floatingNumberDic.Add(target, new List<FloatingNumberData>());
+        }
+        floatingNumberDic[target].Add(new FloatingNumberData(text, Type, hitType));
 
         if (SubEffect != null && hitType != HitType.Miss)
         {
-            SubEffect.Use(hitType, user, target, logList);
+            SubEffect.Use(hitType, user, target, floatingNumberDic);
         }
     }
 }

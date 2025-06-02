@@ -36,51 +36,56 @@ public class InputMamager
         TimerUpdater.UpdateHandler += Update;
     }
 
-    public void Lock()
-    {
-        IsLock = true;
-    }
-
-    public void Unlock()
-    {
-        IsLock = false;
-    }
-
     private void Update() 
     {
         if(SceneController.Instance.Info != null && SceneController.Instance.Info.CurrentScene != "Battle") 
         {
             if (!IsLock)
             {
-                //if (Input.GetKeyDown(KeyCode.S))
-                //{
-                //    FileSystem.Instance.Save();
-                //}
                 if (Input.GetKeyDown(KeyCode.I))
                 {
                     if (_bagUI == null)
                     {
-                        _bagUI = BagUI.Open();
+                        Cursor.lockState = CursorLockMode.None;
+                        IsLock = true;
+                        _bagUI = BagUI.Open(()=> 
+                        {
+                            Cursor.lockState = CursorLockMode.Locked;
+                            IsLock = false;
+                        });
                         _bagUI.SetNormalState();
-                        _bagUI.CloseHandler += Unlock;
-                        Lock();
                     }
                 }
                 if (Input.GetKeyDown(KeyCode.C))
                 {
                     if (_selectCharacterUI == null)
                     {
-                        _selectCharacterUI = CharacterUI.Open();
-                        _selectCharacterUI.CloseHandler += Unlock;
-                        Lock();
+                        Cursor.lockState = CursorLockMode.None;
+                        IsLock = true;
+                        _selectCharacterUI = CharacterUI.Open(()=> 
+                        {
+                            IsLock = false;
+                            if (SceneController.Instance.Info.CurrentScene == "Explore")
+                            {
+                                Cursor.lockState = CursorLockMode.Locked;
+                            }
+                        });
                     }
                 }
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
                     if (_systemUI == null)
                     {
-                        _systemUI = SystemUI.Open();
-                        Lock();
+                        IsLock = true;
+                        Cursor.lockState = CursorLockMode.None;
+                        _systemUI = SystemUI.Open(()=> 
+                        {
+                            IsLock = false;
+                            if (SceneController.Instance.Info.CurrentScene == "Explore")
+                            {
+                                Cursor.lockState = CursorLockMode.Locked;
+                            }
+                        });
                     }
                 }
 
@@ -151,7 +156,7 @@ public class InputMamager
                     {
                         _systemUI.Close();
                         _systemUI = null;
-                        Unlock();
+                        IsLock = false;
                     }
                 }
             }

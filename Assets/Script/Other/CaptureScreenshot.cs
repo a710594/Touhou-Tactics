@@ -12,7 +12,7 @@ public class CaptureScreenshot : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space)) 
         {
-            string fileName = Application.dataPath + "/StreamingAssets/" + FileName + ".png";
+            string fileName = Application.dataPath + "/Resources/Image/Character/" + FileName + ".png";
             StartCoroutine(Capture(fileName));
         }
     }

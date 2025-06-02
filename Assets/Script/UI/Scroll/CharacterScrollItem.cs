@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 public class CharacterScrollItem : ScrollItem
 {
-    public Action<string> UseItemHandler;
+    public Action<CharacterScrollItem> DetailHandler;
+    public Action<CharacterScrollItem> UseItemHandler;
 
     public Text NameLabel;
     public ValueBar HpBar;
@@ -26,33 +27,18 @@ public class CharacterScrollItem : ScrollItem
 
     private void DetailOnClick() 
     {
-        CharacterDetailUI characterDetailUI = CharacterDetailUI.Open(true);
-        characterDetailUI.SetData((CharacterInfo)Data);
+        if (DetailHandler != null) 
+        {
+            DetailHandler(this);
+        }
     }
 
     private void UseItemOnClick() 
     {
-        BagUI bagUI = BagUI.Open();
-        bagUI.SetUseState();
-        bagUI.UseHandler += UseItem;
-    }
-
-    private void UseItem(object obj) 
-    {
-        int add = 0;
-        if(obj is Battle.ItemCommand) 
+        if (UseItemHandler != null) 
         {
-            Battle.ItemCommand item = (Battle.ItemCommand)obj;
-            add = item.Effect.Value;
+            UseItemHandler(this);
         }
-        else if(obj is Food) 
-        {
-            Food food = (Food)obj;
-            add = food.HP;
-        }
-        _characterInfo.SetRecover(add);
-        HpBar.SetValueTween(_characterInfo.CurrentHP, _characterInfo.MaxHP, null);
-        CharacterUI.SetTip(_characterInfo.Name + " ¦^´_¤F " + add + " HP");
     }
 
     protected override void Awake()

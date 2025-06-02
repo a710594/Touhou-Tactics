@@ -17,13 +17,25 @@ public class TutorialUI : MonoBehaviour
     private Action _callback;
     private Dictionary<int, TutorialModel> _dataDic;
 
-    public static void Open(int id, Action callback)
+    public static TutorialUI Open(int id, Action callback)
     {
         GameObject obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/UI/TutorialUI"), Vector3.zero, Quaternion.identity);
         obj.transform.SetParent(GameObject.Find("Canvas").transform);
         obj.transform.localPosition = Vector3.zero;
         TutorialUI tutorialUI = obj.GetComponent<TutorialUI>();
         tutorialUI.Init(id, callback);
+
+        return tutorialUI;
+    }
+
+    public void Close() 
+    {
+        Destroy(gameObject);
+
+        if (_callback != null)
+        {
+            _callback();
+        }
     }
 
     public void Init(int id, Action callback)
@@ -85,20 +97,10 @@ public class TutorialUI : MonoBehaviour
         }
     }
 
-    private void CloseOnClick() 
-    {
-        if (_callback != null) 
-        {
-            _callback();
-        }
-
-        Destroy(gameObject);
-    }
-
     private void Awake()
     {
         PreviouButton.onClick.AddListener(PreviouOnClick);
         NextButton.onClick.AddListener(NextOnClick);
-        CloseButton.onClick.AddListener(CloseOnClick);
+        CloseButton.onClick.AddListener(Close);
     }
 }

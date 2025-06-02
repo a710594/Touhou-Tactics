@@ -73,8 +73,7 @@ public class CharacterInfoUI : MonoBehaviour
     {
         if (_character != null)
         {
-            CharacterDetailUI characterDetailUI = CharacterDetailUI.Open(false);
-            characterDetailUI.SetData((BattlePlayerInfo)_character, _position);
+            BattleController.Instance.OpenCharacterDetail(_character, _position);
         }
     }
 

@@ -6,30 +6,29 @@ using UnityEngine.UI;
 
 public class TreasureUI : MonoBehaviour
 {
-    public Action CloseHandler;
-
     public Text TitleLabel_1;
     public Text TitleLabel_2;
     public Text NameLabel;
 
-    public void Open(int id) 
+    private Action _callback;
+
+    public void Open(ItemModel data, Action callback) 
     {
         gameObject.SetActive(true);
         TitleLabel_1.gameObject.SetActive(true);
         TitleLabel_2.gameObject.SetActive(false);
-        ItemModel data = DataTable.Instance.ItemDic[id];
         NameLabel.text = data.Name;
+        _callback = callback;
     }
 
     private void Close() 
     {
-        if (CloseHandler != null)
-        {
-            CloseHandler();
-        }
-
         gameObject.SetActive(false);
-        InputMamager.Instance.Unlock();
+
+        if (_callback != null)
+        {
+            _callback();
+        }
     }
 
     private void Update()

@@ -70,9 +70,7 @@ namespace Battle
 
         private bool _canClick = true;
         private int _maxIndex = 0;
-        private Vector2Int _selectedPosition;
         private Vector2Int _cameraDefaultPosition; //戰鬥一開始的時候攝影機的位置
-        private CameraDraw _cameraDraw;
         private CameraController _cameraController;
         private StateContext _context = new StateContext();
         public BattleUI BattleUI;
@@ -84,6 +82,7 @@ namespace Battle
         private LineSetting _line;
         private List<CharacterInfo> _candidateList = new List<CharacterInfo>();
         private List<BattleCharacterController> _targetList = new List<BattleCharacterController>();
+        private List<Vector2Int> _areaList = new List<Vector2Int>();
 
         public List<Log> LogList = new List<Log>();
 
@@ -136,7 +135,7 @@ namespace Battle
                 for (int i = 0; i < file.EnemyList.Count; i++)
                 {
                     EnemyDataList.Add(DataTable.Instance.EnemyDic[file.EnemyList[i].ID]);
-                    CreateEnemy(file.EnemyList[i].ID, file.EnemyList[i].Lv, file.EnemyList[i].Position);
+                    CreateEnemy(file.EnemyList[i].ID, file.EnemyList[i].Lv, file.EnemyList[i].Position, file.EnemyList[i].Angle);
                 }
 
                 Start(tutorial);
@@ -244,7 +243,7 @@ namespace Battle
                     count--;
                 }
 
-                //Create Enemy
+                List<Vector2Int> positionList = new List<Vector2Int>();
                 List<Vector2Int> invalidList = new List<Vector2Int>();
                 foreach (KeyValuePair<Vector2Int, BattleInfoTile> pair in TileDic)
                 {
@@ -252,23 +251,24 @@ namespace Battle
                     {
                         invalidList.Add(pair.Key);
                     }
+                    else if (PlayerPositionList.Contains(pair.Key)) 
+                    {
+                        invalidList.Add(pair.Key);
+                    }
+                    else
+                    {
+                        positionList.Add(pair.Key);
+                    }
                 }
-
-                for (int i = 0; i < PlayerPositionList.Count; i++)
-                {
-                    invalidList.Add(PlayerPositionList[i]);
-                }
-
                 float height;
+                Vector2Int center = file.EnemyCenterPosition;
                 for (int i = 0; i < enemyGroup.EnemyList.Count; i++)
                 {
-                    if (Utility.GetRandomPosition(file.MinX, file.MaxX, file.MinY, file.MaxY, invalidList, out Vector2Int result))
-                    {
-                        EnemyDataList.Add(DataTable.Instance.EnemyDic[enemyGroup.EnemyList[i]]);
-                        height = TileDic[result].TileData.Height * 0.5f + 0.5f;
-                        CreateEnemy(enemyGroup.EnemyList[i], enemyGroup.Lv, result);
-                        invalidList.Add(result);
-                    }
+                    EnemyDataList.Add(DataTable.Instance.EnemyDic[enemyGroup.EnemyList[i]]);
+                    position = Utility.GenerateNormalPoints(center, file.StdDev, file.MinX, file.MaxX, file.MinY, file.MaxY, invalidList);
+                    height = TileDic[position].TileData.Height * 0.5f + 0.5f;
+                    CreateEnemy(enemyGroup.EnemyList[i], enemyGroup.Lv, position, Utility.GetRandomAngle());
+                    invalidList.Add(position);
                 }
 
                 Start(tutorial);
@@ -284,7 +284,6 @@ namespace Battle
             BattleUI.gameObject.SetActive(false);
             BattleResultUI.gameObject.SetActive(false);
             _root = GameObject.Find("BattleController").transform;
-            _cameraDraw = Camera.main.GetComponent<CameraDraw>();
             _cameraController = Camera.main.GetComponent<CameraController>();
             _fileLoader = GameObject.Find("FileManager").GetComponent<FileManager>();
             _line = GameObject.Find("Line").GetComponent<LineSetting>();
@@ -371,15 +370,6 @@ namespace Battle
             LogList.Clear();
         }
 
-        public void Click(Vector2Int position)
-        {
-            if (!_canClick)
-            {
-                return;
-            }
-
-            ((BattleControllerState)_context.CurrentState).Click(position);
-        }
 
         public bool PlaceCharacter(BattleCharacterController character)
         {
@@ -484,6 +474,7 @@ namespace Battle
 
         public void UseCommand(Vector2Int position, List<Vector2Int> areaList) 
         {
+            _areaList = areaList;
             if (Tutorial == null || !Tutorial.IsActive || position == Tutorial.CommandPosition)
             {
                 SetTargetList(areaList);
@@ -514,6 +505,14 @@ namespace Battle
                 {
                     _context.SetState<SpellState>();
                 }
+            }
+        }
+
+        public void OpenCharacterDetail(BattleCharacterInfo character, Vector2Int position) 
+        {
+            if (Tutorial == null || !Tutorial.IsActive)
+            {
+                BattleCharacterDetailUI.Open(character, position);
             }
         }
 
@@ -634,17 +633,17 @@ namespace Battle
             //}
         }
 
-        public void CreateEnemy(int id, int lv, Vector2Int position) 
+        public void CreateEnemy(int id, int lv, Vector2Int position, float angle) 
         {
             EnemyModel enemyData = DataTable.Instance.EnemyDic[id];
-            CreateEnemy(enemyData, lv, position);
+            CreateEnemy(enemyData, lv, position, angle);
         }
 
-        public void CreateEnemy(EnemyModel enemyData, int lv, Vector2Int position)
+        public void CreateEnemy(EnemyModel enemyData, int lv, Vector2Int position, float angle)
         {
             GameObject obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/Battle/" + enemyData.Controller), Vector3.zero, Quaternion.identity);
             obj.transform.position = new Vector3(position.x, TileDic[position].TileData.Height * 0.5f + 0.5f, position.y);
-            obj.transform.localEulerAngles = new Vector3(0, -90, 0);
+            obj.transform.localEulerAngles = new Vector3(0, angle, 0);
             BattleCharacterController controller = obj.GetComponent<BattleCharacterController>();
             controller.Init(lv, enemyData);
             controller.MoveEndHandler += OnMoveEnd;
@@ -707,6 +706,7 @@ namespace Battle
                 if (_lastPosition != null)
                 {
                     _lastPosition = null;
+                    BattleUI.SetTileLabel(null);
                     return true;
                 }
                 else
@@ -723,12 +723,14 @@ namespace Battle
                 if(_lastPosition == null || ((Vector2Int)currentPosition != (Vector2Int)_lastPosition)) 
                 {
                     _lastPosition = currentPosition;
+                    BattleUI.SetTileLabel(TileDic[(Vector2Int)currentPosition]);
                     return true;
                 }
             }
             else if(_lastPosition != null)
             {
                 _lastPosition = null;
+                BattleUI.SetTileLabel(null);
                 return true;
             }
             return false;
@@ -739,29 +741,9 @@ namespace Battle
             TileDic[position].TileObject.Select.SetActive(show);
         }
 
-        public void UseEffect(Command command, BattleCharacterController user, BattleCharacterController target, out int count)
+        /*public void UseEffect(Command command, BattleCharacterController user, BattleCharacterController target, out int count)
         {
-            HitType hitType;
-
-            if (Instance.Tutorial != null)
-            {
-                if (Instance.Tutorial.Hit)
-                {
-                    hitType = HitType.Hit;
-                }
-                else if (Instance.Tutorial.Critical) 
-                {
-                    hitType = HitType.Critical;
-                }
-                else
-                {
-                    hitType = Instance.CheckHit(command.Hit, user, target);
-                }
-            }
-            else
-            {
-                hitType = Instance.CheckHit(command.Hit, user, target);
-            }
+            HitType hitType = CheckHit(command.Hit, user, target, Tutorial);
 
             List<Log> logList = new List<Log>();
             command.Effect.Use(hitType, user, target, logList);
@@ -771,25 +753,25 @@ namespace Battle
                 command.SubEffect.Use(user, command.SubTarget, logList);
             }
 
-            if (Passive.Contains<MiraclePassive>(user.Info.PassiveList) && command.Effect is RecoverEffect)
-            {
-                int recover = (int)(user.Info.MaxHP / 10f);
-                user.Info.SetRecover(recover);
-                logList.Add(new Log(user, user, EffectModel.TypeEnum.Recover, hitType, recover.ToString()));
-            }
+            //if (Passive.Contains<MiraclePassive>(user.Info.PassiveList) && command.Effect is RecoverEffect)
+            //{
+            //    int recover = (int)(user.Info.MaxHP / 10f);
+            //    user.Info.SetRecover(recover);
+            //    logList.Add(new Log(user, user, EffectModel.TypeEnum.Recover, hitType, recover.ToString()));
+            //}
 
-            if (command is ItemCommand) 
-            {
-                ItemCommand itemCommand = (ItemCommand)command;
-                if (itemCommand.ItemID != 0)
-                {
-                    ItemManager.Instance.MinusItem(itemCommand.ItemID, 1);
-                }
-                else if (itemCommand.Food !=null) 
-                {
-                    ItemManager.Instance.MinusFood(itemCommand.Food);
-                }
-            }
+            //if (command is ItemCommand) 
+            //{
+            //    ItemCommand itemCommand = (ItemCommand)command;
+            //    if (itemCommand.ItemID != 0)
+            //    {
+            //        ItemManager.Instance.MinusItem(itemCommand.ItemID, 1);
+            //    }
+            //    else if (itemCommand.Food !=null) 
+            //    {
+            //        ItemManager.Instance.MinusFood(itemCommand.Food);
+            //    }
+            //}
 
             for (int i=0; i<logList.Count; i++) 
             {
@@ -817,6 +799,77 @@ namespace Battle
                 target.transform.DOShakePosition(0.5f, 0.1f);
             }
 
+        }*/
+
+        public void UseEffect() 
+        {
+            int originalHP = 0;
+            BattleCharacterController target = null;
+            if (_targetList.Count > 0 && _targetList[0] != SelectedCharacter)
+            {
+                target = _targetList[0];
+                originalHP = target.Info.CurrentHP;
+            }
+
+            HitType hitType;
+            BattleCharacterController user = SelectedCharacter;
+            Command command = user.Info.SelectedCommand;
+            Dictionary<BattleCharacterController, List<FloatingNumberData>> _floatingNumberDic = new Dictionary<BattleCharacterController, List<FloatingNumberData>>();
+            for (int i = 0; i < _targetList.Count; i++)
+            {
+                hitType = CheckHit(command.Hit, user, _targetList[i], Tutorial);
+                command.Effect.Use(hitType, user, _targetList[i], _floatingNumberDic);
+                CheckDeath(_targetList[i]);
+
+                if (command.Shake)
+                {
+                    _targetList[i].transform.DOShakePosition(0.5f, 0.1f);
+                }
+            }
+
+            if (command.SubEffect != null)
+            {
+                command.SubEffect.Use(user, command.SubTarget, _floatingNumberDic, out BattleCharacterController taregt);
+                CheckDeath(taregt);
+            }
+
+            if (Passive.Contains<MiraclePassive>(user.Info.PassiveList) && command.Effect is RecoverEffect)
+            {
+                int recover = (int)(user.Info.MaxHP / 10f);
+                user.Info.SetRecover(recover);
+
+                if (!_floatingNumberDic.ContainsKey(user))
+                {
+                    _floatingNumberDic.Add(user, new List<FloatingNumberData>());
+                }
+                _floatingNumberDic[user].Add(new FloatingNumberData(recover.ToString(), EffectModel.TypeEnum.Recover, HitType.Hit));
+            }
+
+            float height;
+            GameObject partilce;
+            for (int i=0; i<_areaList.Count; i++) 
+            {
+                partilce = GameObject.Instantiate(Resources.Load("Particle/" + command.Particle), Vector3.zero, Quaternion.identity) as GameObject;
+                height = TileDic[_areaList[i]].TileData.Height * 0.5f + 0.5f;
+                partilce.transform.position = new Vector3(_areaList[i].x, height, _areaList[i].y);
+            }
+
+            int maxCount = -1;
+            foreach (KeyValuePair<BattleCharacterController, List<FloatingNumberData>> pair in _floatingNumberDic)
+            {
+                Instance.BattleUI.PlayFloatingNumberPool(pair.Key, pair.Value);
+                if (pair.Value.Count > maxCount) 
+                {
+                    maxCount = pair.Value.Count;
+                }
+            }
+            Timer timer = new Timer();
+            timer.Start(maxCount * 0.5f, Instance.CheckResult);
+
+            if (target != null)
+            {
+                Instance.CharacterInfoUIGroup.SetCharacterInfoUIWithTween_2(target, originalHP, Utility.ConvertToVector2Int(target.transform.position));
+            }
         }
 
         public void SetWin() 
@@ -856,8 +909,6 @@ namespace Battle
             }
 
             public virtual void Next() { }
-
-            public virtual void Click(Vector2Int position) { }
 
             public virtual void Update() { }
         }

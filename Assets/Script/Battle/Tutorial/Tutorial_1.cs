@@ -28,7 +28,7 @@ namespace Battle
         {
             BattleController.Instance.PlaceCharacterHandler -= Step_2;
             BattleController.Instance.PrepareStateStopDrag();
-            TutorialArrowUI.Open("", BattleController.Instance.SelectCharacterUI.ConfirmButton.transform, new Vector3(-200, 0, 0), Vector2Int.right);
+            TutorialArrowUI.Open("", BattleController.Instance.SelectCharacterUI.ConfirmButton.transform, new Vector3(-150, 0, 0), Vector2Int.right);
             BattleController.Instance.CharacterStateBeginHandler += Step_3;
         }
 
@@ -138,7 +138,7 @@ namespace Battle
             Direction = Vector2Int.up;
             BattleController.Instance.DirectionStateBeginHandler -= Step_11;
             TutorialArrowUI.Close();
-            TutorialArrowUI.Open("選擇方向。", new Vector3(4, 2, 4), Vector2Int.down);
+            TutorialArrowUI.Open("選擇方向。", new Vector3(4, 1, 4), Vector2Int.down);
             BattleController.Instance.CharacterStateBeginHandler += Step_12;
         }
 

@@ -22,7 +22,7 @@ namespace Battle
                 _characterList = Instance.CharacterAliveList;
                 _selectedCharacter.Info.HasItem = true;
 
-                _target = null;
+                /*_target = null;
                 if (Instance._targetList.Count > 0 && Instance._targetList[0] != _selectedCharacter)
                 {
                     _target = Instance._targetList[0];
@@ -42,9 +42,20 @@ namespace Battle
                 if (_target != null)
                 {
                     Instance.CharacterInfoUIGroup.SetCharacterInfoUIWithTween_2(_target, _originalHP, Utility.ConvertToVector2Int(_target.transform.position));
+                }*/
+
+                ItemCommand itemCommand = (ItemCommand)_selectedCharacter.Info.SelectedCommand;
+                if (itemCommand.ItemID != 0)
+                {
+                    ItemManager.Instance.MinusItem(itemCommand.ItemID, 1);
+                }
+                else if (itemCommand.Food != null)
+                {
+                    ItemManager.Instance.MinusFood(itemCommand.Food);
                 }
 
-                _timer.Start(maxCount * 0.5f, Instance.CheckResult);
+                Instance.UseEffect();
+                //_timer.Start(maxCount * 0.5f, Instance.CheckResult);
             }
         }
     }

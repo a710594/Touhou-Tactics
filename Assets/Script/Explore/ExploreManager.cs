@@ -81,7 +81,7 @@ namespace Explore
         public void EnterBattle(ExploreFileEnemy enemy) 
         {
             _hasCollision = true;
-            InputMamager.Instance.Lock();
+            InputMamager.Instance.IsLock = true;
             File.EnemyList.Remove(enemy);
             UpdateFile();
 
@@ -89,7 +89,7 @@ namespace Explore
             SceneController.Instance.ChangeScene("Battle", ChangeSceneUI.TypeEnum.Fade, (sceneName) =>
             {
                 Cursor.lockState = CursorLockMode.None;
-                InputMamager.Instance.Unlock();
+                InputMamager.Instance.IsLock = false;
                 string tutorial = null;
                 if (enemy.Type == ExploreFileEnemy.TypeEnum.Fixed)
                 {
@@ -104,11 +104,7 @@ namespace Explore
                         EventManager.Instance.Info.SanaeTutorial = true;
                         tutorial = "SanaeTutorial";
                     }
-                    else if (File.Floor > 1 && !EventManager.Instance.Info.SpellTutorial)
-                    {
-                        EventManager.Instance.Info.SpellTutorial = true;
-                        tutorial = "SpellTutorial";
-                    }
+
                     BattleController.Instance.Init();
                     BattleController.Instance.SetRandom(tutorial, enemyGroup);
                 }
@@ -117,7 +113,7 @@ namespace Explore
 
         public void CheckGoal() 
         {
-            InputMamager.Instance.Lock();
+            InputMamager.Instance.IsLock = true;
             ConfirmUI.Open("要前往下一層嗎？", "確定", "取消", () =>
             {
                 File.Floor++;
@@ -131,11 +127,11 @@ namespace Explore
                 {
                     CharacterManager.Instance.RecoverAllHP();
                     ItemManager.Instance.Info.Key = 0;
-                    InputMamager.Instance.Unlock();
+                    InputMamager.Instance.IsLock = false;
                 });
             }, () =>
             {
-                InputMamager.Instance.Unlock();
+                InputMamager.Instance.IsLock = false;
             });         
         }
 
@@ -217,6 +213,10 @@ namespace Explore
                 if (TileDic[v2].Treasure != null) 
                 {
                     TileDic[v2].Treasure.Object.Icon.layer = _mapLayer;
+                }
+                if (TileDic[v2].Door != null)
+                {
+                    TileDic[v2].Door.transform.GetChild(0).gameObject.layer = _mapLayer;
                 }
             }
 
@@ -391,6 +391,11 @@ namespace Explore
                 gameObj.transform.SetParent(_parent);
                 TileDic[File.DoorList[i].Position].Door = gameObj;
                 TileDic[File.DoorList[i].Position].IsWalkable = false;
+
+                if (TileDic[File.DoorList[i].Position].IsVisited)
+                {
+                    gameObj.transform.GetChild(0).gameObject.layer = _mapLayer;
+                }
             }
 
             for (int i=0; i<File.TreasureList.Count; i++)
@@ -419,6 +424,10 @@ namespace Explore
             gameObj.transform.SetParent(_parent);
             Goal goal = gameObj.GetComponent<Goal>();
             File.GoalObj = goal;
+            if (TileDic[File.Goal].IsVisited)
+            {
+                File.GoalObj.Quad.layer = _mapLayer;
+            }
 
             ExploreEnemyController controller;
             for (int i = 0; i < File.EnemyList.Count; i++)

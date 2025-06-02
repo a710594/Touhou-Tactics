@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Battle
 {
-    public class KutakaAI : OldBattleAI
+    /*public class KutakaAI : OldBattleAI
     {
         private int _count = 0;
 
@@ -44,5 +44,5 @@ namespace Battle
             Vector3 v3 = new Vector3(targetPosition.x, BattleController.Instance.TileDic[targetPosition].TileData.Height, targetPosition.y);
             BattleController.Instance.Click(targetPosition);
         }
-    }
+    }*/
 }

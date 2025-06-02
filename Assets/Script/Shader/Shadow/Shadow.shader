@@ -7,11 +7,13 @@
     }
         SubShader{
           Cull off
+          Blend SrcAlpha OneMinusSrcAlpha // 混合的参数
           Pass {
             Tags
             {
                 "LightMode" = "ForwardBase"
                 "PassFlags" = "OnlyDirectional"
+          "Queue" = "Transparent" "RenderType" = "Transparent"
             }
 
             CGPROGRAM
@@ -64,7 +66,7 @@
             fixed4 frag(v2f i) : SV_Target {
                 // Color Map
                 fixed4 mainTex = tex2D(_MainTex, i.uv);
-                fixed3 diffuse = _LightColor0.rgb * mainTex.rgb;
+                fixed4 diffuse = fixed4(_LightColor0.rgb, 1) * mainTex.rgba;
 
                 //shadow
                 //half3 normal = normalize(i.normal);
@@ -77,9 +79,10 @@
                 //float lightIntensity = smoothstep(0, 0.01, NdotL * shadow);
 
                 // Color
-                fixed3 ambient = _Ambient * mainTex.rgb;
-                fixed4 color = fixed4(ambient + diffuse, 1.0) * shadow;
-                color.rgb = color;
+                fixed4 ambient = _Ambient * mainTex.rgba;
+                //fixed4 color = fixed4(ambient + diffuse) * shadow;
+                fixed3 color3 = diffuse.rgb * shadow;
+                fixed4 color = fixed4(color3, diffuse.a);
 
                 return color;
               }

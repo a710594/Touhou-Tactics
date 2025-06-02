@@ -15,7 +15,7 @@ public class BagUI : MonoBehaviour
 
     public Action<object> UseHandler;
     public Action<int, object> SetEquipHandler;
-    public Action CloseHandler;
+    public Action<object> ScrollItemHandler;
 
     public Text MoneyLabel;
     public Text KeyLabel;
@@ -26,18 +26,20 @@ public class BagUI : MonoBehaviour
     public Button CloseButton;
     public Button UseButton;
     public ButtonColorSetting UseButtonColorSetting;
-    public BagItemGroup BagItemGroup;
-    public BagEquipGroup BagEquipGroup;
+    public BagItemGroup ItemGroup;
+    public BagEquipGroup EquipGroup;
     public RectTransform RectTransform;
     public ButtonGroup ButtonGroup;
     public TipLabel TipLabel;
 
-    private int _equipIndex;
-    private StateEnum _currentState;
-    private object _selectedObj = null;
     private static BagUI _bagUI;
 
-    public static BagUI Open() 
+    private int _equipIndex;
+    private object _selectedObj = null;
+    private StateEnum _currentState;
+    private Action _callback;
+
+    public static BagUI Open(Action callback) 
     {
         if (_bagUI == null)
         {
@@ -47,6 +49,7 @@ public class BagUI : MonoBehaviour
             _bagUI = obj.GetComponent<BagUI>();
             _bagUI.RectTransform.offsetMax = Vector3.zero;
             _bagUI.RectTransform.offsetMin = Vector3.zero;
+            _bagUI._callback = callback;
         }
         return _bagUI;
     }
@@ -54,10 +57,10 @@ public class BagUI : MonoBehaviour
     public void SetNormalState() 
     {
         _currentState = StateEnum.Normal;
-        BagItemGroup.gameObject.SetActive(true);
-        BagEquipGroup.gameObject.SetActive(false);
-        BagItemGroup.SetScrollView(ItemModel.CategoryEnum.Food);
-        ButtonGroup.SetSelect(FoodButton.gameObject);
+        ItemGroup.gameObject.SetActive(true);
+        EquipGroup.gameObject.SetActive(false);
+        ItemGroup.SetScrollView(ItemModel.CategoryEnum.Material);
+        ButtonGroup.SetSelect(ItemButton.gameObject);
         MoneyLabel.text = "Money: " + ItemManager.Instance.Info.Money;
         KeyLabel.text = "Key: " + ItemManager.Instance.Info.Key;
     }
@@ -66,10 +69,10 @@ public class BagUI : MonoBehaviour
     {
         _currentState = StateEnum.Equip;
         _equipIndex = index;
-        BagItemGroup.gameObject.SetActive(false);
-        BagEquipGroup.gameObject.SetActive(true);
-        BagEquipGroup.SetScrollView(category, character);
-        BagEquipGroup.SetDetail(null);
+        ItemGroup.gameObject.SetActive(false);
+        EquipGroup.gameObject.SetActive(true);
+        EquipGroup.SetScrollView(category, character);
+        EquipGroup.SetDetail(null);
         ButtonGroup.gameObject.SetActive(false);
         MoneyLabel.text = "Money: " + ItemManager.Instance.Info.Money;
         KeyLabel.text = "Key: " + ItemManager.Instance.Info.Key;
@@ -78,76 +81,74 @@ public class BagUI : MonoBehaviour
     public void SetUseState()
     {
         _currentState = StateEnum.Use;
-        BagItemGroup.gameObject.SetActive(true);
-        BagEquipGroup.gameObject.SetActive(false);
+        ItemGroup.gameObject.SetActive(true);
+        EquipGroup.gameObject.SetActive(false);
         ItemButton.gameObject.SetActive(false);
         EquipButton.gameObject.SetActive(false);
-        BagItemGroup.SetScrollView(ItemModel.CategoryEnum.Food);
+        ItemGroup.SetScrollView(ItemModel.CategoryEnum.Food);
         ButtonGroup.SetSelect(FoodButton.gameObject);
         MoneyLabel.text = "Money: " + ItemManager.Instance.Info.Money;
         KeyLabel.text = "Key: " + ItemManager.Instance.Info.Key;
     }
 
+    public void SetSelectObj(object obj) 
+    {
+        _selectedObj = obj;
+        UseButton.gameObject.SetActive(true);
+    }
 
     private void ConsumablesOnClick() 
     {
-        BagItemGroup.gameObject.SetActive(true);
-        BagEquipGroup.gameObject.SetActive(false);
-        BagItemGroup.SetScrollView(ItemModel.CategoryEnum.Consumables);
-        BagItemGroup.SetName("");
-        BagItemGroup.SetComment("");
+        ItemGroup.gameObject.SetActive(true);
+        EquipGroup.gameObject.SetActive(false);
+        ItemGroup.SetScrollView(ItemModel.CategoryEnum.Consumables);
+        ItemGroup.SetName("");
+        ItemGroup.SetComment("");
     }
 
     private void FoodOnClick()
     {
-        BagItemGroup.gameObject.SetActive(true);
-        BagEquipGroup.gameObject.SetActive(false);
-        BagItemGroup.SetScrollView(ItemModel.CategoryEnum.Food);
-        BagItemGroup.SetName("");
-        BagItemGroup.SetComment("");
+        ItemGroup.gameObject.SetActive(true);
+        EquipGroup.gameObject.SetActive(false);
+        ItemGroup.SetScrollView(ItemModel.CategoryEnum.Food);
+        ItemGroup.SetName("");
+        ItemGroup.SetComment("");
     }
 
     private void ItemOnClick()
     {
-        BagItemGroup.gameObject.SetActive(true);
-        BagEquipGroup.gameObject.SetActive(false);
-        BagItemGroup.SetScrollView(ItemModel.CategoryEnum.Material);
-        BagItemGroup.SetName("");
-        BagItemGroup.SetComment("");
+        ItemGroup.gameObject.SetActive(true);
+        EquipGroup.gameObject.SetActive(false);
+        ItemGroup.SetScrollView(ItemModel.CategoryEnum.Material);
+        ItemGroup.SetName("");
+        ItemGroup.SetComment("");
     }
 
     private void EquipOnClick()
     {
-        BagItemGroup.gameObject.SetActive(false);
-        BagEquipGroup.gameObject.SetActive(true);
-        BagEquipGroup.SetScrollView();
-        BagEquipGroup.SetDetail(null);
+        ItemGroup.gameObject.SetActive(false);
+        EquipGroup.gameObject.SetActive(true);
+        EquipGroup.SetScrollView();
+        EquipGroup.SetDetail(null);
     }
 
     private void ScrollOnClick(object obj) 
     {
-        /*if (_currentState == StateEnum.Equip)
+        if(ScrollItemHandler!=null)
         {
-            UseButton.gameObject.SetActive(true);
-            if (obj is BagScrollItem.Data)
-            {
-                BagScrollItem.Data data = (BagScrollItem.Data)obj;
-                _selectedObj = data.Equip;
-                _canUse = (data.Weight >= data.Equip.Weight);
-                UseButtonColorSetting.SetColor(_canUse);
-            }
+            ScrollItemHandler(obj);
         }
-        else if(_currentState == StateEnum.Use) 
+        else if(_currentState == StateEnum.Equip || _currentState== StateEnum.Use) 
         {
             _selectedObj = obj;
-            _canUse = true;
             UseButton.gameObject.SetActive(true);
-        }*/
 
-        if(_currentState == StateEnum.Equip || _currentState== StateEnum.Use) 
-        {
-            _selectedObj = obj;
-            UseButton.gameObject.SetActive(true);
+            Equip equip = null;
+            if (obj is Equip)
+            {
+                equip = (Equip)obj;
+                EquipGroup.SetDetail(equip);
+            }
         }
     }
 
@@ -184,14 +185,14 @@ public class BagUI : MonoBehaviour
 
     public void Close() 
     {
-        if (CloseHandler != null) 
-        {
-            CloseHandler();
-        }
-
+        _bagUI = null;
         TipLabel.Stop();
         Destroy(gameObject);
-        _bagUI = null;
+
+        if (_callback != null)
+        {
+            _callback();
+        }
     }
 
     private void Update()
@@ -204,8 +205,8 @@ public class BagUI : MonoBehaviour
         FoodButton.onClick.AddListener(FoodOnClick);
         ItemButton.onClick.AddListener(ItemOnClick);
         EquipButton.onClick.AddListener(EquipOnClick);
-        BagItemGroup.ScrollHandler += ScrollOnClick;
-        BagEquipGroup.ScrollHandler += ScrollOnClick;
+        ItemGroup.ScrollHandler += ScrollOnClick;
+        EquipGroup.ScrollHandler += ScrollOnClick;
 
         UseButton.onClick.AddListener(UseOnClick);
         CloseButton.onClick.AddListener(Close);

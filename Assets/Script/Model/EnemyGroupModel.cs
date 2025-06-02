@@ -25,11 +25,13 @@ public class EnemyGroupModel
     public List<int> EnemyList = new List<int>();
 
     public string Map_1;
-    public int MapProbability_1;
     public string Map_2;
-    public int MapProbability_2;
     public string Map_3;
-    public int MapProbability_3;
+    public string Map_4;
+    public string Map_5;
+    public string Map_6;
+    public string Map_7;
+    public string Map_8;
     public List<string> MapPool = new List<string>();
 
 
@@ -51,26 +53,42 @@ public class EnemyGroupModel
     {
         if (Map_1 != "x")
         {
-            for (int j = 0; j < MapProbability_1; j++)
-            {
-                MapPool.Add(Map_1);
-            }
+            MapPool.Add(Map_1);
         }
 
         if (Map_2 != "x")
         {
-            for (int j = 0; j < MapProbability_2; j++)
-            {
-                MapPool.Add(Map_2);
-            }
+            MapPool.Add(Map_2);
         }
 
         if (Map_3 != "x")
         {
-            for (int j = 0; j < MapProbability_3; j++)
-            {
-                MapPool.Add(Map_3);
-            }
+            MapPool.Add(Map_3);
+        }
+
+        if (Map_4 != "x")
+        {
+            MapPool.Add(Map_4);
+        }
+
+        if (Map_5 != "x")
+        {
+            MapPool.Add(Map_5);
+        }
+
+        if (Map_6 != "x")
+        {
+            MapPool.Add(Map_6);
+        }
+
+        if (Map_7 != "x")
+        {
+            MapPool.Add(Map_7);
+        }
+
+        if (Map_8 != "x")
+        {
+            MapPool.Add(Map_8);
         }
     }
 

@@ -7,6 +7,7 @@ public class ExploreMapBuilder : MonoBehaviour
 {
     public int Floor;
     public int Seed;
+    public FileManager FileManager;
 
     private LayerMask _mapLayer;
 

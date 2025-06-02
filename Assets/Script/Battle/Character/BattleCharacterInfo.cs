@@ -79,16 +79,15 @@ public class BattleCharacterInfo
         StatusList.Add((Status)status.Clone()); ;
     }
 
-    public List<Log> CheckStatus()
+    public List<FloatingNumberData> CheckStatus()
     {
-        List<Log> logList = new List<Log>();
+        List<FloatingNumberData> list = new List<FloatingNumberData>();
         for (int i = 0; i < StatusList.Count; i++)
         {
             if (StatusList[i] is Poison)
             {
                 int damage = ((Poison)StatusList[i]).GetDamage(this);
-                Log log = new Log(this, damage.ToString());
-                logList.Add(log);
+                list.Add(new FloatingNumberData(damage.ToString(), EffectModel.TypeEnum.Poison, HitType.Hit));
                 SetDamage(damage);
             }
 
@@ -99,7 +98,7 @@ public class BattleCharacterInfo
                 i--;
             }
         }
-        return logList;
+        return list;
     }
 
     public bool IsSleep()

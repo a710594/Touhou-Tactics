@@ -195,7 +195,7 @@ RectTransform:
   - {fileID: 8502267450401929751}
   - {fileID: 4058675008923057614}
   m_Father: {fileID: 4159686745874746905}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1122,6 +1122,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ScrollView: {fileID: 2406367287000014555}
+  ButtonGroup: {fileID: 8037414663728744064}
   CommentLabel: {fileID: 7528097669356797453}
   ATKLabel: {fileID: 7528097669248420763}
   DEFLabel: {fileID: 7528097668198069013}
@@ -2036,7 +2037,7 @@ RectTransform:
   - {fileID: 7528097668395256981}
   - {fileID: 2410006018709494114}
   m_Father: {fileID: 4159686745874746905}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2381,7 +2382,7 @@ RectTransform:
   - {fileID: 7528097669431444583}
   - {fileID: 3494738843744963424}
   m_Father: {fileID: 4159686745874746905}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -3338,7 +3339,7 @@ RectTransform:
   - {fileID: 7528097668359567238}
   - {fileID: 8421699091982739903}
   m_Father: {fileID: 4159686745874746905}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -3593,8 +3594,8 @@ MonoBehaviour:
   CloseButton: {fileID: 7528097669061274173}
   UseButton: {fileID: 7528097667993429300}
   UseButtonColorSetting: {fileID: 1328919466074867507}
-  BagItemGroup: {fileID: 7528097669209402044}
-  BagEquipGroup: {fileID: 7528097668038997113}
+  ItemGroup: {fileID: 7528097669209402044}
+  EquipGroup: {fileID: 7528097668038997113}
   RectTransform: {fileID: 7528097669913033671}
   ButtonGroup: {fileID: 6011951001877505324}
   TipLabel: {fileID: 4400087948665985825}
@@ -3864,10 +3865,10 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1128887897442844474}
-  - {fileID: 7528097668503222511}
   - {fileID: 7528097669463381154}
   - {fileID: 7528097669036715345}
+  - {fileID: 1128887897442844474}
+  - {fileID: 7528097668503222511}
   m_Father: {fileID: 7528097669913033671}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

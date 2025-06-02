@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Battle
 {
-    public class CureAI : OldBattleAI
+    /*public class CureAI : OldBattleAI
     {
         public override void Start()
         {
@@ -62,5 +62,5 @@ namespace Battle
             BattleController.Instance.Click(moveTo);
             BattleController.Instance.Click(moveTo);
         }
-    }
+    }*/
 }

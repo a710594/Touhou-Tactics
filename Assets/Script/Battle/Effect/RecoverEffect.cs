@@ -9,28 +9,31 @@ public class RecoverEffect : Effect
     {
     }
 
-    public override void Use(HitType hitType, BattleCharacterController user, BattleCharacterController target, List<Log> logList)
+    public override void Use(HitType hitType, BattleCharacterController user, BattleCharacterController target, Dictionary<BattleCharacterController, List<FloatingNumberData>> floatingNumberDic)
     {
+        string text = "";
         if (hitType != HitType.Miss)
         {
             int recover = BattleController.Instance.GetRecover(this, user);
             target.Info.SetRecover(recover);
-            logList.Add(new Log(user, target, Type, hitType, recover.ToString()));
+            text = recover.ToString();
         }
-        else
+
+        if (!floatingNumberDic.ContainsKey(target))
         {
-            logList.Add(new Log(user, target, Type, hitType, "Miss"));  
+            floatingNumberDic.Add(target, new List<FloatingNumberData>());
         }
+        floatingNumberDic[target].Add(new FloatingNumberData(text, Type, hitType));
 
         if (SubEffect != null && hitType != HitType.Miss)
         {
-            SubEffect.Use(hitType, user, target, logList);
+            SubEffect.Use(hitType, user, target, floatingNumberDic);
         }
     }
 
-    public override void Use(BattleCharacterController user, SubTargetEnum subTarget, List<Log> logList)
+    public override void Use(BattleCharacterController user, SubTargetEnum subTarget, Dictionary<BattleCharacterController, List<FloatingNumberData>> floatingNumberDic, out BattleCharacterController target)
     {
-        BattleCharacterController target = null;
+        base.Use(user, subTarget, floatingNumberDic, out target);
 
         if(subTarget == SubTargetEnum.MinHp) 
         {
@@ -49,7 +52,12 @@ public class RecoverEffect : Effect
 
             int recover = BattleController.Instance.GetRecover(this, user);
             target.Info.SetRecover(recover);
-            logList.Add(new Log(user, target, Type, HitType.Hit, recover.ToString()));
+
+            if (!floatingNumberDic.ContainsKey(target))
+            {
+                floatingNumberDic.Add(target, new List<FloatingNumberData>());
+            }
+            floatingNumberDic[target].Add(new FloatingNumberData(recover.ToString(), Type, HitType.Hit));
         }
     }
 }

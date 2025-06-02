@@ -993,7 +993,8 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4717055257949588721, guid: 4cc41468816d82647965f9cbcad0f811, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 4cc41468816d82647965f9cbcad0f811, type: 3}
 --- !u!1 &671032485
 GameObject:
@@ -1707,8 +1708,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentMode: 0
   EnemyGroupId: 7
-  Map: Tutorial_1
-  Tutorial: Tutorial_1
+  Map: Tutorial_2
+  Tutorial: Tutorial_2
   FileManager: {fileID: 1335403690}
 --- !u!1001 &1507878404
 PrefabInstance:

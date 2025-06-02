@@ -14,19 +14,18 @@ public class BattleUI : MonoBehaviour
 
     public static BattleUI Instance = null;
 
-    public Button BackgroundButton;
     public CommandGroup CommandGroup;
     public LittleHpBarWithStatus LittleHpBarWithStatus;
     public Transform HPGroup;
-    public FloatingNumberPool FloatingNumberPool;
+    public NewFloatingNumberPool FloatingNumberPool;
     public CharacterListGroup CharacterListGroup;
     public DirectionGroup DirectionGroup;
     public LogGroup LogGroup;
     public ArrowImage Arrow;
+    public Text TileLabel;
 
     private Vector3 _directionPosition = new Vector3();    
-   // private Dictionary<BattleCharacterController, LittleHpBarWithStatus> _littleHpBarDic = new Dictionary<BattleCharacterController, LittleHpBarWithStatus>();
-    private Dictionary<BattleCharacterController, FloatingNumberPool> _floatingNumberPoolDic  = new Dictionary<BattleCharacterController, FloatingNumberPool>();
+    private Dictionary<BattleCharacterController, NewFloatingNumberPool> _floatingNumberPoolDic  = new Dictionary<BattleCharacterController, NewFloatingNumberPool>();
 
     public void SetVisible(bool isVisible) 
     {
@@ -41,16 +40,16 @@ public class BattleUI : MonoBehaviour
 
     public void SetFloatingNumberPoolAnchor(BattleCharacterController controller)
     {
-        FloatingNumberPool floatingNumberPool = Instantiate(FloatingNumberPool);
+        NewFloatingNumberPool floatingNumberPool = Instantiate(FloatingNumberPool);
         floatingNumberPool.transform.SetParent(transform);
         floatingNumberPool.SetAnchor(controller.transform);
         _floatingNumberPoolDic.Add(controller, floatingNumberPool);
     }
 
-    public void PlayFloatingNumberPool(BattleCharacterController info, Log log)
+    public void PlayFloatingNumberPool(BattleCharacterController info, List<FloatingNumberData> list)
     {
-        FloatingNumberPool floatingNumberPool = _floatingNumberPoolDic[info];
-        floatingNumberPool.Play(log);
+        NewFloatingNumberPool floatingNumberPool = _floatingNumberPoolDic[info];
+        floatingNumberPool.Play(list);
     }
 
 
@@ -84,32 +83,21 @@ public class BattleUI : MonoBehaviour
         Arrow.Hide();
     }
 
+    public void SetTileLabel(BattleInfoTile tile) 
+    {
+        if (tile == null)
+        {
+            TileLabel.text = "";
+        }
+        else
+        {
+            TileLabel.text = "°ª«×¡G" + tile.TileData.Height.ToString();
+        }
+    }
+
     private void DirectionButtonOnClick(Vector2Int direction)
     {
         BattleController.Instance.SetDirection(direction);
-    }
-
-    private void BackgroundOnClick() 
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 100))
-        {
-            Vector2Int v2 = Utility.ConvertToVector2Int(hit.point);
-            if (BattleController.Instance.IsTutorialActive && !BattleController.Instance.Tutorial.CheckClick(v2))
-            {
-                return;
-            }
-            BattleController.Instance.Click(v2);
-        }
-        else //?N??????S???????a??
-        {
-            if (BattleController.Instance.IsTutorialActive)
-            {
-                return;
-            }
-            BattleController.Instance.Click(new Vector2Int(int.MinValue, int.MinValue));
-        }
     }
 
     private void Awake()
@@ -117,7 +105,6 @@ public class BattleUI : MonoBehaviour
         Instance = this;
         SetDirectionGroupVisible(false);
         DirectionGroup.ClickHandler += DirectionButtonOnClick;
-        BackgroundButton.onClick.AddListener(BackgroundOnClick);
     }
 
     private void Update()

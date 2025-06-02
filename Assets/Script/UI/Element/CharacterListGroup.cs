@@ -20,7 +20,7 @@ public class CharacterListGroup : MonoBehaviour
         image.transform.SetParent(transform);
         image.gameObject.SetActive(false);
         _imageList.Add(image);
-        sprite = Resources.Load<Sprite>("Image/" + controller.Info.FileName + "_F");
+        sprite = Resources.Load<Sprite>("Image/Character/" + controller.Info.FileName + "_Little");
         controller.Sprite = sprite;
     }
 

@@ -164,8 +164,20 @@ namespace Battle
         }
 
 
-        public HitType CheckHit(int hit, BattleCharacterController user, BattleCharacterController target, bool noCritical = false)
+        public HitType CheckHit(int hit, BattleCharacterController user, BattleCharacterController target, BattleTutorial tutorial)
         {
+            if (tutorial != null)
+            {
+                if (Instance.Tutorial.Hit)
+                {
+                    return HitType.Hit;
+                }
+                else if (Instance.Tutorial.Critical)
+                {
+                    return HitType.Critical;
+                }
+            }
+
             float hitRate = GetHitRate(hit, user, target);
 
             if (hitRate <= 1)
@@ -181,7 +193,7 @@ namespace Battle
             }
             else
             {
-                if (!noCritical && (hitRate - 1) * 1f > UnityEngine.Random.Range(0f, 1f))
+                if ((hitRate - 1) * 1f > UnityEngine.Random.Range(0f, 1f))
                 {
                     return HitType.Critical;
                 }
@@ -472,16 +484,62 @@ namespace Battle
             }
         }
 
+        public void CheckDeath(BattleCharacterController character) 
+        {
+            if (character.Info.CurrentHP <= 0)
+            {
+                if (character.Info.Faction == BattleCharacterInfo.FactionEnum.Player)
+                {
+                    if (CharacterDyingList.Contains(character))
+                    {
+                        character.gameObject.SetActive(false);
+                        CharacterDyingList.Remove(character);
+                        CharacterDeadList.Add(character);
+                    }
+                    else
+                    {
+                        CharacterAliveList.Remove(character);
+                        CharacterDyingList.Add(character);
+                        character.StartFlash();
+                    }
+                }
+                else
+                {
+                    CharacterAliveList.Remove(character);
+                    character.gameObject.SetActive(false);
+                }
+            }
+            else if (CharacterDyingList.Contains(character))
+            {
+                CharacterAliveList.Add(character);
+                CharacterDyingList.Remove(character);
+                character.StopFlash();
+            }
+        }
+
         public void CheckResult() 
         {
-            ResultType result = Instance.GetResult();
-            if (result == ResultType.Win)
+            int playerCount = 0;
+            int enemyCount = 0;
+            for (int i = 0; i < CharacterAliveList.Count; i++)
             {
-                _context.SetState<WinState>();
+                if (CharacterAliveList[i].Info.Faction == BattleCharacterInfo.FactionEnum.Player)
+                {
+                    playerCount++;
+                }
+                else
+                {
+                    enemyCount++;
+                }
             }
-            else if (result == ResultType.Lose)
+
+            if (playerCount == 0)
             {
                 _context.SetState<LoseState>();
+            }
+            else if (enemyCount == 0)
+            {
+                _context.SetState<WinState>();
             }
             else
             {

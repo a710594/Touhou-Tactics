@@ -17,11 +17,6 @@ public class BattleQuickStarter : MonoBehaviour
     public string Tutorial;
     public FileManager FileManager;
 
-    private void LoadData()
-    {
-        DataTable.Instance.Load(LoadSave);
-    }
-
     private void LoadSave()
     {
         SaveManager.Instance.Load(() =>
@@ -48,6 +43,6 @@ public class BattleQuickStarter : MonoBehaviour
         InputMamager.Instance.Init();
         DataTable.Instance.SetFileManager(FileManager);
         SaveManager.Instance.SetFileManager(FileManager);
-        LoadData();
+        DataTable.Instance.Load(LoadSave);
     }
 }

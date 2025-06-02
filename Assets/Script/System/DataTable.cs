@@ -386,7 +386,7 @@ public class DataTable
     private void CheckComplete() 
     {
         _count++;
-        if(_count == _fileCount) 
+        if(_count == _fileCount && _callback != null) 
         {
             _callback();
         }

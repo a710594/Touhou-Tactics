@@ -22,7 +22,7 @@ namespace Battle
                 _characterList = Instance.CharacterAliveList;
                 _selectedCharacter.Info.HasSub = true;
 
-                _target = null;
+                /*_target = null;
                 if (Instance._targetList.Count > 0 && Instance._targetList[0] != _selectedCharacter)
                 {
                     _target = Instance._targetList[0];
@@ -42,15 +42,17 @@ namespace Battle
                 if (_target != null)
                 {
                     Instance.CharacterInfoUIGroup.SetCharacterInfoUIWithTween_2(_target, _originalHP, Utility.ConvertToVector2Int(_target.transform.position));
-                }
+                }*/
 
                 Sub sub = (Sub)_selectedCharacter.Info.SelectedCommand;
                 if (sub.CD > 0)
                 {
                     sub.CurrentCD = sub.CD + 1;
-                }                
+                }
 
-                _timer.Start(maxCount * 0.5f, Instance.CheckResult);
+                //_timer.Start(maxCount * 0.5f, Instance.CheckResult);
+
+                Instance.UseEffect();
             }
         }
     }

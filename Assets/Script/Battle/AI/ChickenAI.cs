@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Battle
 {
-    public class ChickenAI : OldBattleAI
+    /*public class ChickenAI : OldBattleAI
     {
         private int _count = 0;
 
@@ -61,5 +61,5 @@ namespace Battle
             BattleController.Instance.Click(moveTo);
             BattleController.Instance.Click(moveTo);
         }
-    }
+    }*/
 }
