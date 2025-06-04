@@ -37,11 +37,6 @@ public class ConfirmUI : MonoBehaviour
     private void Close()
     {
         Destroy(gameObject);
-
-        if (SceneController.Instance.Info.CurrentScene == "Explore")
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-        }
     }
 
     private void Init(string commentText, string confirmText, Action confirmCallback)

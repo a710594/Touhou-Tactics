@@ -62,6 +62,10 @@ public class SkillInfoGroup : MonoBehaviour
         {
             TrackLabel.text = "軌跡：貫穿";
         }
+        else if (skill.Track == TrackEnum.Near)
+        {
+            TrackLabel.text = "軌跡：近戰";
+        }
 
         RangeLabel.text = "射程：" + skill.Range;
     }
@@ -111,6 +115,10 @@ public class SkillInfoGroup : MonoBehaviour
         {
             TrackLabel.text = "軌跡：貫穿";
         }
+        else if (sub.Track == TrackEnum.Near)
+        {
+            TrackLabel.text = "軌跡：近戰";
+        }
 
         RangeLabel.text = "射程：" + sub.Range;
     }
@@ -135,6 +143,10 @@ public class SkillInfoGroup : MonoBehaviour
         else if (spell.Track == TrackEnum.Through)
         {
             TrackLabel.text = "軌跡：貫穿";
+        }
+        else if (spell.Track == TrackEnum.Near)
+        {
+            TrackLabel.text = "軌跡：近戰";
         }
 
         RangeLabel.text = "射程：" + spell.Range;
@@ -161,6 +173,10 @@ public class SkillInfoGroup : MonoBehaviour
         else if (item.Track == TrackEnum.Through)
         {
             TrackLabel.text = "軌跡：貫穿";
+        }
+        else if (item.Track == TrackEnum.Near)
+        {
+            TrackLabel.text = "軌跡：近戰";
         }
 
         RangeLabel.text = "射程：" + item.Range;

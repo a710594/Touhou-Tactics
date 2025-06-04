@@ -89,7 +89,6 @@ namespace Battle
             {
                 if (BattleController.Instance.PlaceCharacter(_characterController))
                 {
-                    _characterController.RightClickHandler = OnRightClick;
                     _candidateList.Remove(_characterController.Info);
                     ScrollView.SetData(new List<object>(_candidateList));
                 }
@@ -100,15 +99,6 @@ namespace Battle
             }
             _camera.enabled = true;
             _isDrag = false;
-        }
-
-        private void OnRightClick(int jobId) 
-        {
-            //BattleController.Instance.RemoveCharacterSprite(jobId);
-            //CharacterInfo info = CharacterManager.Instance.GetCharacterInfoById(jobId);
-            //_tempCharacterList.Add(info);
-            //_selectedCharacterList.Remove(info);
-            //ScrollView.SetData(new List<object>(_tempCharacterList));
         }
 
         private void OnEnter(ButtonPlus buttonPlus)

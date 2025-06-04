@@ -46,10 +46,28 @@ namespace Battle
 
             public override void Update()
             {
-                if (Input.GetMouseButtonDown(1))
+                if (Instance.Tutorial == null || !Instance.Tutorial.IsActive) 
                 {
-                    _context.SetState<CommandState>();
-                    return;
+                    if (Input.GetMouseButtonDown(1))
+                    {
+                        _context.SetState<CommandState>();
+                        return;
+                    }
+
+                    if (Utility.GetMouseButtonDoubleClick(0))
+                    {
+                        RaycastHit hit;
+                        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                        if (Physics.Raycast(ray, out hit, 100, _battleTileLayer))
+                        {
+                            Vector2Int v2 = Utility.ConvertToVector2Int(hit.transform.position);
+                            BattleCharacterController character = Instance.GetCharacterByPosition(v2);
+                            if (character != null)
+                            {
+                                Instance.OpenCharacterDetail(character.Info, v2);
+                            }
+                        }
+                    }
                 }
 
                 if (Instance.UpdatePosition(out Vector2Int? position))
@@ -140,21 +158,6 @@ namespace Battle
                 if (Input.GetMouseButtonDown(0) && position != null && _areaList.Count > 0)
                 {
                     Instance.UseCommand((Vector2Int)position, _areaList);
-                }
-
-                if (Utility.GetMouseButtonDoubleClick(0))
-                {
-                    RaycastHit hit;
-                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                    if (Physics.Raycast(ray, out hit, 100, _battleTileLayer))
-                    {
-                        Vector2Int v2 = Utility.ConvertToVector2Int(hit.transform.position);
-                        BattleCharacterController character = Instance.GetCharacterByPosition(v2);
-                        if (character != null)
-                        {
-                            Instance.OpenCharacterDetail(character.Info, v2);
-                        }
-                    }
                 }
             }
 

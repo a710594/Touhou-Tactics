@@ -1706,7 +1706,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 060a9d3df0d0afb4db2f936629668fbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentMode: 0
+  CurrentMode: 1
   EnemyGroupId: 7
   Map: Tutorial_2
   Tutorial: Tutorial_2

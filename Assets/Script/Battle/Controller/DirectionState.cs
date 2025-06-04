@@ -27,6 +27,7 @@ namespace Battle
                 Instance.CharacterInfoUIGroup.HideCharacterInfoUI_1();
                 Instance.BattleUI.SetDirectionGroupVisible(!_selectedCharacter.Info.IsAuto);
                 Instance.BattleUI.SetDirectionGroupPosition(_selectedCharacter.transform.position);
+                Instance.BattleUI.HideArrow();
 
                 List<FloatingNumberData> list = _selectedCharacter.Info.CheckStatus();
                 for(int i=0; i< list.Count; i++)
@@ -74,7 +75,7 @@ namespace Battle
 
             public override void Update()
             {
-                if (Input.GetMouseButtonDown(1))
+                if (Input.GetMouseButtonDown(1) && (Instance.Tutorial == null || !Instance.Tutorial.IsActive))
                 {
                     _context.SetState<CommandState>();
                     _selectedCharacter.Info.HasMove = false;

@@ -32,6 +32,7 @@ namespace Battle
         Straight,
         Parabola,
         Through,
+        Near,
     }
 
     public enum HitType

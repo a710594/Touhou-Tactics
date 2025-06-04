@@ -23,6 +23,11 @@ public class InputMamager
     public Action LeftHandler;
     public Action RightHandler;
     public Action SpaceHandler;
+    public Action IHandler;
+    public Action CHandler;
+    public Action VHandler;
+    public Action LHandler;
+    public Action EscapeHandler;
 
     public bool IsLock = false;
 
@@ -38,143 +43,77 @@ public class InputMamager
 
     private void Update() 
     {
-        if(SceneController.Instance.Info != null && SceneController.Instance.Info.CurrentScene != "Battle") 
+        if (Input.GetKeyDown(KeyCode.I))
         {
-            if (!IsLock)
+            if (IHandler != null) 
             {
-                if (Input.GetKeyDown(KeyCode.I))
-                {
-                    if (_bagUI == null)
-                    {
-                        Cursor.lockState = CursorLockMode.None;
-                        IsLock = true;
-                        _bagUI = BagUI.Open(()=> 
-                        {
-                            Cursor.lockState = CursorLockMode.Locked;
-                            IsLock = false;
-                        });
-                        _bagUI.SetNormalState();
-                    }
-                }
-                if (Input.GetKeyDown(KeyCode.C))
-                {
-                    if (_selectCharacterUI == null)
-                    {
-                        Cursor.lockState = CursorLockMode.None;
-                        IsLock = true;
-                        _selectCharacterUI = CharacterUI.Open(()=> 
-                        {
-                            IsLock = false;
-                            if (SceneController.Instance.Info.CurrentScene == "Explore")
-                            {
-                                Cursor.lockState = CursorLockMode.Locked;
-                            }
-                        });
-                    }
-                }
-                if (Input.GetKeyDown(KeyCode.Escape))
-                {
-                    if (_systemUI == null)
-                    {
-                        IsLock = true;
-                        Cursor.lockState = CursorLockMode.None;
-                        _systemUI = SystemUI.Open(()=> 
-                        {
-                            IsLock = false;
-                            if (SceneController.Instance.Info.CurrentScene == "Explore")
-                            {
-                                Cursor.lockState = CursorLockMode.Locked;
-                            }
-                        });
-                    }
-                }
-
-                if (Input.GetKey(KeyCode.UpArrow))
-                {
-                    if(UpHandler != null)
-                    {
-                        UpHandler();
-                    }
-                }
-                else if (Input.GetKey(KeyCode.DownArrow))
-                {
-                    if (DownHandler != null)
-                    {
-                        DownHandler();
-                    }
-                }
-                else if (Input.GetKey(KeyCode.LeftArrow))
-                {
-                    if (LeftHandler != null)
-                    {
-                        LeftHandler();
-                    }
-                }
-                else if (Input.GetKey(KeyCode.RightArrow))
-                {
-                    if (RightHandler != null)
-                    {
-                        RightHandler();
-                    }
-                }
-                else if (Input.GetKeyDown(KeyCode.Space)) 
-                {
-                    if (SpaceHandler != null) 
-                    {
-                        SpaceHandler();
-                    }
-                }
-
-#if UNITY_EDITOR
-                if (Input.GetKeyDown(KeyCode.O))
-                {
-                    Explore.ExploreManager.Instance.OpenAllMap();
-                }
-#endif
-            }
-            else
-            {
-                if (Input.GetKeyDown(KeyCode.I))
-                {
-                    if (_bagUI != null)
-                    {
-                        _bagUI.Close();
-                        _bagUI = null;
-                    }
-                }
-                if (Input.GetKeyDown(KeyCode.C))
-                {
-                    if (_selectCharacterUI != null)
-                    {
-                        _selectCharacterUI.Close();
-                        _selectCharacterUI = null;
-                    }
-                }
-                if (Input.GetKeyDown(KeyCode.Escape))
-                {
-                    if (_systemUI != null)
-                    {
-                        _systemUI.Close();
-                        _systemUI = null;
-                        IsLock = false;
-                    }
-                }
+                IHandler();
             }
         }
-        else
+        if (Input.GetKeyDown(KeyCode.C))
         {
-//#if UNITY_EDITOR
-            if (Input.GetKeyDown(KeyCode.V))
+            if (CHandler != null) 
             {
-                Battle.BattleController.Instance.EndTutorial();
-                Battle.BattleController.Instance.SetWin();
+                CHandler();
             }
-            if (Input.GetKeyDown(KeyCode.L))
+        }
+        if (Input.GetKeyDown(KeyCode.V)) 
+        {
+            if (VHandler != null) 
             {
-                Battle.BattleController.Instance.EndTutorial();
-                Battle.BattleController.Instance.SetLose();
+                VHandler();
             }
-//#endif
+        }
+        if (Input.GetKeyDown(KeyCode.L)) 
+        {
+            if (LHandler != null) 
+            {
+                LHandler();
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+
+            if (EscapeHandler != null) 
+            {
+                EscapeHandler();
+            }
+        }
+
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            if(UpHandler != null)
+            {
+                UpHandler();
+            }
+        }
+        else if (Input.GetKey(KeyCode.DownArrow))
+        {
+            if (DownHandler != null)
+            {
+                DownHandler();
+            }
+        }
+        else if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            if (LeftHandler != null)
+            {
+                LeftHandler();
+            }
+        }
+        else if (Input.GetKey(KeyCode.RightArrow))
+        {
+            if (RightHandler != null)
+            {
+                RightHandler();
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.Space)) 
+        {
+            if (SpaceHandler != null) 
+            {
+                SpaceHandler();
+            }
         }
     }
 }

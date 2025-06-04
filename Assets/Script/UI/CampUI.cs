@@ -21,6 +21,10 @@ public class CampUI : MonoBehaviour
     public GameObject FloorGroup;
     public ScrollView FloorScrollView;
 
+    private SystemUI _systemUI;
+    private BagUI _bagUI;
+    private CharacterUI _selectCharacterUI;
+
     public void SetCookButton(bool enable) 
     {
         CookButton.enabled = enable;
@@ -87,6 +91,76 @@ public class CampUI : MonoBehaviour
         }
     }
 
+    private void EscapeOnCLikc()
+    {
+        if (_systemUI == null)
+        {
+            InputMamager.Instance.IsLock = true;
+            Cursor.lockState = CursorLockMode.None;
+            _systemUI = SystemUI.Open(() =>
+            {
+                InputMamager.Instance.IsLock = false;
+                if (SceneController.Instance.Info.CurrentScene == "Explore")
+                {
+                    Cursor.lockState = CursorLockMode.Locked;
+                }
+            });
+            _systemUI.CampHandler += DeregisterEscapeHandler;
+            _systemUI.SaveHandler += DeregisterEscapeHandler;
+            _systemUI.ExitHandler += DeregisterEscapeHandler;
+            _systemUI.ConfirmCloseHandler += RegisterEscapeHandler;
+        }
+        else
+        {
+            _systemUI.Close();
+        }
+    }
+
+    private void RegisterEscapeHandler()
+    {
+        InputMamager.Instance.EscapeHandler += EscapeOnCLikc;
+    }
+
+    private void DeregisterEscapeHandler()
+    {
+        InputMamager.Instance.EscapeHandler -= EscapeOnCLikc;
+    }
+
+    private void IOnClclick()
+    {
+        if (_bagUI == null)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            InputMamager.Instance.IsLock = true;
+            _bagUI = BagUI.Open(() =>
+            {
+                InputMamager.Instance.IsLock = false;
+            });
+            _bagUI.SetNormalState();
+        }
+        else
+        {
+            _bagUI.Close();
+        }
+    }
+
+    private void COnClick()
+    {
+        if (_selectCharacterUI == null)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            InputMamager.Instance.IsLock = true;
+            _selectCharacterUI = CharacterUI.Open(() =>
+            {
+                InputMamager.Instance.IsLock = false;
+            });
+        }
+        else
+        {
+            _selectCharacterUI.Close();
+        }
+    }
+
     private void Awake()
     {
         FloorGroup.SetActive(false);
@@ -97,5 +171,15 @@ public class CampUI : MonoBehaviour
         CookButton.onClick.AddListener(CookOnClick);
         ExploreButton.onClick.AddListener(ExploreOnClick);
         FloorScrollView.ClickHandler += FloorOnClick;
+        InputMamager.Instance.IHandler += IOnClclick;
+        InputMamager.Instance.CHandler += COnClick;
+        RegisterEscapeHandler();
+    }
+
+    private void OnDestroy()
+    {
+        InputMamager.Instance.IHandler -= IOnClclick;
+        InputMamager.Instance.CHandler -= COnClick;
+        DeregisterEscapeHandler();
     }
 }

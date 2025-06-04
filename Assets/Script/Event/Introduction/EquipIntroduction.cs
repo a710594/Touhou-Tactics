@@ -17,22 +17,14 @@ public class EquipIntroduction : MyEvent
         _data = data;
         _tutorialUI = TutorialUI.Open(15, null);
         _tutorialUI.CloseButton.gameObject.SetActive(false);
-        TimerUpdater.UpdateHandler += Update;
-    }
-
-    private void Update() 
-    {
-        if (Input.GetKeyDown(KeyCode.C)) 
-        {
-            Step_1();
-        }
+        InputMamager.Instance.CHandler += Step_1;
     }
 
     private void Step_1() 
     {
-        TimerUpdater.UpdateHandler -= Update;
+        InputMamager.Instance.CHandler -= Step_1;
         _tutorialUI.Close();
-        _characterUI = CharacterUI.Open(null);
+        _characterUI = GameObject.Find("CharacterUI(Clone)").GetComponent<CharacterUI>();
         Cursor.lockState = CursorLockMode.None;
         CharacterScrollItem scrollItem = (CharacterScrollItem)_characterUI.ScrollView.GridList[0].ScrollItemList[0];
         TutorialArrowUI.Open("選擇角色的詳細資料", scrollItem.DetailButton.transform, new Vector3(0, 100, 0), Vector2Int.down);
@@ -108,6 +100,9 @@ public class EquipIntroduction : MyEvent
         {
             _characterUI.Close();
             _characterDetailUI.Close();
+
+            Cursor.lockState = CursorLockMode.None;
+            InputMamager.Instance.IsLock = true;
             CharacterUI.Open(()=> 
             {
                 Cursor.lockState = CursorLockMode.Locked;

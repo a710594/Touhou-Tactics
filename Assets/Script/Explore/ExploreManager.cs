@@ -137,14 +137,17 @@ namespace Explore
 
         public bool CheckEvent(Vector2Int v2) 
         {
-            string trigger = TileDic [v2].Event;
-            if(trigger != null && !EventManager.Instance.Info.TriggerList.Contains(trigger)) 
+            if (TileDic.ContainsKey(v2))
             {
-                EventManager.Instance.Info.TriggerList.Add(trigger);
-                Type objectType = Type.GetType(trigger);
-                MyEvent myEvent = (MyEvent)Activator.CreateInstance(objectType);
-                myEvent.Start();
-                return true;
+                string trigger = TileDic[v2].Event;
+                if (trigger != null && !EventManager.Instance.Info.TriggerList.Contains(trigger))
+                {
+                    EventManager.Instance.Info.TriggerList.Add(trigger);
+                    Type objectType = Type.GetType(trigger);
+                    MyEvent myEvent = (MyEvent)Activator.CreateInstance(objectType);
+                    myEvent.Start();
+                    return true;
+                }
             }
             return false;
         }

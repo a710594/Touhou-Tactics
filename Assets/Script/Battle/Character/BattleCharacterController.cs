@@ -10,7 +10,6 @@ public class BattleCharacterController : MonoBehaviour
 {
 
     public Action MoveEndHandler;
-    public Action<int> RightClickHandler;
 
     [NonSerialized]
     public BattleAI AI = null;
@@ -91,10 +90,6 @@ public class BattleCharacterController : MonoBehaviour
 
     private void OnMouseOver()
     {
-        if (Input.GetMouseButtonDown(1) && RightClickHandler != null) 
-        {
-            RightClickHandler(((BattlePlayerInfo)Info).Job.ID);
-        }
     }
     private void Awake()
     {

@@ -46,11 +46,6 @@ namespace Explore
 
         void Move()
         {
-            if (InputMamager.Instance.IsLock) 
-            {
-                return;
-            }
-
             float moveX = Input.GetAxis("Horizontal");
             float moveZ = Input.GetAxis("Vertical");
 

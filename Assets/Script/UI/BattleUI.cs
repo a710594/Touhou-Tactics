@@ -100,11 +100,29 @@ public class BattleUI : MonoBehaviour
         BattleController.Instance.SetDirection(direction);
     }
 
+    private void VOnClick() 
+    {
+#if UNITY_EDITOR
+        BattleController.Instance.EndTutorial();
+        BattleController.Instance.SetWin();
+#endif
+    }
+
+    private void LOnClick() 
+    {
+#if UNITY_EDITOR
+        BattleController.Instance.EndTutorial();
+        BattleController.Instance.SetLose();
+#endif
+    }
+
     private void Awake()
     {
         Instance = this;
         SetDirectionGroupVisible(false);
         DirectionGroup.ClickHandler += DirectionButtonOnClick;
+        InputMamager.Instance.VHandler += VOnClick;
+        InputMamager.Instance.LHandler += LOnClick;
     }
 
     private void Update()
@@ -113,8 +131,9 @@ public class BattleUI : MonoBehaviour
         DirectionGroup.transform.eulerAngles = new Vector3(90 - Camera.main.transform.eulerAngles.x, 0, Camera.main.transform.eulerAngles.y);
     }
 
-    void Destroy()
+    private void OnDestroy()
     {
-        Instance = null;
+        InputMamager.Instance.VHandler -= VOnClick;
+        InputMamager.Instance.LHandler -= LOnClick;
     }
 }

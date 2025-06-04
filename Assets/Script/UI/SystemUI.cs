@@ -10,6 +10,11 @@ public class SystemUI : MonoBehaviour
     public Button SaveButton;
     public Button ExitButton;
 
+    public Action CampHandler;
+    public Action SaveHandler;
+    public Action ExitHandler;
+    public Action ConfirmCloseHandler;
+
     private Action _callback;
 
     public static SystemUI Open(Action callback)
@@ -50,33 +55,58 @@ public class SystemUI : MonoBehaviour
 
     private void CampOnClick() 
     {
+        if (CampHandler != null) 
+        {
+            CampHandler();
+        }
+
         ConfirmUI.Open("要返回營地嗎？", "確定", "取消", () =>
         {
             Close();
+            OnConfirmClose();
             SceneController.Instance.ChangeScene("Camp", ChangeSceneUI.TypeEnum.Loading, (sceneName)=> 
             {
                 Cursor.lockState = CursorLockMode.None;
                 CharacterManager.Instance.RecoverAllHP();
                 ItemManager.Instance.Info.Key = 0;
             });
-        }, null);
+        }, OnConfirmClose);
     }
 
     private void SaveOnClick()
     {
+        if (SaveHandler != null)
+        {
+            SaveHandler();
+        }
+
         ConfirmUI.Open("要存檔嗎？", "確定", "取消", () =>
         {
             SaveManager.Instance.Save();
+            OnConfirmClose();
             Close();
-        }, null);
+        }, OnConfirmClose);
     }
 
     private void ExitOnClick()
     {
+        if (ExitHandler != null) 
+        {
+            ExitHandler();
+        }
+
         ConfirmUI.Open("要離開遊戲嗎？", "確定", "取消", () =>
         {
             Application.Quit();
-        }, null);
+        }, OnConfirmClose);
+    }
+
+    private void OnConfirmClose() 
+    {
+        if (ConfirmCloseHandler != null) 
+        {
+            ConfirmCloseHandler();
+        }
     }
 
     private void Awake()

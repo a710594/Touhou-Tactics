@@ -19,6 +19,9 @@ public class ExploreUI : MonoBehaviour
 
     private float deltaTime;
     private float _scale;
+    private SystemUI _systemUI;
+    private BagUI _bagUI;
+    private CharacterUI _selectCharacterUI;
 
     public void SetCameraPosition(int x, int y, float scale) 
     {
@@ -76,10 +79,92 @@ public class ExploreUI : MonoBehaviour
         });
     }
 
+    private void EscapeOnCLikc() 
+    {
+        if (_systemUI == null)
+        {
+            InputMamager.Instance.IsLock = true;
+            Cursor.lockState = CursorLockMode.None;
+            _systemUI = SystemUI.Open(() =>
+            {
+                InputMamager.Instance.IsLock = false;
+                if (SceneController.Instance.Info.CurrentScene == "Explore")
+                {
+                    Cursor.lockState = CursorLockMode.Locked;
+                }
+            });
+            _systemUI.CampHandler += DeregisterEscapeHandler;
+            _systemUI.SaveHandler += DeregisterEscapeHandler;
+            _systemUI.ExitHandler += DeregisterEscapeHandler;
+            _systemUI.ConfirmCloseHandler += RegisterEscapeHandler;
+        }
+        else
+        {
+            _systemUI.Close();
+        }
+    }
+
+    private void RegisterEscapeHandler() 
+    {
+        InputMamager.Instance.EscapeHandler += EscapeOnCLikc;
+    }
+
+    private void DeregisterEscapeHandler()
+    {
+        InputMamager.Instance.EscapeHandler -= EscapeOnCLikc;
+    }
+
+    private void IOnClclick() 
+    {
+        if (_bagUI == null)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            InputMamager.Instance.IsLock = true;
+            _bagUI = BagUI.Open(() =>
+            {
+                InputMamager.Instance.IsLock = false;
+                Cursor.lockState = CursorLockMode.Locked;
+            });
+            _bagUI.SetNormalState();
+        }
+        else
+        {
+            _bagUI.Close();
+        }
+    }
+
+    private void COnClick() 
+    {
+        if (_selectCharacterUI == null)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            InputMamager.Instance.IsLock = true;
+            _selectCharacterUI = CharacterUI.Open(() =>
+            {
+                InputMamager.Instance.IsLock = false;
+                Cursor.lockState = CursorLockMode.Locked;
+            });
+        }
+        else
+        {
+            _selectCharacterUI.Close();
+        }
+    }
+
     private void Awake()
     {
         TreasureLabel.SetActive(false);
         KeyLabel.gameObject.SetActive(false);
+        RegisterEscapeHandler();
+        InputMamager.Instance.IHandler += IOnClclick;
+        InputMamager.Instance.CHandler += COnClick;
+    }
+
+    private void OnDestroy()
+    {
+        DeregisterEscapeHandler();
+        InputMamager.Instance.IHandler -= IOnClclick;
+        InputMamager.Instance.CHandler -= COnClick;
     }
 
     void Update()
@@ -92,9 +177,10 @@ public class ExploreUI : MonoBehaviour
             BigMapBG.SetActive(!BigMapBG.activeSelf);
             if (BigMapBG.activeSelf)
             {
-                float size = file.Size.x + 1;
-                float x = (size / 2 - Camera.main.transform.position.x) / size * 1080 * _scale;
-                float y = (size / 2 - Camera.main.transform.position.z) / size * 1080 * _scale;
+                float sizeX = file.Size.x + 1;
+                float sizeY = file.Size.y + 1;
+                float x = (sizeX / 2 - Camera.main.transform.position.x) / sizeX * 1080 * _scale;
+                float y = (sizeY / 2 - Camera.main.transform.position.z) / sizeY * 1080 * _scale;
                 BigMap.anchoredPosition = new Vector2(x, y);
                 BigMapCamera.Render();
                 FloorLabel.text = file.Floor + "F";
