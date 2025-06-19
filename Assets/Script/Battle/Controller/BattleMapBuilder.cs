@@ -168,7 +168,7 @@ namespace Battle
                 pair.Value.TileObject = tileObj;
                 if(pair.Key == _cameraDefaultPosition) 
                 {
-                    _cameraController.SetMyGameObj(obj, null);
+                    _cameraController.SetMyGameObj(obj, false, null);
                 }
 
                 if (pair.Value.AttachData != null)

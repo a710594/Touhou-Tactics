@@ -9,9 +9,8 @@ namespace Battle
     {
         public class RangeState : BattleControllerState
         {
-            private Vector2Int? _lastPosition = null;
-            private List<Vector2Int> _rangeList = new List<Vector2Int>();
             private List<Vector2Int> _areaList = new List<Vector2Int>();
+            private static readonly Color _red = new Color(1, 1, 0, 0.5f);
 
             public RangeState(StateContext context) : base(context)
             {
@@ -26,22 +25,9 @@ namespace Battle
 
                 _selectedCharacter = Instance.SelectedCharacter;
                 _characterList = Instance.CharacterAliveList;
-                _rangeList.Clear();
                 _areaList.Clear();
 
-                if (Passive.Contains<ArcherPassive>(_selectedCharacter.Info.PassiveList))
-                {
-                    _rangeList = ArcherPassive.GetRange(_selectedCharacter.Info.SelectedCommand.Range, Utility.ConvertToVector2Int(_selectedCharacter.transform.position));
-                }
-                else
-                {
-                    _rangeList = Instance.GetRangeList(_selectedCharacter.Info.SelectedCommand.Range, Utility.ConvertToVector2Int(_selectedCharacter.transform.position));
-                }
-
-                Instance.RemoveRange(_selectedCharacter.Info.SelectedCommand.Target, _rangeList);
-
-                Instance.SetQuad(_rangeList, _white);
-                Instance.BattleUI.SetCommandVisible(false);
+                Instance.SetRangeList(_selectedCharacter, _selectedCharacter.Info.SelectedCommand);
             }
 
             public override void Update()
@@ -50,41 +36,21 @@ namespace Battle
                 {
                     if (Input.GetMouseButtonDown(1))
                     {
-                        _context.SetState<CommandState>();
+                        _context.SetState<MoveState>();
                         return;
-                    }
-
-                    if (Utility.GetMouseButtonDoubleClick(0))
-                    {
-                        RaycastHit hit;
-                        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                        if (Physics.Raycast(ray, out hit, 100, _battleTileLayer))
-                        {
-                            Vector2Int v2 = Utility.ConvertToVector2Int(hit.transform.position);
-                            BattleCharacterController character = Instance.GetCharacterByPosition(v2);
-                            if (character != null)
-                            {
-                                Instance.OpenCharacterDetail(character.Info, v2);
-                            }
-                        }
                     }
                 }
 
                 if (Instance.UpdatePosition(out Vector2Int? position))
                 {
-                    if (_lastPosition != null)
-                    {
-                        Instance.SetSelect((Vector2Int)_lastPosition, false);
-                    }
-
                     if (position != null)
                     {
                         Instance.ClearQuad(_areaList);
-                        Instance.SetQuad(_rangeList, _white);
+                        Instance.SetRangeList(_selectedCharacter, _selectedCharacter.Info.SelectedCommand);
                         Instance._line.Hide();
                         BattleCharacterController target = Instance.GetCharacterByPosition((Vector2Int)position);
 
-                        if (_rangeList.Contains((Vector2Int)position))
+                        if (_selectedCharacter.Info.RangeList.Contains((Vector2Int)position))
                         {
                             Command command = _selectedCharacter.Info.SelectedCommand;
                             if (target != null)
@@ -108,7 +74,7 @@ namespace Battle
                                     Instance.CheckParabola(_selectedCharacter.transform.position, target.transform.position, Instance.TileDic[Utility.ConvertToVector2Int(_selectedCharacter.transform.position)].TileData.Height + 1, out bool isBlock, out List<Vector3> result);
                                     if (isBlock)
                                     {
-                                        Instance._line.Show(result, Color.red);
+                                        Instance._line.Show(result, _red);
                                     }
                                     else
                                     {
@@ -136,9 +102,8 @@ namespace Battle
                                 Instance.CharacterInfoUIGroup.HideCharacterInfoUI_2();
                             }
 
-                            Instance.SetSelect((Vector2Int)position, true);
                             _areaList = Instance.GetAreaList(Utility.ConvertToVector2Int(_selectedCharacter.transform.position), (Vector2Int)position, command);
-                            Instance.SetQuad(_areaList, Color.yellow);
+                            Instance.SetQuad(_areaList, Color.red);
                         }
                         else
                         {
@@ -152,7 +117,6 @@ namespace Battle
                             }
                         }
                     }
-                    _lastPosition = position;
                 }
 
                 if (Input.GetMouseButtonDown(0) && position != null && _areaList.Count > 0)
@@ -163,12 +127,8 @@ namespace Battle
 
             public override void End()
             {
-                Instance.ClearQuad(_rangeList);
+                Instance.ClearRangeList(_selectedCharacter);
                 Instance.ClearQuad(_areaList);
-                if (_lastPosition != null)
-                {
-                    Instance.SetSelect((Vector2Int)_lastPosition, false);
-                }
             }
         }
     }

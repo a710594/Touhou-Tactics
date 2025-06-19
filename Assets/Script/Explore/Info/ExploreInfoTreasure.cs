@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExploreInfoTreasure
+/*public class ExploreInfoTreasure
 {
     public int ItemID;
     public float Height;
@@ -17,4 +17,4 @@ public class ExploreInfoTreasure
         Prefab = file.Prefab;
         Height = file.Height;
     }
-}
+}*/

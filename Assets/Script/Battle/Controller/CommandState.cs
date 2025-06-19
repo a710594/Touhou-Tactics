@@ -7,7 +7,7 @@ namespace Battle
     public partial class BattleController
     {
 
-        public class CommandState : BattleControllerState
+        /*public class CommandState : BattleControllerState
         {
             private Vector2Int? _lastPosition = null;
             private List<Vector2Int> _stepList = new List<Vector2Int>();
@@ -104,6 +104,6 @@ namespace Battle
             {
                 Instance.ClearQuad(_stepList);
             }
-        }
+        }*/
     }
 }

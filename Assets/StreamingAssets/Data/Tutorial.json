@@ -1,5 +1,5 @@
 [{"ID":1,"Page":1,"Title":"放置角色","Comment":"將角色從下方拖曳至場景的白色區域中。 白色的區域代表可放置角色的位置。 將角色配置完後按開始戰鬥。","Image":"Tutorial_1_1"},
-{"ID":2,"Page":1,"Title":"移動角色","Comment":"選擇移動後，白色的格子代表可移動的範圍","Image":"Tutorial_1_2"},
+{"ID":2,"Page":1,"Title":"移動角色","Comment":"白色的格子代表可移動的範圍","Image":"Tutorial_1_2"},
 {"ID":3,"Page":1,"Title":"次要動作與主要動作","Comment":"次要動作大多是強化自身或同伴的輔助性動作\n主要動作則是攻擊對手或治療同伴","Image":"x"},
 {"ID":3,"Page":2,"Title":"次要動作","Comment":"使用次要動作中的全力一擊。","Image":"Tutorial_1_3"},
 {"ID":4,"Page":1,"Title":"主要動作","Comment":"妖夢的攻擊力提升了！","Image":"Tutorial_1_4"},

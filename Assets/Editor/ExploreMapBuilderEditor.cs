@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using Explore;
 
-[CustomEditor(typeof(ExploreMapBuilder))]
+/*[CustomEditor(typeof(ExploreMapBuilder))]
 public class ExploreMapBuilderEditor : Editor
 {
     public override void OnInspectorGUI()
@@ -32,4 +32,4 @@ public class ExploreMapBuilderEditor : Editor
     {
         DataTable.Instance.Load(null);
     }
-}
+}*/

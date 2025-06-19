@@ -17,8 +17,8 @@ namespace Explore
         public List<ExploreFileEnemy> EnemyList = new List<ExploreFileEnemy>();
         public List<ExploreFileTile> TileList = new List<ExploreFileTile>();
         public List<ExploreFileTreasure> TreasureList = new List<ExploreFileTreasure>();
-        public List<ExploreFileTrigger> TriggerList = new List<ExploreFileTrigger>();
-        public List<ExploreFIleDoor> DoorList = new List<ExploreFIleDoor>();
+        public List<ExploreFileEvent> EventList = new List<ExploreFileEvent>();
+        public List<ExploreFileDoor> DoorList = new List<ExploreFileDoor>();
 
         [NonSerialized]
         public Goal GoalObj;

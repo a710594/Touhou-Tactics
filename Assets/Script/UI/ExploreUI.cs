@@ -6,29 +6,20 @@ using Explore;
 
 public class ExploreUI : MonoBehaviour
 {
-    public GameObject BigMapBG;
-    public RectTransform BigMap;
-    public GameObject TreasureLabel;
     public TreasureUI TreasureUI;
     public Text fpsText;
     public Text FloorLabel;
-    public Text KeyLabel;
-    public Camera BigMapCamera;
+    public Text ObjectInfoLabel;
     public CanvasGroup CanvasGroup;
     public TipLabel TipLabel;
+    public Image MapMask;
+    public MapUI MapUI;
 
+    private bool _showBigMap = false;
     private float deltaTime;
-    private float _scale;
     private SystemUI _systemUI;
     private BagUI _bagUI;
     private CharacterUI _selectCharacterUI;
-
-    public void SetCameraPosition(int x, int y, float scale) 
-    {
-        _scale = scale;
-        BigMapCamera.transform.position = new Vector3(x, 5, y);
-        BigMap.localScale = new Vector3(scale, scale, 1);
-    }
 
     public void SetVisible(bool isVisible) 
     {
@@ -42,22 +33,23 @@ public class ExploreUI : MonoBehaviour
         }
     }
 
-    public void ShowTreasureLabel(bool show) 
+    public void ShowObjectInfoLabel(string text) 
     {
-        TreasureLabel.gameObject.SetActive(show);
+        ObjectInfoLabel.gameObject.SetActive(true);
+        ObjectInfoLabel.text = text;
+        //if (ItemManager.Instance.Info.Key > 0)
+        //{
+        //    KeyLabel.text = "按空白鍵使用鑰匙開門";
+        //}
+        //else
+        //{
+        //    KeyLabel.text = "需要鑰匙開門";
+        //}
     }
 
-    public void ShowDoorLabel(bool show) 
+    public void HideObjectInfoLabel() 
     {
-        KeyLabel.gameObject.SetActive(show);
-        if (ItemManager.Instance.Info.Key > 0)
-        {
-            KeyLabel.text = "按空白鍵使用鑰匙開門";
-        }
-        else
-        {
-            KeyLabel.text = "需要鑰匙開門";
-        }
+        ObjectInfoLabel.gameObject.SetActive(false);
     }
 
     public void OpenTreasure(int id) 
@@ -77,6 +69,41 @@ public class ExploreUI : MonoBehaviour
                 InputMamager.Instance.IsLock = false;
             }
         });
+    }
+
+    public void InitMap(int width, int height) 
+    {
+        MapUI.InitMap(width, height);
+    }
+
+    public void SetMap(Vector2Int position, Color color) 
+    {
+        MapUI.SetMap(position, color);
+    }
+
+    public void SetPlayerPosition(Vector2 position) 
+    {
+        MapUI.SetPlayerPosition(position);
+    }
+
+    public void SetIcon(Vector2Int position, string name)
+    {
+        MapUI.SetIcon(position, name);
+    }
+
+    public void ClearIcon(Vector2Int position)
+    {
+        MapUI.ClearIcon(position);
+    }
+
+    public void ShowEnemy(Vector3 position, ExploreEnemyController enemy) 
+    {
+        MapUI.ShowEnemy(position, enemy);
+    }
+
+    public void HideEnemy(ExploreEnemyController enemy) 
+    {
+        MapUI.HideEnemy(enemy);
     }
 
     private void EscapeOnCLikc() 
@@ -153,8 +180,7 @@ public class ExploreUI : MonoBehaviour
 
     private void Awake()
     {
-        TreasureLabel.SetActive(false);
-        KeyLabel.gameObject.SetActive(false);
+        ObjectInfoLabel.gameObject.SetActive(false);
         RegisterEscapeHandler();
         InputMamager.Instance.IHandler += IOnClclick;
         InputMamager.Instance.CHandler += COnClick;
@@ -173,24 +199,34 @@ public class ExploreUI : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.M))
         {
-            Cursor.lockState = CursorLockMode.None;
-            BigMapBG.SetActive(!BigMapBG.activeSelf);
-            if (BigMapBG.activeSelf)
+            if (!_showBigMap)
             {
-                float sizeX = file.Size.x + 1;
-                float sizeY = file.Size.y + 1;
-                float x = (sizeX / 2 - Camera.main.transform.position.x) / sizeX * 1080 * _scale;
-                float y = (sizeY / 2 - Camera.main.transform.position.z) / sizeY * 1080 * _scale;
-                BigMap.anchoredPosition = new Vector2(x, y);
-                BigMapCamera.Render();
-                FloorLabel.text = file.Floor + "F";
-                InputMamager.Instance.IsLock = true;
+                MapUI.ShowBigMap();
+                _showBigMap = true;
             }
             else
             {
-                Cursor.lockState = CursorLockMode.Locked;
-                InputMamager.Instance.IsLock = false;
+                MapUI.HideBigMap();
+                _showBigMap = false;
             }
+            //Cursor.lockState = CursorLockMode.None;
+            //BigMapBG.SetActive(!BigMapBG.activeSelf);
+            //if (BigMapBG.activeSelf)
+            //{
+            //    float sizeX = file.Size.x + 1;
+            //    float sizeY = file.Size.y + 1;
+            //    float x = (sizeX / 2 - Camera.main.transform.position.x) / sizeX * 1080 * _scale;
+            //    float y = (sizeY / 2 - Camera.main.transform.position.z) / sizeY * 1080 * _scale;
+            //    BigMap.anchoredPosition = new Vector2(x, y);
+            //    BigMapCamera.Render();
+            //    FloorLabel.text = file.Floor + "F";
+            //    InputMamager.Instance.IsLock = true;
+            //}
+            //else
+            //{
+            //    Cursor.lockState = CursorLockMode.Locked;
+            //    InputMamager.Instance.IsLock = false;
+            //}
         }
 
         deltaTime += (Time.deltaTime - deltaTime) * 0.1f;

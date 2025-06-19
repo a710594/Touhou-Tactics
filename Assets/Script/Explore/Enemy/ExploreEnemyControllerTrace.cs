@@ -8,7 +8,8 @@ namespace Explore
     {
         public GameObject Exclamation;
 
-        protected ExploreEnemyContext _context = new ExploreEnemyContext();
+        private ExploreEnemyContext _context = new ExploreEnemyContext();
+        private LayerMask _triggerLayer; //牆壁和地板的 trigger
 
         void OnControllerColliderHit(ControllerColliderHit hit)
         {
@@ -18,11 +19,6 @@ namespace Explore
         private void Update()
         {
             ((ExploreEnemyState)_context.CurrentState).Update();
-
-            //if (ExploreManager.Instance.PlayerSpeed > 0)
-            //{
-            //    CharacterController.Move(transform.forward * ExploreManager.Instance.PlayerSpeed);
-            //}
         }
 
         public override void Init(ExploreFileEnemy file)
@@ -32,6 +28,38 @@ namespace Explore
             _context.AddState(new TraceState(_context));
             _context.AddState(new DefaultState(_context));
             _context.SetState<DefaultState>();
+            _triggerLayer = ~(1 << LayerMask.NameToLayer("Trigger"));
+        }
+
+        public bool LookPlayer(Transform transform, float angle, int amount) //改成 RaycastAll
+        {
+            float subAngle = angle / amount;
+            Vector3 direction;
+            for (int i = -amount; i <= amount; i++)
+            {
+                direction = Quaternion.AngleAxis(subAngle * i, Vector3.up) * transform.forward;
+                RaycastHit hit;
+                if (Physics.Raycast(transform.position, direction, out hit, 5, _triggerLayer)) 
+                {
+                    if(hit.collider.tag == "Player") 
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public bool IsWalkable(Vector3 origin, Vector3 direction)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(origin, direction, out hit, 1, _triggerLayer)) 
+            {
+                return false;
+            }
+
+            return true;
         }
 
         protected class DefaultState : ExploreEnemyState
@@ -53,31 +81,22 @@ namespace Explore
                     if (!ChangeState())
                     {
                         Enemy.CharacterController.Move(Enemy.transform.forward * ExploreManager.Instance.PlayerSpeed * 0.5f);
+
+                        if (ExploreManager.Instance.TileDic[Utility.ConvertToVector2Int(Enemy.transform.position)].IsVisited)
+                        {
+                            ExploreManager.Instance.ShowEnemy(Enemy.transform.position, Enemy);
+                        }
+                        else
+                        {
+                            ExploreManager.Instance.HideEnemy(Enemy);
+                        }
                     }
                 }
             }
 
             private bool ChangeState()
             {
-                //if (Physics.Raycast(Enemy.transform.position, Enemy.transform.forward, out RaycastHit hit, 10))
-                //{
-                //    if (hit.collider.tag == "Player")
-                //    {
-                //        _context.SetState<TraceState>();
-
-                //        return true;
-                //    }
-                //    else
-                //    {
-                //        return false;
-                //    }
-                //}
-                //else
-                //{
-                //    return false;
-                //}
-
-                if(Utility.LookPlayer(Enemy.transform, 60, 3)) 
+                if(((ExploreEnemyControllerTrace)Enemy).LookPlayer(Enemy.transform, 60, 3)) 
                 {
                     _context.SetState<TraceState>();
                     return true;
@@ -90,12 +109,7 @@ namespace Explore
 
             public override void OnControllerColliderHit(ControllerColliderHit hit)
             {
-                if (hit.collider.tag == "Player")
-                {
-                    Enemy.CharacterController.Move(Vector3.zero);
-                    ExploreManager.Instance.EnterBattle(Enemy.File);
-                }
-                else
+                if (hit.collider.tag == "Wall" || hit.collider.tag == "Treasure" || hit.collider.tag == "Door")
                 {
                     Enemy.transform.eulerAngles += new Vector3(0, 90, 0);
                 }
@@ -128,28 +142,28 @@ namespace Explore
                         Vector2Int playerPosition = Utility.ConvertToVector2Int(ExploreManager.Instance.Player.transform.position);
                         float minDistance = -1;
                         Vector2Int forward = Utility.ConvertToVector2Int(Enemy.transform.position + Vector3.forward);
-                        if (ExploreManager.Instance.TileDic[forward].IsWalkable && (minDistance == -1 || Vector2Int.Distance(playerPosition, forward) < minDistance))
+                        if (((ExploreEnemyControllerTrace)Enemy).IsWalkable(Enemy.transform.position, Vector3.forward) && (minDistance == -1 || Vector2Int.Distance(playerPosition, forward) < minDistance))
                         {
                             minDistance = Vector2Int.Distance(playerPosition, forward);
                             Enemy.transform.eulerAngles = new Vector3(0, 0, 0);
                             _target = Vector3Int.RoundToInt(Enemy.transform.position + Vector3.forward);
                         }
                         Vector2Int back = Utility.ConvertToVector2Int(Enemy.transform.position + Vector3.back);
-                        if (ExploreManager.Instance.TileDic[back].IsWalkable && (minDistance == -1 || Vector2Int.Distance(playerPosition, back) < minDistance))
+                        if (((ExploreEnemyControllerTrace)Enemy).IsWalkable(Enemy.transform.position, Vector3.back) && (minDistance == -1 || Vector2Int.Distance(playerPosition, back) < minDistance))
                         {
                             minDistance = Vector2Int.Distance(playerPosition, back);
                             Enemy.transform.eulerAngles = new Vector3(0, 180, 0);
                             _target = Vector3Int.RoundToInt(Enemy.transform.position + Vector3.back);
                         }
                         Vector2Int left = Utility.ConvertToVector2Int(Enemy.transform.position + Vector3.left);
-                        if (ExploreManager.Instance.TileDic[left].IsWalkable && (minDistance == -1 || Vector2Int.Distance(playerPosition, left) < minDistance))
+                        if (((ExploreEnemyControllerTrace)Enemy).IsWalkable(Enemy.transform.position, Vector3.left) && (minDistance == -1 || Vector2Int.Distance(playerPosition, left) < minDistance))
                         {
                             minDistance = Vector2Int.Distance(playerPosition, left);
                             Enemy.transform.eulerAngles = new Vector3(0, -90, 0);
                             _target = Vector3Int.RoundToInt(Enemy.transform.position + Vector3.left);
                         }
                         Vector2Int right = Utility.ConvertToVector2Int(Enemy.transform.position + Vector3.right);
-                        if (ExploreManager.Instance.TileDic[right].IsWalkable && (minDistance == -1 || Vector2Int.Distance(playerPosition, right) < minDistance))
+                        if (((ExploreEnemyControllerTrace)Enemy).IsWalkable(Enemy.transform.position, Vector3.right) && (minDistance == -1 || Vector2Int.Distance(playerPosition, right) < minDistance))
                         {
                             minDistance = Vector2Int.Distance(playerPosition, right);
                             Enemy.transform.eulerAngles = new Vector3(0, 90, 0);
@@ -160,6 +174,15 @@ namespace Explore
                 else if (ExploreManager.Instance.PlayerSpeed > 0)
                 {
                     Enemy.CharacterController.Move((_target - Enemy.transform.position).normalized * ExploreManager.Instance.PlayerSpeed * 0.5f);
+
+                    if (ExploreManager.Instance.TileDic[Utility.ConvertToVector2Int(Enemy.transform.position)].IsVisited)
+                    {
+                        ExploreManager.Instance.ShowEnemy(Enemy.transform.position, Enemy);
+                    }
+                    else
+                    {
+                        ExploreManager.Instance.HideEnemy(Enemy);
+                    }
                 }
             }
 
@@ -179,11 +202,10 @@ namespace Explore
 
             public override void OnControllerColliderHit(ControllerColliderHit hit)
             {
-                if (hit.collider.tag == "Player")
-                {
-                    Enemy.CharacterController.Move(Vector3.zero);
-                    ExploreManager.Instance.EnterBattle(Enemy.File);
-                }
+                //if (hit.collider.tag == "Wall" || hit.collider.tag == "Treasure")
+                //{
+                //    Enemy.transform.eulerAngles += new Vector3(0, 90, 0);
+                //}
             }
         }
     }

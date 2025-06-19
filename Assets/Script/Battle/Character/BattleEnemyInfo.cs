@@ -28,6 +28,7 @@ public class BattleEnemyInfo : BattleCharacterInfo
         IsAuto = true;
         CurrentHP = MaxHP;
         CurrentWT = WT;
+        CurrentMOV = MOV;
 
         for (int i = 0; i < enemy.SkillList.Count; i++)
         {

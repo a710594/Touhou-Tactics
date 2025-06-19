@@ -71,10 +71,10 @@ public class CharacterInfoUI : MonoBehaviour
 
     private void ButtonOnClick() 
     {
-        if (_character != null)
-        {
-            BattleController.Instance.OpenCharacterDetail(_character, _position);
-        }
+        //if (_character != null)
+        //{
+        //    BattleController.Instance.OpenCharacterDetail(_character, _position);
+        //}
     }
 
     private void Awake()

@@ -39,13 +39,13 @@ namespace Battle
 
         public Action PrepareStateBeginHandler;
         public Action CharacterStateBeginHandler;
-        public Action CommandStateBeginHandler;
         public Action MoveStateBeginHandler;
         public Action RangeStateBeginHandler;
         public Action DirectionStateBeginHandler;
         public Action WinStateBeginHandler;
 
         public Action PlaceCharacterHandler;
+        public Action AfterMoveHandler;
 
         public BattleTutorial Tutorial = null;
         public BattleCharacterController SelectedCharacter;
@@ -67,8 +67,8 @@ namespace Battle
 
         private static readonly Color _white = new Color(1, 1, 1, 0.5f);
         private static readonly Color _yellow = new Color(1, 1, 0, 0.5f);
+        private static readonly Color _red = new Color(1, 1, 0, 0.5f);
 
-        private bool _canClick = true;
         private int _maxIndex = 0;
         private Vector2Int _cameraDefaultPosition; //戰鬥一開始的時候攝影機的位置
         private CameraController _cameraController;
@@ -89,7 +89,6 @@ namespace Battle
         public void Init()
         {
             _maxIndex = 0;
-            _canClick = true;
             CharacterAliveList.Clear();
             CharacterDyingList.Clear();
             CharacterDeadList.Clear();
@@ -106,12 +105,11 @@ namespace Battle
             TimerUpdater.UpdateHandler -= Update;
             PrepareStateBeginHandler = null;
             CharacterStateBeginHandler = null;
-            CommandStateBeginHandler = null;
             MoveStateBeginHandler = null;
             RangeStateBeginHandler = null;
             DirectionStateBeginHandler = null;
             WinStateBeginHandler = null;
-    }
+        }
 
         public void SetFixed(string tutorial, string map)
         {
@@ -251,7 +249,7 @@ namespace Battle
                     {
                         invalidList.Add(pair.Key);
                     }
-                    else if (PlayerPositionList.Contains(pair.Key)) 
+                    else if (PlayerPositionList.Contains(pair.Key))
                     {
                         invalidList.Add(pair.Key);
                     }
@@ -330,7 +328,7 @@ namespace Battle
             _context.ClearState();
             _context.AddState(new PrepareState(_context));
             _context.AddState(new CharacterState(_context));
-            _context.AddState(new CommandState(_context));
+            //_context.AddState(new CommandState(_context));
             _context.AddState(new MoveState(_context));
             _context.AddState(new RangeState(_context));
             //_context.AddState(new TargetState(_context));
@@ -373,7 +371,7 @@ namespace Battle
 
         public bool PlaceCharacter(BattleCharacterController character)
         {
-            if (((PrepareState)_context.CurrentState).PlaceCharacter(character)) 
+            if (((PrepareState)_context.CurrentState).PlaceCharacter(character))
             {
                 if (PlaceCharacterHandler != null)
                 {
@@ -388,7 +386,7 @@ namespace Battle
             }
         }
 
-        public void PrepareStateStopDrag() 
+        public void PrepareStateStopDrag()
         {
             ((PrepareState)_context.CurrentState).CanDrag = false;
         }
@@ -398,45 +396,20 @@ namespace Battle
             _context.SetState<T>();
         }
 
-        public void SetMoveState() 
+        public void SetMoveState()
         {
-            if (Tutorial == null || !Tutorial.IsActive || Tutorial.CanMove) 
+            if (Tutorial == null || !Tutorial.IsActive || Tutorial.CanMove)
             {
                 _context.SetState<MoveState>();
             }
         }
 
-        public void Move(Vector2Int position, Action callback) 
+        public void Move(Vector2Int position)
         {
-            if (_lastPosition != null)
-            {
-                SetSelect((Vector2Int)_lastPosition, false);
-            }
-
-            _canClick = false;
-            List<Vector2Int> path = GetPath(Utility.ConvertToVector2Int(SelectedCharacter.transform.position), position, SelectedCharacter.Info.Faction);
-            SelectedCharacter.LastPosition = SelectedCharacter.transform.position;
-            SelectedCharacter.Move(path, () =>
-            {
-                _canClick = true;
-
-                if (!SelectedCharacter.Info.HasMove)
-                {
-                    SelectedCharacter.Info.HasMove = true;
-                }
-                else if (!SelectedCharacter.Info.MoveAgain)
-                {
-                    SelectedCharacter.Info.MoveAgain = true;
-                }
-
-                if (callback != null)
-                {
-                    callback();
-                }
-            });     
+            ((MoveState)_context.CurrentState).Move(position);
         }
 
-        public void SetSelectedCommand(Skill skill) 
+        public void SetSelectedCommand(Skill skill)
         {
             if (Tutorial == null || !Tutorial.IsActive || skill.ID == Tutorial.SkillID)
             {
@@ -472,7 +445,7 @@ namespace Battle
             }
         }
 
-        public void UseCommand(Vector2Int position, List<Vector2Int> areaList) 
+        public void UseCommand(Vector2Int position, List<Vector2Int> areaList)
         {
             _areaList = areaList;
             if (Tutorial == null || !Tutorial.IsActive || position == Tutorial.CommandPosition)
@@ -508,12 +481,13 @@ namespace Battle
             }
         }
 
-        public void OpenCharacterDetail(BattleCharacterInfo character, Vector2Int position) 
+        public BattleCharacterDetailUI OpenCharacterDetail(BattleCharacterInfo character, Vector2Int position)
         {
             if (Tutorial == null || !Tutorial.IsActive)
             {
-                BattleCharacterDetailUI.Open(character, position);
+                return BattleCharacterDetailUI.Open(character, position);
             }
+            return null;
         }
 
         public void SetDirectionState()
@@ -548,16 +522,16 @@ namespace Battle
 
         public List<Vector2Int> GetAreaList(Vector2Int from, Vector2Int to, Command command)
         {
-            List<Vector2Int> commandPositionList =new List<Vector2Int>();
-            if(command.AreaType == AreaTypeEnum.Point)
+            List<Vector2Int> commandPositionList = new List<Vector2Int>();
+            if (command.AreaType == AreaTypeEnum.Point)
             {
                 commandPositionList.Add(to);
             }
-            else if(command.AreaType == AreaTypeEnum.Array)
+            else if (command.AreaType == AreaTypeEnum.Array)
             {
                 commandPositionList = GetNormalAreaList(from, to, command.Target, command.ArrayList);
             }
-            else if(command.AreaType == AreaTypeEnum.Global)
+            else if (command.AreaType == AreaTypeEnum.Global)
             {
                 for (int i = 0; i < CharacterAliveList.Count; i++)
                 {
@@ -576,23 +550,23 @@ namespace Battle
                 }
             }
 
-            if(command.Track == TrackEnum.Through)
+            if (command.Track == TrackEnum.Through)
             {
                 List<Vector2Int> line = Utility.DrawLine2D(from, to);
                 line.Remove(from);
-                for(int i=0; i<line.Count; i++)
+                for (int i = 0; i < line.Count; i++)
                 {
-                    if(!commandPositionList.Contains(line[i]))
+                    if (!commandPositionList.Contains(line[i]))
                     {
                         commandPositionList.Add(line[i]);
                     }
                 }
             }
-            
+
             return commandPositionList;
         }
 
-        public void SetTargetList(List<Vector2Int> areaList) 
+        public void SetTargetList(List<Vector2Int> areaList)
         {
             BattleCharacterController character;
             for (int i = 0; i < areaList.Count; i++)
@@ -612,7 +586,7 @@ namespace Battle
 
         public void ClearQuad(List<Vector2Int> list)
         {
-            for (int i=0; i<list.Count; i++) 
+            for (int i = 0; i < list.Count; i++)
             {
                 ClearQuad(list[i]);
             }
@@ -623,17 +597,7 @@ namespace Battle
             _context.SetState<EndState>();
         }
 
-        public void OnMoveEnd()
-        {
-            _canClick = true;
-
-            //if (SelectedCharacter.AI != null)
-            //{
-            //    SelectedCharacter.AI.OnMoveEnd();
-            //}
-        }
-
-        public void CreateEnemy(int id, int lv, Vector2Int position, float angle) 
+        public void CreateEnemy(int id, int lv, Vector2Int position, float angle)
         {
             EnemyModel enemyData = DataTable.Instance.EnemyDic[id];
             CreateEnemy(enemyData, lv, position, angle);
@@ -646,7 +610,6 @@ namespace Battle
             obj.transform.localEulerAngles = new Vector3(0, angle, 0);
             BattleCharacterController controller = obj.GetComponent<BattleCharacterController>();
             controller.Init(lv, enemyData);
-            controller.MoveEndHandler += OnMoveEnd;
             CharacterAliveList.Add(controller);
             _maxIndex++;
             controller.Index = _maxIndex;
@@ -666,7 +629,7 @@ namespace Battle
                 {
                     return -1;
                 }
-                else 
+                else
                 {
                     if (x.Info.CurrentWT > y.Info.CurrentWT)
                     {
@@ -705,6 +668,7 @@ namespace Battle
             {
                 if (_lastPosition != null)
                 {
+                    SetSelect((Vector2Int)_lastPosition, false);
                     _lastPosition = null;
                     BattleUI.SetTileLabel(null);
                     return true;
@@ -720,15 +684,18 @@ namespace Battle
             if (Physics.Raycast(ray, out hit, 100, _battleTileLayer))
             {
                 currentPosition = Utility.ConvertToVector2Int(hit.transform.position);
-                if(_lastPosition == null || ((Vector2Int)currentPosition != (Vector2Int)_lastPosition)) 
+                Instance.SetSelect((Vector2Int)currentPosition, true);
+                if (_lastPosition == null || ((Vector2Int)currentPosition != (Vector2Int)_lastPosition))
                 {
+                    HideLastPosition();
                     _lastPosition = currentPosition;
                     BattleUI.SetTileLabel(TileDic[(Vector2Int)currentPosition]);
                     return true;
                 }
             }
-            else if(_lastPosition != null)
+            else if (_lastPosition != null)
             {
+                SetSelect((Vector2Int)_lastPosition, false);
                 _lastPosition = null;
                 BattleUI.SetTileLabel(null);
                 return true;
@@ -736,72 +703,20 @@ namespace Battle
             return false;
         }
 
-        public void SetSelect(Vector2Int position, bool show) 
+        public void SetSelect(Vector2Int position, bool show)
         {
             TileDic[position].TileObject.Select.SetActive(show);
         }
 
-        /*public void UseEffect(Command command, BattleCharacterController user, BattleCharacterController target, out int count)
+        public void HideLastPosition() 
         {
-            HitType hitType = CheckHit(command.Hit, user, target, Tutorial);
-
-            List<Log> logList = new List<Log>();
-            command.Effect.Use(hitType, user, target, logList);
-
-            if (command.SubEffect != null) 
+            if (_lastPosition != null)
             {
-                command.SubEffect.Use(user, command.SubTarget, logList);
+                SetSelect((Vector2Int)_lastPosition, false);
             }
+        }
 
-            //if (Passive.Contains<MiraclePassive>(user.Info.PassiveList) && command.Effect is RecoverEffect)
-            //{
-            //    int recover = (int)(user.Info.MaxHP / 10f);
-            //    user.Info.SetRecover(recover);
-            //    logList.Add(new Log(user, user, EffectModel.TypeEnum.Recover, hitType, recover.ToString()));
-            //}
-
-            //if (command is ItemCommand) 
-            //{
-            //    ItemCommand itemCommand = (ItemCommand)command;
-            //    if (itemCommand.ItemID != 0)
-            //    {
-            //        ItemManager.Instance.MinusItem(itemCommand.ItemID, 1);
-            //    }
-            //    else if (itemCommand.Food !=null) 
-            //    {
-            //        ItemManager.Instance.MinusFood(itemCommand.Food);
-            //    }
-            //}
-
-            for (int i=0; i<logList.Count; i++) 
-            {
-                Instance.BattleUI.PlayFloatingNumberPool(logList[i].Target, logList[i]);
-            }
-            count = logList.Count;
-
-            GameObject partilce;
-            if (command.Effect.Status != null)
-            {
-                for (int i = 0; i < command.Effect.Status.AreaList.Count; i++)
-                {
-                    partilce = GameObject.Instantiate(Resources.Load("Particle/" + command.Particle), Vector3.zero, Quaternion.identity) as GameObject;
-                    partilce.transform.position = target.transform.position + new Vector3(command.Effect.Status.AreaList[i].x, 0, command.Effect.Status.AreaList[i].y);
-                }
-            }
-            else
-            {
-                partilce = GameObject.Instantiate(Resources.Load("Particle/" + command.Particle), Vector3.zero, Quaternion.identity) as GameObject;
-                partilce.transform.position = target.transform.position;
-            }
-
-            if (command.Shake)
-            {
-                target.transform.DOShakePosition(0.5f, 0.1f);
-            }
-
-        }*/
-
-        public void UseEffect() 
+        public void UseEffect()
         {
             int originalHP = 0;
             BattleCharacterController target = null;
@@ -847,7 +762,7 @@ namespace Battle
 
             float height;
             GameObject partilce;
-            for (int i=0; i<_areaList.Count; i++) 
+            for (int i = 0; i < _areaList.Count; i++)
             {
                 partilce = GameObject.Instantiate(Resources.Load("Particle/" + command.Particle), Vector3.zero, Quaternion.identity) as GameObject;
                 height = TileDic[_areaList[i]].TileData.Height * 0.5f + 0.5f;
@@ -858,7 +773,7 @@ namespace Battle
             foreach (KeyValuePair<BattleCharacterController, List<FloatingNumberData>> pair in _floatingNumberDic)
             {
                 Instance.BattleUI.PlayFloatingNumberPool(pair.Key, pair.Value);
-                if (pair.Value.Count > maxCount) 
+                if (pair.Value.Count > maxCount)
                 {
                     maxCount = pair.Value.Count;
                 }
@@ -872,7 +787,7 @@ namespace Battle
             }
         }
 
-        public void SetWin() 
+        public void SetWin()
         {
             _context.SetState<WinState>();
         }
@@ -890,6 +805,70 @@ namespace Battle
             BattleUI.CommandGroup.ItemButton.Lock = false;
         }
 
+        public void ShowStepList(BattleCharacterController character)
+        {
+            int distance;
+            Vector2Int start = Utility.ConvertToVector2Int(character.transform.position);
+            List<Vector2Int> stepList = GetPositionList(character.Info.CurrentMOV, start);
+            for (int i = 0; i < stepList.Count; i++)
+            {
+                distance = GetDistance(start, stepList[i], character.Info.Faction);
+                if (distance > character.Info.CurrentMOV || distance == -1)
+                {
+                    stepList.RemoveAt(i);
+                    i--;
+                }
+            }
+
+            for (int i = 0; i < CharacterAliveList.Count; i++)
+            {
+                if (CharacterAliveList[i] != character)
+                {
+                    stepList.Remove(Utility.ConvertToVector2Int(CharacterAliveList[i].transform.position));
+                }
+            }
+
+            for (int i = 0; i < CharacterDyingList.Count; i++)
+            {
+                if (CharacterDyingList[i] != character)
+                {
+                    stepList.Remove(Utility.ConvertToVector2Int(CharacterDyingList[i].transform.position));
+                }
+            }
+
+            character.Info.StepList = stepList;
+
+            SetQuad(character.Info.StepList, _white);
+        }
+
+        public void ClearStepList(BattleCharacterController character) 
+        {
+            ClearQuad(character.Info.StepList);
+            character.Info.StepList.Clear();
+        }
+
+        public void SetRangeList(BattleCharacterController character, Command command)
+        {
+            List<Vector2Int> rangeList;
+            if (Passive.Contains<ArcherPassive>(character.Info.PassiveList))
+            {
+                rangeList = ArcherPassive.GetRange(command.Range, Utility.ConvertToVector2Int(character.transform.position));
+            }
+            else
+            {
+                rangeList = GetPositionList(command.Range, Utility.ConvertToVector2Int(character.transform.position));
+            }
+
+            RemoveRange(command.Target, rangeList);
+            SetQuad(rangeList, _yellow);
+            character.Info.RangeList = rangeList;
+        }
+
+        public void ClearRangeList(BattleCharacterController character) 
+        {
+            ClearQuad(character.Info.RangeList);
+            character.Info.RangeList.Clear();
+        }
 
 
         private void Update() 

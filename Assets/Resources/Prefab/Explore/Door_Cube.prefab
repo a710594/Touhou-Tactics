@@ -96,9 +96,10 @@ GameObject:
   - component: {fileID: 5437998230631539117}
   - component: {fileID: 7823686990857901415}
   - component: {fileID: -6896694944108293503}
+  - component: {fileID: 603488033002044088}
   m_Layer: 0
   m_Name: Door_Cube
-  m_TagString: Wall
+  m_TagString: Door
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -182,3 +183,15 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 2, z: 1}
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &603488033002044088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8727115808896755707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7230004e8256a3d4db938f110f3f13a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

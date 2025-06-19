@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Explore
 {
-    public class TileObject : MonoBehaviour
+    /*public class TileObject : MonoBehaviour
     {
         public string Name;
         public GameObject Cube;
         public GameObject Quad;
-    }
+    }*/
 }

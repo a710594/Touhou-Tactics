@@ -13,12 +13,27 @@ namespace Explore
         public Transform cameraTransform;
         public CharacterController characterController;
 
+        [Range(0.001f, 0.01f)]
+        public float Amount = 0.002f;
+        [Range(1f, 30f)]
+        public float Freduency = 10f;
+        [Range(10f, 100f)]
+        public float Smooth = 10f;
+
         private float _verticalRotation = 0f;
         private Vector3? _lastPosition = null;
+        private GameObject _obj = null;
+        private TreasureTrigger _treasure = null;
+        private LayerMask _triggerLayer; //Àð¾À©M¦aªOªº trigger
+
+        private float _toggleSpeed = 3f;
+        private Vector3 _startPosition;
 
         void Awake()
         {
             Cursor.lockState = CursorLockMode.Locked;
+            _triggerLayer = ~(1 << LayerMask.NameToLayer("Trigger"));
+            _startPosition = cameraTransform.localPosition;
         }
 
         void Update()
@@ -27,14 +42,14 @@ namespace Explore
             {
                 Move();
                 Look();
+                Raycast();
 
                 if (ExploreManager.Instance.PlayerSpeed > 0)
                 {
-                    ExploreManager.Instance.CheckEvent(Utility.ConvertToVector2Int(transform.position));
-                    ExploreManager.Instance.CheckVisit(transform);
-                    ExploreManager.Instance.CheckTreasure(transform);
-                    ExploreManager.Instance.CheckDoor(transform);
+                    ExploreManager.Instance.SetPlayerPosition(new Vector2(transform.position.x, transform.position.z));
+                    StartHeadBob();
                 }
+                StopHeadBob();
             }
 
             if (_lastPosition != null)
@@ -68,6 +83,52 @@ namespace Explore
             transform.Rotate(Vector3.up * mouseX);           
         }
 
+        public void Raycast() 
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, transform.forward, out hit, 1, _triggerLayer))
+            {
+                if (!hit.collider.gameObject.Equals(_obj))
+                {
+                    _obj = hit.collider.gameObject;
+                    if (hit.collider.tag == "Treasure")
+                    {
+                        _treasure = hit.collider.GetComponent<TreasureTrigger>();
+                        _treasure.Outline.enabled = true;
+                        ExploreManager.Instance.ShowTreasure(_treasure);
+                    }
+                    else if (hit.collider.tag == "Door")
+                    {
+                        if (_treasure != null)
+                        {
+                            _treasure.Outline.enabled = false;
+                            _treasure = null;
+                        }
+                        ExploreManager.Instance.ShowDoor(hit.collider.GetComponent<DoorTrigger>());
+                    }
+                    else
+                    {
+                        if (_treasure != null)
+                        {
+                            _treasure.Outline.enabled = false;
+                            _treasure = null;
+                        }
+                        ExploreManager.Instance.ClearObjectInfo();
+                    }
+                }
+            }
+            else
+            {
+                _obj = null;
+                if (_treasure != null)
+                {
+                    _treasure.Outline.enabled = false;
+                    _treasure = null;
+                }
+                ExploreManager.Instance.ClearObjectInfo();
+            }
+        }
+
         void OnControllerColliderHit(ControllerColliderHit hit)
         {
             if (hit.collider.tag == "FOE")
@@ -75,6 +136,23 @@ namespace Explore
                 ExploreEnemyController enemy = hit.transform.GetComponent<ExploreEnemyController>();
                 ExploreManager.Instance.EnterBattle(enemy.File);
             }
+        }
+
+        private void StartHeadBob() 
+        {
+            Vector3 pos = Vector3.zero;
+            pos.y += Mathf.Lerp(pos.y, Mathf.Sin(Time.time * Freduency) * Amount * 1.4f, Smooth * Time.deltaTime);
+            pos.x += Mathf.Lerp(pos.x, Mathf.Cos(Time.time * Freduency / 2f) * Amount * 1.6f, Smooth * Time.deltaTime);
+            cameraTransform.localPosition += pos;
+        }
+
+        private void StopHeadBob() 
+        {
+            if(cameraTransform.localPosition == _startPosition) 
+            {
+                return;
+            }
+            cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, _startPosition, Time.deltaTime);
         }
     }
 }

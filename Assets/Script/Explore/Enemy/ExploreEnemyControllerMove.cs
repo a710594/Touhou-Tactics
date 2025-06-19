@@ -8,14 +8,9 @@ namespace Explore
     {
         void OnControllerColliderHit(ControllerColliderHit hit)
         {
-            if (hit.collider.tag == "Wall" || hit.collider.tag == "Treasure")
+            if (hit.collider.tag == "Wall" || hit.collider.tag == "Treasure" || hit.collider.tag == "Door")
             {
                 transform.eulerAngles += new Vector3(0, 90, 0);
-            }
-            else if (hit.collider.tag == "Player")
-            {
-                CharacterController.Move(Vector3.zero);
-                ExploreManager.Instance.EnterBattle(File);
             }
         }
 
@@ -24,6 +19,15 @@ namespace Explore
             if (ExploreManager.Instance.PlayerSpeed > 0)
             {
                 CharacterController.Move(transform.forward * ExploreManager.Instance.PlayerSpeed);
+
+                if (ExploreManager.Instance.TileDic[Utility.ConvertToVector2Int(transform.position)].IsVisited) 
+                {
+                    ExploreManager.Instance.ShowEnemy(transform.position, this);
+                }
+                else
+                {
+                    ExploreManager.Instance.HideEnemy(this);
+                }
             }
         }
     }

@@ -25,38 +25,42 @@ namespace Battle
 
         private void Move()
         {
-            List<Vector2Int> stepList = BattleController.Instance.GetStepList(_character);
+            BattleController.Instance.ShowStepList(_character);
             List<BattleCharacterController> targetList = GetTargetList(BattleCharacterInfo.FactionEnum.Player);
-            Dictionary<BattleCharacterController, List<Vector2Int>> canHitDic = GetCanHitDic(SelectedSkill, stepList, targetList);
-            Vector2Int moveTo = GetMoveTo(stepList, targetList, canHitDic);
+            Dictionary<BattleCharacterController, List<Vector2Int>> canHitDic = GetCanHitDic(SelectedSkill, _character.Info.StepList, targetList);
+            Vector2Int moveTo = GetMoveTo(_character.Info.StepList, targetList, canHitDic);
             BattleController.Instance.SetState<BattleController.MoveState>();
-            BattleController.Instance.Move(moveTo, () =>
+            BattleController.Instance.AfterMoveHandler += AfterMove;
+            BattleController.Instance.Move(moveTo);
+        }
+
+        private void AfterMove()
+        {
+            BattleController.Instance.AfterMoveHandler -= AfterMove;
+            if (_canAttack)
             {
-                if (_canAttack)
-                {
-                    Attack();
-                }
-                else
-                {
-                    SetDirection();
-                }
-            });
+                Attack();
+            }
+            else
+            {
+                SetDirection();
+            }
         }
 
         private void Attack()
         {
-            BattleController.Instance.SetState<BattleController.CommandState>();
+            //BattleController.Instance.SetState<BattleController.CommandState>();
             BattleController.Instance.SetSelectedCommand(SelectedSkill);
             Vector2Int userPosition = Utility.ConvertToVector2Int(_character.transform.position);
             Vector2Int targetPosition = Utility.ConvertToVector2Int(_target.transform.position);
             List<Vector2Int> areaList = BattleController.Instance.GetAreaList(userPosition, targetPosition, SelectedSkill);
             BattleController.Instance.UseCommand(targetPosition, areaList);
-            BattleController.Instance.CommandStateBeginHandler += SetDirection;
+            BattleController.Instance.AfterCheckResultHandler += SetDirection;
         }
 
         private void SetDirection()
         {
-            BattleController.Instance.CommandStateBeginHandler -= SetDirection;
+            BattleController.Instance.AfterCheckResultHandler -= SetDirection;
             BattleController.Instance.SetState<BattleController.DirectionState>();
             Vector3 v3 = _target.transform.position - transform.position;
             Vector2Int v2;
@@ -111,7 +115,7 @@ namespace Battle
 
             for (int i = 0; i < stepList.Count; i++) //我可以移動的範圍
             {
-                rangeList = BattleController.Instance.GetRangeList(skill.Range, stepList[i]);
+                rangeList = BattleController.Instance.GetPositionList(skill.Range, stepList[i]);
                 for (int j = 0; j < targetList.Count; j++)
                 {
                     targetPosition = Utility.ConvertToVector2Int(targetList[j].transform.position);

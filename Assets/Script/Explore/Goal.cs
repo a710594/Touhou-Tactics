@@ -14,7 +14,7 @@ namespace Explore
         {
             if (other.tag == "Player")
             {
-                ExploreManager.Instance.CheckGoal();
+                ExploreManager.Instance.ArriveGoal();
             }
         }
     }

@@ -132,40 +132,6 @@ namespace Battle
             }
         }
 
-        public List<Vector2Int> GetStepList(BattleCharacterController character)
-        {
-            int distance;
-            Vector2Int start = Utility.ConvertToVector2Int(character.transform.position);
-            List<Vector2Int> stepList = GetRangeList(character.Info.MOV, start);
-            for (int i = 0; i < stepList.Count; i++)
-            {
-                distance = GetDistance(start, stepList[i], character.Info.Faction);
-                if (distance > character.Info.MOV || distance == -1)
-                {
-                    stepList.RemoveAt(i);
-                    i--;
-                }
-            }
-
-            for (int i = 0; i < CharacterAliveList.Count; i++)
-            {
-                if (CharacterAliveList[i] != character)
-                {
-                    stepList.Remove(Utility.ConvertToVector2Int(CharacterAliveList[i].transform.position));
-                }
-            }
-
-            for (int i = 0; i < CharacterDyingList.Count; i++)
-            {
-                if (CharacterDyingList[i] != character)
-                {
-                    stepList.Remove(Utility.ConvertToVector2Int(CharacterDyingList[i].transform.position));
-                }
-            }
-
-            return stepList;
-        }
-
         private List<Vector2Int> ReconstructPath(Node currentNode)
         {
             List<Vector2Int> path = new List<Vector2Int>();

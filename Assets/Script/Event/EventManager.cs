@@ -82,6 +82,13 @@ public class EventManager
                 Info.MarisaIntroduction = true;
                 hasEvent = true;
             }
+            else if (jobId == 7 && !Info.SanaeIntroduction)
+            {
+                SanaeIntroduction sanaeIntroduction = new SanaeIntroduction();
+                sanaeIntroduction.Start();
+                Info.SanaeIntroduction = true;
+                hasEvent = true;
+            }
         }
 
         if (!hasEvent) 

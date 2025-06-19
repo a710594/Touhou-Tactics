@@ -13,10 +13,18 @@ namespace Battle
             Vector2Int start = Utility.ConvertToVector2Int(transform.position);
             Vector2Int targetPosition;
             Vector2Int moveTo = new Vector2Int();
-            if (canHitDic.Count > 0)
+            BattleCharacterController provocativeTarget = _character.Info.GetProvocativeTarget();
+            if (canHitDic.Count > 0 && (provocativeTarget == null || canHitDic.ContainsKey(provocativeTarget)))
             {
                 _canAttack = true;
-                _target = GetTarget(new List<BattleCharacterController>(canHitDic.Keys));
+                if (provocativeTarget == null)
+                {
+                    _target = GetTarget(new List<BattleCharacterController>(canHitDic.Keys));
+                }
+                else
+                {
+                    _target = provocativeTarget;
+                }
                 for (int i = 0; i < canHitDic[_target].Count; i++)
                 {
                     distance = BattleController.Instance.GetDistance(start, canHitDic[_target][i], _character.Info.Faction); //盡量接近目標
@@ -26,11 +34,20 @@ namespace Battle
                         moveTo = canHitDic[_target][i];
                     }
                 }
+
+                return moveTo;
             }
             else
             {
                 _canAttack = false;
-                _target = GetTarget(targetList);
+                if (provocativeTarget == null)
+                {
+                    _target = GetTarget(new List<BattleCharacterController>(targetList));
+                }
+                else
+                {
+                    _target = provocativeTarget;
+                }
                 targetPosition = Utility.ConvertToVector2Int(_target.transform.position);
                 for (int i = 0; i < stepList.Count; i++)
                 {
@@ -50,18 +67,15 @@ namespace Battle
         {
             int distance;
             int minDistance = int.MaxValue;
-            BattleCharacterController target = _character.Info.GetProvocativeTarget();
+            BattleCharacterController target = null;
 
-            if (target == null)
+            for (int i = 0; i < list.Count; i++)
             {
-                for (int i = 0; i < list.Count; i++)
+                distance = BattleController.Instance.GetDistance(Utility.ConvertToVector2Int(_character.transform.position), Utility.ConvertToVector2Int(list[i].transform.position), _character.Info.Faction);
+                if (minDistance > distance)
                 {
-                    distance = BattleController.Instance.GetDistance(Utility.ConvertToVector2Int(_character.transform.position), Utility.ConvertToVector2Int(list[i].transform.position), _character.Info.Faction);
-                    if (minDistance > distance)
-                    {
-                        minDistance = distance;
-                        target = list[i];
-                    }
+                    minDistance = distance;
+                    target = list[i];
                 }
             }
 

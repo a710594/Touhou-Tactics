@@ -32,7 +32,7 @@ public class CameraController : MonoBehaviour
     private Vector3 _position;
     private Timer _timer = new Timer();
 
-    public void SetMyGameObj(GameObject obj, Action callback) 
+    public void SetMyGameObj(GameObject obj, bool isTween, Action callback) 
     {
         Enable = false;
         float radiansX = transform.eulerAngles.x * Mathf.PI / 180f;
@@ -42,7 +42,7 @@ public class CameraController : MonoBehaviour
         int objHeight = BattleController.Instance.TileDic[objPosition].TileData.Height;
         Vector3 cameraPosition = new Vector3(-Mathf.Sin(radiansY) * MathF.Cos(radiansX) * Distance + TargetObject.transform.position.x, MathF.Sin(radiansX) * Height + objHeight * 0.5f, -Mathf.Cos(radiansY) * MathF.Cos(radiansX) * Distance + TargetObject.transform.position.z);
 
-        if (callback != null)
+        if (isTween)
         {
             transform.DOMove(cameraPosition, 0.5f).OnComplete(() =>
             {
@@ -60,6 +60,10 @@ public class CameraController : MonoBehaviour
         {
             Enable = true;
             transform.position = cameraPosition;
+            if (callback != null)
+            {
+                callback();
+            }
         }
     }
 

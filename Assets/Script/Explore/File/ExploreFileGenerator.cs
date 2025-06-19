@@ -18,6 +18,7 @@ namespace Explore
         public Transform Door;
         public FileManager FileManager;
 
+
         public void BuildFile()
         {
             int minX = int.MinValue;
@@ -30,7 +31,7 @@ namespace Explore
             foreach (Transform child in Tilemap)
             {
                 pos = Utility.ConvertToVector2Int(child.position);
-                tile = new ExploreFileTile(child.tag != "Wall", false, child.name, pos);
+                tile = new ExploreFileTile(child.name, pos);
                 file.TileList.Add(tile);
 
                 if (minX == int.MinValue || pos.x < minX)
@@ -83,26 +84,20 @@ namespace Explore
             foreach (Transform child in Trigger)
             {
                 triggerObject = child.GetComponent<TriggerObject>();
-                file.TriggerList.Add(new ExploreFileTrigger(Utility.ConvertToVector2Int(child.position), triggerObject.Name));
+                file.EventList.Add(new ExploreFileEvent(Utility.ConvertToVector2Int(child.position), triggerObject.Name));
             }
 
-            TreasureObject treasureObj;
+            TreasureEditor treasureObj;
             foreach (Transform child in Treasure)
             {
-                treasureObj = child.gameObject.GetComponent<TreasureObject>();
-                ExploreFileTreasure treasure = new ExploreFileTreasure();
-                treasure.Height = treasureObj.transform.position.y;
-                treasure.Position = Utility.ConvertToVector2Int(treasureObj.transform.position);
-                treasure.RotationY = Mathf.RoundToInt(treasureObj.transform.localEulerAngles.y);
-                treasure.ItemID = treasureObj.ItemID;
-                treasure.Prefab = treasureObj.Prefab;
-                file.TreasureList.Add(treasure);
+                treasureObj = child.gameObject.GetComponent<TreasureEditor>();
+                ExploreFileTreasure treasureFile = new ExploreFileTreasure(treasureObj.ItemID, treasureObj.Prefab, Utility.ConvertToVector2Int(treasureObj.transform.position));
+                file.TreasureList.Add(treasureFile);
             }
 
             foreach (Transform child in Door) 
             {
-                ExploreFIleDoor door = new ExploreFIleDoor();
-                door.Position = Utility.ConvertToVector2Int(child.position);
+                ExploreFileDoor door = new ExploreFileDoor(Utility.ConvertToVector2Int(child.position));
                 file.DoorList.Add(door);
             }
 

@@ -66,7 +66,7 @@ public static class Utility
                 list.Add(new Vector2Int(i, y));
             }
         }
-        else if (dy > dx) //dy 最大
+        else //dy 最大
         {
             if (a.y > b.y)
             {
@@ -418,22 +418,6 @@ public static class Utility
         return false;
     }
 
-    public static bool LookPlayer(Transform transform, float angle, int amount) 
-    {
-        float subAngle = angle / amount;
-        Vector3 direction;
-        for (int i=-amount; i<=amount; i++) 
-        {
-            direction = Quaternion.AngleAxis(subAngle * i, Vector3.up) * transform.forward;
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position, direction, out hit, 5) && hit.collider.tag == "Player")
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     public static Vector2Int GenerateNormalPoints(Vector2Int center, float stdDev, int minX, int maxX, int minY, int maxY, List<Vector2Int> invalidList) 
     {

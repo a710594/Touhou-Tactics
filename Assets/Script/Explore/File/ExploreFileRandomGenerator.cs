@@ -42,7 +42,7 @@ public class ExploreFileRandomGenerator
     private List<Room> _roomList = new List<Room>();
     private List<Room> _isolatedList = new List<Room>(); //孤立的房間
     private List<Room> _otherList = new List<Room>(); //其他的房間
-    private List<ExploreFIleDoor> _doorList = new List<ExploreFIleDoor>();
+    private List<ExploreFileDoor> _doorList = new List<ExploreFileDoor>();
 
     public ExploreFile Create(RandomFloorModel floorData, int seed = 0)
     {
@@ -121,7 +121,7 @@ public class ExploreFileRandomGenerator
                     {
                         pos = new Vector2Int(j, k);
                         grid[pos] = CellType.Room;
-                        File.TileList.Add(new ExploreFileTile(true, false, "Ground", pos));
+                        File.TileList.Add(new ExploreFileTile("Ground", pos));
                         _groundList.Add(pos);
                     }
                 }
@@ -225,7 +225,7 @@ public class ExploreFileRandomGenerator
             room = _otherList[UnityEngine.Random.Range(0, _otherList.Count)];
             if (room.TryGetRandomPosition(out pos))
             {
-                treasureFile = new ExploreFileTreasure(ItemManager.KeyID, "Key", 1, pos, 0);
+                treasureFile = new ExploreFileTreasure(ItemManager.KeyID, "Key", pos);
                 File.TreasureList.Add(treasureFile);
                 room.SetNotAvailable(pos);
             }
@@ -244,7 +244,7 @@ public class ExploreFileRandomGenerator
             if (room.TryGetRandomPosition(out pos))
             {
                 treasureData = DataTable.Instance.TreasureDic[3];
-                treasureFile = new ExploreFileTreasure(treasureData.GetItemID(), treasureData.Prefab, treasureData.Height, pos, 0);
+                treasureFile = new ExploreFileTreasure(treasureData.GetItemID(), treasureData.Prefab, pos);
                 File.TreasureList.Add(treasureFile);
                 room.SetNotAvailable(pos);
             }
@@ -263,7 +263,7 @@ public class ExploreFileRandomGenerator
                 if (_otherList[i].TryGetRandomPosition(out pos))
                 {
                     treasureData = DataTable.Instance.TreasureDic[room.Data.GetTreasure()];
-                    treasureFile = new ExploreFileTreasure(treasureData.GetItemID(), treasureData.Prefab, treasureData.Height, pos, 0);
+                    treasureFile = new ExploreFileTreasure(treasureData.GetItemID(), treasureData.Prefab, pos);
                     File.TreasureList.Add(treasureFile);
                     _otherList[i].SetNotAvailable(pos);
                 }
@@ -313,6 +313,7 @@ public class ExploreFileRandomGenerator
     }
 
     void PathfindHallways() {
+        ExploreFileDoor door;
         DungeonPathfinder2D aStar = new DungeonPathfinder2D(new Vector2Int(File.Size.x, File.Size.y));
 
         foreach (var edge in selectedEdges) {
@@ -363,14 +364,13 @@ public class ExploreFileRandomGenerator
 
             if (path != null) {
                 List<Vector2Int> positionList = new List<Vector2Int>();
-                ExploreFIleDoor door = new ExploreFIleDoor();
                 for (int i = 0; i < path.Count; i++) {
                     var current = path[i];
 
                     if (grid[current] == CellType.None)
                     {
                         grid[current] = CellType.Hallway;
-                        File.TileList.Add(new ExploreFileTile(true, false, "Ground", current));
+                        File.TileList.Add(new ExploreFileTile("Ground", current));
                         _groundList.Add(current);
 
                         //find door
@@ -393,7 +393,7 @@ public class ExploreFileRandomGenerator
                     {
                         positionList.RemoveAt(0);
                     }
-                    door.Position = positionList[0];
+                    door = new ExploreFileDoor(positionList[0]);
                     _doorList.Add(door);
                 }
             }
@@ -435,7 +435,7 @@ public class ExploreFileRandomGenerator
     {
         if (!_groundList.Contains(position) && !_wallList.Contains(position))
         {
-            File.TileList.Add(new ExploreFileTile(false, false, "Wall", position));
+            File.TileList.Add(new ExploreFileTile("Wall", position));
             _wallList.Add(position);
             return true;
         }

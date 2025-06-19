@@ -28,6 +28,7 @@ public class BattlePlayerInfo : BattleCharacterInfo
         Faction = FactionEnum.Player;
         CurrentHP = info.CurrentHP;
         CurrentWT = WT;
+        CurrentMOV = MOV;
 
         SkillList = info.SkillList;
         SubList = info.SupportList;

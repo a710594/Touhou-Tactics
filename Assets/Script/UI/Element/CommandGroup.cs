@@ -8,7 +8,6 @@ namespace Battle
 {
     public class CommandGroup : DropdownRoot
     {
-        public DropdownButton MoveButton;
         public DropdownButton SubButton;
         public DropdownButton MainButton;
         public DropdownButton ItemButton;
@@ -19,29 +18,23 @@ namespace Battle
 
         //private DropdownGroup _showedDropdownGroup = null;
         private DropdownNode _lastNode = null;
-        private BattleCharacterInfo _character;
+        private BattleCharacterController _controller;
+        public BattleCharacterInfo _info;
 
         private TutorialArrowUI _tutorialArrowUI = null;
         private Type _tutorialType = null;
         private int? _tutoriaID = null;
 
-        public void SetData(BattleCharacterInfo character) 
+        public void SetData(BattleCharacterController character) 
         {
-            _character = character;
+            _controller = character;
+            _info = character.Info;
 
-            List<object> subList = new List<object>(_character.SubList);
+            List<object> subList = new List<object>(_info.SubList);
             SubButton.SetData("次要動作", ConvertToPair(subList), this, typeof(Sub));
             SubButton.SetHasUse(false);
 
-            //List<object> skillList = new List<object>(_character.SkillList);
-            //List<object> itemList = ItemManager.Instance.GetBattleItemList();
-            //List<object> spellList = new List<object>(_character.SpellList);
-            //List<KeyValuePair<string, object>> mainList = new List<KeyValuePair<string, object>>();
-            //mainList.Add(new KeyValuePair<string, object>("技能", ConvertToPair(skillList)));
-            //mainList.Add(new KeyValuePair<string, object>("道具", ConvertToPair(itemList)));
-            //mainList.Add(new KeyValuePair<string, object>("符卡", ConvertToPair(spellList)));
-            //MainButton.SetData("主要動作", mainList, this);
-            List<object> skillList = new List<object>(_character.SkillList);
+            List<object> skillList = new List<object>(_info.SkillList);
             MainButton.SetData("主要動作", ConvertToPair(skillList), this, typeof(Skill));
             MainButton.SetHasUse(false);
 
@@ -60,71 +53,18 @@ namespace Battle
             MainButton.DropdownGroup.gameObject.SetActive(false);
             ItemButton.DropdownGroup.gameObject.SetActive(false);
 
-            SubButton.SetHasUse(_character.HasSub);
-            MainButton.SetHasUse(_character.HasMain);
-            ItemButton.SetHasUse(_character.HasItem);
-
-            if (_character.HasMove)
-            {
-                MoveButton.Button.Label.text = "再次移動";
-                if (_character.MoveAgain)
-                {
-                    MoveButton.SetHasUse(true);
-                    SubButton.SetHasUse(true);
-                    MainButton.SetHasUse(true);
-                }
-                else
-                {
-                    if (_character.HasSub || _character.HasMain)
-                    {
-                        MoveButton.SetHasUse(true);
-                    }
-                    else
-                    {
-                        MoveButton.SetHasUse(false);
-                    }
-                }
-            }
-            else
-            {
-                MoveButton.Button.Label.text = "移動";
-                MoveButton.SetHasUse(false);
-            }
+            SubButton.SetHasUse(_info.HasSub);
+            MainButton.SetHasUse(_info.HasMain);
+            ItemButton.SetHasUse(_info.HasItem);
             FinishButton.SetHasUse(false);
         }
 
         public override void ButtonOnClick(object data) 
         {
-            if(data is string &&  (string)data == "Move") 
-            {
-                if (_character.MoveAgain)
-                {
-                    TipLabel.SetLabel("這回合已經使用過再次移動了");
-                }
-                else if (_character.HasMove)
-                {
-                    if (_character.HasSub)
-                    {
-                        TipLabel.SetLabel("這回合已經使用過次要動作了");
-                    }
-                    else if (_character.HasMain)
-                    {
-                        TipLabel.SetLabel("這回合已經使用過主要動作了");
-                    }
-                    else
-                    {
-                        BattleController.Instance.SetMoveState();
-                    }
-                }
-                else
-                {
-                    BattleController.Instance.SetMoveState();
-                }
-            }
-            else if (data is Sub)
+            if (data is Sub)
             {
                 Sub sub = (Sub)data;
-                if (_character.HasSub)
+                if (_info.HasSub)
                 {
                     TipLabel.SetLabel("這回合已經使用過次要動作了");
                 }
@@ -132,7 +72,7 @@ namespace Battle
                 {
                     TipLabel.SetLabel("還需要" + sub.CurrentCD + "回合冷卻");
                 }
-                else if (_character.MoveAgain) 
+                else if (_info.MoveAgain) 
                 {
                     TipLabel.SetLabel("這回合已經使用過再次移動了");
                 }
@@ -144,7 +84,7 @@ namespace Battle
             else if(data is Skill) 
             {
                 Skill skill = (Skill)data;
-                if (_character.HasMain) 
+                if (_info.HasMain) 
                 {
                     TipLabel.SetLabel("這回合已經使用過主要動作了");
                 }
@@ -152,7 +92,7 @@ namespace Battle
                 {
                     TipLabel.SetLabel("還需要" + skill.CurrentCD + "回合冷卻");
                 }
-                else if (_character.MoveAgain)
+                else if (_info.MoveAgain)
                 {
                     TipLabel.SetLabel("這回合已經使用過再次移動了");
                 }
@@ -163,11 +103,11 @@ namespace Battle
             }
             else if(data is ItemCommand) 
             {
-                if (_character.HasItem)
+                if (_info.HasItem)
                 {
                     TipLabel.SetLabel("這回合已經使用過道具了");
                 }
-                else if (_character.MoveAgain)
+                else if (_info.MoveAgain)
                 {
                     TipLabel.SetLabel("這回合已經使用過再次移動了");
                 }
@@ -180,11 +120,11 @@ namespace Battle
             else if(data is Spell) 
             {
                 Spell spell = (Spell)data;
-                if (_character.HasMain)
+                if (_info.HasMain)
                 {
                     TipLabel.SetLabel("這回合已經使用過主要動作了");
                 }
-                else if (!_character.CanUseSpell)
+                else if (!_info.CanUseSpell)
                 {
                     TipLabel.SetLabel("下次行動才能使用符卡");
                 }
@@ -236,10 +176,10 @@ namespace Battle
                 group.SetPosition(button.transform, GridLayout);
 
                 bool hasUse = false;
-                if((button == MainButton && _character.HasMain) ||
-                   (button == SubButton && _character.HasSub) ||
-                   (button == ItemButton && _character.HasItem) ||
-                   ((button == MainButton || button == SubButton || button ==  ItemButton) && _character.MoveAgain)) 
+                if((button == MainButton && _info.HasMain) ||
+                   (button == SubButton && _info.HasSub) ||
+                   (button == ItemButton && _info.HasItem) ||
+                   ((button == MainButton || button == SubButton || button ==  ItemButton) && _info.MoveAgain)) 
                 {
                     hasUse = true;
                 }
@@ -265,30 +205,29 @@ namespace Battle
                     }
                 }
             }
-            else if(data is Sub)
+            else if(data is Command)
             {
-                SkillInfoGroup.SetData((Sub)data);
                 SkillInfoGroup.gameObject.SetActive(true);
-                SkillInfoGroup.transform.position = new Vector3(button.transform.position.x - 285, SkillInfoGroup.transform.position.y, SkillInfoGroup.transform.position.z);
+                BattleController.Instance.ClearStepList(_controller);
+                BattleController.Instance.SetRangeList(_controller, (Command)data);
+                if (data is Sub)
+                {
+                    SkillInfoGroup.SetData((Sub)data);
+                }
+                else if (data is Skill)
+                {
+                    SkillInfoGroup.SetData((Skill)data);
+                }
+                else if (data is ItemCommand)
+                {
+                    SkillInfoGroup.SetData((ItemCommand)data);
+                }
+                else if (data is Spell)
+                {
+                    SkillInfoGroup.SetData((Spell)data);
+                }
             }
-            else if (data is Skill)
-            {
-                SkillInfoGroup.SetData((Skill)data);
-                SkillInfoGroup.gameObject.SetActive(true);
-                SkillInfoGroup.transform.position = new Vector3(button.transform.position.x - 285, SkillInfoGroup.transform.position.y, SkillInfoGroup.transform.position.z);
-            }
-            else if (data is ItemCommand)
-            {
-                SkillInfoGroup.SetData((ItemCommand)data);
-                SkillInfoGroup.gameObject.SetActive(true);
-                SkillInfoGroup.transform.position = new Vector3(button.transform.position.x - 285, SkillInfoGroup.transform.position.y, SkillInfoGroup.transform.position.z);
-            }
-            else if (data is Spell)
-            {
-                SkillInfoGroup.SetData((Spell)data);
-                SkillInfoGroup.gameObject.SetActive(true);
-                SkillInfoGroup.transform.position = new Vector3(button.transform.position.x - 285, SkillInfoGroup.transform.position.y, SkillInfoGroup.transform.position.z);
-            }
+
             _lastNode = button;
 
             if (_tutorialArrowUI != null)
@@ -324,6 +263,8 @@ namespace Battle
         public override void ButtonOnExit()
         {
             SkillInfoGroup.gameObject.SetActive(false);
+            BattleController.Instance.ClearRangeList(_controller);
+            BattleController.Instance.ShowStepList(_controller);
         }
 
         private List<KeyValuePair<string, object>> ConvertToPair(List<object> list) 
@@ -357,17 +298,13 @@ namespace Battle
 
         private void Awake()
         {
-            MoveButton.SetData("移動", "Move", this, null);
-            MoveButton.SetHasUse(false);
             FinishButton.SetData("結束", "Finish", this, null);
             FinishButton.SetHasUse(false);
 
-            ChildList.Add(MoveButton);
             ChildList.Add(SubButton);
             ChildList.Add(MainButton);
             ChildList.Add(FinishButton);
 
-            MoveButton.Parent = this;
             SubButton.Parent = this;
             MainButton.Parent = this;
             FinishButton.Parent = this;

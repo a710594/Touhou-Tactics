@@ -9,6 +9,8 @@ namespace Battle
 {
     public partial class BattleController
     {
+        public Action AfterCheckResultHandler;
+
         /*
          取得一個範圍內的座標,例如如果range=2,就會像這樣
               x
@@ -17,7 +19,7 @@ namespace Battle
              xxx
               x
         */
-        public List<Vector2Int> GetRangeList(int range, Vector2Int start)
+        public List<Vector2Int> GetPositionList(int range, Vector2Int start)
         {
             Vector2Int position;
             List<Vector2Int> list = new List<Vector2Int>();
@@ -543,7 +545,12 @@ namespace Battle
             }
             else
             {
-                _context.SetState<CommandState>();
+                _context.SetState<MoveState>();
+            }
+
+            if (AfterCheckResultHandler != null) 
+            {
+                AfterCheckResultHandler();
             }
         }
 

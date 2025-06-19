@@ -3402,7 +3402,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe6c030f44b2ede45b4e80699d9e9c82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BackgroundButton: {fileID: 4717055257949588721}
   CommandGroup: {fileID: 4635922187720146112}
   LittleHpBarWithStatus: {fileID: 476898917197537266, guid: 66a37a8215f87db44b0b1f5078a8bbeb, type: 3}
   HPGroup: {fileID: 4717055257307106275}
@@ -3805,7 +3804,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -148.89258, y: -93.39801}
+  m_AnchoredPosition: {x: -710, y: 110}
   m_SizeDelta: {x: 350, y: 526.62}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4717055258108647626
@@ -4767,11 +4766,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2237258450712525794, guid: 29fe8a34e1a6834418bdbd976adc2d6b, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 765
+      value: 830
       objectReference: {fileID: 0}
     - target: {fileID: 2237258450712525794, guid: 29fe8a34e1a6834418bdbd976adc2d6b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 44
+      value: 120
       objectReference: {fileID: 0}
     - target: {fileID: 2237258450712525794, guid: 29fe8a34e1a6834418bdbd976adc2d6b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -4788,6 +4787,10 @@ PrefabInstance:
     - target: {fileID: 2237258450712525795, guid: 29fe8a34e1a6834418bdbd976adc2d6b, type: 3}
       propertyPath: m_Name
       value: Command_Group
+      objectReference: {fileID: 0}
+    - target: {fileID: 2237258450712525795, guid: 29fe8a34e1a6834418bdbd976adc2d6b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2237258450712525807, guid: 29fe8a34e1a6834418bdbd976adc2d6b, type: 3}
       propertyPath: m_Color.b

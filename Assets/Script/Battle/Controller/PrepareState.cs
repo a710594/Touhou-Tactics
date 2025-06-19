@@ -10,9 +10,9 @@ namespace Battle
         {
             public bool CanDrag = true;
             
-            private Vector2Int? _lastPosition = null;
             private Vector3 _originalPosition;
             private BattleCharacterController _dragCharacter = null;
+            private BattleCharacterDetailUI _battleCharacterDetailUI;
 
             public PrepareState(StateContext context) : base(context)
             {
@@ -39,7 +39,6 @@ namespace Battle
                     Instance.TempList[i].Index = Instance._maxIndex;
                     Instance.CharacterAliveList.Add(Instance.TempList[i]);
 
-                    Instance.TempList[i].MoveEndHandler += Instance.OnMoveEnd;
                     Instance.BattleUI.CharacterListGroup.Add(Instance.TempList[i]);
                     Instance.BattleUI.SetFloatingNumberPoolAnchor(Instance.TempList[i]);
                 }
@@ -48,11 +47,6 @@ namespace Battle
                 Instance.SortCharacterList(true);
                 Instance.ClearQuad(Instance.PlayerPositionList);
                 Instance.TempList.Clear();
-
-                if (_lastPosition != null)
-                {
-                    Instance.SetSelect((Vector2Int)_lastPosition, false);
-                }
             }
 
             public bool PlaceCharacter(BattleCharacterController character)
@@ -82,14 +76,8 @@ namespace Battle
             {
                 if (Instance.UpdatePosition(out Vector2Int? position))
                 {
-                    if (_lastPosition != null)
-                    {
-                        Instance.SetSelect((Vector2Int)_lastPosition, false);
-                    }
-
                     if (position != null)
                     {
-                        Instance.SetSelect((Vector2Int)position, true);
                         BattleCharacterController character = Instance.GetCharacterByPosition((Vector2Int)position);
                         if (character != null && character != _selectedCharacter)
                         {
@@ -100,7 +88,6 @@ namespace Battle
                             Instance.CharacterInfoUIGroup.HideCharacterInfoUI_2();
                         }
                     }
-                    _lastPosition = position;
                 }
 
                 if (CanDrag)
@@ -127,9 +114,13 @@ namespace Battle
                     {
                         Vector2Int v2 = Utility.ConvertToVector2Int(hit.transform.position);
                         BattleCharacterController character = Instance.GetCharacterByPosition(Utility.ConvertToVector2Int(hit.transform.position));
-                        if (character != null)
+                        if (character != null && _battleCharacterDetailUI == null)
                         {
-                            Instance.OpenCharacterDetail(character.Info, v2);
+                            _battleCharacterDetailUI = Instance.OpenCharacterDetail(character.Info, v2);
+                            _battleCharacterDetailUI.CloseHandler = () => 
+                            { 
+                                _battleCharacterDetailUI = null; 
+                            };
                         }
                     }
                 }

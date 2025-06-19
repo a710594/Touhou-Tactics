@@ -38,6 +38,7 @@ public class BattleCharacterInfo
     public int DEX; //Dexterity 靈巧 影響命中率
     public int AGI; //Agility 敏捷 對抗命中率
     public int MOV; //move 移動
+    public int CurrentMOV;
     public int WT;
     public int CurrentWT;
     public FactionEnum Faction;
@@ -53,6 +54,9 @@ public class BattleCharacterInfo
     public List<Equip> Decoration = new List<Equip>();
 
     public List<Status> StatusList = new List<Status>();
+
+    public List<Vector2Int> StepList = new List<Vector2Int>();
+    public List<Vector2Int> RangeList = new List<Vector2Int>();
 
     public BattleCharacterInfo() { }
 

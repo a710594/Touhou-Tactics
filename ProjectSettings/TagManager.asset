@@ -9,6 +9,7 @@ TagManager:
   - Treasure
   - NoAttach
   - FOE
+  - Door
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - Water
   - UI
   - Map
-  - 
+  - Trigger
   - PostProcessing
   - BattleTile
   - BattleCharacter

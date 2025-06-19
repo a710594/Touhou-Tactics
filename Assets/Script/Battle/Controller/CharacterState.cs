@@ -30,19 +30,19 @@ namespace Battle
                     characterList[i].Info.CurrentWT -= wt;
                 }
 
-                Instance.BattleUI.SetCommandVisible(false);
                 _selectedCharacter.Info.HasMove = false;
                 _selectedCharacter.Info.MoveAgain = false;
                 _selectedCharacter.Info.HasSub = false;
                 _selectedCharacter.Info.HasMain = false;
                 _selectedCharacter.Info.HasSpell = false;
                 _selectedCharacter.Info.HasItem = false;
+                _selectedCharacter.Info.CurrentMOV = _selectedCharacter.Info.MOV;
                 Instance.BattleUI.CharacterListGroupRefresh();
                 Instance.BattleUI.ShowArrow(_selectedCharacter.transform);
                 Instance.CharacterInfoUIGroup.ShowCharacterInfoUI_1(_selectedCharacter.Info, Utility.ConvertToVector2Int(_selectedCharacter.transform.position));
                 Instance.CharacterInfoUIGroup.MoveCharacterInfoUI_1();
                 Instance.CharacterInfoUIGroup.HideCharacterInfoUI_2();
-                Instance._cameraController.SetMyGameObj(_selectedCharacter.gameObject, ()=> 
+                Instance._cameraController.SetMyGameObj(_selectedCharacter.gameObject, true, ()=> 
                 {
                     if (_selectedCharacter.Info is BattlePlayerInfo)
                     {
@@ -55,7 +55,7 @@ namespace Battle
                     }
                     else
                     {
-                        _context.SetState<CommandState>();
+                        _context.SetState<MoveState>();
                     }
                 });
             }

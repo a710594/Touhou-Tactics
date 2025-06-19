@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExploreMapBuilder : MonoBehaviour
+/*public class ExploreMapBuilder : MonoBehaviour
 {
     public int Floor;
     public int Seed;
@@ -24,7 +24,7 @@ public class ExploreMapBuilder : MonoBehaviour
     private void CreateObject(ExploreFile file, out Dictionary<Vector2Int, ExploreFileTile> tileDic)
     {
         GameObject gameObj;
-        TileObject tileObj;
+        //TileObject tileObj;
         TreasureObject treasureObj;
         Transform parent = GameObject.Find("Generator2D").transform;
         tileDic = new Dictionary<Vector2Int, ExploreFileTile>();
@@ -41,14 +41,14 @@ public class ExploreMapBuilder : MonoBehaviour
                 file.TileList[i].Prefab = "Wall_Unlit";
             }
             gameObj = (GameObject)GameObject.Instantiate(Resources.Load("Tile/" + file.TileList[i].Prefab), Vector3.zero, Quaternion.identity);
-            tileObj = gameObj.GetComponent<TileObject>();
-            tileObj.transform.position = new Vector3(file.TileList[i].Position.x, 0, file.TileList[i].Position.y);
-            tileObj.transform.SetParent(parent);
-            if (file.TileList[i].IsVisited)
-            {
-                tileObj.Quad.layer = _mapLayer;
-            }
-            file.TileList[i].Object = tileObj;
+            //tileObj = gameObj.GetComponent<TileObject>();
+            gameObj.transform.position = new Vector3(file.TileList[i].Position.x, 0, file.TileList[i].Position.y);
+            gameObj.transform.SetParent(parent);
+            //if (file.TileList[i].IsVisited)
+            //{
+            //    tileObj.Quad.layer = _mapLayer;
+            //}
+            //file.TileList[i].Object = tileObj;
             tileDic.Add(file.TileList[i].Position, file.TileList[i]);
         }
 
@@ -106,4 +106,4 @@ public class ExploreMapBuilder : MonoBehaviour
     {
         _mapLayer = LayerMask.NameToLayer("Map");
     }
-}
+}*/

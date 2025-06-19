@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,10 +8,11 @@ using UnityEngine.EventSystems;
 
 public class BattleCharacterDetailUI : MonoBehaviour
 {
+    public Action CloseHandler;
+
     public RectTransform RectTransform;
     public Text NameLabel;
     public Text LvLabel;
-    public Text ExpLabel;
     public Text PassiveLabel;
     public Text PassiveCommentLabel;
     public Text HPLabel;
@@ -30,7 +32,6 @@ public class BattleCharacterDetailUI : MonoBehaviour
     public ScrollView StatusScrollView;
     public Button CloseButton;
 
-
     private CharacterInfo _characterInfo = null;
     private BattleCharacterInfo _battleCharacterInfo = null;
 
@@ -40,7 +41,7 @@ public class BattleCharacterDetailUI : MonoBehaviour
         GameObject canvas = GameObject.Find("Canvas");
         obj.transform.SetParent(canvas.transform);
         BattleCharacterDetailUI battleCharacterDetailUI = obj.GetComponent<BattleCharacterDetailUI>();
-        battleCharacterDetailUI.RectTransform.offsetMax = Vector3.zero;
+        battleCharacterDetailUI.RectTransform.offsetMax = Vector2.zero;
         battleCharacterDetailUI.RectTransform.offsetMin = Vector3.zero;
         battleCharacterDetailUI.SetData(character, position);
 
@@ -54,11 +55,17 @@ public class BattleCharacterDetailUI : MonoBehaviour
         LvLabel.text = "Lv. " + character.Lv;
         if (character is BattlePlayerInfo)
         {
-            Sprite sprite = Resources.Load<Sprite>("Image/Character/" + ((BattlePlayerInfo)character).Job.Name + "(裁切去背");
+            Sprite sprite = Resources.Load<Sprite>("Image/Character/" + ((BattlePlayerInfo)character).Job.Controller + "_Head");
             Image.sprite = sprite;
             Image.transform.GetChild(0).gameObject.SetActive(sprite == null);
         }
-        ExpLabel.text = "經驗值：" + CharacterManager.Instance.Info.Exp + "/" + CharacterManager.Instance.NeedExp(CharacterManager.Instance.Info.Lv);
+        else if(character is BattleEnemyInfo) 
+        {
+            Sprite sprite = Resources.Load<Sprite>("Image/Character/" + ((BattleEnemyInfo)character).Enemy.Controller + "_Head");
+            Image.sprite = sprite;
+            Image.transform.GetChild(0).gameObject.SetActive(sprite == null);
+        }
+
         if (character.PassiveList.Count>0)
         {
             PassiveLabel.text = "被動技能：" + character.PassiveList[0].Data.Name;
@@ -105,6 +112,11 @@ public class BattleCharacterDetailUI : MonoBehaviour
 
     private void Close() 
     {
+        if (CloseHandler != null) 
+        {
+            CloseHandler();
+        }
+
         Destroy(gameObject);
     }
 

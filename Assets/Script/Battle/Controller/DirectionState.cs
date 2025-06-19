@@ -23,7 +23,6 @@ namespace Battle
                 }
 
                 _selectedCharacter = Instance.SelectedCharacter;
-                Instance.BattleUI.SetCommandVisible(false);
                 Instance.CharacterInfoUIGroup.HideCharacterInfoUI_1();
                 Instance.BattleUI.SetDirectionGroupVisible(!_selectedCharacter.Info.IsAuto);
                 Instance.BattleUI.SetDirectionGroupPosition(_selectedCharacter.transform.position);
@@ -77,8 +76,8 @@ namespace Battle
             {
                 if (Input.GetMouseButtonDown(1) && (Instance.Tutorial == null || !Instance.Tutorial.IsActive))
                 {
-                    _context.SetState<CommandState>();
-                    _selectedCharacter.Info.HasMove = false;
+                    _context.SetState<MoveState>();
+                    //_selectedCharacter.Info.HasMove = false;
                     return;
                 }
             }

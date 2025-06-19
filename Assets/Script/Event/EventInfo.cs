@@ -14,10 +14,11 @@ public class EventInfo
     public bool SpellTutorial = false;
     public bool UnlockCook = false;
     public bool UnlockShop = false;
+    public bool SanaeIntroduction = false;
     public bool ReimuIntroduction = false;
     public bool MarisaIntroduction = false;
     public bool ItemIntroduction = false;
     public bool EquipIntroduction = false;
 
-    public List<string> TriggerList = new List<string>(); //已觸發的踩地事件
+    public List<string> TriggeredEventList = new List<string>(); //已觸發的踩地事件
 }

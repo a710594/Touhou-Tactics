@@ -36,39 +36,44 @@ namespace Battle
         {
             BattleController.Instance.CharacterStateBeginHandler -= Step_3;
             TutorialArrowUI.Close();
-            BattleController.Instance.CommandStateBeginHandler += Step_4;
+            BattleController.Instance.MoveStateBeginHandler += Step_5;
         }
 
-        private void Step_4()
-        {
-            CanMove = true;
-            BattleController.Instance.CommandStateBeginHandler -= Step_4;
-            TutorialUI.Open(2, () => //選擇移動後，白色的格子代表可移動的範圍
-            {
-                BattleController.Instance.BattleUI.HideArrow();
-                TutorialArrowUI.Open("選擇移動。", BattleUI.Instance.CommandGroup.MoveButton.transform, new Vector3(-200, 0, 0), Vector2Int.right);
-                BattleUI.Instance.CommandGroup.MainButton.Lock = true;
-                BattleUI.Instance.CommandGroup.SubButton.Lock = true;
-                BattleUI.Instance.CommandGroup.ItemButton.Lock = true;
-                BattleController.Instance.MoveStateBeginHandler += Step_5;
-            });
-        }
+        //private void Step_4()
+        //{
+        //    CanMove = true;
+        //    BattleController.Instance.CommandStateBeginHandler -= Step_4;
+        //    TutorialUI.Open(2, () => //選擇移動後，白色的格子代表可移動的範圍
+        //    {
+        //        BattleController.Instance.BattleUI.HideArrow();
+        //        TutorialArrowUI.Open("選擇移動。", BattleUI.Instance.CommandGroup.MoveButton.transform, new Vector3(-200, 0, 0), Vector2Int.right);
+        //        BattleUI.Instance.CommandGroup.MainButton.Lock = true;
+        //        BattleUI.Instance.CommandGroup.SubButton.Lock = true;
+        //        BattleUI.Instance.CommandGroup.ItemButton.Lock = true;
+        //        BattleController.Instance.MoveStateBeginHandler += Step_5;
+        //    });
+        //}
 
         private void Step_5() 
         {
             CanMove = false;
             MovePosition = new Vector2Int(4, 3);
             BattleController.Instance.MoveStateBeginHandler -= Step_5;
-            TutorialArrowUI.Close();
-            TutorialArrowUI.Open("選擇移動。", new Vector3(4, 1, 3), Vector2Int.down);
-            BattleController.Instance.CommandStateBeginHandler += Step_6;
+            TutorialUI.Open(2, () => //選擇移動後，白色的格子代表可移動的範圍
+            {
+                TutorialArrowUI.Close();
+                TutorialArrowUI.Open("移動。", new Vector3(4, 1, 3), Vector2Int.down);
+                BattleController.Instance.BattleUI.HideArrow();
+                BattleController.Instance.BattleUI.SetCommandVisible(false);
+                BattleController.Instance.AfterMoveHandler += Step_6;
+            });
         }
 
         private void Step_6() 
         {
             MovePosition = null;
             SubID = 2;
-            BattleController.Instance.CommandStateBeginHandler -= Step_6;
+            BattleController.Instance.AfterMoveHandler -= Step_6;
             TutorialArrowUI.Close();
             //次要動作大多是強化自身或同伴的輔助性動作\n主要動作則是攻擊對手或治療同伴
             //使用次要動作中的全力一擊。
@@ -88,7 +93,7 @@ namespace Battle
             BattleUI.Instance.CommandGroup.SubButton.Lock = true;
             TutorialArrowUI.Close();
             TutorialArrowUI.Open("選擇目標。", new Vector3(4, 2, 3), Vector2Int.down);
-            BattleController.Instance.CommandStateBeginHandler += Step_8;
+            BattleController.Instance.MoveStateBeginHandler += Step_8;
         }
 
         private void Step_8() 
@@ -96,7 +101,7 @@ namespace Battle
             CommandPosition = null;
             //CanFinish = true;
             SkillID = 1;
-            BattleController.Instance.CommandStateBeginHandler -= Step_8;
+            BattleController.Instance.MoveStateBeginHandler -= Step_8;
             TutorialArrowUI.Close();
             TutorialUI.Open(4, () => //妖夢的攻擊力提升了！ \n使用主要動作中的攻擊，白色的格子代表可攻擊的範圍
             {
@@ -117,14 +122,14 @@ namespace Battle
             BattleUI.Instance.CommandGroup.MainButton.Lock = true;
             TutorialArrowUI.Close();
             TutorialArrowUI.Open("選擇目標。", new Vector3(4, 2, 4), Vector2Int.down);
-            BattleController.Instance.CommandStateBeginHandler += Step_10;
+            BattleController.Instance.MoveStateBeginHandler += Step_10;
         }
 
         private void Step_10()
         {
             CommandPosition = null;
             CanFinish = true;
-            BattleController.Instance.CommandStateBeginHandler -= Step_10;
+            BattleController.Instance.MoveStateBeginHandler -= Step_10;
             TutorialArrowUI.Close();
             TutorialUI.Open(5, () => //如果沒有要做的事就按結束吧。回合結束後需要選擇角色面對的方向。 角色面對的方向會影響命中率。 比方說如果攻擊敵人的正面，命中率會比較低。 反之從背後偷襲，命中率就會變高。 盡量面向敵人，避免被偷襲吧。
             {
@@ -152,48 +157,48 @@ namespace Battle
             {
                 IsActive = true;
                 BattleController.Instance.CharacterStateBeginHandler -= Step_12;
-                BattleController.Instance.CommandStateBeginHandler += Step_13;
+                BattleController.Instance.MoveStateBeginHandler += Step_14;
             }
         }
 
-        private void Step_13() 
-        {
-            CanMove = true;
-            BattleController.Instance.CommandStateBeginHandler -= Step_13;
-            TutorialUI.Open(6, () => //選擇移動後，白色的格子代表可移動的範圍
-            {
-                BattleController.Instance.BattleUI.HideArrow();
-                TutorialArrowUI.Open("選擇移動。", BattleUI.Instance.CommandGroup.MoveButton.transform, new Vector3(-200, 0, 0), Vector2Int.right);
+        //private void Step_13() 
+        //{
+        //    CanMove = true;
+        //    BattleController.Instance.CommandStateBeginHandler -= Step_13;
+        //    TutorialUI.Open(6, () => //選擇移動後，白色的格子代表可移動的範圍
+        //    {
+        //        BattleController.Instance.BattleUI.HideArrow();
+        //        TutorialArrowUI.Open("選擇移動。", BattleUI.Instance.CommandGroup.MoveButton.transform, new Vector3(-200, 0, 0), Vector2Int.right);
 
-                BattleController.Instance.MoveStateBeginHandler += Step_14;
-            });
+        //        BattleController.Instance.MoveStateBeginHandler += Step_14;
+        //    });
 
-        }
+        //}
 
         private void Step_14()
         {
             CanMove = false;
             MovePosition = new Vector2Int(6, 3);
             BattleController.Instance.MoveStateBeginHandler -= Step_14;
-            TutorialArrowUI.Close();
-            TutorialArrowUI.Open("選擇移動。", new Vector3(6, 1, 3), Vector2Int.down);
-            BattleController.Instance.CommandStateBeginHandler += Step_15;
+
+            TutorialUI.Open(6, () => //攻擊的命中率和角色之間的相對位置有關\n如果說從側面攻擊的命中率是100%\n從背面攻擊是150%\n命中率超過100%的部分會變成爆擊率，爆擊傷害+100%
+            {
+                TutorialArrowUI.Close();
+                TutorialArrowUI.Open("移動。", new Vector3(6, 1, 3), Vector2Int.down);
+                BattleController.Instance.BattleUI.HideArrow();
+                BattleController.Instance.AfterMoveHandler += Step_15;
+            });
         }
 
         private void Step_15()
         {
             MovePosition = null;
             SkillID = 1;
-            BattleController.Instance.CommandStateBeginHandler -= Step_15;
+            BattleController.Instance.AfterMoveHandler -= Step_15;
             TutorialArrowUI.Close();
-            //次要動作大多是強化自身或同伴的輔助性動作\n主要動作則是攻擊對手或治療同伴
-            //使用次要動作中的全力一擊。
-            //TutorialUI.Open(3, () =>
-            //{
-                BattleController.Instance.BattleUI.CommandGroup.SetTutorial(typeof(Skill), SkillID);
-                BattleUI.Instance.CommandGroup.MainButton.Lock = false;
-                BattleController.Instance.RangeStateBeginHandler += Step_16;
-            //});
+            BattleController.Instance.BattleUI.CommandGroup.SetTutorial(typeof(Skill), SkillID);
+            BattleUI.Instance.CommandGroup.MainButton.Lock = false;
+            BattleController.Instance.RangeStateBeginHandler += Step_16;
         }
 
         private void Step_16()
