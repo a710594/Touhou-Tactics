@@ -8,7 +8,6 @@ public class MarisaJoinEvent : MyEvent
 
     public override void Start()
     {
-        InputMamager.Instance.IsLock = true;
         _campUI = GameObject.Find("CampUI").GetComponent<CampUI>();
         _campUI.MainGroup.SetActive(false);
         ConversationUI.Open(6, true, () =>
@@ -30,10 +29,8 @@ public class MarisaJoinEvent : MyEvent
     {
         _campUI.CookHandler = null;
         TutorialArrowUI.Close();
-        InputMamager.Instance.IsLock = true;
         TutorialUI.Open(11, ()=> 
         {
-            InputMamager.Instance.IsLock = false;
             _campUI.ShopButton.enabled = true;
             _campUI.ExploreButton.enabled = true;
         });

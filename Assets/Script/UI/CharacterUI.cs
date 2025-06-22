@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CharacterUI : MonoBehaviour
+public class CharacterUI : BaseUI
 {
+    public Action CloseHandler;
     public Action<CharacterScrollItem> DetailHandler = null;
     public Action<CharacterScrollItem> UseItemHandler = null;
 
@@ -16,23 +17,22 @@ public class CharacterUI : MonoBehaviour
     public Text LvLabel;
     public Text ExpLabel;
 
-    private Action _callback;
     private CharacterScrollItem _scrollItem;
 
-    public static CharacterUI Open(Action callback)
+    public static CharacterUI Open()
     {
         GameObject obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/UI/CharacterUI"), Vector3.zero, Quaternion.identity);
         GameObject canvas = GameObject.Find("Canvas");
         obj.transform.SetParent(canvas.transform);
         CharacterUI characterUI = obj.GetComponent<CharacterUI>();
-        characterUI.Init(callback);
+        characterUI.Init();
+        InputMamager.Instance.CurrentUI = characterUI;
 
         return characterUI;
     }
 
-    public void Init(Action callback)
+    public void Init()
     {
-        _callback = callback;
         RectTransform.offsetMax = Vector3.zero;
         RectTransform.offsetMin = Vector3.zero;
         LvLabel.text = "¶¤¥îµ¥¯Å¡G" + CharacterManager.Instance.Info.Lv;
@@ -51,12 +51,17 @@ public class CharacterUI : MonoBehaviour
 
     public void Close()
     {
-        Destroy(gameObject);
-
-        if (_callback != null) 
+        if (CloseHandler != null) 
         {
-            _callback();
+            CloseHandler();
         }
+
+        Destroy(gameObject);
+    }
+
+    public override void COnClick()
+    {
+        Close();
     }
 
     private void DetailOnClick(CharacterScrollItem scrollItem) 
@@ -65,6 +70,10 @@ public class CharacterUI : MonoBehaviour
         {
             CharacterDetailUI characterDetailUI = CharacterDetailUI.Open();
             characterDetailUI.SetData((CharacterInfo)scrollItem.Data);
+            characterDetailUI.CloseHandler = () =>
+            {
+                InputMamager.Instance.CurrentUI = this;
+            };
         }
         else
         {
@@ -77,7 +86,7 @@ public class CharacterUI : MonoBehaviour
         if (UseItemHandler == null)
         {
             _scrollItem = scrollItem;
-            BagUI bagUI = BagUI.Open(null);
+            BagUI bagUI = BagUI.Open();
             bagUI.SetUseState();
             bagUI.UseHandler += UseItem;
         }

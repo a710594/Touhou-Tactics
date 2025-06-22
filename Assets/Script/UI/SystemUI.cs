@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SystemUI : MonoBehaviour
+public class SystemUI : BaseUI
 {
     public Button CampButton;
     public Button SaveButton;
@@ -13,30 +13,29 @@ public class SystemUI : MonoBehaviour
     public Action CampHandler;
     public Action SaveHandler;
     public Action ExitHandler;
+    public Action CloseHandler;
     public Action ConfirmCloseHandler;
 
-    private Action _callback;
-
-    public static SystemUI Open(Action callback)
+    public static SystemUI Open()
     {
         GameObject obj = (GameObject)GameObject.Instantiate(Resources.Load("Prefab/UI/SystemUI"), Vector3.zero, Quaternion.identity);
         obj.transform.SetParent(GameObject.Find("Canvas").transform);
         obj.transform.localPosition = Vector3.zero;
         obj.GetComponent<SystemUI>().Init();
         SystemUI systemUI = obj.GetComponent<SystemUI>();
-        systemUI._callback = callback;
+        InputMamager.Instance.CurrentUI = systemUI;
 
         return systemUI;
     }
 
     public void Close()
     {
-        Destroy(gameObject);
-
-        if (_callback != null) 
+        if (CloseHandler != null)
         {
-            _callback();
+            CloseHandler();
         }
+
+        Destroy(gameObject);
     }
 
 
@@ -51,6 +50,11 @@ public class SystemUI : MonoBehaviour
         {
             CampButton.gameObject.SetActive(false);
         }
+    }
+
+    public override void EscapeOnClick()
+    {
+        Close();
     }
 
     private void CampOnClick() 
@@ -107,6 +111,8 @@ public class SystemUI : MonoBehaviour
         {
             ConfirmCloseHandler();
         }
+
+        InputMamager.Instance.CurrentUI = this;
     }
 
     private void Awake()

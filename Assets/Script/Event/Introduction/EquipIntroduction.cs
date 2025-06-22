@@ -31,12 +31,14 @@ public class EquipIntroduction : MyEvent
         _characterUI.DetailHandler += DetailOnClick;
         _characterUI.UseItemHandler += UseItemOnClick;
         _characterUI.CloseButton.enabled = false;
+        InputMamager.Instance.CurrentUI = null;
     }
 
     private void Step_2() 
     {
         _characterUI.DetailHandler = null;
         _characterUI.UseItemHandler = null;
+        _characterUI.CloseButton.enabled = true;
 
         _characterDetailUI = CharacterDetailUI.Open();
         _characterDetailUI.SetData(_characterInfo);
@@ -95,22 +97,16 @@ public class EquipIntroduction : MyEvent
 
     private void Step_5(int index, object obj) 
     {
-        TutorialArrowUI.Close();
-        TutorialUI.Open(16, ()=> 
+        _characterDetailUI.CloseButton.enabled = true;
+        _characterDetailUI.SkillButton.enabled = true;
+        _characterDetailUI.ResetHandler();
+        _characterDetailUI.CloseHandler = () => 
         {
-            _characterUI.Close();
-            _characterDetailUI.Close();
+            InputMamager.Instance.CurrentUI = _characterUI;
+        };
 
-            Cursor.lockState = CursorLockMode.None;
-            InputMamager.Instance.IsLock = true;
-            CharacterUI.Open(()=> 
-            {
-                Cursor.lockState = CursorLockMode.Locked;
-                InputMamager.Instance.IsLock = false;
-            });
-            _characterDetailUI = CharacterDetailUI.Open();
-            _characterDetailUI.SetData(_characterInfo);
-        });
+        TutorialArrowUI.Close();
+        TutorialUI.Open(16, null);
     }
 
     private void DetailOnClick(CharacterScrollItem scrollItem) 

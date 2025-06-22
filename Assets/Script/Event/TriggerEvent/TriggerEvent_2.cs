@@ -6,12 +6,12 @@ public class TriggerEvent_2 : MyEvent
 {
     public override void Start()
     {
-        InputMamager.Instance.IsLock = true;
+        Explore.ExploreManager.Instance.Player.Enable = false;
         ExploreUI exploreUI = GameObject.Find("ExploreUI").GetComponent<ExploreUI>();
         exploreUI.SetVisible(false);
         ConversationUI.Open(2, true, () =>
         {
-            InputMamager.Instance.IsLock = false; ;
+            Explore.ExploreManager.Instance.Player.Enable = true;
             exploreUI.SetVisible(true);
         });
     }

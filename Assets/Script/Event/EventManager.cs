@@ -26,7 +26,7 @@ public class EventManager
         Info = info;
     }
 
-    public void CheckSceneEvent(string scene, int maxFloor) 
+    public void CheckSceneEvent(string scene, int maxFloor, int currentFloor) 
     {
         if (scene == "Camp")
         {
@@ -45,13 +45,13 @@ public class EventManager
         }
         else if (scene == "Explore")
         {
-            if (!Info.F2 && maxFloor == 2)
+            if (!Info.F2 && currentFloor == 2)
             {
                 F2Event f2Event = new F2Event();
                 f2Event.Start();
                 Info.F2 = true;
             }
-            else if (!Info.F3 && maxFloor == 3)
+            else if (!Info.F3 && currentFloor == 3)
             {
                 F3Event f3Event = new F3Event();
                 f3Event.Start();

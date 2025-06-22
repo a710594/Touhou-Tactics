@@ -79,7 +79,7 @@ namespace Explore
         public void EnterBattle(ExploreFileEnemy enemy) 
         {
             _hasCollision = true;
-            InputMamager.Instance.IsLock = true;
+            Explore.ExploreManager.Instance.Player.Enable = false;
             File.EnemyList.Remove(enemy);
             UpdateFile();
 
@@ -87,7 +87,7 @@ namespace Explore
             SceneController.Instance.ChangeScene("Battle", ChangeSceneUI.TypeEnum.Fade, (sceneName) =>
             {
                 Cursor.lockState = CursorLockMode.None;
-                InputMamager.Instance.IsLock = false;
+                Explore.ExploreManager.Instance.Player.Enable = true;
                 string tutorial = null;
                 if (enemy.Type == ExploreFileEnemy.TypeEnum.Fixed)
                 {
@@ -111,7 +111,7 @@ namespace Explore
 
         public void ArriveGoal() 
         {
-            InputMamager.Instance.IsLock = true;
+            Explore.ExploreManager.Instance.Player.Enable = false;
             ConfirmUI.Open("要前往下一層嗎？", "確定", "取消", () =>
             {
                 File.Floor++;
@@ -125,11 +125,11 @@ namespace Explore
                 {
                     CharacterManager.Instance.RecoverAllHP();
                     ItemManager.Instance.Info.Key = 0;
-                    InputMamager.Instance.IsLock = false;
+                    Explore.ExploreManager.Instance.Player.Enable = true;
                 });
             }, () =>
             {
-                InputMamager.Instance.IsLock = false;
+                Explore.ExploreManager.Instance.Player.Enable = true;
             });         
         }
 

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ConfirmUI : MonoBehaviour
+public class ConfirmUI : BaseUI
 {
     public Text ConfirmLabel;
     public Text CancelLabel;
@@ -23,6 +23,7 @@ public class ConfirmUI : MonoBehaviour
         obj.transform.localPosition = Vector3.zero;
         ConfirmUI confirmUI = obj.GetComponent<ConfirmUI>();
         confirmUI.Init(commentText, confirmText, confirmCallback);
+        InputMamager.Instance.CurrentUI = confirmUI;
     }
 
     public static void Open(string commentText, string confirmText, string cancelText, Action confirmCallback, Action cancelCallback)
@@ -32,6 +33,7 @@ public class ConfirmUI : MonoBehaviour
         obj.transform.localPosition = Vector3.zero;
         ConfirmUI confirmUI = obj.GetComponent<ConfirmUI>();
         confirmUI.Init(commentText, confirmText, cancelText, confirmCallback, cancelCallback);
+        InputMamager.Instance.CurrentUI = confirmUI;
     }
 
     private void Close()

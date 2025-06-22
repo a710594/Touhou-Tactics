@@ -108,7 +108,7 @@ public class MapUI : MonoBehaviour
         Mask.transform.localPosition = Vector3.zero;
         Mask.enabled = false;
         Cursor.lockState = CursorLockMode.None;
-        InputMamager.Instance.IsLock = true;
+        ExploreManager.Instance.Player.Enable = false;
     }
 
     public void HideBigMap() 
@@ -117,6 +117,6 @@ public class MapUI : MonoBehaviour
         Mask.transform.localPosition = new Vector3(Screen.width / 2f - 100, Screen.height / 2f - 100, 0);
         Mask.enabled = true;
         Cursor.lockState = CursorLockMode.Locked;
-        InputMamager.Instance.IsLock = false;
+        ExploreManager.Instance.Player.Enable = true;
     }
 }

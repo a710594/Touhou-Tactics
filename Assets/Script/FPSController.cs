@@ -20,6 +20,9 @@ namespace Explore
         [Range(10f, 100f)]
         public float Smooth = 10f;
 
+        [System.NonSerialized]
+        public bool Enable = true;
+
         private float _verticalRotation = 0f;
         private Vector3? _lastPosition = null;
         private GameObject _obj = null;
@@ -38,7 +41,7 @@ namespace Explore
 
         void Update()
         {
-            if (!InputMamager.Instance.IsLock)
+            if (Enable)
             {
                 Move();
                 Look();

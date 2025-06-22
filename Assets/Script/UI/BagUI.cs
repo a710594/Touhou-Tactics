@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BagUI : MonoBehaviour
+public class BagUI : BaseUI
 {
     public enum StateEnum 
     {
@@ -13,6 +13,7 @@ public class BagUI : MonoBehaviour
         Use,
     }
 
+    public Action CloseHandler;
     public Action<object> UseHandler;
     public Action<int, object> SetEquipHandler;
     public Action<object> ScrollItemHandler;
@@ -37,9 +38,8 @@ public class BagUI : MonoBehaviour
     private int _equipIndex;
     private object _selectedObj = null;
     private StateEnum _currentState;
-    private Action _callback;
 
-    public static BagUI Open(Action callback) 
+    public static BagUI Open() 
     {
         if (_bagUI == null)
         {
@@ -49,7 +49,7 @@ public class BagUI : MonoBehaviour
             _bagUI = obj.GetComponent<BagUI>();
             _bagUI.RectTransform.offsetMax = Vector3.zero;
             _bagUI.RectTransform.offsetMin = Vector3.zero;
-            _bagUI._callback = callback;
+            InputMamager.Instance.CurrentUI = _bagUI;
         }
         return _bagUI;
     }
@@ -187,12 +187,18 @@ public class BagUI : MonoBehaviour
     {
         _bagUI = null;
         TipLabel.Stop();
-        Destroy(gameObject);
 
-        if (_callback != null)
+        if (CloseHandler != null) 
         {
-            _callback();
+            CloseHandler();
         }
+
+        Destroy(gameObject);
+    }
+
+    public override void IOnClick()
+    {
+        Close();
     }
 
     private void Update()

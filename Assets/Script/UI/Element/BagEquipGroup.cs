@@ -103,6 +103,8 @@ public class BagEquipGroup : MonoBehaviour
     private void ScrollItemOnClick(PointerEventData eventData, ButtonPlus button)
     {
         object data = button.Data;
+        SetDetail((Equip)data);
+
         ScrollHandler(data);
     }
 

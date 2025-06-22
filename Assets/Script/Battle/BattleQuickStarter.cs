@@ -32,7 +32,7 @@ public class BattleQuickStarter : MonoBehaviour
             {
                 EnemyGroupModel enemyGroup = DataTable.Instance.EnemyGroupDic[EnemyGroupId];
                 BattleController.Instance.Init();
-                BattleController.Instance.SetRandom(Tutorial, enemyGroup);
+                BattleController.Instance.SetRandom("", enemyGroup);
             }
         });
     }

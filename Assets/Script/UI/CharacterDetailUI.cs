@@ -6,13 +6,14 @@ using UnityEngine.UI;
 using Battle;
 using UnityEngine.EventSystems;
 
-public class CharacterDetailUI : MonoBehaviour
+public class CharacterDetailUI : BaseUI
 {
     public Action WeaponHandler;
     public Action ArmorHandler_1;
     public Action ArmorHandler_2;
     public Action AmuletHandler_1;
     public Action AmuletHandler_2;
+    public Action CloseHandler;
 
     public RectTransform RectTransform;
     public Text NameLabel;
@@ -64,6 +65,7 @@ public class CharacterDetailUI : MonoBehaviour
         CharacterDetailUI characterDetailUI = obj.GetComponent<CharacterDetailUI>();
         characterDetailUI.RectTransform.offsetMax = Vector3.zero;
         characterDetailUI.RectTransform.offsetMin = Vector3.zero;
+        InputMamager.Instance.CurrentUI = characterDetailUI;
 
         return characterDetailUI;
     }
@@ -144,7 +146,7 @@ public class CharacterDetailUI : MonoBehaviour
 
     private void WeaponOnClick(PointerEventData eventData, ButtonPlus buttonPlus)
     {
-        BagUI bagUI = BagUI.Open(null);
+        BagUI bagUI = BagUI.Open();
         bagUI.SetEquipState(EquipModel.CategoryEnum.Weapon, _characterInfo, 0);
         bagUI.SetEquipHandler += SetWeapon;
 
@@ -156,7 +158,7 @@ public class CharacterDetailUI : MonoBehaviour
 
     private void ArmornOnClick_1(PointerEventData eventData, ButtonPlus buttonPlus)
     {
-        BagUI bagUI = BagUI.Open(null);
+        BagUI bagUI = BagUI.Open();
         bagUI.SetEquipState(EquipModel.CategoryEnum.Armor, _characterInfo, 0);
         bagUI.SetEquipHandler += SetArmor;
 
@@ -168,7 +170,7 @@ public class CharacterDetailUI : MonoBehaviour
 
     private void ArmornOnClick_2(PointerEventData eventData, ButtonPlus buttonPlus)
     {
-        BagUI bagUI = BagUI.Open(null);
+        BagUI bagUI = BagUI.Open();
         bagUI.SetEquipState(EquipModel.CategoryEnum.Armor, _characterInfo, 1);
         bagUI.SetEquipHandler += SetArmor;
 
@@ -180,7 +182,7 @@ public class CharacterDetailUI : MonoBehaviour
 
     private void AmuletOnClick_1(PointerEventData eventData, ButtonPlus buttonPlus)
     {
-        BagUI bagUI = BagUI.Open(null);
+        BagUI bagUI = BagUI.Open();
         bagUI.SetEquipState(EquipModel.CategoryEnum.Amulet, _characterInfo, 0);
         bagUI.SetEquipHandler += SetAmulet;
 
@@ -192,7 +194,7 @@ public class CharacterDetailUI : MonoBehaviour
 
     private void AmuletOnClick_2(PointerEventData eventData, ButtonPlus buttonPlus)
     {
-        BagUI bagUI = BagUI.Open(null);
+        BagUI bagUI = BagUI.Open();
         bagUI.SetEquipState(EquipModel.CategoryEnum.Amulet, _characterInfo, 1);
         bagUI.SetEquipHandler += SetAmulet;
 
@@ -327,7 +329,33 @@ public class CharacterDetailUI : MonoBehaviour
 
     public void Close() 
     {
+        if (CloseHandler != null)
+        {
+            CloseHandler();
+        }
+
         Destroy(gameObject);
+    }
+
+    public void ResetHandler() 
+    {
+        WeaponHandler = null;
+        ArmorHandler_1 = null;
+        ArmorHandler_2 = null;
+        AmuletHandler_1 = null;
+        AmuletHandler_2 = null;
+
+        WeaponButton.ClickHandler = null;
+        ArmorButtons[0].ClickHandler = null;
+        ArmorButtons[1].ClickHandler = null;
+        AmuletButtons[0].ClickHandler = null;
+        AmuletButtons[1].ClickHandler = null;
+
+        WeaponButton.ClickHandler += WeaponOnClick;
+        ArmorButtons[0].ClickHandler += ArmornOnClick_1;
+        ArmorButtons[1].ClickHandler += ArmornOnClick_2;
+        AmuletButtons[0].ClickHandler += AmuletOnClick_1;
+        AmuletButtons[1].ClickHandler += AmuletOnClick_2;
     }
 
     private void Awake()

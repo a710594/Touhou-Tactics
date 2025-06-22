@@ -18,22 +18,12 @@ public class InputMamager
         }
     }
 
-    public Action UpHandler;
-    public Action DownHandler;
-    public Action LeftHandler;
-    public Action RightHandler;
     public Action SpaceHandler;
-    public Action IHandler;
     public Action CHandler;
     public Action VHandler;
     public Action LHandler;
-    public Action EscapeHandler;
 
-    public bool IsLock = false;
-
-    private BagUI _bagUI;
-    private CharacterUI _selectCharacterUI;
-    private SystemUI _systemUI;
+    public BaseUI CurrentUI;
 
     public void Init() 
     {
@@ -43,15 +33,14 @@ public class InputMamager
 
     private void Update() 
     {
-        if (Input.GetKeyDown(KeyCode.I))
+        if (Input.GetKeyDown(KeyCode.I) && CurrentUI != null)
         {
-            if (IHandler != null) 
-            {
-                IHandler();
-            }
+            CurrentUI.IOnClick();
         }
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.C) && CurrentUI != null)
         {
+            CurrentUI.COnClick();
+
             if (CHandler != null) 
             {
                 CHandler();
@@ -71,44 +60,12 @@ public class InputMamager
                 LHandler();
             }
         }
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && CurrentUI != null)
         {
-
-            if (EscapeHandler != null) 
-            {
-                EscapeHandler();
-            }
+            CurrentUI.EscapeOnClick();
         }
 
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            if(UpHandler != null)
-            {
-                UpHandler();
-            }
-        }
-        else if (Input.GetKey(KeyCode.DownArrow))
-        {
-            if (DownHandler != null)
-            {
-                DownHandler();
-            }
-        }
-        else if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            if (LeftHandler != null)
-            {
-                LeftHandler();
-            }
-        }
-        else if (Input.GetKey(KeyCode.RightArrow))
-        {
-            if (RightHandler != null)
-            {
-                RightHandler();
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.Space)) 
+        if (Input.GetKeyDown(KeyCode.Space)) 
         {
             if (SpaceHandler != null) 
             {

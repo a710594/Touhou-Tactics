@@ -7,12 +7,12 @@ public class F3Event : MyEvent
     public override void Start()
     {
         Cursor.lockState = CursorLockMode.None;
-        InputMamager.Instance.IsLock = true;
+        Explore.ExploreManager.Instance.Player.Enable = false;
         ExploreUI exploreUI = GameObject.Find("ExploreUI").GetComponent<ExploreUI>();
         exploreUI.SetVisible(false);
         TutorialUI.Open(14, () =>
         {
-            InputMamager.Instance.IsLock = false;
+            Explore.ExploreManager.Instance.Player.Enable = true;
             exploreUI.SetVisible(true);
             Cursor.lockState = CursorLockMode.Locked;
         });

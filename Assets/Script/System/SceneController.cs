@@ -53,7 +53,6 @@ public class SceneController
         if (!_isLock)
         {
             _isLock = true;
-            InputMamager.Instance.IsLock = true;
             _tempScene = scene;
             _lastScene = Info.CurrentScene;
             _changeType = type;
@@ -80,7 +79,6 @@ public class SceneController
     private void SceneLoaded(Scene scene, LoadSceneMode mode)
     {
         _isLock = false;
-        InputMamager.Instance.IsLock = false;
         if (_tempScene != null)
         {
             Info.CurrentScene = _tempScene;
@@ -94,6 +92,6 @@ public class SceneController
             AfterSceneLoadedHandler -= _tempHandler;
         }
 
-        EventManager.Instance.CheckSceneEvent(scene.name, Info.MaxFloor);
+        EventManager.Instance.CheckSceneEvent(scene.name, Info.MaxFloor, Info.CurrentFloor);
     }
 }
